@@ -20,7 +20,7 @@
                         @endif
 
                         <!-- Filter Form -->
-                        <form id="filterForm" method="GET" action="" class="mb-6 flex gap-6 items-center">
+                        <form id="filterForm3" method="GET" action="" class="mb-6 flex gap-6 items-center">
                             <div class="flex items-center gap-4">
                                 <div class="relative inline-block text-left w-48">
                                     <label for="vehicleDropdown"
