@@ -1,7 +1,7 @@
 <div class="flex h-full w-full">
     <div class="flex-1 overflow-y-auto">
         <div class="py-4">
-            <div class="max-w-7xl mx-auto sm:px-2">
+            <div class="w-full px-6 lg:px-2">
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-4 text-gray-900 dark:text-gray-100">
 
@@ -105,290 +105,130 @@
                         </div>
 
                         <div class="overflow-x-auto bg-white dark:bg-gray-900 shadow rounded-lg">
-                            <table class="min-w-full table-fixed text-sm divide-y divide-gray-200 dark:divide-gray-700">
-                                <thead class="bg-gray-100 dark:bg-gray-700">
+                            <table class="table-fixed w-full text-sm divide-y divide-gray-200 dark:divide-gray-700">
+                                <thead class="bg-gray-100 dark:bg-gray-700 text-left">
                                     <tr>
                                         <th
-                                            class="px-4 py-3 w-10 text-left text-xs font-medium text-gray-600 dark:text-gray-300 uppercase">
-                                            Oder No</th>
+                                            class="px-4 py-3 w-20 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                            Order No
+                                        </th>
                                         <th
-                                            class="px-4 py-3 w-10 text-left text-xs font-medium text-gray-600 dark:text-gray-300 uppercase">
-                                            production deadline</th>
+                                            class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                            Production Deadline
+                                        </th>
                                         <th
-                                            class="px-4 py-3 w-32 text-left text-xs font-medium text-gray-600 dark:text-gray-300 uppercase">
-                                            oder received date</th>
+                                            class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                            Order Received Date
+                                        </th>
                                         <th
-                                            class="px-4 py-3 w-32 text-center text-xs font-medium text-gray-600 dark:text-gray-300 uppercase">
-                                            oder start date & time</th>
+                                            class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                            Order Start Date & Time
+                                        </th>
                                         <th
-                                            class="px-4 py-3 w-32 text-center text-xs font-medium text-gray-600 dark:text-gray-300 uppercase">
-                                            operator name</th>
+                                            class="px-4 py-3 w-40 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                            Operator Name
+                                        </th>
                                         <th
-                                            class="px-4 py-3 w-60 text-center text-xs font-medium text-gray-600 dark:text-gray-300 uppercase">
-                                            supervisor name</th>
+                                            class="px-4 py-3 w-40 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                            Supervisor Name
+                                        </th>
                                         <th
-                                            class="px-4 py-3 w-32 text-center text-xs font-medium text-gray-600 dark:text-gray-300 uppercase">
-                                            oder complete date & time</th>
+                                            class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                            Order Complete Date & Time
+                                        </th>
                                         <th
-                                            class="px-4 py-3 text-center text-xs font-medium text-gray-600 dark:text-gray-300 uppercase">
-                                            sample complete and dispatch to R & D </th>
+                                            class="px-4 py-3 w-40 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                            Sample Complete and Dispatch to R&D
+                                        </th>
                                         <th
-                                            class="px-4 py-3 w-10 text-left text-xs font-medium text-gray-600 dark:text-gray-300 uppercase">
-                                            Special Note</th>
+                                            class="px-4 py-3 w-72 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                            Special Note
+                                        </th>
                                         <th
-                                            class="px-4 py-3 text-center text-xs font-medium text-gray-600 dark:text-gray-300 uppercase">
-                                            Action</th>
-
+                                            class="px-4 py-3 w-40 text-center text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                            Action
+                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody id="serviceRecords"
-                                    class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                                    <tr>
-                                        <td class="px-4 py-4 w-10">001</td>
-                                        <td class="px-4 py-4 w-40">2025-05-05</td>
-                                        <td class="px-4 py-4 w-40">2025-05-05</td>
-                                        <td class="px-4 py-4 w-40">2025-05-05</td>
-                                        <td class="px-4 py-4 w-40">operator 001</td>
-                                        <td class="px-4 py-4 w-40">supervisor 001</td>
-                                        <td class="px-4 py-4 w-40 text-center">2025-05-05</td>
-                                        <td class="px-4 py-4 w-40 text-center">Done</td>
-                                        <td class="px-4 py-4 w-40 text-center">abc 1234</td>
-                                        <td class="px-4 py-4">
-                                            <div class="flex w-50">
+                                    class="bg-white dark:bg-gray-800 divide-y text-left divide-gray-200 dark:divide-gray-700">
+
+                                    <tr id="serviceRow1">
+                                        <td class="px-4 py-3 w-20 whitespace-normal break-words">
+                                            <span class="readonly">001</span>
+                                            <input
+                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                value="001" />
+                                        </td>
+                                        <td class="px-4 py-3 w-32 whitespace-normal break-words">
+                                            <span class="readonly">2025-05-05</span>
+                                            <input type="date"
+                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                value="2025-05-05" />
+                                        </td>
+                                        <td class="px-4 py-3 w-32 whitespace-normal break-words">
+                                            <span class="readonly">2025-05-05</span>
+                                            <input type="date"
+                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                value="2025-05-05" />
+                                        </td>
+                                        <td class="px-4 py-3 w-32 whitespace-normal break-words">
+                                            <span class="readonly">2025-05-05</span>
+                                            <input type="datetime-local"
+                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                value="2025-05-05T00:00" />
+                                        </td>
+                                        <td class="px-4 py-3 w-40 whitespace-normal break-words">
+                                            <span class="readonly">Operator 001</span>
+                                            <input
+                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                value="Operator 001" />
+                                        </td>
+                                        <td class="px-4 py-3 w-40 whitespace-normal break-words">
+                                            <span class="readonly">Supervisor 001</span>
+                                            <input
+                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                value="Supervisor 001" />
+                                        </td>
+                                        <td class="px-4 py-3 w-32 whitespace-normal break-words">
+                                            <span class="readonly">2025-05-05</span>
+                                            <input type="datetime-local"
+                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                value="2025-05-05T00:00" />
+                                        </td>
+                                        <td class="px-4 py-3 w-40 whitespace-normal break-words">
+                                            <span class="readonly">Done</span>
+                                            <input
+                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                value="Done" />
+                                        </td>
+                                        <td class="px-4 py-3 w-72 whitespace-normal break-words">
+                                            <span class="readonly">abc 1234 long sample description to test line
+                                                wrapping</span>
+                                            <textarea
+                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                rows="2">abc 1234 long sample description to test line wrapping</textarea>
+                                        </td>
+                                        <td class="px-4 py-3 text-center">
+                                            <div class="flex w-40 text-center space-x-2 justify-center">
                                                 <button
-                                                    class="bg-green-600 h-12 mr-4 hover:bg-green-700 text-white px-3 py-1 rounded text-sm">
+                                                    class="bg-green-600 h-10 hover:bg-green-700 text-white px-3 py-1 rounded text-sm"
+                                                    onclick="editServiceRow('serviceRow1')">
                                                     Edit
                                                 </button>
                                                 <button
-                                                    class="bg-blue-600 h-12 mr-4 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm">
-                                                    save
+                                                    class="bg-blue-600 h-10 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm hidden"
+                                                    onclick="saveServiceRow('serviceRow1')">
+                                                    Save
                                                 </button>
                                             </div>
                                         </td>
                                     </tr>
+
                                 </tbody>
                             </table>
                             <div class="py-6 flex justify-center">
 
-                            </div>
-
-                        </div>
-
-                        <!-- View Service Details Modal -->
-                        <div id="viewServiceModal"
-                            class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 hidden">
-                            <div class="w-[500px] bg-white dark:bg-gray-900 rounded-2xl shadow-2xl p-6">
-                                <h2 class="text-lg font-semibold mb-4 text-center text-amber-900 ">Service Details</h2>
-                                <div class="space-y-2 text-sm text-gray-700 dark:text-gray-200">
-                                    <p><strong class="text-amber-700">Vehicle:</strong> <span id="viewVehicle"></span>
-                                    </p>
-                                    <p><strong class="text-amber-700">Service Date:</strong> <span
-                                            id="viewServiceDate"></span></p>
-                                    <p><strong class="text-amber-700">Service Type:</strong> <span
-                                            id="viewServiceType"></span></p>
-                                    <p><strong class="text-amber-700">Service Mileage:</strong> <span
-                                            id="viewMileage"></span></p>
-                                    <p><strong class="text-amber-700">Next Service Mileage:</strong> <span
-                                            id="viewNextMileage"></span></p>
-                                    <p><strong class="text-amber-700">Next Service Date:</strong> <span
-                                            id="viewNextDate"></span></p>
-                                    <p><strong class="text-amber-700">Location:</strong> <span
-                                            id="viewLocation"></span></p>
-                                    <p><strong class="text-amber-700">Cost (LKR):</strong> Rs. <span
-                                            id="viewCost"></span></p>
-                                    <p><strong class="text-amber-700">Service Notes:</strong> <span
-                                            id="viewNotes"></span></p>
-                                </div>
-                                <div class="flex justify-end mt-6">
-                                    <button
-                                        onclick="document.getElementById('viewServiceModal').classList.add('hidden')"
-                                        class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded text-sm">
-                                        Close
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-
-
-                        <!-- Add Oder Modal -->
-                        <div id="addServiceModal" onclick="closeModalOnOutsideClick(event)"
-                            class="fixed inset-0 z-50 hidden bg-black bg-opacity-50 flex items-center justify-center py-5">
-                            <div
-                                class="w-full max-w-[700px] bg-white dark:bg-gray-900 rounded-2xl shadow-2xl p-4 transform transition-all scale-95 max-h-[calc(100vh-10rem)] overflow-y-auto">
-                                <div class="max-w-[600px] mx-auto p-8">
-                                    <h2
-                                        class="text-2xl font-semibold mb-8 text-blue-900 mt-4 dark:text-gray-100 text-center">
-                                        Add New Sample Development</h2>
-                                    <form action="" method="">
-                                        @csrf
-                                        <div class="space-y-4">
-                                            <div class="flex items-center justify-center w-full">
-                                                <label for="dropzone-file"
-                                                    class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
-                                                    <div class="flex flex-col items-center justify-center pt-5 pb-6 ">
-                                                        <svg class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"
-                                                            aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                                                            fill="none" viewBox="0 0 20 16">
-                                                            <path stroke="currentColor" stroke-linecap="round"
-                                                                stroke-linejoin="round" stroke-width="2"
-                                                                d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
-                                                        </svg>
-                                                        <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span
-                                                                class="font-semibold">Uploard Order soft copy</span> or
-                                                            drag and drop</p>
-                                                        <p class="text-xs text-gray-500 dark:text-gray-400">PDF, JPG
-                                                            (MAX. 800x400px)</p>
-                                                    </div>
-                                                    <input id="dropzone-file" type="file" class="hidden" />
-                                                </label>
-                                            </div>
-
-                                            <div>
-                                                <label
-                                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">Description</label>
-                                                <textarea name="service_notes" rows="3"
-                                                    class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"></textarea>
-                                            </div>
-
-                                            <div class="flex gap-4">
-                                                <div class="w-1/2">
-                                                    <label
-                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Inquery
-                                                        receive date</label>
-                                                    <input type="date" name="service_date" required
-                                                        class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                                </div>
-                                                <div class="w-1/2">
-                                                    <label
-                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer</label>
-                                                    <input type="text" name="done_by" required
-                                                        class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                                </div>
-                                                {{-- <div class="w-1/2">
-                                                    <div class="relative inline-block text-left w-full">
-                                                        <label for="serviceTypeDropdown"
-                                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Service
-                                                            Type</label>
-                                                        <div>
-                                                            <button type="button" id="serviceTypeDropdown"
-                                                                class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10 dark:bg-gray-700 dark:text-white"
-                                                                onclick="toggleServiceTypeDropdown()"
-                                                                aria-haspopup="listbox" aria-expanded="false">
-                                                                <span id="selectedServiceType">Select Service
-                                                                    Type</span>
-                                                                <svg class="ml-2 h-5 w-5 text-gray-400"
-                                                                    viewBox="0 0 20 20" fill="currentColor">
-                                                                    <path fill-rule="evenodd"
-                                                                        d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
-                                                                        clip-rule="evenodd" />
-                                                                </svg>
-                                                            </button>
-                                                        </div>
-
-                                                        <div id="serviceTypeDropdownMenu"
-                                                            class="hidden absolute z-10 mt-2 w-full rounded-md bg-white shadow-lg ring-1 ring-black/5 dark:bg-gray-700 max-h-48 overflow-y-auto">
-                                                            <div class="py-1" role="listbox" tabindex="-1"
-                                                                aria-labelledby="serviceTypeDropdown">
-                                                                @php
-                                                                    $serviceTypes = [
-                                                                        'Full Service',
-                                                                        'Partial Service',
-                                                                        'Wheel Alignment',
-                                                                        'Other',
-                                                                    ];
-                                                                @endphp
-                                                                @foreach ($serviceTypes as $type)
-                                                                    <button type="button"
-                                                                        class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                                                                        onclick="selectServiceType('{{ $type }}')">
-                                                                        {{ $type }}
-                                                                    </button>
-                                                                @endforeach
-                                                            </div>
-                                                        </div>
-
-                                                        <input type="hidden" name="service_type"
-                                                            id="serviceTypeInput" required>
-                                                    </div>
-
-                                                </div> --}}
-                                            </div>
-
-                                            <div class="flex gap-4">
-                                                <div class="w-1/2">
-                                                    <label
-                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Merchandiser</label>
-                                                    <input type="text" name="done_by" required
-                                                        class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                                </div>
-                                                <div class="w-1/2">
-                                                    <label
-                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Item</label>
-                                                    <input type="text" name="service_location" required
-                                                        class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                                </div>
-                                            </div>
-
-                                            <div class="flex gap-4">
-                                                <div class="w-1/2">
-                                                    <label
-                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Size</label>
-                                                    <input type="text" name="service_location" required
-                                                        class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                                </div>
-                                                <div class="w-1/2">
-                                                    <label
-                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Colour</label>
-                                                    <input type="text" name="service_location" required
-                                                        class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                                </div>
-                                            </div>
-
-                                            <div>
-                                                <label
-                                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">Sample
-                                                    Quantity (yds or mtr)</label>
-                                                <input type="text" name="service_location" required
-                                                    class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm mb-4">
-                                            </div>
-
-                                            <span class="font-sans font-semibold text-m ">SPECIAL CUSTOMER COMMENTS &
-                                                REQUESTED DATES</span>
-
-                                            <div class="flex gap-4">
-                                                <div class="w-1/2">
-                                                    <label
-                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer
-                                                        Comments</label>
-                                                    <input type="text" name="service_location" required
-                                                        class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                                </div>
-                                                <div class="w-1/2">
-                                                    <label
-                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer
-                                                        Requested Dates</label>
-                                                    <input type="date" name="service_date" required
-                                                        class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                                </div>
-                                            </div>
-
-
-                                        </div>
-
-                                        <!-- Buttons -->
-                                        <div class="flex justify-end gap-3 mt-12">
-                                            <button type="button"
-                                                onclick="document.getElementById('addServiceModal').classList.add('hidden')"
-                                                class="px-4 py-2 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 text-sm rounded hover:bg-gray-300">
-                                                Cancel
-                                            </button>
-                                            <button type="submit"
-                                                class="px-4 py-2 bg-blue-500 text-white text-sm rounded hover:bg-blue-600">
-                                                Create Order
-                                            </button>
-                                        </div>
-                                    </form>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -577,3 +417,41 @@
         }
     });
 </script>
+
+<script>
+    function editServiceRow(rowId) {
+      const row = document.getElementById(rowId);
+      const spans = row.querySelectorAll('span.readonly');
+      const inputs = row.querySelectorAll('input.editable, textarea.editable');
+
+      spans.forEach(span => span.classList.add('hidden'));
+      inputs.forEach(input => input.classList.remove('hidden'));
+
+      const editBtn = row.querySelector('button.bg-green-600');
+      const saveBtn = row.querySelector('button.bg-blue-600');
+      editBtn.classList.add('hidden');
+      saveBtn.classList.remove('hidden');
+    }
+
+    function saveServiceRow(rowId) {
+      const row = document.getElementById(rowId);
+      const spans = row.querySelectorAll('span.readonly');
+      const inputs = row.querySelectorAll('input.editable, textarea.editable');
+
+      inputs.forEach((input, index) => {
+        if (input.tagName.toLowerCase() === 'textarea') {
+          spans[index].textContent = input.value;
+        } else {
+          spans[index].textContent = input.value;
+        }
+      });
+
+      spans.forEach(span => span.classList.remove('hidden'));
+      inputs.forEach(input => input.classList.add('hidden'));
+
+      const editBtn = row.querySelector('button.bg-green-600');
+      const saveBtn = row.querySelector('button.bg-blue-600');
+      editBtn.classList.remove('hidden');
+      saveBtn.classList.add('hidden');
+    }
+  </script>

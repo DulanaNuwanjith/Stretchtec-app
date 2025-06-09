@@ -1,7 +1,7 @@
 <div class="flex h-full w-full">
     <div class="flex-1 overflow-y-auto">
         <div class="py-4">
-            <div class="max-w-7xl mx-auto sm:px-2">
+            <div class="w-full px-6 lg:px-2">
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-4 text-gray-900 dark:text-gray-100">
 
@@ -185,81 +185,137 @@
                         </div>
 
                         <div class="overflow-x-auto bg-white dark:bg-gray-900 shadow rounded-lg">
-                            <table
-                                class="min-w-full table-fixed text-sm divide-y divide-gray-200 dark:divide-gray-700">
-                                <thead class="bg-gray-100 dark:bg-gray-700">
+                            <table class="table-fixed w-full text-sm divide-y divide-gray-200 dark:divide-gray-700">
+                                <thead class="bg-gray-100 dark:bg-gray-700 text-left">
                                     <tr>
                                         <th
-                                            class="px-4 py-3 w-10 text-left text-xs font-medium text-gray-600 dark:text-gray-300 uppercase">
-                                            Oder No</th>
+                                            class="px-4 py-3 w-20 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                            Order No</th>
                                         <th
-                                            class="px-4 py-3 w-32 text-left text-xs font-medium text-gray-600 dark:text-gray-300 uppercase">
-                                            Inquery Receive Date</th>
+                                            class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                            Inquiry Receive Date</th>
                                         <th
-                                            class="px-4 py-3 w-32 text-left text-xs font-medium text-gray-600 dark:text-gray-300 uppercase">
+                                            class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                             Customer</th>
                                         <th
-                                            class="px-4 py-3 w-32 text-center text-xs font-medium text-gray-600 dark:text-gray-300 uppercase">
+                                            class="px-4 py-3 w-36 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                             Merchandiser</th>
                                         <th
-                                            class="px-4 py-3 w-32 text-center text-xs font-medium text-gray-600 dark:text-gray-300 uppercase">
+                                            class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                             Item</th>
                                         <th
-                                            class="px-4 py-3 w-32 text-center text-xs font-medium text-gray-600 dark:text-gray-300 uppercase">
+                                            class="px-4 py-3 w-20 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                             Size</th>
                                         <th
-                                            class="px-4 py-3 w-60 text-center text-xs font-medium text-gray-600 dark:text-gray-300 uppercase">
+                                            class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                             Colour</th>
                                         <th
-                                            class="px-4 py-3 text-center text-xs font-medium text-gray-600 dark:text-gray-300 uppercase">
-                                            Sample Quantity (yds or mtr)</th>
+                                            class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                            Sample Quantity</th>
                                         <th
-                                            class="px-4 py-3 text-center text-xs font-medium text-gray-600 dark:text-gray-300 uppercase">
-                                            Special Customer Comments</th>
+                                            class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                            Customer Special Comments</th>
                                         <th
-                                            class="px-4 py-3 text-center text-xs font-medium text-gray-600 dark:text-gray-300 uppercase">
-                                            Special Customer Requested Dates</th>
+                                            class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                            Customer Requested Dates</th>
                                         <th
-                                            class="px-4 py-3 w-10 text-left text-xs font-medium text-gray-600 dark:text-gray-300 uppercase">
-                                            Description</th>
+                                            class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                            Development Plan Date</th>
                                         <th
-                                            class="px-4 py-3 text-center text-xs font-medium text-gray-600 dark:text-gray-300 uppercase">
+                                            class="px-4 py-3 w-48 text-xs text-center font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                             Action</th>
-
                                     </tr>
                                 </thead>
                                 <tbody id="serviceRecords"
-                                    class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                                    <tr>
-                                        <td class="px-4 py-4 w-10">001</td>
-                                        <td class="px-4 py-4 w-40">2025-05-05</td>
-                                        <td class="px-4 py-4 w-40">TIMEX</td>
-                                        <td class="px-4 py-4 w-40">Chamith</td>
-                                        <td class="px-4 py-4 w-40">Scock Cord</td>
-                                        <td class="px-4 py-4 w-40">2mm</td>
-                                        <td class="px-4 py-4 w-40 text-center">white cap grey</td>
-                                        <td class="px-4 py-4 w-40 text-center">5 YDS</td>
-                                        <td class="px-4 py-4 w-40 text-center"></td>
-                                        <td class="px-4 py-4 text-center">2025-06-05</td>
-                                        <td class="px-4 py-4 w-40">2mm white cap grey</td>
-                                        <td class="px-4 py-4">
-                                            <div class="flex w-50">
+                                    class="bg-white dark:bg-gray-800 divide-y text-left divide-gray-200 dark:divide-gray-700">
+                                    <tr id="row1">
+                                        <!-- Each cell has a span for readonly text and a hidden input for editing -->
+                                        <td class="px-4 py-3 w-20 whitespace-normal break-words">
+                                            <span class="readonly">001</span>
+                                            <input
+                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                value="001" />
+                                        </td>
+                                        <td class="px-4 py-3 w-32 whitespace-normal break-words">
+                                            <span class="readonly">2025-05-05</span>
+                                            <input type="date"
+                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                value="2025-05-05" />
+                                        </td>
+                                        <td class="px-4 py-3 w-32 whitespace-normal break-words">
+                                            <span class="readonly">TIMEX</span>
+                                            <input
+                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                value="TIMEX" />
+                                        </td>
+                                        <td class="px-4 py-3 w-36 whitespace-normal break-words">
+                                            <span class="readonly">Chamith</span>
+                                            <input
+                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                value="Chamith" />
+                                        </td>
+                                        <td class="px-4 py-3 w-32 whitespace-normal break-words">
+                                            <span class="readonly">Scock Cord</span>
+                                            <input
+                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                value="Scock Cord" />
+                                        </td>
+                                        <td class="px-4 py-3 w-20 whitespace-normal break-words">
+                                            <span class="readonly">2mm</span>
+                                            <input
+                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                value="2mm" />
+                                        </td>
+                                        <td class="px-4 py-3 w-32 whitespace-normal break-words">
+                                            <span class="readonly">white cap grey</span>
+                                            <input
+                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                value="white cap grey" />
+                                        </td>
+                                        <td class="px-4 py-3 w-32 whitespace-normal break-words">
+                                            <span class="readonly">5 YDS</span>
+                                            <input
+                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                value="5 YDS" />
+                                        </td>
+                                        <td class="px-4 py-3 w-32 whitespace-normal break-words">
+                                            <span class="readonly"></span>
+                                            <input
+                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm5"
+                                                value="" />
+                                        </td>
+                                        <td class="px-4 py-3 w-32 whitespace-normal break-words">
+                                            <span class="readonly">2025-06-05</span>
+                                            <input type="date"
+                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                value="2025-06-05" />
+                                        </td>
+                                        <td class="px-4 py-3 w-32 whitespace-normal break-words">
+                                            <span class="readonly">2025-06-05</span>
+                                            <input type="date"
+                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                value="2025-06-05" />
+                                        </td>
+                                        <td class="px-4 py-3 w-48 text-center whitespace-normal break-words">
+                                            <div class="flex space-x-2 justify-center">
                                                 <button
-                                                    class="bg-green-600 h-12 mr-4 hover:bg-green-700 text-white px-3 py-1 rounded text-sm">
-                                                    Edit
-                                                </button>
+                                                    class="bg-green-600 h-10 hover:bg-green-700 text-white px-3 py-1 rounded text-sm"
+                                                    onclick="editRow('row1')">Edit</button>
                                                 <button
-                                                    class="bg-blue-600 h-12 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm">
-                                                    Download Oder
-                                                </button>
+                                                    class="bg-blue-600 h-10 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm hidden"
+                                                    onclick="saveRow('row1')">Save</button>
+                                                <button
+                                                    class="bg-red-600 h-10 hover:bg-red-700 text-white px-3 py-1 rounded text-sm">Download</button>
                                             </div>
                                         </td>
                                     </tr>
                                 </tbody>
                             </table>
                             <div class="py-6 flex justify-center">
+
                             </div>
                         </div>
+
 
                         <!-- Add Sample Modal -->
                         <div id="addSampleModal"
@@ -300,12 +356,15 @@
                                                 </label>
                                             </div>
 
-                                            <!-- Description -->
+                                            <!-- Oder Number -->
                                             <div>
-                                                <label for="description"
-                                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">Description</label>
-                                                <textarea id="description" name="description" rows="3"
-                                                    class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"></textarea>
+                                                <label for="sampleQuantity"
+                                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">Oder
+                                                    Number
+                                                </label>
+                                                <input id="sampleQuantity" type="text" name="sample_quantity"
+                                                    required
+                                                    class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm mb-4">
                                             </div>
 
                                             <!-- Inquiry receive date & Customer -->
@@ -506,4 +565,29 @@
             }
         });
     });
+</script>
+
+<script>
+    function editRow(rowId) {
+        const row = document.getElementById(rowId);
+        row.querySelectorAll('.readonly').forEach(span => span.classList.add('hidden'));
+        row.querySelectorAll('.editable').forEach(input => input.classList.remove('hidden'));
+        row.querySelector('button.bg-green-600').classList.add('hidden'); // Hide Edit button
+        row.querySelector('button.bg-blue-600').classList.remove('hidden'); // Show Save button
+    }
+
+    function saveRow(rowId) {
+        const row = document.getElementById(rowId);
+        const inputs = row.querySelectorAll('.editable');
+        const spans = row.querySelectorAll('.readonly');
+
+        inputs.forEach((input, i) => {
+            spans[i].textContent = input.value;
+            input.classList.add('hidden');
+        });
+        spans.forEach(span => span.classList.remove('hidden'));
+
+        row.querySelector('button.bg-green-600').classList.remove('hidden'); // Show Edit button
+        row.querySelector('button.bg-blue-600').classList.add('hidden'); // Hide Save button
+    }
 </script>
