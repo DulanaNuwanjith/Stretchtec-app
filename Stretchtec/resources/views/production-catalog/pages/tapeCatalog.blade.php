@@ -21,7 +21,7 @@
 
                         <!-- Filter Form -->
                         <form id="filterForm1" method="GET" action="" class="mb-6 flex gap-6 items-center">
-                            <div class="flex items-center gap-4 flex-wrap">
+                            <div class="flex items-center gap-4">
 
                                 <!-- CUSTOMER DROPDOWN -->
                                 <div class="relative inline-block text-left w-48">
@@ -161,118 +161,23 @@
                                         value="{{ request('item') }}">
                                 </div>
 
-                                <!-- DELIVERY STATUS DROPDOWN -->
-                                <div class="relative inline-block text-left w-48">
-                                    <label for="deliveryStatusDropdown"
-                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Customer
-                                        Delivery
-                                        Status</label>
-                                    <div>
-                                        <button type="button" id="deliveryStatusDropdown"
-                                            class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10 dark:bg-gray-700 dark:text-white"
-                                            onclick="toggleDropdown('deliveryStatus')" aria-haspopup="listbox"
-                                            aria-expanded="false">
-                                            <span
-                                                id="selectedDeliveryStatus">{{ request('deliveryStatus') ? request('deliveryStatus') : 'Select Status' }}</span>
-                                            <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20"
-                                                fill="currentColor">
-                                                <path fill-rule="evenodd"
-                                                    d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
-                                                    clip-rule="evenodd" />
-                                            </svg>
-                                        </button>
-                                    </div>
-                                    <div id="deliveryStatusDropdownMenu"
-                                        class="hidden absolute z-10 mt-2 w-full rounded-md bg-white shadow-lg ring-1 ring-black/5 dark:bg-gray-700 max-h-48 overflow-y-auto">
-                                        <div class="p-2 sticky top-0 bg-white dark:bg-gray-700 z-10">
-                                            <input type="text" id="deliveryStatusSearchInput"
-                                                placeholder="Search status..."
-                                                class="w-full px-2 py-1 text-sm border rounded-md dark:bg-gray-600 dark:text-white dark:placeholder-gray-300"
-                                                onkeyup="filterOptions('deliveryStatus')" />
-                                        </div>
-                                        <div class="py-1" role="listbox" tabindex="-1"
-                                            aria-labelledby="deliveryStatusDropdown">
-                                            <button type="button"
-                                                class="deliveryStatus-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                                                onclick="selectOption('deliveryStatus', '')">All Statuses</button>
-                                            <button type="button"
-                                                class="deliveryStatus-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                                                onclick="selectOption('deliveryStatus', 'Delivered')">Delivered</button>
-                                            <button type="button"
-                                                class="deliveryStatus-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                                                onclick="selectOption('deliveryStatus', 'Pending')">Pending</button>
-                                        </div>
-                                    </div>
-                                    <input type="hidden" name="deliveryStatus" id="deliveryStatusInput"
-                                        value="{{ request('deliveryStatus') }}">
-                                </div>
 
-                                <div class="flex gap-6 items-end">
-                                    <!-- CUSTOMER DECISION DROPDOWN -->
-                                    <div class="relative inline-block text-left w-48">
-                                        <label for="customerDecisionDropdown"
-                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Customer
-                                            Decision</label>
-                                        <div>
-                                            <button type="button" id="customerDecisionDropdown"
-                                                class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10 dark:bg-gray-700 dark:text-white"
-                                                onclick="toggleDropdown('customerDecision')" aria-haspopup="listbox"
-                                                aria-expanded="false">
-                                                <span
-                                                    id="selectedCustomerDecision">{{ request('customerDecision') ? request('customerDecision') : 'Select Decision' }}</span>
-                                                <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20"
-                                                    fill="currentColor">
-                                                    <path fill-rule="evenodd"
-                                                        d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
-                                                        clip-rule="evenodd" />
-                                                </svg>
-                                            </button>
-                                        </div>
-                                        <div id="customerDecisionDropdownMenu"
-                                            class="hidden absolute z-10 mt-2 w-full rounded-md bg-white shadow-lg ring-1 ring-black/5 dark:bg-gray-700 max-h-48 overflow-y-auto">
-                                            <div class="p-2 sticky top-0 bg-white dark:bg-gray-700 z-10">
-                                                <input type="text" id="customerDecisionSearchInput"
-                                                    placeholder="Search decision..."
-                                                    class="w-full px-2 py-1 text-sm border rounded-md dark:bg-gray-600 dark:text-white dark:placeholder-gray-300"
-                                                    onkeyup="filterOptions('customerDecision')" />
-                                            </div>
-                                            <div class="py-1" role="listbox" tabindex="-1"
-                                                aria-labelledby="customerDecisionDropdown">
-                                                <button type="button"
-                                                    class="customerDecision-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                                                    onclick="selectOption('customerDecision', '')">All
-                                                    Decisions</button>
-                                                <button type="button"
-                                                    class="customerDecision-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                                                    onclick="selectOption('customerDecision', 'Accepted')">Accepted</button>
-                                                <button type="button"
-                                                    class="customerDecision-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                                                    onclick="selectOption('customerDecision', 'Rejected')">Rejected</button>
-                                            </div>
-                                        </div>
-                                        <input type="hidden" name="customerDecision" id="customerDecisionInput"
-                                            value="{{ request('customerDecision') }}">
-                                    </div>
-                                    <button type="submit"
-                                        class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-                                        Apply Filters
-                                    </button>
-
-                                    <button type="button" id="clearFiltersBtn"
-                                        class="mt-4 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 px-4 py-2 rounded hover:bg-gray-300">
-                                        Clear Filters
-                                    </button>
-                                </div>
                             </div>
+
+                            <button type="submit"
+                                class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                                Apply Filters
+                            </button>
+
+                            <button type="button" id="clearFiltersBtn"
+                                class="mt-4 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 px-4 py-2 rounded hover:bg-gray-300">
+                                Clear Filters
+                            </button>
                         </form>
 
 
                         <div class="flex justify-between items-center mb-6">
-                            <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Sample Inquiry Records</h1>
-                            <button onclick="document.getElementById('addSampleModal').classList.remove('hidden')"
-                                class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded shadow">
-                                + Add New Order
-                            </button>
+                            <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Tape Production Catalog</h1>
                         </div>
 
                         <div class="overflow-x-auto bg-white dark:bg-gray-900 shadow rounded-lg">
@@ -313,20 +218,11 @@
                                             class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                             Development Plan Date</th>
                                         <th
-                                            class="px-4 py-3 w-36 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                            Production Status</th>
-                                        <th
-                                            class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                            Customer Delivery Status</th>
-                                        <th
-                                            class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                            Customer Decision</th>
-                                        <th
                                             class="px-4 py-3 w-48 text-xs text-center font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                             Action</th>
                                     </tr>
                                 </thead>
-                                <tbody id="sampleInquiryRecords"
+                                <tbody id="serviceRecords"
                                     class="bg-white dark:bg-gray-800 divide-y text-left divide-gray-200 dark:divide-gray-700">
                                     <tr id="row1">
                                         <!-- Each cell has a span for readonly text and a hidden input for editing -->
@@ -396,26 +292,6 @@
                                                 class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                 value="2025-06-05" />
                                         </td>
-                                        <td class="px-4 py-3 w-36 whitespace-normal break-words">
-                                            <span class="readonly">Production complete</span>
-                                            <input
-                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                value="Production complete" />
-
-                                        <td class="px-4 py-3 w-32 whitespace-normal break-words">
-                                            <span class="readonly"></span>
-                                            <button onclick="toggleDone(event, this)" type="button"
-                                                class="delivered-btn bg-green-600 text-white px-2 py-1 rounded hover:bg-green-800">
-                                                Delivered
-                                            </button>
-                                            <div class="timestamp mt-1 text-xs text-gray-500 dark:text-gray-400"></div>
-                                        </td>
-
-                                        <td class="px-4 py-3 w-32 whitespace-normal break-words">
-                                            <span class="readonly">Accepted</span>
-                                            <input
-                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                value="" />
                                         <td class="px-4 py-3 w-48 text-center whitespace-normal break-words">
                                             <div class="flex space-x-2 justify-center">
                                                 <button
@@ -607,39 +483,44 @@
         const filterForm = document.getElementById('filterForm');
 
         clearFiltersBtn.addEventListener('click', () => {
+            // Clear values
             vehicleInput.value = '';
             serviceDateFilter.value = '';
             nextServiceDateFilter.value = '';
             document.getElementById('customerInput').value = '';
             document.getElementById('merchandiserInput').value = '';
             document.getElementById('itemInput').value = '';
-            document.getElementById('deliveryStatusInput').value = '';
-            document.getElementById('customerDecisionInput').value = '';
 
+            // Reset dropdown labels
             if (selectedVehicle) selectedVehicle.textContent = 'All Vehicles';
             document.getElementById('selectedCustomer').textContent = 'Select Customer';
             document.getElementById('selectedMerchandiser').textContent = 'Select Merchandiser';
             document.getElementById('selectedItem').textContent = 'Select Item';
-            document.getElementById('selectedDeliveryStatus').textContent = 'Select Status';
-            document.getElementById('selectedCustomerDecision').textContent = 'Select Decision';
 
+            // Submit the form
             filterForm.submit();
         });
 
-        document.querySelectorAll('td').forEach(td => {
-            const timestampDiv = td.querySelector('.timestamp');
-            const deliveredBtn = td.querySelector('button.delivered-btn');
-
-            if (timestampDiv && timestampDiv.textContent.trim() && deliveredBtn) {
-                // Hide Delivered button if timestamp exists
-                deliveredBtn.classList.add('hidden');
-            } else if (timestampDiv && !timestampDiv.textContent.trim() && deliveredBtn) {
-                // Show Delivered button only if timestamp is empty
-                deliveredBtn.classList.remove('hidden');
-            }
-        });
     });
+</script>
 
+
+<script>
+    function showServiceDetailsModal(service) {
+        document.getElementById('viewVehicle').textContent = service.vehicle.license_plate;
+        document.getElementById('viewServiceDate').textContent = service.service_date;
+        document.getElementById('viewServiceType').textContent = service.service_type || '-';
+        document.getElementById('viewMileage').textContent = service.mileage;
+        document.getElementById('viewNextMileage').textContent = service.next_service_mileage;
+        document.getElementById('viewNextDate').textContent = service.next_service_date;
+        document.getElementById('viewLocation').textContent = service.service_location || '-';
+        document.getElementById('viewCost').textContent = parseFloat(service.service_cost).toFixed(2);
+        document.getElementById('viewNotes').textContent = service.service_notes || 'N/A';
+
+        document.getElementById('viewServiceModal').classList.remove('hidden');
+    }
+</script>
+<script>
     function toggleDropdown(type) {
         const menu = document.getElementById(`${type}DropdownMenu`);
         const btn = document.getElementById(`${type}Dropdown`);
@@ -649,12 +530,9 @@
     }
 
     function selectOption(type, value) {
-        const displayText = value || `Select ${capitalize(type)}`;
-        // Show "All Decisions" or "All ..." for empty values, else show the value
-        const displayValue = value || `All ${capitalize(type)}s`;
-
-        document.getElementById(`selected${capitalize(type)}`).innerText = displayValue;
-        document.getElementById(`${type}Input`).value = value || '';
+        const displayText = value || `Select ${type.charAt(0).toUpperCase() + type.slice(1)}`;
+        document.getElementById(`selected${capitalize(type)}`).innerText = value || `All ${capitalize(type)}s`;
+        document.getElementById(`${type}Input`).value = value;
         document.getElementById(`${type}DropdownMenu`).classList.add('hidden');
         document.getElementById(`${type}Dropdown`).setAttribute('aria-expanded', false);
     }
@@ -672,9 +550,9 @@
         return str.charAt(0).toUpperCase() + str.slice(1);
     }
 
-    // Close dropdown menus when clicking outside
+    // Close dropdowns on outside click
     document.addEventListener('click', function(e) {
-        ['item', 'customer', 'merchandiser', 'deliveryStatus', 'customerDecision'].forEach(type => {
+        ['item', 'customer', 'merchandiser'].forEach(type => {
             const btn = document.getElementById(`${type}Dropdown`);
             const menu = document.getElementById(`${type}DropdownMenu`);
             if (!btn.contains(e.target) && !menu.contains(e.target)) {
@@ -688,126 +566,24 @@
 <script>
     function editRow(rowId) {
         const row = document.getElementById(rowId);
-
-        // Show editable inputs, hide readonly spans
         row.querySelectorAll('.readonly').forEach(span => span.classList.add('hidden'));
         row.querySelectorAll('.editable').forEach(input => input.classList.remove('hidden'));
-
-        // Show Save button only
-        const editBtn = row.querySelector('button.edit-btn');
-        const saveBtn = row.querySelector('button.save-btn');
-
-        if (editBtn) editBtn.classList.add('hidden');
-        if (saveBtn) saveBtn.classList.remove('hidden');
-
-        // Hide Delivered button, clear timestamp
-        const statusCell = row.querySelector('td:last-child');
-        if (statusCell) {
-            const deliveredBtn = statusCell.querySelector('button.delivered-btn');
-            const timestampDiv = statusCell.querySelector('.timestamp');
-
-            if (deliveredBtn) deliveredBtn.classList.add('hidden');
-            if (timestampDiv) timestampDiv.textContent = ''; // Clear timestamp
-        }
+        row.querySelector('button.bg-green-600').classList.add('hidden'); // Hide Edit button
+        row.querySelector('button.bg-blue-600').classList.remove('hidden'); // Show Save button
     }
 
     function saveRow(rowId) {
         const row = document.getElementById(rowId);
-
         const inputs = row.querySelectorAll('.editable');
         const spans = row.querySelectorAll('.readonly');
 
-        // Copy input values to spans
         inputs.forEach((input, i) => {
             spans[i].textContent = input.value;
             input.classList.add('hidden');
         });
         spans.forEach(span => span.classList.remove('hidden'));
 
-        // Hide Save button only (no Edit shown)
-        const saveBtn = row.querySelector('button.save-btn');
-        if (saveBtn) saveBtn.classList.add('hidden');
-
-        // Optionally show Delivered button if needed
-        const statusCell = row.querySelector('td:last-child');
-        if (statusCell) {
-            const deliveredBtn = statusCell.querySelector('button.delivered-btn');
-            const timestampDiv = statusCell.querySelector('.timestamp');
-
-            if (timestampDiv && !timestampDiv.textContent.trim()) {
-                if (deliveredBtn) deliveredBtn.classList.remove('hidden');
-            }
-        }
+        row.querySelector('button.bg-green-600').classList.remove('hidden'); // Show Edit button
+        row.querySelector('button.bg-blue-600').classList.add('hidden'); // Hide Save button
     }
-
-
-    function toggleDone(event, btn) {
-        event.stopPropagation();
-
-        const cell = btn.parentElement;
-        const span = cell.querySelector('span.readonly');
-        const input = cell.querySelector('input.editable');
-        const timestampDiv = cell.querySelector('.timestamp');
-        const deliveredBtn = cell.querySelector('button.delivered-btn');
-        const notYetBtn = cell.querySelector('button.notyet-btn');
-
-        if (timestampDiv && timestampDiv.textContent.trim()) {
-            // If already marked delivered, do nothing
-            return;
-        }
-
-        if (span && input) {
-            span.textContent = "Delivered";
-            input.value = "Delivered";
-            span.classList.remove('hidden');
-            input.classList.add('hidden');
-        }
-
-        if (deliveredBtn) deliveredBtn.classList.add('hidden');
-        if (notYetBtn) notYetBtn.classList.add('hidden');
-
-        if (timestampDiv) {
-            const now = new Date();
-            timestampDiv.textContent =
-                `Delivered on ${now.toLocaleDateString()} at ${now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
-        }
-    }
-
-
-    function enableEdit(td) {
-        const row = td.parentElement;
-        // If already in edit mode, do nothing to prevent flicker
-        const saveBtn = row.querySelector('button.bg-blue-600:not(.delivered-btn)');
-        if (saveBtn && !saveBtn.classList.contains('hidden')) {
-            return;
-        }
-
-        // Only allow inline edit if not in full edit mode
-        const span = td.querySelector('span.readonly');
-        const input = td.querySelector('input.editable');
-        const deliveredBtn = td.querySelector('button.delivered-btn');
-        const notYetBtn = td.querySelector('button.notyet-btn');
-        const timestampDiv = td.querySelector('.timestamp');
-
-        if (deliveredBtn) deliveredBtn.classList.add('hidden');
-        if (notYetBtn) notYetBtn.classList.add('hidden');
-        if (timestampDiv) timestampDiv.textContent = '';
-
-        input.value = span.textContent;
-        input.classList.remove('hidden');
-        span.classList.add('hidden');
-    }
-</script>
-
-<script>
-    window.addEventListener('DOMContentLoaded', () => {
-        document.querySelectorAll('td').forEach(td => {
-            const timestampDiv = td.querySelector('.timestamp');
-            const deliveredBtn = td.querySelector('button.delivered-btn');
-
-            if (timestampDiv && timestampDiv.textContent.trim() && deliveredBtn) {
-                deliveredBtn.classList.add('hidden');
-            }
-        });
-    });
 </script>

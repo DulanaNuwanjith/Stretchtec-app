@@ -21,7 +21,7 @@
 
                         <!-- Filter Form -->
                         <form id="filterForm2" method="GET" action="" class="mb-6">
-                            <div class="flex gap-6 items-center flex-wrap">
+                            <div class="flex gap-4 items-center flex-wrap">
                                 <div class="relative inline-block text-left w-48">
                                     <label for="orderDropdown"
                                         class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Order
@@ -274,6 +274,9 @@
                                             class="px-4 py-3 w-40 text-xs font-medium uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">
                                             Send Order To Production Status</th>
                                         <th
+                                            class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                            Production Status</th>
+                                        <th
                                             class="px-4 py-3 w-32 text-xs font-medium uppercase text-gray-600 dark:text-gray-300 text-center whitespace-normal break-words">
                                             Action</th>
                                     </tr>
@@ -360,6 +363,11 @@
                                                 class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                 value="Pending" />
                                         </td>
+                                        <td class="px-4 py-3 w-36 whitespace-normal break-words">
+                                            <span class="readonly">Production complete</span>
+                                            <input
+                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                value="Production complete" />
                                         <td class="px-4 py-3 w-32 text-center whitespace-normal break-words">
                                             <div class="flex justify-center space-x-2">
                                                 <button

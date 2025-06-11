@@ -21,7 +21,7 @@ Route::get('sampleDevelopment', function () {
 })->name('sampleDevelopment.index');
 
 Route::get('productCatalog', function () {
-    return view('productCatalog');
+    return view('production-catalog.productCatalog');
 })->name('productCatalog.index');
 
 
