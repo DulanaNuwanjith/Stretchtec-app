@@ -233,88 +233,147 @@
                         <div class="overflow-x-auto bg-white dark:bg-gray-900 shadow rounded-lg">
                             <table class="table-fixed w-full text-sm divide-y divide-gray-200 dark:divide-gray-700">
                                 <thead class="bg-gray-100 dark:bg-gray-700 text-left">
-                                  <tr>
-                                    <th class="px-4 py-3 w-20 text-xs font-medium uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">Order No</th>
-                                    <th class="px-4 py-3 w-40 text-xs font-medium uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">Customer Requested Date</th>
-                                    <th class="px-4 py-3 w-40 text-xs font-medium uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">Development Plan Date</th>
-                                    <th class="px-4 py-3 w-40 text-xs font-medium uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">Colour Match Sent</th>
-                                    <th class="px-4 py-3 w-40 text-xs font-medium uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">Colour Match Receive Date</th>
-                                    <th class="px-4 py-3 w-40 text-xs font-medium uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">Yarn Ordered Date</th>
-                                    <th class="px-4 py-3 w-40 text-xs font-medium uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">Yarn Ordered PO Number</th>
-                                    <th class="px-4 py-3 w-40 text-xs font-medium uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">Shade</th>
-                                    <th class="px-4 py-3 w-40 text-xs font-medium uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">Tkt</th>
-                                    <th class="px-4 py-3 w-40 text-xs font-medium uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">Yarn Supplier</th>
-                                    <th class="px-4 py-3 w-40 text-xs font-medium uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">Yarn Receive Date</th>
-                                    <th class="px-4 py-3 w-40 text-xs font-medium uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">Production Deadline</th>
-                                    <th class="px-4 py-3 w-40 text-xs font-medium uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">Send Order To Production Status</th>
-                                    <th class="px-4 py-3 w-32 text-xs font-medium uppercase text-gray-600 dark:text-gray-300 text-center whitespace-normal break-words">Action</th>
-                                  </tr>
+                                    <tr>
+                                        <th
+                                            class="px-4 py-3 w-20 text-xs font-medium uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">
+                                            Order No</th>
+                                        <th
+                                            class="px-4 py-3 w-40 text-xs font-medium uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">
+                                            Customer Requested Date</th>
+                                        <th
+                                            class="px-4 py-3 w-40 text-xs font-medium uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">
+                                            Development Plan Date</th>
+                                        <th
+                                            class="px-4 py-3 w-40 text-xs font-medium uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">
+                                            Colour Match Sent</th>
+                                        <th
+                                            class="px-4 py-3 w-40 text-xs font-medium uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">
+                                            Colour Match Receive Date</th>
+                                        <th
+                                            class="px-4 py-3 w-40 text-xs font-medium uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">
+                                            Yarn Ordered Date</th>
+                                        <th
+                                            class="px-4 py-3 w-40 text-xs font-medium uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">
+                                            Yarn Ordered PO Number</th>
+                                        <th
+                                            class="px-4 py-3 w-40 text-xs font-medium uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">
+                                            Shade</th>
+                                        <th
+                                            class="px-4 py-3 w-40 text-xs font-medium uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">
+                                            Tkt</th>
+                                        <th
+                                            class="px-4 py-3 w-40 text-xs font-medium uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">
+                                            Yarn Supplier</th>
+                                        <th
+                                            class="px-4 py-3 w-40 text-xs font-medium uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">
+                                            Yarn Receive Date</th>
+                                        <th
+                                            class="px-4 py-3 w-40 text-xs font-medium uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">
+                                            Production Deadline</th>
+                                        <th
+                                            class="px-4 py-3 w-40 text-xs font-medium uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">
+                                            Send Order To Production Status</th>
+                                        <th
+                                            class="px-4 py-3 w-32 text-xs font-medium uppercase text-gray-600 dark:text-gray-300 text-center whitespace-normal break-words">
+                                            Action</th>
+                                    </tr>
                                 </thead>
-                                <tbody id="productionRecords" class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700 text-left">
+                                <tbody id="productionRecords"
+                                    class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700 text-left">
 
-                                  <tr id="prodRow1">
-                                    <td class="px-4 py-3 w-20 whitespace-normal break-words">
-                                      <span class="readonly">001</span>
-                                      <input class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm" value="001" />
-                                    </td>
-                                    <td class="px-4 py-3 w-40 whitespace-normal break-words">
-                                      <span class="readonly">2025-06-05</span>
-                                      <input type="date" class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm" value="2025-06-05" />
-                                    </td>
-                                    <td class="px-4 py-3 w-40 whitespace-normal break-words">
-                                      <span class="readonly">2025-06-10</span>
-                                      <input type="date" class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm" value="2025-06-10" />
-                                    </td>
-                                    <td class="px-4 py-3 w-40 whitespace-normal break-words">
-                                      <span class="readonly">Sent</span>
-                                      <input class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm" value="Sent" />
-                                    </td>
-                                    <td class="px-4 py-3 w-40 whitespace-normal break-words">
-                                      <span class="readonly">2025-05-30</span>
-                                      <input type="date" class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm" value="2025-05-30" />
-                                    </td>
-                                    <td class="px-4 py-3 w-40 whitespace-normal break-words">
-                                      <span class="readonly">2025-05-20</span>
-                                      <input type="date" class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm" value="2025-05-20" />
-                                    </td>
-                                    <td class="px-4 py-3 w-40 whitespace-normal break-words">
-                                      <span class="readonly">PO12345</span>
-                                      <input class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm" value="PO12345" />
-                                    </td>
-                                    <td class="px-4 py-3 w-40 whitespace-normal break-words">
-                                      <span class="readonly">Dark Blue</span>
-                                      <input class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm" value="Dark Blue" />
-                                    </td>
-                                    <td class="px-4 py-3 w-40 whitespace-normal break-words">
-                                      <span class="readonly">30</span>
-                                      <input type="number" class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm" value="30" />
-                                    </td>
-                                    <td class="px-4 py-3 w-40 whitespace-normal break-words">
-                                      <span class="readonly">Supplier A</span>
-                                      <input class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm" value="Supplier A" />
-                                    </td>
-                                    <td class="px-4 py-3 w-40 whitespace-normal break-words">
-                                      <span class="readonly">2025-05-25</span>
-                                      <input type="date" class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm" value="2025-05-25" />
-                                    </td>
-                                    <td class="px-4 py-3 w-40 whitespace-normal break-words">
-                                      <span class="readonly">2025-07-01</span>
-                                      <input type="date" class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm" value="2025-07-01" />
-                                    </td>
-                                    <td class="px-4 py-3 w-40 whitespace-normal break-words">
-                                      <span class="readonly">Pending</span>
-                                      <input class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm" value="Pending" />
-                                    </td>
-                                    <td class="px-4 py-3 w-32 text-center whitespace-normal break-words">
-                                      <div class="flex justify-center space-x-2">
-                                        <button class="bg-green-600 h-10 px-3 py-1 rounded text-white text-sm hover:bg-green-700" onclick="editRow('prodRow1')">Edit</button>
-                                        <button class="bg-blue-600 h-10 px-3 py-1 rounded text-white text-sm hover:bg-blue-700 hidden" onclick="saveRow('prodRow1')">Save</button>
-                                      </div>
-                                    </td>
-                                  </tr>
+                                    <tr id="prodRow1">
+                                        <td class="px-4 py-3 w-20 whitespace-normal break-words">
+                                            <span class="readonly">001</span>
+                                            <input
+                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                value="001" />
+                                        </td>
+                                        <td class="px-4 py-3 w-40 whitespace-normal break-words">
+                                            <span class="readonly">2025-06-05</span>
+                                            <input type="date"
+                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                value="2025-06-05" />
+                                        </td>
+                                        <td class="px-4 py-3 w-40 whitespace-normal break-words">
+                                            <span class="readonly">2025-06-10</span>
+                                            <input type="date"
+                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                value="2025-06-10" />
+                                        </td>
+                                        <td class="px-4 py-3 w-40 whitespace-normal break-words">
+                                            <span class="readonly">2025-05-30</span>
+                                            <input type="date"
+                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                value="2025-05-30" />
+                                        </td>
+                                        <td class="px-4 py-3 w-40 whitespace-normal break-words">
+                                            <span class="readonly">2025-05-30</span>
+                                            <input type="date"
+                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                value="2025-05-30" />
+                                        </td>
+                                        <td class="px-4 py-3 w-40 whitespace-normal break-words">
+                                            <span class="readonly">2025-05-20</span>
+                                            <input type="date"
+                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                value="2025-05-20" />
+                                        </td>
+                                        <td class="px-4 py-3 w-40 whitespace-normal break-words">
+                                            <span class="readonly">PO12345</span>
+                                            <input
+                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                value="PO12345" />
+                                        </td>
+                                        <td class="px-4 py-3 w-40 whitespace-normal break-words">
+                                            <span class="readonly">Dark Blue</span>
+                                            <input
+                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                value="Dark Blue" />
+                                        </td>
+                                        <td class="px-4 py-3 w-40 whitespace-normal break-words">
+                                            <span class="readonly">30</span>
+                                            <input type="number"
+                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                value="30" />
+                                        </td>
+                                        <td class="px-4 py-3 w-40 whitespace-normal break-words">
+                                            <span class="readonly">Supplier A</span>
+                                            <input
+                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                value="Supplier A" />
+                                        </td>
+                                        <td class="px-4 py-3 w-40 whitespace-normal break-words">
+                                            <span class="readonly">2025-05-25</span>
+                                            <input type="date"
+                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                value="2025-05-25" />
+                                        </td>
+                                        <td class="px-4 py-3 w-40 whitespace-normal break-words">
+                                            <span class="readonly">2025-07-01</span>
+                                            <input type="date"
+                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                value="2025-07-01" />
+                                        </td>
+                                        <td class="px-4 py-3 w-40 whitespace-normal break-words">
+                                            <span class="readonly">Pending</span>
+                                            <input
+                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                value="Pending" />
+                                        </td>
+                                        <td class="px-4 py-3 w-32 text-center whitespace-normal break-words">
+                                            <div class="flex justify-center space-x-2">
+                                                <button
+                                                    class="bg-green-600 h-10 px-3 py-1 rounded text-white text-sm hover:bg-green-700"
+                                                    onclick="editRow('prodRow1')">Edit</button>
+                                                <button
+                                                    class="bg-blue-600 h-10 px-3 py-1 rounded text-white text-sm hover:bg-blue-700 hidden"
+                                                    onclick="saveRow('prodRow1')">Save</button>
+                                            </div>
+                                        </td>
+                                    </tr>
 
                                 </tbody>
-                              </table>
+                            </table>
                             <div class="py-6 flex justify-center">
 
                             </div>
@@ -510,39 +569,39 @@
 
 <script>
     function editRow(rowId) {
-      const row = document.getElementById(rowId);
-      const spans = row.querySelectorAll('span.readonly');
-      const inputs = row.querySelectorAll('input.editable');
-      spans.forEach(s => s.classList.add('hidden'));
-      inputs.forEach(i => i.classList.remove('hidden'));
+        const row = document.getElementById(rowId);
+        const spans = row.querySelectorAll('span.readonly');
+        const inputs = row.querySelectorAll('input.editable');
+        spans.forEach(s => s.classList.add('hidden'));
+        inputs.forEach(i => i.classList.remove('hidden'));
 
-      // Toggle buttons
-      const editBtn = row.querySelector('button.bg-green-600');
-      const saveBtn = row.querySelector('button.bg-blue-600');
-      if (editBtn && saveBtn) {
-        editBtn.classList.add('hidden');
-        saveBtn.classList.remove('hidden');
-      }
+        // Toggle buttons
+        const editBtn = row.querySelector('button.bg-green-600');
+        const saveBtn = row.querySelector('button.bg-blue-600');
+        if (editBtn && saveBtn) {
+            editBtn.classList.add('hidden');
+            saveBtn.classList.remove('hidden');
+        }
     }
 
     function saveRow(rowId) {
-      const row = document.getElementById(rowId);
-      const spans = row.querySelectorAll('span.readonly');
-      const inputs = row.querySelectorAll('input.editable');
+        const row = document.getElementById(rowId);
+        const spans = row.querySelectorAll('span.readonly');
+        const inputs = row.querySelectorAll('input.editable');
 
-      inputs.forEach((input, idx) => {
-        spans[idx].textContent = input.value;
-      });
+        inputs.forEach((input, idx) => {
+            spans[idx].textContent = input.value;
+        });
 
-      spans.forEach(s => s.classList.remove('hidden'));
-      inputs.forEach(i => i.classList.add('hidden'));
+        spans.forEach(s => s.classList.remove('hidden'));
+        inputs.forEach(i => i.classList.add('hidden'));
 
-      // Toggle buttons
-      const editBtn = row.querySelector('button.bg-green-600');
-      const saveBtn = row.querySelector('button.bg-blue-600');
-      if (editBtn && saveBtn) {
-        editBtn.classList.remove('hidden');
-        saveBtn.classList.add('hidden');
-      }
+        // Toggle buttons
+        const editBtn = row.querySelector('button.bg-green-600');
+        const saveBtn = row.querySelector('button.bg-blue-600');
+        if (editBtn && saveBtn) {
+            editBtn.classList.remove('hidden');
+            saveBtn.classList.add('hidden');
+        }
     }
-  </script>
+</script>

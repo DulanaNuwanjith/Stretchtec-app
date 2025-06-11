@@ -18,7 +18,10 @@ Route::middleware([
 
 Route::get('sampleDevelopment', function () {
     return view('sample-development.sampleDevelopment');
-});
+})->name('sampleDevelopment.index');
 
+Route::get('productCatalog', function () {
+    return view('productCatalog');
+})->name('productCatalog.index');
 
 

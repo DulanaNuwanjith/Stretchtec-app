@@ -39,44 +39,23 @@
                 </li>
 
                 <li>
-                    <a href="sampleDevelopment"
+                    <a href="{{ route('sampleDevelopment.index') }}"
                         class="flex items-center px-4 py-2 rounded hover:bg-gray-200 {{ request()->routeIs('sampleDevelopment.*') ? 'bg-gray-200' : '' }}">
-                        <img src="{{ asset('icons/list.png') }}" alt="Vehicles" class="w-6 h-6 mr-5" />
+                        <img src="{{ asset('icons/research.png') }}" alt="" class="w-6 h-6 mr-5" />
                         <span>Sample Development</span>
                     </a>
                 </li>
 
-                {{-- <li>
-                    <a href=""
-                        class="flex items-center px-4 py-2 rounded hover:bg-gray-200 {{ request()->routeIs('services.*') ? 'bg-gray-200' : '' }}">
-                        <img src="{{ asset('icons/sign.png') }}" alt="Service" class="w-6 h-6 mr-5" />
-                        <span>Service</span>
+                <li>
+                    <a href="{{ route('productCatalog.index') }}"
+                        class="flex items-center px-4 py-2 rounded hover:bg-gray-200 {{ request()->routeIs('productCatalog.*') ? 'bg-gray-200' : '' }}">
+                        <img src="{{ asset('icons/catalog.png') }}" alt="" class="w-6 h-6 mr-5" />
+                        <span>Product Catalog</span>
                     </a>
                 </li>
 
-                <li>
-                    <a href=""
-                        class="flex items-center px-4 py-2 rounded hover:bg-gray-200 {{ request()->routeIs('maintainances.*') ? 'bg-gray-200' : '' }}">
-                        <img src="{{ asset('icons/repair.png') }}" alt="Maintainance" class="w-6 h-6 mr-5" />
-                        <span>Maintainance</span>
-                    </a>
-                </li>
 
-                <li>
-                    <a href=""
-                        class="flex items-center px-4 py-2 rounded hover:bg-gray-200 {{ request()->routeIs('meterreads.*') ? 'bg-gray-200' : '' }}">
-                        <img src="{{ asset('icons/speedometer.png') }}" alt="Meter Reading" class="w-6 h-6 mr-5" />
-                        <span>Meter Reading</span>
-                    </a>
-                </li>
-                <li>
-                    <a href=""
-                        class="flex items-center px-4 py-2 rounded hover:bg-gray-200 {{ request()->routeIs('travelrecords.*') ? 'bg-gray-200' : '' }}">
-                        <img src="{{ asset('icons/travel.png') }}" alt="Meter Reading" class="w-6 h-6 mr-5" />
-                        <span>Travel Records</span>
-                    </a>
-                </li>
-            </ul> --}}
+            </ul>
 
             <!-- Profile and Logout as Sidebar Buttons -->
             <ul class="space-y-2 border-t pt-4 mt-4">
