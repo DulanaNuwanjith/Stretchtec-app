@@ -26,14 +26,15 @@
                                 <!-- CUSTOMER DROPDOWN -->
                                 <div class="relative inline-block text-left w-48">
                                     <label for="customerDropdown"
-                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Customer</label>
+                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Sample
+                                        No</label>
                                     <div>
                                         <button type="button" id="customerDropdown"
                                             class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10 dark:bg-gray-700 dark:text-white"
                                             onclick="toggleDropdown('customer')" aria-haspopup="listbox"
                                             aria-expanded="false">
                                             <span
-                                                id="selectedCustomer">{{ request('customer') ? request('customer') : 'Select Customer' }}</span>
+                                                id="selectedCustomer">{{ request('customer') ? request('customer') : 'Select Sample No' }}</span>
                                             <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20"
                                                 fill="currentColor">
                                                 <path fill-rule="evenodd"
@@ -177,7 +178,12 @@
 
 
                         <div class="flex justify-between items-center mb-6">
-                            <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Tape Production Catalog</h1>
+                            <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Tapes Production Catalog
+                            </h1>
+                            <button onclick="document.getElementById('addProductModal').classList.remove('hidden')"
+                                class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded shadow">
+                                + Add New Item
+                            </button>
                         </div>
 
                         <div class="overflow-x-auto bg-white dark:bg-gray-900 shadow rounded-lg">
@@ -185,14 +191,11 @@
                                 <thead class="bg-gray-100 dark:bg-gray-700 text-left">
                                     <tr>
                                         <th
-                                            class="px-4 py-3 w-20 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                            Order No</th>
+                                            class="px-4 py-3 w-24 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                            Sample No</th>
                                         <th
-                                            class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                            Inquiry Receive Date</th>
-                                        <th
-                                            class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                            Customer</th>
+                                            class="px-4 py-3 w-40 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                            Date</th>
                                         <th
                                             class="px-4 py-3 w-36 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                             Merchandiser</th>
@@ -200,23 +203,26 @@
                                             class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                             Item</th>
                                         <th
-                                            class="px-4 py-3 w-20 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                            class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                             Size</th>
                                         <th
                                             class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                             Colour</th>
                                         <th
-                                            class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                            Sample Quantity</th>
+                                            class="px-4 py-3 w-48 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                            Reference No</th>
                                         <th
                                             class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                            Customer Special Comments</th>
+                                            Shade</th>
                                         <th
                                             class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                            Customer Requested Dates</th>
+                                            TKT</th>
                                         <th
                                             class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                            Development Plan Date</th>
+                                            Approval</th>
+                                        <th
+                                            class="px-4 py-3 w-72 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                            Special Note</th>
                                         <th
                                             class="px-4 py-3 w-48 text-xs text-center font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                             Action</th>
@@ -226,71 +232,72 @@
                                     class="bg-white dark:bg-gray-800 divide-y text-left divide-gray-200 dark:divide-gray-700">
                                     <tr id="row1">
                                         <!-- Each cell has a span for readonly text and a hidden input for editing -->
-                                        <td class="px-4 py-3 w-20 whitespace-normal break-words">
-                                            <span class="readonly">001</span>
+                                        <td class="px-4 py-3 w-24 whitespace-normal break-words">
+                                            <span class="readonly">1880</span>
                                             <input
                                                 class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                value="001" />
+                                                value="1880" />
                                         </td>
-                                        <td class="px-4 py-3 w-32 whitespace-normal break-words">
+                                        <td class="px-4 py-3 w-40 whitespace-normal break-words">
                                             <span class="readonly">2025-05-05</span>
                                             <input type="date"
                                                 class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                 value="2025-05-05" />
                                         </td>
                                         <td class="px-4 py-3 w-32 whitespace-normal break-words">
-                                            <span class="readonly">TIMEX</span>
+                                            <span class="readonly">Ama liyanage</span>
                                             <input
                                                 class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                value="TIMEX" />
-                                        </td>
-                                        <td class="px-4 py-3 w-36 whitespace-normal break-words">
-                                            <span class="readonly">Chamith</span>
-                                            <input
-                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                value="Chamith" />
+                                                value="Ama liyanage" />
                                         </td>
                                         <td class="px-4 py-3 w-32 whitespace-normal break-words">
-                                            <span class="readonly">Scock Cord</span>
+                                            <span class="readonly">Elastic</span>
                                             <input
                                                 class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                value="Scock Cord" />
-                                        </td>
-                                        <td class="px-4 py-3 w-20 whitespace-normal break-words">
-                                            <span class="readonly">2mm</span>
-                                            <input
-                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                value="2mm" />
+                                                value="Elastic" />
                                         </td>
                                         <td class="px-4 py-3 w-32 whitespace-normal break-words">
-                                            <span class="readonly">white cap grey</span>
+                                            <span class="readonly">2 1/4</span>
                                             <input
                                                 class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                value="white cap grey" />
+                                                value="2 1/4" />
                                         </td>
                                         <td class="px-4 py-3 w-32 whitespace-normal break-words">
-                                            <span class="readonly">5 YDS</span>
+                                            <span class="readonly">Black</span>
                                             <input
                                                 class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                value="5 YDS" />
+                                                value="Black" />
+                                        </td>
+                                        <td class="px-4 py-3 w-48 whitespace-normal break-words">
+                                            <span class="readonly">STKE/2025/JA25-B</span>
+                                            <input
+                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                value="STKE/2025/JA25-B" />
                                         </td>
                                         <td class="px-4 py-3 w-32 whitespace-normal break-words">
-                                            <span class="readonly"></span>
+                                            <span class="readonly">AE Black</span>
                                             <input
                                                 class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm5"
-                                                value="" />
+                                                value="AE Black" />
                                         </td>
                                         <td class="px-4 py-3 w-32 whitespace-normal break-words">
-                                            <span class="readonly">2025-06-05</span>
-                                            <input type="date"
+                                            <span class="readonly">TKT 120</span>
+                                            <input
                                                 class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                value="2025-06-05" />
+                                                value="TKT 120" />
                                         </td>
                                         <td class="px-4 py-3 w-32 whitespace-normal break-words">
-                                            <span class="readonly">2025-06-05</span>
-                                            <input type="date"
+                                            <span class="readonly">AE</span>
+                                            <input
                                                 class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                value="2025-06-05" />
+                                                value="AE" />
+                                        </td>
+                                        <td class="px-4 py-3 w-72 whitespace-normal break-words">
+                                            <span class="readonly">abc 1234 long sample description to test line
+                                                wrapping</span>
+                                            <input
+                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                value="abc 1234 long sample description to test line wrapping" />
                                         </td>
                                         <td class="px-4 py-3 w-48 text-center whitespace-normal break-words">
                                             <div class="flex space-x-2 justify-center">
@@ -301,7 +308,7 @@
                                                     class="bg-blue-600 h-10 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm hidden"
                                                     onclick="saveRow('row1')">Save</button>
                                                 <button
-                                                    class="bg-red-600 h-10 hover:bg-red-700 text-white px-3 py-1 rounded text-sm">Download</button>
+                                                    class="bg-gray-600 h-10 hover:bg-gray-700 text-white px-3 py-1 rounded text-sm">Download</button>
                                             </div>
                                         </td>
                                     </tr>
@@ -311,10 +318,8 @@
 
                             </div>
                         </div>
-
-
-                        <!-- Add Sample Modal -->
-                        <div id="addSampleModal"
+                        <!-- Add Product Modal -->
+                        <div id="addProductModal"
                             class="fixed inset-0 z-50 hidden bg-black bg-opacity-50 flex items-center justify-center py-5">
                             <div class="w-full max-w-[700px] bg-white dark:bg-gray-900 rounded-2xl shadow-2xl p-4 transform transition-all scale-95 max-h-[calc(100vh-10rem)] overflow-y-auto"
                                 onclick="event.stopPropagation()">
@@ -341,7 +346,7 @@
                                                                 d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
                                                         </svg>
                                                         <p class="mb-2 text-sm text-gray-500 dark:text-gray-400">
-                                                            <span class="font-semibold">Upload Order soft copy</span>
+                                                            <span class="font-semibold">Upload Sample Photo</span>
                                                             or drag and drop
                                                         </p>
                                                         <p class="text-xs text-gray-500 dark:text-gray-400">PDF, JPG
@@ -355,7 +360,7 @@
                                             <!-- Oder Number -->
                                             <div>
                                                 <label for="sampleQuantity"
-                                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">Oder
+                                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">Sample
                                                     Number
                                                 </label>
                                                 <input id="sampleQuantity" type="text" name="sample_quantity"
@@ -367,16 +372,14 @@
                                             <div class="flex gap-4">
                                                 <div class="w-1/2">
                                                     <label for="inquiryDate"
-                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Inquiry
-                                                        Receive Date</label>
-                                                    <input id="inquiryDate" type="date" name="inquiry_date"
-                                                        required
+                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Date</label>
+                                                    <input id="Date" type="date" name="inquiry_date" required
                                                         class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                 </div>
                                                 <div class="w-1/2">
-                                                    <label for="customer"
-                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer</label>
-                                                    <input id="customer" type="text" name="customer" required
+                                                    <label for="merchandiser"
+                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Merchandiser</label>
+                                                    <input id="Merchandiser" type="text" name="customer" required
                                                         class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                 </div>
                                             </div>
@@ -384,16 +387,16 @@
                                             <!-- Merchandiser & Item -->
                                             <div class="flex gap-4">
                                                 <div class="w-1/2">
-                                                    <label for="merchandiser"
-                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Merchandiser</label>
-                                                    <input id="merchandiser" type="text" name="merchandiser"
-                                                        required
-                                                        class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                                </div>
-                                                <div class="w-1/2">
                                                     <label for="item"
                                                         class="block text-sm font-medium text-gray-700 dark:text-gray-300">Item</label>
                                                     <input id="item" type="text" name="item" required
+                                                        class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                </div>
+
+                                                <div class="w-1/2">
+                                                    <label for="size"
+                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Size</label>
+                                                    <input id="size" type="text" name="size" required
                                                         class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                 </div>
                                             </div>
@@ -401,15 +404,30 @@
                                             <!-- Size & Colour -->
                                             <div class="flex gap-4">
                                                 <div class="w-1/2">
-                                                    <label for="size"
-                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Size</label>
-                                                    <input id="size" type="text" name="size" required
-                                                        class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                                </div>
-                                                <div class="w-1/2">
                                                     <label for="colour"
                                                         class="block text-sm font-medium text-gray-700 dark:text-gray-300">Colour</label>
                                                     <input id="colour" type="text" name="colour" required
+                                                        class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                </div>
+                                                <div class="w-1/2">
+                                                    <label for="shade"
+                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Shade</label>
+                                                    <input id="shade" type="text" name="shade" required
+                                                        class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                </div>
+                                            </div>
+                                            <!-- Size & Colour -->
+                                            <div class="flex gap-4">
+                                                <div class="w-1/2">
+                                                    <label for="colour"
+                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">TKT</label>
+                                                    <input id="TKT" type="text" name="TKT" required
+                                                        class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                </div>
+                                                <div class="w-1/2">
+                                                    <label for="shade"
+                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Approval</label>
+                                                    <input id="approval" type="text" name="approval" required
                                                         class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                 </div>
                                             </div>
@@ -417,42 +435,26 @@
                                             <!-- Sample Quantity -->
                                             <div>
                                                 <label for="sampleQuantity"
-                                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">Sample
-                                                    Quantity (yds or mtr)</label>
-                                                <input id="sampleQuantity" type="text" name="sample_quantity"
-                                                    required
+                                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">Reference
+                                                    No</label>
+                                                <input id="Reference No" type="text" name="Reference No" required
                                                     class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm mb-4">
                                             </div>
 
-                                            <span class="font-sans font-semibold text-m block mb-2">SPECIAL CUSTOMER
-                                                COMMENTS & REQUESTED DATES</span>
-
-                                            <!-- Customer Comments & Requested Dates -->
-                                            <div class="flex gap-4">
-                                                <div class="w-1/2">
-                                                    <label for="customerComments"
-                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer
-                                                        Comments</label>
-                                                    <input id="customerComments" type="text"
-                                                        name="customer_comments"
-                                                        class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                                </div>
-                                                <div class="w-1/2">
-                                                    <label for="requestedDate"
-                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer
-                                                        Requested Date</label>
-                                                    <input id="requestedDate" type="date"
-                                                        name="customer_requested_date"
-                                                        class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                                </div>
+                                            <!-- Sample Quantity -->
+                                            <div>
+                                                <label for="sampleQuantity"
+                                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">Special
+                                                    Note</label>
+                                                <input id="Special Note" type="text" name="Special Note" required
+                                                    class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm mb-4">
                                             </div>
-
                                         </div>
 
                                         <!-- Buttons -->
                                         <div class="flex justify-end gap-3 mt-12">
                                             <button type="button"
-                                                onclick="document.getElementById('addSampleModal').classList.add('hidden')"
+                                                onclick="document.getElementById('addProductModal').classList.add('hidden')"
                                                 class="px-4 py-2 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 text-sm rounded hover:bg-gray-300">
                                                 Cancel
                                             </button>
@@ -475,25 +477,17 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        const vehicleInput = document.getElementById('vehicleInput');
-        const serviceDateFilter = document.getElementById('serviceDateFilter');
-        const nextServiceDateFilter = document.getElementById('nextServiceDateFilter');
         const clearFiltersBtn = document.getElementById('clearFiltersBtn');
         const selectedVehicle = document.getElementById('selectedVehicle');
         const filterForm = document.getElementById('filterForm');
 
         clearFiltersBtn.addEventListener('click', () => {
             // Clear values
-            vehicleInput.value = '';
-            serviceDateFilter.value = '';
-            nextServiceDateFilter.value = '';
             document.getElementById('customerInput').value = '';
             document.getElementById('merchandiserInput').value = '';
             document.getElementById('itemInput').value = '';
 
-            // Reset dropdown labels
-            if (selectedVehicle) selectedVehicle.textContent = 'All Vehicles';
-            document.getElementById('selectedCustomer').textContent = 'Select Customer';
+            document.getElementById('selectedCustomer').textContent = 'Select Sample No';
             document.getElementById('selectedMerchandiser').textContent = 'Select Merchandiser';
             document.getElementById('selectedItem').textContent = 'Select Item';
 
@@ -504,22 +498,6 @@
     });
 </script>
 
-
-<script>
-    function showServiceDetailsModal(service) {
-        document.getElementById('viewVehicle').textContent = service.vehicle.license_plate;
-        document.getElementById('viewServiceDate').textContent = service.service_date;
-        document.getElementById('viewServiceType').textContent = service.service_type || '-';
-        document.getElementById('viewMileage').textContent = service.mileage;
-        document.getElementById('viewNextMileage').textContent = service.next_service_mileage;
-        document.getElementById('viewNextDate').textContent = service.next_service_date;
-        document.getElementById('viewLocation').textContent = service.service_location || '-';
-        document.getElementById('viewCost').textContent = parseFloat(service.service_cost).toFixed(2);
-        document.getElementById('viewNotes').textContent = service.service_notes || 'N/A';
-
-        document.getElementById('viewServiceModal').classList.remove('hidden');
-    }
-</script>
 <script>
     function toggleDropdown(type) {
         const menu = document.getElementById(`${type}DropdownMenu`);
