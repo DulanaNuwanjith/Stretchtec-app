@@ -18,10 +18,8 @@
                     <img src="{{ asset('images/logo.png') }}" alt="Logo" class="w-72 object-contain" />
                 </div>
                 <p class="text-sm text-center font-sans px-4 text-blue-900">
-                    Our vision is to be the leading Sri Lankan holding company, securing its interests as a preferred
-                    partner for institutional investors in the private and public sectors, as well as multinational
-                    corporations, to standardize the efficacy and profitability of the businesses in which Rangiri
-                    Holdings has a stake.
+                    Our vision is to be the market leader in service and quality exceeding customer expectations all the
+                    time being a partner in progress to win the global market competition in every aspect.
                 </p>
             </div>
 
@@ -34,7 +32,8 @@
 
                 <form method="POST" action="{{ route('login') }}">
                     @csrf
-                    <input id="email" type="email" name="email" :value="old('email')" required autofocus autocomplete="username"
+                    <input id="email" type="email" name="email" :value="old('email')" required autofocus
+                        autocomplete="username"
                         class="w-full text-sm font-sans mb-4 px-4 py-2 rounded-full bg-green-100 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-400" />
                     <div class="relative mb-2">
                         <input id="password" type="password" name="password" required autocomplete="current-password"
