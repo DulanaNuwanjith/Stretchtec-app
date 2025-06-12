@@ -651,14 +651,14 @@
             // Mark as Done
             button.textContent = 'Done';
             button.classList.remove('bg-gray-300', 'text-black', 'hover:bg-gray-400');
-            button.classList.add('bg-green-500', 'text-white', 'hover:bg-green-600');
+            button.classList.add('bg-blue-600', 'text-white', 'hover:bg-blue-700');
 
             const now = new Date();
             timestamp.textContent = `Done on ${now.toLocaleDateString()} at ${now.toLocaleTimeString()}`;
         } else {
             // Revert to Pending
             button.textContent = 'Pending';
-            button.classList.remove('bg-green-500', 'text-white', 'hover:bg-green-600');
+            button.classList.remove('bg-blue-600', 'text-white', 'hover:bg-blue-700');
             button.classList.add('bg-gray-300', 'text-black', 'hover:bg-gray-400');
 
             timestamp.textContent = '';
@@ -701,14 +701,14 @@
             // ✅ Set to "Ordered" with green color
             button.textContent = 'Ordered';
             button.classList.remove('bg-gray-300', 'text-black', 'hover:bg-gray-400');
-            button.classList.add('bg-green-500', 'text-white', 'hover:bg-green-600');
+            button.classList.add('bg-blue-600', 'text-white', 'hover:bg-blue-700');
 
             const now = new Date();
             timestamp.textContent = `Ordered on ${now.toLocaleDateString()} at ${now.toLocaleTimeString()}`;
         } else {
             // ✅ Set back to "Pending"
             button.textContent = 'Pending';
-            button.classList.remove('bg-green-500', 'text-white', 'hover:bg-green-600');
+            button.classList.remove('bg-blue-600', 'text-white', 'hover:bg-blue-700');
             button.classList.add('bg-gray-300', 'text-black', 'hover:bg-gray-400');
 
             timestamp.textContent = '';
@@ -751,14 +751,14 @@
             // Change to Sent (green)
             button.textContent = 'Sent';
             button.classList.remove('bg-gray-300', 'text-black', 'hover:bg-gray-400');
-            button.classList.add('bg-green-500', 'text-white', 'hover:bg-green-600');
+            button.classList.add('bg-blue-600', 'text-white', 'hover:bg-blue-700');
 
             const now = new Date();
             timestamp.textContent = `Sent on ${now.toLocaleDateString()} at ${now.toLocaleTimeString()}`;
         } else {
             // Revert to Pending
             button.textContent = 'Pending';
-            button.classList.remove('bg-green-500', 'text-white', 'hover:bg-green-600');
+            button.classList.remove('bg-blue-600', 'text-white', 'hover:bg-blue-700');
             button.classList.add('bg-gray-300', 'text-black', 'hover:bg-gray-400');
 
             timestamp.textContent = '';
