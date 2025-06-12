@@ -6,14 +6,6 @@
 
     <div class="flex-1 overflow-y-auto p-4  bg-white ">
 
-        <div class="flex justify-between items-center mb-4 p-4">
-            <h2 class="text-3xl font-bold text-gray-800 dark:text-white">Production Catalog</h2>
-            <button onclick="document.getElementById('').classList.remove('hidden')"
-                class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded shadow">
-                + Add New Item
-            </button>
-        </div>
-
         <!-- Tabs Header -->
         <div class="flex space-x-4 border-b border-gray-300 mb-4 bg-white p-4  dark:bg-gray-800 overflow-hidden  ">
             <button @click="tab = 'page1'"
@@ -29,7 +21,7 @@
             <button @click="tab = 'page3'"
                 :class="tab === 'page3' ? 'border-b-2 border-blue-500 text-blue-600' : 'text-gray-600'"
                 class="pb-2 px-3 font-semibold">
-                Codes
+                Cords
             </button>
         </div>
 
