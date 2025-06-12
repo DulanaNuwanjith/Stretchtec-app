@@ -311,6 +311,9 @@
                                             Customer Requested Dates</th>
                                         <th
                                             class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                            Aready Developed Or Not</th>
+                                        <th
+                                            class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                             Development Plan Date</th>
                                         <th
                                             class="px-4 py-3 w-36 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
@@ -389,6 +392,12 @@
                                             <input type="date"
                                                 class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                 value="2025-06-05" />
+                                        </td>
+                                        <td class="px-4 py-3 w-32 whitespace-normal break-words text-center">
+                                            <span class="readonly">Not</span>
+                                            <input 
+                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                value="Not" />
                                         </td>
                                         <td class="px-4 py-3 w-32 whitespace-normal break-words">
                                             <span class="readonly">2025-06-05</span>
@@ -528,6 +537,12 @@
                                                 class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                 value="2025-06-05" />
                                         </td>
+                                        <td class="px-4 py-3 w-32 whitespace-normal break-words text-center">
+                                            <span class="readonly">Not</span>
+                                            <input 
+                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                value="Not" />
+                                        </td>
                                         <td class="px-4 py-3 w-32 whitespace-normal break-words">
                                             <span class="readonly">2025-06-05</span>
                                             <input type="date"
@@ -564,7 +579,7 @@
                                                     class="bg-green-600 h-10 hover:bg-green-700 text-white px-3 py-1 rounded text-sm"
                                                     onclick="editRow('row2')">Edit</button>
                                                 <button
-                                                    class="bg-blue-600 h-10 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm hidden"
+                                                    class="bg-blue-700 h-10 hover:bg-blue-800 text-white px-3 py-1 rounded text-sm hidden"
                                                     onclick="saveRow('row2')">Save</button>
                                                 <button
                                                     class="bg-gray-600 h-10 hover:bg-gray-700 text-white px-3 py-1 rounded text-sm">Download</button>
@@ -783,13 +798,19 @@
     // Helper function to get custom "All ..." label for each type
     function getDisplayLabel(type, value) {
         if (value) return value;
-        switch(type) {
-            case 'customer': return 'All Customer';
-            case 'merchandiser': return 'All Merchandiser';
-            case 'item': return 'All Item';
-            case 'deliveryStatus': return 'All Delivery Status';
-            case 'customerDecision': return 'All Decision';
-            default: return 'All';
+        switch (type) {
+            case 'customer':
+                return 'All Customer';
+            case 'merchandiser':
+                return 'All Merchandiser';
+            case 'item':
+                return 'All Item';
+            case 'deliveryStatus':
+                return 'All Delivery Status';
+            case 'customerDecision':
+                return 'All Decision';
+            default:
+                return 'All';
         }
     }
 

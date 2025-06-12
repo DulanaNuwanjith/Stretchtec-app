@@ -120,7 +120,7 @@
                                             Production Deadline
                                         </th>
                                         <th
-                                            class="px-4 py-3 w-40 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                            class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                             Order Received Date & Time
                                         </th>
                                         <th
@@ -148,7 +148,7 @@
                                             Special Note
                                         </th>
                                         <th
-                                            class="px-4 py-3 w-40 text-center text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                            class="px-4 py-3 w-48 text-center text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                             Action
                                         </th>
                                     </tr>
@@ -228,7 +228,7 @@
                                                 rows="2">abc 1234 long sample description to test line wrapping</textarea>
                                         </td>
                                         <td class="px-4 py-3 text-center">
-                                            <div class="flex w-40 text-center space-x-2 justify-center">
+                                            <div class="flex w-48 text-center space-x-2 justify-center">
                                                 <button
                                                     class="bg-green-600 h-10 hover:bg-green-700 text-white px-3 py-1 rounded text-sm"
                                                     onclick="editServiceRow('serviceRow1')">
@@ -239,6 +239,8 @@
                                                     onclick="saveServiceRow('serviceRow1')">
                                                     Save
                                                 </button>
+                                                <button
+                                                    class="bg-gray-600 h-10 hover:bg-gray-700 text-white px-3 py-1 rounded text-sm">Download</button>
                                             </div>
                                         </td>
                                     </tr>
