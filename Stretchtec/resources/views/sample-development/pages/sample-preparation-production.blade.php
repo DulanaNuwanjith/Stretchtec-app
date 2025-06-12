@@ -22,63 +22,66 @@
                         <!-- Filter Form -->
                         <form id="filterForm3" method="GET" action="" class="mb-6 flex gap-6 items-center">
                             <div class="flex items-center gap-4">
-                                <div class="relative inline-block text-left w-48">
-                                    <label for="vehicleDropdown"
-                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Customer</label>
+                                <!-- Sample No Dropdown -->
+                                <div class="relative inline-block text-left w-full max-w-sm">
+                                    <label for="sampleDropdown"
+                                        class="block text-sm font-medium text-gray-700 mb-1">Sample No</label>
 
-                                    <div>
-                                        <button type="button" id="vehicleDropdown"
-                                            class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10 dark:bg-gray-700 dark:text-white"
-                                            onclick="toggleVehicleDropdown()" aria-haspopup="listbox"
-                                            aria-expanded="false">
-                                            <span id="selectedVehicle">
-                                                {{ request('vehicle') ? request('vehicle') : 'TIMEX' }}
-                                            </span>
-                                            <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20"
-                                                fill="currentColor">
-                                                <path fill-rule="evenodd"
-                                                    d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
-                                                    clip-rule="evenodd" />
-                                            </svg>
-                                        </button>
-                                    </div>
+                                    <button type="button" id="sampleDropdown"
+                                        class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50"
+                                        onclick="toggleSampleDropdown()" aria-haspopup="listbox" aria-expanded="false">
+                                        <span id="selectedSample">Select Sample No</span>
+                                        <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd"
+                                                d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
+                                                clip-rule="evenodd" />
+                                        </svg>
+                                    </button>
 
-                                    <div id="vehicleDropdownMenu"
-                                        class="hidden absolute z-10 mt-2 w-full rounded-md bg-white shadow-lg ring-1 ring-black/5 dark:bg-gray-700 max-h-48 overflow-y-auto">
+                                    <div id="sampleDropdownMenu"
+                                        class="hidden absolute z-10 mt-2 w-full rounded-md bg-white shadow-lg ring-1 ring-black/5 max-h-48 overflow-y-auto">
 
                                         <!-- Search box -->
-                                        <div class="p-2 sticky top-0 bg-white dark:bg-gray-700 z-10">
-                                            <input type="text" id="vehicleSearchInput"
-                                                placeholder="Search vehicles..."
-                                                class="w-full px-2 py-1 text-sm border rounded-md dark:bg-gray-600 dark:text-white dark:placeholder-gray-300"
-                                                onkeyup="filterVehicles()" />
+                                        <div class="p-2 sticky top-0 bg-white z-10">
+                                            <input type="text" id="sampleSearchInput"
+                                                placeholder="Search Sample No..."
+                                                class="w-full px-2 py-1 text-sm border rounded-md"
+                                                oninput="filterSamples()" />
                                         </div>
 
-                                        <div class="py-1" role="listbox" tabindex="-1"
-                                            aria-labelledby="vehicleDropdown">
+                                        <div class="py-1" role="listbox" tabindex="-1">
+                                            <!-- Clear / Reset -->
                                             <button type="button"
-                                                class="vehicle-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                                                onclick="selectVehicle('')">Select Customer</button>
+                                                class="sample-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                                onclick="selectSample('', 'Select Sample No')">
+                                                Clear Selection
+                                            </button>
 
+                                            <!-- Sample Options -->
+                                            <button type="button"
+                                                class="sample-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                                onclick="selectSample('001', 'SAMPLE-001')">SAMPLE-001</button>
+                                            <button type="button"
+                                                class="sample-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                                onclick="selectSample('002', 'SAMPLE-002')">SAMPLE-002</button>
+                                            <button type="button"
+                                                class="sample-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                                onclick="selectSample('003', 'SAMPLE-003')">SAMPLE-003</button>
                                         </div>
                                     </div>
 
-                                    <input type="hidden" name="vehicle" id="vehicleInput"
-                                        value="{{ request('vehicle') }}">
+                                    <input type="hidden" name="sample_no" id="sampleInput">
                                 </div>
 
-
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Inquery
-                                        Receive Date</label>
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Production Deadline</label>
                                     <input type="date" id="serviceDateFilter" name="service_date"
                                         value="{{ request('service_date') }}"
                                         class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                 </div>
 
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer
-                                        Requested Dates</label>
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Order Complete Date</label>
                                     <input type="date" id="nextServiceDateFilter" name="next_service_date"
                                         value="{{ request('next_service_date') }}"
                                         class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
@@ -280,33 +283,6 @@
     });
 </script>
 
-
-<script>
-    function showServiceDetailsModal(service) {
-        document.getElementById('viewVehicle').textContent = service.vehicle.license_plate;
-        document.getElementById('viewServiceDate').textContent = service.service_date;
-        document.getElementById('viewServiceType').textContent = service.service_type || '-';
-        document.getElementById('viewMileage').textContent = service.mileage;
-        document.getElementById('viewNextMileage').textContent = service.next_service_mileage;
-        document.getElementById('viewNextDate').textContent = service.next_service_date;
-        document.getElementById('viewLocation').textContent = service.service_location || '-';
-        document.getElementById('viewCost').textContent = parseFloat(service.service_cost).toFixed(2);
-        document.getElementById('viewNotes').textContent = service.service_notes || 'N/A';
-
-        document.getElementById('viewServiceModal').classList.remove('hidden');
-    }
-</script>
-
-<script>
-    // Close modal when clicking outside of it
-    window.closeModalOnOutsideClick = function(event) {
-        const addVehicleModal = document.getElementById('addServiceModal');
-        if (event.target === addVehicleModal) {
-            addServiceModal.classList.add('hidden');
-        }
-    }
-</script>
-
 <script>
     function toggleVehicleDropdown() {
         const menu = document.getElementById('vehicleDropdownMenu');
@@ -463,4 +439,50 @@
             timestamp.textContent = '';
         }
     }
+</script>
+
+<script>
+  function toggleSampleDropdown() {
+    const menu = document.getElementById('sampleDropdownMenu');
+    const btn = document.getElementById('sampleDropdown');
+    const expanded = btn.getAttribute('aria-expanded') === 'true';
+
+    menu.classList.toggle('hidden');
+    btn.setAttribute('aria-expanded', String(!expanded));
+
+    if (!menu.classList.contains('hidden')) {
+      // Reset search input and show all options
+      const input = document.getElementById('sampleSearchInput');
+      input.value = '';
+      filterSamples();
+    }
+  }
+
+  function filterSamples() {
+    const filter = document.getElementById('sampleSearchInput').value.toLowerCase();
+    const options = document.querySelectorAll('#sampleDropdownMenu .sample-option');
+
+    options.forEach(option => {
+      const text = option.textContent.toLowerCase();
+      option.style.display = text.includes(filter) ? '' : 'none';
+    });
+  }
+
+  function selectSample(id, label) {
+    document.getElementById('selectedSample').innerText = label;
+    document.getElementById('sampleInput').value = id;
+    document.getElementById('sampleDropdownMenu').classList.add('hidden');
+    document.getElementById('sampleDropdown').setAttribute('aria-expanded', 'false');
+  }
+
+  // Close dropdown if clicked outside
+  document.addEventListener('click', function (e) {
+    const btn = document.getElementById('sampleDropdown');
+    const menu = document.getElementById('sampleDropdownMenu');
+
+    if (!btn.contains(e.target) && !menu.contains(e.target)) {
+      menu.classList.add('hidden');
+      btn.setAttribute('aria-expanded', 'false');
+    }
+  });
 </script>
