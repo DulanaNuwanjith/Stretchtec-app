@@ -245,7 +245,7 @@
                                             Development Plan Date</th>
                                         <th
                                             class="px-4 py-3 w-40 text-xs font-medium uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">
-                                            Colour Match Sent</th>
+                                            Colour Match Sent Date</th>
                                         <th
                                             class="px-4 py-3 w-40 text-xs font-medium uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">
                                             Colour Match Receive Date</th>
@@ -303,23 +303,40 @@
                                                 class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                 value="2025-06-10" />
                                         </td>
-                                        <td class="px-4 py-3 w-40 whitespace-normal break-words">
-                                            <span class="readonly">2025-05-30</span>
-                                            <input type="date"
-                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                value="2025-05-30" />
+
+                                        <td class="py-3 w-40 whitespace-normal break-words text-center">
+                                            <div class="colour-match-sent mb-4">
+                                                <button onclick="toggleColourMatchSent(event, this)" type="button"
+                                                    class="delivered-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
+                                                    Pending
+                                                </button>
+                                                <div class="timestamp mt-1 text-xs text-gray-500 dark:text-gray-400">
+                                                </div>
+                                            </div>
                                         </td>
-                                        <td class="px-4 py-3 w-40 whitespace-normal break-words">
-                                            <span class="readonly">2025-05-30</span>
-                                            <input type="date"
-                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                value="2025-05-30" />
+
+                                        <td class="py-3 w-40 whitespace-normal break-words text-center">
+                                            <div class="colour-match-receive mb-4">
+                                                <button onclick="toggleColourMatchReceive(event, this)" type="button"
+                                                    class="receive-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
+                                                    Pending
+                                                </button>
+                                                <div
+                                                    class="receive-timestamp mt-1 text-xs text-gray-500 dark:text-gray-400">
+                                                </div>
+                                            </div>
                                         </td>
-                                        <td class="px-4 py-3 w-40 whitespace-normal break-words">
-                                            <span class="readonly">2025-05-20</span>
-                                            <input type="date"
-                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                value="2025-05-20" />
+
+                                        <td class="py-3 w-40 whitespace-normal break-words text-center">
+                                            <div class="yarn-ordered-item mb-4">
+                                                <button onclick="toggleYarnOrdered(event, this)" type="button"
+                                                    class="yarn-ordered-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
+                                                    Pending
+                                                </button>
+                                                <div
+                                                    class="yarn-timestamp mt-1 text-xs text-gray-500 dark:text-gray-400">
+                                                </div>
+                                            </div>
                                         </td>
                                         <td class="px-4 py-3 w-40 whitespace-normal break-words">
                                             <span class="readonly">PO12345</span>
@@ -345,11 +362,16 @@
                                                 class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                 value="Supplier A" />
                                         </td>
-                                        <td class="px-4 py-3 w-40 whitespace-normal break-words">
-                                            <span class="readonly">2025-05-25</span>
-                                            <input type="date"
-                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                value="2025-05-25" />
+                                        <td class="py-3 w-40 whitespace-normal break-words text-center">
+                                            <div class="yarn-receive-item mb-4">
+                                                <button onclick="toggleYarnReceived(event, this)" type="button"
+                                                    class="yarn-receive-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
+                                                    Pending
+                                                </button>
+                                                <div
+                                                    class="yarn-receive-timestamp mt-1 text-xs text-gray-500 dark:text-gray-400">
+                                                </div>
+                                            </div>
                                         </td>
                                         <td class="px-4 py-3 w-40 whitespace-normal break-words">
                                             <span class="readonly">2025-07-01</span>
@@ -357,13 +379,18 @@
                                                 class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                 value="2025-07-01" />
                                         </td>
-                                        <td class="px-4 py-3 w-40 whitespace-normal break-words">
-                                            <span class="readonly">Pending</span>
-                                            <input
-                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                value="Pending" />
+                                        <td class="py-3 w-40 whitespace-normal break-words text-center">
+                                            <div class="send-production-item mb-4">
+                                                <button onclick="toggleSendProduction(event, this)" type="button"
+                                                    class="send-production-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
+                                                    Pending
+                                                </button>
+                                                <div
+                                                    class="send-production-timestamp mt-1 text-xs text-gray-500 dark:text-gray-400">
+                                                </div>
+                                            </div>
                                         </td>
-                                        <td class="px-4 py-3 w-36 whitespace-normal break-words">
+                                        <td class="px-4 py-3 w-32 whitespace-normal break-words">
                                             <span class="readonly">Production complete</span>
                                             <input
                                                 class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
@@ -610,6 +637,131 @@
         if (editBtn && saveBtn) {
             editBtn.classList.remove('hidden');
             saveBtn.classList.add('hidden');
+        }
+    }
+</script>
+
+<script>
+    function toggleColourMatchSent(event, button) {
+        const isPending = button.textContent.trim() === 'Pending';
+        const container = button.closest('.colour-match-sent');
+        const timestamp = container.querySelector('.timestamp');
+
+        if (isPending) {
+            // Mark as Done
+            button.textContent = 'Done';
+            button.classList.remove('bg-gray-300', 'text-black', 'hover:bg-gray-400');
+            button.classList.add('bg-green-500', 'text-white', 'hover:bg-green-600');
+
+            const now = new Date();
+            timestamp.textContent = `Done on ${now.toLocaleDateString()} at ${now.toLocaleTimeString()}`;
+        } else {
+            // Revert to Pending
+            button.textContent = 'Pending';
+            button.classList.remove('bg-green-500', 'text-white', 'hover:bg-green-600');
+            button.classList.add('bg-gray-300', 'text-black', 'hover:bg-gray-400');
+
+            timestamp.textContent = '';
+        }
+    }
+</script>
+
+<script>
+    function toggleColourMatchReceive(event, button) {
+        const isPending = button.textContent.trim() === 'Pending';
+        const container = button.closest('.colour-match-receive');
+        const timestamp = container.querySelector('.receive-timestamp');
+
+        if (isPending) {
+            // Change to "Receive" with green color
+            button.textContent = 'Receive';
+            button.classList.remove('bg-gray-300', 'text-black', 'hover:bg-gray-400');
+            button.classList.add('bg-green-500', 'text-white', 'hover:bg-green-600');
+
+            const now = new Date();
+            timestamp.textContent = `Received on ${now.toLocaleDateString()} at ${now.toLocaleTimeString()}`;
+        } else {
+            // Revert to "Pending" with gray color
+            button.textContent = 'Pending';
+            button.classList.remove('bg-green-500', 'text-white', 'hover:bg-green-600');
+            button.classList.add('bg-gray-300', 'text-black', 'hover:bg-gray-400');
+
+            timestamp.textContent = '';
+        }
+    }
+</script>
+
+<script>
+    function toggleYarnOrdered(event, button) {
+        const isPending = button.textContent.trim() === 'Pending';
+        const container = button.closest('.yarn-ordered-item');
+        const timestamp = container.querySelector('.yarn-timestamp');
+
+        if (isPending) {
+            // ✅ Set to "Ordered" with green color
+            button.textContent = 'Ordered';
+            button.classList.remove('bg-gray-300', 'text-black', 'hover:bg-gray-400');
+            button.classList.add('bg-green-500', 'text-white', 'hover:bg-green-600');
+
+            const now = new Date();
+            timestamp.textContent = `Ordered on ${now.toLocaleDateString()} at ${now.toLocaleTimeString()}`;
+        } else {
+            // ✅ Set back to "Pending"
+            button.textContent = 'Pending';
+            button.classList.remove('bg-green-500', 'text-white', 'hover:bg-green-600');
+            button.classList.add('bg-gray-300', 'text-black', 'hover:bg-gray-400');
+
+            timestamp.textContent = '';
+        }
+    }
+</script>
+
+<script>
+    function toggleYarnReceived(event, button) {
+        const isPending = button.textContent.trim() === 'Pending';
+        const container = button.closest('.yarn-receive-item');
+        const timestamp = container.querySelector('.yarn-receive-timestamp');
+
+        if (isPending) {
+            // ✅ Change to "Received"
+            button.textContent = 'Received';
+            button.classList.remove('bg-gray-300', 'text-black', 'hover:bg-gray-400');
+            button.classList.add('bg-green-500', 'text-white', 'hover:bg-green-600');
+
+            const now = new Date();
+            timestamp.textContent = `Received on ${now.toLocaleDateString()} at ${now.toLocaleTimeString()}`;
+        } else {
+            // ✅ Revert to "Pending"
+            button.textContent = 'Pending';
+            button.classList.remove('bg-green-500', 'text-white', 'hover:bg-green-600');
+            button.classList.add('bg-gray-300', 'text-black', 'hover:bg-gray-400');
+
+            timestamp.textContent = '';
+        }
+    }
+</script>
+
+<script>
+    function toggleSendProduction(event, button) {
+        const isPending = button.textContent.trim() === 'Pending';
+        const container = button.closest('.send-production-item');
+        const timestamp = container.querySelector('.send-production-timestamp');
+
+        if (isPending) {
+            // Change to Sent (green)
+            button.textContent = 'Sent';
+            button.classList.remove('bg-gray-300', 'text-black', 'hover:bg-gray-400');
+            button.classList.add('bg-green-500', 'text-white', 'hover:bg-green-600');
+
+            const now = new Date();
+            timestamp.textContent = `Sent on ${now.toLocaleDateString()} at ${now.toLocaleTimeString()}`;
+        } else {
+            // Revert to Pending
+            button.textContent = 'Pending';
+            button.classList.remove('bg-green-500', 'text-white', 'hover:bg-green-600');
+            button.classList.add('bg-gray-300', 'text-black', 'hover:bg-gray-400');
+
+            timestamp.textContent = '';
         }
     }
 </script>

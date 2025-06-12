@@ -316,10 +316,10 @@
                                             class="px-4 py-3 w-36 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                             Production Status</th>
                                         <th
-                                            class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                            class="px-4 py-3 w-56 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                             Customer Delivery Status</th>
                                         <th
-                                            class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                            class="px-4 py-3 w-48 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                             Customer Decision</th>
                                         <th
                                             class="px-4 py-3 w-48 text-xs text-center font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
@@ -327,7 +327,7 @@
                                     </tr>
                                 </thead>
                                 <tbody id="sampleInquiryRecords"
-                                    class="bg-white dark:bg-gray-800 divide-y text-left divide-gray-200 dark:divide-gray-700">
+                                    class="bg-white dark:bg-gray-800 divide-y text-left divide-gray-200 dark:divide-gray-700 ">
                                     <tr id="row1">
                                         <!-- Each cell has a span for readonly text and a hidden input for editing -->
                                         <td class="px-4 py-3 w-20 whitespace-normal break-words">
@@ -402,20 +402,57 @@
                                                 class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                 value="Production complete" />
 
-                                        <td class="px-4 py-3 w-32 whitespace-normal break-words">
-                                            <span class="readonly"></span>
-                                            <button onclick="toggleDone(event, this)" type="button"
-                                                class="delivered-btn bg-green-600 text-white px-2 py-1 rounded hover:bg-green-800">
-                                                Delivered
-                                            </button>
-                                            <div class="timestamp mt-1 text-xs text-gray-500 dark:text-gray-400"></div>
+                                        <td class="py-3 w-56 whitespace-normal break-words text-center">
+                                            <div class="delivery-item mb-4">
+                                                <button onclick="toggleDone(event, this)" type="button"
+                                                    class="delivered-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400">
+                                                    Pending
+                                                </button>
+                                                <div class="timestamp mt-1 text-xs text-gray-500 dark:text-gray-400">
+                                                </div>
+                                            </div>
                                         </td>
 
-                                        <td class="px-4 py-3 w-32 whitespace-normal break-words">
-                                            <span class="readonly">Accepted</span>
-                                            <input
-                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                value="" />
+                                        <td class="px-4 py-3 w-48 whitespace-normal break-words">
+                                            <div class="relative inline-block text-left w-36">
+                                                <!-- Dropdown Button -->
+                                                <div>
+                                                    <button type="button" id="customerDecisionDropdownTable"
+                                                        class="inline-flex justify-between w-36 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10 dark:bg-gray-700 dark:text-white transition-all duration-200"
+                                                        onclick="toggleCustomerDecisionDropdownTable(event)">
+                                                        <span id="selectedCustomerDecisionTable">Pending</span>
+                                                        <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20"
+                                                            fill="currentColor">
+                                                            <path fill-rule="evenodd"
+                                                                d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
+                                                                clip-rule="evenodd" />
+                                                        </svg>
+                                                    </button>
+                                                </div>
+
+                                                <!-- Dropdown Menu -->
+                                                <div id="customerDecisionDropdownMenuTable"
+                                                    class="hidden absolute z-10 mt-2 w-36 rounded-md bg-white shadow-lg ring-1 ring-black/5 dark:bg-gray-700">
+                                                    <div class="py-1" role="listbox" tabindex="-1"
+                                                        aria-labelledby="customerDecisionDropdownTable">
+                                                        <button type="button"
+                                                            class="decision-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
+                                                            onclick="selectCustomerDecisionTable('Pending')">Pending</button>
+                                                        <button type="button"
+                                                            class="decision-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
+                                                            onclick="selectCustomerDecisionTable('Accepted')">Accepted</button>
+                                                        <button type="button"
+                                                            class="decision-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
+                                                            onclick="selectCustomerDecisionTable('Rejected')">Rejected</button>
+                                                    </div>
+                                                </div>
+
+                                                <input type="hidden" name="customer_decision"
+                                                    id="customerDecisionInputTable" value="Pending" />
+                                            </div>
+                                        </td>
+
+
                                         <td class="px-4 py-3 w-48 text-center whitespace-normal break-words">
                                             <div class="flex space-x-2 justify-center">
                                                 <button
@@ -425,7 +462,112 @@
                                                     class="bg-blue-600 h-10 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm hidden"
                                                     onclick="saveRow('row1')">Save</button>
                                                 <button
-                                                    class="bg-red-600 h-10 hover:bg-red-700 text-white px-3 py-1 rounded text-sm">Download</button>
+                                                    class="bg-gray-600 h-10 hover:bg-gray-700 text-white px-3 py-1 rounded text-sm">Download</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr id="row2">
+                                        <!-- Each cell has a span for readonly text and a hidden input for editing -->
+                                        <td class="px-4 py-3 w-20 whitespace-normal break-words">
+                                            <span class="readonly">001</span>
+                                            <input
+                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                value="001" />
+                                        </td>
+                                        <td class="px-4 py-3 w-32 whitespace-normal break-words">
+                                            <span class="readonly">2025-05-05</span>
+                                            <input type="date"
+                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                value="2025-05-05" />
+                                        </td>
+                                        <td class="px-4 py-3 w-32 whitespace-normal break-words">
+                                            <span class="readonly">TIMEX</span>
+                                            <input
+                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                value="TIMEX" />
+                                        </td>
+                                        <td class="px-4 py-3 w-36 whitespace-normal break-words">
+                                            <span class="readonly">Chamith</span>
+                                            <input
+                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                value="Chamith" />
+                                        </td>
+                                        <td class="px-4 py-3 w-32 whitespace-normal break-words">
+                                            <span class="readonly">Scock Cord</span>
+                                            <input
+                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                value="Scock Cord" />
+                                        </td>
+                                        <td class="px-4 py-3 w-20 whitespace-normal break-words">
+                                            <span class="readonly">2mm</span>
+                                            <input
+                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                value="2mm" />
+                                        </td>
+                                        <td class="px-4 py-3 w-32 whitespace-normal break-words">
+                                            <span class="readonly">white cap grey</span>
+                                            <input
+                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                value="white cap grey" />
+                                        </td>
+                                        <td class="px-4 py-3 w-32 whitespace-normal break-words">
+                                            <span class="readonly">5 YDS</span>
+                                            <input
+                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                value="5 YDS" />
+                                        </td>
+                                        <td class="px-4 py-3 w-32 whitespace-normal break-words">
+                                            <span class="readonly"></span>
+                                            <input
+                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm5"
+                                                value="" />
+                                        </td>
+                                        <td class="px-4 py-3 w-32 whitespace-normal break-words">
+                                            <span class="readonly">2025-06-05</span>
+                                            <input type="date"
+                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                value="2025-06-05" />
+                                        </td>
+                                        <td class="px-4 py-3 w-32 whitespace-normal break-words">
+                                            <span class="readonly">2025-06-05</span>
+                                            <input type="date"
+                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                value="2025-06-05" />
+                                        </td>
+                                        <td class="px-4 py-3 w-36 whitespace-normal break-words">
+                                            <span class="readonly">Production complete</span>
+                                            <input
+                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                value="Production complete" />
+
+                                        <td class="py-3 w-56 whitespace-normal break-words text-center">
+                                            <div class="delivery-item mb-4">
+                                                <button onclick="toggleDone(event, this)" type="button"
+                                                    class="delivered-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400">
+                                                    Pending
+                                                </button>
+                                                <div class="timestamp mt-1 text-xs text-gray-500 dark:text-gray-400">
+                                                </div>
+                                            </div>
+                                        </td>
+
+                                        <td class="px-4 py-3 w-32 whitespace-normal break-words">
+                                            <button
+                                                class="toggle-btn-accepted px-2 py-1 rounded bg-blue-500 text-white">
+                                                Accepted
+                                            </button>
+                                        </td>
+
+                                        <td class="px-4 py-3 w-48 text-center whitespace-normal break-words">
+                                            <div class="flex space-x-2 justify-center">
+                                                <button
+                                                    class="bg-green-600 h-10 hover:bg-green-700 text-white px-3 py-1 rounded text-sm"
+                                                    onclick="editRow('row2')">Edit</button>
+                                                <button
+                                                    class="bg-blue-600 h-10 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm hidden"
+                                                    onclick="saveRow('row2')">Save</button>
+                                                <button
+                                                    class="bg-gray-600 h-10 hover:bg-gray-700 text-white px-3 py-1 rounded text-sm">Download</button>
                                             </div>
                                         </td>
                                     </tr>
@@ -599,24 +741,16 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        const vehicleInput = document.getElementById('vehicleInput');
-        const serviceDateFilter = document.getElementById('serviceDateFilter');
-        const nextServiceDateFilter = document.getElementById('nextServiceDateFilter');
         const clearFiltersBtn = document.getElementById('clearFiltersBtn');
-        const selectedVehicle = document.getElementById('selectedVehicle');
         const filterForm = document.getElementById('filterForm');
 
         clearFiltersBtn.addEventListener('click', () => {
-            vehicleInput.value = '';
-            serviceDateFilter.value = '';
-            nextServiceDateFilter.value = '';
             document.getElementById('customerInput').value = '';
             document.getElementById('merchandiserInput').value = '';
             document.getElementById('itemInput').value = '';
             document.getElementById('deliveryStatusInput').value = '';
             document.getElementById('customerDecisionInput').value = '';
 
-            if (selectedVehicle) selectedVehicle.textContent = 'All Vehicles';
             document.getElementById('selectedCustomer').textContent = 'Select Customer';
             document.getElementById('selectedMerchandiser').textContent = 'Select Merchandiser';
             document.getElementById('selectedItem').textContent = 'Select Item';
@@ -631,10 +765,8 @@
             const deliveredBtn = td.querySelector('button.delivered-btn');
 
             if (timestampDiv && timestampDiv.textContent.trim() && deliveredBtn) {
-                // Hide Delivered button if timestamp exists
                 deliveredBtn.classList.add('hidden');
             } else if (timestampDiv && !timestampDiv.textContent.trim() && deliveredBtn) {
-                // Show Delivered button only if timestamp is empty
                 deliveredBtn.classList.remove('hidden');
             }
         });
@@ -648,10 +780,28 @@
         btn.setAttribute('aria-expanded', !expanded);
     }
 
+    // Helper function to get custom "All ..." label for each type
+    function getDisplayLabel(type, value) {
+        if (value) return value;
+        switch(type) {
+            case 'customer': return 'All Customer';
+            case 'merchandiser': return 'All Merchandiser';
+            case 'item': return 'All Item';
+            case 'deliveryStatus': return 'All Delivery Status';
+            case 'customerDecision': return 'All Decision';
+            default: return 'All';
+        }
+    }
+
+    function formatDisplayValue(value, type) {
+        // You can decide if you want to use getDisplayLabel here or keep generic
+        // Using getDisplayLabel to keep consistency
+        return getDisplayLabel(type, value);
+    }
+
     function selectOption(type, value) {
         const displayText = value || `Select ${capitalize(type)}`;
-        // Show "All Decisions" or "All ..." for empty values, else show the value
-        const displayValue = value || `All ${capitalize(type)}s`;
+        const displayValue = getDisplayLabel(type, value);
 
         document.getElementById(`selected${capitalize(type)}`).innerText = displayValue;
         document.getElementById(`${type}Input`).value = value || '';
@@ -685,6 +835,7 @@
     });
 </script>
 
+
 <script>
     function editRow(rowId) {
         const row = document.getElementById(rowId);
@@ -693,121 +844,139 @@
         row.querySelectorAll('.readonly').forEach(span => span.classList.add('hidden'));
         row.querySelectorAll('.editable').forEach(input => input.classList.remove('hidden'));
 
-        // Show Save button only
+        // Hide the Edit button and show the Save button
         const editBtn = row.querySelector('button.edit-btn');
         const saveBtn = row.querySelector('button.save-btn');
-
         if (editBtn) editBtn.classList.add('hidden');
         if (saveBtn) saveBtn.classList.remove('hidden');
-
-        // Hide Delivered button, clear timestamp
-        const statusCell = row.querySelector('td:last-child');
-        if (statusCell) {
-            const deliveredBtn = statusCell.querySelector('button.delivered-btn');
-            const timestampDiv = statusCell.querySelector('.timestamp');
-
-            if (deliveredBtn) deliveredBtn.classList.add('hidden');
-            if (timestampDiv) timestampDiv.textContent = ''; // Clear timestamp
-        }
     }
+
 
     function saveRow(rowId) {
         const row = document.getElementById(rowId);
 
-        const inputs = row.querySelectorAll('.editable');
-        const spans = row.querySelectorAll('.readonly');
+        // Hide inputs, show spans again
+        row.querySelectorAll('.editable').forEach(input => input.classList.add('hidden'));
+        row.querySelectorAll('.readonly').forEach(span => span.classList.remove('hidden'));
 
-        // Copy input values to spans
-        inputs.forEach((input, i) => {
-            spans[i].textContent = input.value;
-            input.classList.add('hidden');
-        });
-        spans.forEach(span => span.classList.remove('hidden'));
-
-        // Hide Save button only (no Edit shown)
+        // Show Edit, hide Save
+        const editBtn = row.querySelector('button.edit-btn');
         const saveBtn = row.querySelector('button.save-btn');
+        if (editBtn) editBtn.classList.remove('hidden');
         if (saveBtn) saveBtn.classList.add('hidden');
-
-        // Optionally show Delivered button if needed
-        const statusCell = row.querySelector('td:last-child');
-        if (statusCell) {
-            const deliveredBtn = statusCell.querySelector('button.delivered-btn');
-            const timestampDiv = statusCell.querySelector('.timestamp');
-
-            if (timestampDiv && !timestampDiv.textContent.trim()) {
-                if (deliveredBtn) deliveredBtn.classList.remove('hidden');
-            }
-        }
-    }
-
-
-    function toggleDone(event, btn) {
-        event.stopPropagation();
-
-        const cell = btn.parentElement;
-        const span = cell.querySelector('span.readonly');
-        const input = cell.querySelector('input.editable');
-        const timestampDiv = cell.querySelector('.timestamp');
-        const deliveredBtn = cell.querySelector('button.delivered-btn');
-        const notYetBtn = cell.querySelector('button.notyet-btn');
-
-        if (timestampDiv && timestampDiv.textContent.trim()) {
-            // If already marked delivered, do nothing
-            return;
-        }
-
-        if (span && input) {
-            span.textContent = "Delivered";
-            input.value = "Delivered";
-            span.classList.remove('hidden');
-            input.classList.add('hidden');
-        }
-
-        if (deliveredBtn) deliveredBtn.classList.add('hidden');
-        if (notYetBtn) notYetBtn.classList.add('hidden');
-
-        if (timestampDiv) {
-            const now = new Date();
-            timestampDiv.textContent =
-                `Delivered on ${now.toLocaleDateString()} at ${now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
-        }
-    }
-
-
-    function enableEdit(td) {
-        const row = td.parentElement;
-        // If already in edit mode, do nothing to prevent flicker
-        const saveBtn = row.querySelector('button.bg-blue-600:not(.delivered-btn)');
-        if (saveBtn && !saveBtn.classList.contains('hidden')) {
-            return;
-        }
-
-        // Only allow inline edit if not in full edit mode
-        const span = td.querySelector('span.readonly');
-        const input = td.querySelector('input.editable');
-        const deliveredBtn = td.querySelector('button.delivered-btn');
-        const notYetBtn = td.querySelector('button.notyet-btn');
-        const timestampDiv = td.querySelector('.timestamp');
-
-        if (deliveredBtn) deliveredBtn.classList.add('hidden');
-        if (notYetBtn) notYetBtn.classList.add('hidden');
-        if (timestampDiv) timestampDiv.textContent = '';
-
-        input.value = span.textContent;
-        input.classList.remove('hidden');
-        span.classList.add('hidden');
     }
 </script>
 
 <script>
-    window.addEventListener('DOMContentLoaded', () => {
-        document.querySelectorAll('td').forEach(td => {
-            const timestampDiv = td.querySelector('.timestamp');
-            const deliveredBtn = td.querySelector('button.delivered-btn');
+    function toggleDone(event, button) {
+        const isPending = button.textContent.trim() === 'Pending';
+        const container = button.closest('.delivery-item');
+        const timestamp = container.querySelector('.timestamp');
 
-            if (timestampDiv && timestampDiv.textContent.trim() && deliveredBtn) {
-                deliveredBtn.classList.add('hidden');
+        if (isPending) {
+            // ✅ Change button to "Delivered"
+            button.textContent = 'Delivered';
+            button.classList.remove('bg-gray-300', 'text-black', 'hover:bg-gray-400');
+            button.classList.add('bg-[#FF9119]', 'text-white', 'hover:bg-[#FF9119]/80');
+
+            // ✅ Show current date and time
+            const now = new Date();
+            timestamp.textContent = `Delivered on ${now.toLocaleDateString()} at ${now.toLocaleTimeString()}`;
+        } else {
+            // ✅ Change back to "Pending"
+            button.textContent = 'Pending';
+            button.classList.remove('bg-[#FF9119]', 'text-white', 'hover:bg-[#FF9119]/80');
+            button.classList.add('bg-gray-300', 'text-black', 'hover:bg-gray-400');
+
+            // ✅ Clear timestamp
+            timestamp.textContent = '';
+        }
+    }
+</script>
+
+
+<script>
+    const buttons = document.querySelectorAll('.toggle-btn-accepted');
+
+    buttons.forEach(button => {
+        button.addEventListener('click', () => {
+            const isDelivered = button.textContent.trim() === 'Accepted';
+
+            if (isDelivered) {
+                button.textContent = 'Rejected';
+                button.classList.remove('bg-blue-500', 'text-white', 'hover:bg-blue-600');
+                button.classList.add('bg-red-600', 'text-white', 'hover:bg-red-700');
+            } else {
+                button.textContent = 'Accepted';
+                button.classList.remove('bg-red-600', 'text-white', 'hover:bg-red-700');
+                button.classList.add('bg-blue-500', 'text-white', 'hover:bg-blue-600');
             }
         });
+    });
+</script>
+
+<script>
+    function toggleCustomerDecisionDropdownTable(event) {
+        event.stopPropagation();
+        const menu = document.getElementById('customerDecisionDropdownMenuTable');
+        const btn = document.getElementById('customerDecisionDropdownTable');
+        const expanded = btn.getAttribute('aria-expanded') === 'true';
+
+        menu.classList.toggle('hidden');
+        btn.setAttribute('aria-expanded', !expanded);
+    }
+
+    function selectCustomerDecisionTable(status) {
+        const span = document.getElementById('selectedCustomerDecisionTable');
+        const input = document.getElementById('customerDecisionInputTable');
+        const dropdownMenu = document.getElementById('customerDecisionDropdownMenuTable');
+        const dropdownBtn = document.getElementById('customerDecisionDropdownTable');
+
+        // Set selected text
+        span.innerText = status;
+        input.value = status;
+
+        // Reset classes
+        span.className = ''; // remove all classes on span
+        dropdownBtn.classList.remove(
+            'bg-white', 'bg-green-100', 'bg-red-100',
+            'text-gray-900', 'text-green-600', 'text-red-600',
+            'ring-gray-300', 'ring-green-500', 'ring-red-500'
+        );
+
+        // Apply new styles based on status
+        if (status === 'Accepted') {
+            span.classList.add('text-green-600');
+            dropdownBtn.classList.add('bg-green-100', 'text-green-600', 'ring-green-500');
+        } else if (status === 'Rejected') {
+            span.classList.add('text-red-600');
+            dropdownBtn.classList.add('bg-red-100', 'text-red-600', 'ring-red-500');
+        } else {
+            span.classList.add('text-gray-900');
+            dropdownBtn.classList.add('bg-white', 'text-gray-900', 'ring-gray-300');
+        }
+
+        // Keep required button styles
+        dropdownBtn.classList.add(
+            'inline-flex', 'justify-between', 'w-36', 'rounded-md',
+            'px-3', 'py-2', 'text-sm', 'font-semibold',
+            'shadow-sm', 'hover:bg-gray-50', 'h-10',
+            'dark:bg-gray-700', 'dark:text-white'
+        );
+
+        // Close dropdown
+        dropdownMenu.classList.add('hidden');
+        dropdownBtn.setAttribute('aria-expanded', false);
+    }
+
+    // Close dropdown on outside click
+    document.addEventListener('click', function(e) {
+        const dropdownBtn = document.getElementById('customerDecisionDropdownTable');
+        const dropdownMenu = document.getElementById('customerDecisionDropdownMenuTable');
+
+        if (!dropdownBtn.contains(e.target) && !dropdownMenu.contains(e.target)) {
+            dropdownMenu.classList.add('hidden');
+            dropdownBtn.setAttribute('aria-expanded', false);
+        }
     });
 </script>

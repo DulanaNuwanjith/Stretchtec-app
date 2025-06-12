@@ -117,11 +117,11 @@
                                             Production Deadline
                                         </th>
                                         <th
-                                            class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                            Order Received Date
+                                            class="px-4 py-3 w-40 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                            Order Received Date & Time
                                         </th>
                                         <th
-                                            class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                            class="px-4 py-3 w-40 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                             Order Start Date & Time
                                         </th>
                                         <th
@@ -133,7 +133,7 @@
                                             Supervisor Name
                                         </th>
                                         <th
-                                            class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                            class="px-4 py-3 w-40 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                             Order Complete Date & Time
                                         </th>
                                         <th
@@ -172,11 +172,16 @@
                                                 class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                 value="2025-05-05" />
                                         </td>
-                                        <td class="px-4 py-3 w-32 whitespace-normal break-words">
-                                            <span class="readonly">2025-05-05</span>
-                                            <input type="datetime-local"
-                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                value="2025-05-05T00:00" />
+                                        <td class="py-3 w-40 whitespace-normal break-words text-center">
+                                            <div class="order-start-item mb-4">
+                                                <button onclick="toggleOrderStart(event, this)" type="button"
+                                                    class="order-start-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
+                                                    Pending
+                                                </button>
+                                                <div
+                                                    class="order-start-timestamp mt-1 text-xs text-gray-500 dark:text-gray-400">
+                                                </div>
+                                            </div>
                                         </td>
                                         <td class="px-4 py-3 w-40 whitespace-normal break-words">
                                             <span class="readonly">Operator 001</span>
@@ -190,17 +195,27 @@
                                                 class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                 value="Supervisor 001" />
                                         </td>
-                                        <td class="px-4 py-3 w-32 whitespace-normal break-words">
-                                            <span class="readonly">2025-05-05</span>
-                                            <input type="datetime-local"
-                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                value="2025-05-05T00:00" />
+                                        <td class="py-3 w-40 whitespace-normal break-words text-center">
+                                            <div class="order-complete-item mb-4">
+                                                <button onclick="toggleOrderComplete(event, this)" type="button"
+                                                    class="order-complete-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
+                                                    Pending
+                                                </button>
+                                                <div
+                                                    class="order-complete-timestamp mt-1 text-xs text-gray-500 dark:text-gray-400">
+                                                </div>
+                                            </div>
                                         </td>
-                                        <td class="px-4 py-3 w-40 whitespace-normal break-words">
-                                            <span class="readonly">Done</span>
-                                            <input
-                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                value="Done" />
+                                        <td class="py-3 w-40 whitespace-normal break-words text-center">
+                                            <div class="sample-dispatch-item mb-4">
+                                                <button onclick="toggleSampleDispatch(event, this)" type="button"
+                                                    class="sample-dispatch-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
+                                                    Pending
+                                                </button>
+                                                <div
+                                                    class="sample-dispatch-timestamp mt-1 text-xs text-gray-500 dark:text-gray-400">
+                                                </div>
+                                            </div>
                                         </td>
                                         <td class="px-4 py-3 w-72 whitespace-normal break-words">
                                             <span class="readonly">abc 1234 long sample description to test line
@@ -344,114 +359,108 @@
 </script>
 
 <script>
-    function toggleStyledVehicleDropdown() {
-        const menu = document.getElementById('styledVehicleDropdownMenu');
-        menu.classList.toggle('hidden');
-
-        const btn = document.getElementById('vehicleDropdownStyled');
-        const expanded = btn.getAttribute('aria-expanded') === 'true';
-        btn.setAttribute('aria-expanded', !expanded);
-
-        // Clear search input and reset filter when dropdown opens
-        if (!menu.classList.contains('hidden')) {
-            document.getElementById('styledVehicleSearchInput').value = '';
-            filterStyledVehicles();
-        }
-    }
-
-    function filterStyledVehicles() {
-        const input = document.getElementById('styledVehicleSearchInput');
-        const filter = input.value.toLowerCase();
-        const options = document.querySelectorAll('#styledVehicleDropdownMenu .styled-vehicle-option');
-
-        options.forEach(option => {
-            const text = option.textContent.toLowerCase();
-            option.style.display = text.includes(filter) ? '' : 'none';
-        });
-    }
-
-    function selectStyledVehicle(value, label) {
-        document.getElementById('styledSelectedVehicle').innerText = label;
-        document.getElementById('styledVehicleInput').value = value;
-        document.getElementById('styledVehicleDropdownMenu').classList.add('hidden');
-        document.getElementById('vehicleDropdownStyled').setAttribute('aria-expanded', false);
-    }
-
-    // Close dropdown when clicking outside
-    document.addEventListener('click', function(e) {
-        const styledBtn = document.getElementById('vehicleDropdownStyled');
-        const styledMenu = document.getElementById('styledVehicleDropdownMenu');
-
-        if (!styledBtn.contains(e.target) && !styledMenu.contains(e.target)) {
-            styledMenu.classList.add('hidden');
-            styledBtn.setAttribute('aria-expanded', false);
-        }
-    });
-</script>
-
-<script>
-    function toggleServiceTypeDropdown() {
-        const menu = document.getElementById('serviceTypeDropdownMenu');
-        menu.classList.toggle('hidden');
-
-        const btn = document.getElementById('serviceTypeDropdown');
-        const expanded = btn.getAttribute('aria-expanded') === 'true';
-        btn.setAttribute('aria-expanded', !expanded);
-    }
-
-    function selectServiceType(value) {
-        document.getElementById('selectedServiceType').innerText = value;
-        document.getElementById('serviceTypeInput').value = value;
-        document.getElementById('serviceTypeDropdownMenu').classList.add('hidden');
-        document.getElementById('serviceTypeDropdown').setAttribute('aria-expanded', false);
-    }
-
-    // Close on outside click
-    document.addEventListener('click', function(e) {
-        const btn = document.getElementById('serviceTypeDropdown');
-        const menu = document.getElementById('serviceTypeDropdownMenu');
-
-        if (!btn.contains(e.target) && !menu.contains(e.target)) {
-            menu.classList.add('hidden');
-            btn.setAttribute('aria-expanded', false);
-        }
-    });
-</script>
-
-<script>
     function editServiceRow(rowId) {
-      const row = document.getElementById(rowId);
-      const spans = row.querySelectorAll('span.readonly');
-      const inputs = row.querySelectorAll('input.editable, textarea.editable');
+        const row = document.getElementById(rowId);
+        const spans = row.querySelectorAll('span.readonly');
+        const inputs = row.querySelectorAll('input.editable, textarea.editable');
 
-      spans.forEach(span => span.classList.add('hidden'));
-      inputs.forEach(input => input.classList.remove('hidden'));
+        spans.forEach(span => span.classList.add('hidden'));
+        inputs.forEach(input => input.classList.remove('hidden'));
 
-      const editBtn = row.querySelector('button.bg-green-600');
-      const saveBtn = row.querySelector('button.bg-blue-600');
-      editBtn.classList.add('hidden');
-      saveBtn.classList.remove('hidden');
+        const editBtn = row.querySelector('button.bg-green-600');
+        const saveBtn = row.querySelector('button.bg-blue-600');
+        editBtn.classList.add('hidden');
+        saveBtn.classList.remove('hidden');
     }
 
     function saveServiceRow(rowId) {
-      const row = document.getElementById(rowId);
-      const spans = row.querySelectorAll('span.readonly');
-      const inputs = row.querySelectorAll('input.editable, textarea.editable');
+        const row = document.getElementById(rowId);
+        const spans = row.querySelectorAll('span.readonly');
+        const inputs = row.querySelectorAll('input.editable, textarea.editable');
 
-      inputs.forEach((input, index) => {
-        if (input.tagName.toLowerCase() === 'textarea') {
-          spans[index].textContent = input.value;
-        } else {
-          spans[index].textContent = input.value;
-        }
-      });
+        inputs.forEach((input, index) => {
+            if (input.tagName.toLowerCase() === 'textarea') {
+                spans[index].textContent = input.value;
+            } else {
+                spans[index].textContent = input.value;
+            }
+        });
 
-      spans.forEach(span => span.classList.remove('hidden'));
-      inputs.forEach(input => input.classList.add('hidden'));
+        spans.forEach(span => span.classList.remove('hidden'));
+        inputs.forEach(input => input.classList.add('hidden'));
 
-      const editBtn = row.querySelector('button.bg-green-600');
-      const saveBtn = row.querySelector('button.bg-blue-600');
-      editBtn.classList.remove('hidden');
-      saveBtn.classList.add('hidden');
+        const editBtn = row.querySelector('button.bg-green-600');
+        const saveBtn = row.querySelector('button.bg-blue-600');
+        editBtn.classList.remove('hidden');
+        saveBtn.classList.add('hidden');
     }
-  </script>
+</script>
+
+<script>
+    function toggleOrderStart(event, button) {
+        const isPending = button.textContent.trim() === 'Pending';
+        const container = button.closest('.order-start-item');
+        const timestamp = container.querySelector('.order-start-timestamp');
+
+        if (isPending) {
+            button.textContent = 'Started';
+            button.classList.remove('bg-gray-300', 'text-black', 'hover:bg-gray-400');
+            button.classList.add('bg-blue-600', 'text-white', 'hover:bg-blue-700');
+
+            const now = new Date();
+            timestamp.textContent = `Started on ${now.toLocaleDateString()} at ${now.toLocaleTimeString()}`;
+        } else {
+            button.textContent = 'Pending';
+            button.classList.remove('bg-blue-600', 'text-white', 'hover:bg-blue-700');
+            button.classList.add('bg-gray-300', 'text-black', 'hover:bg-gray-400');
+
+            timestamp.textContent = '';
+        }
+    }
+</script>
+
+<script>
+    function toggleOrderComplete(event, button) {
+        const isPending = button.textContent.trim() === 'Pending';
+        const container = button.closest('.order-complete-item');
+        const timestamp = container.querySelector('.order-complete-timestamp');
+
+        if (isPending) {
+            button.textContent = 'Completed';
+            button.classList.remove('bg-gray-300', 'text-black', 'hover:bg-gray-400');
+            button.classList.add('bg-green-600', 'text-white', 'hover:bg-green-700');
+
+            const now = new Date();
+            timestamp.textContent = `Completed on ${now.toLocaleDateString()} at ${now.toLocaleTimeString()}`;
+        } else {
+            button.textContent = 'Pending';
+            button.classList.remove('bg-green-600', 'text-white', 'hover:bg-green-700');
+            button.classList.add('bg-gray-300', 'text-black', 'hover:bg-gray-400');
+
+            timestamp.textContent = '';
+        }
+    }
+</script>
+
+<script>
+    function toggleSampleDispatch(event, button) {
+        const isPending = button.textContent.trim() === 'Pending';
+        const container = button.closest('.sample-dispatch-item');
+        const timestamp = container.querySelector('.sample-dispatch-timestamp');
+
+        if (isPending) {
+            button.textContent = 'Done';
+            button.classList.remove('bg-gray-300', 'text-black', 'hover:bg-gray-400');
+            button.classList.add('bg-blue-600', 'text-white', 'hover:bg-blue-700');
+
+            const now = new Date();
+            timestamp.textContent = `Done on ${now.toLocaleDateString()} at ${now.toLocaleTimeString()}`;
+        } else {
+            button.textContent = 'Pending';
+            button.classList.remove('bg-blue-600', 'text-white', 'hover:bg-blue-700');
+            button.classList.add('bg-gray-300', 'text-black', 'hover:bg-gray-400');
+
+            timestamp.textContent = '';
+        }
+    }
+</script>
