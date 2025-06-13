@@ -1,5 +1,5 @@
 <div class="flex h-full w-full">
-    <div class="flex-1 overflow-y-hidden">
+    <div class="flex-1 overflow-y-hidden mb-20">
         <div class="py-4">
             <div class="w-full px-6 lg:px-2">
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
@@ -319,7 +319,7 @@
                                             class="px-4 py-3 w-36 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                             Production Status</th>
                                         <th
-                                            class="px-4 py-3 w-56 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                            class="px-4 py-3 w-56 text-xs text-center font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                             Customer Delivery Status</th>
                                         <th
                                             class="px-4 py-3 w-56 text-xs text-center font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">

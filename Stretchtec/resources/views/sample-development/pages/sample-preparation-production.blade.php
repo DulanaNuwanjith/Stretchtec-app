@@ -1,5 +1,5 @@
 <div class="flex h-full w-full">
-    <div class="flex-1 overflow-y-hidden">
+    <div class="flex-1 overflow-y-hidden mb-20">
         <div class="py-4">
             <div class="w-full px-6 lg:px-2">
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
@@ -126,7 +126,7 @@
                                             Order Received Date & Time
                                         </th>
                                         <th
-                                            class="px-4 py-3 w-40 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                            class="px-4 py-3 w-40 text-center text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                             Order Start Date & Time
                                         </th>
                                         <th
@@ -138,11 +138,11 @@
                                             Supervisor Name
                                         </th>
                                         <th
-                                            class="px-4 py-3 w-40 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                            class="px-4 py-3 w-40 text-center text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                             Order Complete Date & Time
                                         </th>
                                         <th
-                                            class="px-4 py-3 w-40 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                            class="px-4 py-3 w-40 text-center text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                             Sample Complete and Dispatch to R&D
                                         </th>
                                         <th
