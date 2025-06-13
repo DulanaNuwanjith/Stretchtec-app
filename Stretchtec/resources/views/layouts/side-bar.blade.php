@@ -60,7 +60,7 @@
             <!-- Profile and Logout as Sidebar Buttons -->
             <ul class="space-y-2 border-t pt-4 mt-4">
                 <li>
-                    <a href=""
+                    <a href="{{ route('profile.show') }}"
                         class="flex items-center px-4 py-2 rounded hover:bg-gray-200 {{ request()->routeIs('profile.edit') ? 'bg-gray-200' : '' }}">
                         <img src="{{ asset('icons/employee.png') }}" alt="Profile Icon" class="w-6 h-6 mr-5" />
                         <span>Profile</span>
