@@ -9,7 +9,7 @@
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
 
-<body class="flex min-h-screen bg-gray-100">
+<body class="flex h-screen bg-gray-100">
 
     <!-- Sidebar -->
     <aside class="w-64 bg-gradient-to-b from-white to-blue-600 min-h-screen shadow-md flex flex-col">
