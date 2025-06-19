@@ -26,7 +26,7 @@
             <ul class="space-y-2">
                 <li>
                     <a class="flex items-centerc bg-white px-4 py-2 rounded">
-                        <span>ODER MANAGEMENT</span>
+                        <span>ORDER MANAGEMENT</span>
                     </a>
                 </li>
 
