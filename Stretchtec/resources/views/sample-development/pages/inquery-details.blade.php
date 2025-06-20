@@ -325,6 +325,9 @@
                                             class="px-4 py-3 w-56 text-xs text-center font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                             Customer Decision</th>
                                         <th
+                                            class="px-4 py-3 w-56 text-xs text-center font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                            Note</th>
+                                        <th
                                             class="px-4 py-3 w-48 text-xs text-center font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                             Action</th>
                                     </tr>
@@ -466,6 +469,12 @@
                                                     id="customerDecisionInputTable" value="Pending" />
                                             </div>
                                         </td>
+
+                                        <td class="px-4 py-3 whitespace-normal break-words">
+                                            <span class="readonly">Typing....</span>
+                                            <input
+                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                value="Typing...." />
 
 
                                         <td class="px-4 py-3 text-center whitespace-normal break-words">
