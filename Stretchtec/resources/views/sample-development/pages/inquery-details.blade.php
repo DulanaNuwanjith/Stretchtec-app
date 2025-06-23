@@ -319,6 +319,9 @@
                                             class="px-4 py-3 w-36 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                             Production Status</th>
                                         <th
+                                            class="px-4 py-3 w-48 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                            Reference No</th>
+                                        <th
                                             class="px-4 py-3 w-56 text-xs text-center font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                             Customer Delivery Status</th>
                                         <th
@@ -413,6 +416,11 @@
                                             <input
                                                 class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                 value="Production complete" />
+                                        <td class="px-4 py-3 whitespace-normal break-words">
+                                            <span class="readonly">STKE/2025/JA25-B</span>
+                                            <input
+                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                value="STKE/2025/JA25-B" />
 
                                         <td class="py-3 whitespace-normal break-words text-center">
                                             <div class="delivery-item mb-4">
@@ -569,6 +577,11 @@
                                             <input
                                                 class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                 value="Production complete" />
+                                        <td class="px-4 py-3 whitespace-normal break-words">
+                                            <span class="readonly">STKE/2025/JA25-B</span>
+                                            <input
+                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                value="STKE/2025/JA25-B" />
 
                                         <td class="py-3 whitespace-normal break-words text-center">
                                             <div class="delivery-item mb-4">
@@ -719,6 +732,11 @@
                                             <input
                                                 class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                 value="Production complete" />
+                                        <td class="px-4 py-3 whitespace-normal break-words">
+                                            <span class="readonly">STKE/2025/JA25-B</span>
+                                            <input
+                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                value="STKE/2025/JA25-B" />
 
                                         <td class="py-3 whitespace-normal break-words text-center">
                                             <div class="delivery-item mb-4">
@@ -869,6 +887,11 @@
                                             <input
                                                 class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                 value="Production complete" />
+                                        <td class="px-4 py-3 whitespace-normal break-words">
+                                            <span class="readonly">STKE/2025/JA25-B</span>
+                                            <input
+                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                value="STKE/2025/JA25-B" />
 
                                         <td class="py-3 whitespace-normal break-words text-center">
                                             <div class="delivery-item mb-4">
@@ -1019,6 +1042,11 @@
                                             <input
                                                 class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                 value="Production complete" />
+                                        <td class="px-4 py-3 whitespace-normal break-words">
+                                            <span class="readonly">STKE/2025/JA25-B</span>
+                                            <input
+                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                value="STKE/2025/JA25-B" />
 
                                         <td class="py-3 whitespace-normal break-words text-center">
                                             <div class="delivery-item mb-4">
@@ -1169,6 +1197,11 @@
                                             <input
                                                 class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                 value="Production complete" />
+                                        <td class="px-4 py-3 whitespace-normal break-words">
+                                            <span class="readonly">STKE/2025/JA25-B</span>
+                                            <input
+                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                value="STKE/2025/JA25-B" />
 
                                         <td class="py-3 whitespace-normal break-words text-center">
                                             <div class="delivery-item mb-4">
