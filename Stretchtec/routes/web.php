@@ -28,4 +28,10 @@ Route::get('production', function () {
     return view('production.production');
 })->name('production.index');
 
+Route::get('storeManagement', function () {
+    return view('store-management.storeManagement');
+})->name('storeManagement.index');
 
+Route::get('reports', function () {
+    return view('reports');
+})->name('reports.index');
