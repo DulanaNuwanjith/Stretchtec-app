@@ -24,4 +24,8 @@ Route::get('productCatalog', function () {
     return view('production-catalog.productCatalog');
 })->name('productCatalog.index');
 
+Route::get('production', function () {
+    return view('production.production');
+})->name('production.index');
+
 
