@@ -31,7 +31,7 @@
         <!-- Tabs Content with padding top to avoid overlap -->
         <div class="pt-4 px-4">
             <div x-show="tab === 'page1'">
-                @include('sample-development.pages.inquery-details')
+                @include('sample-development.pages.sample-inquery-details')
             </div>
             <div x-show="tab === 'page2'" x-cloak>
                 @include('sample-development.pages.sample-preparation-details')

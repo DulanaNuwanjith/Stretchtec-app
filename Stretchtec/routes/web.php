@@ -35,3 +35,7 @@ Route::get('storeManagement', function () {
 Route::get('reports', function () {
     return view('reports');
 })->name('reports.index');
+
+Route::get('sampleStockManagement', function () {
+    return view('sample-development.sample-stock-management');
+})->name('sampleStockManagement.index');

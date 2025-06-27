@@ -260,6 +260,9 @@
                                             Shade</th>
                                         <th
                                             class="px-4 py-3 w-40 text-xs font-medium uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">
+                                            Yarn ordered quantity</th>
+                                        <th
+                                            class="px-4 py-3 w-40 text-xs font-medium uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">
                                             Tkt</th>
                                         <th
                                             class="px-4 py-3 w-40 text-xs font-medium uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">
@@ -276,6 +279,9 @@
                                         <th
                                             class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                             Production Status</th>
+                                        <th
+                                            class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                            Production Output</th>
                                         <th
                                             class="px-4 py-3 w-32 text-xs font-medium uppercase text-gray-600 dark:text-gray-300 text-center whitespace-normal break-words">
                                             Action</th>
@@ -351,6 +357,12 @@
                                                 value="Dark Blue" />
                                         </td>
                                         <td class="px-4 py-3 whitespace-normal break-words">
+                                            <span class="readonly">5000m Corn</span>
+                                            <input
+                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                value="5000m Corn" />
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-normal break-words">
                                             <span class="readonly">30</span>
                                             <input type="number"
                                                 class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
@@ -395,6 +407,13 @@
                                             <input
                                                 class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                 value="Production complete" />
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-normal break-words">
+                                            <span class="readonly">5 yard</span>
+                                            <input
+                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                value="5 yard" />
+                                        </td>
                                         <td class="px-4 py-3 text-center whitespace-normal break-words">
                                             <div class="flex justify-center space-x-2">
                                                 <button
@@ -473,6 +492,12 @@
                                                 value="Dark Blue" />
                                         </td>
                                         <td class="px-4 py-3 whitespace-normal break-words">
+                                            <span class="readonly">5000m Corn</span>
+                                            <input
+                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                value="5000m Corn" />
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-normal break-words">
                                             <span class="readonly">30</span>
                                             <input type="number"
                                                 class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
@@ -517,6 +542,13 @@
                                             <input
                                                 class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                 value="Production complete" />
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-normal break-words">
+                                            <span class="readonly">5 yard</span>
+                                            <input
+                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                value="5 yard" />
+                                        </td>
                                         <td class="px-4 py-3 text-center whitespace-normal break-words">
                                             <div class="flex justify-center space-x-2">
                                                 <button
@@ -595,6 +627,12 @@
                                                 value="Dark Blue" />
                                         </td>
                                         <td class="px-4 py-3 whitespace-normal break-words">
+                                            <span class="readonly">5000m Corn</span>
+                                            <input
+                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                value="5000m Corn" />
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-normal break-words">
                                             <span class="readonly">30</span>
                                             <input type="number"
                                                 class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
@@ -639,6 +677,13 @@
                                             <input
                                                 class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                 value="Production complete" />
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-normal break-words">
+                                            <span class="readonly">5 yard</span>
+                                            <input
+                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                value="5 yard" />
+                                        </td>
                                         <td class="px-4 py-3 text-center whitespace-normal break-words">
                                             <div class="flex justify-center space-x-2">
                                                 <button
@@ -717,6 +762,12 @@
                                                 value="Dark Blue" />
                                         </td>
                                         <td class="px-4 py-3 whitespace-normal break-words">
+                                            <span class="readonly">5000m Corn</span>
+                                            <input
+                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                value="5000m Corn" />
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-normal break-words">
                                             <span class="readonly">30</span>
                                             <input type="number"
                                                 class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
@@ -761,6 +812,13 @@
                                             <input
                                                 class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                 value="Production complete" />
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-normal break-words">
+                                            <span class="readonly">5 yard</span>
+                                            <input
+                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                value="5 yard" />
+                                        </td>
                                         <td class="px-4 py-3 text-center whitespace-normal break-words">
                                             <div class="flex justify-center space-x-2">
                                                 <button
@@ -839,6 +897,12 @@
                                                 value="Dark Blue" />
                                         </td>
                                         <td class="px-4 py-3 whitespace-normal break-words">
+                                            <span class="readonly">5000m Corn</span>
+                                            <input
+                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                value="5000m Corn" />
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-normal break-words">
                                             <span class="readonly">30</span>
                                             <input type="number"
                                                 class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
@@ -883,6 +947,13 @@
                                             <input
                                                 class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                 value="Production complete" />
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-normal break-words">
+                                            <span class="readonly">5 yard</span>
+                                            <input
+                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                value="5 yard" />
+                                        </td>
                                         <td class="px-4 py-3 text-center whitespace-normal break-words">
                                             <div class="flex justify-center space-x-2">
                                                 <button
@@ -894,7 +965,7 @@
                                             </div>
                                         </td>
                                     </tr>
-                                    
+
                                 </tbody>
                             </table>
                             <div class="py-6 flex justify-center">

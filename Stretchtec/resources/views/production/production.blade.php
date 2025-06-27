@@ -18,7 +18,7 @@
                 @click="tab = 'page2'"
                 :class="tab === 'page2' ? 'border-b-2 border-blue-500 text-blue-600' : 'text-gray-600'"
                 class="pb-2 px-3 font-semibold">
-                Preparation Preparations
+                Production Order Preparations
             </button>
             <button
                 @click="tab = 'page3'"
@@ -34,7 +34,7 @@
                 @include('production.pages.production-inquery-details')
             </div>
             <div x-show="tab === 'page2'" x-cloak>
-                @include('sample-development.pages.sample-preparation-details')
+                @include('production.pages.production-order-preparation')
             </div>
             <div x-show="tab === 'page3'">
                 @include('sample-development.pages.sample-preparation-production')
