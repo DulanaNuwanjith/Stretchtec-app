@@ -142,12 +142,12 @@
                                             Order Complete Date & Time
                                         </th>
                                         <th
-                                            class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                            Production Output</th>
-                                        <th
                                             class="px-4 py-3 w-40 text-center text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                             Dispatch to R&D
                                         </th>
+                                        <th
+                                            class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                            Production Output</th>
                                         <th
                                             class="px-4 py-3 w-72 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                             Special Note
