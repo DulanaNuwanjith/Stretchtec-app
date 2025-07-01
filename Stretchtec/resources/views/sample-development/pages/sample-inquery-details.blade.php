@@ -319,8 +319,8 @@
                                             class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                             Customer Requested Dates</th>
                                         <th
-                                            class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                            Aready Developed Or Not</th>
+                                            class="px-4 py-3 w-56 text-center text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                            Aready Developed & In Sample Stock</th>
                                         <th
                                             class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                             Development Plan Date</th>
@@ -408,13 +408,43 @@
                                                 class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                 value="2025-06-05" />
                                         </td>
-                                        <td class="px-4 py-3 whitespace-normal break-words text-center">
-                                            <span class="readonly">Not</span>
-                                            <input
-                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                value="Not" />
-                                        </td>
+                                        <td class="px-4 py-3 whitespace-normal break-words">
+                                            <div class="relative inline-block text-left w-36">
+                                                <!-- Dropdown Button -->
+                                                <div>
+                                                    <button type="button" id="developmentStatusDropdown"
+                                                        class="inline-flex justify-between w-48 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10 dark:bg-gray-700 dark:text-white transition-all duration-200"
+                                                        onclick="toggleDevelopmentStatusDropdown(event)">
+                                                        <span id="selectedDevelopmentStatus">Need to Develop</span>
+                                                        <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20"
+                                                            fill="currentColor">
+                                                            <path fill-rule="evenodd"
+                                                                d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
+                                                                clip-rule="evenodd" />
+                                                        </svg>
+                                                    </button>
+                                                </div>
 
+                                                <!-- Dropdown Menu -->
+                                                <div id="developmentStatusDropdownMenu"
+                                                    class="hidden absolute z-10 mt-2 w-48 rounded-md bg-white shadow-lg ring-1 ring-black/5 dark:bg-gray-700">
+                                                    <div class="py-1" role="listbox" tabindex="-1"
+                                                        aria-labelledby="developmentStatusDropdown">
+                                                        <button type="button"
+                                                            class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
+                                                            onclick="selectDevelopmentStatus('Need to Develop')">Need
+                                                            to Develop</button>
+                                                        <button type="button"
+                                                            class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
+                                                            onclick="selectDevelopmentStatus('No Need to Develop')">No
+                                                            Need to Develop</button>
+                                                    </div>
+                                                </div>
+
+                                                <input type="hidden" name="development_status"
+                                                    id="developmentStatusInput" value="Need to Develop" />
+                                            </div>
+                                        </td>
                                         <td class="px-4 py-3 whitespace-normal break-words">
                                             <span class="readonly">2025-06-05</span>
                                             <input type="date"
@@ -1730,6 +1760,44 @@
         if (!dropdownBtn.contains(e.target) && !dropdownMenu.contains(e.target)) {
             dropdownMenu.classList.add('hidden');
             dropdownBtn.setAttribute('aria-expanded', false);
+        }
+    });
+</script>
+
+<script>
+    function toggleDevelopmentStatusDropdown(event) {
+        event.stopPropagation();
+        const menu = document.getElementById('developmentStatusDropdownMenu');
+        const btn = document.getElementById('developmentStatusDropdown');
+        const expanded = btn.getAttribute('aria-expanded') === 'true';
+
+        menu.classList.toggle('hidden');
+        btn.setAttribute('aria-expanded', !expanded);
+    }
+
+    function selectDevelopmentStatus(status) {
+        const span = document.getElementById('selectedDevelopmentStatus');
+        const input = document.getElementById('developmentStatusInput');
+        const menu = document.getElementById('developmentStatusDropdownMenu');
+        const btn = document.getElementById('developmentStatusDropdown');
+
+        // Update label and hidden input
+        span.innerText = status;
+        input.value = status;
+
+        // Close dropdown
+        menu.classList.add('hidden');
+        btn.setAttribute('aria-expanded', false);
+    }
+
+    // Close on outside click
+    document.addEventListener('click', function (e) {
+        const btn = document.getElementById('developmentStatusDropdown');
+        const menu = document.getElementById('developmentStatusDropdownMenu');
+
+        if (!btn.contains(e.target) && !menu.contains(e.target)) {
+            menu.classList.add('hidden');
+            btn.setAttribute('aria-expanded', false);
         }
     });
 </script>
