@@ -16,10 +16,6 @@ Route::middleware([
     })->name('dashboard');
 });
 
-Route::get('sampleDevelopment', function () {
-    return view('sample-development.sampleDevelopment');
-})->name('sampleDevelopment.index');
-
 Route::get('productCatalog', function () {
     return view('production-catalog.productCatalog');
 })->name('productCatalog.index');
@@ -43,3 +39,15 @@ Route::get('sampleStockManagement', function () {
 Route::get('addResponsiblePerson', function () {
     return view('addResponsiblePerson');
 })->name('addResponsiblePerson.index');
+
+Route::get('/sample-inquery-details', function () {
+    return view('sample-development.pages.sample-inquery-details');
+})->name('sample-inquery-details.index');
+
+Route::get('/sample-preparation-details', function () {
+    return view('sample-development.pages.sample-preparation-details');
+})->name('sample-preparation-details.index');
+
+Route::get('/sample-preparation-production', function () {
+    return view('sample-development.pages.sample-preparation-production');
+})->name('sample-preparation-production.index');
