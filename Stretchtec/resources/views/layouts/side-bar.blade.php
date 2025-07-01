@@ -39,8 +39,8 @@
                 </li>
 
                 <li>
-                    <a href="{{ route('sampleDevelopment.index') }}"
-                        class="flex items-center px-4 py-2 rounded hover:bg-gray-200 {{ request()->routeIs('sampleDevelopment.*','sampleStockManagement.*') ? 'bg-gray-200' : '' }}">
+                    <a href="{{ route('sample-inquery-details.index') }}"
+                        class="flex items-center px-4 py-2 rounded hover:bg-gray-200 {{ request()->routeIs('sample-inquery-details.*','sample-preparation-details.*','sample-preparation-production.*','sampleStockManagement.*') ? 'bg-gray-200' : '' }}">
                         <img src="{{ asset('icons/research.png') }}" alt="" class="w-6 h-6 mr-5" />
                         <span>Sample Development</span>
                     </a>
