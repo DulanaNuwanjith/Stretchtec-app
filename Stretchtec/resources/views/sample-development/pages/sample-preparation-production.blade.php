@@ -164,7 +164,9 @@
                                     <tr id="serviceRow1">
                                         <td class="px-4 py-3 whitespace-normal break-words">
                                             <span class="readonly hover:text-blue-600 hover:underline cursor-pointer"
-                                                onclick="document.getElementById('viewDetailsSample').classList.remove('hidden')">001</span>
+                                                onclick="document.getElementById('viewDetailsSample').classList.remove('hidden')">
+                                                001
+                                            </span>
                                             <input
                                                 class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                 value="001" />
@@ -731,18 +733,23 @@
                             </table>
                             <!-- Add Sample Modal -->
                             <div id="viewDetailsSample"
-                                class="fixed inset-0 z-50 hidden bg-black bg-opacity-50 flex items-center justify-center py-5">
+                                class="fixed inset-0 z-50 hidden bg-black bg-opacity-50 flex items-center justify-center py-5"
+                                onclick="document.getElementById('viewDetailsSample').classList.add('hidden')">
+
+                                <!-- Modal box -->
                                 <div class="w-full max-w-[700px] bg-white dark:bg-gray-900 rounded-2xl shadow-2xl p-4 transform transition-all scale-95 max-h-[calc(100vh-10rem)] overflow-y-auto"
                                     onclick="event.stopPropagation()">
+
                                     <div class="max-w-[600px] mx-auto p-8">
                                         <h2
                                             class="text-2xl font-semibold mb-8 text-blue-900 mt-4 dark:text-gray-100 text-center">
                                             Order Number 001
                                         </h2>
-                                        
                                     </div>
+
                                 </div>
                             </div>
+
                             <div class="py-6 flex justify-center">
 
                             </div>
