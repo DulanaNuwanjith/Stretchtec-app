@@ -47,8 +47,8 @@
                 </li>
 
                 <li>
-                    <a href="{{ route('productCatalog.index') }}"
-                        class="flex items-center px-4 py-2 rounded hover:bg-gray-200 {{ request()->routeIs('productCatalog.*') ? 'bg-gray-200' : '' }}">
+                    <a href="{{ route('elasticCatalog.index') }}"
+                        class="flex items-center px-4 py-2 rounded hover:bg-gray-200 {{ request()->routeIs('elasticCatalog.*','codeCatalog.*','tapeCatalog.*') ? 'bg-gray-200' : '' }}">
                         <img src="{{ asset('icons/catalog.png') }}" alt="" class="w-6 h-6 mr-5" />
                         <span>Product Catalog</span>
                     </a>

@@ -1,4 +1,3 @@
-<!-- resources/views/layouts/sampleTabs.blade.php -->
 <!DOCTYPE html>
 <html lang="en">
 

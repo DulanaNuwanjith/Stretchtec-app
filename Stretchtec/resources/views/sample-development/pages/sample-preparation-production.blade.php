@@ -3,7 +3,7 @@
 </head>
 
 <div class="flex h-full w-full bg-white">
-    <!-- resources/views/sample-development/pages/sample-preparation-production.blade.php -->
+
     @extends('layouts.sample-tabs')
 
     @section('content')

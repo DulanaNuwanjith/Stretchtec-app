@@ -51,3 +51,15 @@ Route::get('/sample-preparation-details', function () {
 Route::get('/sample-preparation-production', function () {
     return view('sample-development.pages.sample-preparation-production');
 })->name('sample-preparation-production.index');
+
+Route::get('/codeCatalog', function () {
+    return view('production-catalog.pages.codeCatalog');
+})->name('codeCatalog.index');
+
+Route::get('/elasticCatalog', function () {
+    return view('production-catalog.pages.elasticCatalog');
+})->name('elasticCatalog.index');
+
+Route::get('/tapeCatalog', function () {
+    return view('production-catalog.pages.tapeCatalog');
+})->name('tapeCatalog.index');
