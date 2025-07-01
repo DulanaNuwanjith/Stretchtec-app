@@ -20,10 +20,6 @@ Route::get('productCatalog', function () {
     return view('production-catalog.productCatalog');
 })->name('productCatalog.index');
 
-Route::get('production', function () {
-    return view('production.production');
-})->name('production.index');
-
 Route::get('storeManagement', function () {
     return view('store-management.storeManagement');
 })->name('storeManagement.index');
@@ -63,3 +59,11 @@ Route::get('/elasticCatalog', function () {
 Route::get('/tapeCatalog', function () {
     return view('production-catalog.pages.tapeCatalog');
 })->name('tapeCatalog.index');
+
+Route::get('/production-inquery-details', function () {
+    return view('production.pages.production-inquery-details');
+})->name('production-inquery-details.index');
+
+Route::get('/production-order-preparation', function () {
+    return view('production.pages.production-order-preparation');
+})->name('production-order-preparation.index');

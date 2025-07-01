@@ -54,8 +54,8 @@
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('production.index') }}"
-                        class="flex items-center px-4 py-2 rounded hover:bg-gray-200 {{ request()->routeIs('production.*') ? 'bg-gray-200' : '' }}">
+                    <a href="{{ route('production-inquery-details.index') }}"
+                        class="flex items-center px-4 py-2 rounded hover:bg-gray-200 {{ request()->routeIs('production-inquery-details.*','production-order-preparation.*') ? 'bg-gray-200' : '' }}">
                         <img src="{{ asset('icons/factory.png') }}" alt="" class="w-6 h-6 mr-5" />
                         <span>Production</span>
                     </a>
