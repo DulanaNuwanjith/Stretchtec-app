@@ -18,7 +18,7 @@
       <div class="w-full p-8 ">
 
         <!-- Page Title -->
-        <h2 class="text-3xl font-bold mb-6 text-center">Add User</h2>
+        <h2 class="text-3xl font-bold mb-6 ">Add User</h2>
 
         <!-- Add User Form -->
         <form action="/add-user" method="POST" class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
@@ -51,7 +51,7 @@
             <textarea name="address" rows="2" class="w-full border border-gray-300 p-2 rounded"></textarea>
           </div>
 
-          <div class="md:col-span-2 text-center">
+          <div class="md:col-span-2 text-right">
             <button type="submit"
               class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition">
               Add User
@@ -65,7 +65,7 @@
         <h2 class="text-2xl font-bold mb-4 text-gray-900">User List</h2>
 
         <!-- Search bar -->
-        <div class="mb-6 max-w-md">
+        <div class="mb-6 w-full">
           <input
             type="text"
             id="globalSearch"
