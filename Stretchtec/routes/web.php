@@ -39,3 +39,7 @@ Route::get('reports', function () {
 Route::get('sampleStockManagement', function () {
     return view('sample-development.sample-stock-management');
 })->name('sampleStockManagement.index');
+
+Route::get('addResponsiblePerson', function () {
+    return view('addResponsiblePerson');
+})->name('addResponsiblePerson.index');
