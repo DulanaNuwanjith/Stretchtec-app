@@ -1,7 +1,7 @@
 @extends('layouts.add-user-tabs')
 
 @section('content')
-    <div class="flex-1 overflow-y-auto">
+    {{-- <div class="flex-1 overflow-y-auto">
         <div class="">
             <div class="w-full px-6 lg:px-2">
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
@@ -302,6 +302,5 @@
       `;
         }
     }
-</script>
-
+</script> --}}
 @endsection
