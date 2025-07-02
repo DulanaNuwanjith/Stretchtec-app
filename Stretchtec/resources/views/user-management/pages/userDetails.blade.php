@@ -24,10 +24,10 @@
                         <div class="flex justify-between items-center mb-6">
                             <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">User Details
                             </h1>
-                            <button onclick="document.getElementById('addNewUserModal').classList.remove('hidden')"
+                            {{-- <button onclick="document.getElementById('addNewUserModal').classList.remove('hidden')"
                                 class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded shadow">
                                 + Add New User
-                            </button>
+                            </button> --}}
                         </div>
 
                         <div class="overflow-x-auto bg-white dark:bg-gray-900 shadow rounded-lg">
@@ -40,6 +40,9 @@
                                         <th
                                             class="px-4 py-3 w-40 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                             Name</th>
+                                        <th
+                                            class="px-4 py-3 w-40 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                            Role</th>    
                                         <th
                                             class="px-4 py-3 w-36 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                             Email</th>
@@ -63,6 +66,12 @@
                                             <input type="text"
                                                 class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                 value="Dulana Nuwanjith" />
+                                        </td>
+                                        <td class="px-4 py-3 w-40 whitespace-normal break-words">
+                                            <span class="readonly">Admin</span>
+                                            <input type="text"
+                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                value="Admin" />
                                         </td>
                                         <td class="px-4 py-3 w-32 whitespace-normal break-words">
                                             <span class="readonly">dulana69@gmail.com</span>
@@ -91,7 +100,7 @@
                             </div>
                         </div>
                         <!-- Add Product Modal -->
-                        <div id="addNewUserModal"
+                        {{-- <div id="addNewUserModal"
                             class="fixed inset-0 z-50 hidden bg-black bg-opacity-50 flex items-center justify-center py-5">
                             <div class="w-full max-w-[700px] bg-white dark:bg-gray-900 rounded-2xl shadow-2xl p-4 transform transition-all scale-95 max-h-[calc(100vh-10rem)] overflow-y-auto"
                                 onclick="event.stopPropagation()">
@@ -182,7 +191,7 @@
                                     </form>
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
             </div>
@@ -303,5 +312,4 @@
         }
     }
 </script>
-
 @endsection
