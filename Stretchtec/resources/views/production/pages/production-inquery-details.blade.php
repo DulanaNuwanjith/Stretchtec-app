@@ -1,6 +1,13 @@
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+
 <div class="flex h-full w-full">
+    @extends('layouts.production-tabs')
+
+@section('content')
     <div class="flex-1 overflow-y-hidden mb-20">
-        <div class="py-4">
+        <div class="">
             <div class="w-full px-6 lg:px-2">
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-4 text-gray-900 dark:text-gray-100">
@@ -902,3 +909,6 @@
         }
     }
 </script>
+
+@endsection
+    
