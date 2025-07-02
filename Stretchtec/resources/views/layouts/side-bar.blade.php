@@ -39,23 +39,23 @@
                 </li>
 
                 <li>
-                    <a href="{{ route('sampleDevelopment.index') }}"
-                        class="flex items-center px-4 py-2 rounded hover:bg-gray-200 {{ request()->routeIs('sampleDevelopment.*','sampleStockManagement.*') ? 'bg-gray-200' : '' }}">
+                    <a href="{{ route('sample-inquery-details.index') }}"
+                        class="flex items-center px-4 py-2 rounded hover:bg-gray-200 {{ request()->routeIs('sample-inquery-details.*','sample-preparation-details.*','sample-preparation-production.*','sampleStockManagement.*') ? 'bg-gray-200' : '' }}">
                         <img src="{{ asset('icons/research.png') }}" alt="" class="w-6 h-6 mr-5" />
                         <span>Sample Development</span>
                     </a>
                 </li>
 
                 <li>
-                    <a href="{{ route('productCatalog.index') }}"
-                        class="flex items-center px-4 py-2 rounded hover:bg-gray-200 {{ request()->routeIs('productCatalog.*') ? 'bg-gray-200' : '' }}">
+                    <a href="{{ route('elasticCatalog.index') }}"
+                        class="flex items-center px-4 py-2 rounded hover:bg-gray-200 {{ request()->routeIs('elasticCatalog.*','codeCatalog.*','tapeCatalog.*') ? 'bg-gray-200' : '' }}">
                         <img src="{{ asset('icons/catalog.png') }}" alt="" class="w-6 h-6 mr-5" />
                         <span>Product Catalog</span>
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('production.index') }}"
-                        class="flex items-center px-4 py-2 rounded hover:bg-gray-200 {{ request()->routeIs('production.*') ? 'bg-gray-200' : '' }}">
+                    <a href="{{ route('production-inquery-details.index') }}"
+                        class="flex items-center px-4 py-2 rounded hover:bg-gray-200 {{ request()->routeIs('production-inquery-details.*','production-order-preparation.*') ? 'bg-gray-200' : '' }}">
                         <img src="{{ asset('icons/factory.png') }}" alt="" class="w-6 h-6 mr-5" />
                         <span>Production</span>
                     </a>
@@ -74,8 +74,13 @@
                         <span>Reports</span>
                     </a>
                 </li>
-
-
+                <li>
+                    <a href="{{ route('addResponsiblePerson.index') }}"
+                        class="flex items-center px-4 py-2 rounded hover:bg-gray-200 {{ request()->routeIs('addResponsiblePerson.*') ? 'bg-gray-200' : '' }}">
+                        <img src="{{ asset('icons/man.png') }}" alt="" class="w-6 h-6 mr-5" />
+                        <span>Add Users</span>
+                    </a>
+                </li>
             </ul>
 
             <!-- Profile and Logout as Sidebar Buttons -->
