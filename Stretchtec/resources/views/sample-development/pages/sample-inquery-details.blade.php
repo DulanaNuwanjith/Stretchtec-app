@@ -1831,12 +1831,12 @@
 
             if (isPending) {
                 // Mark as Done
-                button.textContent = 'Done';
+                button.textContent = 'sent';
                 button.classList.remove('bg-gray-300', 'text-black', 'hover:bg-gray-400');
                 button.classList.add('bg-[#FF9119]', 'text-white', 'hover:bg-[#FF9119]/80');
 
                 const now = new Date();
-                timestamp.textContent = `Done on ${now.toLocaleDateString()} at ${now.toLocaleTimeString()}`;
+                timestamp.textContent = `sent on ${now.toLocaleDateString()} at ${now.toLocaleTimeString()}`;
             } else {
                 // Revert to Pending
                 button.textContent = 'Pending';
