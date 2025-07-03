@@ -316,8 +316,8 @@
                                                 class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Colour</th>
                                             <th
-                                                class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                                Sample Quantity</th>
+                                                class="px-4 py-3 w-40 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                Customer Requested Sample Quantity</th>
                                             <th
                                                 class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Customer Special Comments</th>
