@@ -2,7 +2,7 @@
     @include('layouts.side-bar')
     <div class="flex-1 overflow-y-auto p-8 bg-white">
 
-        <a href="{{ route('sampleDevelopment.index') }}">
+        <a href="{{ route('sample-inquery-details.index') }}">
             <button class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded shadow mb-6">
                 Back Sample Development
             </button>
