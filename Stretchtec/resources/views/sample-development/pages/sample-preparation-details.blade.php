@@ -562,6 +562,12 @@
                                                     value="Production complete" />
                                             </td>
                                             <td class="px-4 py-3 whitespace-normal break-words">
+                                                <span class="readonly">STKE/2025/JA25-B</span>
+                                                <input
+                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                    value="STKE/2025/JA25-B" />
+                                            </td>
+                                            <td class="px-4 py-3 whitespace-normal break-words">
                                                 <span class="readonly">5 yard</span>
                                                 <input
                                                     class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
@@ -699,6 +705,12 @@
                                                     value="Production complete" />
                                             </td>
                                             <td class="px-4 py-3 whitespace-normal break-words">
+                                                <span class="readonly">STKE/2025/JA25-B</span>
+                                                <input
+                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                    value="STKE/2025/JA25-B" />
+                                            </td>
+                                            <td class="px-4 py-3 whitespace-normal break-words">
                                                 <span class="readonly">5 yard</span>
                                                 <input
                                                     class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
@@ -836,6 +848,12 @@
                                                     value="Production complete" />
                                             </td>
                                             <td class="px-4 py-3 whitespace-normal break-words">
+                                                <span class="readonly">STKE/2025/JA25-B</span>
+                                                <input
+                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                    value="STKE/2025/JA25-B" />
+                                            </td>
+                                            <td class="px-4 py-3 whitespace-normal break-words">
                                                 <span class="readonly">5 yard</span>
                                                 <input
                                                     class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
@@ -971,6 +989,12 @@
                                                 <input
                                                     class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                     value="Production complete" />
+                                            </td>
+                                            <td class="px-4 py-3 whitespace-normal break-words">
+                                                <span class="readonly">STKE/2025/JA25-B</span>
+                                                <input
+                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                    value="STKE/2025/JA25-B" />
                                             </td>
                                             <td class="px-4 py-3 whitespace-normal break-words">
                                                 <span class="readonly">5 yard</span>
