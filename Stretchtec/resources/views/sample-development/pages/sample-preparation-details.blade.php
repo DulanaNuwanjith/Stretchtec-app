@@ -287,10 +287,13 @@
                                                 class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Production Status</th>
                                             <th
+                                                class="px-4 py-3 w-48 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                Reference No</th>
+                                            <th
                                                 class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Production Output</th>
                                             <th
-                                                class="px-4 py-3 w-32 text-xs font-medium uppercase text-gray-600 dark:text-gray-300 text-center whitespace-normal break-words">
+                                                class="px-4 py-3 w-48 text-xs font-medium uppercase text-gray-600 dark:text-gray-300 text-center whitespace-normal break-words">
                                                 Action</th>
                                         </tr>
                                     </thead>
@@ -416,6 +419,12 @@
                                                     value="Production complete" />
                                             </td>
                                             <td class="px-4 py-3 whitespace-normal break-words">
+                                                <span class="readonly">STKE/2025/JA25-B</span>
+                                                <input
+                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                    value="STKE/2025/JA25-B" />
+                                            </td>
+                                            <td class="px-4 py-3 whitespace-normal break-words">
                                                 <span class="readonly">5 yard</span>
                                                 <input
                                                     class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
@@ -429,6 +438,8 @@
                                                     <button
                                                         class="bg-blue-600 h-10 px-3 py-1 rounded text-white text-sm hover:bg-blue-700 hidden"
                                                         onclick="saveRow('prodRow1')">Save</button>
+                                                        <button
+                                                        class="bg-gray-600 h-10 hover:bg-gray-700 text-white px-3 py-1 rounded text-sm">Download</button>
                                                 </div>
                                             </td>
                                         </tr>
@@ -551,6 +562,12 @@
                                                     value="Production complete" />
                                             </td>
                                             <td class="px-4 py-3 whitespace-normal break-words">
+                                                <span class="readonly">STKE/2025/JA25-B</span>
+                                                <input
+                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                    value="STKE/2025/JA25-B" />
+                                            </td>
+                                            <td class="px-4 py-3 whitespace-normal break-words">
                                                 <span class="readonly">5 yard</span>
                                                 <input
                                                     class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
@@ -564,6 +581,8 @@
                                                     <button
                                                         class="bg-blue-600 h-10 px-3 py-1 rounded text-white text-sm hover:bg-blue-700 hidden"
                                                         onclick="saveRow('prodRow1')">Save</button>
+                                                        <button
+                                                        class="bg-gray-600 h-10 hover:bg-gray-700 text-white px-3 py-1 rounded text-sm">Download</button>
                                                 </div>
                                             </td>
                                         </tr>
@@ -686,6 +705,12 @@
                                                     value="Production complete" />
                                             </td>
                                             <td class="px-4 py-3 whitespace-normal break-words">
+                                                <span class="readonly">STKE/2025/JA25-B</span>
+                                                <input
+                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                    value="STKE/2025/JA25-B" />
+                                            </td>
+                                            <td class="px-4 py-3 whitespace-normal break-words">
                                                 <span class="readonly">5 yard</span>
                                                 <input
                                                     class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
@@ -699,6 +724,8 @@
                                                     <button
                                                         class="bg-blue-600 h-10 px-3 py-1 rounded text-white text-sm hover:bg-blue-700 hidden"
                                                         onclick="saveRow('prodRow1')">Save</button>
+                                                        <button
+                                                        class="bg-gray-600 h-10 hover:bg-gray-700 text-white px-3 py-1 rounded text-sm">Download</button>
                                                 </div>
                                             </td>
                                         </tr>
@@ -821,6 +848,12 @@
                                                     value="Production complete" />
                                             </td>
                                             <td class="px-4 py-3 whitespace-normal break-words">
+                                                <span class="readonly">STKE/2025/JA25-B</span>
+                                                <input
+                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                    value="STKE/2025/JA25-B" />
+                                            </td>
+                                            <td class="px-4 py-3 whitespace-normal break-words">
                                                 <span class="readonly">5 yard</span>
                                                 <input
                                                     class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
@@ -834,6 +867,8 @@
                                                     <button
                                                         class="bg-blue-600 h-10 px-3 py-1 rounded text-white text-sm hover:bg-blue-700 hidden"
                                                         onclick="saveRow('prodRow1')">Save</button>
+                                                        <button
+                                                        class="bg-gray-600 h-10 hover:bg-gray-700 text-white px-3 py-1 rounded text-sm">Download</button>
                                                 </div>
                                             </td>
                                         </tr>
@@ -956,6 +991,12 @@
                                                     value="Production complete" />
                                             </td>
                                             <td class="px-4 py-3 whitespace-normal break-words">
+                                                <span class="readonly">STKE/2025/JA25-B</span>
+                                                <input
+                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                    value="STKE/2025/JA25-B" />
+                                            </td>
+                                            <td class="px-4 py-3 whitespace-normal break-words">
                                                 <span class="readonly">5 yard</span>
                                                 <input
                                                     class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
@@ -969,10 +1010,11 @@
                                                     <button
                                                         class="bg-blue-600 h-10 px-3 py-1 rounded text-white text-sm hover:bg-blue-700 hidden"
                                                         onclick="saveRow('prodRow1')">Save</button>
+                                                        <button
+                                                        class="bg-gray-600 h-10 hover:bg-gray-700 text-white px-3 py-1 rounded text-sm">Download</button>
                                                 </div>
                                             </td>
                                         </tr>
-
                                     </tbody>
                                 </table>
                                 <div class="py-6 flex justify-center">

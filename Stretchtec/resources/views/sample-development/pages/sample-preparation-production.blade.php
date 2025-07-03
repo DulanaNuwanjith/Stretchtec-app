@@ -150,15 +150,15 @@
                                                 Order Complete Date & Time
                                             </th>
                                             <th
+                                                class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                Production Output</th>
+                                            <th
                                                 class="px-4 py-3 w-56 text-center text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Dispatch to R&D
                                             </th>
                                             <th
-                                                class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                                Production Output</th>
-                                            <th
                                                 class="px-4 py-3 w-72 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                                Special Note
+                                                Note
                                             </th>
                                             <th
                                                 class="px-4 py-3 w-48 text-center text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
@@ -225,6 +225,12 @@
                                                     </div>
                                                 </div>
                                             </td>
+                                            <td class="px-4 py-3 whitespace-normal break-words">
+                                                <span class="readonly">5 yard</span>
+                                                <input
+                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                    value="5 yard" />
+                                            </td>
                                             <td class="py-3 whitespace-normal break-words text-center">
                                                 <div class="sample-dispatch-item mb-4">
                                                     <button onclick="toggleSampleDispatch(event, this)" type="button"
@@ -235,12 +241,6 @@
                                                         class="sample-dispatch-timestamp mt-1 text-xs text-gray-500 dark:text-gray-400">
                                                     </div>
                                                 </div>
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">5 yard</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="5 yard" />
                                             </td>
                                             <td class="px-4 py-3 whitespace-normal break-words">
                                                 <span class="readonly">abc 1234 long sample description to test line
@@ -319,6 +319,12 @@
                                                     </div>
                                                 </div>
                                             </td>
+                                            <td class="px-4 py-3 whitespace-normal break-words">
+                                                <span class="readonly">5 yard</span>
+                                                <input
+                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                    value="5 yard" />
+                                            </td>
                                             <td class="py-3 whitespace-normal break-words text-center">
                                                 <div class="sample-dispatch-item mb-4">
                                                     <button onclick="toggleSampleDispatch(event, this)" type="button"
@@ -329,12 +335,6 @@
                                                         class="sample-dispatch-timestamp mt-1 text-xs text-gray-500 dark:text-gray-400">
                                                     </div>
                                                 </div>
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">5 yard</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="5 yard" />
                                             </td>
                                             <td class="px-4 py-3 whitespace-normal break-words">
                                                 <span class="readonly">abc 1234 long sample description to test line
@@ -413,6 +413,12 @@
                                                     </div>
                                                 </div>
                                             </td>
+                                            <td class="px-4 py-3 whitespace-normal break-words">
+                                                <span class="readonly">5 yard</span>
+                                                <input
+                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                    value="5 yard" />
+                                            </td>
                                             <td class="py-3 whitespace-normal break-words text-center">
                                                 <div class="sample-dispatch-item mb-4">
                                                     <button onclick="toggleSampleDispatch(event, this)" type="button"
@@ -423,12 +429,6 @@
                                                         class="sample-dispatch-timestamp mt-1 text-xs text-gray-500 dark:text-gray-400">
                                                     </div>
                                                 </div>
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">5 yard</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="5 yard" />
                                             </td>
                                             <td class="px-4 py-3 whitespace-normal break-words">
                                                 <span class="readonly">abc 1234 long sample description to test line
@@ -507,6 +507,12 @@
                                                     </div>
                                                 </div>
                                             </td>
+                                            <td class="px-4 py-3 whitespace-normal break-words">
+                                                <span class="readonly">5 yard</span>
+                                                <input
+                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                    value="5 yard" />
+                                            </td>
                                             <td class="py-3 whitespace-normal break-words text-center">
                                                 <div class="sample-dispatch-item mb-4">
                                                     <button onclick="toggleSampleDispatch(event, this)" type="button"
@@ -517,12 +523,6 @@
                                                         class="sample-dispatch-timestamp mt-1 text-xs text-gray-500 dark:text-gray-400">
                                                     </div>
                                                 </div>
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">5 yard</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="5 yard" />
                                             </td>
                                             <td class="px-4 py-3 whitespace-normal break-words">
                                                 <span class="readonly">abc 1234 long sample description to test line
@@ -601,6 +601,12 @@
                                                     </div>
                                                 </div>
                                             </td>
+                                            <td class="px-4 py-3 whitespace-normal break-words">
+                                                <span class="readonly">5 yard</span>
+                                                <input
+                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                    value="5 yard" />
+                                            </td>
                                             <td class="py-3 whitespace-normal break-words text-center">
                                                 <div class="sample-dispatch-item mb-4">
                                                     <button onclick="toggleSampleDispatch(event, this)" type="button"
@@ -611,12 +617,6 @@
                                                         class="sample-dispatch-timestamp mt-1 text-xs text-gray-500 dark:text-gray-400">
                                                     </div>
                                                 </div>
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">5 yard</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="5 yard" />
                                             </td>
                                             <td class="px-4 py-3 whitespace-normal break-words">
                                                 <span class="readonly">abc 1234 long sample description to test line
@@ -642,101 +642,6 @@
                                                 </div>
                                             </td>
                                         </tr>
-                                        <tr id="serviceRow1">
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">001</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="001" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">2025-05-05</span>
-                                                <input type="date"
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="2025-05-05" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">2025-05-05</span>
-                                                <input type="date"
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="2025-05-05" />
-                                            </td>
-                                            <td class="py-3 whitespace-normal break-words text-center">
-                                                <div class="order-start-item mb-4">
-                                                    <button onclick="toggleOrderStart(event, this)" type="button"
-                                                        class="order-start-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
-                                                        Pending
-                                                    </button>
-                                                    <div
-                                                        class="order-start-timestamp mt-1 text-xs text-gray-500 dark:text-gray-400">
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">Operator 001</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="Operator 001" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">Supervisor 001</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="Supervisor 001" />
-                                            </td>
-                                            <td class="py-3 whitespace-normal break-words text-center">
-                                                <div class="order-complete-item mb-4">
-                                                    <button onclick="toggleOrderComplete(event, this)" type="button"
-                                                        class="order-complete-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
-                                                        Pending
-                                                    </button>
-                                                    <div
-                                                        class="order-complete-timestamp mt-1 text-xs text-gray-500 dark:text-gray-400">
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="py-3 whitespace-normal break-words text-center">
-                                                <div class="sample-dispatch-item mb-4">
-                                                    <button onclick="toggleSampleDispatch(event, this)" type="button"
-                                                        class="sample-dispatch-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
-                                                        Pending
-                                                    </button>
-                                                    <div
-                                                        class="sample-dispatch-timestamp mt-1 text-xs text-gray-500 dark:text-gray-400">
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">5 yard</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="5 yard" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">abc 1234 long sample description to test line
-                                                    wrapping</span>
-                                                <textarea
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    rows="2">abc 1234 long sample description to test line wrapping</textarea>
-                                            </td>
-                                            <td class="px-4 py-3 text-center">
-                                                <div class="flex text-center space-x-2 justify-center">
-                                                    <button
-                                                        class="bg-green-600 h-10 hover:bg-green-700 text-white px-3 py-1 rounded text-sm"
-                                                        onclick="editServiceRow('serviceRow1')">
-                                                        Edit
-                                                    </button>
-                                                    <button
-                                                        class="bg-blue-600 h-10 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm hidden"
-                                                        onclick="saveServiceRow('serviceRow1')">
-                                                        Save
-                                                    </button>
-                                                    <button
-                                                        class="bg-gray-600 h-10 hover:bg-gray-700 text-white px-3 py-1 rounded text-sm">Download</button>
-                                                </div>
-                                            </td>
-                                        </tr>
-
                                     </tbody>
                                 </table>
                                 <!-- Add Sample Modal -->
