@@ -326,7 +326,7 @@
                                                 Customer Requested Dates</th>
                                             <th
                                                 class="px-4 py-3 w-56 text-center text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                                Aready Developed & In Sample Stock</th>
+                                                Already Developed & In Sample Stock</th>
                                             <th
                                                 class="px-4 py-3 w-40 text-center text-xs font-medium uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">
                                                 Sent order to sample development</th>
@@ -346,7 +346,7 @@
                                                 class="px-4 py-3 w-56 text-xs text-center font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Customer Decision</th>
                                             <th
-                                                class="px-4 py-3 w-56 text-xs text-center font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="px-4 py-3 w-72 text-xs text-center font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Note</th>
                                             <th
                                                 class="px-4 py-3 w-48 text-xs text-center font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
@@ -538,10 +538,11 @@
                                             </td>
 
                                             <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">Typing....</span>
-                                                <input
+                                                <span class="readonly">abc 1234 long sample description to test line
+                                                    wrapping</span>
+                                                <textarea
                                                     class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="Typing...." />
+                                                    rows="2">abc 1234 long sample description to test line wrapping</textarea>
                                             </td>
 
                                             <td class="px-4 py-3 text-center whitespace-normal break-words">
@@ -740,10 +741,11 @@
                                             </td>
 
                                             <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">Typing....</span>
-                                                <input
+                                                <span class="readonly">abc 1234 long sample description to test line
+                                                    wrapping</span>
+                                                <textarea
                                                     class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="Typing...." />
+                                                    rows="2">abc 1234 long sample description to test line wrapping</textarea>
                                             </td>
 
                                             <td class="px-4 py-3 text-center whitespace-normal break-words">
@@ -942,10 +944,11 @@
                                             </td>
 
                                             <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">Typing....</span>
-                                                <input
+                                                <span class="readonly">abc 1234 long sample description to test line
+                                                    wrapping</span>
+                                                <textarea
                                                     class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="Typing...." />
+                                                    rows="2">abc 1234 long sample description to test line wrapping</textarea>
                                             </td>
 
                                             <td class="px-4 py-3 text-center whitespace-normal break-words">
@@ -1144,10 +1147,11 @@
                                             </td>
 
                                             <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">Typing....</span>
-                                                <input
+                                                <span class="readonly">abc 1234 long sample description to test line
+                                                    wrapping</span>
+                                                <textarea
                                                     class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="Typing...." />
+                                                    rows="2">abc 1234 long sample description to test line wrapping</textarea>
                                             </td>
 
                                             <td class="px-4 py-3 text-center whitespace-normal break-words">
@@ -1346,10 +1350,11 @@
                                             </td>
 
                                             <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">Typing....</span>
-                                                <input
+                                                <span class="readonly">abc 1234 long sample description to test line
+                                                    wrapping</span>
+                                                <textarea
                                                     class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="Typing...." />
+                                                    rows="2">abc 1234 long sample description to test line wrapping</textarea>
                                             </td>
 
                                             <td class="px-4 py-3 text-center whitespace-normal break-words">

@@ -293,6 +293,9 @@
                                                 class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Production Output</th>
                                             <th
+                                                class="px-4 py-3 w-72 text-xs text-center font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                Note</th>
+                                            <th
                                                 class="px-4 py-3 w-48 text-xs font-medium uppercase text-gray-600 dark:text-gray-300 text-center whitespace-normal break-words">
                                                 Action</th>
                                         </tr>
@@ -430,291 +433,12 @@
                                                     class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                     value="5 yard" />
                                             </td>
-                                            <td class="px-4 py-3 text-center whitespace-normal break-words">
-                                                <div class="flex justify-center space-x-2">
-                                                    <button
-                                                        class="bg-green-600 h-10 px-3 py-1 rounded text-white text-sm hover:bg-green-700"
-                                                        onclick="editRow('prodRow1')">Edit</button>
-                                                    <button
-                                                        class="bg-blue-600 h-10 px-3 py-1 rounded text-white text-sm hover:bg-blue-700 hidden"
-                                                        onclick="saveRow('prodRow1')">Save</button>
-                                                        <button
-                                                        class="bg-gray-600 h-10 hover:bg-gray-700 text-white px-3 py-1 rounded text-sm">Download</button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr id="prodRow1">
                                             <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">001</span>
-                                                <input
+                                                <span class="readonly">abc 1234 long sample description to test line
+                                                    wrapping</span>
+                                                <textarea
                                                     class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="001" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">2025-06-05</span>
-                                                <input type="date"
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="2025-06-05" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">2025-06-10</span>
-                                                <input type="date"
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="2025-06-10" />
-                                            </td>
-
-                                            <td class="py-3 whitespace-normal break-words text-center">
-                                                <div class="colour-match-sent mb-4">
-                                                    <button onclick="toggleColourMatchSent(event, this)" type="button"
-                                                        class="delivered-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
-                                                        Pending
-                                                    </button>
-                                                    <div class="timestamp mt-1 text-xs text-gray-500 dark:text-gray-400">
-                                                    </div>
-                                                </div>
-                                            </td>
-
-                                            <td class="py-3 whitespace-normal break-words text-center">
-                                                <div class="colour-match-receive mb-4">
-                                                    <button onclick="toggleColourMatchReceive(event, this)" type="button"
-                                                        class="receive-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
-                                                        Pending
-                                                    </button>
-                                                    <div
-                                                        class="receive-timestamp mt-1 text-xs text-gray-500 dark:text-gray-400">
-                                                    </div>
-                                                </div>
-                                            </td>
-
-                                            <td class="py-3 whitespace-normal break-words text-center">
-                                                <div class="yarn-ordered-item mb-4">
-                                                    <button onclick="toggleYarnOrdered(event, this)" type="button"
-                                                        class="yarn-ordered-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
-                                                        Pending
-                                                    </button>
-                                                    <div
-                                                        class="yarn-timestamp mt-1 text-xs text-gray-500 dark:text-gray-400">
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">PO12345</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="PO12345" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">Dark Blue</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="Dark Blue" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">5000m Corn</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="5000m Corn" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">30</span>
-                                                <input type="number"
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="30" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">Supplier A</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="Supplier A" />
-                                            </td>
-                                            <td class="py-3 whitespace-normal break-words text-center">
-                                                <div class="yarn-receive-item mb-4">
-                                                    <button onclick="toggleYarnReceived(event, this)" type="button"
-                                                        class="yarn-receive-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
-                                                        Pending
-                                                    </button>
-                                                    <div
-                                                        class="yarn-receive-timestamp mt-1 text-xs text-gray-500 dark:text-gray-400">
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">2025-07-01</span>
-                                                <input type="date"
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="2025-07-01" />
-                                            </td>
-                                            <td class="py-3 whitespace-normal break-words text-center">
-                                                <div class="send-production-item mb-4">
-                                                    <button onclick="toggleSendProduction(event, this)" type="button"
-                                                        class="send-production-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
-                                                        Pending
-                                                    </button>
-                                                    <div
-                                                        class="send-production-timestamp mt-1 text-xs text-gray-500 dark:text-gray-400">
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">Production complete</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="Production complete" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">STKE/2025/JA25-B</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="STKE/2025/JA25-B" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">5 yard</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="5 yard" />
-                                            </td>
-                                            <td class="px-4 py-3 text-center whitespace-normal break-words">
-                                                <div class="flex justify-center space-x-2">
-                                                    <button
-                                                        class="bg-green-600 h-10 px-3 py-1 rounded text-white text-sm hover:bg-green-700"
-                                                        onclick="editRow('prodRow1')">Edit</button>
-                                                    <button
-                                                        class="bg-blue-600 h-10 px-3 py-1 rounded text-white text-sm hover:bg-blue-700 hidden"
-                                                        onclick="saveRow('prodRow1')">Save</button>
-                                                        <button
-                                                        class="bg-gray-600 h-10 hover:bg-gray-700 text-white px-3 py-1 rounded text-sm">Download</button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr id="prodRow1">
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">001</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="001" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">2025-06-05</span>
-                                                <input type="date"
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="2025-06-05" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">2025-06-10</span>
-                                                <input type="date"
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="2025-06-10" />
-                                            </td>
-
-                                            <td class="py-3 whitespace-normal break-words text-center">
-                                                <div class="colour-match-sent mb-4">
-                                                    <button onclick="toggleColourMatchSent(event, this)" type="button"
-                                                        class="delivered-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
-                                                        Pending
-                                                    </button>
-                                                    <div class="timestamp mt-1 text-xs text-gray-500 dark:text-gray-400">
-                                                    </div>
-                                                </div>
-                                            </td>
-
-                                            <td class="py-3 whitespace-normal break-words text-center">
-                                                <div class="colour-match-receive mb-4">
-                                                    <button onclick="toggleColourMatchReceive(event, this)" type="button"
-                                                        class="receive-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
-                                                        Pending
-                                                    </button>
-                                                    <div
-                                                        class="receive-timestamp mt-1 text-xs text-gray-500 dark:text-gray-400">
-                                                    </div>
-                                                </div>
-                                            </td>
-
-                                            <td class="py-3 whitespace-normal break-words text-center">
-                                                <div class="yarn-ordered-item mb-4">
-                                                    <button onclick="toggleYarnOrdered(event, this)" type="button"
-                                                        class="yarn-ordered-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
-                                                        Pending
-                                                    </button>
-                                                    <div
-                                                        class="yarn-timestamp mt-1 text-xs text-gray-500 dark:text-gray-400">
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">PO12345</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="PO12345" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">Dark Blue</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="Dark Blue" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">5000m Corn</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="5000m Corn" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">30</span>
-                                                <input type="number"
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="30" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">Supplier A</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="Supplier A" />
-                                            </td>
-                                            <td class="py-3 whitespace-normal break-words text-center">
-                                                <div class="yarn-receive-item mb-4">
-                                                    <button onclick="toggleYarnReceived(event, this)" type="button"
-                                                        class="yarn-receive-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
-                                                        Pending
-                                                    </button>
-                                                    <div
-                                                        class="yarn-receive-timestamp mt-1 text-xs text-gray-500 dark:text-gray-400">
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">2025-07-01</span>
-                                                <input type="date"
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="2025-07-01" />
-                                            </td>
-                                            <td class="py-3 whitespace-normal break-words text-center">
-                                                <div class="send-production-item mb-4">
-                                                    <button onclick="toggleSendProduction(event, this)" type="button"
-                                                        class="send-production-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
-                                                        Pending
-                                                    </button>
-                                                    <div
-                                                        class="send-production-timestamp mt-1 text-xs text-gray-500 dark:text-gray-400">
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">Production complete</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="Production complete" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">STKE/2025/JA25-B</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="STKE/2025/JA25-B" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">5 yard</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="5 yard" />
+                                                    rows="2">abc 1234 long sample description to test line wrapping</textarea>
                                             </td>
                                             <td class="px-4 py-3 text-center whitespace-normal break-words">
                                                 <div class="flex justify-center space-x-2">
@@ -859,6 +583,13 @@
                                                     class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                     value="5 yard" />
                                             </td>
+                                            <td class="px-4 py-3 whitespace-normal break-words">
+                                                <span class="readonly">abc 1234 long sample description to test line
+                                                    wrapping</span>
+                                                <textarea
+                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                    rows="2">abc 1234 long sample description to test line wrapping</textarea>
+                                            </td>
                                             <td class="px-4 py-3 text-center whitespace-normal break-words">
                                                 <div class="flex justify-center space-x-2">
                                                     <button
@@ -1001,6 +732,313 @@
                                                 <input
                                                     class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                     value="5 yard" />
+                                            </td>
+                                            <td class="px-4 py-3 whitespace-normal break-words">
+                                                <span class="readonly">abc 1234 long sample description to test line
+                                                    wrapping</span>
+                                                <textarea
+                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                    rows="2">abc 1234 long sample description to test line wrapping</textarea>
+                                            </td>
+                                            <td class="px-4 py-3 text-center whitespace-normal break-words">
+                                                <div class="flex justify-center space-x-2">
+                                                    <button
+                                                        class="bg-green-600 h-10 px-3 py-1 rounded text-white text-sm hover:bg-green-700"
+                                                        onclick="editRow('prodRow1')">Edit</button>
+                                                    <button
+                                                        class="bg-blue-600 h-10 px-3 py-1 rounded text-white text-sm hover:bg-blue-700 hidden"
+                                                        onclick="saveRow('prodRow1')">Save</button>
+                                                        <button
+                                                        class="bg-gray-600 h-10 hover:bg-gray-700 text-white px-3 py-1 rounded text-sm">Download</button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr id="prodRow1">
+                                            <td class="px-4 py-3 whitespace-normal break-words">
+                                                <span class="readonly">001</span>
+                                                <input
+                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                    value="001" />
+                                            </td>
+                                            <td class="px-4 py-3 whitespace-normal break-words">
+                                                <span class="readonly">2025-06-05</span>
+                                                <input type="date"
+                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                    value="2025-06-05" />
+                                            </td>
+                                            <td class="px-4 py-3 whitespace-normal break-words">
+                                                <span class="readonly">2025-06-10</span>
+                                                <input type="date"
+                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                    value="2025-06-10" />
+                                            </td>
+
+                                            <td class="py-3 whitespace-normal break-words text-center">
+                                                <div class="colour-match-sent mb-4">
+                                                    <button onclick="toggleColourMatchSent(event, this)" type="button"
+                                                        class="delivered-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
+                                                        Pending
+                                                    </button>
+                                                    <div class="timestamp mt-1 text-xs text-gray-500 dark:text-gray-400">
+                                                    </div>
+                                                </div>
+                                            </td>
+
+                                            <td class="py-3 whitespace-normal break-words text-center">
+                                                <div class="colour-match-receive mb-4">
+                                                    <button onclick="toggleColourMatchReceive(event, this)" type="button"
+                                                        class="receive-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
+                                                        Pending
+                                                    </button>
+                                                    <div
+                                                        class="receive-timestamp mt-1 text-xs text-gray-500 dark:text-gray-400">
+                                                    </div>
+                                                </div>
+                                            </td>
+
+                                            <td class="py-3 whitespace-normal break-words text-center">
+                                                <div class="yarn-ordered-item mb-4">
+                                                    <button onclick="toggleYarnOrdered(event, this)" type="button"
+                                                        class="yarn-ordered-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
+                                                        Pending
+                                                    </button>
+                                                    <div
+                                                        class="yarn-timestamp mt-1 text-xs text-gray-500 dark:text-gray-400">
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="px-4 py-3 whitespace-normal break-words">
+                                                <span class="readonly">PO12345</span>
+                                                <input
+                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                    value="PO12345" />
+                                            </td>
+                                            <td class="px-4 py-3 whitespace-normal break-words">
+                                                <span class="readonly">Dark Blue</span>
+                                                <input
+                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                    value="Dark Blue" />
+                                            </td>
+                                            <td class="px-4 py-3 whitespace-normal break-words">
+                                                <span class="readonly">5000m Corn</span>
+                                                <input
+                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                    value="5000m Corn" />
+                                            </td>
+                                            <td class="px-4 py-3 whitespace-normal break-words">
+                                                <span class="readonly">30</span>
+                                                <input type="number"
+                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                    value="30" />
+                                            </td>
+                                            <td class="px-4 py-3 whitespace-normal break-words">
+                                                <span class="readonly">Supplier A</span>
+                                                <input
+                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                    value="Supplier A" />
+                                            </td>
+                                            <td class="py-3 whitespace-normal break-words text-center">
+                                                <div class="yarn-receive-item mb-4">
+                                                    <button onclick="toggleYarnReceived(event, this)" type="button"
+                                                        class="yarn-receive-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
+                                                        Pending
+                                                    </button>
+                                                    <div
+                                                        class="yarn-receive-timestamp mt-1 text-xs text-gray-500 dark:text-gray-400">
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="px-4 py-3 whitespace-normal break-words">
+                                                <span class="readonly">2025-07-01</span>
+                                                <input type="date"
+                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                    value="2025-07-01" />
+                                            </td>
+                                            <td class="py-3 whitespace-normal break-words text-center">
+                                                <div class="send-production-item mb-4">
+                                                    <button onclick="toggleSendProduction(event, this)" type="button"
+                                                        class="send-production-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
+                                                        Pending
+                                                    </button>
+                                                    <div
+                                                        class="send-production-timestamp mt-1 text-xs text-gray-500 dark:text-gray-400">
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="px-4 py-3 whitespace-normal break-words">
+                                                <span class="readonly">Production complete</span>
+                                                <input
+                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                    value="Production complete" />
+                                            </td>
+                                            <td class="px-4 py-3 whitespace-normal break-words">
+                                                <span class="readonly">STKE/2025/JA25-B</span>
+                                                <input
+                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                    value="STKE/2025/JA25-B" />
+                                            </td>
+                                            <td class="px-4 py-3 whitespace-normal break-words">
+                                                <span class="readonly">5 yard</span>
+                                                <input
+                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                    value="5 yard" />
+                                            </td>
+                                            <td class="px-4 py-3 whitespace-normal break-words">
+                                                <span class="readonly">abc 1234 long sample description to test line
+                                                    wrapping</span>
+                                                <textarea
+                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                    rows="2">abc 1234 long sample description to test line wrapping</textarea>
+                                            </td>
+                                            <td class="px-4 py-3 text-center whitespace-normal break-words">
+                                                <div class="flex justify-center space-x-2">
+                                                    <button
+                                                        class="bg-green-600 h-10 px-3 py-1 rounded text-white text-sm hover:bg-green-700"
+                                                        onclick="editRow('prodRow1')">Edit</button>
+                                                    <button
+                                                        class="bg-blue-600 h-10 px-3 py-1 rounded text-white text-sm hover:bg-blue-700 hidden"
+                                                        onclick="saveRow('prodRow1')">Save</button>
+                                                        <button
+                                                        class="bg-gray-600 h-10 hover:bg-gray-700 text-white px-3 py-1 rounded text-sm">Download</button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr id="prodRow1">
+                                            <td class="px-4 py-3 whitespace-normal break-words">
+                                                <span class="readonly">001</span>
+                                                <input
+                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                    value="001" />
+                                            </td>
+                                            <td class="px-4 py-3 whitespace-normal break-words">
+                                                <span class="readonly">2025-06-05</span>
+                                                <input type="date"
+                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                    value="2025-06-05" />
+                                            </td>
+                                            <td class="px-4 py-3 whitespace-normal break-words">
+                                                <span class="readonly">2025-06-10</span>
+                                                <input type="date"
+                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                    value="2025-06-10" />
+                                            </td>
+
+                                            <td class="py-3 whitespace-normal break-words text-center">
+                                                <div class="colour-match-sent mb-4">
+                                                    <button onclick="toggleColourMatchSent(event, this)" type="button"
+                                                        class="delivered-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
+                                                        Pending
+                                                    </button>
+                                                    <div class="timestamp mt-1 text-xs text-gray-500 dark:text-gray-400">
+                                                    </div>
+                                                </div>
+                                            </td>
+
+                                            <td class="py-3 whitespace-normal break-words text-center">
+                                                <div class="colour-match-receive mb-4">
+                                                    <button onclick="toggleColourMatchReceive(event, this)" type="button"
+                                                        class="receive-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
+                                                        Pending
+                                                    </button>
+                                                    <div
+                                                        class="receive-timestamp mt-1 text-xs text-gray-500 dark:text-gray-400">
+                                                    </div>
+                                                </div>
+                                            </td>
+
+                                            <td class="py-3 whitespace-normal break-words text-center">
+                                                <div class="yarn-ordered-item mb-4">
+                                                    <button onclick="toggleYarnOrdered(event, this)" type="button"
+                                                        class="yarn-ordered-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
+                                                        Pending
+                                                    </button>
+                                                    <div
+                                                        class="yarn-timestamp mt-1 text-xs text-gray-500 dark:text-gray-400">
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="px-4 py-3 whitespace-normal break-words">
+                                                <span class="readonly">PO12345</span>
+                                                <input
+                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                    value="PO12345" />
+                                            </td>
+                                            <td class="px-4 py-3 whitespace-normal break-words">
+                                                <span class="readonly">Dark Blue</span>
+                                                <input
+                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                    value="Dark Blue" />
+                                            </td>
+                                            <td class="px-4 py-3 whitespace-normal break-words">
+                                                <span class="readonly">5000m Corn</span>
+                                                <input
+                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                    value="5000m Corn" />
+                                            </td>
+                                            <td class="px-4 py-3 whitespace-normal break-words">
+                                                <span class="readonly">30</span>
+                                                <input type="number"
+                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                    value="30" />
+                                            </td>
+                                            <td class="px-4 py-3 whitespace-normal break-words">
+                                                <span class="readonly">Supplier A</span>
+                                                <input
+                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                    value="Supplier A" />
+                                            </td>
+                                            <td class="py-3 whitespace-normal break-words text-center">
+                                                <div class="yarn-receive-item mb-4">
+                                                    <button onclick="toggleYarnReceived(event, this)" type="button"
+                                                        class="yarn-receive-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
+                                                        Pending
+                                                    </button>
+                                                    <div
+                                                        class="yarn-receive-timestamp mt-1 text-xs text-gray-500 dark:text-gray-400">
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="px-4 py-3 whitespace-normal break-words">
+                                                <span class="readonly">2025-07-01</span>
+                                                <input type="date"
+                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                    value="2025-07-01" />
+                                            </td>
+                                            <td class="py-3 whitespace-normal break-words text-center">
+                                                <div class="send-production-item mb-4">
+                                                    <button onclick="toggleSendProduction(event, this)" type="button"
+                                                        class="send-production-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
+                                                        Pending
+                                                    </button>
+                                                    <div
+                                                        class="send-production-timestamp mt-1 text-xs text-gray-500 dark:text-gray-400">
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="px-4 py-3 whitespace-normal break-words">
+                                                <span class="readonly">Production complete</span>
+                                                <input
+                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                    value="Production complete" />
+                                            </td>
+                                            <td class="px-4 py-3 whitespace-normal break-words">
+                                                <span class="readonly">STKE/2025/JA25-B</span>
+                                                <input
+                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                    value="STKE/2025/JA25-B" />
+                                            </td>
+                                            <td class="px-4 py-3 whitespace-normal break-words">
+                                                <span class="readonly">5 yard</span>
+                                                <input
+                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                    value="5 yard" />
+                                            </td>
+                                            <td class="px-4 py-3 whitespace-normal break-words">
+                                                <span class="readonly">abc 1234 long sample description to test line
+                                                    wrapping</span>
+                                                <textarea
+                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                    rows="2">abc 1234 long sample description to test line wrapping</textarea>
                                             </td>
                                             <td class="px-4 py-3 text-center whitespace-normal break-words">
                                                 <div class="flex justify-center space-x-2">

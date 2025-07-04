@@ -111,7 +111,7 @@
 
 
                             <div class="flex justify-between items-center mb-6">
-                                <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Sample Preperation
+                                <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Sample Preparation
                                     Production
                                     Records
                                 </h1>
@@ -157,7 +157,7 @@
                                                 Dispatch to R&D
                                             </th>
                                             <th
-                                                class="px-4 py-3 w-72 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="px-4 py-3 w-72 text-center text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Note
                                             </th>
                                             <th
