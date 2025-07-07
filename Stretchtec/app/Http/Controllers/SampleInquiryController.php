@@ -166,4 +166,17 @@ class SampleInquiryController extends Controller
 
         return back()->with('success', 'Marked as sent to sample development.');
     }
+
+    public function markCustomerDelivered(Request $request)
+    {
+        $request->validate([
+            'id' => 'required|exists:sample_inquiries,id',
+        ]);
+
+        $inquiry = SampleInquiry::findOrFail($request->id);
+        $inquiry->customerDeliveryDate = Carbon::now();
+        $inquiry->save();
+
+        return back()->with('success', 'Marked as delivered to customer.');
+    }
 }

@@ -574,15 +574,24 @@
 
                                                 <td class="py-3 whitespace-normal break-words text-center">
                                                     <div class="delivery-item mb-4">
-                                                        <button onclick="toggleDone(event, this)" type="button"
-                                                            class="delivered-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400">
-                                                            Pending
-                                                        </button>
-                                                        <div
-                                                            class="timestamp mt-1 text-xs text-gray-500 dark:text-gray-400">
-                                                        </div>
+                                                        @if (is_null($inquiry->customerDeliveryDate))
+                                                            <form action="{{ route('inquiry.markCustomerDelivered') }}" method="POST">
+                                                                @csrf
+                                                                <input type="hidden" name="id" value="{{ $inquiry->id }}">
+                                                                <button type="submit"
+                                                                        class="delivered-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
+                                                                    Pending
+                                                                </button>
+                                                            </form>
+                                                            <div class="timestamp mt-1 text-xs text-gray-500 dark:text-gray-400"></div>
+                                                        @else
+                                                            <span class="inline-block text-sm font-semibold text-gray-700 dark:text-white bg-green-100 dark:bg-gray-800 px-3 py-1 rounded">
+                                                                Delivered on {{ \Carbon\Carbon::parse($inquiry->customerDeliveryDate)->format('Y-m-d H:i') }}
+                                                            </span>
+                                                        @endif
                                                     </div>
                                                 </td>
+
 
                                                 <!-- Customer Decision -->
                                                 <td class="px-6 py-3 whitespace-normal break-words">
