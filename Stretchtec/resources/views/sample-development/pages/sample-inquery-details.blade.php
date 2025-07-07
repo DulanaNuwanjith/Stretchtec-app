@@ -455,28 +455,49 @@
                                                 <td class="px-4 py-3 whitespace-normal break-words">
                                                     <div class="relative inline-block text-left w-36">
                                                         @if (!$inquiry->alreadyDeveloped)
-                                                            <!-- Form-based dropdown to update alreadyDeveloped boolean -->
                                                             <form method="POST"
                                                                 action="{{ route('inquiry.updateDevelopedStatus') }}">
                                                                 @csrf
                                                                 <input type="hidden" name="id"
                                                                     value="{{ $inquiry->id }}">
+                                                                <input type="hidden" name="alreadyDeveloped"
+                                                                    id="alreadyDevelopedInput{{ $inquiry->id }}"
+                                                                    value="0">
 
-                                                                <select name="alreadyDeveloped"
-                                                                    onchange="this.form.submit()"
-                                                                    class="w-48 h-10 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 dark:bg-gray-700 dark:text-white">
-                                                                    <option value="0"
-                                                                        {{ $inquiry->alreadyDeveloped == 0 ? 'selected' : '' }}>
-                                                                        Need to Develop
-                                                                    </option>
-                                                                    <option value="1"
-                                                                        {{ $inquiry->alreadyDeveloped == 1 ? 'selected' : '' }}>
-                                                                        No Need to Develop
-                                                                    </option>
-                                                                </select>
+                                                                <!-- Dropdown Button -->
+                                                                <button type="button"
+                                                                    id="alreadyDevelopedDropdown{{ $inquiry->id }}"
+                                                                    class="inline-flex justify-between w-48 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10 dark:bg-gray-700 dark:text-white transition-all duration-200"
+                                                                    onclick="toggleDevelopedDropdown(event, {{ $inquiry->id }})">
+                                                                    <span
+                                                                        id="selectedAlreadyDeveloped{{ $inquiry->id }}">Need
+                                                                        to Develop</span>
+                                                                    <svg class="ml-2 h-5 w-5 text-gray-400"
+                                                                        viewBox="0 0 20 20" fill="currentColor">
+                                                                        <path fill-rule="evenodd"
+                                                                            d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
+                                                                            clip-rule="evenodd" />
+                                                                    </svg>
+                                                                </button>
+
+                                                                <!-- Dropdown Menu -->
+                                                                <div id="alreadyDevelopedDropdownMenu{{ $inquiry->id }}"
+                                                                    class="hidden absolute z-10 mt-2 w-48 rounded-md bg-white shadow-lg ring-1 ring-black/5 dark:bg-gray-700">
+                                                                    <div class="py-1">
+                                                                        <button type="submit"
+                                                                            onclick="setDevelopedStatus({{ $inquiry->id }}, 0, 'Need to Develop')"
+                                                                            class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600">
+                                                                            Need to Develop
+                                                                        </button>
+                                                                        <button type="submit"
+                                                                            onclick="setDevelopedStatus({{ $inquiry->id }}, 1, 'No Need to Develop')"
+                                                                            class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600">
+                                                                            No Need to Develop
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
                                                             </form>
                                                         @else
-                                                            <!-- Read-only Mode -->
                                                             <div
                                                                 class="inline-flex items-center w-48 rounded-md bg-gray-200 px-3 py-2 text-sm font-semibold text-gray-500 shadow-inner h-10 dark:bg-gray-700 dark:text-gray-400">
                                                                 {{ $inquiry->alreadyDeveloped ? 'No Need to Develop' : 'Need to Develop' }}
@@ -489,12 +510,14 @@
                                                 <td class="py-3 whitespace-normal break-words text-center">
                                                     @if (!$inquiry->alreadyDeveloped)
                                                         <div class="colour-match-sent mb-4">
-                                                            <button onclick="toggleSentOrderToSampleDevelopment(event, this)"
-                                                                    type="button"
-                                                                    class="delivered-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
+                                                            <button
+                                                                onclick="toggleSentOrderToSampleDevelopment(event, this)"
+                                                                type="button"
+                                                                class="delivered-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
                                                                 Pending
                                                             </button>
-                                                            <div class="timestamp mt-1 text-xs text-gray-500 dark:text-gray-400">
+                                                            <div
+                                                                class="timestamp mt-1 text-xs text-gray-500 dark:text-gray-400">
                                                                 {{-- Optional timestamp --}}
                                                             </div>
                                                         </div>
@@ -507,10 +530,9 @@
                                                 <td class="px-4 py-3 whitespace-normal break-words">
                                                     @if (!$inquiry->alreadyDeveloped)
                                                         <span class="readonly">{{ $inquiry->developPlannedDate }}</span>
-                                                        <input type="date"
-                                                               name="developPlannedDate"
-                                                               class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                               value="{{ $inquiry->developPlannedDate }}" />
+                                                        <input type="date" name="developPlannedDate"
+                                                            class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                            value="{{ $inquiry->developPlannedDate }}" />
                                                     @else
                                                         {{-- Show empty cell or readonly text if needed --}}
                                                         <span class="text-gray-400 italic">—</span>
@@ -521,10 +543,9 @@
                                                 <td class="px-4 py-3 whitespace-normal break-words">
                                                     @if (!$inquiry->alreadyDeveloped)
                                                         <span class="readonly">{{ $inquiry->productionStatus }}</span>
-                                                        <input type="text"
-                                                               name="productionStatus"
-                                                               class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                               value="{{ $inquiry->productionStatus }}" />
+                                                        <input type="text" name="productionStatus"
+                                                            class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                            value="{{ $inquiry->productionStatus }}" />
                                                     @else
                                                         {{-- Show empty or readonly info --}}
                                                         <span class="text-gray-400 italic">—</span>
@@ -969,6 +990,37 @@
     </script>
 
     <script>
+        function toggleDevelopedDropdown(event, id) {
+            event.stopPropagation();
+            const menu = document.getElementById(`alreadyDevelopedDropdownMenu${id}`);
+            const btn = document.getElementById(`alreadyDevelopedDropdown${id}`);
+            const expanded = btn.getAttribute('aria-expanded') === 'true';
+
+            menu.classList.toggle('hidden');
+            btn.setAttribute('aria-expanded', !expanded);
+        }
+
+        function setDevelopedStatus(id, value, label) {
+            document.getElementById(`alreadyDevelopedInput${id}`).value = value;
+            document.getElementById(`selectedAlreadyDeveloped${id}`).innerText = label;
+        }
+
+        // Close all "Already Developed" dropdowns on outside click
+        document.addEventListener('click', function(e) {
+            document.querySelectorAll('[id^=alreadyDevelopedDropdownMenu]').forEach(menu => {
+                if (!menu.contains(e.target)) {
+                    menu.classList.add('hidden');
+                }
+            });
+
+            document.querySelectorAll('[id^=alreadyDevelopedDropdown]').forEach(btn => {
+                btn.setAttribute('aria-expanded', false);
+            });
+        });
+    </script>
+
+
+    <script>
         function toggleCustomerDecisionDropdownTable(event) {
             event.stopPropagation();
             const menu = document.getElementById('customerDecisionDropdownMenuTable');
@@ -1077,5 +1129,11 @@
                 timestamp.textContent = '';
             }
         }
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById("inquiryDate").value = today;
+        });
     </script>
 @endsection
