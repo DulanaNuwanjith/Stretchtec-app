@@ -582,18 +582,24 @@
                                                 <td class="py-3 whitespace-normal break-words text-center">
                                                     <div class="delivery-item mb-4">
                                                         @if (is_null($inquiry->customerDeliveryDate))
-                                                            <form action="{{ route('inquiry.markCustomerDelivered') }}" method="POST">
+                                                            <form action="{{ route('inquiry.markCustomerDelivered') }}"
+                                                                method="POST">
                                                                 @csrf
-                                                                <input type="hidden" name="id" value="{{ $inquiry->id }}">
+                                                                <input type="hidden" name="id"
+                                                                    value="{{ $inquiry->id }}">
                                                                 <button type="submit"
-                                                                        class="delivered-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
+                                                                    class="delivered-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
                                                                     Pending
                                                                 </button>
                                                             </form>
-                                                            <div class="timestamp mt-1 text-xs text-gray-500 dark:text-gray-400"></div>
+                                                            <div
+                                                                class="timestamp mt-1 text-xs text-gray-500 dark:text-gray-400">
+                                                            </div>
                                                         @else
-                                                            <span class="inline-block text-sm font-semibold text-gray-700 dark:text-white bg-green-100 dark:bg-gray-800 px-3 py-1 rounded">
-                                                                Delivered on {{ \Carbon\Carbon::parse($inquiry->customerDeliveryDate)->format('Y-m-d H:i') }}
+                                                            <span
+                                                                class="inline-block text-sm font-semibold text-gray-700 dark:text-white bg-green-100 dark:bg-gray-800 px-3 py-1 rounded">
+                                                                Delivered on
+                                                                {{ \Carbon\Carbon::parse($inquiry->customerDeliveryDate)->format('Y-m-d H:i') }}
                                                             </span>
                                                         @endif
                                                     </div>
@@ -665,13 +671,22 @@
                                                             class="save-btn bg-blue-600 h-10 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm hidden"
                                                             onclick="saveRow('row{{ $inquiry->id }}')">Save</button>
 
-                                                        @if ($inquiry->orderFile)
-                                                            <a href="{{ asset('storage/' . $inquiry->orderFile) }}"
-                                                                target="_blank"
-                                                                class="bg-gray-600 h-10 hover:bg-gray-700 text-white px-3 py-1 rounded text-sm">Download</a>
-                                                        @else
-                                                            <span class="text-sm text-gray-400">No file</span>
-                                                        @endif
+                                                        <div class="flex items-center justify-center">
+                                                            @if ($inquiry->orderFile)
+                                                                <a href="{{ asset('storage/' . $inquiry->orderFile) }}"
+                                                                    target="_blank"
+                                                                    class="bg-gray-600 h-10 hover:bg-gray-700 text-white px-3 py-1 rounded text-sm">
+                                                                    Download
+                                                                </a>
+                                                            @else
+                                                                <button type="button"
+                                                                    class="bg-gray-300 h-10 text-gray-500 px-3 py-1 rounded text-sm cursor-not-allowed"
+                                                                    disabled>
+                                                                    No File
+                                                                </button>
+                                                            @endif
+                                                        </div>
+
                                                     </div>
                                                 </td>
                                             </tr>
