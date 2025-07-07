@@ -14,6 +14,12 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
+
+    //Sample inquiry routes
+    Route::resource('sampleInquiry', 'App\Http\Controllers\SampleInquiryController')->names([
+        'index' => 'sample-inquery-details.index',
+        'store' => 'sampleInquiry.store',
+    ]);
 });
 
 Route::get('productCatalog', function () {
@@ -32,9 +38,9 @@ Route::get('sampleStockManagement', function () {
     return view('sample-development.sample-stock-management');
 })->name('sampleStockManagement.index');
 
-Route::get('sample-inquery-details', function () {
-    return view('sample-development.pages.sample-inquery-details');
-})->name('sample-inquery-details.index');
+//Route::get('sample-inquery-details', function () {
+//    return view('sample-development.pages.sample-inquery-details');
+//})->name('sample-inquery-details.index');
 
 Route::get('sample-preparation-details', function () {
     return view('sample-development.pages.sample-preparation-details');

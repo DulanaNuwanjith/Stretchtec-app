@@ -25,7 +25,17 @@
                                 </div>
                             @endif
 
-                            <!-- Filter Form -->
+                                @if ($errors->any())
+                                    <div class="mb-4 p-4 text-red-700 bg-red-100 border border-red-300 rounded-md">
+                                        <ul class="list-disc pl-5 space-y-1 text-sm">
+                                            @foreach ($errors->all() as $error)
+                                                <li>{{ $error }}</li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                @endif
+
+                                <!-- Filter Form -->
                             <form id="filterForm1" method="GET" action="" class="mb-6 flex gap-6 items-center">
                                 <div class="flex items-center gap-4 flex-wrap">
 
@@ -1388,7 +1398,7 @@
                                             class="text-2xl font-semibold mb-8 text-blue-900 mt-4 dark:text-gray-100 text-center">
                                             Add New Sample Development
                                         </h2>
-                                        <form action="" method="POST" enctype="multipart/form-data">
+                                        <form action="{{route('sampleInquiry.store')}}" method="POST" enctype="multipart/form-data">
                                             @csrf
                                             <div class="space-y-4">
 
@@ -1413,17 +1423,17 @@
                                                                 (MAX. 800x400px)</p>
                                                         </div>
                                                         <input id="sampleFile" name="order_file" type="file"
-                                                            class="hidden" accept=".pdf,.jpg,.jpeg" />
+                                                            class="block" accept=".pdf,.jpg,.jpeg" />
                                                     </label>
                                                 </div>
 
                                                 <!-- Oder Number -->
                                                 <div>
-                                                    <label for="sampleQuantity"
+                                                    <label for="orderNo"
                                                         class="block text-sm font-medium text-gray-700 dark:text-gray-300">Oder
                                                         Number
                                                     </label>
-                                                    <input id="sampleQuantity" type="text" name="sample_quantity"
+                                                    <input id="orderNo" type="text" name="orderNo"
                                                         required
                                                         class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm mb-4">
                                                 </div>
