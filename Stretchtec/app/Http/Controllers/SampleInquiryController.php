@@ -77,7 +77,7 @@ class SampleInquiryController extends Controller
             SampleInquiry::create([
                 'orderFile' => $orderFilePath,
                 'orderNo' => $orderNo,
-                'inquiryReceiveDate' => $validated['inquiry_date'],
+                'inquiryReceiveDate' => Carbon::now(),
                 'customerName' => $validated['customer'],
                 'merchandiseName' => $validated['merchandiser'],
                 'item' => $validated['item'],

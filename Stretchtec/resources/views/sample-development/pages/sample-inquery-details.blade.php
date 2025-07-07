@@ -306,7 +306,7 @@
                                     <thead class="bg-gray-100 dark:bg-gray-700 text-left">
                                         <tr>
                                             <th
-                                                class="px-4 py-3 w-20 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Order No</th>
                                             <th
                                                 class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
@@ -381,10 +381,11 @@
 
                                                 <!-- Inquiry Receive Date -->
                                                 <td class="px-4 py-3 whitespace-normal break-words">
-                                                    <span class="readonly">{{ $inquiry->inquiryReceiveDate }}</span>
-                                                    <input type="date"
-                                                        class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                        value="{{ $inquiry->inquiryReceiveDate }}" />
+                                                    <span class="readonly">
+                                                        {{ \Carbon\Carbon::parse($inquiry->inquiryReceiveDate)->format('Y-m-d') }}
+                                                    </span>
+                                                    <input type="date" class="hidden editable ..."
+                                                        value="{{ \Carbon\Carbon::parse($inquiry->inquiryReceiveDate)->format('Y-m-d') }}" />
                                                 </td>
 
                                                 <!-- Customer -->
@@ -512,19 +513,25 @@
                                                         <div class="colour-match-sent mb-4">
                                                             @if (is_null($inquiry->sentToSampleDevelopmentDate))
                                                                 {{-- Show form with clickable button --}}
-                                                                <form action="{{ route('inquiry.markSentToSampleDev') }}" method="POST">
+                                                                <form action="{{ route('inquiry.markSentToSampleDev') }}"
+                                                                    method="POST">
                                                                     @csrf
-                                                                    <input type="hidden" name="id" value="{{ $inquiry->id }}">
+                                                                    <input type="hidden" name="id"
+                                                                        value="{{ $inquiry->id }}">
                                                                     <button type="submit"
-                                                                            class="delivered-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
+                                                                        class="delivered-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
                                                                         Pending
                                                                     </button>
                                                                 </form>
                                                             @else
                                                                 {{-- Show static timestamp info --}}
-                                                                <span class="inline-block text-sm font-semibold text-gray-700 dark:text-white bg-yellow-100 dark:bg-gray-800 px-3 py-1 rounded">
-                                                                Sent on {{ \Carbon\Carbon::parse($inquiry->sentToSampleDevelopmentDate)->format('Y-m-d') }} at {{ \Carbon\Carbon::parse($inquiry->sentToSampleDevelopmentDate)->format('H:i')  }}
-                                                            </span>
+                                                                <span
+                                                                    class="inline-block text-sm font-semibold text-gray-700 dark:text-white bg-yellow-100 dark:bg-gray-800 px-3 py-1 rounded">
+                                                                    Sent on
+                                                                    {{ \Carbon\Carbon::parse($inquiry->sentToSampleDevelopmentDate)->format('Y-m-d') }}
+                                                                    at
+                                                                    {{ \Carbon\Carbon::parse($inquiry->sentToSampleDevelopmentDate)->format('H:i') }}
+                                                                </span>
                                                             @endif
                                                         </div>
                                                     @else
@@ -539,11 +546,11 @@
                                                         <input type="date" name="developPlannedDate"
                                                             class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                             value="{{ $inquiry->developPlannedDate }}" />
-                                                        <span class="readonly">{{ $inquiry->developPlannedDate ?? 'N/D' }}</span>
-                                                        <input type="date"
-                                                               name="developPlannedDate"
-                                                               class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                               value="{{ $inquiry->developPlannedDate ?? 'N/D' }}" />
+                                                        <span
+                                                            class="readonly">{{ $inquiry->developPlannedDate ?? 'N/D' }}</span>
+                                                        <input type="date" name="developPlannedDate"
+                                                            class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                            value="{{ $inquiry->developPlannedDate ?? 'N/D' }}" />
                                                     @else
                                                         {{-- Show empty cell or readonly text if needed --}}
                                                         <span class="text-gray-400 italic">—</span>
