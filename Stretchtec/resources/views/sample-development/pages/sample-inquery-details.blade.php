@@ -26,17 +26,17 @@
                                 </div>
                             @endif
 
-                                @if ($errors->any())
-                                    <div class="mb-4 p-4 text-red-700 bg-red-100 border border-red-300 rounded-md">
-                                        <ul class="list-disc pl-5 space-y-1 text-sm">
-                                            @foreach ($errors->all() as $error)
-                                                <li>{{ $error }}</li>
-                                            @endforeach
-                                        </ul>
-                                    </div>
-                                @endif
+                            @if ($errors->any())
+                                <div class="mb-4 p-4 text-red-700 bg-red-100 border border-red-300 rounded-md">
+                                    <ul class="list-disc pl-5 space-y-1 text-sm">
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
 
-                                <!-- Filter Form -->
+                            <!-- Filter Form -->
                             <form id="filterForm1" method="GET" action="" class="mb-6 flex gap-6 items-center">
                                 <div class="flex items-center gap-4 flex-wrap">
 
@@ -368,158 +368,250 @@
 
 
                                     <tbody id="sampleInquiryRecords"
-                                           class="bg-white dark:bg-gray-800 divide-y text-left divide-gray-200 dark:divide-gray-700">
-                                    @foreach ($inquiries as $inquiry)
-                                        <tr id="row{{ $inquiry->id }}">
-                                            <!-- Order No -->
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">{{ $inquiry->orderNo }}</span>
-                                                <input type="text" class="hidden editable ..." value="{{ $inquiry->orderNo }}" />
-                                            </td>
+                                        class="bg-white dark:bg-gray-800 divide-y text-left divide-gray-200 dark:divide-gray-700">
+                                        @foreach ($inquiries as $inquiry)
+                                            <tr id="row{{ $inquiry->id }}">
+                                                <!-- Order No -->
+                                                <td class="px-4 py-3 whitespace-normal break-words">
+                                                    <span class="readonly">{{ $inquiry->orderNo }}</span>
+                                                    <input type="text"
+                                                        class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                        value="{{ $inquiry->orderNo }}" />
+                                                </td>
 
-                                            <!-- Inquiry Receive Date -->
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">{{ $inquiry->inquiryReceiveDate }}</span>
-                                                <input type="date" class="hidden editable ..." value="{{ $inquiry->inquiryReceiveDate }}" />
-                                            </td>
+                                                <!-- Inquiry Receive Date -->
+                                                <td class="px-4 py-3 whitespace-normal break-words">
+                                                    <span class="readonly">{{ $inquiry->inquiryReceiveDate }}</span>
+                                                    <input type="date"
+                                                        class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                        value="{{ $inquiry->inquiryReceiveDate }}" />
+                                                </td>
 
-                                            <!-- Customer -->
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">{{ $inquiry->customerName }}</span>
-                                                <input type="text" class="hidden editable ..." value="{{ $inquiry->customerName }}" />
-                                            </td>
+                                                <!-- Customer -->
+                                                <td class="px-4 py-3 whitespace-normal break-words">
+                                                    <span class="readonly">{{ $inquiry->customerName }}</span>
+                                                    <input type="text"
+                                                        class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                        value="{{ $inquiry->customerName }}" />
+                                                </td>
 
-                                            <!-- Merchandiser -->
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">{{ $inquiry->merchandiseName }}</span>
-                                                <input type="text" class="hidden editable ..." value="{{ $inquiry->merchandiseName }}" />
-                                            </td>
+                                                <!-- Merchandiser -->
+                                                <td class="px-4 py-3 whitespace-normal break-words">
+                                                    <span class="readonly">{{ $inquiry->merchandiseName }}</span>
+                                                    <input type="text"
+                                                        class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                        value="{{ $inquiry->merchandiseName }}" />
+                                                </td>
 
-                                            <!-- Item -->
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">{{ $inquiry->item }}</span>
-                                                <input type="text" class="hidden editable ..." value="{{ $inquiry->item }}" />
-                                            </td>
+                                                <!-- Item -->
+                                                <td class="px-4 py-3 whitespace-normal break-words">
+                                                    <span class="readonly">{{ $inquiry->item }}</span>
+                                                    <input type="text"
+                                                        class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                        value="{{ $inquiry->item }}" />
+                                                </td>
 
-                                            <!-- Size -->
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">{{ $inquiry->size }}</span>
-                                                <input type="text" class="hidden editable ..." value="{{ $inquiry->size }}" />
-                                            </td>
+                                                <!-- Size -->
+                                                <td class="px-4 py-3 whitespace-normal break-words">
+                                                    <span class="readonly">{{ $inquiry->size }}</span>
+                                                    <input type="text"
+                                                        class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                        value="{{ $inquiry->size }}" />
+                                                </td>
 
-                                            <!-- Color -->
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">{{ $inquiry->color }}</span>
-                                                <input type="text" class="hidden editable ..." value="{{ $inquiry->color }}" />
-                                            </td>
+                                                <!-- Color -->
+                                                <td class="px-4 py-3 whitespace-normal break-words">
+                                                    <span class="readonly">{{ $inquiry->color }}</span>
+                                                    <input type="text"
+                                                        class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                        value="{{ $inquiry->color }}" />
+                                                </td>
 
-                                            <!-- Sample Qty -->
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">{{ $inquiry->sampleQty }}</span>
-                                                <input type="text" class="hidden editable ..." value="{{ $inquiry->sampleQty }}" />
-                                            </td>
+                                                <!-- Sample Qty -->
+                                                <td class="px-4 py-3 whitespace-normal break-words">
+                                                    <span class="readonly">{{ $inquiry->sampleQty }}</span>
+                                                    <input type="text"
+                                                        class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                        value="{{ $inquiry->sampleQty }}" />
+                                                </td>
 
-                                            <!-- Customer Comments -->
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">{{ $inquiry->customerSpecialComment }}</span>
-                                                <input type="text" class="hidden editable ..." value="{{ $inquiry->customerSpecialComment }}" />
-                                            </td>
+                                                <!-- Customer Comments -->
+                                                <td class="px-4 py-3 whitespace-normal break-words">
+                                                    <span class="readonly">{{ $inquiry->customerSpecialComment }}</span>
+                                                    <input type="text"
+                                                        class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                        value="{{ $inquiry->customerSpecialComment }}" />
+                                                </td>
 
-                                            <!-- Requested Date -->
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">{{ $inquiry->customerRequestDate }}</span>
-                                                <input type="date" class="hidden editable ..." value="{{ $inquiry->customerRequestDate }}" />
-                                            </td>
+                                                <!-- Requested Date -->
+                                                <td class="px-4 py-3 whitespace-normal break-words">
+                                                    <span class="readonly">{{ $inquiry->customerRequestDate }}</span>
+                                                    <input type="date"
+                                                        class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                        value="{{ $inquiry->customerRequestDate }}" />
+                                                </td>
 
-                                            <!-- Already Developed -->
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <div class="relative inline-block text-left w-36">
-                                                    @if (!$inquiry->alreadyDeveloped)
-                                                        <!-- Form-based dropdown to update alreadyDeveloped boolean -->
-                                                        <form method="POST" action="{{ route('inquiry.updateDevelopedStatus') }}">
-                                                            @csrf
-                                                            <input type="hidden" name="id" value="{{ $inquiry->id }}">
+                                                <!-- Already Developed -->
+                                                <td class="px-4 py-3 whitespace-normal break-words">
+                                                    <div class="relative inline-block text-left w-36">
+                                                        @if (!$inquiry->alreadyDeveloped)
+                                                            <!-- Form-based dropdown to update alreadyDeveloped boolean -->
+                                                            <form method="POST"
+                                                                action="{{ route('inquiry.updateDevelopedStatus') }}">
+                                                                @csrf
+                                                                <input type="hidden" name="id"
+                                                                    value="{{ $inquiry->id }}">
 
-                                                            <select name="alreadyDeveloped"
+                                                                <select name="alreadyDeveloped"
                                                                     onchange="this.form.submit()"
                                                                     class="w-48 h-10 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 dark:bg-gray-700 dark:text-white">
-                                                                <option value="0" {{ $inquiry->alreadyDeveloped == 0 ? 'selected' : '' }}>
-                                                                    Need to Develop
-                                                                </option>
-                                                                <option value="1" {{ $inquiry->alreadyDeveloped == 1 ? 'selected' : '' }}>
-                                                                    No Need to Develop
-                                                                </option>
-                                                            </select>
-                                                        </form>
-                                                    @else
-                                                        <!-- Read-only Mode -->
+                                                                    <option value="0"
+                                                                        {{ $inquiry->alreadyDeveloped == 0 ? 'selected' : '' }}>
+                                                                        Need to Develop
+                                                                    </option>
+                                                                    <option value="1"
+                                                                        {{ $inquiry->alreadyDeveloped == 1 ? 'selected' : '' }}>
+                                                                        No Need to Develop
+                                                                    </option>
+                                                                </select>
+                                                            </form>
+                                                        @else
+                                                            <!-- Read-only Mode -->
+                                                            <div
+                                                                class="inline-flex items-center w-48 rounded-md bg-gray-200 px-3 py-2 text-sm font-semibold text-gray-500 shadow-inner h-10 dark:bg-gray-700 dark:text-gray-400">
+                                                                {{ $inquiry->alreadyDeveloped ? 'No Need to Develop' : 'Need to Develop' }}
+                                                            </div>
+                                                        @endif
+                                                    </div>
+                                                </td>
+
+                                                <!-- Sent Order to Sample Development -->
+
+                                                <td class="py-3 whitespace-normal break-words text-center">
+                                                    <div class="colour-match-sent mb-4">
+                                                        <button onclick="toggleSentOrderToSampleDevelopment(event, this)"
+                                                            type="button"
+                                                            class="delivered-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
+                                                            Pending
+                                                        </button>
                                                         <div
-                                                            class="inline-flex items-center w-48 rounded-md bg-gray-200 px-3 py-2 text-sm font-semibold text-gray-500 shadow-inner h-10 dark:bg-gray-700 dark:text-gray-400">
-                                                            {{ $inquiry->alreadyDeveloped ? 'No Need to Develop' : 'Need to Develop' }}
+                                                            class="timestamp mt-1 text-xs text-gray-500 dark:text-gray-400">
                                                         </div>
-                                                    @endif
-                                                </div>
-                                            </td>
+                                                    </div>
+                                                </td>
 
-                                            <!-- Sent Order to Sample Development -->
-                                            <td class="px-4 py-3 whitespace-normal break-words text-center">
-                                                <button type="button"
-                                                        class="delivered-btn {{ $inquiry->productionStatus === 'sent' ? 'bg-green-500' : 'bg-gray-300' }} text-black px-2 py-1 mt-3 rounded">
-                                                    {{ ucfirst($inquiry->productionStatus) }}
-                                                </button>
-                                            </td>
+                                                <!-- Develop Plan Date -->
+                                                <td class="px-4 py-3 whitespace-normal break-words">
+                                                    <span class="readonly">{{ $inquiry->developPlannedDate }}</span>
+                                                    <input type="date"
+                                                        class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                        value="{{ $inquiry->developPlannedDate }}" />
+                                                </td>
 
-                                            <!-- Develop Plan Date -->
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">{{ $inquiry->developPlannedDate }}</span>
-                                                <input type="date" class="hidden editable ..." value="{{ $inquiry->developPlannedDate }}" />
-                                            </td>
+                                                <!-- Production Status -->
+                                                <td class="px-4 py-3 whitespace-normal break-words">
+                                                    <span class="readonly">{{ $inquiry->productionStatus }}</span>
+                                                    <input type="text"
+                                                        class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                        value="{{ $inquiry->productionStatus }}" />
+                                                </td>
 
-                                            <!-- Production Status -->
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">{{ $inquiry->productionStatus }}</span>
-                                                <input type="text" class="hidden editable ..." value="{{ $inquiry->productionStatus }}" />
-                                            </td>
+                                                <!-- Reference No -->
+                                                <td class="px-4 py-3 whitespace-normal break-words">
+                                                    <span class="readonly">{{ $inquiry->referenceNo }}</span>
+                                                    <input type="text"
+                                                        class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                        value="{{ $inquiry->referenceNo }}" />
+                                                </td>
 
-                                            <!-- Reference No -->
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">{{ $inquiry->referenceNo }}</span>
-                                                <input type="text" class="hidden editable ..." value="{{ $inquiry->referenceNo }}" />
-                                            </td>
+                                                <td class="py-3 whitespace-normal break-words text-center">
+                                                    <div class="delivery-item mb-4">
+                                                        <button onclick="toggleDone(event, this)" type="button"
+                                                            class="delivered-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400">
+                                                            Pending
+                                                        </button>
+                                                        <div
+                                                            class="timestamp mt-1 text-xs text-gray-500 dark:text-gray-400">
+                                                        </div>
+                                                    </div>
+                                                </td>
 
-                                            <!-- Delivery Date -->
-                                            <td class="px-4 py-3 whitespace-normal break-words text-center">
-                                                <span class="readonly">{{ $inquiry->customerDeliveryDate }}</span>
-                                            </td>
+                                                <!-- Customer Decision -->
+                                                <td class="px-6 py-3 whitespace-normal break-words">
+                                                    <div class="relative inline-block text-left w-36">
+                                                        <!-- Dropdown Button -->
+                                                        <div>
+                                                            <button type="button" id="customerDecisionDropdownTable"
+                                                                class="inline-flex justify-between w-48 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10 dark:bg-gray-700 dark:text-white transition-all duration-200"
+                                                                onclick="toggleCustomerDecisionDropdownTable(event)">
+                                                                <span id="selectedCustomerDecisionTable">Pending</span>
+                                                                <svg class="ml-2 h-5 w-5 text-gray-400"
+                                                                    viewBox="0 0 20 20" fill="currentColor">
+                                                                    <path fill-rule="evenodd"
+                                                                        d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
+                                                                        clip-rule="evenodd" />
+                                                                </svg>
+                                                            </button>
+                                                        </div>
 
-                                            <!-- Customer Decision -->
-                                            <td class="px-4 py-3 whitespace-normal break-words text-center">
-                                                <span class="readonly">{{ $inquiry->customerDecision }}</span>
-                                            </td>
+                                                        <!-- Dropdown Menu -->
+                                                        <div id="customerDecisionDropdownMenuTable"
+                                                            class="hidden absolute z-10 mt-2 w-48 rounded-md bg-white shadow-lg ring-1 ring-black/5 dark:bg-gray-700">
+                                                            <div class="py-1" role="listbox" tabindex="-1"
+                                                                aria-labelledby="customerDecisionDropdownTable">
+                                                                <button type="button"
+                                                                    class="decision-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
+                                                                    onclick="selectCustomerDecisionTable('Pending')">Pending</button>
+                                                                <button type="button"
+                                                                    class="decision-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
+                                                                    onclick="selectCustomerDecisionTable('Order Received')">Order
+                                                                    Received</button>
+                                                                <button type="button"
+                                                                    class="decision-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
+                                                                    onclick="selectCustomerDecisionTable('Order Not Received')">Order
+                                                                    Not Received</button>
+                                                                <button type="button"
+                                                                    class="decision-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
+                                                                    onclick="selectCustomerDecisionTable('Order Rejected')">Oder
+                                                                    Rejected</button>
+                                                            </div>
+                                                        </div>
 
-                                            <!-- Notes -->
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">{{ $inquiry->notes }}</span>
-                                                <textarea class="hidden editable ..." rows="2">{{ $inquiry->notes }}</textarea>
-                                            </td>
+                                                        <input type="hidden" name="customer_decision"
+                                                            id="customerDecisionInputTable" value="Pending" />
+                                                    </div>
+                                                </td>
 
-                                            <!-- Actions -->
-                                            <td class="px-4 py-3 text-center whitespace-normal break-words">
-                                                <div class="flex space-x-2 justify-center">
-                                                    <button class="bg-green-600 h-10 hover:bg-green-700 text-white px-3 py-1 rounded text-sm"
+                                                <!-- Notes -->
+                                                <td class="px-4 py-3 whitespace-normal break-words">
+                                                    <span class="readonly">{{ $inquiry->notes }}</span>
+                                                    <textarea
+                                                        class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                        rows="2">{{ $inquiry->notes }}</textarea>
+                                                </td>
+
+                                                <!-- Actions -->
+                                                <td class="px-4 py-3 text-center whitespace-normal break-words">
+                                                    <div class="flex space-x-2 justify-center">
+                                                        <button
+                                                            class="edit-btn bg-green-600 h-10 hover:bg-green-700 text-white px-3 py-1 rounded text-sm"
                                                             onclick="editRow('row{{ $inquiry->id }}')">Edit</button>
-                                                    <button class="bg-blue-600 h-10 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm hidden"
+
+                                                        <button
+                                                            class="save-btn bg-blue-600 h-10 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm hidden"
                                                             onclick="saveRow('row{{ $inquiry->id }}')">Save</button>
-                                                    @if ($inquiry->orderFile)
-                                                        <a href="{{ asset('storage/' . $inquiry->orderFile) }}" target="_blank"
-                                                           class="bg-gray-600 h-10 hover:bg-gray-700 text-white px-3 py-1 rounded text-sm">Download</a>
-                                                    @else
-                                                        <span class="text-sm text-gray-400">No file</span>
-                                                    @endif
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    @endforeach
+
+                                                        @if ($inquiry->orderFile)
+                                                            <a href="{{ asset('storage/' . $inquiry->orderFile) }}"
+                                                                target="_blank"
+                                                                class="bg-gray-600 h-10 hover:bg-gray-700 text-white px-3 py-1 rounded text-sm">Download</a>
+                                                        @else
+                                                            <span class="text-sm text-gray-400">No file</span>
+                                                        @endif
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @endforeach
                                     </tbody>
 
                                 </table>
@@ -538,7 +630,8 @@
                                             class="text-2xl font-semibold mb-8 text-blue-900 mt-4 dark:text-gray-100 text-center">
                                             Add New Sample Development
                                         </h2>
-                                        <form action="{{route('sampleInquiry.store')}}" method="POST" enctype="multipart/form-data">
+                                        <form action="{{ route('sampleInquiry.store') }}" method="POST"
+                                            enctype="multipart/form-data">
                                             @csrf
                                             <div class="space-y-4">
 
@@ -935,10 +1028,11 @@
             document.getElementById(`dropdownMenu${id}`).classList.toggle('hidden');
         }
 
-        document.addEventListener('click', function (event) {
+        document.addEventListener('click', function(event) {
             // Hide all open dropdowns when clicked outside
             document.querySelectorAll('[id^="dropdownMenu"]').forEach(menu => {
-                if (!menu.contains(event.target) && !event.target.closest('[id^="developmentStatusDropdown"]')) {
+                if (!menu.contains(event.target) && !event.target.closest(
+                        '[id^="developmentStatusDropdown"]')) {
                     menu.classList.add('hidden');
                 }
             });
