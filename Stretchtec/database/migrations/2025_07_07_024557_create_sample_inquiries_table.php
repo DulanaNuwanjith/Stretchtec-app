@@ -27,7 +27,7 @@ return new class extends Migration
             $table->boolean('alreadyDeveloped')->default(false);
             $table->string('sentToSampleDevelopmentDate')->nullable();
             $table->date('developPlannedDate')->nullable();
-            $table->string('productionStatus')->default('pending');
+            $table->string('productionStatus')->default('Pending');
             $table->string('referenceNo')->nullable();
             $table->dateTime('customerDeliveryDate')->nullable();
             $table->string('customerDecision')->default('pending');
