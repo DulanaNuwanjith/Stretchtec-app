@@ -15,9 +15,32 @@ class SampleInquiryController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $inquiries = SampleInquiry::latest()->get(); // Fetch all records ordered by latest created
+        $query = SampleInquiry::query();
+
+        // Apply filters if provided
+        if ($request->filled('customer')) {
+            $query->where('customer', $request->customer);
+        }
+
+        if ($request->filled('merchandiser')) {
+            $query->where('merchandiser', $request->merchandiser);
+        }
+
+        if ($request->filled('item')) {
+            $query->where('item', $request->item);
+        }
+
+        if ($request->filled('deliveryStatus')) {
+            $query->where('delivery_status', $request->deliveryStatus);
+        }
+
+        if ($request->filled('customerDecision')) {
+            $query->where('customer_decision', $request->customerDecision);
+        }
+
+        $inquiries = $query->latest()->get();
 
         return view('sample-development.pages.sample-inquery-details', compact('inquiries'));
     }
