@@ -454,7 +454,7 @@
                                                 <!-- Already Developed -->
                                                 <td class="px-4 py-3 whitespace-normal break-words">
                                                     <div class="relative inline-block text-left w-36">
-                                                        @if (!$inquiry->alreadyDeveloped)
+                                                        @if (!$inquiry->alreadyDeveloped && !$inquiry->sentToSampleDevelopmentDate)
                                                             <form method="POST"
                                                                 action="{{ route('inquiry.updateDevelopedStatus') }}">
                                                                 @csrf
