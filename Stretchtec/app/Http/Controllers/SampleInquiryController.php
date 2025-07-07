@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\SampleInquiry;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
@@ -150,4 +151,22 @@ class SampleInquiryController extends Controller
 
         return back()->with('success', 'Development status updated!');
     }
+
+    public function markSentToSampleDevelopment(Request $request)
+    {
+        $request->validate([
+            'id' => 'required|exists:sample_inquiries,id',
+        ]);
+
+        $inquiry = SampleInquiry::findOrFail($request->id);
+
+        // Set the timestamp to now
+        $inquiry->sentToSampleDevelopmentDate = Carbon::now();
+        $inquiry->save();
+
+        return back()->with('success', 'Marked as sent to sample development.');
+    }
+
+
+
 }
