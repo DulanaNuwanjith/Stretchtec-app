@@ -606,51 +606,60 @@
                                                     </div>
                                                 </td>
 
-
                                                 <!-- Customer Decision -->
                                                 <td class="px-6 py-3 whitespace-normal break-words">
-                                                    <div class="relative inline-block text-left w-36">
-                                                        <!-- Dropdown Button -->
-                                                        <div>
-                                                            <button type="button" id="customerDecisionDropdownTable"
-                                                                class="inline-flex justify-between w-48 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10 dark:bg-gray-700 dark:text-white transition-all duration-200"
-                                                                onclick="toggleCustomerDecisionDropdownTable(event)">
-                                                                <span id="selectedCustomerDecisionTable">Pending</span>
-                                                                <svg class="ml-2 h-5 w-5 text-gray-400"
-                                                                    viewBox="0 0 20 20" fill="currentColor">
-                                                                    <path fill-rule="evenodd"
-                                                                        d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
-                                                                        clip-rule="evenodd" />
-                                                                </svg>
-                                                            </button>
-                                                        </div>
+                                                    <form action="{{ route('sample-inquery-details.update-decision', $inquiry->id) }}" method="POST" class="relative inline-block text-left w-48">
+                                                        @csrf
+                                                        @method('PATCH')
+
+                                                        @php
+                                                            $status = $inquiry->customerDecision;
+                                                            $colorClass = match($status) {
+                                                                'Order Rejected' => 'bg-red-100 text-red-800 dark:bg-red-700 dark:text-white',
+                                                                'Order Received' => 'bg-green-100 text-green-800 dark:bg-green-700 dark:text-white',
+                                                                'Order Not Received' => 'bg-yellow-100 text-yellow-800 dark:bg-yellow-700 dark:text-white',
+                                                                'Pending' => 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-white',
+                                                                default => 'bg-white text-gray-900 dark:bg-gray-700 dark:text-white',
+                                                            };
+                                                        @endphp
+
+                                                            <!-- Dropdown Button -->
+                                                        <button type="button"
+                                                                id="customerDecisionDropdownTable-{{ $inquiry->id }}"
+                                                                class="inline-flex justify-between w-48 rounded-md px-3 py-2 text-sm font-semibold shadow-sm ring-1 h-10 transition-all duration-200 {{ $colorClass }}"
+                                                                onclick="toggleCustomerDecisionDropdownTable(event, '{{ $inquiry->id }}')">
+                                                            <span id="selectedCustomerDecisionTable-{{ $inquiry->id }}">{{ $status }}</span>
+                                                            <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                                                                <path fill-rule="evenodd"
+                                                                      d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
+                                                                      clip-rule="evenodd" />
+                                                            </svg>
+                                                        </button>
 
                                                         <!-- Dropdown Menu -->
-                                                        <div id="customerDecisionDropdownMenuTable"
-                                                            class="hidden absolute z-10 mt-2 w-48 rounded-md bg-white shadow-lg ring-1 ring-black/5 dark:bg-gray-700">
-                                                            <div class="py-1" role="listbox" tabindex="-1"
-                                                                aria-labelledby="customerDecisionDropdownTable">
-                                                                <button type="button"
-                                                                    class="decision-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                                                                    onclick="selectCustomerDecisionTable('Pending')">Pending</button>
-                                                                <button type="button"
-                                                                    class="decision-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                                                                    onclick="selectCustomerDecisionTable('Order Received')">Order
-                                                                    Received</button>
-                                                                <button type="button"
-                                                                    class="decision-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                                                                    onclick="selectCustomerDecisionTable('Order Not Received')">Order
-                                                                    Not Received</button>
-                                                                <button type="button"
-                                                                    class="decision-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                                                                    onclick="selectCustomerDecisionTable('Order Rejected')">Oder
-                                                                    Rejected</button>
+                                                        <div id="customerDecisionDropdownMenuTable-{{ $inquiry->id }}"
+                                                             class="hidden absolute z-10 mt-2 w-48 rounded-md bg-white shadow-lg ring-1 ring-black/5 dark:bg-gray-700">
+                                                            <div class="py-1" role="listbox" tabindex="-1" aria-labelledby="customerDecisionDropdownTable-{{ $inquiry->id }}">
+                                                                @php
+                                                                    $options = ['Pending', 'Order Received', 'Order Not Received', 'Order Rejected'];
+                                                                    $colors = [
+                                                                        'Pending' => 'hover:bg-gray-100 text-gray-700 dark:text-white dark:hover:bg-gray-600',
+                                                                        'Order Received' => 'hover:bg-green-100 text-green-700 dark:text-white dark:hover:bg-green-600',
+                                                                        'Order Not Received' => 'hover:bg-yellow-100 text-yellow-700 dark:text-white dark:hover:bg-yellow-600',
+                                                                        'Order Rejected' => 'hover:bg-red-100 text-red-700 dark:text-white dark:hover:bg-red-600',
+                                                                    ];
+                                                                @endphp
+
+                                                                @foreach ($options as $option)
+                                                                    <button type="submit" name="customerDecision" value="{{ $option }}"
+                                                                            class="decision-option w-full text-left px-4 py-2 text-sm {{ $colors[$option] }}"
+                                                                            onclick="selectCustomerDecisionTable('{{ $option }}', '{{ $inquiry->id }}')">
+                                                                        {{ $option }}
+                                                                    </button>
+                                                                @endforeach
                                                             </div>
                                                         </div>
-
-                                                        <input type="hidden" name="customer_decision"
-                                                            id="customerDecisionInputTable" value="Pending" />
-                                                    </div>
+                                                    </form>
                                                 </td>
 
                                                 <!-- Notes -->
@@ -1142,78 +1151,64 @@
     </script>
 
 
-    <script>
-        function toggleCustomerDecisionDropdownTable(event) {
-            event.stopPropagation();
-            const menu = document.getElementById('customerDecisionDropdownMenuTable');
-            const btn = document.getElementById('customerDecisionDropdownTable');
-            const expanded = btn.getAttribute('aria-expanded') === 'true';
+<script>
+    function toggleCustomerDecisionDropdownTable(event, id) {
+        event.stopPropagation();
+        const menu = document.getElementById('customerDecisionDropdownMenuTable-' + id);
+        const btn = document.getElementById('customerDecisionDropdownTable-' + id);
+        const expanded = btn.getAttribute('aria-expanded') === 'true';
 
-            menu.classList.toggle('hidden');
-            btn.setAttribute('aria-expanded', !expanded);
+        menu.classList.toggle('hidden');
+        btn.setAttribute('aria-expanded', !expanded);
+    }
+
+    function selectCustomerDecisionTable(status, id) {
+        const span = document.getElementById('selectedCustomerDecisionTable-' + id);
+        const btn = document.getElementById('customerDecisionDropdownTable-' + id);
+        const menu = document.getElementById('customerDecisionDropdownMenuTable-' + id);
+
+        // Update span text
+        span.innerText = status;
+
+        // Remove color classes
+        btn.classList.remove(
+            'bg-white', 'bg-green-100', 'bg-yellow-100', 'bg-red-100', 'bg-gray-100',
+            'text-gray-800', 'text-green-800', 'text-yellow-800', 'text-red-800',
+            'dark:bg-red-700', 'dark:bg-green-700', 'dark:bg-yellow-700', 'dark:bg-gray-700',
+            'dark:text-white'
+        );
+
+        // Add new color
+        if (status === 'Order Received') {
+            btn.classList.add('bg-green-100', 'text-green-800', 'dark:bg-green-700', 'dark:text-white');
+        } else if (status === 'Order Not Received') {
+            btn.classList.add('bg-yellow-100', 'text-yellow-800', 'dark:bg-yellow-700', 'dark:text-white');
+        } else if (status === 'Order Rejected') {
+            btn.classList.add('bg-red-100', 'text-red-800', 'dark:bg-red-700', 'dark:text-white');
+        } else {
+            btn.classList.add('bg-gray-100', 'text-gray-800', 'dark:bg-gray-700', 'dark:text-white');
         }
 
-        function selectCustomerDecisionTable(status) {
-            const span = document.getElementById('selectedCustomerDecisionTable');
-            const input = document.getElementById('customerDecisionInputTable');
-            const dropdownMenu = document.getElementById('customerDecisionDropdownMenuTable');
-            const dropdownBtn = document.getElementById('customerDecisionDropdownTable');
+        // Hide dropdown
+        menu.classList.add('hidden');
+        btn.setAttribute('aria-expanded', false);
+    }
 
-            // Set selected text and hidden input
-            span.innerText = status;
-            input.value = status;
-
-            // Remove only color-related classes (don't touch layout or ring)
-            span.classList.remove('text-gray-900', 'text-green-600', 'text-yellow-600', 'text-red-600');
-            dropdownBtn.classList.remove(
-                'bg-white', 'bg-green-100', 'bg-yellow-100', 'bg-red-100',
-                'text-gray-900', 'text-green-600', 'text-yellow-600', 'text-red-600',
-                'ring-gray-300', 'ring-green-500', 'ring-yellow-500', 'ring-red-500'
-            );
-
-            // Add base styles (these should always remain)
-            dropdownBtn.classList.add(
-                'inline-flex', 'justify-between', 'w-48', 'rounded-md',
-                'px-3', 'py-2', 'text-sm', 'font-semibold',
-                'shadow-sm', 'hover:bg-gray-50', 'h-10',
-                'ring-1', 'transition-all', 'duration-200',
-                'dark:bg-gray-700', 'dark:text-white'
-            );
-
-            // Apply conditional styling
-            if (status === 'Order Received') {
-                span.classList.add('text-green-600');
-                dropdownBtn.classList.add('bg-green-100', 'text-green-600', 'ring-green-500');
-            } else if (status === 'Order Not Received') {
-                span.classList.add('text-yellow-600');
-                dropdownBtn.classList.add('bg-yellow-100', 'text-yellow-600', 'ring-yellow-500');
-            } else if (status === 'Order Rejected') {
-                span.classList.add('text-red-600');
-                dropdownBtn.classList.add('bg-red-100', 'text-red-600', 'ring-red-500');
-            } else { // Pending
-                span.classList.add('text-gray-900');
-                dropdownBtn.classList.add('bg-white', 'text-gray-900', 'ring-gray-300');
-            }
-
-            // Close dropdown
-            dropdownMenu.classList.add('hidden');
-            dropdownBtn.setAttribute('aria-expanded', false);
-        }
-
-
-        // Close dropdown on outside click
-        document.addEventListener('click', function(e) {
-            const dropdownBtn = document.getElementById('customerDecisionDropdownTable');
-            const dropdownMenu = document.getElementById('customerDecisionDropdownMenuTable');
-
-            if (!dropdownBtn.contains(e.target) && !dropdownMenu.contains(e.target)) {
-                dropdownMenu.classList.add('hidden');
-                dropdownBtn.setAttribute('aria-expanded', false);
+    document.addEventListener('click', function(e) {
+        document.querySelectorAll('[id^="customerDecisionDropdownMenuTable"]').forEach(menu => {
+            if (!menu.contains(e.target)) {
+                menu.classList.add('hidden');
             }
         });
-    </script>
 
-    <script>
+        document.querySelectorAll('[id^="customerDecisionDropdownTable"]').forEach(btn => {
+            btn.setAttribute('aria-expanded', false);
+        });
+    });
+</script>
+
+
+<script>
         function toggleDropdown(id) {
             document.getElementById(`dropdownMenu${id}`).classList.toggle('hidden');
         }

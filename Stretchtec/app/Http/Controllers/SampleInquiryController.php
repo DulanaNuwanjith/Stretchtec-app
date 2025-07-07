@@ -202,4 +202,17 @@ class SampleInquiryController extends Controller
 
         return back()->with('success', 'Marked as delivered to customer.');
     }
+
+    public function updateDecision(Request $request, $id)
+    {
+        $request->validate([
+            'customerDecision' => 'required|string|in:Pending,Order Received,Order Not Received,Order Rejected',
+        ]);
+
+        $sampleInquiry = SampleInquiry::findOrFail($id);
+        $sampleInquiry->customerDecision = $request->input('customerDecision');
+        $sampleInquiry->save();
+
+        return redirect()->back()->with('success', 'Customer decision updated successfully.');
+    }
 }

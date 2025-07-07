@@ -26,6 +26,9 @@ Route::middleware([
         ->name('inquiry.markSentToSampleDev');
     Route::post('/sampleInquiry/mark-customer-delivered', [SampleInquiryController::class, 'markCustomerDelivered'])
         ->name('inquiry.markCustomerDelivered');
+    Route::patch('/sample-inquery-details/{id}/update-decision', [SampleInquiryController::class, 'updateDecision'])
+        ->name('sample-inquery-details.update-decision');
+
 });
 
 Route::get('productCatalog', function () {
