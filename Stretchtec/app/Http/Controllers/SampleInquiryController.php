@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\SampleInquiry;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
@@ -150,8 +151,6 @@ class SampleInquiryController extends Controller
 
         return back()->with('success', 'Development status updated!');
     }
-<<<<<<< Updated upstream
-=======
 
     public function markSentToSampleDevelopment(Request $request)
     {
@@ -167,7 +166,4 @@ class SampleInquiryController extends Controller
 
         return back()->with('success', 'Marked as sent to sample development.');
     }
-
-
->>>>>>> Stashed changes
 }

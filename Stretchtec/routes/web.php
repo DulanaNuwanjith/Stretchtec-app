@@ -22,7 +22,8 @@ Route::middleware([
         'store' => 'sampleInquiry.store',
     ]);
     Route::post('/sampleInquiry/update-developed-status', [SampleInquiryController::class, 'updateDevelopedStatus'])->name('inquiry.updateDevelopedStatus');
-
+    Route::post('/sampleInquiry/mark-sent-to-sample-dev', [SampleInquiryController::class, 'markSentToSampleDevelopment'])
+        ->name('inquiry.markSentToSampleDev');
 });
 
 Route::get('productCatalog', function () {
