@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\SampleInquiry;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
 class SampleInquiryController extends Controller
@@ -14,8 +15,11 @@ class SampleInquiryController extends Controller
      */
     public function index()
     {
-        return view('sample-development.pages.sample-inquery-details');
+        $inquiries = SampleInquiry::latest()->get(); // Fetch all records ordered by latest created
+
+        return view('sample-development.pages.sample-inquery-details', compact('inquiries'));
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -125,5 +129,19 @@ class SampleInquiryController extends Controller
     public function destroy(SampleInquiry $sampleInquiry)
     {
         //
+    }
+
+    public function updateDevelopedStatus(Request $request)
+    {
+        $request->validate([
+            'id' => 'required|exists:sample_inquiries,id',
+            'alreadyDeveloped' => 'required|in:0,1',
+        ]);
+
+        $inquiry = SampleInquiry::findOrFail($request->id);
+        $inquiry->alreadyDeveloped = $request->alreadyDeveloped;
+        $inquiry->save();
+
+        return back()->with('success', 'Development status updated!');
     }
 }

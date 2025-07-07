@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\SampleInquiryController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -20,6 +21,8 @@ Route::middleware([
         'index' => 'sample-inquery-details.index',
         'store' => 'sampleInquiry.store',
     ]);
+    Route::post('/sampleInquiry/update-developed-status', [SampleInquiryController::class, 'updateDevelopedStatus'])->name('inquiry.updateDevelopedStatus');
+
 });
 
 Route::get('productCatalog', function () {

@@ -1,5 +1,6 @@
 <head>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 <div class="flex h-full w-full bg-white">
     @extends('layouts.sample-tabs')
@@ -363,1027 +364,166 @@
                                                 Action</th>
                                         </tr>
                                     </thead>
+
+
+
                                     <tbody id="sampleInquiryRecords"
-                                        class="bg-white dark:bg-gray-800 divide-y text-left divide-gray-200 dark:divide-gray-700 ">
-                                        <tr id="row1">
-                                            <!-- Each cell has a span for readonly text and a hidden input for editing -->
+                                           class="bg-white dark:bg-gray-800 divide-y text-left divide-gray-200 dark:divide-gray-700">
+                                    @foreach ($inquiries as $inquiry)
+                                        <tr id="row{{ $inquiry->id }}">
+                                            <!-- Order No -->
                                             <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">001</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="001" />
+                                                <span class="readonly">{{ $inquiry->orderNo }}</span>
+                                                <input type="text" class="hidden editable ..." value="{{ $inquiry->orderNo }}" />
                                             </td>
+
+                                            <!-- Inquiry Receive Date -->
                                             <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">2025-05-05</span>
-                                                <input type="date"
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="2025-05-05" />
+                                                <span class="readonly">{{ $inquiry->inquiryReceiveDate }}</span>
+                                                <input type="date" class="hidden editable ..." value="{{ $inquiry->inquiryReceiveDate }}" />
                                             </td>
+
+                                            <!-- Customer -->
                                             <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">TIMEX</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="TIMEX" />
+                                                <span class="readonly">{{ $inquiry->customerName }}</span>
+                                                <input type="text" class="hidden editable ..." value="{{ $inquiry->customerName }}" />
                                             </td>
+
+                                            <!-- Merchandiser -->
                                             <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">Chamith</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="Chamith" />
+                                                <span class="readonly">{{ $inquiry->merchandiseName }}</span>
+                                                <input type="text" class="hidden editable ..." value="{{ $inquiry->merchandiseName }}" />
                                             </td>
+
+                                            <!-- Item -->
                                             <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">Scock Cord</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="Scock Cord" />
+                                                <span class="readonly">{{ $inquiry->item }}</span>
+                                                <input type="text" class="hidden editable ..." value="{{ $inquiry->item }}" />
                                             </td>
+
+                                            <!-- Size -->
                                             <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">2mm</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="2mm" />
+                                                <span class="readonly">{{ $inquiry->size }}</span>
+                                                <input type="text" class="hidden editable ..." value="{{ $inquiry->size }}" />
                                             </td>
+
+                                            <!-- Color -->
                                             <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">white cap grey</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="white cap grey" />
+                                                <span class="readonly">{{ $inquiry->color }}</span>
+                                                <input type="text" class="hidden editable ..." value="{{ $inquiry->color }}" />
                                             </td>
+
+                                            <!-- Sample Qty -->
                                             <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">5 YDS</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="5 YDS" />
+                                                <span class="readonly">{{ $inquiry->sampleQty }}</span>
+                                                <input type="text" class="hidden editable ..." value="{{ $inquiry->sampleQty }}" />
                                             </td>
+
+                                            <!-- Customer Comments -->
                                             <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly"></span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm5"
-                                                    value="" />
+                                                <span class="readonly">{{ $inquiry->customerSpecialComment }}</span>
+                                                <input type="text" class="hidden editable ..." value="{{ $inquiry->customerSpecialComment }}" />
                                             </td>
+
+                                            <!-- Requested Date -->
                                             <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">2025-06-05</span>
-                                                <input type="date"
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="2025-06-05" />
+                                                <span class="readonly">{{ $inquiry->customerRequestDate }}</span>
+                                                <input type="date" class="hidden editable ..." value="{{ $inquiry->customerRequestDate }}" />
                                             </td>
+
+                                            <!-- Already Developed -->
                                             <td class="px-4 py-3 whitespace-normal break-words">
                                                 <div class="relative inline-block text-left w-36">
-                                                    <!-- Dropdown Button -->
-                                                    <div>
-                                                        <button type="button" id="developmentStatusDropdown"
-                                                            class="inline-flex justify-between w-48 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10 dark:bg-gray-700 dark:text-white transition-all duration-200"
-                                                            onclick="toggleDevelopmentStatusDropdown(event)">
-                                                            <span id="selectedDevelopmentStatus">Need to Develop</span>
-                                                            <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20"
-                                                                fill="currentColor">
-                                                                <path fill-rule="evenodd"
-                                                                    d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
-                                                                    clip-rule="evenodd" />
-                                                            </svg>
-                                                        </button>
-                                                    </div>
+                                                    @if (!$inquiry->alreadyDeveloped)
+                                                        <!-- Form-based dropdown to update alreadyDeveloped boolean -->
+                                                        <form method="POST" action="{{ route('inquiry.updateDevelopedStatus') }}">
+                                                            @csrf
+                                                            <input type="hidden" name="id" value="{{ $inquiry->id }}">
 
-                                                    <!-- Dropdown Menu -->
-                                                    <div id="developmentStatusDropdownMenu"
-                                                        class="hidden absolute z-10 mt-2 w-48 rounded-md bg-white shadow-lg ring-1 ring-black/5 dark:bg-gray-700">
-                                                        <div class="py-1" role="listbox" tabindex="-1"
-                                                            aria-labelledby="developmentStatusDropdown">
-                                                            <button type="button"
-                                                                class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                                                                onclick="selectDevelopmentStatus('Need to Develop')">Need
-                                                                to Develop</button>
-                                                            <button type="button"
-                                                                class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                                                                onclick="selectDevelopmentStatus('No Need to Develop')">No
-                                                                Need to Develop</button>
+                                                            <select name="alreadyDeveloped"
+                                                                    onchange="this.form.submit()"
+                                                                    class="w-48 h-10 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 dark:bg-gray-700 dark:text-white">
+                                                                <option value="0" {{ $inquiry->alreadyDeveloped == 0 ? 'selected' : '' }}>
+                                                                    Need to Develop
+                                                                </option>
+                                                                <option value="1" {{ $inquiry->alreadyDeveloped == 1 ? 'selected' : '' }}>
+                                                                    No Need to Develop
+                                                                </option>
+                                                            </select>
+                                                        </form>
+                                                    @else
+                                                        <!-- Read-only Mode -->
+                                                        <div
+                                                            class="inline-flex items-center w-48 rounded-md bg-gray-200 px-3 py-2 text-sm font-semibold text-gray-500 shadow-inner h-10 dark:bg-gray-700 dark:text-gray-400">
+                                                            {{ $inquiry->alreadyDeveloped ? 'No Need to Develop' : 'Need to Develop' }}
                                                         </div>
-                                                    </div>
-
-                                                    <input type="hidden" name="development_status"
-                                                        id="developmentStatusInput" value="Need to Develop" />
-                                                </div>
-                                            </td>
-                                            <td class="py-3 whitespace-normal break-words text-center">
-                                                <div class="colour-match-sent mb-4">
-                                                    <button onclick="toggleSentOrderToSampleDevelopment(event, this)" type="button"
-                                                        class="delivered-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
-                                                        Pending
-                                                    </button>
-                                                    <div class="timestamp mt-1 text-xs text-gray-500 dark:text-gray-400">
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">2025-06-05</span>
-                                                <input type="date"
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="2025-06-05" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">Production complete</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="Production complete" />
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">STKE/2025/JA25-B</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="STKE/2025/JA25-B" />
-
-                                            <td class="py-3 whitespace-normal break-words text-center">
-                                                <div class="delivery-item mb-4">
-                                                    <button onclick="toggleDone(event, this)" type="button"
-                                                        class="delivered-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400">
-                                                        Pending
-                                                    </button>
-                                                    <div class="timestamp mt-1 text-xs text-gray-500 dark:text-gray-400">
-                                                    </div>
+                                                    @endif
                                                 </div>
                                             </td>
 
-                                            <td class="px-6 py-3 whitespace-normal break-words">
-                                                <div class="relative inline-block text-left w-36">
-                                                    <!-- Dropdown Button -->
-                                                    <div>
-                                                        <button type="button" id="customerDecisionDropdownTable"
-                                                            class="inline-flex justify-between w-48 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10 dark:bg-gray-700 dark:text-white transition-all duration-200"
-                                                            onclick="toggleCustomerDecisionDropdownTable(event)">
-                                                            <span id="selectedCustomerDecisionTable">Pending</span>
-                                                            <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20"
-                                                                fill="currentColor">
-                                                                <path fill-rule="evenodd"
-                                                                    d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
-                                                                    clip-rule="evenodd" />
-                                                            </svg>
-                                                        </button>
-                                                    </div>
-
-                                                    <!-- Dropdown Menu -->
-                                                    <div id="customerDecisionDropdownMenuTable"
-                                                        class="hidden absolute z-10 mt-2 w-48 rounded-md bg-white shadow-lg ring-1 ring-black/5 dark:bg-gray-700">
-                                                        <div class="py-1" role="listbox" tabindex="-1"
-                                                            aria-labelledby="customerDecisionDropdownTable">
-                                                            <button type="button"
-                                                                class="decision-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                                                                onclick="selectCustomerDecisionTable('Pending')">Pending</button>
-                                                            <button type="button"
-                                                                class="decision-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                                                                onclick="selectCustomerDecisionTable('Order Received')">Order
-                                                                Received</button>
-                                                            <button type="button"
-                                                                class="decision-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                                                                onclick="selectCustomerDecisionTable('Order Not Received')">Order
-                                                                Not Received</button>
-                                                            <button type="button"
-                                                                class="decision-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                                                                onclick="selectCustomerDecisionTable('Order Rejected')">Oder
-                                                                Rejected</button>
-                                                        </div>
-                                                    </div>
-
-                                                    <input type="hidden" name="customer_decision"
-                                                        id="customerDecisionInputTable" value="Pending" />
-                                                </div>
+                                            <!-- Sent Order to Sample Development -->
+                                            <td class="px-4 py-3 whitespace-normal break-words text-center">
+                                                <button type="button"
+                                                        class="delivered-btn {{ $inquiry->productionStatus === 'sent' ? 'bg-green-500' : 'bg-gray-300' }} text-black px-2 py-1 mt-3 rounded">
+                                                    {{ ucfirst($inquiry->productionStatus) }}
+                                                </button>
                                             </td>
 
+                                            <!-- Develop Plan Date -->
                                             <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">abc 1234 long sample description to test line
-                                                    wrapping</span>
-                                                <textarea
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    rows="2">abc 1234 long sample description to test line wrapping</textarea>
+                                                <span class="readonly">{{ $inquiry->developPlannedDate }}</span>
+                                                <input type="date" class="hidden editable ..." value="{{ $inquiry->developPlannedDate }}" />
                                             </td>
 
+                                            <!-- Production Status -->
+                                            <td class="px-4 py-3 whitespace-normal break-words">
+                                                <span class="readonly">{{ $inquiry->productionStatus }}</span>
+                                                <input type="text" class="hidden editable ..." value="{{ $inquiry->productionStatus }}" />
+                                            </td>
+
+                                            <!-- Reference No -->
+                                            <td class="px-4 py-3 whitespace-normal break-words">
+                                                <span class="readonly">{{ $inquiry->referenceNo }}</span>
+                                                <input type="text" class="hidden editable ..." value="{{ $inquiry->referenceNo }}" />
+                                            </td>
+
+                                            <!-- Delivery Date -->
+                                            <td class="px-4 py-3 whitespace-normal break-words text-center">
+                                                <span class="readonly">{{ $inquiry->customerDeliveryDate }}</span>
+                                            </td>
+
+                                            <!-- Customer Decision -->
+                                            <td class="px-4 py-3 whitespace-normal break-words text-center">
+                                                <span class="readonly">{{ $inquiry->customerDecision }}</span>
+                                            </td>
+
+                                            <!-- Notes -->
+                                            <td class="px-4 py-3 whitespace-normal break-words">
+                                                <span class="readonly">{{ $inquiry->notes }}</span>
+                                                <textarea class="hidden editable ..." rows="2">{{ $inquiry->notes }}</textarea>
+                                            </td>
+
+                                            <!-- Actions -->
                                             <td class="px-4 py-3 text-center whitespace-normal break-words">
                                                 <div class="flex space-x-2 justify-center">
-                                                    <button
-                                                        class="bg-green-600 h-10 hover:bg-green-700 text-white px-3 py-1 rounded text-sm"
-                                                        onclick="editRow('row1')">Edit</button>
-                                                    <button
-                                                        class="bg-blue-600 h-10 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm hidden"
-                                                        onclick="saveRow('row1')">Save</button>
-                                                    <button
-                                                        class="bg-gray-600 h-10 hover:bg-gray-700 text-white px-3 py-1 rounded text-sm">Download</button>
+                                                    <button class="bg-green-600 h-10 hover:bg-green-700 text-white px-3 py-1 rounded text-sm"
+                                                            onclick="editRow('row{{ $inquiry->id }}')">Edit</button>
+                                                    <button class="bg-blue-600 h-10 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm hidden"
+                                                            onclick="saveRow('row{{ $inquiry->id }}')">Save</button>
+                                                    @if ($inquiry->orderFile)
+                                                        <a href="{{ asset('storage/' . $inquiry->orderFile) }}" target="_blank"
+                                                           class="bg-gray-600 h-10 hover:bg-gray-700 text-white px-3 py-1 rounded text-sm">Download</a>
+                                                    @else
+                                                        <span class="text-sm text-gray-400">No file</span>
+                                                    @endif
                                                 </div>
                                             </td>
                                         </tr>
-                                        <tr id="row1">
-                                            <!-- Each cell has a span for readonly text and a hidden input for editing -->
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">001</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="001" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">2025-05-05</span>
-                                                <input type="date"
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="2025-05-05" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">TIMEX</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="TIMEX" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">Chamith</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="Chamith" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">Scock Cord</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="Scock Cord" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">2mm</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="2mm" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">white cap grey</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="white cap grey" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">5 YDS</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="5 YDS" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly"></span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm5"
-                                                    value="" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">2025-06-05</span>
-                                                <input type="date"
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="2025-06-05" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <div class="relative inline-block text-left w-36">
-                                                    <!-- Dropdown Button -->
-                                                    <div>
-                                                        <button type="button" id="developmentStatusDropdown"
-                                                            class="inline-flex justify-between w-48 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10 dark:bg-gray-700 dark:text-white transition-all duration-200"
-                                                            onclick="toggleDevelopmentStatusDropdown(event)">
-                                                            <span id="selectedDevelopmentStatus">Need to Develop</span>
-                                                            <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20"
-                                                                fill="currentColor">
-                                                                <path fill-rule="evenodd"
-                                                                    d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
-                                                                    clip-rule="evenodd" />
-                                                            </svg>
-                                                        </button>
-                                                    </div>
-
-                                                    <!-- Dropdown Menu -->
-                                                    <div id="developmentStatusDropdownMenu"
-                                                        class="hidden absolute z-10 mt-2 w-48 rounded-md bg-white shadow-lg ring-1 ring-black/5 dark:bg-gray-700">
-                                                        <div class="py-1" role="listbox" tabindex="-1"
-                                                            aria-labelledby="developmentStatusDropdown">
-                                                            <button type="button"
-                                                                class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                                                                onclick="selectDevelopmentStatus('Need to Develop')">Need
-                                                                to Develop</button>
-                                                            <button type="button"
-                                                                class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                                                                onclick="selectDevelopmentStatus('No Need to Develop')">No
-                                                                Need to Develop</button>
-                                                        </div>
-                                                    </div>
-
-                                                    <input type="hidden" name="development_status"
-                                                        id="developmentStatusInput" value="Need to Develop" />
-                                                </div>
-                                            </td>
-                                            <td class="py-3 whitespace-normal break-words text-center">
-                                                <div class="colour-match-sent mb-4">
-                                                    <button onclick="toggleSentOrderToSampleDevelopment(event, this)" type="button"
-                                                        class="delivered-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
-                                                        Pending
-                                                    </button>
-                                                    <div class="timestamp mt-1 text-xs text-gray-500 dark:text-gray-400">
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">2025-06-05</span>
-                                                <input type="date"
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="2025-06-05" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">Production complete</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="Production complete" />
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">STKE/2025/JA25-B</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="STKE/2025/JA25-B" />
-
-                                            <td class="py-3 whitespace-normal break-words text-center">
-                                                <div class="delivery-item mb-4">
-                                                    <button onclick="toggleDone(event, this)" type="button"
-                                                        class="delivered-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400">
-                                                        Pending
-                                                    </button>
-                                                    <div class="timestamp mt-1 text-xs text-gray-500 dark:text-gray-400">
-                                                    </div>
-                                                </div>
-                                            </td>
-
-                                            <td class="px-6 py-3 whitespace-normal break-words">
-                                                <div class="relative inline-block text-left w-36">
-                                                    <!-- Dropdown Button -->
-                                                    <div>
-                                                        <button type="button" id="customerDecisionDropdownTable"
-                                                            class="inline-flex justify-between w-48 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10 dark:bg-gray-700 dark:text-white transition-all duration-200"
-                                                            onclick="toggleCustomerDecisionDropdownTable(event)">
-                                                            <span id="selectedCustomerDecisionTable">Pending</span>
-                                                            <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20"
-                                                                fill="currentColor">
-                                                                <path fill-rule="evenodd"
-                                                                    d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
-                                                                    clip-rule="evenodd" />
-                                                            </svg>
-                                                        </button>
-                                                    </div>
-
-                                                    <!-- Dropdown Menu -->
-                                                    <div id="customerDecisionDropdownMenuTable"
-                                                        class="hidden absolute z-10 mt-2 w-48 rounded-md bg-white shadow-lg ring-1 ring-black/5 dark:bg-gray-700">
-                                                        <div class="py-1" role="listbox" tabindex="-1"
-                                                            aria-labelledby="customerDecisionDropdownTable">
-                                                            <button type="button"
-                                                                class="decision-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                                                                onclick="selectCustomerDecisionTable('Pending')">Pending</button>
-                                                            <button type="button"
-                                                                class="decision-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                                                                onclick="selectCustomerDecisionTable('Order Received')">Order
-                                                                Received</button>
-                                                            <button type="button"
-                                                                class="decision-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                                                                onclick="selectCustomerDecisionTable('Order Not Received')">Order
-                                                                Not Received</button>
-                                                            <button type="button"
-                                                                class="decision-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                                                                onclick="selectCustomerDecisionTable('Order Rejected')">Oder
-                                                                Rejected</button>
-                                                        </div>
-                                                    </div>
-
-                                                    <input type="hidden" name="customer_decision"
-                                                        id="customerDecisionInputTable" value="Pending" />
-                                                </div>
-                                            </td>
-
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">abc 1234 long sample description to test line
-                                                    wrapping</span>
-                                                <textarea
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    rows="2">abc 1234 long sample description to test line wrapping</textarea>
-                                            </td>
-
-                                            <td class="px-4 py-3 text-center whitespace-normal break-words">
-                                                <div class="flex space-x-2 justify-center">
-                                                    <button
-                                                        class="bg-green-600 h-10 hover:bg-green-700 text-white px-3 py-1 rounded text-sm"
-                                                        onclick="editRow('row1')">Edit</button>
-                                                    <button
-                                                        class="bg-blue-600 h-10 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm hidden"
-                                                        onclick="saveRow('row1')">Save</button>
-                                                    <button
-                                                        class="bg-gray-600 h-10 hover:bg-gray-700 text-white px-3 py-1 rounded text-sm">Download</button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr id="row1">
-                                            <!-- Each cell has a span for readonly text and a hidden input for editing -->
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">001</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="001" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">2025-05-05</span>
-                                                <input type="date"
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="2025-05-05" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">TIMEX</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="TIMEX" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">Chamith</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="Chamith" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">Scock Cord</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="Scock Cord" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">2mm</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="2mm" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">white cap grey</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="white cap grey" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">5 YDS</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="5 YDS" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly"></span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm5"
-                                                    value="" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">2025-06-05</span>
-                                                <input type="date"
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="2025-06-05" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <div class="relative inline-block text-left w-36">
-                                                    <!-- Dropdown Button -->
-                                                    <div>
-                                                        <button type="button" id="developmentStatusDropdown"
-                                                            class="inline-flex justify-between w-48 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10 dark:bg-gray-700 dark:text-white transition-all duration-200"
-                                                            onclick="toggleDevelopmentStatusDropdown(event)">
-                                                            <span id="selectedDevelopmentStatus">Need to Develop</span>
-                                                            <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20"
-                                                                fill="currentColor">
-                                                                <path fill-rule="evenodd"
-                                                                    d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
-                                                                    clip-rule="evenodd" />
-                                                            </svg>
-                                                        </button>
-                                                    </div>
-
-                                                    <!-- Dropdown Menu -->
-                                                    <div id="developmentStatusDropdownMenu"
-                                                        class="hidden absolute z-10 mt-2 w-48 rounded-md bg-white shadow-lg ring-1 ring-black/5 dark:bg-gray-700">
-                                                        <div class="py-1" role="listbox" tabindex="-1"
-                                                            aria-labelledby="developmentStatusDropdown">
-                                                            <button type="button"
-                                                                class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                                                                onclick="selectDevelopmentStatus('Need to Develop')">Need
-                                                                to Develop</button>
-                                                            <button type="button"
-                                                                class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                                                                onclick="selectDevelopmentStatus('No Need to Develop')">No
-                                                                Need to Develop</button>
-                                                        </div>
-                                                    </div>
-
-                                                    <input type="hidden" name="development_status"
-                                                        id="developmentStatusInput" value="Need to Develop" />
-                                                </div>
-                                            </td>
-                                            <td class="py-3 whitespace-normal break-words text-center">
-                                                <div class="colour-match-sent mb-4">
-                                                    <button onclick="toggleSentOrderToSampleDevelopment(event, this)" type="button"
-                                                        class="delivered-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
-                                                        Pending
-                                                    </button>
-                                                    <div class="timestamp mt-1 text-xs text-gray-500 dark:text-gray-400">
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">2025-06-05</span>
-                                                <input type="date"
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="2025-06-05" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">Production complete</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="Production complete" />
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">STKE/2025/JA25-B</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="STKE/2025/JA25-B" />
-
-                                            <td class="py-3 whitespace-normal break-words text-center">
-                                                <div class="delivery-item mb-4">
-                                                    <button onclick="toggleDone(event, this)" type="button"
-                                                        class="delivered-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400">
-                                                        Pending
-                                                    </button>
-                                                    <div class="timestamp mt-1 text-xs text-gray-500 dark:text-gray-400">
-                                                    </div>
-                                                </div>
-                                            </td>
-
-                                            <td class="px-6 py-3 whitespace-normal break-words">
-                                                <div class="relative inline-block text-left w-36">
-                                                    <!-- Dropdown Button -->
-                                                    <div>
-                                                        <button type="button" id="customerDecisionDropdownTable"
-                                                            class="inline-flex justify-between w-48 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10 dark:bg-gray-700 dark:text-white transition-all duration-200"
-                                                            onclick="toggleCustomerDecisionDropdownTable(event)">
-                                                            <span id="selectedCustomerDecisionTable">Pending</span>
-                                                            <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20"
-                                                                fill="currentColor">
-                                                                <path fill-rule="evenodd"
-                                                                    d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
-                                                                    clip-rule="evenodd" />
-                                                            </svg>
-                                                        </button>
-                                                    </div>
-
-                                                    <!-- Dropdown Menu -->
-                                                    <div id="customerDecisionDropdownMenuTable"
-                                                        class="hidden absolute z-10 mt-2 w-48 rounded-md bg-white shadow-lg ring-1 ring-black/5 dark:bg-gray-700">
-                                                        <div class="py-1" role="listbox" tabindex="-1"
-                                                            aria-labelledby="customerDecisionDropdownTable">
-                                                            <button type="button"
-                                                                class="decision-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                                                                onclick="selectCustomerDecisionTable('Pending')">Pending</button>
-                                                            <button type="button"
-                                                                class="decision-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                                                                onclick="selectCustomerDecisionTable('Order Received')">Order
-                                                                Received</button>
-                                                            <button type="button"
-                                                                class="decision-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                                                                onclick="selectCustomerDecisionTable('Order Not Received')">Order
-                                                                Not Received</button>
-                                                            <button type="button"
-                                                                class="decision-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                                                                onclick="selectCustomerDecisionTable('Order Rejected')">Oder
-                                                                Rejected</button>
-                                                        </div>
-                                                    </div>
-
-                                                    <input type="hidden" name="customer_decision"
-                                                        id="customerDecisionInputTable" value="Pending" />
-                                                </div>
-                                            </td>
-
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">abc 1234 long sample description to test line
-                                                    wrapping</span>
-                                                <textarea
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    rows="2">abc 1234 long sample description to test line wrapping</textarea>
-                                            </td>
-
-                                            <td class="px-4 py-3 text-center whitespace-normal break-words">
-                                                <div class="flex space-x-2 justify-center">
-                                                    <button
-                                                        class="bg-green-600 h-10 hover:bg-green-700 text-white px-3 py-1 rounded text-sm"
-                                                        onclick="editRow('row1')">Edit</button>
-                                                    <button
-                                                        class="bg-blue-600 h-10 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm hidden"
-                                                        onclick="saveRow('row1')">Save</button>
-                                                    <button
-                                                        class="bg-gray-600 h-10 hover:bg-gray-700 text-white px-3 py-1 rounded text-sm">Download</button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr id="row1">
-                                            <!-- Each cell has a span for readonly text and a hidden input for editing -->
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">001</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="001" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">2025-05-05</span>
-                                                <input type="date"
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="2025-05-05" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">TIMEX</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="TIMEX" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">Chamith</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="Chamith" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">Scock Cord</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="Scock Cord" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">2mm</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="2mm" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">white cap grey</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="white cap grey" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">5 YDS</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="5 YDS" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly"></span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm5"
-                                                    value="" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">2025-06-05</span>
-                                                <input type="date"
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="2025-06-05" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <div class="relative inline-block text-left w-36">
-                                                    <!-- Dropdown Button -->
-                                                    <div>
-                                                        <button type="button" id="developmentStatusDropdown"
-                                                            class="inline-flex justify-between w-48 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10 dark:bg-gray-700 dark:text-white transition-all duration-200"
-                                                            onclick="toggleDevelopmentStatusDropdown(event)">
-                                                            <span id="selectedDevelopmentStatus">Need to Develop</span>
-                                                            <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20"
-                                                                fill="currentColor">
-                                                                <path fill-rule="evenodd"
-                                                                    d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
-                                                                    clip-rule="evenodd" />
-                                                            </svg>
-                                                        </button>
-                                                    </div>
-
-                                                    <!-- Dropdown Menu -->
-                                                    <div id="developmentStatusDropdownMenu"
-                                                        class="hidden absolute z-10 mt-2 w-48 rounded-md bg-white shadow-lg ring-1 ring-black/5 dark:bg-gray-700">
-                                                        <div class="py-1" role="listbox" tabindex="-1"
-                                                            aria-labelledby="developmentStatusDropdown">
-                                                            <button type="button"
-                                                                class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                                                                onclick="selectDevelopmentStatus('Need to Develop')">Need
-                                                                to Develop</button>
-                                                            <button type="button"
-                                                                class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                                                                onclick="selectDevelopmentStatus('No Need to Develop')">No
-                                                                Need to Develop</button>
-                                                        </div>
-                                                    </div>
-
-                                                    <input type="hidden" name="development_status"
-                                                        id="developmentStatusInput" value="Need to Develop" />
-                                                </div>
-                                            </td>
-                                            <td class="py-3 whitespace-normal break-words text-center">
-                                                <div class="colour-match-sent mb-4">
-                                                    <button onclick="toggleSentOrderToSampleDevelopment(event, this)" type="button"
-                                                        class="delivered-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
-                                                        Pending
-                                                    </button>
-                                                    <div class="timestamp mt-1 text-xs text-gray-500 dark:text-gray-400">
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">2025-06-05</span>
-                                                <input type="date"
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="2025-06-05" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">Production complete</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="Production complete" />
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">STKE/2025/JA25-B</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="STKE/2025/JA25-B" />
-
-                                            <td class="py-3 whitespace-normal break-words text-center">
-                                                <div class="delivery-item mb-4">
-                                                    <button onclick="toggleDone(event, this)" type="button"
-                                                        class="delivered-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400">
-                                                        Pending
-                                                    </button>
-                                                    <div class="timestamp mt-1 text-xs text-gray-500 dark:text-gray-400">
-                                                    </div>
-                                                </div>
-                                            </td>
-
-                                            <td class="px-6 py-3 whitespace-normal break-words">
-                                                <div class="relative inline-block text-left w-36">
-                                                    <!-- Dropdown Button -->
-                                                    <div>
-                                                        <button type="button" id="customerDecisionDropdownTable"
-                                                            class="inline-flex justify-between w-48 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10 dark:bg-gray-700 dark:text-white transition-all duration-200"
-                                                            onclick="toggleCustomerDecisionDropdownTable(event)">
-                                                            <span id="selectedCustomerDecisionTable">Pending</span>
-                                                            <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20"
-                                                                fill="currentColor">
-                                                                <path fill-rule="evenodd"
-                                                                    d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
-                                                                    clip-rule="evenodd" />
-                                                            </svg>
-                                                        </button>
-                                                    </div>
-
-                                                    <!-- Dropdown Menu -->
-                                                    <div id="customerDecisionDropdownMenuTable"
-                                                        class="hidden absolute z-10 mt-2 w-48 rounded-md bg-white shadow-lg ring-1 ring-black/5 dark:bg-gray-700">
-                                                        <div class="py-1" role="listbox" tabindex="-1"
-                                                            aria-labelledby="customerDecisionDropdownTable">
-                                                            <button type="button"
-                                                                class="decision-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                                                                onclick="selectCustomerDecisionTable('Pending')">Pending</button>
-                                                            <button type="button"
-                                                                class="decision-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                                                                onclick="selectCustomerDecisionTable('Order Received')">Order
-                                                                Received</button>
-                                                            <button type="button"
-                                                                class="decision-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                                                                onclick="selectCustomerDecisionTable('Order Not Received')">Order
-                                                                Not Received</button>
-                                                            <button type="button"
-                                                                class="decision-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                                                                onclick="selectCustomerDecisionTable('Order Rejected')">Oder
-                                                                Rejected</button>
-                                                        </div>
-                                                    </div>
-
-                                                    <input type="hidden" name="customer_decision"
-                                                        id="customerDecisionInputTable" value="Pending" />
-                                                </div>
-                                            </td>
-
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">abc 1234 long sample description to test line
-                                                    wrapping</span>
-                                                <textarea
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    rows="2">abc 1234 long sample description to test line wrapping</textarea>
-                                            </td>
-
-                                            <td class="px-4 py-3 text-center whitespace-normal break-words">
-                                                <div class="flex space-x-2 justify-center">
-                                                    <button
-                                                        class="bg-green-600 h-10 hover:bg-green-700 text-white px-3 py-1 rounded text-sm"
-                                                        onclick="editRow('row1')">Edit</button>
-                                                    <button
-                                                        class="bg-blue-600 h-10 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm hidden"
-                                                        onclick="saveRow('row1')">Save</button>
-                                                    <button
-                                                        class="bg-gray-600 h-10 hover:bg-gray-700 text-white px-3 py-1 rounded text-sm">Download</button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr id="row1">
-                                            <!-- Each cell has a span for readonly text and a hidden input for editing -->
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">001</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="001" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">2025-05-05</span>
-                                                <input type="date"
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="2025-05-05" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">TIMEX</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="TIMEX" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">Chamith</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="Chamith" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">Scock Cord</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="Scock Cord" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">2mm</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="2mm" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">white cap grey</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="white cap grey" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">5 YDS</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="5 YDS" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly"></span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm5"
-                                                    value="" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">2025-06-05</span>
-                                                <input type="date"
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="2025-06-05" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <div class="relative inline-block text-left w-36">
-                                                    <!-- Dropdown Button -->
-                                                    <div>
-                                                        <button type="button" id="developmentStatusDropdown"
-                                                            class="inline-flex justify-between w-48 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10 dark:bg-gray-700 dark:text-white transition-all duration-200"
-                                                            onclick="toggleDevelopmentStatusDropdown(event)">
-                                                            <span id="selectedDevelopmentStatus">Need to Develop</span>
-                                                            <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20"
-                                                                fill="currentColor">
-                                                                <path fill-rule="evenodd"
-                                                                    d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
-                                                                    clip-rule="evenodd" />
-                                                            </svg>
-                                                        </button>
-                                                    </div>
-
-                                                    <!-- Dropdown Menu -->
-                                                    <div id="developmentStatusDropdownMenu"
-                                                        class="hidden absolute z-10 mt-2 w-48 rounded-md bg-white shadow-lg ring-1 ring-black/5 dark:bg-gray-700">
-                                                        <div class="py-1" role="listbox" tabindex="-1"
-                                                            aria-labelledby="developmentStatusDropdown">
-                                                            <button type="button"
-                                                                class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                                                                onclick="selectDevelopmentStatus('Need to Develop')">Need
-                                                                to Develop</button>
-                                                            <button type="button"
-                                                                class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                                                                onclick="selectDevelopmentStatus('No Need to Develop')">No
-                                                                Need to Develop</button>
-                                                        </div>
-                                                    </div>
-
-                                                    <input type="hidden" name="development_status"
-                                                        id="developmentStatusInput" value="Need to Develop" />
-                                                </div>
-                                            </td>
-                                            <td class="py-3 whitespace-normal break-words text-center">
-                                                <div class="colour-match-sent mb-4">
-                                                    <button onclick="toggleSentOrderToSampleDevelopment(event, this)" type="button"
-                                                        class="delivered-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
-                                                        Pending
-                                                    </button>
-                                                    <div class="timestamp mt-1 text-xs text-gray-500 dark:text-gray-400">
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">2025-06-05</span>
-                                                <input type="date"
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="2025-06-05" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">Production complete</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="Production complete" />
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">STKE/2025/JA25-B</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="STKE/2025/JA25-B" />
-
-                                            <td class="py-3 whitespace-normal break-words text-center">
-                                                <div class="delivery-item mb-4">
-                                                    <button onclick="toggleDone(event, this)" type="button"
-                                                        class="delivered-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400">
-                                                        Pending
-                                                    </button>
-                                                    <div class="timestamp mt-1 text-xs text-gray-500 dark:text-gray-400">
-                                                    </div>
-                                                </div>
-                                            </td>
-
-                                            <td class="px-6 py-3 whitespace-normal break-words">
-                                                <div class="relative inline-block text-left w-36">
-                                                    <!-- Dropdown Button -->
-                                                    <div>
-                                                        <button type="button" id="customerDecisionDropdownTable"
-                                                            class="inline-flex justify-between w-48 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10 dark:bg-gray-700 dark:text-white transition-all duration-200"
-                                                            onclick="toggleCustomerDecisionDropdownTable(event)">
-                                                            <span id="selectedCustomerDecisionTable">Pending</span>
-                                                            <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20"
-                                                                fill="currentColor">
-                                                                <path fill-rule="evenodd"
-                                                                    d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
-                                                                    clip-rule="evenodd" />
-                                                            </svg>
-                                                        </button>
-                                                    </div>
-
-                                                    <!-- Dropdown Menu -->
-                                                    <div id="customerDecisionDropdownMenuTable"
-                                                        class="hidden absolute z-10 mt-2 w-48 rounded-md bg-white shadow-lg ring-1 ring-black/5 dark:bg-gray-700">
-                                                        <div class="py-1" role="listbox" tabindex="-1"
-                                                            aria-labelledby="customerDecisionDropdownTable">
-                                                            <button type="button"
-                                                                class="decision-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                                                                onclick="selectCustomerDecisionTable('Pending')">Pending</button>
-                                                            <button type="button"
-                                                                class="decision-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                                                                onclick="selectCustomerDecisionTable('Order Received')">Order
-                                                                Received</button>
-                                                            <button type="button"
-                                                                class="decision-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                                                                onclick="selectCustomerDecisionTable('Order Not Received')">Order
-                                                                Not Received</button>
-                                                            <button type="button"
-                                                                class="decision-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                                                                onclick="selectCustomerDecisionTable('Order Rejected')">Oder
-                                                                Rejected</button>
-                                                        </div>
-                                                    </div>
-
-                                                    <input type="hidden" name="customer_decision"
-                                                        id="customerDecisionInputTable" value="Pending" />
-                                                </div>
-                                            </td>
-
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">abc 1234 long sample description to test line
-                                                    wrapping</span>
-                                                <textarea
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    rows="2">abc 1234 long sample description to test line wrapping</textarea>
-                                            </td>
-
-                                            <td class="px-4 py-3 text-center whitespace-normal break-words">
-                                                <div class="flex space-x-2 justify-center">
-                                                    <button
-                                                        class="bg-green-600 h-10 hover:bg-green-700 text-white px-3 py-1 rounded text-sm"
-                                                        onclick="editRow('row1')">Edit</button>
-                                                    <button
-                                                        class="bg-blue-600 h-10 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm hidden"
-                                                        onclick="saveRow('row1')">Save</button>
-                                                    <button
-                                                        class="bg-gray-600 h-10 hover:bg-gray-700 text-white px-3 py-1 rounded text-sm">Download</button>
-                                                </div>
-                                            </td>
-                                        </tr>
+                                    @endforeach
                                     </tbody>
+
                                 </table>
                                 {{-- <div class="py-6 flex justify-center">
-
                             </div> --}}
                             </div>
 
@@ -1802,40 +942,17 @@
     </script>
 
     <script>
-        function toggleDevelopmentStatusDropdown(event) {
-            event.stopPropagation();
-            const menu = document.getElementById('developmentStatusDropdownMenu');
-            const btn = document.getElementById('developmentStatusDropdown');
-            const expanded = btn.getAttribute('aria-expanded') === 'true';
-
-            menu.classList.toggle('hidden');
-            btn.setAttribute('aria-expanded', !expanded);
+        function toggleDropdown(id) {
+            document.getElementById(`dropdownMenu${id}`).classList.toggle('hidden');
         }
 
-        function selectDevelopmentStatus(status) {
-            const span = document.getElementById('selectedDevelopmentStatus');
-            const input = document.getElementById('developmentStatusInput');
-            const menu = document.getElementById('developmentStatusDropdownMenu');
-            const btn = document.getElementById('developmentStatusDropdown');
-
-            // Update label and hidden input
-            span.innerText = status;
-            input.value = status;
-
-            // Close dropdown
-            menu.classList.add('hidden');
-            btn.setAttribute('aria-expanded', false);
-        }
-
-        // Close on outside click
-        document.addEventListener('click', function(e) {
-            const btn = document.getElementById('developmentStatusDropdown');
-            const menu = document.getElementById('developmentStatusDropdownMenu');
-
-            if (!btn.contains(e.target) && !menu.contains(e.target)) {
-                menu.classList.add('hidden');
-                btn.setAttribute('aria-expanded', false);
-            }
+        document.addEventListener('click', function (event) {
+            // Hide all open dropdowns when clicked outside
+            document.querySelectorAll('[id^="dropdownMenu"]').forEach(menu => {
+                if (!menu.contains(event.target) && !event.target.closest('[id^="developmentStatusDropdown"]')) {
+                    menu.classList.add('hidden');
+                }
+            });
         });
     </script>
     <script>
