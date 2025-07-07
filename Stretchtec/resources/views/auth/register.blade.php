@@ -21,8 +21,17 @@
 
             <div class="mt-4">
                 <x-label for="role" value="{{ __('Role') }}" />
-                <x-input id="role" class="block mt-1 w-full" type="text" name="role" :value="old('role')" required/>
+                <select id="role" name="role" required class="block mt-1 w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
+                    <option value="">-- Select Role --</option>
+                    <option value="Admin">Admin</option>
+                    <option value="Super_admin">Super Admin</option>
+                    <option value="Merchandiser">Merchandiser</option>
+                    <option value="Customer_coordinator">Customer Coordinator</option>
+                    <option value="Sample_developers">Sample Developers</option>
+                    <option value="Production_officer">Production Officer</option>
+                </select>
             </div>
+
 
             <div class="mt-4">
                 <x-label for="password" value="{{ __('Password') }}" />

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\SampleInquiryController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -14,6 +15,20 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
+
+    //Sample inquiry routes
+    Route::resource('sampleInquiry', 'App\Http\Controllers\SampleInquiryController')->names([
+        'index' => 'sample-inquery-details.index',
+        'store' => 'sampleInquiry.store',
+    ]);
+    Route::post('/sampleInquiry/update-developed-status', [SampleInquiryController::class, 'updateDevelopedStatus'])->name('inquiry.updateDevelopedStatus');
+    Route::post('/sampleInquiry/mark-sent-to-sample-dev', [SampleInquiryController::class, 'markSentToSampleDevelopment'])
+        ->name('inquiry.markSentToSampleDev');
+    Route::post('/sampleInquiry/mark-customer-delivered', [SampleInquiryController::class, 'markCustomerDelivered'])
+        ->name('inquiry.markCustomerDelivered');
+    Route::patch('/sample-inquery-details/{id}/update-decision', [SampleInquiryController::class, 'updateDecision'])
+        ->name('sample-inquery-details.update-decision');
+
 });
 
 Route::get('productCatalog', function () {
@@ -32,9 +47,9 @@ Route::get('sampleStockManagement', function () {
     return view('sample-development.sample-stock-management');
 })->name('sampleStockManagement.index');
 
-Route::get('sample-inquery-details', function () {
-    return view('sample-development.pages.sample-inquery-details');
-})->name('sample-inquery-details.index');
+//Route::get('sample-inquery-details', function () {
+//    return view('sample-development.pages.sample-inquery-details');
+//})->name('sample-inquery-details.index');
 
 Route::get('sample-preparation-details', function () {
     return view('sample-development.pages.sample-preparation-details');
