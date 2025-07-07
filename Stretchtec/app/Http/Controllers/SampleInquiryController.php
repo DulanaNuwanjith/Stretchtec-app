@@ -6,6 +6,7 @@ use App\Models\SampleInquiry;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\DB;
 
 class SampleInquiryController extends Controller
 {
@@ -31,10 +32,9 @@ class SampleInquiryController extends Controller
     public function store(Request $request)
     {
         try {
-            // ✅ Validate input
+            // ✅ Validate input (excluding orderNo)
             $validated = $request->validate([
                 'order_file' => 'nullable|file|mimes:pdf,jpg,jpeg',
-                'orderNo' => 'required|string|unique:sample_inquiries,orderNo',
                 'inquiry_date' => 'required|date',
                 'customer' => 'required|string|max:255',
                 'merchandiser' => 'required|string|max:255',
@@ -46,13 +46,19 @@ class SampleInquiryController extends Controller
                 'customer_requested_date' => 'nullable|date',
             ]);
 
-            // 📂 File Upload
+            // 🔢 Generate next unique order number safely
+            $lastOrderNo = DB::table('sample_inquiries')
+                ->selectRaw("MAX(CAST(SUBSTR(orderNo, 7) AS INTEGER)) as max_number")
+                ->value('max_number');
+
+            $nextNumber = $lastOrderNo ? $lastOrderNo + 1 : 1;
+            $orderNo = 'ST-SD-' . str_pad($nextNumber, 4, '0', STR_PAD_LEFT);
+
+            // 📂 Handle file upload
             $orderFilePath = null;
             if ($request->hasFile('order_file')) {
-                $orderNo = $request->input('orderNo');
-                $date = now()->format('Ymd'); // Format: 20250707
+                $date = now()->format('Ymd'); // e.g. 20250707
                 $extension = $request->file('order_file')->getClientOriginalExtension();
-
                 $fileName = $orderNo . '_' . $date . '.' . $extension;
 
                 $orderFilePath = $request->file('order_file')->storeAs(
@@ -62,10 +68,10 @@ class SampleInquiryController extends Controller
                 );
             }
 
-            // 📝 Store the record
+            // 📝 Create the record
             SampleInquiry::create([
                 'orderFile' => $orderFilePath,
-                'orderNo' => $validated['orderNo'],
+                'orderNo' => $orderNo,
                 'inquiryReceiveDate' => $validated['inquiry_date'],
                 'customerName' => $validated['customer'],
                 'merchandiseName' => $validated['merchandiser'],
@@ -86,7 +92,6 @@ class SampleInquiryController extends Controller
                 ->withErrors($e->validator)
                 ->withInput();
         } catch (\Exception $e) {
-            // Log the unexpected exception for debugging
             Log::error('Sample Inquiry Store Error: ' . $e->getMessage());
 
             return redirect()->back()
@@ -94,6 +99,7 @@ class SampleInquiryController extends Controller
                 ->withInput();
         }
     }
+
 
     /**
      * Display the specified resource.
