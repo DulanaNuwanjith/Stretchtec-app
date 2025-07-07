@@ -19,13 +19,13 @@ class SampleInquiryController extends Controller
     {
         $query = SampleInquiry::query();
 
-        // Apply filters if provided
+        // Apply filters
         if ($request->filled('customer')) {
-            $query->where('customer', $request->customer);
+            $query->where('customerName', $request->customer);
         }
 
         if ($request->filled('merchandiser')) {
-            $query->where('merchandiser', $request->merchandiser);
+            $query->where('merchandiseName', $request->merchandiser);
         }
 
         if ($request->filled('item')) {
@@ -33,16 +33,21 @@ class SampleInquiryController extends Controller
         }
 
         if ($request->filled('deliveryStatus')) {
-            $query->where('delivery_status', $request->deliveryStatus);
+            $query->where('productionStatus', $request->deliveryStatus);
         }
 
         if ($request->filled('customerDecision')) {
-            $query->where('customer_decision', $request->customerDecision);
+            $query->where('customerDecision', $request->customerDecision);
         }
 
         $inquiries = $query->latest()->get();
 
-        return view('sample-development.pages.sample-inquery-details', compact('inquiries'));
+        // Dynamic dropdown values
+        $customers = SampleInquiry::select('customerName')->distinct()->orderBy('customerName')->pluck('customerName');
+        $merchandisers = SampleInquiry::select('merchandiseName')->distinct()->orderBy('merchandiseName')->pluck('merchandiseName');
+        $items = SampleInquiry::select('item')->distinct()->orderBy('item')->pluck('item');
+
+        return view('sample-development.pages.sample-inquery-details', compact('inquiries', 'customers', 'merchandisers','items'));
     }
 
 
