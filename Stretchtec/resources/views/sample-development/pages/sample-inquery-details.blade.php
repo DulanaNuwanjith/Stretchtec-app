@@ -1289,26 +1289,8 @@
     </script>
     <script>
         document.getElementById('clearFiltersBtn').addEventListener('click', function() {
-            const form = document.getElementById('filterForm1');
-
-            // Clear all visible inputs (text/select)
-            form.querySelectorAll('input, select').forEach(el => {
-                if (el.type !== 'hidden') el.value = '';
-            });
-
-            // Clear hidden inputs for customer and merchandiser
-            document.getElementById('customerInput').value = '';
-            document.getElementById('merchandiserInput').value = '';
-
-            // Reset dropdown visible labels
-            document.getElementById('selectedCustomer').innerText = 'Select Customer';
-            document.getElementById('selectedMerchandiser').innerText = 'Select Merchandiser';
-
-            document.getElementById('itemInput').value = '';
-            document.getElementById('selectedItem').innerText = 'Select Item';
-
-            // Submit the form to reload all data
-            form.submit();
+            // Reload the page to clear all filters and reset state
+            window.location.href = window.location.pathname;
         });
     </script>
 @endsection
