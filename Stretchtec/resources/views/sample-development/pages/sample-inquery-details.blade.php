@@ -485,36 +485,52 @@
                                                     </div>
                                                 </td>
 
-                                                <!-- Sent Order to Sample Development -->
-
+                                                {{-- Sent Order to Sample Development --}}
                                                 <td class="py-3 whitespace-normal break-words text-center">
-                                                    <div class="colour-match-sent mb-4">
-                                                        <button onclick="toggleSentOrderToSampleDevelopment(event, this)"
-                                                            type="button"
-                                                            class="delivered-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
-                                                            Pending
-                                                        </button>
-                                                        <div
-                                                            class="timestamp mt-1 text-xs text-gray-500 dark:text-gray-400">
+                                                    @if (!$inquiry->alreadyDeveloped)
+                                                        <div class="colour-match-sent mb-4">
+                                                            <button onclick="toggleSentOrderToSampleDevelopment(event, this)"
+                                                                    type="button"
+                                                                    class="delivered-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
+                                                                Pending
+                                                            </button>
+                                                            <div class="timestamp mt-1 text-xs text-gray-500 dark:text-gray-400">
+                                                                {{-- Optional timestamp --}}
+                                                            </div>
                                                         </div>
-                                                    </div>
+                                                    @else
+                                                        {{-- Show nothing --}}
+                                                    @endif
                                                 </td>
 
-                                                <!-- Develop Plan Date -->
+                                                {{-- Develop Plan Date --}}
                                                 <td class="px-4 py-3 whitespace-normal break-words">
-                                                    <span class="readonly">{{ $inquiry->developPlannedDate }}</span>
-                                                    <input type="date"
-                                                        class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                        value="{{ $inquiry->developPlannedDate }}" />
+                                                    @if (!$inquiry->alreadyDeveloped)
+                                                        <span class="readonly">{{ $inquiry->developPlannedDate }}</span>
+                                                        <input type="date"
+                                                               name="developPlannedDate"
+                                                               class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                               value="{{ $inquiry->developPlannedDate }}" />
+                                                    @else
+                                                        {{-- Show empty cell or readonly text if needed --}}
+                                                        <span class="text-gray-400 italic">—</span>
+                                                    @endif
                                                 </td>
 
-                                                <!-- Production Status -->
+                                                {{-- Production Status --}}
                                                 <td class="px-4 py-3 whitespace-normal break-words">
-                                                    <span class="readonly">{{ $inquiry->productionStatus }}</span>
-                                                    <input type="text"
-                                                        class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                        value="{{ $inquiry->productionStatus }}" />
+                                                    @if (!$inquiry->alreadyDeveloped)
+                                                        <span class="readonly">{{ $inquiry->productionStatus }}</span>
+                                                        <input type="text"
+                                                               name="productionStatus"
+                                                               class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                               value="{{ $inquiry->productionStatus }}" />
+                                                    @else
+                                                        {{-- Show empty or readonly info --}}
+                                                        <span class="text-gray-400 italic">—</span>
+                                                    @endif
                                                 </td>
+
 
                                                 <!-- Reference No -->
                                                 <td class="px-4 py-3 whitespace-normal break-words">
