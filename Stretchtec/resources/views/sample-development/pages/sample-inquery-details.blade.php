@@ -37,7 +37,8 @@
                             @endif
 
                             <!-- Filter Form -->
-                            <form id="filterForm1" method="GET" action="{{ route('sample-inquery-details.index') }}" class="mb-6 flex gap-6 items-center">
+                            <form id="filterForm1" method="GET" action="{{ route('sample-inquery-details.index') }}"
+                                class="mb-6 flex gap-6 items-center">
                                 <div class="flex items-center gap-4 flex-wrap">
 
                                     <!-- CUSTOMER DROPDOWN -->
@@ -951,6 +952,85 @@
         });
     </script>
 
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const filters = ['customer', 'merchandiser', 'item', 'deliveryStatus', 'customerDecision'];
+
+            // Bind dropdown toggle
+            filters.forEach(type => {
+                const button = document.getElementById(`${type}Dropdown`);
+                const menu = document.getElementById(`${type}DropdownMenu`);
+
+                if (button && menu) {
+                    button.addEventListener("click", (e) => {
+                        e.stopPropagation();
+                        closeAllDropdowns();
+                        menu.classList.toggle("hidden");
+                        button.setAttribute("aria-expanded", menu.classList.contains("hidden") ?
+                            "false" : "true");
+                    });
+                }
+            });
+
+            // Bind option selection
+            filters.forEach(type => {
+                const options = document.querySelectorAll(`.${type}-option`);
+                options.forEach(option => {
+                    option.addEventListener("click", () => {
+                        const value = option.textContent.trim() ===
+                            `Select ${capitalize(type)}` ? '' : option.textContent.trim();
+                        document.getElementById(`${type}Input`).value = value;
+                        document.getElementById(`selected${capitalize(type)}`).textContent =
+                            value || `Select ${capitalize(type)}`;
+                        document.getElementById(`${type}DropdownMenu`).classList.add(
+                            "hidden");
+                        document.getElementById(`${type}Dropdown`).setAttribute(
+                            "aria-expanded", "false");
+                    });
+                });
+            });
+
+            // Bind search filter
+            filters.forEach(type => {
+                const searchInput = document.getElementById(`${type}SearchInput`);
+                if (searchInput) {
+                    searchInput.addEventListener("keyup", () => {
+                        const query = searchInput.value.toLowerCase();
+                        const options = document.querySelectorAll(`.${type}-option`);
+                        options.forEach(option => {
+                            const text = option.textContent.toLowerCase();
+                            option.style.display = text.includes(query) ? "block" : "none";
+                        });
+                    });
+                }
+            });
+
+            // Close all dropdowns if clicked outside
+            document.addEventListener("click", (e) => {
+                filters.forEach(type => {
+                    const menu = document.getElementById(`${type}DropdownMenu`);
+                    const button = document.getElementById(`${type}Dropdown`);
+                    if (!menu.contains(e.target) && !button.contains(e.target)) {
+                        menu.classList.add("hidden");
+                        button.setAttribute("aria-expanded", "false");
+                    }
+                });
+            });
+
+            function capitalize(str) {
+                return str.charAt(0).toUpperCase() + str.slice(1);
+            }
+
+            function closeAllDropdowns() {
+                filters.forEach(type => {
+                    const menu = document.getElementById(`${type}DropdownMenu`);
+                    const button = document.getElementById(`${type}Dropdown`);
+                    menu.classList.add("hidden");
+                    button.setAttribute("aria-expanded", "false");
+                });
+            }
+        });
+    </script>
 
     <script>
         function editRow(rowId) {
