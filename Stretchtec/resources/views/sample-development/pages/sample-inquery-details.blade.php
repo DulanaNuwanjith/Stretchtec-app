@@ -426,7 +426,7 @@
                                                 </td>
 
                                                 <!-- Sample Qty -->
-                                                <td class="px-4 py-3 whitespace-normal break-words">
+                                                <td class="px-4 py-3 whitespace-normal break-words text-center">
                                                     <span class="readonly">{{ $inquiry->sampleQty }}</span>
                                                     <input type="text"
                                                         class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
@@ -587,11 +587,11 @@
                                                 </td>
 
                                                 <!-- Reference No -->
-                                                <td class="px-4 py-3 whitespace-normal break-words">
-                                                    <span class="readonly">{{ $inquiry->referenceNo }}</span>
+                                                <td class="px-4 py-3 whitespace-normal break-words text-center">
+                                                    <span class="readonly">{{ $inquiry->referenceNo ?? 'N/D' }}</span>
                                                     <input type="text"
                                                         class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                        value="{{ $inquiry->referenceNo }}" />
+                                                        value="{{ $inquiry->referenceNo ?? 'N/D' }}" />
                                                 </td>
 
                                                 <td class="py-3 whitespace-normal break-words text-center">
@@ -697,11 +697,11 @@
                                                 </td>
 
                                                 <!-- Notes -->
-                                                <td class="px-4 py-3 whitespace-normal break-words">
-                                                    <span class="readonly">{{ $inquiry->notes }}</span>
+                                                <td class="px-4 py-3 whitespace-normal break-words text-center">
+                                                    <span class="readonly">{{ $inquiry->notes ?? 'N/D' }}</span>
                                                     <textarea
                                                         class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                        rows="2">{{ $inquiry->notes }}</textarea>
+                                                        rows="2">{{ $inquiry->notes ?? 'N/D' }}</textarea>
                                                 </td>
 
                                                 <!-- Actions -->
