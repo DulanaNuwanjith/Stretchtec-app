@@ -510,6 +510,7 @@
                                                 <td class="py-3 whitespace-normal break-words text-center">
                                                     @if (!$inquiry->alreadyDeveloped)
                                                         <div class="colour-match-sent mb-4">
+<<<<<<< Updated upstream
                                                             <button
                                                                 onclick="toggleSentOrderToSampleDevelopment(event, this)"
                                                                 type="button"
@@ -520,6 +521,24 @@
                                                                 class="timestamp mt-1 text-xs text-gray-500 dark:text-gray-400">
                                                                 {{-- Optional timestamp --}}
                                                             </div>
+=======
+                                                            @if (is_null($inquiry->sentToSampleDevelopmentDate))
+                                                                {{-- Show form with clickable button --}}
+                                                                <form action="{{ route('inquiry.markSentToSampleDev') }}" method="POST">
+                                                                    @csrf
+                                                                    <input type="hidden" name="id" value="{{ $inquiry->id }}">
+                                                                    <button type="submit"
+                                                                            class="delivered-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
+                                                                        Pending
+                                                                    </button>
+                                                                </form>
+                                                            @else
+                                                                {{-- Show static timestamp info --}}
+                                                                <span class="inline-block text-sm font-semibold text-gray-700 dark:text-white bg-yellow-100 dark:bg-gray-800 px-3 py-1 rounded">
+                                                                Sent on {{ \Carbon\Carbon::parse($inquiry->sentToSampleDevelopmentDate)->format('Y-m-d') }} at {{ \Carbon\Carbon::parse($inquiry->sentToSampleDevelopmentDate)->format('H:i')  }}
+                                                            </span>
+                                                            @endif
+>>>>>>> Stashed changes
                                                         </div>
                                                     @else
                                                         {{-- Show nothing --}}
@@ -527,12 +546,20 @@
                                                 </td>
 
                                                 {{-- Develop Plan Date --}}
-                                                <td class="px-4 py-3 whitespace-normal break-words">
+                                                <td class="px-4 py-3 whitespace-normal break-words text-center">
                                                     @if (!$inquiry->alreadyDeveloped)
+<<<<<<< Updated upstream
                                                         <span class="readonly">{{ $inquiry->developPlannedDate }}</span>
                                                         <input type="date" name="developPlannedDate"
                                                             class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                             value="{{ $inquiry->developPlannedDate }}" />
+=======
+                                                        <span class="readonly">{{ $inquiry->developPlannedDate ?? 'N/D' }}</span>
+                                                        <input type="date"
+                                                               name="developPlannedDate"
+                                                               class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                               value="{{ $inquiry->developPlannedDate ?? 'N/D' }}" />
+>>>>>>> Stashed changes
                                                     @else
                                                         {{-- Show empty cell or readonly text if needed --}}
                                                         <span class="text-gray-400 italic">—</span>
