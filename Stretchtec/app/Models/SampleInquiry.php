@@ -19,6 +19,7 @@ class SampleInquiry extends Model
         'customerSpecialComment',
         'customerRequestDate',
         'alreadyDeveloped',
+        'sentToSampleDevelopmentDate',
         'developPlannedDate',
         'productionStatus',
         'referenceNo',

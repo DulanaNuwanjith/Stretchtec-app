@@ -25,6 +25,7 @@ return new class extends Migration
             $table->longText('customerSpecialComment')->nullable();
             $table->date('customerRequestDate')->nullable();
             $table->boolean('alreadyDeveloped')->default(false);
+            $table->string('sentToSampleDevelopmentDate')->nullable();
             $table->date('developPlannedDate')->nullable();
             $table->string('productionStatus')->default('pending');
             $table->string('referenceNo')->nullable();
