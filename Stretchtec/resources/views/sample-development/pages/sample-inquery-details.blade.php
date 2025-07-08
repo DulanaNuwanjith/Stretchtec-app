@@ -8,7 +8,7 @@
     @extends('layouts.sample-tabs')
 
     @section('content')
-        <div class="flex-1 overflow-y-hidden mb-20">
+        <div class="flex-1 overflow-y-hidden">
             <div class="">
                 <div class="w-full px-6 lg:px-2">
                     <div class="bg-white dark:bg-gray-800 overflow-hidden">
@@ -18,12 +18,37 @@
                                     font-size: 0.875rem;
                                     padding: 0.75rem 1rem;
                                     border-radius: 8px;
+                                    background-color: #ffffff !important;
+                                    position: relative;
+                                    box-sizing: border-box;
+                                    color: #3b82f6 !important;
+                                }
+
+                                .swal2-toast .swal2-title,
+                                .swal2-toast .swal2-html-container {
+                                    color: #3b82f6 !important;
+                                }
+
+                                .swal2-toast .swal2-icon {
+                                    color: #3b82f6 !important;
                                 }
 
                                 .swal2-shadow {
                                     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
                                 }
+
+                                .swal2-toast::after {
+                                    content: '';
+                                    position: absolute;
+                                    bottom: 0;
+                                    left: 0;
+                                    width: 100%;
+                                    height: 3px;
+                                    background-color: #3b82f6;
+                                    border-radius: 0 0 8px 8px;
+                                }
                             </style>
+
                             <script>
                                 document.addEventListener('DOMContentLoaded', () => {
                                     @if (session('success'))
@@ -38,8 +63,6 @@
                                             customClass: {
                                                 popup: 'swal2-toast swal2-shadow'
                                             },
-                                            background: '#f0fdf4',
-                                            color: '#166534',
                                         });
                                     @endif
 
@@ -55,8 +78,6 @@
                                             customClass: {
                                                 popup: 'swal2-toast swal2-shadow'
                                             },
-                                            background: '#fef2f2',
-                                            color: '#991b1b',
                                         });
                                     @endif
 
@@ -73,8 +94,6 @@
                                             customClass: {
                                                 popup: 'swal2-toast swal2-shadow'
                                             },
-                                            background: '#fff7ed',
-                                            color: '#92400e',
                                         });
                                     @endif
                                 });
@@ -822,12 +841,11 @@
                                             </tr>
                                         @endforeach
                                     </tbody>
-
                                 </table>
-                                {{-- <div class="py-6 flex justify-center">
-                            </div> --}}
                             </div>
-
+                            <div class="py-6 flex justify-center">
+                                {{ $inquiries->links() }}
+                            </div>
 
                             <!-- Add Sample Modal -->
                             <div id="addSampleModal"

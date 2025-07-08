@@ -50,7 +50,7 @@ class SampleInquiryController extends Controller
             $query->where('customerDecision', $request->customerDecision);
         }
 
-        $inquiries = $query->latest()->get();
+        $inquiries = $query->latest()->paginate(10);
 
         // Dynamic dropdown values
         $customers = SampleInquiry::select('customerName')->distinct()->orderBy('customerName')->pluck('customerName');
