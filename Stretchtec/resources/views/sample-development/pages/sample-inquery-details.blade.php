@@ -401,7 +401,7 @@
                                     <thead class="bg-gray-200 dark:bg-gray-700 text-left">
                                         <tr class="text-center">
                                             <th
-                                                class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="sticky left-0 z-10 bg-white px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Order No</th>
                                             <th
                                                 class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
@@ -467,8 +467,8 @@
                                                 class="odd:bg-white even:bg-gray-50 border-b border-gray-200  text-left">
                                                 <!-- Order No -->
                                                 <td
-                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300">
-                                                    <span class="readonly">{{ $inquiry->orderNo }}</span>
+                                                    class="sticky left-0 z-10 bg-white px-4 py-3 bg-gray-100 whitespace-normal break-words border-r border-gray-300">
+                                                    <span class="readonly font-bold">{{ $inquiry->orderNo }}</span>
                                                     <input type="text"
                                                         class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                         value="{{ $inquiry->orderNo }}" />
