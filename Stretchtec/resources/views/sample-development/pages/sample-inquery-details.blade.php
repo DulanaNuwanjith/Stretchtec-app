@@ -1,6 +1,8 @@
 <head>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <!-- SweetAlert2 CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <div class="flex h-full w-full bg-white">
     @extends('layouts.sample-tabs')
@@ -11,30 +13,72 @@
                 <div class="w-full px-6 lg:px-2">
                     <div class="bg-white dark:bg-gray-800 overflow-hidden">
                         <div class="p-4 text-gray-900 dark:text-gray-100">
+                            <style>
+                                .swal2-toast {
+                                    font-size: 0.875rem;
+                                    padding: 0.75rem 1rem;
+                                    border-radius: 8px;
+                                }
 
-                            @if (session('success'))
-                                <div
-                                    class="mb-4 p-4 text-green-800 bg-green-100 border border-green-300 rounded-md dark:text-green-200 dark:bg-green-900 dark:border-green-800">
-                                    {{ session('success') }}
-                                </div>
-                            @endif
+                                .swal2-shadow {
+                                    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+                                }
+                            </style>
+                            <script>
+                                document.addEventListener('DOMContentLoaded', () => {
+                                    @if (session('success'))
+                                        Swal.fire({
+                                            toast: true,
+                                            position: 'top-end',
+                                            icon: 'success',
+                                            title: '{{ session('success') }}',
+                                            showConfirmButton: false,
+                                            timer: 2000,
+                                            timerProgressBar: true,
+                                            customClass: {
+                                                popup: 'swal2-toast swal2-shadow'
+                                            },
+                                            background: '#f0fdf4',
+                                            color: '#166534',
+                                        });
+                                    @endif
 
-                            @if (session('error'))
-                                <div
-                                    class="mb-4 p-4 text-red-800 bg-red-100 border border-red-300 rounded-md dark:text-red-200 dark:bg-red-900 dark:border-red-800">
-                                    {{ session('error') }}
-                                </div>
-                            @endif
+                                    @if (session('error'))
+                                        Swal.fire({
+                                            toast: true,
+                                            position: 'top-end',
+                                            icon: 'error',
+                                            title: '{{ session('error') }}',
+                                            showConfirmButton: false,
+                                            timer: 2000,
+                                            timerProgressBar: true,
+                                            customClass: {
+                                                popup: 'swal2-toast swal2-shadow'
+                                            },
+                                            background: '#fef2f2',
+                                            color: '#991b1b',
+                                        });
+                                    @endif
 
-                            @if ($errors->any())
-                                <div class="mb-4 p-4 text-red-700 bg-red-100 border border-red-300 rounded-md">
-                                    <ul class="list-disc pl-5 space-y-1 text-sm">
-                                        @foreach ($errors->all() as $error)
-                                            <li>{{ $error }}</li>
-                                        @endforeach
-                                    </ul>
-                                </div>
-                            @endif
+                                    @if ($errors->any())
+                                        Swal.fire({
+                                            toast: true,
+                                            position: 'top-end',
+                                            icon: 'warning',
+                                            title: 'Validation Errors',
+                                            html: `{!! implode('<br>', $errors->all()) !!}`,
+                                            showConfirmButton: false,
+                                            timer: 3000,
+                                            timerProgressBar: true,
+                                            customClass: {
+                                                popup: 'swal2-toast swal2-shadow'
+                                            },
+                                            background: '#fff7ed',
+                                            color: '#92400e',
+                                        });
+                                    @endif
+                                });
+                            </script>
 
                             <!-- Filter Form -->
                             <form id="filterForm1" method="GET" action="{{ route('sample-inquery-details.index') }}"
@@ -662,8 +706,7 @@
                                                 </td>
 
                                                 <!-- Customer Decision -->
-                                                <td
-                                                    class="px-4 whitespace-normal break-words border-r border-gray-300">
+                                                <td class="px-4 whitespace-normal break-words border-r border-gray-300">
                                                     <form
                                                         action="{{ route('sample-inquery-details.update-decision', $inquiry->id) }}"
                                                         method="POST" class="relative inline-block text-left w-48">
