@@ -322,8 +322,8 @@
 
                             <div class="overflow-x-auto bg-white dark:bg-gray-900 shadow rounded-lg">
                                 <table class="table-fixed w-full text-sm divide-y divide-gray-200 dark:divide-gray-700">
-                                    <thead class="bg-gray-100 dark:bg-gray-700 text-left">
-                                        <tr>
+                                    <thead class="bg-gray-200 dark:bg-gray-700 text-left">
+                                        <tr class="text-center">
                                             <th
                                                 class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Order No</th>
@@ -355,10 +355,10 @@
                                                 class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Customer Requested Dates</th>
                                             <th
-                                                class="px-4 py-3 w-56 text-center text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="px-4 py-3 w-56 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Already Developed & In Sample Stock</th>
                                             <th
-                                                class="px-4 py-3 w-40 text-center text-xs font-medium uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">
+                                                class="px-4 py-3 w-40 text-xs font-medium uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">
                                                 Sent order to sample development</th>
                                             <th
                                                 class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
@@ -370,28 +370,28 @@
                                                 class="px-4 py-3 w-48 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Reference No</th>
                                             <th
-                                                class="px-4 py-3 w-40 text-xs text-center font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="px-4 py-3 w-40 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Customer Delivery Status</th>
                                             <th
-                                                class="px-4 py-3 w-56 text-xs text-center font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="px-4 py-3 w-56 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Customer Decision</th>
                                             <th
-                                                class="px-4 py-3 w-72 text-xs text-center font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="px-4 py-3 w-72 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Note</th>
                                             <th
-                                                class="px-4 py-3 w-48 text-xs text-center font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="px-4 py-3 w-48 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Action</th>
                                         </tr>
                                     </thead>
 
-
-
                                     <tbody id="sampleInquiryRecords"
                                         class="bg-white dark:bg-gray-800 divide-y text-left divide-gray-200 dark:divide-gray-700">
                                         @foreach ($inquiries as $inquiry)
-                                            <tr id="row{{ $inquiry->id }}">
+                                            <tr id="row{{ $inquiry->id }}"
+                                                class="odd:bg-white even:bg-gray-50 border-b border-gray-200  text-center">
                                                 <!-- Order No -->
-                                                <td class="px-4 py-3 whitespace-normal break-words">
+                                                <td
+                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300">
                                                     <span class="readonly">{{ $inquiry->orderNo }}</span>
                                                     <input type="text"
                                                         class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
@@ -399,7 +399,8 @@
                                                 </td>
 
                                                 <!-- Inquiry Receive Date -->
-                                                <td class="px-4 py-3 whitespace-normal break-words">
+                                                <td
+                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
                                                     <span class="readonly">
                                                         {{ \Carbon\Carbon::parse($inquiry->inquiryReceiveDate)->format('Y-m-d') }}
                                                     </span>
@@ -408,7 +409,8 @@
                                                 </td>
 
                                                 <!-- Customer -->
-                                                <td class="px-4 py-3 whitespace-normal break-words">
+                                                <td
+                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
                                                     <span class="readonly">{{ $inquiry->customerName }}</span>
                                                     <input type="text"
                                                         class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
@@ -416,7 +418,8 @@
                                                 </td>
 
                                                 <!-- Merchandiser -->
-                                                <td class="px-4 py-3 whitespace-normal break-words">
+                                                <td
+                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
                                                     <span class="readonly">{{ $inquiry->merchandiseName }}</span>
                                                     <input type="text"
                                                         class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
@@ -424,7 +427,8 @@
                                                 </td>
 
                                                 <!-- Item -->
-                                                <td class="px-4 py-3 whitespace-normal break-words">
+                                                <td
+                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
                                                     <span class="readonly">{{ $inquiry->item }}</span>
                                                     <input type="text"
                                                         class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
@@ -432,7 +436,8 @@
                                                 </td>
 
                                                 <!-- Size -->
-                                                <td class="px-4 py-3 whitespace-normal break-words">
+                                                <td
+                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
                                                     <span class="readonly">{{ $inquiry->size }}</span>
                                                     <input type="text"
                                                         class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
@@ -440,7 +445,8 @@
                                                 </td>
 
                                                 <!-- Color -->
-                                                <td class="px-4 py-3 whitespace-normal break-words">
+                                                <td
+                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
                                                     <span class="readonly">{{ $inquiry->color }}</span>
                                                     <input type="text"
                                                         class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
@@ -448,7 +454,8 @@
                                                 </td>
 
                                                 <!-- Sample Qty -->
-                                                <td class="px-4 py-3 whitespace-normal break-words text-center">
+                                                <td
+                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
                                                     <span class="readonly">{{ $inquiry->sampleQty }}</span>
                                                     <input type="text"
                                                         class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
@@ -456,7 +463,8 @@
                                                 </td>
 
                                                 <!-- Customer Comments -->
-                                                <td class="px-4 py-3 whitespace-normal break-words">
+                                                <td
+                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
                                                     <span class="readonly">{{ $inquiry->customerSpecialComment }}</span>
                                                     <input type="text"
                                                         class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
@@ -464,16 +472,20 @@
                                                 </td>
 
                                                 <!-- Requested Date -->
-                                                <td class="px-4 py-3 whitespace-normal break-words">
-                                                    <span class="readonly">{{ $inquiry->customerRequestDate }}</span>
+                                                <td
+                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
+                                                    <span
+                                                        class="readonly">{{ $inquiry->customerRequestDate->format('Y-m-d') }}</span>
                                                     <input type="date"
                                                         class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                        value="{{ $inquiry->customerRequestDate }}" />
+                                                        value="{{ $inquiry->customerRequestDate->format('Y-m-d') }}" />
+
                                                 </td>
 
                                                 <!-- Already Developed -->
-                                                <td class="px-4 py-3 whitespace-normal break-words">
-                                                    <div class="relative inline-block text-left w-36">
+                                                <td
+                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300">
+                                                    <div class="relative inline-block text-left">
                                                         @if (!$inquiry->alreadyDeveloped && !$inquiry->sentToSampleDevelopmentDate)
                                                             <form method="POST"
                                                                 action="{{ route('inquiry.updateDevelopedStatus') }}">
@@ -527,9 +539,10 @@
                                                 </td>
 
                                                 {{-- Sent Order to Sample Development --}}
-                                                <td class="py-3 whitespace-normal break-words text-center">
+                                                <td
+                                                    class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
                                                     @if (!$inquiry->alreadyDeveloped)
-                                                        <div class="colour-match-sent mb-4">
+                                                        <div class="colour-match-sent">
                                                             @if (is_null($inquiry->sentToSampleDevelopmentDate))
                                                                 {{-- Show form with clickable button --}}
                                                                 <form action="{{ route('inquiry.markSentToSampleDev') }}"
@@ -546,7 +559,7 @@
                                                                 {{-- Show static timestamp info --}}
                                                                 <span
                                                                     class="inline-block text-sm font-semibold text-gray-700 dark:text-white bg-yellow-100 dark:bg-gray-800 px-3 py-1 rounded">
-                                                                    Sent on
+                                                                    Sent on <br>
                                                                     {{ \Carbon\Carbon::parse($inquiry->sentToSampleDevelopmentDate)->format('Y-m-d') }}
                                                                     at
                                                                     {{ \Carbon\Carbon::parse($inquiry->sentToSampleDevelopmentDate)->format('H:i') }}
@@ -559,7 +572,8 @@
                                                 </td>
 
                                                 {{-- Develop Plan Date --}}
-                                                <td class="px-4 py-3 whitespace-normal break-words text-center">
+                                                <td
+                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center ">
                                                     @if (!$inquiry->alreadyDeveloped)
                                                         <span class="readonly">{{ $inquiry->developPlannedDate }}</span>
                                                         <input type="date" name="developPlannedDate"
@@ -577,7 +591,8 @@
                                                 </td>
 
                                                 {{-- Production Status --}}
-                                                <td class="px-4 py-3 whitespace-normal break-words">
+                                                <td
+                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
                                                     @if (!$inquiry->alreadyDeveloped)
                                                         @php
                                                             $status = $inquiry->productionStatus;
@@ -609,15 +624,17 @@
                                                 </td>
 
                                                 <!-- Reference No -->
-                                                <td class="px-4 py-3 whitespace-normal break-words text-center">
+                                                <td
+                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center ">
                                                     <span class="readonly">{{ $inquiry->referenceNo ?? 'N/D' }}</span>
                                                     <input type="text"
                                                         class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                         value="{{ $inquiry->referenceNo ?? 'N/D' }}" />
                                                 </td>
 
-                                                <td class="py-3 whitespace-normal break-words text-center">
-                                                    <div class="delivery-item mb-4">
+                                                <td
+                                                    class="py-3 whitespace-normal break-words border-r border-gray-300 text-center ">
+                                                    <div class="delivery-item">
                                                         @if (is_null($inquiry->customerDeliveryDate))
                                                             <form action="{{ route('inquiry.markCustomerDelivered') }}"
                                                                 method="POST">
@@ -635,15 +652,18 @@
                                                         @else
                                                             <span
                                                                 class="inline-block text-sm font-semibold text-gray-700 dark:text-white bg-green-100 dark:bg-gray-800 px-3 py-1 rounded">
-                                                                Delivered on
-                                                                {{ \Carbon\Carbon::parse($inquiry->customerDeliveryDate)->format('Y-m-d H:i') }}
+                                                                Delivered on <br>
+                                                                {{ \Carbon\Carbon::parse($inquiry->customerDeliveryDate)->format('Y-m-d') }}
+                                                                at
+                                                                {{ \Carbon\Carbon::parse($inquiry->customerDeliveryDate)->format('H:i') }}
                                                             </span>
                                                         @endif
                                                     </div>
                                                 </td>
 
                                                 <!-- Customer Decision -->
-                                                <td class="px-6 py-3 whitespace-normal break-words">
+                                                <td
+                                                    class="px-6 py-3 whitespace-normal break-words border-r border-gray-300">
                                                     <form
                                                         action="{{ route('sample-inquery-details.update-decision', $inquiry->id) }}"
                                                         method="POST" class="relative inline-block text-left w-48">
@@ -719,7 +739,8 @@
                                                 </td>
 
                                                 <!-- Notes -->
-                                                <td class="px-4 py-3 whitespace-normal break-words text-center">
+                                                <td
+                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center ">
                                                     <span class="readonly">{{ $inquiry->notes ?? 'N/D' }}</span>
                                                     <textarea
                                                         class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
@@ -727,7 +748,7 @@
                                                 </td>
 
                                                 <!-- Actions -->
-                                                <td class="px-4 py-3 text-center whitespace-normal break-words">
+                                                <td class="px-4 py-3 whitespace-normal break-words text-center ">
                                                     <div class="flex space-x-2 justify-center">
                                                         <button
                                                             class="edit-btn bg-green-600 h-10 hover:bg-green-700 text-white px-3 py-1 rounded text-sm"
