@@ -385,10 +385,10 @@
                                     </thead>
 
                                     <tbody id="sampleInquiryRecords"
-                                        class="bg-white dark:bg-gray-800 divide-y text-left divide-gray-200 dark:divide-gray-700">
+                                        class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                                         @foreach ($inquiries as $inquiry)
                                             <tr id="row{{ $inquiry->id }}"
-                                                class="odd:bg-white even:bg-gray-50 border-b border-gray-200  text-center">
+                                                class="odd:bg-white even:bg-gray-50 border-b border-gray-200  text-left">
                                                 <!-- Order No -->
                                                 <td
                                                     class="px-4 py-3 whitespace-normal break-words border-r border-gray-300">
@@ -558,7 +558,7 @@
                                                             @else
                                                                 {{-- Show static timestamp info --}}
                                                                 <span
-                                                                    class="inline-block text-sm font-semibold text-gray-700 dark:text-white bg-yellow-100 dark:bg-gray-800 px-3 py-1 rounded">
+                                                                    class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-yellow-100 dark:bg-gray-800 px-3 py-1 rounded">
                                                                     Sent on <br>
                                                                     {{ \Carbon\Carbon::parse($inquiry->sentToSampleDevelopmentDate)->format('Y-m-d') }}
                                                                     at
@@ -651,7 +651,7 @@
                                                             </div>
                                                         @else
                                                             <span
-                                                                class="inline-block text-sm font-semibold text-gray-700 dark:text-white bg-green-100 dark:bg-gray-800 px-3 py-1 rounded">
+                                                                class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-green-100 dark:bg-gray-800 px-3 py-1 rounded">
                                                                 Delivered on <br>
                                                                 {{ \Carbon\Carbon::parse($inquiry->customerDeliveryDate)->format('Y-m-d') }}
                                                                 at
@@ -663,7 +663,7 @@
 
                                                 <!-- Customer Decision -->
                                                 <td
-                                                    class="px-6 py-3 whitespace-normal break-words border-r border-gray-300">
+                                                    class="px-4 whitespace-normal break-words border-r border-gray-300">
                                                     <form
                                                         action="{{ route('sample-inquery-details.update-decision', $inquiry->id) }}"
                                                         method="POST" class="relative inline-block text-left w-48">
