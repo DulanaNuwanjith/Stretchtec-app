@@ -35,4 +35,8 @@
     <pre><code>cd Stretchtec
 npm run dev</code></pre>
   </li>
+
+  <li>Laravel to create a symbolic link from the public/storage directory to the storage/app/public directory.:
+    <pre><code>php artisan storage:link</code></pre>
+  </li>
 </ol>
