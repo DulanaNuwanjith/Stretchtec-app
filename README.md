@@ -1,3 +1,49 @@
+# StretchTec Integrated Production & Efficiency Management System (IPEMS)
+
+Welcome to the official repository for **IPEMS** — a modern, efficient, and scalable solution developed for StretchTec to revolutionize production and operations management.
+
+## 🚀 What is IPEMS?
+
+IPEMS (Integrated Production & Efficiency Management System) is a centralized platform built with **Laravel** and **Blade** that replaces scattered Excel files, notebooks, and manual tracking with a **smart, real-time digital workflow**.
+
+From the spark of a customer inquiry to the shipment of the final product, IPEMS brings structure, speed, and visibility to the entire process.
+
+---
+
+## 🧠 Key Features
+
+- 🔍 **Customer Inquiry Management**  
+  Track and respond to customer inquiries in an organized, efficient manner.
+
+- 🧪 **Sample Development Tracking**  
+  Manage sample requests and approvals with clear timelines.
+
+- 📦 **Order Management**  
+  Seamlessly manage small or bulk orders with real-time status updates.
+
+- 🏭 **Production Planning**  
+  Schedule and monitor production processes with built-in intelligence.
+
+- 📊 **Inventory & Material Tracking**  
+  Maintain real-time oversight on raw materials and finished goods.
+
+- 📈 **Reports & Dashboards**  
+  Instantly generate insights and analytics to support better decisions.
+
+- 🤝 **Collaboration-Friendly**  
+  Designed for team usage, promoting better communication and task ownership.
+
+---
+
+## ⚙️ Built With
+
+- **Laravel** – Robust PHP framework for backend logic & APIs  
+- **Blade** – Laravel’s lightweight templating engine for the frontend  
+- **MySQL** – For structured and reliable data storage  
+- **Tailwind CSS** (optional) – For clean, responsive UI styling
+
+---
+
 <h1>Installation Steps</h1>
 
 <ol>
@@ -17,8 +63,8 @@
     <pre><code>npm install</code></pre>
   </li>
 
-  <li>Create .env file and copy paste the code in .env.example file.</li>
-  
+  <li>Create a `.env` file and copy contents from `.env.example`:</li>
+
   <li>Generate the application key:
     <pre><code>php artisan key:generate</code></pre>
   </li>
@@ -32,11 +78,23 @@
   </li>
 
   <li>In a new terminal, run the frontend build:
-    <pre><code>cd Stretchtec
-npm run dev</code></pre>
+    <pre><code>npm run dev</code></pre>
   </li>
 
-  <li>Laravel to create a symbolic link from the public/storage directory to the storage/app/public directory.:
+  <li>Create a symbolic link from `public/storage` to `storage/app/public`:
     <pre><code>php artisan storage:link</code></pre>
   </li>
 </ol>
+
+---
+
+## 🛡️ License
+
+This project is proprietary to StretchTec. Do not distribute or use without permission.
+
+---
+
+## 👤 Developed By
+
+**Rangiri Holdings IT Team**  
+With ❤️ using Laravel & modern web technologies.
