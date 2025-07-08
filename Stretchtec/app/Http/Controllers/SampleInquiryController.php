@@ -32,10 +32,20 @@ class SampleInquiryController extends Controller
             $query->where('item', $request->item);
         }
 
+        // Filter by delivery status using customerDeliveryDate
         if ($request->filled('deliveryStatus')) {
-            $query->where('productionStatus', $request->deliveryStatus);
+            $validStatuses = ['Delivered', 'Pending'];
+
+            if (in_array($request->deliveryStatus, $validStatuses)) {
+                if ($request->deliveryStatus === 'Delivered') {
+                    $query->whereNotNull('customerDeliveryDate');
+                } elseif ($request->deliveryStatus === 'Pending') {
+                    $query->whereNull('customerDeliveryDate');
+                }
+            }
         }
 
+        // Filter by customer decision
         if ($request->filled('customerDecision')) {
             $query->where('customerDecision', $request->customerDecision);
         }
