@@ -56,57 +56,54 @@
                                     </tr>
                                 </thead>
                                 <tbody id="serviceRecords"
-                                       class="bg-white dark:bg-gray-800 divide-y text-left divide-gray-200 dark:divide-gray-700">
-
-                                @foreach ($operatorsAndSupervisors as $index => $operator)
-                                    @php
-                                        $rowId = 'row' . ($index + 1);
-                                    @endphp
-                                    <tr id="{{ $rowId }}">
+                                    class="bg-white dark:bg-gray-800 divide-y text-left divide-gray-200 dark:divide-gray-700">
+                                    <tr id="row1">
+                                        <!-- Each cell has a span for readonly text and a hidden input for editing -->
                                         <td class="px-4 py-3 whitespace-normal break-words">
-                                            <span class="readonly">{{ $operator->empID }}</span>
-                                            <input class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                   value="{{ $operator->empID }}" />
+                                            <span class="readonly">EMP 001</span>
+                                            <input
+                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                value="EMP 001" />
                                         </td>
                                         <td class="px-4 py-3 whitespace-normal break-words">
-                                            <span class="readonly">{{ $operator->name }}</span>
-                                            <input type="text" class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                   value="{{ $operator->name }}" />
+                                            <span class="readonly">Dulana Nuwanjith</span>
+                                            <input type="text"
+                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                value="Dulana Nuwanjith" />
                                         </td>
                                         <td class="px-4 py-3 whitespace-normal break-words">
-                                            <span class="readonly">{{ ucfirst($operator->role) }}</span>
-                                            <input type="text" class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                   value="{{ $operator->role }}" />
+                                            <span class="readonly">Operator</span>
+                                            <input type="text"
+                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                value="Operator" />
                                         </td>
                                         <td class="px-4 py-3 whitespace-normal break-words">
-                                            <span class="readonly">{{ $operator->phoneNo }}</span>
-                                            <input type="email" class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                   value="{{ $operator->phoneNo }}" />
+                                            <span class="readonly">0777137830</span>
+                                            <input type="email"
+                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                value="0777137830" />
                                         </td>
                                         <td class="px-4 py-3 whitespace-normal break-words">
-                                            <span class="readonly">{{ $operator->address }}</span>
-                                            <input type="text" class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                   value="{{ $operator->address }}" />
+                                            <span class="readonly">Vijayanthi,Pilankada,Uduthuththiripitiya.</span>
+                                            <input type="text"
+                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                value="Vijayanthi,Pilankada,Uduthuththiripitiya." />
+                                        </td>
                                         </td>
                                         <td class="px-4 py-3 w-48 text-center whitespace-normal break-words">
                                             <div class="flex space-x-2 justify-center">
-                                                <button class="bg-green-600 h-10 hover:bg-green-700 text-white px-3 py-1 rounded text-sm"
-                                                        onclick="editRow('{{ $rowId }}')">Edit</button>
-                                                <button class="bg-blue-600 h-10 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm hidden"
-                                                        onclick="saveRow('{{ $rowId }}')">Save</button>
-                                                <form action="{{ route('operatorsandSupervisors.destroy', $operator->id) }}" method="POST"
-                                                      onsubmit="return confirm('Are you sure you want to delete this record?');">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button class="bg-red-600 h-10 hover:bg-red-700 text-white px-3 py-1 rounded text-sm">Delete</button>
-                                                </form>
-
+                                                <button
+                                                    class="bg-green-600 h-10 hover:bg-green-700 text-white px-3 py-1 rounded text-sm"
+                                                    onclick="editRow('row1')">Edit</button>
+                                                <button
+                                                    class="bg-blue-600 h-10 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm hidden"
+                                                    onclick="saveRow('row1')">Save</button>
+                                                <button
+                                                    class="bg-red-600 h-10 hover:bg-red-700 text-white px-3 py-1 rounded text-sm">Delete</button>
                                             </div>
                                         </td>
                                     </tr>
-                                @endforeach
                                 </tbody>
-
                             </table>
                             <div class="py-6 flex justify-center">
 
@@ -122,7 +119,7 @@
                                         class="text-2xl font-semibold mb-8 text-blue-900 mt-4 dark:text-gray-100 text-center">
                                         Add New Operator or Supervisor
                                     </h2>
-                                    <form action="{{route('operatorsandSupervisors.store')}}" method="POST" enctype="multipart/form-data">
+                                    <form action="" method="POST" enctype="multipart/form-data">
                                         @csrf
                                         <div class="space-y-4">
 
@@ -145,21 +142,21 @@
 
                                             <div class="flex gap-4">
                                                 <div class="w-1/2">
-                                                    <label for="phoneNo"
+                                                    <label for="telephoneno"
                                                         class="block text-sm font-medium text-gray-700 dark:text-gray-300">Telephone
                                                         No</label>
-                                                    <input id="phoneNo" type="text" name="phoneNo" required
+                                                    <input id="telephoneno" type="text" name="telephoneno" required
                                                         class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                 </div>
                                                 <div class="w-1/2">
-                                                    <label for="role"
+                                                    <label for="responsible_role"
                                                         class="block text-sm font-medium text-gray-700 dark:text-gray-300">Responsible
                                                         Role</label>
-                                                    <select id="role" name="role" required
+                                                    <select id="responsible_role" name="responsible_role" required
                                                         class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                         <option value="">-- Select Role --</option>
-                                                        <option value="OPERATOR">Operator</option>
-                                                        <option value="SUPERVISOR">Supervisor</option>
+                                                        <option value="Operator">Operator</option>
+                                                        <option value="Supervisor">Supervisor</option>
                                                     </select>
                                                 </div>
                                             </div>

@@ -3,7 +3,7 @@
 
         {{-- Pagination Links --}}
         <nav role="navigation">
-            <ul class="inline-flex items-center space-x-1 text-sm">
+            <ul class="inline-flex items-center space-x-1 text-sm mb-2">
                 {{-- Previous Page --}}
                 @if ($paginator->onFirstPage())
                     <li>
