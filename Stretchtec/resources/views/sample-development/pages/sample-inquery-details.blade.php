@@ -541,7 +541,7 @@
                                                 <!-- Customer Comments -->
                                                 <td
                                                     class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
-                                                    <span class="readonly">{{ $inquiry->customerSpecialComment }}</span>
+                                                    <span class="readonly">{{ $inquiry->customerSpecialComment ?? 'N/A' }}</span>
                                                     <input type="text"
                                                         class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                         value="{{ $inquiry->customerSpecialComment }}" />
@@ -647,7 +647,7 @@
                                                             @endif
                                                         </div>
                                                     @else
-                                                        {{-- Show nothing --}}
+                                                        N/A
                                                     @endif
                                                 </td>
 
