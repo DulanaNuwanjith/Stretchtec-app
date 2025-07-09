@@ -97,6 +97,7 @@ class OperatorsandSupervisorsController extends Controller
      */
     public function update(Request $request, OperatorsandSupervisors $operatorsandSupervisors)
     {
+
         try {
             $validatedData = $request->validate([
                 'empID' => [

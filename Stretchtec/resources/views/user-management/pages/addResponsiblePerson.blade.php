@@ -161,7 +161,7 @@
                                             <span class="readonly">{{ $operator->empID }}</span>
                                             <input name="empID"
                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                   value="{{ $operator->empID }}" readonly />
+                                                   value="{{ $operator->empID }}" required form="update-form-{{ $operator->id }}" />
                                         </td>
 
                                         <!-- Name -->
