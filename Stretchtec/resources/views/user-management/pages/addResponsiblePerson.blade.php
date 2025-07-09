@@ -42,10 +42,13 @@
                                             class="px-4 py-3 w-40 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                             Name</th>
                                         <th
+                                            class="px-4 py-3 w-40 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                            Responsible Role</th>
+                                        <th
                                             class="px-4 py-3 w-36 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                             Telephone No</th>
                                         <th
-                                            class="px-4 py-3 w-40 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                            class="px-4 py-3 w-48 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                             Address</th>
                                         <th
                                             class="px-4 py-3 w-48 text-xs text-center font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
@@ -67,6 +70,12 @@
                                             <input type="text"
                                                 class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                 value="Dulana Nuwanjith" />
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-normal break-words">
+                                            <span class="readonly">Operator</span>
+                                            <input type="text"
+                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                value="Operator" />
                                         </td>
                                         <td class="px-4 py-3 whitespace-normal break-words">
                                             <span class="readonly">0777137830</span>
@@ -138,6 +147,17 @@
                                                         No</label>
                                                     <input id="telephoneno" type="text" name="telephoneno" required
                                                         class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                </div>
+                                                <div class="w-1/2">
+                                                    <label for="responsible_role"
+                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Responsible
+                                                        Role</label>
+                                                    <select id="responsible_role" name="responsible_role" required
+                                                        class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                        <option value="">-- Select Role --</option>
+                                                        <option value="Operator">Operator</option>
+                                                        <option value="Supervisor">Supervisor</option>
+                                                    </select>
                                                 </div>
                                             </div>
 
