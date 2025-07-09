@@ -110,7 +110,7 @@
                             <div id="filterFormContainer" class="hidden mt-4">
                                 <!-- Filter Form -->
                                 <form id="filterForm1" method="GET" action="{{ route('sample-inquery-details.index') }}"
-                                    class="mb-6 flex gap-6 items-center">
+                                    class="mb-6 sticky top-0 z-20 flex gap-6 items-center">
                                     <div class="flex items-center gap-4 flex-wrap">
 
                                         <!-- CUSTOMER DROPDOWN -->
