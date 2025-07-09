@@ -827,27 +827,34 @@
                                                 </td>
 
                                                 <!-- Actions -->
-                                                <td class="px-4 py-3 whitespace-normal break-words text-center ">
+                                                <td class="px-4 py-3 whitespace-normal break-words text-center">
                                                     <div class="flex space-x-2 justify-center">
-                                                        <button
-                                                            class="edit-btn bg-green-600 h-10 hover:bg-green-700 text-white px-3 py-1 rounded text-sm"
-                                                            onclick="editRow('row{{ $inquiry->id }}')">Edit</button>
+
+                                                        @if (Auth::user()->role === 'Super_admin')
+                                                            <button
+                                                                class="edit-btn bg-green-600 h-10 hover:bg-green-700 text-white px-3 py-1 rounded text-sm"
+                                                                onclick="editRow('row{{ $inquiry->id }}')">
+                                                                Edit
+                                                            </button>
+                                                        @endif
 
                                                         <button
                                                             class="save-btn bg-blue-600 h-10 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm hidden"
-                                                            onclick="saveRow('row{{ $inquiry->id }}')">Save</button>
+                                                            onclick="saveRow('row{{ $inquiry->id }}')">
+                                                            Save
+                                                        </button>
 
                                                         <div class="flex items-center justify-center">
                                                             @if ($inquiry->orderFile)
                                                                 <a href="{{ asset('storage/' . $inquiry->orderFile) }}"
-                                                                    target="_blank"
-                                                                    class="bg-gray-600 h-10 w-20 hover:bg-gray-700 text-white px-3 py-2 rounded text-sm">
+                                                                   target="_blank"
+                                                                   class="bg-gray-600 h-10 w-20 hover:bg-gray-700 text-white px-3 py-2 rounded text-sm">
                                                                     View
                                                                 </a>
                                                             @else
                                                                 <button type="button"
-                                                                    class="bg-gray-300 h-10 w-20 text-gray-500 px-3 py-1 rounded text-sm cursor-not-allowed"
-                                                                    disabled>
+                                                                        class="bg-gray-300 h-10 w-20 text-gray-500 px-3 py-1 rounded text-sm cursor-not-allowed"
+                                                                        disabled>
                                                                     No File
                                                                 </button>
                                                             @endif
@@ -855,6 +862,7 @@
 
                                                     </div>
                                                 </td>
+
                                             </tr>
                                         @endforeach
                                     </tbody>
