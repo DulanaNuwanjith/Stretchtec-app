@@ -42,7 +42,7 @@
                                             Name</th>
                                         <th
                                             class="px-4 py-3 w-40 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                            Role</th>    
+                                            Role</th>
                                         <th
                                             class="px-4 py-3 w-36 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                             Email</th>
@@ -52,48 +52,59 @@
                                     </tr>
                                 </thead>
                                 <tbody id="serviceRecords"
-                                    class="bg-white dark:bg-gray-800 divide-y text-left divide-gray-200 dark:divide-gray-700">
-                                    <tr id="row1">
-                                        <!-- Each cell has a span for readonly text and a hidden input for editing -->
+                                       class="bg-white dark:bg-gray-800 divide-y text-left divide-gray-200 dark:divide-gray-700">
+
+                                @foreach ($users as $index => $user)
+                                    @php
+                                        $rowId = 'row' . ($index + 1);
+                                    @endphp
+                                    <tr id="{{ $rowId }}">
                                         <td class="px-4 py-3 w-24 whitespace-normal break-words">
-                                            <span class="readonly">1880</span>
-                                            <input
-                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                value="1880" />
+                                            <span class="readonly">{{ $user->id }}</span>
+                                            <input class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                   value="{{ $user->id }}" />
                                         </td>
                                         <td class="px-4 py-3 w-40 whitespace-normal break-words">
-                                            <span class="readonly">Dulana Nuwanjith</span>
-                                            <input type="text"
-                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                value="Dulana Nuwanjith" />
+                                            <span class="readonly">{{ $user->name }}</span>
+                                            <input type="text" class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                   value="{{ $user->name }}" />
                                         </td>
                                         <td class="px-4 py-3 w-40 whitespace-normal break-words">
-                                            <span class="readonly">Admin</span>
-                                            <input type="text"
-                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                value="Admin" />
+                                        <span class="readonly">
+                                            {{ ($user->role ?? 'N/A') }}
+                                        </span>
+                                                                    <input type="text" class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                   value="{{ ($user->role ?? 'N/A') }}" />
                                         </td>
                                         <td class="px-4 py-3 w-32 whitespace-normal break-words">
-                                            <span class="readonly">dulana69@gmail.com</span>
-                                            <input type="email"
-                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                value="dulana69@gmail.com" />
-                                        </td>
+                                            <span class="readonly">{{ $user->email }}</span>
+                                            <input type="email" class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                   value="{{ $user->email }}" />
                                         </td>
                                         <td class="px-4 py-3 w-48 text-center whitespace-normal break-words">
                                             <div class="flex space-x-2 justify-center">
-                                                <button
-                                                    class="bg-green-600 h-10 hover:bg-green-700 text-white px-3 py-1 rounded text-sm"
-                                                    onclick="editRow('row1')">Edit</button>
-                                                <button
-                                                    class="bg-blue-600 h-10 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm hidden"
-                                                    onclick="saveRow('row1')">Save</button>
-                                                <button
-                                                    class="bg-red-600 h-10 hover:bg-red-700 text-white px-3 py-1 rounded text-sm">Delete</button>
+                                                <button class="bg-green-600 h-10 hover:bg-green-700 text-white px-3 py-1 rounded text-sm"
+                                                        onclick="editRow('{{ $rowId }}')">Edit</button>
+                                                <button class="bg-blue-600 h-10 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm hidden"
+                                                        onclick="saveRow('{{ $rowId }}')">Save</button>
+                                                <form action="{{route('userDetails.destroy', $user->id)}} " method="POST"
+                                                      onsubmit="return confirm('Are you sure you want to delete this user?');">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button class="bg-red-600 h-10 hover:bg-red-700 text-white px-3 py-1 rounded text-sm">Delete</button>
+                                                </form>
                                             </div>
                                         </td>
                                     </tr>
+                                @endforeach
+
+                                @if ($users->isEmpty())
+                                    <tr>
+                                        <td colspan="5" class="text-center py-4 text-red-500">No users found.</td>
+                                    </tr>
+                                @endif
                                 </tbody>
+
                             </table>
                             <div class="py-6 flex justify-center">
 

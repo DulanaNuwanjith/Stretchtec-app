@@ -29,6 +29,16 @@ Route::middleware([
     Route::patch('/sample-inquery-details/{id}/update-decision', [SampleInquiryController::class, 'updateDecision'])
         ->name('sample-inquery-details.update-decision');
 
+    //Operators and Supervisors routes
+    Route::resource('operatorsandSupervisors', 'App\Http\Controllers\OperatorsandSupervisorsController')->names([
+        'index' => 'operatorsandSupervisors.index',
+        'store' => 'operatorsandSupervisors.store',
+        'update' => 'operatorsandSupervisors.update',
+        'destroy' => 'operatorsandSupervisors.destroy',
+    ]);
+    Route::get('/userDetails', [\App\Http\Controllers\UserMananagementController::class, 'index'])->name('userDetails.index');
+    Route::delete('/userDetails/{id}', [\App\Http\Controllers\UserMananagementController::class, 'destroy'])->name('userDetails.destroy');
+
 });
 
 Route::get('productCatalog', function () {
@@ -46,10 +56,6 @@ Route::get('reports', function () {
 Route::get('sampleStockManagement', function () {
     return view('sample-development.sample-stock-management');
 })->name('sampleStockManagement.index');
-
-//Route::get('sample-inquery-details', function () {
-//    return view('sample-development.pages.sample-inquery-details');
-//})->name('sample-inquery-details.index');
 
 Route::get('sample-preparation-details', function () {
     return view('sample-development.pages.sample-preparation-details');
@@ -78,12 +84,4 @@ Route::get('production-inquery-details', function () {
 Route::get('production-order-preparation', function () {
     return view('production.pages.production-order-preparation');
 })->name('production-order-preparation.index');
-
-Route::get('userDetails', function () {
-    return view('user-management.pages.userDetails');
-})->name('userDetails.index');
-
-Route::get('addResponsiblePerson', function () {
-    return view('user-management.pages.addResponsiblePerson');
-})->name('addResponsiblePerson.index');
 
