@@ -147,48 +147,52 @@
                                     </tr>
                                 </thead>
                                 <tbody id="serviceRecords"
-                                       class="bg-white dark:bg-gray-800 divide-y text-left divide-gray-200 dark:divide-gray-700">
+                                    class="bg-white dark:bg-gray-800 divide-y text-left divide-gray-200 dark:divide-gray-700">
 
-                                @foreach ($users as $index => $user)
-                                    @php
-                                        $rowId = 'row' . ($index + 1);
-                                    @endphp
-                                    <tr id="{{ $rowId }}">
-                                        <td class="px-4 py-3 w-24 whitespace-normal break-words">
-                                            <span class="readonly">{{ $user->id }}</span>
-                                            <input class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                   value="{{ $user->id }}" />
-                                        </td>
-                                        <td class="px-4 py-3 w-40 whitespace-normal break-words">
-                                            <span class="readonly">{{ $user->name }}</span>
-                                            <input type="text" class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                   value="{{ $user->name }}" />
-                                        </td>
-                                        <td class="px-4 py-3 w-40 whitespace-normal break-words">
-                                        <span class="readonly">
-                                            {{ ($user->role ?? 'N/A') }}
-                                        </span>
-                                                                    <input type="text" class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                   value="{{ ($user->role ?? 'N/A') }}" />
-                                        </td>
-                                        <td class="px-4 py-3 w-32 whitespace-normal break-words">
-                                            <span class="readonly">{{ $user->email }}</span>
-                                            <input type="email" class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                   value="{{ $user->email }}" />
-                                        </td>
-                                        <td class="px-4 py-3 w-48 text-center whitespace-normal break-words">
-                                            <div class="flex space-x-2 justify-center">
-                                                <button class="bg-green-600 h-10 hover:bg-green-700 text-white px-3 py-1 rounded text-sm"
+                                    @foreach ($users as $index => $user)
+                                        @php
+                                            $rowId = 'row' . ($index + 1);
+                                        @endphp
+                                        <tr id="{{ $rowId }}">
+                                            <td class="px-4 py-3 w-24 whitespace-normal break-words">
+                                                <span class="readonly">{{ $user->id }}</span>
+                                                <input
+                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                    value="{{ $user->id }}" />
+                                            </td>
+                                            <td class="px-4 py-3 w-40 whitespace-normal break-words">
+                                                <span class="readonly">{{ $user->name }}</span>
+                                                <input type="text"
+                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                    value="{{ $user->name }}" />
+                                            </td>
+                                            <td class="px-4 py-3 w-40 whitespace-normal break-words">
+                                                <span class="readonly">
+                                                    {{ $user->role ?? 'N/A' }}
+                                                </span>
+                                                <input type="text"
+                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                    value="{{ $user->role ?? 'N/A' }}" />
+                                            </td>
+                                            <td class="px-4 py-3 w-32 whitespace-normal break-words">
+                                                <span class="readonly">{{ $user->email }}</span>
+                                                <input type="email"
+                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                    value="{{ $user->email }}" />
+                                            </td>
+                                            <td class="px-4 py-3 w-48 text-center whitespace-normal break-words">
+                                                <div class="flex space-x-2 justify-center">
+                                                    {{-- <button class="bg-green-600 h-10 hover:bg-green-700 text-white px-3 py-1 rounded text-sm"
                                                         onclick="editRow('{{ $rowId }}')">Edit</button>
                                                 <button class="bg-blue-600 h-10 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm hidden"
                                                         onclick="saveRow('{{ $rowId }}')">Save</button>
-                                                {{-- <form action="{{route('userDetails.destroy', $user->id)}} " method="POST"
+                                                <form action="{{route('userDetails.destroy', $user->id)}} " method="POST"
                                                       onsubmit="return confirm('Are you sure you want to delete this user?');">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button class="bg-red-600 h-10 hover:bg-red-700 text-white px-3 py-1 rounded text-sm">Delete</button>
                                                 </form> --}}
-                                                <form id="delete-form-{{ $user->id }}"
+                                                    <form id="delete-form-{{ $user->id }}"
                                                         action="{{ route('userDetails.destroy', $user->id) }}"
                                                         method="POST" class="inline-block">
                                                         @csrf
@@ -199,16 +203,16 @@
                                                             Delete
                                                         </button>
                                                     </form>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                @endforeach
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @endforeach
 
-                                @if ($users->isEmpty())
-                                    <tr>
-                                        <td colspan="5" class="text-center py-4 text-red-500">No users found.</td>
-                                    </tr>
-                                @endif
+                                    @if ($users->isEmpty())
+                                        <tr>
+                                            <td colspan="5" class="text-center py-4 text-red-500">No users found.</td>
+                                        </tr>
+                                    @endif
                                 </tbody>
 
                             </table>
@@ -407,26 +411,4 @@
             row.querySelector('button.bg-blue-600').classList.add('hidden'); // Hide Save button
         }
     </script>
-    <script>
-    function togglePassword() {
-        const passwordInput = document.getElementById('password');
-        const eyeIcon = document.getElementById('eyeIcon');
-
-        if (passwordInput.type === 'password') {
-            passwordInput.type = 'text';
-            eyeIcon.innerHTML = `
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-          d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-          d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-      `;
-        } else {
-            passwordInput.type = 'password';
-            eyeIcon.innerHTML = `
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-          d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7a9.955 9.955 0 012.188-3.368M6.72 6.72A9.964 9.964 0 0112 5c4.477 0 8.267 2.943 9.541 7a9.966 9.966 0 01-4.292 5.222M15 12a3 3 0 00-4.243-2.828M9.878 9.878a3 3 0 004.243 4.243M3 3l18 18" />
-      `;
-        }
-    }
-</script>
 @endsection
