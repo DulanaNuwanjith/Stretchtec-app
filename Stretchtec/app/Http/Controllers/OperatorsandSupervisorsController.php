@@ -47,7 +47,7 @@ class OperatorsandSupervisorsController extends Controller
                 'name' => 'required|string|max:255',
                 'phoneNo' => 'required|string|max:15',
                 'address' => 'nullable|string|max:255',
-                'role' => 'required|in:OPERATOR`,SUPERVISOR',
+                'role' => 'required' . '|in:OPERATOR,SUPERVISOR',
             ]);
 
             // Only fill fields that are necessary
