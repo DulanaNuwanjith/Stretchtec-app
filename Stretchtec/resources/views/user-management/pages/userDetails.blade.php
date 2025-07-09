@@ -182,12 +182,6 @@
                                                         onclick="editRow('{{ $rowId }}')">Edit</button>
                                                 <button class="bg-blue-600 h-10 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm hidden"
                                                         onclick="saveRow('{{ $rowId }}')">Save</button>
-                                                {{-- <form action="{{route('userDetails.destroy', $user->id)}} " method="POST"
-                                                      onsubmit="return confirm('Are you sure you want to delete this user?');">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button class="bg-red-600 h-10 hover:bg-red-700 text-white px-3 py-1 rounded text-sm">Delete</button>
-                                                </form> --}}
                                                 <form id="delete-form-{{ $user->id }}"
                                                         action="{{ route('userDetails.destroy', $user->id) }}"
                                                         method="POST" class="inline-block">

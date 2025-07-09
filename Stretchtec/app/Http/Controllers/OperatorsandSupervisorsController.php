@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\OperatorsandSupervisors;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
 class OperatorsandSupervisorsController extends Controller
@@ -97,36 +98,35 @@ class OperatorsandSupervisorsController extends Controller
     public function update(Request $request, OperatorsandSupervisors $operatorsandSupervisors)
     {
         try {
-            // Validate incoming request
             $validatedData = $request->validate([
-                'empID' => 'required|unique:operatorsand_supervisors,empID,' . $operatorsandSupervisors->id,
+                'empID' => [
+                    'required',
+                    Rule::unique('operatorsand_supervisors', 'empID')->ignore($operatorsandSupervisors->id),
+                ],
                 'name' => 'required|string|max:255',
                 'phoneNo' => 'required|string|max:15',
                 'address' => 'nullable|string|max:255',
-                'role' => 'required|in:operator,supervisor',
+                'role' => 'required|in:OPERATOR,SUPERVISOR',
             ]);
 
-            // Update the operator or supervisor
-            $operatorsandSupervisors->update($validatedData);
+            $updated = $operatorsandSupervisors->update($validatedData);
 
-            return response()->json([
-                'message' => 'Operator or Supervisor updated successfully'
-            ], 200);
+            if ($updated) {
+                return redirect()->back()->with('success', 'Operator or Supervisor updated successfully.');
+            } else {
+                Log::warning("Update failed for Operator or Supervisor ID: " . $operatorsandSupervisors->id);
+                return redirect()->back()->with('error', 'Update failed. Please try again.');
+            }
 
         } catch (ValidationException $e) {
-            // Return validation error messages
-            return response()->json([
-                'message' => 'Validation failed',
-                'errors' => $e->errors()
-            ], 422);
+            Log::error('Validation failed for Operator or Supervisor update: ' . $e->getMessage());
+            return redirect()->back()
+                ->withErrors($e->validator)
+                ->withInput();
 
         } catch (\Exception $e) {
-            // Log unexpected errors
-            Log::error('Failed to update Operator or Supervisor: ' . $e->getMessage());
-
-            return response()->json([
-                'message' => 'An unexpected error occurred. Please try again later.'
-            ], 500);
+            Log::error('Unexpected error during Operator or Supervisor update: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'An unexpected error occurred while updating the Operator or Supervisor.');
         }
     }
 
