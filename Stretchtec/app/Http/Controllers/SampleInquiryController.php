@@ -125,8 +125,8 @@ class SampleInquiryController extends Controller
                 'customerSpecialComment' => $validated['customer_comments'] ?? null,
                 'customerRequestDate' => $validated['customer_requested_date'] ?? null,
                 'alreadyDeveloped' => false,
-                'productionStatus' => 'pending',
-                'customerDecision' => 'pending',
+                'productionStatus' => 'Pending',
+                'customerDecision' => 'Pending',
             ]);
 
             return redirect()->back()->with('success', 'Sample Inquiry Created Successfully!');
