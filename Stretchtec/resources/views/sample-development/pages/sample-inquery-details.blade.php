@@ -830,7 +830,7 @@
                                                 <td class="px-4 py-3 whitespace-normal break-words text-center">
                                                     <div class="flex space-x-2 justify-center">
 
-                                                        @if (Auth::user()->role === 'Super_admin')
+                                                        @if (Auth::user()->role === 'SUPERADMIN')
                                                             <button
                                                                 class="edit-btn bg-green-600 h-10 hover:bg-green-700 text-white px-3 py-1 rounded text-sm"
                                                                 onclick="editRow('row{{ $inquiry->id }}')">
