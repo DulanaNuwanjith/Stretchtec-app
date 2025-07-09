@@ -1,4 +1,5 @@
 @extends('layouts.add-user-tabs')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 @section('content')
     <div class="flex-1 overflow-y-auto">
@@ -6,20 +7,113 @@
             <div class="w-full px-6 lg:px-2">
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-4 text-gray-900 dark:text-gray-100">
+                        <style>
+                            .swal2-toast {
+                                font-size: 0.875rem;
+                                padding: 0.75rem 1rem;
+                                border-radius: 8px;
+                                background-color: #ffffff !important;
+                                position: relative;
+                                box-sizing: border-box;
+                                color: #3b82f6 !important;
+                            }
 
-                        @if (session('success'))
-                            <div
-                                class="mb-4 p-4 text-green-800 bg-green-100 border border-green-300 rounded-md dark:text-green-200 dark:bg-green-900 dark:border-green-800">
-                                {{ session('success') }}
-                            </div>
-                        @endif
+                            .swal2-toast .swal2-title,
+                            .swal2-toast .swal2-html-container {
+                                color: #3b82f6 !important;
+                            }
 
-                        @if (session('error'))
-                            <div
-                                class="mb-4 p-4 text-red-800 bg-red-100 border border-red-300 rounded-md dark:text-red-200 dark:bg-red-900 dark:border-red-800">
-                                {{ session('error') }}
-                            </div>
-                        @endif
+                            .swal2-toast .swal2-icon {
+                                color: #3b82f6 !important;
+                            }
+
+                            .swal2-shadow {
+                                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+                            }
+
+                            .swal2-toast::after {
+                                content: '';
+                                position: absolute;
+                                bottom: 0;
+                                left: 0;
+                                width: 100%;
+                                height: 3px;
+                                background-color: #3b82f6;
+                                border-radius: 0 0 8px 8px;
+                            }
+                        </style>
+
+                        <script>
+                            document.addEventListener('DOMContentLoaded', () => {
+                                @if (session('success'))
+                                    Swal.fire({
+                                        toast: true,
+                                        position: 'top-end',
+                                        icon: 'success',
+                                        title: '{{ session('success') }}',
+                                        showConfirmButton: false,
+                                        timer: 2000,
+                                        timerProgressBar: true,
+                                        customClass: {
+                                            popup: 'swal2-toast swal2-shadow'
+                                        },
+                                    });
+                                @endif
+
+                                @if (session('error'))
+                                    Swal.fire({
+                                        toast: true,
+                                        position: 'top-end',
+                                        icon: 'error',
+                                        title: '{{ session('error') }}',
+                                        showConfirmButton: false,
+                                        timer: 2000,
+                                        timerProgressBar: true,
+                                        customClass: {
+                                            popup: 'swal2-toast swal2-shadow'
+                                        },
+                                    });
+                                @endif
+
+                                @if ($errors->any())
+                                    Swal.fire({
+                                        toast: true,
+                                        position: 'top-end',
+                                        icon: 'warning',
+                                        title: 'Validation Errors',
+                                        html: `{!! implode('<br>', $errors->all()) !!}`,
+                                        showConfirmButton: false,
+                                        timer: 3000,
+                                        timerProgressBar: true,
+                                        customClass: {
+                                            popup: 'swal2-toast swal2-shadow'
+                                        },
+                                    });
+                                @endif
+                            });
+                        </script>
+                        <script>
+                            function confirmDelete(id) {
+                                Swal.fire({
+                                    title: 'Are you sure?',
+                                    text: "This record will be permanently deleted!",
+                                    icon: 'warning',
+                                    showCancelButton: true,
+                                    confirmButtonColor: '#e3342f',
+                                    cancelButtonColor: '#6c757d',
+                                    confirmButtonText: 'Yes, delete it!',
+                                    background: '#ffffff',
+                                    color: '#3b82f6',
+                                    customClass: {
+                                        popup: 'swal2-toast swal2-shadow'
+                                    }
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        document.getElementById(`delete-form-${id}`).submit();
+                                    }
+                                });
+                            }
+                        </script>
 
                         <div class="flex justify-between items-center mb-6">
                             <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Operators & Supervisors Details
@@ -56,60 +150,72 @@
                                     </tr>
                                 </thead>
                                 <tbody id="serviceRecords"
-                                       class="bg-white dark:bg-gray-800 divide-y text-left divide-gray-200 dark:divide-gray-700">
+                                    class="bg-white dark:bg-gray-800 divide-y text-left divide-gray-200 dark:divide-gray-700">
 
-                                @foreach ($operatorsAndSupervisors as $index => $operator)
-                                    @php
-                                        $rowId = 'row' . ($index + 1);
-                                    @endphp
-                                    <tr id="{{ $rowId }}">
-                                        <td class="px-4 py-3 whitespace-normal break-words">
-                                            <span class="readonly">{{ $operator->empID }}</span>
-                                            <input class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                   value="{{ $operator->empID }}" />
-                                        </td>
-                                        <td class="px-4 py-3 whitespace-normal break-words">
-                                            <span class="readonly">{{ $operator->name }}</span>
-                                            <input type="text" class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                   value="{{ $operator->name }}" />
-                                        </td>
-                                        <td class="px-4 py-3 whitespace-normal break-words">
-                                            <span class="readonly">{{ ucfirst($operator->role) }}</span>
-                                            <input type="text" class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                   value="{{ $operator->role }}" />
-                                        </td>
-                                        <td class="px-4 py-3 whitespace-normal break-words">
-                                            <span class="readonly">{{ $operator->phoneNo }}</span>
-                                            <input type="email" class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                   value="{{ $operator->phoneNo }}" />
-                                        </td>
-                                        <td class="px-4 py-3 whitespace-normal break-words">
-                                            <span class="readonly">{{ $operator->address }}</span>
-                                            <input type="text" class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                   value="{{ $operator->address }}" />
-                                        </td>
-                                        <td class="px-4 py-3 w-48 text-center whitespace-normal break-words">
-                                            <div class="flex space-x-2 justify-center">
-                                                <button class="bg-green-600 h-10 hover:bg-green-700 text-white px-3 py-1 rounded text-sm"
+                                    @foreach ($operatorsAndSupervisors as $index => $operator)
+                                        @php
+                                            $rowId = 'row' . ($index + 1);
+                                        @endphp
+                                        <tr id="{{ $rowId }}">
+                                            <td class="px-4 py-3 whitespace-normal break-words">
+                                                <span class="readonly">{{ $operator->empID }}</span>
+                                                <input
+                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                    value="{{ $operator->empID }}" />
+                                            </td>
+                                            <td class="px-4 py-3 whitespace-normal break-words">
+                                                <span class="readonly">{{ $operator->name }}</span>
+                                                <input type="text"
+                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                    value="{{ $operator->name }}" />
+                                            </td>
+                                            <td class="px-4 py-3 whitespace-normal break-words">
+                                                <span class="readonly">{{ ucfirst($operator->role) }}</span>
+                                                <input type="text"
+                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                    value="{{ $operator->role }}" />
+                                            </td>
+                                            <td class="px-4 py-3 whitespace-normal break-words">
+                                                <span class="readonly">{{ $operator->phoneNo }}</span>
+                                                <input type="email"
+                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                    value="{{ $operator->phoneNo }}" />
+                                            </td>
+                                            <td class="px-4 py-3 whitespace-normal break-words">
+                                                <span class="readonly">{{ $operator->address }}</span>
+                                                <input type="text"
+                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                    value="{{ $operator->address }}" />
+                                            </td>
+                                            <td class="px-4 py-3 w-48 text-center whitespace-normal break-words">
+                                                <div class="flex space-x-2 justify-center">
+                                                    <button
+                                                        class="bg-green-600 h-10 hover:bg-green-700 text-white px-3 py-1 rounded text-sm"
                                                         onclick="editRow('{{ $rowId }}')">Edit</button>
-                                                <button class="bg-blue-600 h-10 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm hidden"
+                                                    <button
+                                                        class="bg-blue-600 h-10 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm hidden"
                                                         onclick="saveRow('{{ $rowId }}')">Save</button>
-                                                <form action="{{ route('operatorsandSupervisors.destroy', $operator->id) }}" method="POST"
-                                                      onsubmit="return confirm('Are you sure you want to delete this record?');">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button class="bg-red-600 h-10 hover:bg-red-700 text-white px-3 py-1 rounded text-sm">Delete</button>
-                                                </form>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                @endforeach
+                                                    <form id="delete-form-{{ $operator->id }}"
+                                                        action="{{ route('operatorsandSupervisors.destroy', $operator->id) }}"
+                                                        method="POST" class="inline-block">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="button"
+                                                            onclick="confirmDelete('{{ $operator->id }}')"
+                                                            class="bg-red-600 h-10 hover:bg-red-700 text-white px-3 py-1 rounded text-sm">
+                                                            Delete
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @endforeach
                                 </tbody>
 
                             </table>
-                            <div class="py-6 flex justify-center">
-
-                            </div>
+                        </div>
+                        <div class="py-6 flex justify-center">
+                            {{ $operatorsAndSupervisors->links() }}
                         </div>
                         <!-- Add Product Modal -->
                         <div id="addNewOperatorSupervisorModal"
@@ -121,7 +227,8 @@
                                         class="text-2xl font-semibold mb-8 text-blue-900 mt-4 dark:text-gray-100 text-center">
                                         Add New Operator or Supervisor
                                     </h2>
-                                    <form action="{{route('operatorsandSupervisors.store')}}" method="POST" enctype="multipart/form-data">
+                                    <form action="{{ route('operatorsandSupervisors.store') }}" method="POST"
+                                        enctype="multipart/form-data">
                                         @csrf
                                         <div class="space-y-4">
 

@@ -15,7 +15,7 @@ class OperatorsandSupervisorsController extends Controller
     public function index()
     {
         try {
-            $operatorsAndSupervisors = OperatorsandSupervisors::all();
+            $operatorsAndSupervisors = OperatorsandSupervisors::paginate(10);
 
             // Return Blade view with data
             return view('user-management.pages.addResponsiblePerson', compact('operatorsAndSupervisors'));

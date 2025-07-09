@@ -12,7 +12,7 @@ class UserMananagementController extends Controller
     public function index()
     {
         try {
-            $users = User::all(); // Or use paginate() if too many
+            $users = User::paginate(10);
 
             return view('user-management.pages.userDetails', compact('users'));
 
