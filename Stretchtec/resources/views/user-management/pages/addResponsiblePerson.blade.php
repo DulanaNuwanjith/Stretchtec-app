@@ -210,7 +210,7 @@
                                             <!-- Actions -->
                                             <td class="px-4 py-3 text-center">
                                                 <div class="flex space-x-2 justify-center">
-                                                    <!-- Edit Button -->
+                                                    {{-- <!-- Edit Button -->
                                                     <button type="button"
                                                         class="edit-btn bg-green-600 h-10 hover:bg-green-700 text-white px-3 py-1 rounded text-sm"
                                                         onclick="toggleEdit('{{ $rowId }}')"
@@ -230,7 +230,7 @@
                                                             id="saveBtn-{{ $rowId }}">
                                                             Save
                                                         </button>
-                                                    </form>
+                                                    </form> --}}
                                                     <form id="delete-form-{{ $operator->id }}"
                                                         action="{{ route('userDetails.destroy', $operator->id) }}"
                                                         method="POST" class="inline-block">
@@ -445,28 +445,6 @@
 
             row.querySelector('button.bg-green-600').classList.remove('hidden'); // Show Edit button
             row.querySelector('button.bg-blue-600').classList.add('hidden'); // Hide Save button
-        }
-    </script>
-    <script>
-        function togglePassword() {
-            const passwordInput = document.getElementById('password');
-            const eyeIcon = document.getElementById('eyeIcon');
-
-            if (passwordInput.type === 'password') {
-                passwordInput.type = 'text';
-                eyeIcon.innerHTML = `
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-          d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-          d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-      `;
-            } else {
-                passwordInput.type = 'password';
-                eyeIcon.innerHTML = `
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-          d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7a9.955 9.955 0 012.188-3.368M6.72 6.72A9.964 9.964 0 0112 5c4.477 0 8.267 2.943 9.541 7a9.966 9.966 0 01-4.292 5.222M15 12a3 3 0 00-4.243-2.828M9.878 9.878a3 3 0 004.243 4.243M3 3l18 18" />
-      `;
-            }
         }
     </script>
 @endsection
