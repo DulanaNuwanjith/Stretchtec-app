@@ -20,6 +20,7 @@ Route::middleware([
     Route::resource('sampleInquiry', 'App\Http\Controllers\SampleInquiryController')->names([
         'index' => 'sample-inquery-details.index',
         'store' => 'sampleInquiry.store',
+        'destroy' => 'sampleInquiry.destroy',
     ]);
     Route::post('/sampleInquiry/update-developed-status', [SampleInquiryController::class, 'updateDevelopedStatus'])->name('inquiry.updateDevelopedStatus');
     Route::post('/sampleInquiry/mark-sent-to-sample-dev', [SampleInquiryController::class, 'markSentToSampleDevelopment'])

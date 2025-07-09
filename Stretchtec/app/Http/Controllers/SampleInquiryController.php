@@ -173,8 +173,15 @@ class SampleInquiryController extends Controller
      */
     public function destroy(SampleInquiry $sampleInquiry)
     {
-        //
+        try {
+            $sampleInquiry->delete(); // Use soft delete if enabled
+            return redirect()->back()->with('success', 'Sample Inquiry deleted successfully.');
+        } catch (\Exception $e) {
+            Log::error('Sample Inquiry Delete Error: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Failed to delete the inquiry.');
+        }
     }
+
 
     public function updateDevelopedStatus(Request $request)
     {

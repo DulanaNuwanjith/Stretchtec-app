@@ -98,6 +98,30 @@
                                     @endif
                                 });
                             </script>
+
+                            <script>
+                                function confirmDelete(id) {
+                                    Swal.fire({
+                                        title: 'Are you sure?',
+                                        text: "This record will be permanently deleted!",
+                                        icon: 'warning',
+                                        showCancelButton: true,
+                                        confirmButtonColor: '#3b82f6',
+                                        cancelButtonColor: '#6c757d',
+                                        confirmButtonText: 'Yes, delete it!',
+                                        background: '#ffffff',
+                                        color: '#3b82f6',
+                                        customClass: {
+                                            popup: 'swal2-toast swal2-shadow'
+                                        }
+                                    }).then((result) => {
+                                        if (result.isConfirmed) {
+                                            document.getElementById(`delete-form-${id}`).submit();
+                                        }
+                                    });
+                                }
+                            </script>
+
                             <div class="flex justify-start">
                                 <button onclick="toggleFilterForm()"
                                     class="bg-white border border-blue-500 text-blue-500 hover:text-blue-600 hover:border-blue-600 font-semibold py-1 px-3 rounded shadow flex items-center gap-2 mb-6">
@@ -434,7 +458,7 @@
                                                 class="px-4 py-3 w-56 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Already Developed & In Sample Stock</th>
                                             <th
-                                                class="px-4 py-3 w-40 text-xs font-medium uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">
+                                                class="px-4 py-3 w-48 text-xs font-medium uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">
                                                 Sent order to sample development</th>
                                             <th
                                                 class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
@@ -446,7 +470,7 @@
                                                 class="px-4 py-3 w-48 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Reference No</th>
                                             <th
-                                                class="px-4 py-3 w-40 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="px-4 py-3 w-48 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Customer Delivery Status</th>
                                             <th
                                                 class="px-4 py-3 w-56 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
@@ -455,7 +479,7 @@
                                                 class="px-4 py-3 w-72 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Note</th>
                                             <th
-                                                class="px-4 py-3 w-48 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="px-4 py-3 w-64 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Action</th>
                                         </tr>
                                     </thead>
@@ -541,24 +565,27 @@
                                                 <!-- Customer Comments -->
                                                 <td
                                                     class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
-                                                    <span class="readonly">{{ $inquiry->customerSpecialComment ?? 'N/A' }}</span>
+                                                    <span
+                                                        class="readonly">{{ $inquiry->customerSpecialComment ?? 'N/A' }}</span>
                                                     <input type="text"
                                                         class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                         value="{{ $inquiry->customerSpecialComment }}" />
                                                 </td>
 
                                                 <!-- Requested Date -->
-                                                <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                                <td
+                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
                                                     @if ($inquiry->customerRequestDate)
-                                                        <span class="readonly">{{ $inquiry->customerRequestDate->format('Y-m-d') }}</span>
+                                                        <span
+                                                            class="readonly">{{ $inquiry->customerRequestDate->format('Y-m-d') }}</span>
                                                         <input type="date"
-                                                               class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                               value="{{ $inquiry->customerRequestDate->format('Y-m-d') }}" />
+                                                            class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                            value="{{ $inquiry->customerRequestDate->format('Y-m-d') }}" />
                                                     @else
                                                         <span class="readonly">N/A</span>
                                                         <input type="date"
-                                                               class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                               value="" />
+                                                            class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                            value="" />
                                                     @endif
                                                 </td>
 
@@ -828,8 +855,7 @@
 
                                                 <!-- Actions -->
                                                 <td class="px-4 py-3 whitespace-normal break-words text-center">
-                                                    <div class="flex space-x-2 justify-center">
-
+                                                    <div class="flex space-x-2 justify-center items-center">
                                                         @if (Auth::user()->role === 'SUPERADMIN')
                                                             <button
                                                                 class="edit-btn bg-green-600 h-10 hover:bg-green-700 text-white px-3 py-1 rounded text-sm"
@@ -844,24 +870,35 @@
                                                             Save
                                                         </button>
 
-                                                        <div class="flex items-center justify-center">
-                                                            @if ($inquiry->orderFile)
-                                                                <a href="{{ asset('storage/' . $inquiry->orderFile) }}"
-                                                                   target="_blank"
-                                                                   class="bg-gray-600 h-10 w-20 hover:bg-gray-700 text-white px-3 py-2 rounded text-sm">
-                                                                    View
-                                                                </a>
-                                                            @else
+                                                        @if ($inquiry->orderFile)
+                                                            <a href="{{ asset('storage/' . $inquiry->orderFile) }}"
+                                                                target="_blank"
+                                                                class="bg-gray-600 h-10 w-20 hover:bg-gray-700 text-white px-3 py-2 rounded text-sm flex items-center justify-center">
+                                                                View
+                                                            </a>
+                                                        @else
+                                                            <button type="button"
+                                                                class="bg-gray-300 h-10 w-20 text-gray-500 px-3 py-1 rounded text-sm cursor-not-allowed"
+                                                                disabled>
+                                                                No File
+                                                            </button>
+                                                        @endif
+                                                        @if (Auth::user()->role === 'SUPERADMIN')
+                                                            <form id="delete-form-{{ $inquiry->id }}"
+                                                                action="{{ route('sampleInquiry.destroy', $inquiry->id) }}"
+                                                                method="POST" class="flex items-center">
+                                                                @csrf
+                                                                @method('DELETE')
                                                                 <button type="button"
-                                                                        class="bg-gray-300 h-10 w-20 text-gray-500 px-3 py-1 rounded text-sm cursor-not-allowed"
-                                                                        disabled>
-                                                                    No File
+                                                                    onclick="confirmDelete('{{ $inquiry->id }}')"
+                                                                    class="bg-red-600 h-10 hover:bg-red-700 text-white px-3 py-1 rounded text-sm">
+                                                                    Delete
                                                                 </button>
-                                                            @endif
-                                                        </div>
-
+                                                            </form>
+                                                        @endif
                                                     </div>
                                                 </td>
+
 
                                             </tr>
                                         @endforeach
