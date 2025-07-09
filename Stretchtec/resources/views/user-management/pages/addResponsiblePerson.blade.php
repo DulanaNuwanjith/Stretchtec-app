@@ -99,7 +99,7 @@
                                     text: "This record will be permanently deleted!",
                                     icon: 'warning',
                                     showCancelButton: true,
-                                    confirmButtonColor: '#e3342f',
+                                    confirmButtonColor: '#3b82f6',
                                     cancelButtonColor: '#6c757d',
                                     confirmButtonText: 'Yes, delete it!',
                                     background: '#ffffff',
