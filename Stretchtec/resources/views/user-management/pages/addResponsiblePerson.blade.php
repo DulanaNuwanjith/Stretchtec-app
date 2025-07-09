@@ -73,9 +73,11 @@
                                         </td>
                                         <td class="px-4 py-3 whitespace-normal break-words">
                                             <span class="readonly">Operator</span>
-                                            <input type="text"
-                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                value="Operator" />
+                                            <select
+                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                <option value="Operator" selected>Operator</option>
+                                                <option value="Supervisor">Supervisor</option>
+                                            </select>
                                         </td>
                                         <td class="px-4 py-3 whitespace-normal break-words">
                                             <span class="readonly">0777137830</span>
