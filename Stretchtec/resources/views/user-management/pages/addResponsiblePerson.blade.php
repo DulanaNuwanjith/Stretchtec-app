@@ -150,82 +150,102 @@
                                     </tr>
                                 </thead>
                                 <tbody id="serviceRecords"
-                                       class="bg-white dark:bg-gray-800 divide-y text-left divide-gray-200 dark:divide-gray-700">
+                                    class="bg-white dark:bg-gray-800 divide-y text-left divide-gray-200 dark:divide-gray-700">
 
-                                @foreach ($operatorsAndSupervisors as $index => $operator)
-                                    @php $rowId = 'row' . ($index + 1); @endphp
+                                    @foreach ($operatorsAndSupervisors as $index => $operator)
+                                        @php $rowId = 'row' . ($index + 1); @endphp
 
-                                    <tr id="{{ $rowId }}">
-                                        <!-- Employee ID -->
-                                        <td class="px-4 py-3">
-                                            <span class="readonly">{{ $operator->empID }}</span>
-                                            <input name="empID"
-                                                   class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                   value="{{ $operator->empID }}" required form="update-form-{{ $operator->id }}" />
-                                        </td>
+                                        <tr id="{{ $rowId }}">
+                                            <!-- Employee ID -->
+                                            <td class="px-4 py-3">
+                                                <span class="readonly">{{ $operator->empID }}</span>
+                                                <input name="empID"
+                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                    value="{{ $operator->empID }}" required
+                                                    form="update-form-{{ $operator->id }}" />
+                                            </td>
 
-                                        <!-- Name -->
-                                        <td class="px-4 py-3">
-                                            <span class="readonly">{{ $operator->name }}</span>
-                                            <input name="name"
-                                                   class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                   value="{{ $operator->name }}" required form="update-form-{{ $operator->id }}" />
-                                        </td>
+                                            <!-- Name -->
+                                            <td class="px-4 py-3">
+                                                <span class="readonly">{{ $operator->name }}</span>
+                                                <input name="name"
+                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                    value="{{ $operator->name }}" required
+                                                    form="update-form-{{ $operator->id }}" />
+                                            </td>
 
-                                        <!-- Role -->
-                                        <td class="px-4 py-3">
-                                            <span class="readonly">{{ ucfirst($operator->role) }}</span>
-                                            <select name="role"
+                                            <!-- Role -->
+                                            <td class="px-4 py-3">
+                                                <span class="readonly">{{ ucfirst($operator->role) }}</span>
+                                                <select name="role"
                                                     class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                     required form="update-form-{{ $operator->id }}">
-                                                <option value="OPERATOR" {{ $operator->role === 'OPERATOR' ? 'selected' : '' }}>Operator</option>
-                                                <option value="SUPERVISOR" {{ $operator->role === 'SUPERVISOR' ? 'selected' : '' }}>Supervisor</option>
-                                            </select>
-                                        </td>
+                                                    <option value="OPERATOR"
+                                                        {{ $operator->role === 'OPERATOR' ? 'selected' : '' }}>Operator
+                                                    </option>
+                                                    <option value="SUPERVISOR"
+                                                        {{ $operator->role === 'SUPERVISOR' ? 'selected' : '' }}>Supervisor
+                                                    </option>
+                                                </select>
+                                            </td>
 
-                                        <!-- Phone -->
-                                        <td class="px-4 py-3">
-                                            <span class="readonly">{{ $operator->phoneNo }}</span>
-                                            <input name="phoneNo" type="text"
-                                                   class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                   value="{{ $operator->phoneNo }}" required maxlength="15" form="update-form-{{ $operator->id }}" />
-                                        </td>
+                                            <!-- Phone -->
+                                            <td class="px-4 py-3">
+                                                <span class="readonly">{{ $operator->phoneNo }}</span>
+                                                <input name="phoneNo" type="text"
+                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                    value="{{ $operator->phoneNo }}" required maxlength="15"
+                                                    form="update-form-{{ $operator->id }}" />
+                                            </td>
 
-                                        <!-- Address -->
-                                        <td class="px-4 py-3">
-                                            <span class="readonly">{{ $operator->address }}</span>
-                                            <input name="address" type="text"
-                                                   class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                   value="{{ $operator->address }}" form="update-form-{{ $operator->id }}" />
-                                        </td>
+                                            <!-- Address -->
+                                            <td class="px-4 py-3">
+                                                <span class="readonly">{{ $operator->address }}</span>
+                                                <input name="address" type="text"
+                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                    value="{{ $operator->address }}"
+                                                    form="update-form-{{ $operator->id }}" />
+                                            </td>
 
-                                        <!-- Actions -->
-                                        <td class="px-4 py-3 text-center">
-                                            <div class="flex space-x-2 justify-center">
-                                                <!-- Edit Button -->
-                                                <button type="button"
+                                            <!-- Actions -->
+                                            <td class="px-4 py-3 text-center">
+                                                <div class="flex space-x-2 justify-center">
+                                                    <!-- Edit Button -->
+                                                    <button type="button"
                                                         class="edit-btn bg-green-600 h-10 hover:bg-green-700 text-white px-3 py-1 rounded text-sm"
-                                                        onclick="toggleEdit('{{ $rowId }}')" id="editBtn-{{ $rowId }}">
-                                                    Edit
-                                                </button>
+                                                        onclick="toggleEdit('{{ $rowId }}')"
+                                                        id="editBtn-{{ $rowId }}">
+                                                        Edit
+                                                    </button>
 
-                                                <!-- Save Button -->
-                                                <form id="update-form-{{ $operator->id }}"
-                                                      action="{{ route('operatorsandSupervisors.update', $operator->id) }}"
-                                                      method="POST" class="inline">
-                                                    @csrf
-                                                    @method('PATCH')
+                                                    <!-- Save Button -->
+                                                    <form id="update-form-{{ $operator->id }}"
+                                                        action="{{ route('operatorsandSupervisors.update', $operator->id) }}"
+                                                        method="POST" class="inline">
+                                                        @csrf
+                                                        @method('PATCH')
 
-                                                    <button type="submit"
+                                                        <button type="submit"
                                                             class="save-btn hidden bg-blue-600 h-10 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm"
                                                             id="saveBtn-{{ $rowId }}">
-                                                        Save
-                                                    </button>
-                                                </form>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                @endforeach
+                                                            Save
+                                                        </button>
+                                                    </form>
+                                                    <form id="delete-form-{{ $operator->id }}"
+                                                        action="{{ route('userDetails.destroy', $operator->id) }}"
+                                                        method="POST" class="inline-block">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="button"
+                                                            onclick="confirmDelete('{{ $operator->id }}')"
+                                                            class="bg-red-600 h-10 hover:bg-red-700 text-white px-3 py-1 rounded text-sm">
+                                                            Delete
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @endforeach
 
 
                                 </tbody>
@@ -357,12 +377,6 @@
             // Hide Edit, Show Save
             if (editBtn) editBtn.classList.add('hidden');
             if (saveBtn) saveBtn.classList.remove('hidden');
-        }
-
-        function confirmDelete(id) {
-            if (confirm("Are you sure you want to delete this record?")) {
-                document.getElementById('delete-form-' + id).submit();
-            }
         }
     </script>
 
