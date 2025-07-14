@@ -504,7 +504,8 @@
                                                     <span class="readonly">
                                                         {{ \Carbon\Carbon::parse($inquiry->inquiryReceiveDate)->format('Y-m-d') }}
                                                     </span>
-                                                    <input type="date" class="hidden editable ..."
+                                                    <input type="date"
+                                                        class="hidden editable  w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                         value="{{ \Carbon\Carbon::parse($inquiry->inquiryReceiveDate)->format('Y-m-d') }}" />
                                                 </td>
 
@@ -680,19 +681,15 @@
 
                                                 {{-- Develop Plan Date --}}
                                                 <td
-                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center ">
+                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
                                                     @if (!$inquiry->alreadyDeveloped)
-                                                        <span class="readonly">{{ $inquiry->developPlannedDate }}</span>
+                                                        <span class="readonly">
+                                                            {{ $inquiry->developPlannedDate ?? 'N/D' }}
+                                                        </span>
                                                         <input type="date" name="developPlannedDate"
                                                             class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                             value="{{ $inquiry->developPlannedDate }}" />
-                                                        <span
-                                                            class="readonly">{{ $inquiry->developPlannedDate ?? 'N/D' }}</span>
-                                                        <input type="date" name="developPlannedDate"
-                                                            class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                            value="{{ $inquiry->developPlannedDate ?? 'N/D' }}" />
                                                     @else
-                                                        {{-- Show empty cell or readonly text if needed --}}
                                                         <span class="text-gray-400 italic">—</span>
                                                     @endif
                                                 </td>
@@ -711,7 +708,7 @@
                                                                 'Complete'
                                                                     => 'bg-green-100 text-green-800 dark:bg-green-700 dark:text-white',
                                                                 default
-                                                                    => 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-white'
+                                                                    => 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-white',
                                                             };
                                                         @endphp
 
