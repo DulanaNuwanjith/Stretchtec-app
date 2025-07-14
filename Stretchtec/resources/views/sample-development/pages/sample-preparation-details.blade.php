@@ -242,7 +242,7 @@
                                     <thead class="bg-gray-100 dark:bg-gray-700 text-left">
                                         <tr>
                                             <th
-                                                class="px-4 py-3 w-20 text-xs font-medium uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">
+                                                class="px-4 py-3 w-32 text-xs font-medium uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">
                                                 Order No</th>
                                             <th
                                                 class="px-4 py-3 w-40 text-xs font-medium uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">
