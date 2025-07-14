@@ -973,11 +973,17 @@
                                                             required
                                                             class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                     </div>
+                                                    <!-- Item -->
                                                     <div class="w-1/2">
                                                         <label for="item"
                                                             class="block text-sm font-medium text-gray-700 dark:text-gray-300">Item</label>
-                                                        <input id="item" type="text" name="item" required
+                                                        <select id="item" name="item" required
                                                             class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                            <option value="">Select Item</option>
+                                                            <option value="elastic">Elastic</option>
+                                                            <option value="code">Code</option>
+                                                            <option value="tape">Tape</option>
+                                                        </select>
                                                     </div>
                                                 </div>
 
