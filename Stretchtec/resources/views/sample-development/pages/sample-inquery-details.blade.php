@@ -705,13 +705,13 @@
                                                             $status = $inquiry->productionStatus;
                                                             $badgeClass = match ($status) {
                                                                 'Pending'
-                                                                    => 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-white',
+                                                                    => 'bg-blue-100 text-blue-800 dark:bg-blue-700 dark:text-white',
                                                                 'In_progress'
                                                                     => 'bg-yellow-100 text-yellow-800 dark:bg-yellow-700 dark:text-white',
                                                                 'Complete'
                                                                     => 'bg-green-100 text-green-800 dark:bg-green-700 dark:text-white',
                                                                 default
-                                                                    => 'bg-blue-100 text-blue-800 dark:bg-blue-700 dark:text-white',
+                                                                    => 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-white'
                                                             };
                                                         @endphp
 
