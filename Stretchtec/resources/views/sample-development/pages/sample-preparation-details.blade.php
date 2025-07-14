@@ -529,41 +529,107 @@
                                                     @endif
                                                 </td>
 
-                                                <td
-                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
-                                                    <span class="readonly">PO12345</span>
-                                                    <input
-                                                        class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                        value="PO12345" />
+                                                <td class="px-4 py-3 border-r border-gray-300 text-center">
+                                                    @if (!$prep->is_po_locked)
+                                                        <form action="{{ route('rnd.lockPoField') }}" method="POST">
+                                                            @csrf
+                                                            <input type="hidden" name="id"
+                                                                value="{{ $prep->id }}">
+                                                            <input type="text" name="yarnOrderedPONumber"
+                                                                value="{{ $prep->yarnOrderedPONumber }}"
+                                                                class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                                required>
+                                                            <button type="submit"
+                                                                class="mt-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm">
+                                                                Save
+                                                            </button>
+                                                        </form>
+                                                    @else
+                                                        <span class="readonly">{{ $prep->yarnOrderedPONumber }}</span>
+                                                    @endif
                                                 </td>
-                                                <td
-                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
-                                                    <span class="readonly">Dark Blue</span>
-                                                    <input
-                                                        class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                        value="Dark Blue" />
+
+                                                <td class="px-4 py-3 border-r border-gray-300 text-center">
+                                                    @if (!$prep->is_shade_locked)
+                                                        <form action="{{ route('rnd.lockShadeField') }}" method="POST">
+                                                            @csrf
+                                                            <input type="hidden" name="id"
+                                                                value="{{ $prep->id }}">
+                                                            <input type="text" name="shade"
+                                                                value="{{ $prep->shade }}"
+                                                                class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                                required>
+                                                            <button type="submit"
+                                                                class="mt-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm">
+                                                                Save
+                                                            </button>
+                                                        </form>
+                                                    @else
+                                                        <span class="readonly">{{ $prep->shade }}</span>
+                                                    @endif
                                                 </td>
-                                                <td
-                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
-                                                    <span class="readonly">5000m Corn</span>
-                                                    <input
-                                                        class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                        value="5000m Corn" />
+
+                                                <td class="px-4 py-3 border-r border-gray-300 text-center">
+                                                    @if (!$prep->is_qty_locked)
+                                                        <form action="{{ route('rnd.lockQtyField') }}" method="POST">
+                                                            @csrf
+                                                            <input type="hidden" name="id"
+                                                                value="{{ $prep->id }}">
+                                                            <input type="text" name="yarnOrderedQty"
+                                                                value="{{ $prep->yarnOrderedQty }}"
+                                                                class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                                required>
+                                                            <button type="submit"
+                                                                class="mt-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm">
+                                                                Save
+                                                            </button>
+                                                        </form>
+                                                    @else
+                                                        <span class="readonly">{{ $prep->yarnOrderedQty }}</span>
+                                                    @endif
                                                 </td>
-                                                <td
-                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
-                                                    <span class="readonly">30</span>
-                                                    <input type="number"
-                                                        class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                        value="30" />
+
+                                                <td class="px-4 py-3 border-r border-gray-300 text-center">
+                                                    @if (!$prep->is_tkt_locked)
+                                                        <form action="{{ route('rnd.lockTktField') }}" method="POST">
+                                                            @csrf
+                                                            <input type="hidden" name="id"
+                                                                value="{{ $prep->id }}">
+                                                            <input type="number" name="tkt"
+                                                                value="{{ $prep->tkt }}"
+                                                                class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                                required>
+                                                            <button type="submit"
+                                                                class="mt-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm">
+                                                                Save
+                                                            </button>
+                                                        </form>
+                                                    @else
+                                                        <span class="readonly">{{ $prep->tkt }}</span>
+                                                    @endif
                                                 </td>
-                                                <td
-                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
-                                                    <span class="readonly">Supplier A</span>
-                                                    <input
-                                                        class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                        value="Supplier A" />
+
+                                                <td class="px-4 py-3 border-r border-gray-300 text-center">
+                                                    @if (!$prep->is_supplier_locked)
+                                                        <form action="{{ route('rnd.lockSupplierField') }}"
+                                                            method="POST">
+                                                            @csrf
+                                                            <input type="hidden" name="id"
+                                                                value="{{ $prep->id }}">
+                                                            <input type="text" name="yarnSupplier"
+                                                                value="{{ $prep->yarnSupplier }}"
+                                                                class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                                required>
+                                                            <button type="submit"
+                                                                class="mt-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm">
+                                                                Save
+                                                            </button>
+                                                        </form>
+                                                    @else
+                                                        <span class="readonly">{{ $prep->yarnSupplier }}</span>
+                                                    @endif
                                                 </td>
+
                                                 {{-- Yarn Receive Date --}}
                                                 <td
                                                     class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
@@ -589,13 +655,28 @@
                                                     @endif
                                                 </td>
 
-                                                <td
-                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
-                                                    <span class="readonly">2025-07-01</span>
-                                                    <input type="date"
-                                                        class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                        value="2025-07-01" />
+                                                <td class="px-4 py-3 border-r border-gray-300 text-center">
+                                                    @if (!$prep->is_deadline_locked)
+                                                        <form action="{{ route('rnd.lockDeadlineField') }}"
+                                                            method="POST">
+                                                            @csrf
+                                                            <input type="hidden" name="id"
+                                                                value="{{ $prep->id }}">
+                                                            <input type="date" name="productionDeadline"
+                                                                value="{{ $prep->productionDeadline?->format('Y-m-d') }}"
+                                                                class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                                required>
+                                                            <button type="submit"
+                                                                class="mt-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm">
+                                                                Save
+                                                            </button>
+                                                        </form>
+                                                    @else
+                                                        <span
+                                                            class="readonly">{{ $prep->productionDeadline?->format('Y-m-d') }}</span>
+                                                    @endif
                                                 </td>
+
                                                 {{-- Send Order To Production Status --}}
                                                 <td
                                                     class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
@@ -627,13 +708,27 @@
                                                         class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                         value="Production complete" />
                                                 </td>
-                                                <td
-                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
-                                                    <span class="readonly">STKE/2025/JA25-B</span>
-                                                    <input
-                                                        class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                        value="STKE/2025/JA25-B" />
+                                                <td class="px-4 py-3 border-r border-gray-300 text-center">
+                                                    @if (!$prep->is_reference_locked)
+                                                        <form action="{{ route('rnd.lockReferenceField') }}"
+                                                            method="POST">
+                                                            @csrf
+                                                            <input type="hidden" name="id"
+                                                                value="{{ $prep->id }}">
+                                                            <input type="text" name="referenceNo"
+                                                                value="{{ $prep->referenceNo }}"
+                                                                class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                                required>
+                                                            <button type="submit"
+                                                                class="mt-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm">
+                                                                Save
+                                                            </button>
+                                                        </form>
+                                                    @else
+                                                        <span class="readonly">{{ $prep->referenceNo }}</span>
+                                                    @endif
                                                 </td>
+
                                                 <td
                                                     class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
                                                     <span class="readonly">5 yard</span>

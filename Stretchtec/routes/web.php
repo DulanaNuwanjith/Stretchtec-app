@@ -100,3 +100,10 @@ Route::post('/rnd/mark-yarn-received', [SamplePreparationRnDController::class, '
 Route::post('/rnd/mark-send-to-production', [SamplePreparationRnDController::class, 'markSendToProduction'])->name('rnd.markSendToProduction');
 
 Route::post('/rnd/set-develop-plan-date', [SamplePreparationRnDController::class, 'setDevelopPlanDate'])->name('rnd.setDevelopPlanDate');
+Route::post('/rnd/lockPoField', [SamplePreparationRnDController::class, 'lockPoField'])->name('rnd.lockPoField');
+Route::post('/rnd/lockShadeField', [SamplePreparationRnDController::class, 'lockShadeField'])->name('rnd.lockShadeField');
+Route::post('/rnd/lockQtyField', [SamplePreparationRnDController::class, 'lockQtyField'])->name('rnd.lockQtyField');
+Route::post('/rnd/lockTktField', [SamplePreparationRnDController::class, 'lockTktField'])->name('rnd.lockTktField');
+Route::post('/rnd/lockSupplierField', [SamplePreparationRnDController::class, 'lockSupplierField'])->name('rnd.lockSupplierField');
+Route::post('/rnd/lockDeadlineField', [SamplePreparationRnDController::class, 'lockDeadlineField'])->name('rnd.lockDeadlineField');
+Route::post('/rnd/lockReferenceField', [SamplePreparationRnDController::class, 'lockReferenceField'])->name('rnd.lockReferenceField');

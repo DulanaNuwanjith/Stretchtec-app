@@ -97,56 +97,123 @@ class SamplePreparationRnDController extends Controller
         return back()->with('success', 'Develop Plan Date saved.');
     }
 
+    public function lockPoField(Request $request)
+    {
+        $request->validate([
+            'id' => 'required|exists:sample_preparation_rnd,id',
+            'yarnOrderedPONumber' => 'required|string',
+        ]);
 
-    // public function update(Request $request, $id)
-    // {
-    //     $prep = SamplePreparationRnd::findOrFail($id);
+        $prep = SamplePreparationRnD::findOrFail($request->id);
+        if (!$prep->is_po_locked) {
+            $prep->yarnOrderedPONumber = $request->yarnOrderedPONumber;
+            $prep->is_po_locked = true;
+            $prep->save();
+        }
 
-    //     if (!$prep->is_dev_plan_locked && $request->filled('developPlannedDate')) {
-    //         $prep->developPlannedDate = $request->input('developPlannedDate');
-    //         $prep->is_dev_plan_locked = true;
-    //     }
+        return back()->with('success', 'PO Number saved.');
+    }
 
-    //     if (!$prep->is_po_locked && $request->filled('yarnOrderedPONumber')) {
-    //         $prep->yarnOrderedPONumber = $request->input('yarnOrderedPONumber');
-    //         $prep->is_po_locked = true;
-    //     }
+    public function lockShadeField(Request $request)
+    {
+        $request->validate([
+            'id' => 'required|exists:sample_preparation_rnd,id',
+            'shade' => 'required|string',
+        ]);
 
-    //     if (!$prep->is_shade_locked && $request->filled('shade')) {
-    //         $prep->shade = $request->input('shade');
-    //         $prep->is_shade_locked = true;
-    //     }
+        $prep = SamplePreparationRnD::findOrFail($request->id);
+        if (!$prep->is_shade_locked) {
+            $prep->shade = $request->shade;
+            $prep->is_shade_locked = true;
+            $prep->save();
+        }
 
-    //     if (!$prep->is_qty_locked && $request->filled('yarnOrderedQty')) {
-    //         $prep->yarnOrderedQty = $request->input('yarnOrderedQty');
-    //         $prep->is_qty_locked = true;
-    //     }
+        return back()->with('success', 'Shade saved.');
+    }
 
-    //     if (!$prep->is_tkt_locked && $request->filled('tkt')) {
-    //         $prep->tkt = $request->input('tkt');
-    //         $prep->is_tkt_locked = true;
-    //     }
+    public function lockQtyField(Request $request)
+    {
+        $request->validate([
+            'id' => 'required|exists:sample_preparation_rnd,id',
+            'yarnOrderedQty' => 'required|string',
+        ]);
 
-    //     if (!$prep->is_supplier_locked && $request->filled('yarnSupplier')) {
-    //         $prep->yarnSupplier = $request->input('yarnSupplier');
-    //         $prep->is_supplier_locked = true;
-    //     }
+        $prep = SamplePreparationRnD::findOrFail($request->id);
+        if (!$prep->is_qty_locked) {
+            $prep->yarnOrderedQty = $request->yarnOrderedQty;
+            $prep->is_qty_locked = true;
+            $prep->save();
+        }
 
-    //     if (!$prep->is_deadline_locked && $request->filled('productionDeadline')) {
-    //         $prep->productionDeadline = $request->input('productionDeadline');
-    //         $prep->is_deadline_locked = true;
-    //     }
+        return back()->with('success', 'Yarn Quantity saved.');
+    }
 
-    //     if (!$prep->is_reference_locked && $request->filled('referenceNo')) {
-    //         $prep->referenceNo = $request->input('referenceNo');
-    //         $prep->is_reference_locked = true;
-    //     }
+    public function lockTktField(Request $request)
+    {
+        $request->validate([
+            'id' => 'required|exists:sample_preparation_rnd,id',
+            'tkt' => 'required|string',
+        ]);
 
-    //     // Save all changes
-    //     $prep->save();
+        $prep = SamplePreparationRnD::findOrFail($request->id);
+        if (!$prep->is_tkt_locked) {
+            $prep->tkt = $request->tkt;
+            $prep->is_tkt_locked = true;
+            $prep->save();
+        }
 
-    //     return redirect()->back()->with('success', 'Sample Preparation updated.');
-    // }
+        return back()->with('success', 'TKT saved.');
+    }
 
+    public function lockSupplierField(Request $request)
+    {
+        $request->validate([
+            'id' => 'required|exists:sample_preparation_rnd,id',
+            'yarnSupplier' => 'required|string',
+        ]);
+
+        $prep = SamplePreparationRnD::findOrFail($request->id);
+        if (!$prep->is_supplier_locked) {
+            $prep->yarnSupplier = $request->yarnSupplier;
+            $prep->is_supplier_locked = true;
+            $prep->save();
+        }
+
+        return back()->with('success', 'Supplier saved.');
+    }
+
+    public function lockDeadlineField(Request $request)
+    {
+        $request->validate([
+            'id' => 'required|exists:sample_preparation_rnd,id',
+            'productionDeadline' => 'required|date',
+        ]);
+
+        $prep = SamplePreparationRnD::findOrFail($request->id);
+        if (!$prep->is_deadline_locked) {
+            $prep->productionDeadline = $request->productionDeadline;
+            $prep->is_deadline_locked = true;
+            $prep->save();
+        }
+
+        return back()->with('success', 'Production Deadline saved.');
+    }
+
+    public function lockReferenceField(Request $request)
+    {
+        $request->validate([
+            'id' => 'required|exists:sample_preparation_rnd,id',
+            'referenceNo' => 'required|string',
+        ]);
+
+        $prep = SamplePreparationRnD::findOrFail($request->id);
+        if (!$prep->is_reference_locked) {
+            $prep->referenceNo = $request->referenceNo;
+            $prep->is_reference_locked = true;
+            $prep->save();
+        }
+
+        return back()->with('success', 'Reference No saved.');
+    }
 
 }
