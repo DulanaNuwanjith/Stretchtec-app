@@ -50,7 +50,7 @@ class SampleInquiryController extends Controller
             $query->where('customerDecision', $request->customerDecision);
         }
 
-        $inquiries = $query->latest()->get();
+        $inquiries = $query->latest()->paginate(10);
 
         // Dynamic dropdown values
         $customers = SampleInquiry::select('customerName')->distinct()->orderBy('customerName')->pluck('customerName');
@@ -125,8 +125,8 @@ class SampleInquiryController extends Controller
                 'customerSpecialComment' => $validated['customer_comments'] ?? null,
                 'customerRequestDate' => $validated['customer_requested_date'] ?? null,
                 'alreadyDeveloped' => false,
-                'productionStatus' => 'pending',
-                'customerDecision' => 'pending',
+                'productionStatus' => 'Pending',
+                'customerDecision' => 'Pending',
             ]);
 
             return redirect()->back()->with('success', 'Sample Inquiry Created Successfully!');
@@ -173,8 +173,15 @@ class SampleInquiryController extends Controller
      */
     public function destroy(SampleInquiry $sampleInquiry)
     {
-        //
+        try {
+            $sampleInquiry->delete(); // Use soft delete if enabled
+            return redirect()->back()->with('success', 'Sample Inquiry deleted successfully.');
+        } catch (\Exception $e) {
+            Log::error('Sample Inquiry Delete Error: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Failed to delete the inquiry.');
+        }
     }
+
 
     public function updateDevelopedStatus(Request $request)
     {

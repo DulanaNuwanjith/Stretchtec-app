@@ -8,7 +8,7 @@
     @extends('layouts.sample-tabs')
 
     @section('content')
-        <div class="flex-1 overflow-y-hidden mb-20">
+        <div class="flex-1 overflow-y-hidden">
             <div class="">
                 <div class="w-full px-6 lg:px-2">
                     <div class="bg-white dark:bg-gray-800 overflow-hidden">
@@ -18,12 +18,37 @@
                                     font-size: 0.875rem;
                                     padding: 0.75rem 1rem;
                                     border-radius: 8px;
+                                    background-color: #ffffff !important;
+                                    position: relative;
+                                    box-sizing: border-box;
+                                    color: #3b82f6 !important;
+                                }
+
+                                .swal2-toast .swal2-title,
+                                .swal2-toast .swal2-html-container {
+                                    color: #3b82f6 !important;
+                                }
+
+                                .swal2-toast .swal2-icon {
+                                    color: #3b82f6 !important;
                                 }
 
                                 .swal2-shadow {
                                     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
                                 }
+
+                                .swal2-toast::after {
+                                    content: '';
+                                    position: absolute;
+                                    bottom: 0;
+                                    left: 0;
+                                    width: 100%;
+                                    height: 3px;
+                                    background-color: #3b82f6;
+                                    border-radius: 0 0 8px 8px;
+                                }
                             </style>
+
                             <script>
                                 document.addEventListener('DOMContentLoaded', () => {
                                     @if (session('success'))
@@ -38,8 +63,6 @@
                                             customClass: {
                                                 popup: 'swal2-toast swal2-shadow'
                                             },
-                                            background: '#f0fdf4',
-                                            color: '#166534',
                                         });
                                     @endif
 
@@ -55,8 +78,6 @@
                                             customClass: {
                                                 popup: 'swal2-toast swal2-shadow'
                                             },
-                                            background: '#fef2f2',
-                                            color: '#991b1b',
                                         });
                                     @endif
 
@@ -73,223 +94,196 @@
                                             customClass: {
                                                 popup: 'swal2-toast swal2-shadow'
                                             },
-                                            background: '#fff7ed',
-                                            color: '#92400e',
                                         });
                                     @endif
                                 });
                             </script>
 
-                            <!-- Filter Form -->
-                            <form id="filterForm1" method="GET" action="{{ route('sample-inquery-details.index') }}"
-                                class="mb-6 flex gap-6 items-center">
-                                <div class="flex items-center gap-4 flex-wrap">
+                            <script>
+                                function confirmDelete(id) {
+                                    Swal.fire({
+                                        title: 'Are you sure?',
+                                        text: "This record will be permanently deleted!",
+                                        icon: 'warning',
+                                        showCancelButton: true,
+                                        confirmButtonColor: '#3b82f6',
+                                        cancelButtonColor: '#6c757d',
+                                        confirmButtonText: 'Yes, delete it!',
+                                        background: '#ffffff',
+                                        color: '#3b82f6',
+                                        customClass: {
+                                            popup: 'swal2-toast swal2-shadow'
+                                        }
+                                    }).then((result) => {
+                                        if (result.isConfirmed) {
+                                            document.getElementById(`delete-form-${id}`).submit();
+                                        }
+                                    });
+                                }
+                            </script>
 
-                                    <!-- CUSTOMER DROPDOWN -->
-                                    <div class="relative inline-block text-left w-48">
-                                        <label for="customerDropdown"
-                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Customer</label>
-                                        <div>
-                                            <button type="button" id="customerDropdown"
-                                                class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10 dark:bg-gray-700 dark:text-white"
-                                                onclick="toggleDropdown('customer')" aria-haspopup="listbox"
-                                                aria-expanded="false">
-                                                <span
-                                                    id="selectedCustomer">{{ request('customer') ? request('customer') : 'Select Customer' }}</span>
-                                                <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20"
-                                                    fill="currentColor">
-                                                    <path fill-rule="evenodd"
-                                                        d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
-                                                        clip-rule="evenodd" />
-                                                </svg>
-                                            </button>
-                                        </div>
-                                        <div id="customerDropdownMenu"
-                                            class="hidden absolute z-10 mt-2 w-full rounded-md bg-white shadow-lg ring-1 ring-black/5 dark:bg-gray-700 max-h-48 overflow-y-auto">
-                                            <div class="p-2 sticky top-0 bg-white dark:bg-gray-700 z-10">
-                                                <input type="text" id="customerSearchInput"
-                                                    placeholder="Search customers..."
-                                                    class="w-full px-2 py-1 text-sm border rounded-md dark:bg-gray-600 dark:text-white dark:placeholder-gray-300"
-                                                    onkeyup="filterOptions('customer')" />
+                            <div class="flex justify-start">
+                                <button onclick="toggleFilterForm()"
+                                    class="bg-white border border-blue-500 text-blue-500 hover:text-blue-600 hover:border-blue-600 font-semibold py-1 px-3 rounded shadow flex items-center gap-2 mb-6">
+                                    <img src="{{ asset('icons/filter.png') }}" alt="" class="w-6 h-6"
+                                        alt="Filter Icon">
+                                    Filters
+                                </button>
+                            </div>
+
+                            <div id="filterFormContainer" class="hidden mt-4">
+                                <!-- Filter Form -->
+                                <form id="filterForm1" method="GET" action="{{ route('sample-inquery-details.index') }}"
+                                    class="mb-6 sticky top-0 z-20 flex gap-6 items-center">
+                                    <div class="flex items-center gap-4 flex-wrap">
+
+                                        <!-- CUSTOMER DROPDOWN -->
+                                        <div class="relative inline-block text-left w-48">
+                                            <label for="customerDropdown"
+                                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Customer</label>
+                                            <div>
+                                                <button type="button" id="customerDropdown"
+                                                    class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10 dark:bg-gray-700 dark:text-white"
+                                                    onclick="toggleDropdown('customer')" aria-haspopup="listbox"
+                                                    aria-expanded="false">
+                                                    <span
+                                                        id="selectedCustomer">{{ request('customer') ? request('customer') : 'Select Customer' }}</span>
+                                                    <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20"
+                                                        fill="currentColor">
+                                                        <path fill-rule="evenodd"
+                                                            d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
+                                                            clip-rule="evenodd" />
+                                                    </svg>
+                                                </button>
                                             </div>
-                                            <div class="py-1" role="listbox" tabindex="-1"
-                                                aria-labelledby="customerDropdown">
-                                                <button type="button"
-                                                    class="customer-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                                                    onclick="selectOption('customer', '')">Select Customer</button>
-
-                                                @foreach ($customers as $customer)
+                                            <div id="customerDropdownMenu"
+                                                class="hidden absolute z-10 mt-2 w-full rounded-md bg-white shadow-lg ring-1 ring-black/5 dark:bg-gray-700 max-h-48 overflow-y-auto">
+                                                <div class="p-2 sticky top-0 bg-white dark:bg-gray-700 z-10">
+                                                    <input type="text" id="customerSearchInput"
+                                                        placeholder="Search customers..."
+                                                        class="w-full px-2 py-1 text-sm border rounded-md dark:bg-gray-600 dark:text-white dark:placeholder-gray-300"
+                                                        onkeyup="filterOptions('customer')" />
+                                                </div>
+                                                <div class="py-1" role="listbox" tabindex="-1"
+                                                    aria-labelledby="customerDropdown">
                                                     <button type="button"
                                                         class="customer-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                                                        onclick="selectOption('customer', '{{ $customer }}')">{{ $customer }}</button>
-                                                @endforeach
-                                            </div>
-                                        </div>
-                                        <input type="hidden" name="customer" id="customerInput"
-                                            value="{{ request('customer') }}">
-                                    </div>
+                                                        onclick="selectOption('customer', '')">Select Customer</button>
 
-                                    <!-- MERCHANDISER DROPDOWN -->
-                                    <div class="relative inline-block text-left w-48">
-                                        <label for="merchandiserDropdown"
-                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Merchandiser</label>
-                                        <div>
-                                            <button type="button" id="merchandiserDropdown"
-                                                class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10 dark:bg-gray-700 dark:text-white"
-                                                onclick="toggleDropdown('merchandiser')" aria-haspopup="listbox"
-                                                aria-expanded="false">
-                                                <span
-                                                    id="selectedMerchandiser">{{ request('merchandiser') ? request('merchandiser') : 'Select Merchandiser' }}</span>
-                                                <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20"
-                                                    fill="currentColor">
-                                                    <path fill-rule="evenodd"
-                                                        d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
-                                                        clip-rule="evenodd" />
-                                                </svg>
-                                            </button>
-                                        </div>
-                                        <div id="merchandiserDropdownMenu"
-                                            class="hidden absolute z-10 mt-2 w-full rounded-md bg-white shadow-lg ring-1 ring-black/5 dark:bg-gray-700 max-h-48 overflow-y-auto">
-                                            <div class="p-2 sticky top-0 bg-white dark:bg-gray-700 z-10">
-                                                <input type="text" id="merchandiserSearchInput"
-                                                    placeholder="Search merchandisers..."
-                                                    class="w-full px-2 py-1 text-sm border rounded-md dark:bg-gray-600 dark:text-white dark:placeholder-gray-300"
-                                                    onkeyup="filterOptions('merchandiser')" />
+                                                    @foreach ($customers as $customer)
+                                                        <button type="button"
+                                                            class="customer-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
+                                                            onclick="selectOption('customer', '{{ $customer }}')">{{ $customer }}</button>
+                                                    @endforeach
+                                                </div>
                                             </div>
-                                            <div class="py-1" role="listbox" tabindex="-1"
-                                                aria-labelledby="merchandiserDropdown">
-                                                <button type="button"
-                                                    class="merchandiser-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                                                    onclick="selectOption('merchandiser', '')">Select Merchandiser</button>
+                                            <input type="hidden" name="customer" id="customerInput"
+                                                value="{{ request('customer') }}">
+                                        </div>
 
-                                                @foreach ($merchandisers as $merch)
+                                        <!-- MERCHANDISER DROPDOWN -->
+                                        <div class="relative inline-block text-left w-48">
+                                            <label for="merchandiserDropdown"
+                                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Merchandiser</label>
+                                            <div>
+                                                <button type="button" id="merchandiserDropdown"
+                                                    class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10 dark:bg-gray-700 dark:text-white"
+                                                    onclick="toggleDropdown('merchandiser')" aria-haspopup="listbox"
+                                                    aria-expanded="false">
+                                                    <span
+                                                        id="selectedMerchandiser">{{ request('merchandiser') ? request('merchandiser') : 'Select Merchandiser' }}</span>
+                                                    <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20"
+                                                        fill="currentColor">
+                                                        <path fill-rule="evenodd"
+                                                            d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
+                                                            clip-rule="evenodd" />
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                            <div id="merchandiserDropdownMenu"
+                                                class="hidden absolute z-10 mt-2 w-full rounded-md bg-white shadow-lg ring-1 ring-black/5 dark:bg-gray-700 max-h-48 overflow-y-auto">
+                                                <div class="p-2 sticky top-0 bg-white dark:bg-gray-700 z-10">
+                                                    <input type="text" id="merchandiserSearchInput"
+                                                        placeholder="Search merchandisers..."
+                                                        class="w-full px-2 py-1 text-sm border rounded-md dark:bg-gray-600 dark:text-white dark:placeholder-gray-300"
+                                                        onkeyup="filterOptions('merchandiser')" />
+                                                </div>
+                                                <div class="py-1" role="listbox" tabindex="-1"
+                                                    aria-labelledby="merchandiserDropdown">
                                                     <button type="button"
                                                         class="merchandiser-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                                                        onclick="selectOption('merchandiser', '{{ $merch }}')">{{ $merch }}</button>
-                                                @endforeach
-                                            </div>
-                                        </div>
-                                        <input type="hidden" name="merchandiser" id="merchandiserInput"
-                                            value="{{ request('merchandiser') }}">
-                                    </div>
+                                                        onclick="selectOption('merchandiser', '')">Select
+                                                        Merchandiser</button>
 
-                                    <!-- ITEM DROPDOWN -->
-                                    <div class="relative inline-block text-left w-48">
-                                        <label for="itemDropdown"
-                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Item</label>
-                                        <div>
-                                            <button type="button" id="itemDropdown"
-                                                class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10 dark:bg-gray-700 dark:text-white"
-                                                onclick="toggleDropdown('item')" aria-haspopup="listbox"
-                                                aria-expanded="false">
-                                                <span id="selectedItem">{{ request('item') ?: 'Select Item' }}</span>
-                                                <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20"
-                                                    fill="currentColor">
-                                                    <path fill-rule="evenodd"
-                                                        d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
-                                                        clip-rule="evenodd" />
-                                                </svg>
-                                            </button>
-                                        </div>
-                                        <div id="itemDropdownMenu"
-                                            class="hidden absolute z-10 mt-2 w-full rounded-md bg-white shadow-lg ring-1 ring-black/5 dark:bg-gray-700 max-h-48 overflow-y-auto">
-                                            <div class="p-2 sticky top-0 bg-white dark:bg-gray-700 z-10">
-                                                <input type="text" id="itemSearchInput" placeholder="Search items..."
-                                                    class="w-full px-2 py-1 text-sm border rounded-md dark:bg-gray-600 dark:text-white dark:placeholder-gray-300"
-                                                    onkeyup="filterOptions('item')" />
+                                                    @foreach ($merchandisers as $merch)
+                                                        <button type="button"
+                                                            class="merchandiser-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
+                                                            onclick="selectOption('merchandiser', '{{ $merch }}')">{{ $merch }}</button>
+                                                    @endforeach
+                                                </div>
                                             </div>
-                                            <div class="py-1" role="listbox" tabindex="-1"
-                                                aria-labelledby="itemDropdown">
-                                                <button type="button"
-                                                    class="item-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                                                    onclick="selectOption('item', '')">Select Item</button>
+                                            <input type="hidden" name="merchandiser" id="merchandiserInput"
+                                                value="{{ request('merchandiser') }}">
+                                        </div>
 
-                                                @foreach ($items as $item)
+                                        <!-- ITEM DROPDOWN -->
+                                        <div class="relative inline-block text-left w-48">
+                                            <label for="itemDropdown"
+                                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Item</label>
+                                            <div>
+                                                <button type="button" id="itemDropdown"
+                                                    class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10 dark:bg-gray-700 dark:text-white"
+                                                    onclick="toggleDropdown('item')" aria-haspopup="listbox"
+                                                    aria-expanded="false">
+                                                    <span id="selectedItem">{{ request('item') ?: 'Select Item' }}</span>
+                                                    <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20"
+                                                        fill="currentColor">
+                                                        <path fill-rule="evenodd"
+                                                            d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
+                                                            clip-rule="evenodd" />
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                            <div id="itemDropdownMenu"
+                                                class="hidden absolute z-10 mt-2 w-full rounded-md bg-white shadow-lg ring-1 ring-black/5 dark:bg-gray-700 max-h-48 overflow-y-auto">
+                                                <div class="p-2 sticky top-0 bg-white dark:bg-gray-700 z-10">
+                                                    <input type="text" id="itemSearchInput"
+                                                        placeholder="Search items..."
+                                                        class="w-full px-2 py-1 text-sm border rounded-md dark:bg-gray-600 dark:text-white dark:placeholder-gray-300"
+                                                        onkeyup="filterOptions('item')" />
+                                                </div>
+                                                <div class="py-1" role="listbox" tabindex="-1"
+                                                    aria-labelledby="itemDropdown">
                                                     <button type="button"
                                                         class="item-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                                                        onclick="selectOption('item', '{{ $item }}')">{{ $item }}</button>
-                                                @endforeach
+                                                        onclick="selectOption('item', '')">Select Item</button>
+
+                                                    @foreach ($items as $item)
+                                                        <button type="button"
+                                                            class="item-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
+                                                            onclick="selectOption('item', '{{ $item }}')">{{ $item }}</button>
+                                                    @endforeach
+                                                </div>
                                             </div>
-                                        </div>
-                                        <input type="hidden" name="item" id="itemInput"
-                                            value="{{ request('item') }}">
-                                    </div>
-
-                                    <!-- CUSTOMER DELIVERY STATUS DROPDOWN -->
-                                    <div class="relative inline-block text-left w-48">
-                                        <label for="deliveryStatusDropdown"
-                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                            Customer Delivery Status
-                                        </label>
-
-                                        <!-- Dropdown Toggle Button -->
-                                        <div>
-                                            <button type="button" id="deliveryStatusDropdown"
-                                                class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10 dark:bg-gray-700 dark:text-white"
-                                                onclick="toggleDropdown('deliveryStatus')" aria-haspopup="listbox"
-                                                aria-expanded="false">
-                                                <span id="selectedDeliveryStatus">
-                                                    {{ request('deliveryStatus') ?: 'Select Status' }}
-                                                </span>
-                                                <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20"
-                                                    fill="currentColor" aria-hidden="true">
-                                                    <path fill-rule="evenodd"
-                                                        d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.25 8.29a.75.75 0 01-.02-1.08z"
-                                                        clip-rule="evenodd" />
-                                                </svg>
-                                            </button>
+                                            <input type="hidden" name="item" id="itemInput"
+                                                value="{{ request('item') }}">
                                         </div>
 
-                                        <!-- Dropdown Menu -->
-                                        <div id="deliveryStatusDropdownMenu"
-                                            class="hidden absolute z-10 mt-2 w-full rounded-md bg-white shadow-lg ring-1 ring-black/5 dark:bg-gray-700 max-h-48 overflow-y-auto">
-
-                                            <!-- Search Input -->
-                                            <div class="p-2 sticky top-0 bg-white dark:bg-gray-700 z-10">
-                                                <input type="text" id="deliveryStatusSearchInput"
-                                                    placeholder="Search status..."
-                                                    class="w-full px-2 py-1 text-sm border rounded-md dark:bg-gray-600 dark:text-white dark:placeholder-gray-300"
-                                                    onkeyup="filterOptions('deliveryStatus')" />
-                                            </div>
-
-                                            <!-- Option Buttons -->
-                                            <div class="py-1" role="listbox" tabindex="-1"
-                                                aria-labelledby="deliveryStatusDropdown">
-                                                @php
-                                                    $statuses = ['', 'Delivered', 'Pending'];
-                                                @endphp
-                                                @foreach ($statuses as $status)
-                                                    <button type="button"
-                                                        class="deliveryStatus-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                                                        onclick="selectOption('deliveryStatus', '{{ $status }}')">
-                                                        {{ $status === '' ? 'All Statuses' : $status }}
-                                                    </button>
-                                                @endforeach
-                                            </div>
-                                        </div>
-
-                                        <!-- Hidden Input for Form Submission -->
-                                        <input type="hidden" name="deliveryStatus" id="deliveryStatusInput"
-                                            value="{{ request('deliveryStatus') }}">
-                                    </div>
-
-
-                                    <div class="flex gap-6 items-end">
-                                        <!-- CUSTOMER DECISION DROPDOWN -->
+                                        <!-- CUSTOMER DELIVERY STATUS DROPDOWN -->
                                         <div class="relative inline-block text-left w-48">
-                                            <label for="customerDecisionDropdown"
+                                            <label for="deliveryStatusDropdown"
                                                 class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                                Customer Decision
+                                                Customer Delivery Status
                                             </label>
 
-                                            <!-- Dropdown Toggle -->
+                                            <!-- Dropdown Toggle Button -->
                                             <div>
-                                                <button type="button" id="customerDecisionDropdown"
+                                                <button type="button" id="deliveryStatusDropdown"
                                                     class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10 dark:bg-gray-700 dark:text-white"
-                                                    onclick="toggleDropdown('customerDecision')" aria-haspopup="listbox"
+                                                    onclick="toggleDropdown('deliveryStatus')" aria-haspopup="listbox"
                                                     aria-expanded="false">
-                                                    <span id="selectedCustomerDecision">
-                                                        {{ request('customerDecision') ?: 'Select Decision' }}
+                                                    <span id="selectedDeliveryStatus">
+                                                        {{ request('deliveryStatus') ?: 'Select Status' }}
                                                     </span>
                                                     <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20"
                                                         fill="currentColor" aria-hidden="true">
@@ -301,51 +295,113 @@
                                             </div>
 
                                             <!-- Dropdown Menu -->
-                                            <div id="customerDecisionDropdownMenu"
+                                            <div id="deliveryStatusDropdownMenu"
                                                 class="hidden absolute z-10 mt-2 w-full rounded-md bg-white shadow-lg ring-1 ring-black/5 dark:bg-gray-700 max-h-48 overflow-y-auto">
+
+                                                <!-- Search Input -->
                                                 <div class="p-2 sticky top-0 bg-white dark:bg-gray-700 z-10">
-                                                    <input type="text" id="customerDecisionSearchInput"
-                                                        placeholder="Search decision..."
+                                                    <input type="text" id="deliveryStatusSearchInput"
+                                                        placeholder="Search status..."
                                                         class="w-full px-2 py-1 text-sm border rounded-md dark:bg-gray-600 dark:text-white dark:placeholder-gray-300"
-                                                        onkeyup="filterOptions('customerDecision')" />
+                                                        onkeyup="filterOptions('deliveryStatus')" />
                                                 </div>
+
+                                                <!-- Option Buttons -->
                                                 <div class="py-1" role="listbox" tabindex="-1"
-                                                    aria-labelledby="customerDecisionDropdown">
+                                                    aria-labelledby="deliveryStatusDropdown">
                                                     @php
-                                                        $decisions = [
-                                                            '', // For "All"
-                                                            'Pending',
-                                                            'Order Received',
-                                                            'Order Not Received',
-                                                            'Order Rejected',
-                                                        ];
+                                                        $statuses = ['', 'Delivered', 'Pending'];
                                                     @endphp
-                                                    @foreach ($decisions as $decision)
+                                                    @foreach ($statuses as $status)
                                                         <button type="button"
-                                                            class="customerDecision-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                                                            onclick="selectOption('customerDecision', '{{ $decision }}')">
-                                                            {{ $decision === '' ? 'All Decisions' : $decision }}
+                                                            class="deliveryStatus-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
+                                                            onclick="selectOption('deliveryStatus', '{{ $status }}')">
+                                                            {{ $status === '' ? 'All Statuses' : $status }}
                                                         </button>
                                                     @endforeach
                                                 </div>
                                             </div>
 
-                                            <input type="hidden" name="customerDecision" id="customerDecisionInput"
-                                                value="{{ request('customerDecision') }}">
+                                            <!-- Hidden Input for Form Submission -->
+                                            <input type="hidden" name="deliveryStatus" id="deliveryStatusInput"
+                                                value="{{ request('deliveryStatus') }}">
                                         </div>
 
-                                        <button type="submit"
-                                            class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-                                            Apply Filters
-                                        </button>
 
-                                        <button type="button" id="clearFiltersBtn"
-                                            class="mt-4 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 px-4 py-2 rounded hover:bg-gray-300">
-                                            Clear Filters
-                                        </button>
+                                        <div class="flex gap-6 items-end">
+                                            <!-- CUSTOMER DECISION DROPDOWN -->
+                                            <div class="relative inline-block text-left w-48">
+                                                <label for="customerDecisionDropdown"
+                                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                                    Customer Decision
+                                                </label>
+
+                                                <!-- Dropdown Toggle -->
+                                                <div>
+                                                    <button type="button" id="customerDecisionDropdown"
+                                                        class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10 dark:bg-gray-700 dark:text-white"
+                                                        onclick="toggleDropdown('customerDecision')"
+                                                        aria-haspopup="listbox" aria-expanded="false">
+                                                        <span id="selectedCustomerDecision">
+                                                            {{ request('customerDecision') ?: 'Select Decision' }}
+                                                        </span>
+                                                        <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20"
+                                                            fill="currentColor" aria-hidden="true">
+                                                            <path fill-rule="evenodd"
+                                                                d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.25 8.29a.75.75 0 01-.02-1.08z"
+                                                                clip-rule="evenodd" />
+                                                        </svg>
+                                                    </button>
+                                                </div>
+
+                                                <!-- Dropdown Menu -->
+                                                <div id="customerDecisionDropdownMenu"
+                                                    class="hidden absolute z-10 mt-2 w-full rounded-md bg-white shadow-lg ring-1 ring-black/5 dark:bg-gray-700 max-h-48 overflow-y-auto">
+                                                    <div class="p-2 sticky top-0 bg-white dark:bg-gray-700 z-10">
+                                                        <input type="text" id="customerDecisionSearchInput"
+                                                            placeholder="Search decision..."
+                                                            class="w-full px-2 py-1 text-sm border rounded-md dark:bg-gray-600 dark:text-white dark:placeholder-gray-300"
+                                                            onkeyup="filterOptions('customerDecision')" />
+                                                    </div>
+                                                    <div class="py-1" role="listbox" tabindex="-1"
+                                                        aria-labelledby="customerDecisionDropdown">
+                                                        @php
+                                                            $decisions = [
+                                                                '', // For "All"
+                                                                'Pending',
+                                                                'Order Received',
+                                                                'Order Not Received',
+                                                                'Order Rejected',
+                                                            ];
+                                                        @endphp
+                                                        @foreach ($decisions as $decision)
+                                                            <button type="button"
+                                                                class="customerDecision-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
+                                                                onclick="selectOption('customerDecision', '{{ $decision }}')">
+                                                                {{ $decision === '' ? 'All Decisions' : $decision }}
+                                                            </button>
+                                                        @endforeach
+                                                    </div>
+                                                </div>
+
+                                                <input type="hidden" name="customerDecision" id="customerDecisionInput"
+                                                    value="{{ request('customerDecision') }}">
+                                            </div>
+
+                                            <button type="submit"
+                                                class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                                                Apply Filters
+                                            </button>
+
+                                            <button type="button" id="clearFiltersBtn"
+                                                class="mt-4 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 px-4 py-2 rounded hover:bg-gray-300">
+                                                Clear Filters
+                                            </button>
+                                        </div>
                                     </div>
-                                </div>
-                            </form>
+                                </form>
+                            </div>
+
 
                             <div class="flex justify-between items-center mb-6">
                                 <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Sample Inquiry Records</h1>
@@ -369,7 +425,7 @@
                                     <thead class="bg-gray-200 dark:bg-gray-700 text-left">
                                         <tr class="text-center">
                                             <th
-                                                class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="sticky left-0 z-10 bg-white px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Order No</th>
                                             <th
                                                 class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
@@ -402,7 +458,7 @@
                                                 class="px-4 py-3 w-56 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Already Developed & In Sample Stock</th>
                                             <th
-                                                class="px-4 py-3 w-40 text-xs font-medium uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">
+                                                class="px-4 py-3 w-48 text-xs font-medium uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">
                                                 Sent order to sample development</th>
                                             <th
                                                 class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
@@ -414,7 +470,7 @@
                                                 class="px-4 py-3 w-48 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Reference No</th>
                                             <th
-                                                class="px-4 py-3 w-40 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="px-4 py-3 w-48 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Customer Delivery Status</th>
                                             <th
                                                 class="px-4 py-3 w-56 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
@@ -423,7 +479,7 @@
                                                 class="px-4 py-3 w-72 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Note</th>
                                             <th
-                                                class="px-4 py-3 w-48 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="px-4 py-3 w-64 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Action</th>
                                         </tr>
                                     </thead>
@@ -435,8 +491,8 @@
                                                 class="odd:bg-white even:bg-gray-50 border-b border-gray-200  text-left">
                                                 <!-- Order No -->
                                                 <td
-                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300">
-                                                    <span class="readonly">{{ $inquiry->orderNo }}</span>
+                                                    class="sticky left-0 z-10 bg-white px-4 py-3 bg-gray-100 whitespace-normal break-words border-r border-gray-300">
+                                                    <span class="readonly font-bold">{{ $inquiry->orderNo }}</span>
                                                     <input type="text"
                                                         class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                         value="{{ $inquiry->orderNo }}" />
@@ -448,7 +504,8 @@
                                                     <span class="readonly">
                                                         {{ \Carbon\Carbon::parse($inquiry->inquiryReceiveDate)->format('Y-m-d') }}
                                                     </span>
-                                                    <input type="date" class="hidden editable ..."
+                                                    <input type="date"
+                                                        class="hidden editable  w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                         value="{{ \Carbon\Carbon::parse($inquiry->inquiryReceiveDate)->format('Y-m-d') }}" />
                                                 </td>
 
@@ -509,7 +566,8 @@
                                                 <!-- Customer Comments -->
                                                 <td
                                                     class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
-                                                    <span class="readonly">{{ $inquiry->customerSpecialComment }}</span>
+                                                    <span
+                                                        class="readonly">{{ $inquiry->customerSpecialComment ?? 'N/A' }}</span>
                                                     <input type="text"
                                                         class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                         value="{{ $inquiry->customerSpecialComment }}" />
@@ -517,13 +575,19 @@
 
                                                 <!-- Requested Date -->
                                                 <td
-                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
-                                                    <span
-                                                        class="readonly">{{ $inquiry->customerRequestDate->format('Y-m-d') }}</span>
-                                                    <input type="date"
-                                                        class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                        value="{{ $inquiry->customerRequestDate->format('Y-m-d') }}" />
-
+                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                                    @if ($inquiry->customerRequestDate)
+                                                        <span
+                                                            class="readonly">{{ $inquiry->customerRequestDate->format('Y-m-d') }}</span>
+                                                        <input type="date"
+                                                            class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                            value="{{ $inquiry->customerRequestDate->format('Y-m-d') }}" />
+                                                    @else
+                                                        <span class="readonly">N/A</span>
+                                                        <input type="date"
+                                                            class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                            value="" />
+                                                    @endif
                                                 </td>
 
                                                 <!-- Already Developed -->
@@ -611,25 +675,21 @@
                                                             @endif
                                                         </div>
                                                     @else
-                                                        {{-- Show nothing --}}
+                                                        N/A
                                                     @endif
                                                 </td>
 
                                                 {{-- Develop Plan Date --}}
                                                 <td
-                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center ">
+                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
                                                     @if (!$inquiry->alreadyDeveloped)
-                                                        <span class="readonly">{{ $inquiry->developPlannedDate }}</span>
+                                                        <span class="readonly">
+                                                            {{ $inquiry->developPlannedDate ?? 'N/D' }}
+                                                        </span>
                                                         <input type="date" name="developPlannedDate"
                                                             class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                             value="{{ $inquiry->developPlannedDate }}" />
-                                                        <span
-                                                            class="readonly">{{ $inquiry->developPlannedDate ?? 'N/D' }}</span>
-                                                        <input type="date" name="developPlannedDate"
-                                                            class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                            value="{{ $inquiry->developPlannedDate ?? 'N/D' }}" />
                                                     @else
-                                                        {{-- Show empty cell or readonly text if needed --}}
                                                         <span class="text-gray-400 italic">—</span>
                                                     @endif
                                                 </td>
@@ -642,13 +702,13 @@
                                                             $status = $inquiry->productionStatus;
                                                             $badgeClass = match ($status) {
                                                                 'Pending'
-                                                                    => 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-white',
+                                                                    => 'bg-blue-100 text-blue-800 dark:bg-blue-700 dark:text-white',
                                                                 'In_progress'
                                                                     => 'bg-yellow-100 text-yellow-800 dark:bg-yellow-700 dark:text-white',
                                                                 'Complete'
                                                                     => 'bg-green-100 text-green-800 dark:bg-green-700 dark:text-white',
                                                                 default
-                                                                    => 'bg-blue-100 text-blue-800 dark:bg-blue-700 dark:text-white',
+                                                                    => 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-white',
                                                             };
                                                         @endphp
 
@@ -791,43 +851,60 @@
                                                 </td>
 
                                                 <!-- Actions -->
-                                                <td class="px-4 py-3 whitespace-normal break-words text-center ">
-                                                    <div class="flex space-x-2 justify-center">
-                                                        <button
-                                                            class="edit-btn bg-green-600 h-10 hover:bg-green-700 text-white px-3 py-1 rounded text-sm"
-                                                            onclick="editRow('row{{ $inquiry->id }}')">Edit</button>
+                                                <td class="px-4 py-3 whitespace-normal break-words text-center">
+                                                    <div class="flex space-x-2 justify-center items-center">
+                                                        @if (Auth::user()->role === 'SUPERADMIN')
+                                                            <button
+                                                                class="edit-btn bg-green-600 h-10 hover:bg-green-700 text-white px-3 py-1 rounded text-sm"
+                                                                onclick="editRow('row{{ $inquiry->id }}')">
+                                                                Edit
+                                                            </button>
+                                                        @endif
 
                                                         <button
                                                             class="save-btn bg-blue-600 h-10 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm hidden"
-                                                            onclick="saveRow('row{{ $inquiry->id }}')">Save</button>
+                                                            onclick="saveRow('row{{ $inquiry->id }}')">
+                                                            Save
+                                                        </button>
 
-                                                        <div class="flex items-center justify-center">
-                                                            @if ($inquiry->orderFile)
-                                                                <a href="{{ asset('storage/' . $inquiry->orderFile) }}"
-                                                                    target="_blank"
-                                                                    class="bg-gray-600 h-10 w-20 hover:bg-gray-700 text-white px-3 py-2 rounded text-sm">
-                                                                    View
-                                                                </a>
-                                                            @else
+                                                        @if ($inquiry->orderFile)
+                                                            <a href="{{ asset('storage/' . $inquiry->orderFile) }}"
+                                                                target="_blank"
+                                                                class="bg-gray-600 h-10 w-20 hover:bg-gray-700 text-white px-3 py-2 rounded text-sm flex items-center justify-center">
+                                                                View
+                                                            </a>
+                                                        @else
+                                                            <button type="button"
+                                                                class="bg-gray-300 h-10 w-20 text-gray-500 px-3 py-1 rounded text-sm cursor-not-allowed"
+                                                                disabled>
+                                                                No File
+                                                            </button>
+                                                        @endif
+                                                        @if (Auth::user()->role === 'SUPERADMIN')
+                                                            <form id="delete-form-{{ $inquiry->id }}"
+                                                                action="{{ route('sampleInquiry.destroy', $inquiry->id) }}"
+                                                                method="POST" class="flex items-center">
+                                                                @csrf
+                                                                @method('DELETE')
                                                                 <button type="button"
-                                                                    class="bg-gray-300 h-10 w-20 text-gray-500 px-3 py-1 rounded text-sm cursor-not-allowed"
-                                                                    disabled>
-                                                                    No File
+                                                                    onclick="confirmDelete('{{ $inquiry->id }}')"
+                                                                    class="bg-red-600 h-10 hover:bg-red-700 text-white px-3 py-1 rounded text-sm">
+                                                                    Delete
                                                                 </button>
-                                                            @endif
-                                                        </div>
-
+                                                            </form>
+                                                        @endif
                                                     </div>
                                                 </td>
+
+
                                             </tr>
                                         @endforeach
                                     </tbody>
-
                                 </table>
-                                {{-- <div class="py-6 flex justify-center">
-                            </div> --}}
                             </div>
-
+                            <div class="py-6 flex justify-center">
+                                {{ $inquiries->links() }}
+                            </div>
 
                             <!-- Add Sample Modal -->
                             <div id="addSampleModal"
@@ -1378,5 +1455,12 @@
             // Reload the page to clear all filters and reset state
             window.location.href = window.location.pathname;
         });
+    </script>
+
+    <script>
+        function toggleFilterForm() {
+            const form = document.getElementById('filterFormContainer');
+            form.classList.toggle('hidden');
+        }
     </script>
 @endsection
