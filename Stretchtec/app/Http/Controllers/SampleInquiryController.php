@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\DB;
+use App\Models\SamplePreparationRnD;
 
 class SampleInquiryController extends Controller
 {
@@ -208,6 +209,16 @@ class SampleInquiryController extends Controller
         // Set the timestamp to now
         $inquiry->sentToSampleDevelopmentDate = Carbon::now();
         $inquiry->save();
+
+        if (!SamplePreparationRnD::where('sample_inquiry_id', $inquiry->id)->exists()) {
+            SamplePreparationRnD::create([
+                'sample_inquiry_id' => $inquiry->id,
+                'orderNo' => $inquiry->orderNo,
+                'customerRequestDate' => $inquiry->customerRequestDate,
+                'note' => $inquiry->notes,
+            ]);
+        }
+
 
         return back()->with('success', 'Marked as sent to sample development.');
     }

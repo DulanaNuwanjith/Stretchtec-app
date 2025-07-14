@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\SampleInquiryController;
+use App\Http\Controllers\SamplePreparationRnDController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -58,9 +59,9 @@ Route::get('sampleStockManagement', function () {
     return view('sample-development.sample-stock-management');
 })->name('sampleStockManagement.index');
 
-Route::get('sample-preparation-details', function () {
-    return view('sample-development.pages.sample-preparation-details');
-})->name('sample-preparation-details.index');
+// Route::get('sample-preparation-details', function () {
+//     return view('sample-development.pages.sample-preparation-details');
+// })->name('sample-preparation-details.index');
 
 Route::get('sample-preparation-production', function () {
     return view('sample-development.pages.sample-preparation-production');
@@ -86,3 +87,16 @@ Route::get('production-order-preparation', function () {
     return view('production.pages.production-order-preparation');
 })->name('production-order-preparation.index');
 
+Route::get('sample-preparation-details', [SamplePreparationRnDController::class, 'viewRnD'])->name('sample-preparation-details.index');
+
+Route::post('/rnd/mark-colour-match-sent', [SamplePreparationRnDController::class, 'markColourMatchSent'])->name('rnd.markColourMatchSent');
+
+Route::post('/rnd/mark-colour-match-receive', [SamplePreparationRnDController::class, 'markColourMatchReceive'])->name('rnd.markColourMatchReceive');
+
+Route::post('/rnd/mark-yarn-ordered', [SamplePreparationRnDController::class, 'markYarnOrdered'])->name('rnd.markYarnOrdered');
+
+Route::post('/rnd/mark-yarn-received', [SamplePreparationRnDController::class, 'markYarnReceived'])->name('rnd.markYarnReceived');
+
+Route::post('/rnd/mark-send-to-production', [SamplePreparationRnDController::class, 'markSendToProduction'])->name('rnd.markSendToProduction');
+
+Route::post('/rnd/set-develop-plan-date', [SamplePreparationRnDController::class, 'setDevelopPlanDate'])->name('rnd.setDevelopPlanDate');

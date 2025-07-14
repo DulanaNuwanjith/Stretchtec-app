@@ -34,4 +34,10 @@ class SampleInquiry extends Model
         'developPlannedDate' => 'date',
         'customerDeliveryDate' => 'datetime'
     ];
+
+    public function samplePreparationRnD()
+    {
+        return $this->hasOne(SamplePreparationRnD::class);
+    }                                                 
+
 }
