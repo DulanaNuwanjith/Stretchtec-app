@@ -675,7 +675,7 @@
                                                             @endif
                                                         </div>
                                                     @else
-                                                        N/A
+                                                        <span class="text-gray-400 italic">—</span>
                                                     @endif
                                                 </td>
 
