@@ -88,14 +88,17 @@ class SamplePreparationRnDController extends Controller
 
         $prep = SamplePreparationRnD::findOrFail($request->id);
 
-        if (!$prep->developPlannedDate) {
-            $prep->developPlannedDate = $request->developPlannedDate;
-            $prep->is_dev_plan_locked = true;
-            $prep->save();
+        if ($prep->developPlannedDate) {
+            return back()->with('error', 'Development Plan Date is already set and locked.');
         }
+
+        $prep->developPlannedDate = $request->developPlannedDate;
+        $prep->is_dev_plan_locked = true;
+        $prep->save();
 
         return back()->with('success', 'Develop Plan Date saved.');
     }
+
 
     public function lockPoField(Request $request)
     {
@@ -207,13 +210,22 @@ class SamplePreparationRnDController extends Controller
         ]);
 
         $prep = SamplePreparationRnD::findOrFail($request->id);
+
         if (!$prep->is_reference_locked) {
             $prep->referenceNo = $request->referenceNo;
             $prep->is_reference_locked = true;
             $prep->save();
+
+            // Sync with SampleInquiry
+            $inquiry = $prep->sampleInquiry;
+            if ($inquiry) {
+                $inquiry->referenceNo = $prep->referenceNo;
+                $inquiry->save();
+            }
         }
 
         return back()->with('success', 'Reference No saved.');
     }
+
 
 }

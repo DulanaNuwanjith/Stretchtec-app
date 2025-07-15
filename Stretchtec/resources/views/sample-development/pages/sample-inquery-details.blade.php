@@ -684,11 +684,11 @@
                                                     class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
                                                     @if (!$inquiry->alreadyDeveloped)
                                                         <span class="readonly">
-                                                            {{ $inquiry->developPlannedDate ?? 'N/D' }}
+                                                            {{ optional($inquiry->developPlannedDate)->format('Y-m-d') ?? 'N/D' }}
                                                         </span>
                                                         <input type="date" name="developPlannedDate"
                                                             class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                            value="{{ $inquiry->developPlannedDate }}" />
+                                                            value="{{ optional($inquiry->developPlannedDate)->format('Y-m-d') }}" />
                                                     @else
                                                         <span class="text-gray-400 italic">—</span>
                                                     @endif
