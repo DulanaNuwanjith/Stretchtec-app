@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\SampleInquiryController;
+use App\Http\Controllers\SamplePreparationRnDController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -58,9 +59,9 @@ Route::get('sampleStockManagement', function () {
     return view('sample-development.sample-stock-management');
 })->name('sampleStockManagement.index');
 
-Route::get('sample-preparation-details', function () {
-    return view('sample-development.pages.sample-preparation-details');
-})->name('sample-preparation-details.index');
+// Route::get('sample-preparation-details', function () {
+//     return view('sample-development.pages.sample-preparation-details');
+// })->name('sample-preparation-details.index');
 
 Route::get('sample-preparation-production', function () {
     return view('sample-development.pages.sample-preparation-production');
@@ -86,3 +87,23 @@ Route::get('production-order-preparation', function () {
     return view('production.pages.production-order-preparation');
 })->name('production-order-preparation.index');
 
+Route::get('sample-preparation-details', [SamplePreparationRnDController::class, 'viewRnD'])->name('sample-preparation-details.index');
+
+Route::post('/rnd/mark-colour-match-sent', [SamplePreparationRnDController::class, 'markColourMatchSent'])->name('rnd.markColourMatchSent');
+
+Route::post('/rnd/mark-colour-match-receive', [SamplePreparationRnDController::class, 'markColourMatchReceive'])->name('rnd.markColourMatchReceive');
+
+Route::post('/rnd/mark-yarn-ordered', [SamplePreparationRnDController::class, 'markYarnOrdered'])->name('rnd.markYarnOrdered');
+
+Route::post('/rnd/mark-yarn-received', [SamplePreparationRnDController::class, 'markYarnReceived'])->name('rnd.markYarnReceived');
+
+Route::post('/rnd/mark-send-to-production', [SamplePreparationRnDController::class, 'markSendToProduction'])->name('rnd.markSendToProduction');
+
+Route::post('/rnd/set-develop-plan-date', [SamplePreparationRnDController::class, 'setDevelopPlanDate'])->name('rnd.setDevelopPlanDate');
+Route::post('/rnd/lockPoField', [SamplePreparationRnDController::class, 'lockPoField'])->name('rnd.lockPoField');
+Route::post('/rnd/lockShadeField', [SamplePreparationRnDController::class, 'lockShadeField'])->name('rnd.lockShadeField');
+Route::post('/rnd/lockQtyField', [SamplePreparationRnDController::class, 'lockQtyField'])->name('rnd.lockQtyField');
+Route::post('/rnd/lockTktField', [SamplePreparationRnDController::class, 'lockTktField'])->name('rnd.lockTktField');
+Route::post('/rnd/lockSupplierField', [SamplePreparationRnDController::class, 'lockSupplierField'])->name('rnd.lockSupplierField');
+Route::post('/rnd/lockDeadlineField', [SamplePreparationRnDController::class, 'lockDeadlineField'])->name('rnd.lockDeadlineField');
+Route::post('/rnd/lockReferenceField', [SamplePreparationRnDController::class, 'lockReferenceField'])->name('rnd.lockReferenceField');
