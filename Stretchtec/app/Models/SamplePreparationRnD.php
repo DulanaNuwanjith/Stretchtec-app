@@ -61,4 +61,25 @@ class SamplePreparationRnD extends Model
     {
         return $this->belongsTo(SampleInquiry::class, 'sample_inquiry_id');
     }
+
+    protected static function booted()
+    {
+        static::saved(function ($prep) {
+            if ($prep->sampleInquiry && ($prep->isDirty('referenceNo') || $prep->isDirty('developPlannedDate'))) {
+                $updateData = [];
+
+                if ($prep->isDirty('referenceNo')) {
+                    $updateData['referenceNo'] = $prep->referenceNo;
+                }
+
+                if ($prep->isDirty('developPlannedDate')) {
+                    $updateData['developPlannedDate'] = $prep->developPlannedDate;
+                }
+
+                if (!empty($updateData)) {
+                    $prep->sampleInquiry->update($updateData);
+                }
+            }
+        });
+    }
 }

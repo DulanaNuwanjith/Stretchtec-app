@@ -440,6 +440,9 @@
                                                 class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Item</th>
                                             <th
+                                                class="px-4 py-3 w-40 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                Item Discription</th>
+                                            <th
                                                 class="px-4 py-3 w-20 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Size</th>
                                             <th
@@ -534,6 +537,15 @@
                                                     <input type="text"
                                                         class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                         value="{{ $inquiry->item }}" />
+                                                </td>
+
+                                                <!-- Item Discription -->
+                                                <td
+                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
+                                                    <span class="readonly">{{ $inquiry->ItemDiscription }}</span>
+                                                    <input type="text"
+                                                        class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                        value="{{ $inquiry->ItemDiscription }}" />
                                                 </td>
 
                                                 <!-- Size -->
@@ -684,11 +696,11 @@
                                                     class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
                                                     @if (!$inquiry->alreadyDeveloped)
                                                         <span class="readonly">
-                                                            {{ $inquiry->developPlannedDate ?? 'N/D' }}
+                                                            {{ optional($inquiry->developPlannedDate)->format('Y-m-d') ?? 'N/D' }}
                                                         </span>
                                                         <input type="date" name="developPlannedDate"
                                                             class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                            value="{{ $inquiry->developPlannedDate }}" />
+                                                            value="{{ optional($inquiry->developPlannedDate)->format('Y-m-d') }}" />
                                                     @else
                                                         <span class="text-gray-400 italic">—</span>
                                                     @endif
@@ -987,6 +999,14 @@
                                                     </div>
                                                 </div>
 
+                                                <div>
+                                                    <label for="itemDiscription"
+                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Item Discription</label>
+                                                    <input id="itemDiscription" type="text" name="itemDiscription"
+                                                        required
+                                                        class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                </div>
+
                                                 <!-- Size & Colour -->
                                                 <div class="flex gap-4">
                                                     <div class="w-1/2">
@@ -1003,14 +1023,18 @@
                                                     </div>
                                                 </div>
 
-                                                <!-- Sample Quantity -->
-                                                <div>
-                                                    <label for="sampleQuantity"
-                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Sample
-                                                        Quantity (yds or mtr)</label>
-                                                    <input id="sampleQuantity" type="text" name="sample_quantity"
-                                                        required
-                                                        class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm mb-4">
+                                                <div class="flex gap-4">
+                                                    <div class="w-1/2">
+                                                        <label for="sampleQuantity"
+                                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">Sample
+                                                            Quantity (yds or mtr)</label>
+                                                        <input id="sampleQuantity" type="text" name="sample_quantity"
+                                                            required
+                                                            class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm mb-4">
+                                                    </div>
+                                                    <div class="w-1/2">
+
+                                                    </div>
                                                 </div>
 
                                                 <span class="font-sans font-semibold text-m block mb-2">SPECIAL CUSTOMER
