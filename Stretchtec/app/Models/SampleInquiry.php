@@ -13,6 +13,7 @@ class SampleInquiry extends Model
         'customerName',
         'merchandiseName',
         'item',
+        'itemDiscription',
         'size',
         'color',
         'sampleQty',
