@@ -905,8 +905,21 @@
                                                         <button
                                                             class="bg-blue-600 h-10 px-3 py-1 rounded text-white text-sm hover:bg-blue-700 hidden"
                                                             onclick="saveRow('prodRow{{ $prep->id }}')">Save</button> --}}
-                                                        <button
-                                                            class="bg-gray-600 h-10 hover:bg-gray-700 text-white px-3 py-1 rounded text-sm">Download</button>
+                                                        @if ($prep->sampleInquiry && $prep->sampleInquiry->orderFile)
+
+                                                            <a href="{{ asset('storage/' . $prep->sampleInquiry->orderFile) }}"
+                                                                target="_blank"
+                                                                class="bg-gray-600 h-10 w-20 hover:bg-gray-700 text-white px-3 py-2 rounded text-sm flex items-center justify-center ml-2">
+                                                                View
+                                                            </a>
+                                                        @else
+                                                            <button type="button"
+                                                                class="bg-gray-300 h-10 w-20 text-gray-500 px-3 py-1 rounded text-sm cursor-not-allowed"
+                                                                disabled>
+                                                                No File
+                                                            </button>
+                                                        @endif
+
                                                     </div>
                                                 </td>
                                             </tr>
