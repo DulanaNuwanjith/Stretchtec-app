@@ -230,10 +230,17 @@ class SamplePreparationRnDController extends Controller
     public function updateDevelopedStatus(Request $request)
     {
         $prep = SamplePreparationRnD::findOrFail($request->id);
-        $prep->alreadyDeveloped = $request->alreadyDeveloped;
+
+        // Disallow update if locked
+        if ($prep->alreadyDeveloped || $prep->developPlannedDate) {
+            return back()->with('error', 'Status is locked and cannot be changed.');
+        }
+
+        $prep->alreadyDeveloped = (int) $request->alreadyDeveloped;
         $prep->save();
 
         return back()->with('success', 'Developed status updated successfully!');
     }
+
 
 }

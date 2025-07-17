@@ -489,7 +489,7 @@
                                                 <td
                                                     class="px-4 py-3 whitespace-normal break-words border-r border-gray-300">
                                                     <div class="relative inline-block text-left">
-                                                        @if (!$prep->alreadyDeveloped)
+                                                        @if (!$prep->alreadyDeveloped && !$prep->developPlannedDate)
                                                             <form method="POST"
                                                                 action="{{ route('rnd.updateDevelopedStatus') }}">
                                                                 @csrf
@@ -502,7 +502,7 @@
                                                                 <!-- Dropdown Button -->
                                                                 <button type="button"
                                                                     id="alreadyDevelopedDropdown{{ $prep->id }}"
-                                                                    class="inline-flex justify-between w-48 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10 dark:bg-gray-700 dark:text-white"
+                                                                    class="inline-flex justify-between w-48 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10"
                                                                     onclick="toggleDevelopedDropdown(event, {{ $prep->id }})">
                                                                     <span
                                                                         id="selectedAlreadyDeveloped{{ $prep->id }}">Need
@@ -517,16 +517,16 @@
 
                                                                 <!-- Dropdown Menu -->
                                                                 <div id="alreadyDevelopedDropdownMenu{{ $prep->id }}"
-                                                                    class="hidden absolute z-10 mt-2 w-48 rounded-md bg-white shadow-lg ring-1 ring-black/5 dark:bg-gray-700">
+                                                                    class="hidden absolute z-10 mt-2 w-48 rounded-md bg-white shadow-lg ring-1 ring-black/5">
                                                                     <div class="py-1">
-                                                                        <button type="submit"
+                                                                        <button type="button"
                                                                             onclick="setDevelopedStatus({{ $prep->id }}, 0, 'Need to Develop')"
-                                                                            class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600">
+                                                                            class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                                                             Need to Develop
                                                                         </button>
-                                                                        <button type="submit"
+                                                                        <button type="button"
                                                                             onclick="setDevelopedStatus({{ $prep->id }}, 1, 'No Need to Develop')"
-                                                                            class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600">
+                                                                            class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                                                             No Need to Develop
                                                                         </button>
                                                                     </div>
@@ -534,7 +534,7 @@
                                                             </form>
                                                         @else
                                                             <div
-                                                                class="inline-flex items-center w-48 rounded-md bg-gray-200 px-3 py-2 text-sm font-semibold text-gray-500 shadow-inner h-10 dark:bg-gray-700 dark:text-gray-400">
+                                                                class="inline-flex items-center w-48 rounded-md bg-gray-200 px-3 py-2 text-sm font-semibold text-gray-500 shadow-inner h-10">
                                                                 {{ $prep->alreadyDeveloped ? 'No Need to Develop' : 'Need to Develop' }}
                                                             </div>
                                                         @endif
@@ -579,14 +579,17 @@
                                                                 @csrf
                                                                 <input type="hidden" name="id"
                                                                     value="{{ $prep->id }}">
+
                                                                 <button type="submit"
-                                                                    class="yarn-ordered-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
+                                                                    class="yarn-ordered-btn px-2 py-1 mt-3 rounded transition-all duration-200 
+                        {{ $prep->developPlannedDate ? 'bg-gray-300 text-black hover:bg-gray-400' : 'bg-gray-200 text-gray-500 cursor-not-allowed' }}"
+                                                                    {{ $prep->developPlannedDate ? '' : 'disabled' }}>
                                                                     Pending
                                                                 </button>
                                                             </form>
                                                         @else
                                                             <span
-                                                                class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-Purple-200 dark:bg-gray-800 px-3 py-1 rounded">
+                                                                class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-purple-200 dark:bg-gray-800 px-3 py-1 rounded">
                                                                 Ordered on <br>
                                                                 {{ \Carbon\Carbon::parse($prep->yarnOrderedDate)->format('Y-m-d') }}
                                                                 at
@@ -609,8 +612,12 @@
                                                                     value="{{ $prep->yarnOrderedPONumber }}"
                                                                     class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                                     required>
+
                                                                 <button type="submit"
-                                                                    class="mt-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm">
+                                                                    class="mt-1 px-3 py-1 rounded text-sm transition-all duration-200
+                        {{ $prep->developPlannedDate ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-gray-300 text-gray-500 cursor-not-allowed' }}"
+                                                                    {{ $prep->developPlannedDate ? '' : 'disabled' }}
+                                                                    title="{{ $prep->developPlannedDate ? '' : 'Please set Develop Plan Date first' }}">
                                                                     Save
                                                                 </button>
                                                             </form>
@@ -634,8 +641,12 @@
                                                                     value="{{ $prep->shade }}"
                                                                     class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                                     required>
+
                                                                 <button type="submit"
-                                                                    class="mt-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm">
+                                                                    class="mt-1 px-3 py-1 rounded text-sm transition-all duration-200
+                        {{ $prep->developPlannedDate ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-gray-300 text-gray-500 cursor-not-allowed' }}"
+                                                                    {{ $prep->developPlannedDate ? '' : 'disabled' }}
+                                                                    title="{{ $prep->developPlannedDate ? '' : 'Please set Develop Plan Date first' }}">
                                                                     Save
                                                                 </button>
                                                             </form>
@@ -659,8 +670,12 @@
                                                                     value="{{ $prep->yarnOrderedQty }}"
                                                                     class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                                     required>
+
                                                                 <button type="submit"
-                                                                    class="mt-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm">
+                                                                    class="mt-1 px-3 py-1 rounded text-sm transition-all duration-200
+                        {{ $prep->developPlannedDate ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-gray-300 text-gray-500 cursor-not-allowed' }}"
+                                                                    {{ $prep->developPlannedDate ? '' : 'disabled' }}
+                                                                    title="{{ $prep->developPlannedDate ? '' : 'Please set Develop Plan Date first' }}">
                                                                     Save
                                                                 </button>
                                                             </form>
@@ -684,8 +699,12 @@
                                                                     value="{{ $prep->tkt }}"
                                                                     class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                                     required>
+
                                                                 <button type="submit"
-                                                                    class="mt-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm">
+                                                                    class="mt-1 px-3 py-1 rounded text-sm transition-all duration-200
+                        {{ $prep->developPlannedDate ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-gray-300 text-gray-500 cursor-not-allowed' }}"
+                                                                    {{ $prep->developPlannedDate ? '' : 'disabled' }}
+                                                                    title="{{ $prep->developPlannedDate ? '' : 'Please set Develop Plan Date first' }}">
                                                                     Save
                                                                 </button>
                                                             </form>
@@ -709,8 +728,12 @@
                                                                     value="{{ $prep->yarnSupplier }}"
                                                                     class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                                     required>
+
                                                                 <button type="submit"
-                                                                    class="mt-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm">
+                                                                    class="mt-1 px-3 py-1 rounded text-sm transition-all duration-200
+                        {{ $prep->developPlannedDate ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-gray-300 text-gray-500 cursor-not-allowed' }}"
+                                                                    {{ $prep->developPlannedDate ? '' : 'disabled' }}
+                                                                    title="{{ $prep->developPlannedDate ? '' : 'Please set Develop Plan Date first' }}">
                                                                     Save
                                                                 </button>
                                                             </form>
@@ -733,13 +756,16 @@
                                                                 <input type="hidden" name="id"
                                                                     value="{{ $prep->id }}">
                                                                 <button type="submit"
-                                                                    class="yarn-receive-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
+                                                                    class="yarn-receive-btn px-2 py-1 mt-3 rounded transition-all duration-200
+                        {{ $prep->developPlannedDate && $prep->yarnOrderedDate ? 'bg-gray-300 text-black hover:bg-gray-400' : 'bg-gray-200 text-gray-500 cursor-not-allowed' }}"
+                                                                    {{ $prep->developPlannedDate && $prep->yarnOrderedDate ? '' : 'disabled' }}
+                                                                    title="{{ $prep->developPlannedDate && $prep->yarnOrderedDate ? '' : 'Please set Develop Plan Date and Yarn Ordered Date first' }}">
                                                                     Pending
                                                                 </button>
                                                             </form>
                                                         @else
                                                             <span
-                                                                class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-Pink-200 dark:bg-gray-800 px-3 py-1 rounded">
+                                                                class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-pink-200 dark:bg-gray-800 px-3 py-1 rounded">
                                                                 Received on <br>
                                                                 {{ \Carbon\Carbon::parse($prep->yarnReceiveDate)->format('Y-m-d') }}
                                                                 at
@@ -763,14 +789,19 @@
                                                                     value="{{ $prep->productionDeadline?->format('Y-m-d') }}"
                                                                     class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                                     required>
+
                                                                 <button type="submit"
-                                                                    class="mt-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm">
+                                                                    class="mt-1 px-3 py-1 rounded text-sm transition-all duration-200
+                        {{ $prep->developPlannedDate ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-gray-300 text-gray-500 cursor-not-allowed' }}"
+                                                                    {{ $prep->developPlannedDate ? '' : 'disabled' }}
+                                                                    title="{{ $prep->developPlannedDate ? '' : 'Please set Develop Plan Date first' }}">
                                                                     Save
                                                                 </button>
                                                             </form>
                                                         @else
-                                                            <span
-                                                                class="readonly">{{ $prep->productionDeadline?->format('Y-m-d') }}</span>
+                                                            <span class="readonly">
+                                                                {{ $prep->productionDeadline?->format('Y-m-d') ?? '-' }}
+                                                            </span>
                                                         @endif
                                                     @else
                                                         <span class="text-gray-400 italic">—</span>
@@ -788,7 +819,10 @@
                                                                 <input type="hidden" name="id"
                                                                     value="{{ $prep->id }}">
                                                                 <button type="submit"
-                                                                    class="send-production-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
+                                                                    class="send-production-btn px-2 py-1 mt-3 rounded transition-all duration-200
+                        {{ $prep->developPlannedDate ? 'bg-gray-300 text-black hover:bg-gray-400' : 'bg-gray-200 text-gray-500 cursor-not-allowed' }}"
+                                                                    {{ $prep->developPlannedDate ? '' : 'disabled' }}
+                                                                    title="{{ $prep->developPlannedDate ? '' : 'Please set Develop Plan Date first' }}">
                                                                     Pending
                                                                 </button>
                                                             </form>
