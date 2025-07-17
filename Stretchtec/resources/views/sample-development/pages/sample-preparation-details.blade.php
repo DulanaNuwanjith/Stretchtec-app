@@ -867,7 +867,6 @@
                                                 </td>
 
                                                 <td class="px-4 py-3 border-r border-gray-300 text-center">
-                                                    @if (!$prep->alreadyDeveloped)
                                                         @if (!$prep->is_reference_locked)
                                                             <form action="{{ route('rnd.lockReferenceField') }}"
                                                                 method="POST">
@@ -886,9 +885,6 @@
                                                         @else
                                                             <span class="readonly">{{ $prep->referenceNo }}</span>
                                                         @endif
-                                                    @else
-                                                        <span class="text-gray-400 italic">—</span>
-                                                    @endif
                                                 </td>
 
                                                 <td
