@@ -36,6 +36,7 @@ class SamplePreparationRnD extends Model
         'is_reference_locked',
         'productionOutput',
         'note',
+        'alreadyDeveloped',
     ];
 
     protected $casts = [
@@ -55,6 +56,7 @@ class SamplePreparationRnD extends Model
         'is_supplier_locked' => 'boolean',
         'is_deadline_locked' => 'boolean',
         'is_reference_locked' => 'boolean',
+        'alreadyDeveloped' => 'boolean',
     ];
 
     public function sampleInquiry()

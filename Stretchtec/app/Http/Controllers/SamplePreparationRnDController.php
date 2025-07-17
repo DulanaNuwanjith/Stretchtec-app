@@ -227,5 +227,13 @@ class SamplePreparationRnDController extends Controller
         return back()->with('success', 'Reference No saved.');
     }
 
+    public function updateDevelopedStatus(Request $request)
+    {
+        $prep = SamplePreparationRnD::findOrFail($request->id);
+        $prep->alreadyDeveloped = $request->alreadyDeveloped;
+        $prep->save();
+
+        return back()->with('success', 'Developed status updated successfully!');
+    }
 
 }
