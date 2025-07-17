@@ -347,6 +347,14 @@
                                 <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Sample Preperation R & D
                                     Records
                                 </h1>
+                                <div class="flex space-x-3">
+                                    <a href="{{ route('leftoverYarnManagement.index') }}">
+                                        <button
+                                            class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded shadow">
+                                            Leftover Yarn Management
+                                        </button>
+                                    </a>
+                                </div>
                             </div>
 
                             <div class="overflow-x-auto bg-white dark:bg-gray-900 shadow rounded-lg">
@@ -407,6 +415,12 @@
                                             <th
                                                 class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Production Output</th>
+                                            <th
+                                                class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                Yarn Ordered Weight</th>
+                                            <th
+                                                class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                Yarn Leftover Weight</th>
                                             <th
                                                 class="px-4 py-3 w-72 text-xs text-center font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Note</th>
@@ -889,6 +903,64 @@
                                                     @endif
                                                 </td>
 
+                                                <!-- Yarn Ordered Weight -->
+                                                <td class="px-4 py-3 border-r border-gray-300 text-center">
+                                                    @if (!$prep->alreadyDeveloped)
+                                                        @if (!$prep->is_yarn_ordered_weight_locked)
+                                                            <form action="{{ route('rnd.updateYarnWeights') }}"
+                                                                method="POST">
+                                                                @csrf
+                                                                <input type="hidden" name="id"
+                                                                    value="{{ $prep->id }}">
+                                                                <input type="hidden" name="field"
+                                                                    value="yarnOrderedWeight">
+                                                                <input type="number" step="0.01" name="value"
+                                                                    value="{{ $prep->yarnOrderedWeight }}"
+                                                                    class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                                    required>
+                                                                <button type="submit"
+                                                                    class="mt-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm">
+                                                                    Save
+                                                                </button>
+                                                            </form>
+                                                        @else
+                                                            <span class="readonly">{{ $prep->yarnOrderedWeight }}
+                                                                g</span>
+                                                        @endif
+                                                    @else
+                                                        <span class="text-gray-400 italic">—</span>
+                                                    @endif
+                                                </td>
+
+                                                <!-- Yarn Leftover Weight -->
+                                                <td class="px-4 py-3 border-r border-gray-300 text-center">
+                                                    @if (!$prep->alreadyDeveloped)
+                                                        @if (!$prep->is_yarn_leftover_weight_locked)
+                                                            <form action="{{ route('rnd.updateYarnWeights') }}"
+                                                                method="POST">
+                                                                @csrf
+                                                                <input type="hidden" name="id"
+                                                                    value="{{ $prep->id }}">
+                                                                <input type="hidden" name="field"
+                                                                    value="yarnLeftoverWeight">
+                                                                <input type="number" step="0.01" name="value"
+                                                                    value="{{ $prep->yarnLeftoverWeight }}"
+                                                                    class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                                    required>
+                                                                <button type="submit"
+                                                                    class="mt-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm">
+                                                                    Save
+                                                                </button>
+                                                            </form>
+                                                        @else
+                                                            <span class="readonly">{{ $prep->yarnLeftoverWeight }}
+                                                                g</span>
+                                                        @endif
+                                                    @else
+                                                        <span class="text-gray-400 italic">—</span>
+                                                    @endif
+                                                </td>
+
                                                 <td
                                                     class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
                                                     <span class="readonly">{{ $prep->note ?? 'N/D' }}</span>
@@ -906,7 +978,6 @@
                                                             class="bg-blue-600 h-10 px-3 py-1 rounded text-white text-sm hover:bg-blue-700 hidden"
                                                             onclick="saveRow('prodRow{{ $prep->id }}')">Save</button> --}}
                                                         @if ($prep->sampleInquiry && $prep->sampleInquiry->orderFile)
-
                                                             <a href="{{ asset('storage/' . $prep->sampleInquiry->orderFile) }}"
                                                                 target="_blank"
                                                                 class="bg-gray-600 h-10 w-20 hover:bg-gray-700 text-white px-3 py-2 rounded text-sm flex items-center justify-center ml-2">

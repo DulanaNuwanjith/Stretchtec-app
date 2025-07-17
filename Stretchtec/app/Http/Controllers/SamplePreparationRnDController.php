@@ -242,5 +242,25 @@ class SamplePreparationRnDController extends Controller
         return back()->with('success', 'Developed status updated successfully!');
     }
 
+    public function updateYarnWeights(Request $request)
+    {
+        $request->validate([
+            'id' => 'required|exists:sample_preparation_rnd,id',
+            'field' => 'required|in:yarnOrderedWeight,yarnLeftoverWeight',
+            'value' => 'required|numeric',
+        ]);
+
+        $prep = SamplePreparationRnD::find($request->id);
+
+        $field = $request->field;
+        $lockField = 'is_' . \Str::snake($field) . '_locked';
+
+        $prep->$field = $request->value;
+        $prep->$lockField = true;
+        $prep->save();
+
+        return back()->with('success', 'Weight updated successfully.');
+    }
+
 
 }

@@ -37,6 +37,10 @@ class SamplePreparationRnD extends Model
         'productionOutput',
         'note',
         'alreadyDeveloped',
+        'yarnOrderedWeight',
+        'is_yarn_ordered_weight_locked',
+        'yarnLeftoverWeight',
+        'is_yarn_leftover_weight_locked',
     ];
 
     protected $casts = [
@@ -57,6 +61,8 @@ class SamplePreparationRnD extends Model
         'is_deadline_locked' => 'boolean',
         'is_reference_locked' => 'boolean',
         'alreadyDeveloped' => 'boolean',
+        'is_yarn_ordered_weight_locked' => 'boolean',
+        'is_yarn_leftover_weight_locked' => 'boolean',
     ];
 
     public function sampleInquiry()

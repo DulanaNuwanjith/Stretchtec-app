@@ -59,6 +59,10 @@ Route::get('sampleStockManagement', function () {
     return view('sample-development.sample-stock-management');
 })->name('sampleStockManagement.index');
 
+Route::get('leftoverYarnManagement', function () {
+    return view('sample-development.leftover-yarn-details');
+})->name('leftoverYarnManagement.index');
+
 // Route::get('sample-preparation-details', function () {
 //     return view('sample-development.pages.sample-preparation-details');
 // })->name('sample-preparation-details.index');
@@ -108,3 +112,4 @@ Route::post('/rnd/lockSupplierField', [SamplePreparationRnDController::class, 'l
 Route::post('/rnd/lockDeadlineField', [SamplePreparationRnDController::class, 'lockDeadlineField'])->name('rnd.lockDeadlineField');
 Route::post('/rnd/lockReferenceField', [SamplePreparationRnDController::class, 'lockReferenceField'])->name('rnd.lockReferenceField');
 Route::post('/sample-preparation/update-developed', [SamplePreparationRnDController::class, 'updateDevelopedStatus'])->name('rnd.updateDevelopedStatus');
+Route::post('/rnd/update-yarn-weights', [SamplePreparationRnDController::class, 'updateYarnWeights'])->name('rnd.updateYarnWeights');
