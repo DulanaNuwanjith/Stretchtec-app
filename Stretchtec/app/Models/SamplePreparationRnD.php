@@ -36,6 +36,11 @@ class SamplePreparationRnD extends Model
         'is_reference_locked',
         'productionOutput',
         'note',
+        'alreadyDeveloped',
+        'yarnOrderedWeight',
+        'is_yarn_ordered_weight_locked',
+        'yarnLeftoverWeight',
+        'is_yarn_leftover_weight_locked',
     ];
 
     protected $casts = [
@@ -55,6 +60,9 @@ class SamplePreparationRnD extends Model
         'is_supplier_locked' => 'boolean',
         'is_deadline_locked' => 'boolean',
         'is_reference_locked' => 'boolean',
+        'alreadyDeveloped' => 'boolean',
+        'is_yarn_ordered_weight_locked' => 'boolean',
+        'is_yarn_leftover_weight_locked' => 'boolean',
     ];
 
     public function sampleInquiry()
@@ -81,5 +89,10 @@ class SamplePreparationRnD extends Model
                 }
             }
         });
+    }
+
+    public function production()
+    {
+        return $this->hasOne(SamplePreparationProduction::class, 'sample_preparation_rnd_id');
     }
 }

@@ -441,7 +441,7 @@
                                                 Item</th>
                                             <th
                                                 class="px-4 py-3 w-40 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                                Item Discription</th>
+                                                Item Description</th>
                                             <th
                                                 class="px-4 py-3 w-20 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Size</th>
@@ -457,9 +457,6 @@
                                             <th
                                                 class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Customer Requested Dates</th>
-                                            <th
-                                                class="px-4 py-3 w-56 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                                Already Developed & In Sample Stock</th>
                                             <th
                                                 class="px-4 py-3 w-48 text-xs font-medium uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">
                                                 Sent order to sample development</th>
@@ -602,66 +599,9 @@
                                                     @endif
                                                 </td>
 
-                                                <!-- Already Developed -->
-                                                <td
-                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300">
-                                                    <div class="relative inline-block text-left">
-                                                        @if (!$inquiry->alreadyDeveloped && !$inquiry->sentToSampleDevelopmentDate)
-                                                            <form method="POST"
-                                                                action="{{ route('inquiry.updateDevelopedStatus') }}">
-                                                                @csrf
-                                                                <input type="hidden" name="id"
-                                                                    value="{{ $inquiry->id }}">
-                                                                <input type="hidden" name="alreadyDeveloped"
-                                                                    id="alreadyDevelopedInput{{ $inquiry->id }}"
-                                                                    value="0">
-
-                                                                <!-- Dropdown Button -->
-                                                                <button type="button"
-                                                                    id="alreadyDevelopedDropdown{{ $inquiry->id }}"
-                                                                    class="inline-flex justify-between w-48 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10 dark:bg-gray-700 dark:text-white transition-all duration-200"
-                                                                    onclick="toggleDevelopedDropdown(event, {{ $inquiry->id }})">
-                                                                    <span
-                                                                        id="selectedAlreadyDeveloped{{ $inquiry->id }}">Need
-                                                                        to Develop</span>
-                                                                    <svg class="ml-2 h-5 w-5 text-gray-400"
-                                                                        viewBox="0 0 20 20" fill="currentColor">
-                                                                        <path fill-rule="evenodd"
-                                                                            d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
-                                                                            clip-rule="evenodd" />
-                                                                    </svg>
-                                                                </button>
-
-                                                                <!-- Dropdown Menu -->
-                                                                <div id="alreadyDevelopedDropdownMenu{{ $inquiry->id }}"
-                                                                    class="hidden absolute z-10 mt-2 w-48 rounded-md bg-white shadow-lg ring-1 ring-black/5 dark:bg-gray-700">
-                                                                    <div class="py-1">
-                                                                        <button type="submit"
-                                                                            onclick="setDevelopedStatus({{ $inquiry->id }}, 0, 'Need to Develop')"
-                                                                            class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600">
-                                                                            Need to Develop
-                                                                        </button>
-                                                                        <button type="submit"
-                                                                            onclick="setDevelopedStatus({{ $inquiry->id }}, 1, 'No Need to Develop')"
-                                                                            class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600">
-                                                                            No Need to Develop
-                                                                        </button>
-                                                                    </div>
-                                                                </div>
-                                                            </form>
-                                                        @else
-                                                            <div
-                                                                class="inline-flex items-center w-48 rounded-md bg-gray-200 px-3 py-2 text-sm font-semibold text-gray-500 shadow-inner h-10 dark:bg-gray-700 dark:text-gray-400">
-                                                                {{ $inquiry->alreadyDeveloped ? 'No Need to Develop' : 'Need to Develop' }}
-                                                            </div>
-                                                        @endif
-                                                    </div>
-                                                </td>
-
                                                 {{-- Sent Order to Sample Development --}}
                                                 <td
                                                     class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
-                                                    @if (!$inquiry->alreadyDeveloped)
                                                         <div class="colour-match-sent">
                                                             @if (is_null($inquiry->sentToSampleDevelopmentDate))
                                                                 {{-- Show form with clickable button --}}
@@ -686,30 +626,22 @@
                                                                 </span>
                                                             @endif
                                                         </div>
-                                                    @else
-                                                        <span class="text-gray-400 italic">—</span>
-                                                    @endif
                                                 </td>
 
                                                 {{-- Develop Plan Date --}}
                                                 <td
                                                     class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
-                                                    @if (!$inquiry->alreadyDeveloped)
                                                         <span class="readonly">
                                                             {{ optional($inquiry->developPlannedDate)->format('Y-m-d') ?? 'N/D' }}
                                                         </span>
                                                         <input type="date" name="developPlannedDate"
                                                             class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                             value="{{ optional($inquiry->developPlannedDate)->format('Y-m-d') }}" />
-                                                    @else
-                                                        <span class="text-gray-400 italic">—</span>
-                                                    @endif
                                                 </td>
 
                                                 {{-- Production Status --}}
                                                 <td
                                                     class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
-                                                    @if (!$inquiry->alreadyDeveloped)
                                                         @php
                                                             $status = $inquiry->productionStatus;
                                                             $badgeClass = match ($status) {
@@ -734,9 +666,6 @@
                                                         <input type="text" name="productionStatus"
                                                             class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                             value="{{ $status }}" />
-                                                    @else
-                                                        <span class="text-gray-400 italic">—</span>
-                                                    @endif
                                                 </td>
 
                                                 <!-- Reference No -->

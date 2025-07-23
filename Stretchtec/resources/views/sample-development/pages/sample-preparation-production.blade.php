@@ -13,101 +13,210 @@
                     <div class="bg-white dark:bg-gray-800 overflow-hidden">
                         <div class="p-4 text-gray-900 dark:text-gray-100">
 
-                            @if (session('success'))
-                                <div
-                                    class="mb-4 p-4 text-green-800 bg-green-100 border border-green-300 rounded-md dark:text-green-200 dark:bg-green-900 dark:border-green-800">
-                                    {{ session('success') }}
-                                </div>
-                            @endif
+                            <style>
+                                .swal2-toast {
+                                    font-size: 0.875rem;
+                                    padding: 0.75rem 1rem;
+                                    border-radius: 8px;
+                                    background-color: #ffffff !important;
+                                    position: relative;
+                                    box-sizing: border-box;
+                                    color: #3b82f6 !important;
+                                }
 
-                            @if (session('error'))
-                                <div
-                                    class="mb-4 p-4 text-red-800 bg-red-100 border border-red-300 rounded-md dark:text-red-200 dark:bg-red-900 dark:border-red-800">
-                                    {{ session('error') }}
-                                </div>
-                            @endif
+                                .swal2-toast .swal2-title,
+                                .swal2-toast .swal2-html-container {
+                                    color: #3b82f6 !important;
+                                }
 
-                            <!-- Filter Form -->
-                            <form id="filterForm3" method="GET" action="" class="mb-6 flex gap-6 items-center">
-                                <div class="flex items-center gap-4">
-                                    <!-- Sample No Dropdown -->
-                                    <div class="relative inline-block text-left w-48">
-                                        <label for="sampleDropdown"
-                                            class="block text-sm font-medium text-gray-700 mb-1">Sample No</label>
+                                .swal2-toast .swal2-icon {
+                                    color: #3b82f6 !important;
+                                }
 
-                                        <button type="button" id="sampleDropdown"
-                                            class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50"
-                                            onclick="toggleSampleDropdown()" aria-haspopup="listbox" aria-expanded="false">
-                                            <span id="selectedSample">Select Sample No</span>
-                                            <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
-                                                <path fill-rule="evenodd"
-                                                    d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
-                                                    clip-rule="evenodd" />
-                                            </svg>
-                                        </button>
+                                .swal2-shadow {
+                                    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+                                }
 
-                                        <div id="sampleDropdownMenu"
-                                            class="hidden absolute z-10 mt-2 w-full rounded-md bg-white shadow-lg ring-1 ring-black/5 max-h-48 overflow-y-auto">
+                                .swal2-toast::after {
+                                    content: '';
+                                    position: absolute;
+                                    bottom: 0;
+                                    left: 0;
+                                    width: 100%;
+                                    height: 3px;
+                                    background-color: #3b82f6;
+                                    border-radius: 0 0 8px 8px;
+                                }
+                            </style>
 
-                                            <!-- Search box -->
-                                            <div class="p-2 sticky top-0 bg-white z-10">
-                                                <input type="text" id="sampleSearchInput"
-                                                    placeholder="Search Sample No..."
-                                                    class="w-full px-2 py-1 text-sm border rounded-md"
-                                                    oninput="filterSamples()" />
+                            <script>
+                                document.addEventListener('DOMContentLoaded', () => {
+                                    @if (session('success'))
+                                        Swal.fire({
+                                            toast: true,
+                                            position: 'top-end',
+                                            icon: 'success',
+                                            title: '{{ session('success') }}',
+                                            showConfirmButton: false,
+                                            timer: 2000,
+                                            timerProgressBar: true,
+                                            customClass: {
+                                                popup: 'swal2-toast swal2-shadow'
+                                            },
+                                        });
+                                    @endif
+
+                                    @if (session('error'))
+                                        Swal.fire({
+                                            toast: true,
+                                            position: 'top-end',
+                                            icon: 'error',
+                                            title: '{{ session('error') }}',
+                                            showConfirmButton: false,
+                                            timer: 2000,
+                                            timerProgressBar: true,
+                                            customClass: {
+                                                popup: 'swal2-toast swal2-shadow'
+                                            },
+                                        });
+                                    @endif
+
+                                    @if ($errors->any())
+                                        Swal.fire({
+                                            toast: true,
+                                            position: 'top-end',
+                                            icon: 'warning',
+                                            title: 'Validation Errors',
+                                            html: `{!! implode('<br>', $errors->all()) !!}`,
+                                            showConfirmButton: false,
+                                            timer: 3000,
+                                            timerProgressBar: true,
+                                            customClass: {
+                                                popup: 'swal2-toast swal2-shadow'
+                                            },
+                                        });
+                                    @endif
+                                });
+                            </script>
+
+                            <script>
+                                function confirmDelete(id) {
+                                    Swal.fire({
+                                        title: 'Are you sure?',
+                                        text: "This record will be permanently deleted!",
+                                        icon: 'warning',
+                                        showCancelButton: true,
+                                        confirmButtonColor: '#3b82f6',
+                                        cancelButtonColor: '#6c757d',
+                                        confirmButtonText: 'Yes, delete it!',
+                                        background: '#ffffff',
+                                        color: '#3b82f6',
+                                        customClass: {
+                                            popup: 'swal2-toast swal2-shadow'
+                                        }
+                                    }).then((result) => {
+                                        if (result.isConfirmed) {
+                                            document.getElementById(`delete-form-${id}`).submit();
+                                        }
+                                    });
+                                }
+                            </script>
+
+                            <div class="flex justify-start">
+                                <button onclick="toggleFilterForm()"
+                                    class="bg-white border border-blue-500 text-blue-500 hover:text-blue-600 hover:border-blue-600 font-semibold py-1 px-3 rounded shadow flex items-center gap-2 mb-6">
+                                    <img src="{{ asset('icons/filter.png') }}" alt="" class="w-6 h-6"
+                                        alt="Filter Icon">
+                                    Filters
+                                </button>
+                            </div>
+
+                            <div id="filterFormContainer" class="hidden mt-4">
+                                <!-- Filter Form -->
+                                <form id="filterForm3" method="GET" action="" class="mb-6 flex gap-6 items-center">
+                                    <div class="flex items-center gap-4">
+                                        <!-- Sample No Dropdown -->
+                                        <div class="relative inline-block text-left w-48">
+                                            <label for="sampleDropdown"
+                                                class="block text-sm font-medium text-gray-700 mb-1">Sample No</label>
+
+                                            <button type="button" id="sampleDropdown"
+                                                class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50"
+                                                onclick="toggleSampleDropdown()" aria-haspopup="listbox"
+                                                aria-expanded="false">
+                                                <span id="selectedSample">Select Sample No</span>
+                                                <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20"
+                                                    fill="currentColor">
+                                                    <path fill-rule="evenodd"
+                                                        d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
+                                                        clip-rule="evenodd" />
+                                                </svg>
+                                            </button>
+
+                                            <div id="sampleDropdownMenu"
+                                                class="hidden absolute z-10 mt-2 w-full rounded-md bg-white shadow-lg ring-1 ring-black/5 max-h-48 overflow-y-auto">
+
+                                                <!-- Search box -->
+                                                <div class="p-2 sticky top-0 bg-white z-10">
+                                                    <input type="text" id="sampleSearchInput"
+                                                        placeholder="Search Sample No..."
+                                                        class="w-full px-2 py-1 text-sm border rounded-md"
+                                                        oninput="filterSamples()" />
+                                                </div>
+
+                                                <div class="py-1" role="listbox" tabindex="-1">
+                                                    <!-- Clear / Reset -->
+                                                    <button type="button"
+                                                        class="sample-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                                        onclick="selectSample('', 'Select Sample No')">
+                                                        All Sample No
+                                                    </button>
+
+                                                    <!-- Sample Options -->
+                                                    <button type="button"
+                                                        class="sample-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                                        onclick="selectSample('001', 'SAMPLE-001')">SAMPLE-001</button>
+                                                    <button type="button"
+                                                        class="sample-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                                        onclick="selectSample('002', 'SAMPLE-002')">SAMPLE-002</button>
+                                                    <button type="button"
+                                                        class="sample-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                                        onclick="selectSample('003', 'SAMPLE-003')">SAMPLE-003</button>
+                                                </div>
                                             </div>
 
-                                            <div class="py-1" role="listbox" tabindex="-1">
-                                                <!-- Clear / Reset -->
-                                                <button type="button"
-                                                    class="sample-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                                    onclick="selectSample('', 'Select Sample No')">
-                                                    All Sample No
-                                                </button>
-
-                                                <!-- Sample Options -->
-                                                <button type="button"
-                                                    class="sample-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                                    onclick="selectSample('001', 'SAMPLE-001')">SAMPLE-001</button>
-                                                <button type="button"
-                                                    class="sample-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                                    onclick="selectSample('002', 'SAMPLE-002')">SAMPLE-002</button>
-                                                <button type="button"
-                                                    class="sample-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                                    onclick="selectSample('003', 'SAMPLE-003')">SAMPLE-003</button>
-                                            </div>
+                                            <input type="hidden" name="sample_no" id="sampleInput">
                                         </div>
 
-                                        <input type="hidden" name="sample_no" id="sampleInput">
+                                        <div>
+                                            <label
+                                                class="block text-sm font-medium text-gray-700 dark:text-gray-300">Production
+                                                Deadline</label>
+                                            <input type="date" id="productionDeadlineFilter" name="production_deadline"
+                                                value="{{ request('') }}"
+                                                class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                        </div>
+
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Order
+                                                Complete Date</label>
+                                            <input type="date" id="oderCompleteDateFilter" name="order_complete_date"
+                                                value="{{ request('') }}"
+                                                class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                        </div>
                                     </div>
 
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Production
-                                            Deadline</label>
-                                        <input type="date" id="productionDeadlineFilter" name="production_deadline"
-                                            value="{{ request('') }}"
-                                            class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                    </div>
+                                    <button type="submit"
+                                        class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                                        Apply Filters
+                                    </button>
 
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Order
-                                            Complete Date</label>
-                                        <input type="date" id="oderCompleteDateFilter" name="order_complete_date"
-                                            value="{{ request('') }}"
-                                            class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                    </div>
-                                </div>
-
-                                <button type="submit"
-                                    class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-                                    Apply Filters
-                                </button>
-
-                                <button type="button" id="clearFiltersBtnProduction"
-                                    class="mt-4 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 px-4 py-2 rounded hover:bg-gray-300">
-                                    Clear Filters
-                                </button>
-                            </form>
+                                    <button type="button" id="clearFiltersBtnProduction"
+                                        class="mt-4 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 px-4 py-2 rounded hover:bg-gray-300">
+                                        Clear Filters
+                                    </button>
+                                </form>
+                            </div>
 
 
                             <div class="flex justify-between items-center mb-6">
@@ -120,9 +229,9 @@
                             <div class="overflow-x-auto bg-white dark:bg-gray-900 shadow rounded-lg">
                                 <table class="table-fixed w-full text-sm divide-y divide-gray-200 dark:divide-gray-700">
                                     <thead class="bg-gray-100 dark:bg-gray-700 text-left">
-                                        <tr>
+                                        <tr class="text-center">
                                             <th
-                                                class="px-4 py-3 w-20 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="sticky left-0 z-10 bg-white px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Order No
                                             </th>
                                             <th
@@ -130,11 +239,11 @@
                                                 Production Deadline
                                             </th>
                                             <th
-                                                class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="px-4 py-3 w-48 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Order Received Date & Time
                                             </th>
                                             <th
-                                                class="px-4 py-3 w-56 text-center text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="px-4 py-3 w-48 text-center text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Order Start Date & Time
                                             </th>
                                             <th
@@ -146,14 +255,14 @@
                                                 Supervisor Name
                                             </th>
                                             <th
-                                                class="px-4 py-3 w-56 text-center text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="px-4 py-3 w-48 text-center text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Order Complete Date & Time
                                             </th>
                                             <th
                                                 class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Production Output</th>
                                             <th
-                                                class="px-4 py-3 w-56 text-center text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="px-4 py-3 w-48 text-center text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Dispatch to R&D
                                             </th>
                                             <th
@@ -167,481 +276,204 @@
                                         </tr>
                                     </thead>
                                     <tbody id="serviceRecords"
-                                        class="bg-white dark:bg-gray-800 divide-y text-left divide-gray-200 dark:divide-gray-700">
+                                        class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                                        @foreach ($productions as $prod)
+                                            <tr id="serviceRow{{ $prod->id }}"
+                                                class="odd:bg-white even:bg-gray-50 border-b border-gray-200  text-left">
+                                                {{-- Order No --}}
+                                                <td class="sticky left-0 z-10 bg-white px-4 py-3 bg-gray-100 whitespace-normal break-words border-r border-gray-300">
+                                                    <span
+                                                        class="readonly hover:text-blue-600 hover:underline cursor-pointer"
+                                                        onclick="document.getElementById('viewDetailsSample').classList.remove('hidden')">
+                                                        {{ $prod->order_no }}
+                                                    </span>
+                                                    <input type="text" name="order_no"
+                                                        class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                        value="{{ $prod->order_no }}" />
+                                                </td>
 
-                                        <tr id="serviceRow1">
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly hover:text-blue-600 hover:underline cursor-pointer"
-                                                    onclick="document.getElementById('viewDetailsSample').classList.remove('hidden')">
-                                                    001
-                                                </span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="001" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">2025-05-05</span>
-                                                <input type="date"
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="2025-05-05" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">2025-05-05</span>
-                                                <input type="date"
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="2025-05-05" />
-                                            </td>
-                                            <td class="py-3 whitespace-normal break-words text-center">
-                                                <div class="order-start-item mb-4">
-                                                    <button onclick="toggleOrderStart(event, this)" type="button"
-                                                        class="order-start-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
-                                                        Pending
-                                                    </button>
-                                                    <div
-                                                        class="order-start-timestamp mt-1 text-xs text-gray-500 dark:text-gray-400">
+                                                {{-- Production Deadline --}}
+                                                <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
+                                                    <span class="readonly">
+                                                        {{ $prod->production_deadline ? $prod->production_deadline->format('Y-m-d') : '-' }}
+                                                    </span>
+                                                    <input type="date" name="production_deadline"
+                                                        class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                        value="{{ $prod->production_deadline ? $prod->production_deadline->format('Y-m-d') : '' }}" />
+                                                </td>
+
+                                                {{-- Order Received Date & Time --}}
+                                                <td
+                                                    class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                                    <span
+                                                        class="readonly inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-yellow-100 dark:bg-gray-800 px-3 py-1 rounded">
+                                                        Received on <br>
+                                                        {{ \Carbon\Carbon::parse($prod->order_received_at)->format('Y-m-d') }}
+                                                        at
+                                                        {{ \Carbon\Carbon::parse($prod->order_received_at)->format('H:i') }}
+                                                    </span>
+                                                    <input type="datetime-local" name="order_received_at"
+                                                        class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                        value="{{ $prod->order_received_at ? $prod->order_received_at->format('Y-m-d\TH:i') : '' }}" />
+                                                </td>
+
+                                                {{-- Order Start Date & Time --}}
+                                                <td
+                                                    class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                                    @if (!$prod->order_start_at)
+                                                        <form action="{{ route('production.markStart') }}"
+                                                            method="POST">
+                                                            @csrf
+                                                            <input type="hidden" name="id"
+                                                                value="{{ $prod->id }}">
+                                                            <button type="submit"
+                                                                class="order-start-btn px-2 py-1 mt-3 rounded transition-all duration-200 bg-gray-300 text-black hover:bg-gray-400">
+                                                                Pending
+                                                            </button>
+                                                        </form>
+                                                    @else
+                                                        <span
+                                                            class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-pink-200 dark:bg-gray-800 px-3 py-1 rounded">
+                                                            Started on <br>
+                                                            {{ $prod->order_start_at->format('Y-m-d') }} at
+                                                            {{ $prod->order_start_at->format('H:i') }}
+                                                        </span>
+                                                    @endif
+                                                </td>
+
+                                                {{-- Operator Name --}}
+                                                <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
+                                                    @if ($prod->operator_name)
+                                                        {{-- Show only the name if already selected --}}
+                                                        <span>{{ $prod->operator_name }}</span>
+                                                    @else
+                                                        {{-- Show the dropdown if no operator assigned --}}
+                                                        <form method="POST" action="{{ route('sample-preparation-production.update-operator', $prod->id) }}">
+                                                            @csrf
+                                                            @method('PATCH')
+
+                                                            <select name="operator_name"
+                                                                    class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                                    onchange="this.form.submit()">
+                                                                <option value="">-- Operator --</option>
+                                                                @foreach ($operators as $operator)
+                                                                    <option value="{{ $operator->name }}"
+                                                                        {{ $prod->operator_name === $operator->name ? 'selected' : '' }}>
+                                                                        {{ $operator->name }}
+                                                                    </option>
+                                                                @endforeach
+                                                            </select>
+                                                        </form>
+                                                    @endif
+                                                </td>
+
+                                                {{-- Supervisor Name --}}
+                                                <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
+                                                    @if ($prod->supervisor_name)
+                                                        {{-- Show only the supervisor name if already assigned --}}
+                                                        <span>{{ $prod->supervisor_name }}</span>
+                                                    @else
+                                                        {{-- Show dropdown to select a supervisor if not assigned --}}
+                                                        <form method="POST" action="{{ route('sample-preparation-production.update-supervisor', $prod->id) }}">
+                                                            @csrf
+                                                            @method('PATCH')
+
+                                                            <select name="supervisor_name"
+                                                                    class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                                    onchange="this.form.submit()">
+                                                                <option value="">-- Supervisor --</option>
+                                                                @foreach ($supervisors as $supervisor)
+                                                                    <option value="{{ $supervisor->name }}"
+                                                                        {{ $prod->supervisor_name === $supervisor->name ? 'selected' : '' }}>
+                                                                        {{ $supervisor->name }}
+                                                                    </option>
+                                                                @endforeach
+                                                            </select>
+                                                        </form>
+                                                    @endif
+                                                </td>
+
+                                                {{-- Order Complete Date & Time --}}
+                                                <td
+                                                    class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                                    @if (!$prod->order_complete_at)
+                                                        <form action="{{ route('production.markComplete') }}"
+                                                            method="POST">
+                                                            @csrf
+                                                            <input type="hidden" name="id"
+                                                                value="{{ $prod->id }}">
+                                                            <button type="submit"
+                                                                class="order-complete-btn px-2 py-1 mt-3 rounded transition-all duration-200 bg-gray-300 text-black hover:bg-gray-400">
+                                                                Pending
+                                                            </button>
+                                                        </form>
+                                                    @else
+                                                        <span
+                                                            class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-pink-200 dark:bg-gray-800 px-3 py-1 rounded">
+                                                            Completed on <br>
+                                                            {{ $prod->order_complete_at->format('Y-m-d') }} at
+                                                            {{ $prod->order_complete_at->format('H:i') }}
+                                                        </span>
+                                                    @endif
+                                                </td>
+
+                                                {{-- Production Output --}}
+                                                <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
+                                                    <span class="readonly">{{ $prod->production_output ?? '-' }}</span>
+                                                    <input type="text" name="production_output"
+                                                        class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                        value="{{ $prod->production_output ?? '' }}" />
+                                                </td>
+
+                                                {{-- Dispatch to R&D --}}
+                                                <td class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                                    @if (!$prod->dispatch_to_rnd_at)
+                                                        <form action="{{ route('production.dispatchToRnd') }}"
+                                                            method="POST">
+                                                            @csrf
+                                                            <input type="hidden" name="id"
+                                                                value="{{ $prod->id }}">
+                                                            <button type="submit"
+                                                                class="sample-dispatch-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
+                                                                Pending
+                                                            </button>
+                                                        </form>
+                                                    @else
+                                                        <div
+                                                            class="sample-dispatch-timestamp text-xs text-gray-500 dark:text-gray-400">
+                                                            {{ $prod->dispatch_to_rnd_at->format('Y-m-d H:i') }}
+                                                        </div>
+                                                    @endif
+                                                </td>
+
+                                                {{-- Note --}}
+                                                <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                                    <span class="readonly">{{ $prod->note ?? 'N/D' }}</span>
+                                                    <textarea name="note" rows="2"
+                                                        class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">{{ $prod->note ?? '' }}</textarea>
+                                                </td>
+
+                                                {{-- Action Buttons --}}
+                                                <td class="px-4 py-3 whitespace-normal break-words text-center">
+                                                    <div class="flex space-x-2 justify-center">
+                                                        <button type="button"
+                                                            class="bg-green-600 h-10 hover:bg-green-700 text-white px-3 py-1 rounded text-sm"
+                                                            onclick="editServiceRow('serviceRow{{ $prod->id }}')">
+                                                            Edit
+                                                        </button>
+                                                        <button type="button"
+                                                            class="bg-blue-600 h-10 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm hidden"
+                                                            onclick="saveServiceRow('serviceRow{{ $prod->id }}')">
+                                                            Save
+                                                        </button>
+                                                        <button type="button"
+                                                            class="bg-gray-600 h-10 hover:bg-gray-700 text-white px-3 py-1 rounded text-sm">
+                                                            Download
+                                                        </button>
                                                     </div>
-                                                </div>
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">Operator 001</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="Operator 001" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">Supervisor 001</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="Supervisor 001" />
-                                            </td>
-                                            <td class="py-3 whitespace-normal break-words text-center">
-                                                <div class="order-complete-item mb-4">
-                                                    <button onclick="toggleOrderComplete(event, this)" type="button"
-                                                        class="order-complete-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
-                                                        Pending
-                                                    </button>
-                                                    <div
-                                                        class="order-complete-timestamp mt-1 text-xs text-gray-500 dark:text-gray-400">
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">5 yard</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="5 yard" />
-                                            </td>
-                                            <td class="py-3 whitespace-normal break-words text-center">
-                                                <div class="sample-dispatch-item mb-4">
-                                                    <button onclick="toggleSampleDispatch(event, this)" type="button"
-                                                        class="sample-dispatch-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
-                                                        Pending
-                                                    </button>
-                                                    <div
-                                                        class="sample-dispatch-timestamp mt-1 text-xs text-gray-500 dark:text-gray-400">
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">abc 1234 long sample description to test line
-                                                    wrapping</span>
-                                                <textarea
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    rows="2">abc 1234 long sample description to test line wrapping</textarea>
-                                            </td>
-                                            <td class="px-4 py-3 text-center">
-                                                <div class="flex text-center space-x-2 justify-center">
-                                                    <button
-                                                        class="bg-green-600 h-10 hover:bg-green-700 text-white px-3 py-1 rounded text-sm"
-                                                        onclick="editServiceRow('serviceRow1')">
-                                                        Edit
-                                                    </button>
-                                                    <button
-                                                        class="bg-blue-600 h-10 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm hidden"
-                                                        onclick="saveServiceRow('serviceRow1')">
-                                                        Save
-                                                    </button>
-                                                    <button
-                                                        class="bg-gray-600 h-10 hover:bg-gray-700 text-white px-3 py-1 rounded text-sm">Download</button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr id="serviceRow1">
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">001</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="001" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">2025-05-05</span>
-                                                <input type="date"
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="2025-05-05" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">2025-05-05</span>
-                                                <input type="date"
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="2025-05-05" />
-                                            </td>
-                                            <td class="py-3 whitespace-normal break-words text-center">
-                                                <div class="order-start-item mb-4">
-                                                    <button onclick="toggleOrderStart(event, this)" type="button"
-                                                        class="order-start-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
-                                                        Pending
-                                                    </button>
-                                                    <div
-                                                        class="order-start-timestamp mt-1 text-xs text-gray-500 dark:text-gray-400">
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">Operator 001</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="Operator 001" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">Supervisor 001</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="Supervisor 001" />
-                                            </td>
-                                            <td class="py-3 whitespace-normal break-words text-center">
-                                                <div class="order-complete-item mb-4">
-                                                    <button onclick="toggleOrderComplete(event, this)" type="button"
-                                                        class="order-complete-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
-                                                        Pending
-                                                    </button>
-                                                    <div
-                                                        class="order-complete-timestamp mt-1 text-xs text-gray-500 dark:text-gray-400">
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">5 yard</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="5 yard" />
-                                            </td>
-                                            <td class="py-3 whitespace-normal break-words text-center">
-                                                <div class="sample-dispatch-item mb-4">
-                                                    <button onclick="toggleSampleDispatch(event, this)" type="button"
-                                                        class="sample-dispatch-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
-                                                        Pending
-                                                    </button>
-                                                    <div
-                                                        class="sample-dispatch-timestamp mt-1 text-xs text-gray-500 dark:text-gray-400">
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">abc 1234 long sample description to test line
-                                                    wrapping</span>
-                                                <textarea
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    rows="2">abc 1234 long sample description to test line wrapping</textarea>
-                                            </td>
-                                            <td class="px-4 py-3 text-center">
-                                                <div class="flex text-center space-x-2 justify-center">
-                                                    <button
-                                                        class="bg-green-600 h-10 hover:bg-green-700 text-white px-3 py-1 rounded text-sm"
-                                                        onclick="editServiceRow('serviceRow1')">
-                                                        Edit
-                                                    </button>
-                                                    <button
-                                                        class="bg-blue-600 h-10 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm hidden"
-                                                        onclick="saveServiceRow('serviceRow1')">
-                                                        Save
-                                                    </button>
-                                                    <button
-                                                        class="bg-gray-600 h-10 hover:bg-gray-700 text-white px-3 py-1 rounded text-sm">Download</button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr id="serviceRow1">
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">001</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="001" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">2025-05-05</span>
-                                                <input type="date"
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="2025-05-05" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">2025-05-05</span>
-                                                <input type="date"
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="2025-05-05" />
-                                            </td>
-                                            <td class="py-3 whitespace-normal break-words text-center">
-                                                <div class="order-start-item mb-4">
-                                                    <button onclick="toggleOrderStart(event, this)" type="button"
-                                                        class="order-start-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
-                                                        Pending
-                                                    </button>
-                                                    <div
-                                                        class="order-start-timestamp mt-1 text-xs text-gray-500 dark:text-gray-400">
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">Operator 001</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="Operator 001" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">Supervisor 001</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="Supervisor 001" />
-                                            </td>
-                                            <td class="py-3 whitespace-normal break-words text-center">
-                                                <div class="order-complete-item mb-4">
-                                                    <button onclick="toggleOrderComplete(event, this)" type="button"
-                                                        class="order-complete-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
-                                                        Pending
-                                                    </button>
-                                                    <div
-                                                        class="order-complete-timestamp mt-1 text-xs text-gray-500 dark:text-gray-400">
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">5 yard</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="5 yard" />
-                                            </td>
-                                            <td class="py-3 whitespace-normal break-words text-center">
-                                                <div class="sample-dispatch-item mb-4">
-                                                    <button onclick="toggleSampleDispatch(event, this)" type="button"
-                                                        class="sample-dispatch-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
-                                                        Pending
-                                                    </button>
-                                                    <div
-                                                        class="sample-dispatch-timestamp mt-1 text-xs text-gray-500 dark:text-gray-400">
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">abc 1234 long sample description to test line
-                                                    wrapping</span>
-                                                <textarea
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    rows="2">abc 1234 long sample description to test line wrapping</textarea>
-                                            </td>
-                                            <td class="px-4 py-3 text-center">
-                                                <div class="flex text-center space-x-2 justify-center">
-                                                    <button
-                                                        class="bg-green-600 h-10 hover:bg-green-700 text-white px-3 py-1 rounded text-sm"
-                                                        onclick="editServiceRow('serviceRow1')">
-                                                        Edit
-                                                    </button>
-                                                    <button
-                                                        class="bg-blue-600 h-10 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm hidden"
-                                                        onclick="saveServiceRow('serviceRow1')">
-                                                        Save
-                                                    </button>
-                                                    <button
-                                                        class="bg-gray-600 h-10 hover:bg-gray-700 text-white px-3 py-1 rounded text-sm">Download</button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr id="serviceRow1">
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">001</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="001" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">2025-05-05</span>
-                                                <input type="date"
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="2025-05-05" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">2025-05-05</span>
-                                                <input type="date"
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="2025-05-05" />
-                                            </td>
-                                            <td class="py-3 whitespace-normal break-words text-center">
-                                                <div class="order-start-item mb-4">
-                                                    <button onclick="toggleOrderStart(event, this)" type="button"
-                                                        class="order-start-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
-                                                        Pending
-                                                    </button>
-                                                    <div
-                                                        class="order-start-timestamp mt-1 text-xs text-gray-500 dark:text-gray-400">
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">Operator 001</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="Operator 001" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">Supervisor 001</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="Supervisor 001" />
-                                            </td>
-                                            <td class="py-3 whitespace-normal break-words text-center">
-                                                <div class="order-complete-item mb-4">
-                                                    <button onclick="toggleOrderComplete(event, this)" type="button"
-                                                        class="order-complete-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
-                                                        Pending
-                                                    </button>
-                                                    <div
-                                                        class="order-complete-timestamp mt-1 text-xs text-gray-500 dark:text-gray-400">
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">5 yard</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="5 yard" />
-                                            </td>
-                                            <td class="py-3 whitespace-normal break-words text-center">
-                                                <div class="sample-dispatch-item mb-4">
-                                                    <button onclick="toggleSampleDispatch(event, this)" type="button"
-                                                        class="sample-dispatch-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
-                                                        Pending
-                                                    </button>
-                                                    <div
-                                                        class="sample-dispatch-timestamp mt-1 text-xs text-gray-500 dark:text-gray-400">
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">abc 1234 long sample description to test line
-                                                    wrapping</span>
-                                                <textarea
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    rows="2">abc 1234 long sample description to test line wrapping</textarea>
-                                            </td>
-                                            <td class="px-4 py-3 text-center">
-                                                <div class="flex text-center space-x-2 justify-center">
-                                                    <button
-                                                        class="bg-green-600 h-10 hover:bg-green-700 text-white px-3 py-1 rounded text-sm"
-                                                        onclick="editServiceRow('serviceRow1')">
-                                                        Edit
-                                                    </button>
-                                                    <button
-                                                        class="bg-blue-600 h-10 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm hidden"
-                                                        onclick="saveServiceRow('serviceRow1')">
-                                                        Save
-                                                    </button>
-                                                    <button
-                                                        class="bg-gray-600 h-10 hover:bg-gray-700 text-white px-3 py-1 rounded text-sm">Download</button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr id="serviceRow1">
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">001</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="001" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">2025-05-05</span>
-                                                <input type="date"
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="2025-05-05" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">2025-05-05</span>
-                                                <input type="date"
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="2025-05-05" />
-                                            </td>
-                                            <td class="py-3 whitespace-normal break-words text-center">
-                                                <div class="order-start-item mb-4">
-                                                    <button onclick="toggleOrderStart(event, this)" type="button"
-                                                        class="order-start-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
-                                                        Pending
-                                                    </button>
-                                                    <div
-                                                        class="order-start-timestamp mt-1 text-xs text-gray-500 dark:text-gray-400">
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">Operator 001</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="Operator 001" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">Supervisor 001</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="Supervisor 001" />
-                                            </td>
-                                            <td class="py-3 whitespace-normal break-words text-center">
-                                                <div class="order-complete-item mb-4">
-                                                    <button onclick="toggleOrderComplete(event, this)" type="button"
-                                                        class="order-complete-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
-                                                        Pending
-                                                    </button>
-                                                    <div
-                                                        class="order-complete-timestamp mt-1 text-xs text-gray-500 dark:text-gray-400">
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">5 yard</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="5 yard" />
-                                            </td>
-                                            <td class="py-3 whitespace-normal break-words text-center">
-                                                <div class="sample-dispatch-item mb-4">
-                                                    <button onclick="toggleSampleDispatch(event, this)" type="button"
-                                                        class="sample-dispatch-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
-                                                        Pending
-                                                    </button>
-                                                    <div
-                                                        class="sample-dispatch-timestamp mt-1 text-xs text-gray-500 dark:text-gray-400">
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">abc 1234 long sample description to test line
-                                                    wrapping</span>
-                                                <textarea
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    rows="2">abc 1234 long sample description to test line wrapping</textarea>
-                                            </td>
-                                            <td class="px-4 py-3 text-center">
-                                                <div class="flex text-center space-x-2 justify-center">
-                                                    <button
-                                                        class="bg-green-600 h-10 hover:bg-green-700 text-white px-3 py-1 rounded text-sm"
-                                                        onclick="editServiceRow('serviceRow1')">
-                                                        Edit
-                                                    </button>
-                                                    <button
-                                                        class="bg-blue-600 h-10 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm hidden"
-                                                        onclick="saveServiceRow('serviceRow1')">
-                                                        Save
-                                                    </button>
-                                                    <button
-                                                        class="bg-gray-600 h-10 hover:bg-gray-700 text-white px-3 py-1 rounded text-sm">Download</button>
-                                                </div>
-                                            </td>
-                                        </tr>
+                                                </td>
+                                            </tr>
+                                        @endforeach
                                     </tbody>
                                 </table>
                                 <!-- Add Sample Modal -->
@@ -661,10 +493,6 @@
                                         </div>
 
                                     </div>
-                                </div>
-
-                                <div class="py-6 flex justify-center">
-
                                 </div>
                             </div>
                         </div>
@@ -846,6 +674,13 @@
 
                 timestamp.textContent = '';
             }
+        }
+    </script>
+
+    <script>
+        function toggleFilterForm() {
+            const form = document.getElementById('filterFormContainer');
+            form.classList.toggle('hidden');
         }
     </script>
 @endsection

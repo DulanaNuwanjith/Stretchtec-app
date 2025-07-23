@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\SampleInquiryController;
 use App\Http\Controllers\SamplePreparationRnDController;
+use App\Http\Controllers\SamplePreparationProductionController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -17,13 +18,19 @@ Route::middleware([
         return view('dashboard');
     })->name('dashboard');
 
+    Route::patch('/sample-preparation-production/update-operator/{id}', [SamplePreparationProductionController::class, 'updateOperator'])
+        ->name('sample-preparation-production.update-operator');
+
+    Route::patch('/sample-preparation-production/update-supervisor/{id}', [SamplePreparationProductionController::class, 'updateSupervisor'])
+        ->name('sample-preparation-production.update-supervisor');
+
     //Sample inquiry routes
     Route::resource('sampleInquiry', 'App\Http\Controllers\SampleInquiryController')->names([
         'index' => 'sample-inquery-details.index',
         'store' => 'sampleInquiry.store',
         'destroy' => 'sampleInquiry.destroy',
     ]);
-    Route::post('/sampleInquiry/update-developed-status', [SampleInquiryController::class, 'updateDevelopedStatus'])->name('inquiry.updateDevelopedStatus');
+    // Route::post('/sampleInquiry/update-developed-status', [SampleInquiryController::class, 'updateDevelopedStatus'])->name('inquiry.updateDevelopedStatus');
     Route::post('/sampleInquiry/mark-sent-to-sample-dev', [SampleInquiryController::class, 'markSentToSampleDevelopment'])
         ->name('inquiry.markSentToSampleDev');
     Route::post('/sampleInquiry/mark-customer-delivered', [SampleInquiryController::class, 'markCustomerDelivered'])
@@ -58,6 +65,10 @@ Route::get('reports', function () {
 Route::get('sampleStockManagement', function () {
     return view('sample-development.sample-stock-management');
 })->name('sampleStockManagement.index');
+
+Route::get('leftoverYarnManagement', function () {
+    return view('sample-development.leftover-yarn-details');
+})->name('leftoverYarnManagement.index');
 
 // Route::get('sample-preparation-details', function () {
 //     return view('sample-development.pages.sample-preparation-details');
@@ -107,3 +118,17 @@ Route::post('/rnd/lockTktField', [SamplePreparationRnDController::class, 'lockTk
 Route::post('/rnd/lockSupplierField', [SamplePreparationRnDController::class, 'lockSupplierField'])->name('rnd.lockSupplierField');
 Route::post('/rnd/lockDeadlineField', [SamplePreparationRnDController::class, 'lockDeadlineField'])->name('rnd.lockDeadlineField');
 Route::post('/rnd/lockReferenceField', [SamplePreparationRnDController::class, 'lockReferenceField'])->name('rnd.lockReferenceField');
+Route::post('/sample-preparation/update-developed', [SamplePreparationRnDController::class, 'updateDevelopedStatus'])->name('rnd.updateDevelopedStatus');
+Route::post('/rnd/update-yarn-weights', [SamplePreparationRnDController::class, 'updateYarnWeights'])->name('rnd.updateYarnWeights');
+
+
+Route::prefix('sample-production')->group(function () {
+    Route::get('/', [SamplePreparationProductionController::class, 'index'])->name('production.index');
+    Route::post('/update', [SamplePreparationProductionController::class, 'update'])->name('production.update');
+    Route::post('/mark-start', [SamplePreparationProductionController::class, 'markOrderStart'])->name('production.markStart');
+    Route::post('/mark-complete', [SamplePreparationProductionController::class, 'markOrderComplete'])->name('production.markComplete');
+    Route::post('/dispatch-to-rnd', [SamplePreparationProductionController::class, 'dispatchToRnd'])->name('production.dispatchToRnd');
+});
+
+Route::get('/sample-preparation-production', [SamplePreparationProductionController::class, 'index'])
+    ->name('sample-preparation-production.index');

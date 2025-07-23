@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\SamplePreparationRnD;
+use App\Models\SamplePreparationProduction;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
@@ -68,16 +69,29 @@ class SamplePreparationRnDController extends Controller
 
     public function markSendToProduction(Request $request)
     {
-        $request->validate([
-            'id' => 'required|exists:sample_preparation_rnd,id',
-        ]);
-
         $rnd = SamplePreparationRnD::findOrFail($request->id);
-        $rnd->sendOrderToProductionStatus = Carbon::now(); // Store date/time
+
+        // Optional: Check if already sent
+        if ($rnd->sendOrderToProductionStatus) {
+            return redirect()->back()->with('info', 'Already sent to production.');
+        }
+
+        // Update sendOrderToProductionStatus
+        $rnd->sendOrderToProductionStatus = now();
         $rnd->save();
 
-        return back()->with('success', 'Order sent to production.');
+        // Create production record
+        SamplePreparationProduction::create([
+            'sample_preparation_rnd_id' => $rnd->id,
+            'order_no' => $rnd->orderNo,
+            'production_deadline' => $rnd->productionDeadline,
+            'order_received_at' => now(),
+            'note' => $rnd->note,
+        ]);
+
+        return back()->with('success', 'Sent to production successfully.');
     }
+
 
     public function setDevelopPlanDate(Request $request)
     {
@@ -225,6 +239,41 @@ class SamplePreparationRnDController extends Controller
         }
 
         return back()->with('success', 'Reference No saved.');
+    }
+
+    public function updateDevelopedStatus(Request $request)
+    {
+        $prep = SamplePreparationRnD::findOrFail($request->id);
+
+        // Disallow update if locked
+        if ($prep->alreadyDeveloped || $prep->developPlannedDate) {
+            return back()->with('error', 'Status is locked and cannot be changed.');
+        }
+
+        $prep->alreadyDeveloped = (int) $request->alreadyDeveloped;
+        $prep->save();
+
+        return back()->with('success', 'Developed status updated successfully!');
+    }
+
+    public function updateYarnWeights(Request $request)
+    {
+        $request->validate([
+            'id' => 'required|exists:sample_preparation_rnd,id',
+            'field' => 'required|in:yarnOrderedWeight,yarnLeftoverWeight',
+            'value' => 'required|numeric',
+        ]);
+
+        $prep = SamplePreparationRnD::find($request->id);
+
+        $field = $request->field;
+        $lockField = 'is_' . \Str::snake($field) . '_locked';
+
+        $prep->$field = $request->value;
+        $prep->$lockField = true;
+        $prep->save();
+
+        return back()->with('success', 'Weight updated successfully.');
     }
 
 
