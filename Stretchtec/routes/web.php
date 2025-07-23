@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\SampleInquiryController;
 use App\Http\Controllers\SamplePreparationRnDController;
+use App\Http\Controllers\SamplePreparationProductionController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -113,3 +114,15 @@ Route::post('/rnd/lockDeadlineField', [SamplePreparationRnDController::class, 'l
 Route::post('/rnd/lockReferenceField', [SamplePreparationRnDController::class, 'lockReferenceField'])->name('rnd.lockReferenceField');
 Route::post('/sample-preparation/update-developed', [SamplePreparationRnDController::class, 'updateDevelopedStatus'])->name('rnd.updateDevelopedStatus');
 Route::post('/rnd/update-yarn-weights', [SamplePreparationRnDController::class, 'updateYarnWeights'])->name('rnd.updateYarnWeights');
+
+
+Route::prefix('sample-production')->group(function () {
+    Route::get('/', [SamplePreparationProductionController::class, 'index'])->name('production.index');
+    Route::post('/update', [SamplePreparationProductionController::class, 'update'])->name('production.update');
+    Route::post('/mark-start', [SamplePreparationProductionController::class, 'markOrderStart'])->name('production.markStart');
+    Route::post('/mark-complete', [SamplePreparationProductionController::class, 'markOrderComplete'])->name('production.markComplete');
+    Route::post('/dispatch-to-rnd', [SamplePreparationProductionController::class, 'dispatchToRnd'])->name('production.dispatchToRnd');
+});
+
+Route::get('/sample-preparation-production', [SamplePreparationProductionController::class, 'index'])
+    ->name('sample-preparation-production.index');

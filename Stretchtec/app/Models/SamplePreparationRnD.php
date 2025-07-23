@@ -90,4 +90,9 @@ class SamplePreparationRnD extends Model
             }
         });
     }
+
+    public function production()
+    {
+        return $this->hasOne(SamplePreparationProduction::class, 'sample_preparation_rnd_id');
+    }
 }

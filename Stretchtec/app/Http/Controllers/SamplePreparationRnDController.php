@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\SamplePreparationRnD;
+use App\Models\SamplePreparationProduction;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
@@ -72,12 +73,26 @@ class SamplePreparationRnDController extends Controller
             'id' => 'required|exists:sample_preparation_rnd,id',
         ]);
 
-        $rnd = SamplePreparationRnD::findOrFail($request->id);
-        $rnd->sendOrderToProductionStatus = Carbon::now(); // Store date/time
+        $rnd = SamplePreparationRnD::with('production')->findOrFail($request->id);
+
+        // Mark as sent
+        $rnd->sendOrderToProductionStatus = now();
         $rnd->save();
 
-        return back()->with('success', 'Order sent to production.');
+        // Create production record if not exists
+        if (!$rnd->production) {
+            SamplePreparationProduction::create([
+                'sample_preparation_rnd_id' => $rnd->id,
+                'order_no' => $rnd->orderNo,
+                'production_deadline' => $rnd->productionDeadline,
+                'order_received_at' => $rnd->sendOrderToProductionStatus,
+                'note' => $rnd->note,
+            ]);
+        }
+
+        return back()->with('success', 'Order sent to production and production record created.');
     }
+
 
     public function setDevelopPlanDate(Request $request)
     {

@@ -1352,6 +1352,7 @@
             form.classList.toggle('hidden');
         }
     </script>
+    
     <script>
         function toggleDevelopedDropdown(event, id) {
             event.preventDefault();
