@@ -343,18 +343,54 @@
 
                                                 {{-- Operator Name --}}
                                                 <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
-                                                    <span class="readonly">{{ $prod->operator_name ?? '-' }}</span>
-                                                    <input type="text" name="operator_name"
-                                                        class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                        value="{{ $prod->operator_name ?? '' }}" />
+                                                    @if ($prod->operator_name)
+                                                        {{-- Show only the name if already selected --}}
+                                                        <span>{{ $prod->operator_name }}</span>
+                                                    @else
+                                                        {{-- Show the dropdown if no operator assigned --}}
+                                                        <form method="POST" action="{{ route('sample-preparation-production.update-operator', $prod->id) }}">
+                                                            @csrf
+                                                            @method('PATCH')
+
+                                                            <select name="operator_name"
+                                                                    class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                                    onchange="this.form.submit()">
+                                                                <option value="">-- Operator --</option>
+                                                                @foreach ($operators as $operator)
+                                                                    <option value="{{ $operator->name }}"
+                                                                        {{ $prod->operator_name === $operator->name ? 'selected' : '' }}>
+                                                                        {{ $operator->name }}
+                                                                    </option>
+                                                                @endforeach
+                                                            </select>
+                                                        </form>
+                                                    @endif
                                                 </td>
 
                                                 {{-- Supervisor Name --}}
                                                 <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
-                                                    <span class="readonly">{{ $prod->supervisor_name ?? '-' }}</span>
-                                                    <input type="text" name="supervisor_name"
-                                                        class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                        value="{{ $prod->supervisor_name ?? '' }}" />
+                                                    @if ($prod->supervisor_name)
+                                                        {{-- Show only the supervisor name if already assigned --}}
+                                                        <span>{{ $prod->supervisor_name }}</span>
+                                                    @else
+                                                        {{-- Show dropdown to select a supervisor if not assigned --}}
+                                                        <form method="POST" action="{{ route('sample-preparation-production.update-supervisor', $prod->id) }}">
+                                                            @csrf
+                                                            @method('PATCH')
+
+                                                            <select name="supervisor_name"
+                                                                    class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                                    onchange="this.form.submit()">
+                                                                <option value="">-- Supervisor --</option>
+                                                                @foreach ($supervisors as $supervisor)
+                                                                    <option value="{{ $supervisor->name }}"
+                                                                        {{ $prod->supervisor_name === $supervisor->name ? 'selected' : '' }}>
+                                                                        {{ $supervisor->name }}
+                                                                    </option>
+                                                                @endforeach
+                                                            </select>
+                                                        </form>
+                                                    @endif
                                                 </td>
 
                                                 {{-- Order Complete Date & Time --}}
