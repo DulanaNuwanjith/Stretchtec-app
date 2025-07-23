@@ -293,20 +293,22 @@
 
                                                 {{-- Production Deadline --}}
                                                 <td class="px-4 py-3 whitespace-normal break-words">
-                                                    <span
-                                                        class="readonly">{{ optional($prod->production_deadline)->format('Y-m-d') ?? '-' }}</span>
+                                                    <span class="readonly">
+                                                        {{ $prod->production_deadline ? $prod->production_deadline->format('Y-m-d') : '-' }}
+                                                    </span>
                                                     <input type="date" name="production_deadline"
                                                         class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                        value="{{ optional($prod->production_deadline)->format('Y-m-d') ?? '' }}" />
+                                                        value="{{ $prod->production_deadline ? $prod->production_deadline->format('Y-m-d') : '' }}" />
                                                 </td>
 
                                                 {{-- Order Received Date & Time --}}
                                                 <td class="px-4 py-3 whitespace-normal break-words">
-                                                    <span
-                                                        class="readonly">{{ optional($prod->order_received_at)->format('Y-m-d H:i') ?? '-' }}</span>
+                                                    <span class="readonly">
+                                                        {{ $prod->order_received_at ? $prod->order_received_at->format('Y-m-d H:i') : '-' }}
+                                                    </span>
                                                     <input type="datetime-local" name="order_received_at"
                                                         class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                        value="{{ optional($prod->order_received_at)->format('Y-m-d\TH:i') ?? '' }}" />
+                                                        value="{{ $prod->order_received_at ? $prod->order_received_at->format('Y-m-d\TH:i') : '' }}" />
                                                 </td>
 
                                                 {{-- Order Start Date & Time --}}

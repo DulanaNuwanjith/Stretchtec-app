@@ -24,7 +24,6 @@ class SamplePreparationProductionController extends Controller
             'supervisor_name' => 'nullable|string|max:255',
             'production_output' => 'nullable|string|max:255',
             'note' => 'nullable|string',
-            'production_deadline' => 'nullable|date',
             'order_no' => 'nullable|string|max:255',
         ]);
 

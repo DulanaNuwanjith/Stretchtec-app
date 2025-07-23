@@ -22,12 +22,12 @@ class SamplePreparationProduction extends Model
         'note',
     ];
 
-    protected $dates = [
-        'production_deadline',
-        'order_received_at',
-        'order_start_at',
-        'order_complete_at',
-        'dispatch_to_rnd_at',
+    protected $casts = [
+        'production_deadline'    => 'date',
+        'order_received_at'      => 'datetime',
+        'order_start_at'         => 'datetime',
+        'order_complete_at'      => 'datetime',
+        'dispatch_to_rnd_at'     => 'datetime',
     ];
 
     public function samplePreparationRnD()
