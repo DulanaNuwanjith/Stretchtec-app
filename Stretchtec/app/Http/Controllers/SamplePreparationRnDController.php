@@ -69,28 +69,27 @@ class SamplePreparationRnDController extends Controller
 
     public function markSendToProduction(Request $request)
     {
-        $request->validate([
-            'id' => 'required|exists:sample_preparation_rnd,id',
-        ]);
+        $rnd = SamplePreparationRnD::findOrFail($request->id);
 
-        $rnd = SamplePreparationRnD::with('production')->findOrFail($request->id);
+        // Optional: Check if already sent
+        if ($rnd->sendOrderToProductionStatus) {
+            return redirect()->back()->with('info', 'Already sent to production.');
+        }
 
-        // Mark as sent
+        // Update sendOrderToProductionStatus
         $rnd->sendOrderToProductionStatus = now();
         $rnd->save();
 
-        // Create production record if not exists
-        if (!$rnd->production) {
-            SamplePreparationProduction::create([
-                'sample_preparation_rnd_id' => $rnd->id,
-                'order_no' => $rnd->orderNo,
-                'production_deadline' => $rnd->productionDeadline,
-                'order_received_at' => $rnd->sendOrderToProductionStatus,
-                'note' => $rnd->note,
-            ]);
-        }
+        // Create production record
+        SamplePreparationProduction::create([
+            'sample_preparation_rnd_id' => $rnd->id,
+            'order_no' => $rnd->orderNo,
+            'production_deadline' => $rnd->productionDeadline,
+            'order_received_at' => now(),
+            'note' => $rnd->note,
+        ]);
 
-        return back()->with('success', 'Order sent to production and production record created.');
+        return back()->with('success', 'Sent to production successfully.');
     }
 
 
