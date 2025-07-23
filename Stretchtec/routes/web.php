@@ -18,6 +18,12 @@ Route::middleware([
         return view('dashboard');
     })->name('dashboard');
 
+    Route::patch('/sample-preparation-production/update-operator/{id}', [SamplePreparationProductionController::class, 'updateOperator'])
+        ->name('sample-preparation-production.update-operator');
+
+    Route::patch('/sample-preparation-production/update-supervisor/{id}', [SamplePreparationProductionController::class, 'updateSupervisor'])
+        ->name('sample-preparation-production.update-supervisor');
+
     //Sample inquiry routes
     Route::resource('sampleInquiry', 'App\Http\Controllers\SampleInquiryController')->names([
         'index' => 'sample-inquery-details.index',

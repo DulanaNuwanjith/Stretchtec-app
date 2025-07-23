@@ -11,8 +11,10 @@ class SamplePreparationProductionController extends Controller
     // Show all productions
     public function index()
     {
+        $operators = \App\Models\OperatorsandSupervisors::where('role', 'OPERATOR')->get();
+        $supervisors = \App\Models\OperatorsandSupervisors::where('role', 'SUPERVISOR')->get();
         $productions = SamplePreparationProduction::latest()->get();
-        return view('sample-development.pages.sample-preparation-production', compact('productions'));
+        return view('sample-development.pages.sample-preparation-production', compact('productions', 'operators', 'supervisors'));
     }
 
     // Update editable fields like operator_name, supervisor_name, production_output, note, deadline, order_no
@@ -75,5 +77,31 @@ class SamplePreparationProductionController extends Controller
         $production->save();
 
         return back()->with('success', 'Dispatched to R&D.');
+    }
+
+    public function updateOperator(Request $request, $id)
+    {
+        $request->validate([
+            'operator_name' => 'required|string|max:255',
+        ]);
+
+        $production = SamplePreparationProduction::findOrFail($id);
+        $production->operator_name = $request->operator_name;
+        $production->save();
+
+        return redirect()->back()->with('success', 'Operator updated successfully.');
+    }
+
+    public function updateSupervisor(Request $request, $id)
+    {
+        $request->validate([
+            'supervisor_name' => 'required|string|max:255',
+        ]);
+
+        $production = SamplePreparationProduction::findOrFail($id);
+        $production->supervisor_name = $request->supervisor_name;
+        $production->save();
+
+        return redirect()->back()->with('success', 'Supervisor updated successfully.');
     }
 }

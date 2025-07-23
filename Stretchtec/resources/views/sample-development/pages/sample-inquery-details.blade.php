@@ -441,7 +441,7 @@
                                                 Item</th>
                                             <th
                                                 class="px-4 py-3 w-40 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                                Item Discription</th>
+                                                Item Description</th>
                                             <th
                                                 class="px-4 py-3 w-20 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Size</th>
@@ -625,7 +625,7 @@
                                                                     {{ \Carbon\Carbon::parse($inquiry->sentToSampleDevelopmentDate)->format('H:i') }}
                                                                 </span>
                                                             @endif
-                                                        </div>                                                  
+                                                        </div>
                                                 </td>
 
                                                 {{-- Develop Plan Date --}}
