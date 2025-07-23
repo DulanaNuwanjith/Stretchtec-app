@@ -229,9 +229,9 @@
                             <div class="overflow-x-auto bg-white dark:bg-gray-900 shadow rounded-lg">
                                 <table class="table-fixed w-full text-sm divide-y divide-gray-200 dark:divide-gray-700">
                                     <thead class="bg-gray-100 dark:bg-gray-700 text-left">
-                                        <tr>
+                                        <tr class="text-center">
                                             <th
-                                                class="px-4 py-3 w-20 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="sticky left-0 z-10 bg-white px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Order No
                                             </th>
                                             <th
@@ -243,7 +243,7 @@
                                                 Order Received Date & Time
                                             </th>
                                             <th
-                                                class="px-4 py-3 w-56 text-center text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="px-4 py-3 w-48 text-center text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Order Start Date & Time
                                             </th>
                                             <th
@@ -255,14 +255,14 @@
                                                 Supervisor Name
                                             </th>
                                             <th
-                                                class="px-4 py-3 w-56 text-center text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="px-4 py-3 w-48 text-center text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Order Complete Date & Time
                                             </th>
                                             <th
                                                 class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Production Output</th>
                                             <th
-                                                class="px-4 py-3 w-56 text-center text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="px-4 py-3 w-48 text-center text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Dispatch to R&D
                                             </th>
                                             <th
@@ -276,11 +276,12 @@
                                         </tr>
                                     </thead>
                                     <tbody id="serviceRecords"
-                                        class="bg-white dark:bg-gray-800 divide-y text-left divide-gray-200 dark:divide-gray-700">
+                                        class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                                         @foreach ($productions as $prod)
-                                            <tr id="serviceRow{{ $prod->id }}">
+                                            <tr id="serviceRow{{ $prod->id }}"
+                                                class="odd:bg-white even:bg-gray-50 border-b border-gray-200  text-left">
                                                 {{-- Order No --}}
-                                                <td class="px-4 py-3 whitespace-normal break-words">
+                                                <td class="sticky left-0 z-10 bg-white px-4 py-3 bg-gray-100 whitespace-normal break-words border-r border-gray-300">
                                                     <span
                                                         class="readonly hover:text-blue-600 hover:underline cursor-pointer"
                                                         onclick="document.getElementById('viewDetailsSample').classList.remove('hidden')">
@@ -292,7 +293,7 @@
                                                 </td>
 
                                                 {{-- Production Deadline --}}
-                                                <td class="px-4 py-3 whitespace-normal break-words">
+                                                <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
                                                     <span class="readonly">
                                                         {{ $prod->production_deadline ? $prod->production_deadline->format('Y-m-d') : '-' }}
                                                     </span>
@@ -303,7 +304,7 @@
 
                                                 {{-- Order Received Date & Time --}}
                                                 <td
-                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
+                                                    class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
                                                     <span
                                                         class="readonly inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-yellow-100 dark:bg-gray-800 px-3 py-1 rounded">
                                                         Received on <br>
@@ -317,7 +318,8 @@
                                                 </td>
 
                                                 {{-- Order Start Date & Time --}}
-                                                <td class="py-3 whitespace-normal break-words text-center">
+                                                <td
+                                                    class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
                                                     @if (!$prod->order_start_at)
                                                         <form action="{{ route('production.markStart') }}"
                                                             method="POST">
@@ -325,20 +327,22 @@
                                                             <input type="hidden" name="id"
                                                                 value="{{ $prod->id }}">
                                                             <button type="submit"
-                                                                class="order-start-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
+                                                                class="order-start-btn px-2 py-1 mt-3 rounded transition-all duration-200 bg-gray-300 text-black hover:bg-gray-400">
                                                                 Pending
                                                             </button>
                                                         </form>
                                                     @else
-                                                        <div
-                                                            class="order-start-timestamp text-xs text-gray-500 dark:text-gray-400">
-                                                            {{ $prod->order_start_at->format('Y-m-d H:i') }}
-                                                        </div>
+                                                        <span
+                                                            class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-pink-200 dark:bg-gray-800 px-3 py-1 rounded">
+                                                            Started on <br>
+                                                            {{ $prod->order_start_at->format('Y-m-d') }} at
+                                                            {{ $prod->order_start_at->format('H:i') }}
+                                                        </span>
                                                     @endif
                                                 </td>
 
                                                 {{-- Operator Name --}}
-                                                <td class="px-4 py-3 whitespace-normal break-words">
+                                                <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
                                                     <span class="readonly">{{ $prod->operator_name ?? '-' }}</span>
                                                     <input type="text" name="operator_name"
                                                         class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
@@ -346,7 +350,7 @@
                                                 </td>
 
                                                 {{-- Supervisor Name --}}
-                                                <td class="px-4 py-3 whitespace-normal break-words">
+                                                <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
                                                     <span class="readonly">{{ $prod->supervisor_name ?? '-' }}</span>
                                                     <input type="text" name="supervisor_name"
                                                         class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
@@ -354,7 +358,8 @@
                                                 </td>
 
                                                 {{-- Order Complete Date & Time --}}
-                                                <td class="py-3 whitespace-normal break-words text-center">
+                                                <td
+                                                    class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
                                                     @if (!$prod->order_complete_at)
                                                         <form action="{{ route('production.markComplete') }}"
                                                             method="POST">
@@ -362,20 +367,22 @@
                                                             <input type="hidden" name="id"
                                                                 value="{{ $prod->id }}">
                                                             <button type="submit"
-                                                                class="order-complete-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
+                                                                class="order-complete-btn px-2 py-1 mt-3 rounded transition-all duration-200 bg-gray-300 text-black hover:bg-gray-400">
                                                                 Pending
                                                             </button>
                                                         </form>
                                                     @else
-                                                        <div
-                                                            class="order-complete-timestamp text-xs text-gray-500 dark:text-gray-400">
-                                                            {{ $prod->order_complete_at->format('Y-m-d H:i') }}
-                                                        </div>
+                                                        <span
+                                                            class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-pink-200 dark:bg-gray-800 px-3 py-1 rounded">
+                                                            Completed on <br>
+                                                            {{ $prod->order_complete_at->format('Y-m-d') }} at
+                                                            {{ $prod->order_complete_at->format('H:i') }}
+                                                        </span>
                                                     @endif
                                                 </td>
 
                                                 {{-- Production Output --}}
-                                                <td class="px-4 py-3 whitespace-normal break-words">
+                                                <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
                                                     <span class="readonly">{{ $prod->production_output ?? '-' }}</span>
                                                     <input type="text" name="production_output"
                                                         class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
@@ -383,7 +390,7 @@
                                                 </td>
 
                                                 {{-- Dispatch to R&D --}}
-                                                <td class="py-3 whitespace-normal break-words text-center">
+                                                <td class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
                                                     @if (!$prod->dispatch_to_rnd_at)
                                                         <form action="{{ route('production.dispatchToRnd') }}"
                                                             method="POST">
@@ -404,14 +411,14 @@
                                                 </td>
 
                                                 {{-- Note --}}
-                                                <td class="px-4 py-3 whitespace-normal break-words">
+                                                <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
                                                     <span class="readonly">{{ $prod->note ?? 'N/D' }}</span>
                                                     <textarea name="note" rows="2"
                                                         class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">{{ $prod->note ?? '' }}</textarea>
                                                 </td>
 
                                                 {{-- Action Buttons --}}
-                                                <td class="px-4 py-3 text-center">
+                                                <td class="px-4 py-3 whitespace-normal break-words text-center">
                                                     <div class="flex space-x-2 justify-center">
                                                         <button type="button"
                                                             class="bg-green-600 h-10 hover:bg-green-700 text-white px-3 py-1 rounded text-sm"
@@ -450,10 +457,6 @@
                                         </div>
 
                                     </div>
-                                </div>
-
-                                <div class="py-6 flex justify-center">
-
                                 </div>
                             </div>
                         </div>
