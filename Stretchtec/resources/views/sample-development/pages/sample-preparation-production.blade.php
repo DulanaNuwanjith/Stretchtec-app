@@ -239,7 +239,7 @@
                                                 Production Deadline
                                             </th>
                                             <th
-                                                class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="px-4 py-3 w-48 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Order Received Date & Time
                                             </th>
                                             <th
@@ -302,9 +302,14 @@
                                                 </td>
 
                                                 {{-- Order Received Date & Time --}}
-                                                <td class="px-4 py-3 whitespace-normal break-words">
-                                                    <span class="readonly">
-                                                        {{ $prod->order_received_at ? $prod->order_received_at->format('Y-m-d H:i') : '-' }}
+                                                <td
+                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
+                                                    <span
+                                                        class="readonly inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-yellow-100 dark:bg-gray-800 px-3 py-1 rounded">
+                                                        Received on <br>
+                                                        {{ \Carbon\Carbon::parse($prod->order_received_at)->format('Y-m-d') }}
+                                                        at
+                                                        {{ \Carbon\Carbon::parse($prod->order_received_at)->format('H:i') }}
                                                     </span>
                                                     <input type="datetime-local" name="order_received_at"
                                                         class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
