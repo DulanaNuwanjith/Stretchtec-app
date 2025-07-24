@@ -263,7 +263,7 @@
                                                 class="font-bold px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Production Output</th>
                                             <th
-                                                class="font-bold px-4 py-3 w-48 text-center text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold px-4 py-3 w-56 text-center text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Dispatch to R&D
                                             </th>
                                             <th
@@ -316,38 +316,46 @@
                                                         {{ \Carbon\Carbon::parse($prod->order_received_at)->format('H:i') }}
                                                     </span>
                                                     <input type="datetime-local" name="order_received_at"
-                                                           class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                           value="{{ $prod->order_received_at ? $prod->order_received_at->format('Y-m-d\TH:i') : '' }}" />
+                                                        class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                        value="{{ $prod->order_received_at ? $prod->order_received_at->format('Y-m-d\TH:i') : '' }}" />
                                                 </td>
 
                                                 {{-- Order Start Date & Time --}}
-                                                <td class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                                <td
+                                                    class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
                                                     @auth
-                                                        @if(auth()->user()->role === 'ADMIN')
+                                                        @if (auth()->user()->role === 'ADMIN')
                                                             @if (!$prod->order_start_at)
-                                                                <span class="inline-block mt-3 text-sm font-semibold text-gray-700 dark:text-white bg-gray-200 dark:bg-gray-800 px-3 py-1 rounded">
+                                                                <span
+                                                                    class="inline-block mt-3 text-sm font-semibold text-gray-700 dark:text-white bg-gray-200 dark:bg-gray-800 px-3 py-1 rounded">
                                                                     Pending
                                                                 </span>
-                                                                                                @else
-                                                                                                    <span class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-pink-200 dark:bg-gray-800 px-3 py-1 rounded">
-                                                                                                        Started on <br>
-                                                                                                        {{ $prod->order_start_at->format('Y-m-d') }} at {{ $prod->order_start_at->format('H:i') }}
-                                                                                                    </span>
+                                                            @else
+                                                                <span
+                                                                    class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-pink-200 dark:bg-gray-800 px-3 py-1 rounded">
+                                                                    Started on <br>
+                                                                    {{ $prod->order_start_at->format('Y-m-d') }} at
+                                                                    {{ $prod->order_start_at->format('H:i') }}
+                                                                </span>
                                                             @endif
                                                         @else
                                                             @if (!$prod->order_start_at)
-                                                                <form action="{{ route('production.markStart') }}" method="POST">
+                                                                <form action="{{ route('production.markStart') }}"
+                                                                    method="POST">
                                                                     @csrf
-                                                                    <input type="hidden" name="id" value="{{ $prod->id }}">
+                                                                    <input type="hidden" name="id"
+                                                                        value="{{ $prod->id }}">
                                                                     <button type="submit"
-                                                                            class="order-start-btn px-2 py-1 mt-3 rounded transition-all duration-200 bg-gray-300 text-black hover:bg-gray-400">
+                                                                        class="order-start-btn px-2 py-1 mt-3 rounded transition-all duration-200 bg-gray-300 text-black hover:bg-gray-400">
                                                                         Pending
                                                                     </button>
                                                                 </form>
                                                             @else
-                                                                <span class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-pink-200 dark:bg-gray-800 px-3 py-1 rounded">
+                                                                <span
+                                                                    class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-pink-200 dark:bg-gray-800 px-3 py-1 rounded">
                                                                     Started on <br>
-                                                                    {{ $prod->order_start_at->format('Y-m-d') }} at {{ $prod->order_start_at->format('H:i') }}
+                                                                    {{ $prod->order_start_at->format('Y-m-d') }} at
+                                                                    {{ $prod->order_start_at->format('H:i') }}
                                                                 </span>
                                                             @endif
                                                         @endif
@@ -355,9 +363,10 @@
                                                 </td>
 
                                                 {{-- Operator Name --}}
-                                                <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                                <td
+                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
                                                     @auth
-                                                        @if(auth()->user()->role === 'ADMIN')
+                                                        @if (auth()->user()->role === 'ADMIN')
                                                             @if ($prod->operator_name)
                                                                 <span>{{ $prod->operator_name }}</span>
                                                             @else
@@ -367,42 +376,48 @@
                                                             @if ($prod->operator_name)
                                                                 <span>{{ $prod->operator_name }}</span>
                                                             @else
-                                                                <form method="POST" action="{{ route('sample-preparation-production.update-operator', $prod->id) }}">
+                                                                <form method="POST"
+                                                                    action="{{ route('sample-preparation-production.update-operator', $prod->id) }}">
                                                                     @csrf
                                                                     @method('PATCH')
 
                                                                     <div class="relative inline-block text-left w-44">
                                                                         <button type="button"
-                                                                                class="dropdown-btn inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50"
-                                                                                onclick="toggleDropdown(this, 'operator')">
-                                                                            <span class="selected-operator">Select Operator</span>
-                                                                            <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                                                                            class="dropdown-btn inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50"
+                                                                            onclick="toggleDropdown(this, 'operator')">
+                                                                            <span class="selected-operator">Select
+                                                                                Operator</span>
+                                                                            <svg class="ml-2 h-5 w-5 text-gray-400"
+                                                                                viewBox="0 0 20 20" fill="currentColor">
                                                                                 <path fill-rule="evenodd"
-                                                                                      d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
-                                                                                      clip-rule="evenodd" />
+                                                                                    d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
+                                                                                    clip-rule="evenodd" />
                                                                             </svg>
                                                                         </button>
 
-                                                                        <div class="dropdown-menu-operator hidden absolute z-10 mt-2 w-full rounded-md bg-white shadow-lg ring-1 ring-black/5 max-h-48 overflow-y-auto">
+                                                                        <div
+                                                                            class="dropdown-menu-operator hidden absolute z-10 mt-2 w-full rounded-md bg-white shadow-lg ring-1 ring-black/5 max-h-48 overflow-y-auto">
                                                                             <div class="p-2 sticky top-0 bg-white z-10">
                                                                                 <input type="text"
-                                                                                       placeholder="Search Operator..."
-                                                                                       class="w-full px-2 py-1 text-sm border rounded-md"
-                                                                                       oninput="filterDropdownOptions(this)" />
+                                                                                    placeholder="Search Operator..."
+                                                                                    class="w-full px-2 py-1 text-sm border rounded-md"
+                                                                                    oninput="filterDropdownOptions(this)" />
                                                                             </div>
 
-                                                                            <div class="py-1" role="listbox" tabindex="-1">
+                                                                            <div class="py-1" role="listbox"
+                                                                                tabindex="-1">
                                                                                 @foreach ($operators as $operator)
                                                                                     <button type="button"
-                                                                                            class="dropdown-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                                                                            onclick="selectDropdownOption(this, '{{ $operator->name }}', 'operator')">
+                                                                                        class="dropdown-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                                                                        onclick="selectDropdownOption(this, '{{ $operator->name }}', 'operator')">
                                                                                         {{ $operator->name }}
                                                                                     </button>
                                                                                 @endforeach
                                                                             </div>
                                                                         </div>
 
-                                                                        <input type="hidden" name="operator_name" class="input-operator">
+                                                                        <input type="hidden" name="operator_name"
+                                                                            class="input-operator">
                                                                     </div>
                                                                 </form>
                                                             @endif
@@ -411,9 +426,10 @@
                                                 </td>
 
                                                 {{-- Supervisor Name --}}
-                                                <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                                <td
+                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
                                                     @auth
-                                                        @if(auth()->user()->role === 'ADMIN')
+                                                        @if (auth()->user()->role === 'ADMIN')
                                                             @if ($prod->supervisor_name)
                                                                 <span>{{ $prod->supervisor_name }}</span>
                                                             @else
@@ -423,42 +439,48 @@
                                                             @if ($prod->supervisor_name)
                                                                 <span>{{ $prod->supervisor_name }}</span>
                                                             @else
-                                                                <form method="POST" action="{{ route('sample-preparation-production.update-supervisor', $prod->id) }}">
+                                                                <form method="POST"
+                                                                    action="{{ route('sample-preparation-production.update-supervisor', $prod->id) }}">
                                                                     @csrf
                                                                     @method('PATCH')
 
                                                                     <div class="relative inline-block text-left w-44">
                                                                         <button type="button"
-                                                                                class="dropdown-btn inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50"
-                                                                                onclick="toggleDropdown(this, 'supervisor')">
-                                                                            <span class="selected-supervisor">Select Supervisor</span>
-                                                                            <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                                                                            class="dropdown-btn inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50"
+                                                                            onclick="toggleDropdown(this, 'supervisor')">
+                                                                            <span class="selected-supervisor">Select
+                                                                                Supervisor</span>
+                                                                            <svg class="ml-2 h-5 w-5 text-gray-400"
+                                                                                viewBox="0 0 20 20" fill="currentColor">
                                                                                 <path fill-rule="evenodd"
-                                                                                      d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
-                                                                                      clip-rule="evenodd" />
+                                                                                    d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
+                                                                                    clip-rule="evenodd" />
                                                                             </svg>
                                                                         </button>
 
-                                                                        <div class="dropdown-menu-supervisor hidden absolute z-10 mt-2 w-full rounded-md bg-white shadow-lg ring-1 ring-black/5 max-h-48 overflow-y-auto">
+                                                                        <div
+                                                                            class="dropdown-menu-supervisor hidden absolute z-10 mt-2 w-full rounded-md bg-white shadow-lg ring-1 ring-black/5 max-h-48 overflow-y-auto">
                                                                             <div class="p-2 sticky top-0 bg-white z-10">
                                                                                 <input type="text"
-                                                                                       placeholder="Search Supervisor..."
-                                                                                       class="w-full px-2 py-1 text-sm border rounded-md"
-                                                                                       oninput="filterDropdownOptions(this)" />
+                                                                                    placeholder="Search Supervisor..."
+                                                                                    class="w-full px-2 py-1 text-sm border rounded-md"
+                                                                                    oninput="filterDropdownOptions(this)" />
                                                                             </div>
 
-                                                                            <div class="py-1" role="listbox" tabindex="-1">
+                                                                            <div class="py-1" role="listbox"
+                                                                                tabindex="-1">
                                                                                 @foreach ($supervisors as $supervisor)
                                                                                     <button type="button"
-                                                                                            class="dropdown-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                                                                            onclick="selectDropdownOption(this, '{{ $supervisor->name }}', 'supervisor')">
+                                                                                        class="dropdown-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                                                                        onclick="selectDropdownOption(this, '{{ $supervisor->name }}', 'supervisor')">
                                                                                         {{ $supervisor->name }}
                                                                                     </button>
                                                                                 @endforeach
                                                                             </div>
                                                                         </div>
 
-                                                                        <input type="hidden" name="supervisor_name" class="input-supervisor">
+                                                                        <input type="hidden" name="supervisor_name"
+                                                                            class="input-supervisor">
                                                                     </div>
                                                                 </form>
                                                             @endif
@@ -467,33 +489,41 @@
                                                 </td>
 
                                                 {{-- Order Complete Date & Time --}}
-                                                <td class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                                <td
+                                                    class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
                                                     @auth
-                                                        @if(auth()->user()->role === 'ADMIN')
+                                                        @if (auth()->user()->role === 'ADMIN')
                                                             @if (!$prod->order_complete_at)
-                                                                <span class="inline-block mt-3 text-sm font-semibold text-gray-700 dark:text-white bg-gray-200 dark:bg-gray-800 px-3 py-1 rounded">
+                                                                <span
+                                                                    class="inline-block mt-3 text-sm font-semibold text-gray-700 dark:text-white bg-gray-200 dark:bg-gray-800 px-3 py-1 rounded">
                                                                     Pending
                                                                 </span>
                                                             @else
-                                                                <span class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-green-100 dark:bg-gray-800 px-3 py-1 rounded">
+                                                                <span
+                                                                    class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-green-100 dark:bg-gray-800 px-3 py-1 rounded">
                                                                     Completed on <br>
-                                                                    {{ $prod->order_complete_at->format('Y-m-d') }} at {{ $prod->order_complete_at->format('H:i') }}
+                                                                    {{ $prod->order_complete_at->format('Y-m-d') }} at
+                                                                    {{ $prod->order_complete_at->format('H:i') }}
                                                                 </span>
                                                             @endif
                                                         @else
                                                             @if (!$prod->order_complete_at)
-                                                                <form action="{{ route('production.markComplete') }}" method="POST">
+                                                                <form action="{{ route('production.markComplete') }}"
+                                                                    method="POST">
                                                                     @csrf
-                                                                    <input type="hidden" name="id" value="{{ $prod->id }}">
+                                                                    <input type="hidden" name="id"
+                                                                        value="{{ $prod->id }}">
                                                                     <button type="submit"
-                                                                            class="order-complete-btn px-2 py-1 mt-3 rounded transition-all duration-200 bg-gray-300 text-black hover:bg-gray-400">
+                                                                        class="order-complete-btn px-2 py-1 mt-3 rounded transition-all duration-200 bg-gray-300 text-black hover:bg-gray-400">
                                                                         Pending
                                                                     </button>
                                                                 </form>
                                                             @else
-                                                                <span class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-green-100 dark:bg-gray-800 px-3 py-1 rounded">
+                                                                <span
+                                                                    class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-green-100 dark:bg-gray-800 px-3 py-1 rounded">
                                                                     Completed on <br>
-                                                                    {{ $prod->order_complete_at->format('Y-m-d') }} at {{ $prod->order_complete_at->format('H:i') }}
+                                                                    {{ $prod->order_complete_at->format('Y-m-d') }} at
+                                                                    {{ $prod->order_complete_at->format('H:i') }}
                                                                 </span>
                                                             @endif
                                                         @endif
@@ -501,25 +531,29 @@
                                                 </td>
 
                                                 {{-- Production Output --}}
-                                                <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                                <td
+                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
                                                     @auth
-                                                        @if(auth()->user()->role === 'ADMIN')
+                                                        @if (auth()->user()->role === 'ADMIN')
                                                             <span class="readonly">
                                                                 {{ is_numeric($prod->production_output) ? $prod->production_output . ' g' : '-' }}
                                                             </span>
                                                         @else
                                                             @if (!$prod->is_output_locked)
-                                                                <form action="{{ route('production.updateOutput') }}" method="POST" class="inline-block w-full">
+                                                                <form action="{{ route('production.updateOutput') }}"
+                                                                    method="POST" class="inline-block w-full">
                                                                     @csrf
-                                                                    <input type="hidden" name="id" value="{{ $prod->id }}">
+                                                                    <input type="hidden" name="id"
+                                                                        value="{{ $prod->id }}">
 
-                                                                    <input type="number" step="any" name="production_output"
-                                                                           value="{{ old('production_output', $prod->production_output) }}"
-                                                                           class="w-full px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                                           required>
+                                                                    <input type="number" step="any"
+                                                                        name="production_output"
+                                                                        value="{{ old('production_output', $prod->production_output) }}"
+                                                                        class="w-full px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                                        required>
 
                                                                     <button type="submit"
-                                                                            class="mt-1 px-3 py-1 rounded text-sm transition-all duration-200 bg-blue-600 hover:bg-blue-700 text-white">
+                                                                        class="mt-1 px-3 py-1 rounded text-sm transition-all duration-200 bg-blue-600 hover:bg-blue-700 text-white">
                                                                         Save
                                                                     </button>
                                                                 </form>
@@ -533,37 +567,49 @@
                                                 </td>
 
                                                 {{-- Dispatch to R&D --}}
-                                                <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                                <td
+                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
                                                     @auth
-                                                        @if(auth()->user()->role === 'ADMIN')
+                                                        @if (auth()->user()->role === 'ADMIN')
                                                             <div class="text-sm text-gray-800 dark:text-white font-medium">
                                                                 {{ $prod->dispatched_by ?? '-' }}
                                                             </div>
-                                                            <div class="sample-dispatch-timestamp text-xs text-gray-500 dark:text-gray-400">
+                                                            <div
+                                                                class="sample-dispatch-timestamp text-xs text-gray-500 dark:text-gray-400">
                                                                 {{ $prod->dispatch_to_rnd_at ? $prod->dispatch_to_rnd_at->format('Y-m-d H:i') : '-' }}
                                                             </div>
                                                         @else
                                                             @if (!$prod->dispatch_to_rnd_at)
-                                                                <form action="{{ route('production.dispatchToRnd') }}" method="POST">
+                                                                <form action="{{ route('production.dispatchToRnd') }}"
+                                                                    method="POST">
                                                                     @csrf
-                                                                    <input type="hidden" name="id" value="{{ $prod->id }}">
+                                                                    <input type="hidden" name="id"
+                                                                        value="{{ $prod->id }}">
 
-                                                                    <input type="text" name="dispatched_by" placeholder="Enter name"
-                                                                           class="w-full px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                                           required>
+                                                                    <input type="text" name="dispatched_by"
+                                                                        placeholder="Enter name"
+                                                                        class="w-full px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                                        required>
 
                                                                     <button type="submit"
-                                                                            class="sample-dispatch-btn bg-gray-300 text-black mt-1 px-2 py-1 rounded hover:bg-gray-400 transition-all duration-200 w-full">
+                                                                        class="sample-dispatch-btn bg-gray-300 text-black mt-1 px-2 py-1 rounded hover:bg-gray-400 transition-all duration-200 w-full">
                                                                         Dispatch
                                                                     </button>
                                                                 </form>
                                                             @else
-                                                                <div class="text-sm text-gray-800 dark:text-white font-medium">
-                                                                    {{ $prod->dispatched_by ?? '-' }}
-                                                                </div>
-                                                                <div class="sample-dispatch-timestamp text-xs text-gray-500 dark:text-gray-400">
-                                                                    {{ $prod->dispatch_to_rnd_at->format('Y-m-d H:i') }}
-                                                                </div>
+                                                                <span
+                                                                    class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-blue-100 dark:bg-gray-800 px-3 py-1 rounded">
+                                                                    <div
+                                                                        class="text-sm text-gray-800 dark:text-white font-medium">
+                                                                        Dispatch to {{ $prod->dispatched_by ?? '-' }}
+                                                                    </div>
+                                                                    <div
+                                                                        class="sample-dispatch-timestamp text-xs text-gray-500 dark:text-gray-400">
+                                                                        Dispatch
+                                                                        on {{ $prod->dispatch_to_rnd_at->format('Y-m-d') }} <br>
+                                                                        at {{ $prod->dispatch_to_rnd_at->format('H:i') }}
+                                                                    </div>
+                                                                </span>
                                                             @endif
                                                         @endif
                                                     @endauth
@@ -581,15 +627,15 @@
                                                 <td class="px-4 py-3 whitespace-normal break-words text-center">
                                                     <div class="flex space-x-2 justify-center">
                                                         @auth
-                                                            @if(auth()->user()->role === 'SUPERADMIN')
+                                                            @if (auth()->user()->role === 'SUPERADMIN')
                                                                 <button type="button"
-                                                                        class="bg-green-600 h-10 hover:bg-green-700 text-white px-3 py-1 rounded text-sm"
-                                                                        onclick="editServiceRow('serviceRow{{ $prod->id }}')">
+                                                                    class="bg-green-600 h-10 hover:bg-green-700 text-white px-3 py-1 rounded text-sm"
+                                                                    onclick="editServiceRow('serviceRow{{ $prod->id }}')">
                                                                     Edit
                                                                 </button>
                                                                 <button type="button"
-                                                                        class="bg-blue-600 h-10 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm hidden"
-                                                                        onclick="saveServiceRow('serviceRow{{ $prod->id }}')">
+                                                                    class="bg-blue-600 h-10 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm hidden"
+                                                                    onclick="saveServiceRow('serviceRow{{ $prod->id }}')">
                                                                     Save
                                                                 </button>
                                                             @endif
@@ -597,7 +643,7 @@
 
                                                         {{-- Download button is visible to everyone --}}
                                                         <button type="button"
-                                                                class="bg-gray-600 h-10 hover:bg-gray-700 text-white px-3 py-1 rounded text-sm">
+                                                            class="bg-gray-600 h-10 hover:bg-gray-700 text-white px-3 py-1 rounded text-sm">
                                                             Download
                                                         </button>
                                                     </div>
