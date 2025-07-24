@@ -306,25 +306,18 @@
                                                 </td>
 
                                                 {{-- Order Received Date & Time --}}
-                                                <td class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
-                                                    @auth
-                                                        @if(auth()->user()->role === 'ADMIN')
-                                                            <span class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-yellow-100 dark:bg-gray-800 px-3 py-1 rounded">
-                                                    Received on <br>
-                                                    {{ \Carbon\Carbon::parse($prod->order_received_at)->format('Y-m-d') }}
-                                                    at {{ \Carbon\Carbon::parse($prod->order_received_at)->format('H:i') }}
-                                                </span>
-                                                                                            @else
-                                                                                                <span class="readonly inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-yellow-100 dark:bg-gray-800 px-3 py-1 rounded">
-                                                    Received on <br>
-                                                    {{ \Carbon\Carbon::parse($prod->order_received_at)->format('Y-m-d') }}
-                                                    at {{ \Carbon\Carbon::parse($prod->order_received_at)->format('H:i') }}
-                                                </span>
-                                                            <input type="datetime-local" name="order_received_at"
-                                                                   class="editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                                   value="{{ $prod->order_received_at ? $prod->order_received_at->format('Y-m-d\TH:i') : '' }}" />
-                                                        @endif
-                                                    @endauth
+                                                <td
+                                                    class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                                    <span
+                                                        class="readonly inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-yellow-100 dark:bg-gray-800 px-3 py-1 rounded">
+                                                        Received on <br>
+                                                        {{ \Carbon\Carbon::parse($prod->order_received_at)->format('Y-m-d') }}
+                                                        at
+                                                        {{ \Carbon\Carbon::parse($prod->order_received_at)->format('H:i') }}
+                                                    </span>
+                                                    <input type="datetime-local" name="order_received_at"
+                                                           class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                           value="{{ $prod->order_received_at ? $prod->order_received_at->format('Y-m-d\TH:i') : '' }}" />
                                                 </td>
 
                                                 {{-- Order Start Date & Time --}}
@@ -416,6 +409,7 @@
                                                         @endif
                                                     @endauth
                                                 </td>
+
                                                 {{-- Supervisor Name --}}
                                                 <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
                                                     @auth
