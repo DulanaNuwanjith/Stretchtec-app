@@ -2,6 +2,18 @@
     @include('layouts.side-bar')
     <div class="flex-1 overflow-y-auto p-8 bg-white">
 
+        @if(session('success'))
+            <div class="bg-green-100 text-green-800 px-4 py-2 rounded mb-4">
+                {{ session('success') }}
+            </div>
+        @endif
+
+        @if(session('error'))
+            <div class="bg-red-100 text-red-800 px-4 py-2 rounded mb-4">
+                {{ session('error') }}
+            </div>
+        @endif
+
         <a href="{{ route('sample-preparation-details.index') }}">
             <button class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded shadow mb-6">
                 Back Sample Preparation R&D
@@ -12,121 +24,98 @@
             <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Sample Stock Records</h1>
         </div>
 
-        <div class="overflow-x-auto bg-white dark:bg-gray-900 shadow rounded-lg">
-            <table class="table-fixed w-full text-sm divide-y divide-gray-200 dark:divide-gray-700">
-                <thead class="bg-gray-100 dark:bg-gray-700 text-center">
+            <form method="GET" action="{{ route('leftoverYarn.index') }}" class="mb-4 flex items-center space-x-2">
+                <input
+                    type="text"
+                    name="search"
+                    value="{{ request('search') }}"
+                    placeholder="Search by Shade, PO Number or Supplier"
+                    class="px-3 py-2 border rounded-md w-1/2 dark:bg-gray-700 dark:text-white"
+                />
+
+                <button
+                    type="submit"
+                    class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                >
+                    Search
+                </button>
+
+                @if(request()->has('search'))
+                    <a
+                        href="{{ route('leftoverYarn.index') }}"
+                        class="px-4 py-2 bg-gray-400 text-white rounded hover:bg-gray-500"
+                    >
+                        Clear
+                    </a>
+                @endif
+            </form>
+
+            <div class="overflow-x-auto bg-white dark:bg-gray-900 shadow rounded-lg">
+                <table class="table-fixed w-full text-sm divide-y divide-gray-200 dark:divide-gray-700 text-center"> <!-- text-center added -->
+                    <thead class="bg-gray-100 dark:bg-gray-700">
                     <tr>
-                        <th
-                            class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                            Shade</th>
-                        <th
-                            class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                            Yarn Ordered PO Number</th>
-                        <th
-                            class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                            Yarn Received Date</th>
-                        <th
-                            class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                            Tkt</th>
-                        <th
-                            class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                            Yarn Supplier</th>
-                        <th
-                            class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                            Available Stock</th>
-                        <th
-                            class="px-4 py-3 w-48 text-xs text-center font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                            Action Admin</th>
+                        <th class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase border-r border-gray-300 dark:border-gray-600">Shade</th>
+                        <th class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase border-r border-gray-300 dark:border-gray-600">Yarn Ordered PO Number</th>
+                        <th class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase border-r border-gray-300 dark:border-gray-600">Yarn Received Date</th>
+                        <th class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase border-r border-gray-300 dark:border-gray-600">Tkt</th>
+                        <th class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase border-r border-gray-300 dark:border-gray-600">Yarn Supplier</th>
+                        <th class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase border-r border-gray-300 dark:border-gray-600">Available Stock</th>
+                        <th class="px-4 py-3 w-48 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase">Action Admin</th>
                     </tr>
-                </thead>
-                <tbody id="sampleInquiryRecords"
-                    class="bg-white dark:bg-gray-800 divide-y text-left divide-gray-200 dark:divide-gray-700 ">
-                    <tr id="row1">
-                        <td class="px-4 py-3 whitespace-normal break-words">
-                            <span class="readonly">Black</span>
-                            <input
-                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm5"
-                                value="Black" />
-                        </td>
-                        <td class="px-4 py-3 whitespace-normal break-words">
-                            <span class="readonly">PO 001</span>
-                            <input
-                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm5"
-                                value="PO 001" />
-                        </td>
-                        <td class="px-4 py-3 whitespace-normal break-words">
-                            <span class="readonly">2025-05-04</span>
-                            <input
-                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                value="2025-05-04" />
-                        </td>
-                        <td class="px-4 py-3 whitespace-normal break-words">
-                            <span class="readonly">1234</span>
-                            <input
-                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                value="1234" />
-                        </td>
-                        <td class="px-4 py-3 whitespace-normal break-words">
-                            <span class="readonly">Pan Asia</span>
-                            <input
-                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                value="1234" />
-                        </td>
-                        <td class="px-4 py-3 whitespace-normal break-words">
-                            <span class="readonly">50 g</span>
-                            <input
-                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                value="50 g" />
-                        </td>
-                        <td class="px-4 py-3 text-center whitespace-normal break-words">
-                            <div class="flex space-x-2 justify-center">
-                                <button
-                                    class="edit-btn bg-green-600 h-10 hover:bg-green-700 text-white px-3 py-1 rounded text-sm"
-                                    onclick="editRow('row1')">Edit</button>
-                                <button
-                                    class="save-btn bg-blue-600 h-10 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm hidden"
-                                    onclick="saveRow('row1')">Save</button>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <!-- Add Sample Modal -->
-        <div id="balanceSampleStockModel"
-            class="fixed inset-0 z-50 hidden bg-black bg-opacity-50 flex items-center justify-center py-5">
-            <div class="w-full max-w-[700px] bg-white dark:bg-gray-900 rounded-2xl shadow-2xl p-4 transform transition-all scale-95 max-h-[calc(100vh-10rem)] overflow-y-auto"
-                onclick="event.stopPropagation()">
-                <div class="max-w-[600px] mx-auto p-8">
-                    <h2 class="text-2xl font-semibold mb-8 text-blue-900 mt-4 dark:text-gray-100 text-center">
-                        Dispatched Quantity <br>STKE/2025/JA25-B
-                    </h2>
-                    <form action="" method="POST" enctype="multipart/form-data">
-                        @csrf
-                        <div class="space-y-4">
+                    </thead>
 
-                            <!-- Dispatched Quantity -->
-                            <div>
-                                <input id="sampleQuantity" type="text" name="sample_quantity" required
-                                    class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm mb-4">
-                            </div>
+                    <tbody id="sampleInquiryRecords" class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                    @foreach ($leftoverYarns as $record)
+                        <tr id="row{{ $record->id }}">
+                            <td class="px-4 py-3 border-r border-gray-300 dark:border-gray-600">
+                                <span class="readonly">{{ $record->shade }}</span>
+                                <input class="hidden editable w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm text-center" value="{{ $record->shade }}" />
+                            </td>
+                            <td class="px-4 py-3 border-r border-gray-300 dark:border-gray-600">
+                                <span class="readonly">{{ $record->po_number }}</span>
+                                <input class="hidden editable w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm text-center" value="{{ $record->po_number }}" />
+                            </td>
+                            <td class="px-4 py-3 border-r border-gray-300 dark:border-gray-600">
+                                <span class="readonly">{{ \Carbon\Carbon::parse($record->yarn_received_date)->format('Y-m-d') }}</span>
+                                <input type="date" class="hidden editable w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm text-center" value="{{ $record->yarn_received_date }}" />
+                            </td>
+                            <td class="px-4 py-3 border-r border-gray-300 dark:border-gray-600">
+                                <span class="readonly">{{ $record->tkt }}</span>
+                                <input class="hidden editable w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm text-center" value="{{ $record->tkt }}" />
+                            </td>
+                            <td class="px-4 py-3 border-r border-gray-300 dark:border-gray-600">
+                                <span class="readonly">{{ $record->yarn_supplier }}</span>
+                                <input class="hidden editable w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm text-center" value="{{ $record->yarn_supplier }}" />
+                            </td>
+                            <td class="px-4 py-3 border-r border-gray-300 dark:border-gray-600">
+                                <span class="readonly">{{ $record->available_stock }} g</span>
+                                <input class="hidden editable w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm text-center" value="{{ $record->available_stock }}" />
+                            </td>
 
-                        <!-- Buttons -->
-                        <div class="flex justify-end gap-3 mt-12">
-                            <button type="button"
-                                onclick="document.getElementById('balanceSampleStockModel').classList.add('hidden')"
-                                class="px-4 py-2 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 text-sm rounded hover:bg-gray-300">
-                                Cancel
-                            </button>
-                            <button type="submit"
-                                class="px-4 py-2 bg-blue-500 text-white text-sm rounded hover:bg-blue-600">
-                                Save
-                            </button>
-                        </div>
-                    </form>
-                </div>
+                            <td class="px-4 py-3">
+                                <div class="flex flex-col items-center space-y-2">
+                                    <!-- Borrow Form -->
+                                    <form action="{{ route('leftover-yarn.borrow', $record->id) }}" method="POST" class="flex flex-col items-center space-y-2">
+                                        @csrf
+                                        <input type="number" name="borrow_qty"
+                                               class="w-24 px-2 py-1 border rounded text-sm dark:bg-gray-700 dark:text-white text-center"
+                                               placeholder="Qty" min="1" required>
+                                        <button type="submit"
+                                                class="bg-yellow-600 hover:bg-yellow-700 text-white px-3 py-1 rounded text-sm">
+                                            Borrow
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    @endforeach
+                    </tbody>
+                </table>
             </div>
-        </div>
+
+            <div class="mt-4">
+                {{ $leftoverYarns->links() }}
+            </div>
 
     </div>
 </div>
