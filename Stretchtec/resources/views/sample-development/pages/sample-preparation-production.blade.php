@@ -247,11 +247,11 @@
                                                 Order Start Date & Time
                                             </th>
                                             <th
-                                                class="px-4 py-3 w-40 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="px-4 py-3 w-52 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Operator Name
                                             </th>
                                             <th
-                                                class="px-4 py-3 w-40 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="px-4 py-3 w-52 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Supervisor Name
                                             </th>
                                             <th
@@ -281,7 +281,8 @@
                                             <tr id="serviceRow{{ $prod->id }}"
                                                 class="odd:bg-white even:bg-gray-50 border-b border-gray-200  text-left">
                                                 {{-- Order No --}}
-                                                <td class="sticky left-0 z-10 bg-white px-4 py-3 bg-gray-100 whitespace-normal break-words border-r border-gray-300">
+                                                <td
+                                                    class="sticky left-0 z-10 bg-white px-4 py-3 bg-gray-100 whitespace-normal break-words border-r border-gray-300">
                                                     <span
                                                         class="readonly hover:text-blue-600 hover:underline cursor-pointer"
                                                         onclick="document.getElementById('viewDetailsSample').classList.remove('hidden')">
@@ -293,7 +294,8 @@
                                                 </td>
 
                                                 {{-- Production Deadline --}}
-                                                <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
+                                                <td
+                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
                                                     <span class="readonly">
                                                         {{ $prod->production_deadline ? $prod->production_deadline->format('Y-m-d') : '-' }}
                                                     </span>
@@ -342,53 +344,104 @@
                                                 </td>
 
                                                 {{-- Operator Name --}}
-                                                <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
+                                                <td
+                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
                                                     @if ($prod->operator_name)
-                                                        {{-- Show only the name if already selected --}}
                                                         <span>{{ $prod->operator_name }}</span>
                                                     @else
-                                                        {{-- Show the dropdown if no operator assigned --}}
-                                                        <form method="POST" action="{{ route('sample-preparation-production.update-operator', $prod->id) }}">
+                                                        <form method="POST"
+                                                            action="{{ route('sample-preparation-production.update-operator', $prod->id) }}">
                                                             @csrf
                                                             @method('PATCH')
 
-                                                            <select name="operator_name"
-                                                                    class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                                    onchange="this.form.submit()">
-                                                                <option value="">-- Operator --</option>
-                                                                @foreach ($operators as $operator)
-                                                                    <option value="{{ $operator->name }}"
-                                                                        {{ $prod->operator_name === $operator->name ? 'selected' : '' }}>
-                                                                        {{ $operator->name }}
-                                                                    </option>
-                                                                @endforeach
-                                                            </select>
+                                                            <div class="relative inline-block text-left w-44">
+                                                                <button type="button"
+                                                                    class="dropdown-btn inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50"
+                                                                    onclick="toggleDropdown(this, 'operator')">
+                                                                    <span class="selected-operator">Select Operator</span>
+                                                                    <svg class="ml-2 h-5 w-5 text-gray-400"
+                                                                        viewBox="0 0 20 20" fill="currentColor">
+                                                                        <path fill-rule="evenodd"
+                                                                            d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
+                                                                            clip-rule="evenodd" />
+                                                                    </svg>
+                                                                </button>
+
+                                                                <div
+                                                                    class="dropdown-menu-operator hidden absolute z-10 mt-2 w-full rounded-md bg-white shadow-lg ring-1 ring-black/5 max-h-48 overflow-y-auto">
+                                                                    <div class="p-2 sticky top-0 bg-white z-10">
+                                                                        <input type="text"
+                                                                            placeholder="Search Operator..."
+                                                                            class="w-full px-2 py-1 text-sm border rounded-md"
+                                                                            oninput="filterDropdownOptions(this)" />
+                                                                    </div>
+
+                                                                    <div class="py-1" role="listbox" tabindex="-1">
+                                                                        @foreach ($operators as $operator)
+                                                                            <button type="button"
+                                                                                class="dropdown-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                                                                onclick="selectDropdownOption(this, '{{ $operator->name }}', 'operator')">
+                                                                                {{ $operator->name }}
+                                                                            </button>
+                                                                        @endforeach
+                                                                    </div>
+                                                                </div>
+
+                                                                <input type="hidden" name="operator_name"
+                                                                    class="input-operator">
+                                                            </div>
                                                         </form>
                                                     @endif
                                                 </td>
 
                                                 {{-- Supervisor Name --}}
-                                                <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
+                                                <td
+                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
                                                     @if ($prod->supervisor_name)
-                                                        {{-- Show only the supervisor name if already assigned --}}
                                                         <span>{{ $prod->supervisor_name }}</span>
                                                     @else
-                                                        {{-- Show dropdown to select a supervisor if not assigned --}}
-                                                        <form method="POST" action="{{ route('sample-preparation-production.update-supervisor', $prod->id) }}">
+                                                        <form method="POST"
+                                                            action="{{ route('sample-preparation-production.update-supervisor', $prod->id) }}">
                                                             @csrf
                                                             @method('PATCH')
 
-                                                            <select name="supervisor_name"
-                                                                    class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                                    onchange="this.form.submit()">
-                                                                <option value="">-- Supervisor --</option>
-                                                                @foreach ($supervisors as $supervisor)
-                                                                    <option value="{{ $supervisor->name }}"
-                                                                        {{ $prod->supervisor_name === $supervisor->name ? 'selected' : '' }}>
-                                                                        {{ $supervisor->name }}
-                                                                    </option>
-                                                                @endforeach
-                                                            </select>
+                                                            <div class="relative inline-block text-left w-44">
+                                                                <button type="button"
+                                                                    class="dropdown-btn inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50"
+                                                                    onclick="toggleDropdown(this, 'supervisor')">
+                                                                    <span class="selected-supervisor">Select
+                                                                        Supervisor</span>
+                                                                    <svg class="ml-2 h-5 w-5 text-gray-400"
+                                                                        viewBox="0 0 20 20" fill="currentColor">
+                                                                        <path fill-rule="evenodd"
+                                                                            d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
+                                                                            clip-rule="evenodd" />
+                                                                    </svg>
+                                                                </button>
+
+                                                                <div
+                                                                    class="dropdown-menu-supervisor hidden absolute z-10 mt-2 w-full rounded-md bg-white shadow-lg ring-1 ring-black/5 max-h-48 overflow-y-auto">
+                                                                    <div class="p-2 sticky top-0 bg-white z-10">
+                                                                        <input type="text"
+                                                                            placeholder="Search Supervisor..."
+                                                                            class="w-full px-2 py-1 text-sm border rounded-md"
+                                                                            oninput="filterDropdownOptions(this)" />
+                                                                    </div>
+
+                                                                    <div class="py-1" role="listbox" tabindex="-1">
+                                                                        @foreach ($supervisors as $supervisor)
+                                                                            <button type="button"
+                                                                                class="dropdown-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                                                                onclick="selectDropdownOption(this, '{{ $supervisor->name }}', 'supervisor')">
+                                                                                {{ $supervisor->name }}
+                                                                            </button>
+                                                                        @endforeach
+                                                                    </div>
+                                                                </div>
+
+                                                                <input type="hidden" name="supervisor_name"
+                                                                    class="input-supervisor">
+                                                            </div>
                                                         </form>
                                                     @endif
                                                 </td>
@@ -418,7 +471,8 @@
                                                 </td>
 
                                                 {{-- Production Output --}}
-                                                <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
+                                                <td
+                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
                                                     <span class="readonly">{{ $prod->production_output ?? '-' }}</span>
                                                     <input type="text" name="production_output"
                                                         class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
@@ -426,7 +480,8 @@
                                                 </td>
 
                                                 {{-- Dispatch to R&D --}}
-                                                <td class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                                <td
+                                                    class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
                                                     @if (!$prod->dispatch_to_rnd_at)
                                                         <form action="{{ route('production.dispatchToRnd') }}"
                                                             method="POST">
@@ -447,7 +502,8 @@
                                                 </td>
 
                                                 {{-- Note --}}
-                                                <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                                <td
+                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
                                                     <span class="readonly">{{ $prod->note ?? 'N/D' }}</span>
                                                     <textarea name="note" rows="2"
                                                         class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">{{ $prod->note ?? '' }}</textarea>
@@ -681,6 +737,39 @@
         function toggleFilterForm() {
             const form = document.getElementById('filterFormContainer');
             form.classList.toggle('hidden');
+        }
+    </script>
+
+    <script>
+        document.addEventListener('click', function(event) {
+            document.querySelectorAll('.relative.inline-block').forEach(container => {
+                if (!container.contains(event.target)) {
+                    const dropdown = container.querySelector(
+                        '.dropdown-menu-operator, .dropdown-menu-supervisor');
+                    if (dropdown) dropdown.classList.add('hidden');
+                }
+            });
+        });
+
+        function toggleDropdown(button, type) {
+            const dropdown = button.parentElement.querySelector(`.dropdown-menu-${type}`);
+            if (dropdown) dropdown.classList.toggle('hidden');
+        }
+
+        function selectDropdownOption(button, value, type) {
+            const container = button.closest('.relative.inline-block');
+            container.querySelector(`.selected-${type}`).innerText = value;
+            container.querySelector(`.input-${type}`).value = value;
+            container.querySelector('form').submit();
+            container.querySelector(`.dropdown-menu-${type}`).classList.add('hidden');
+        }
+
+        function filterDropdownOptions(input) {
+            const filter = input.value.toLowerCase();
+            const options = input.closest('.relative.inline-block').querySelectorAll('.dropdown-option');
+            options.forEach(option => {
+                option.style.display = option.innerText.toLowerCase().includes(filter) ? 'block' : 'none';
+            });
         }
     </script>
 @endsection
