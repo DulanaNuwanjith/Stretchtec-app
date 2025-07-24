@@ -63,13 +63,16 @@ class SamplePreparationProductionController extends Controller
         return redirect()->back()->with('success', 'Order complete date/time marked.');
     }
 
-    // Mark dispatch to R&D date/time
     public function dispatchToRnd(Request $request)
     {
-        $request->validate(['id' => 'required|exists:sample_preparation_production,id']);
+        $request->validate([
+            'id' => 'required|exists:sample_preparation_production,id',
+            'dispatched_by' => 'required|string|max:255',
+        ]);
 
         $production = SamplePreparationProduction::findOrFail($request->id);
         $production->dispatch_to_rnd_at = Carbon::now();
+        $production->dispatched_by = $request->dispatched_by;
         $production->save();
 
         return redirect()->back()->with('success', 'Dispatched to R&D.');
