@@ -854,17 +854,35 @@
                                                     @endif
                                                 </td>
 
+                                                {{-- Production Status --}}
                                                 <td
                                                     class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
-                                                    @if (!$prep->alreadyDeveloped)
-                                                        <span class="readonly">Production complete</span>
-                                                        <input
-                                                            class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                            value="Production complete" />
-                                                    @else
-                                                        <span class="text-gray-400 italic">—</span>
-                                                    @endif
+                                                    @php
+                                                        $status = $prep->productionStatus;
+                                                        $badgeClass = match ($status) {
+                                                            'Pending'
+                                                                => 'bg-blue-100 text-blue-800 dark:bg-blue-700 dark:text-white',
+                                                            'In Production'
+                                                                => 'bg-yellow-100 text-yellow-800 dark:bg-yellow-700 dark:text-white',
+                                                            'Production Complete'
+                                                                => 'bg-green-100 text-green-800 dark:bg-green-700 dark:text-white',
+                                                            default
+                                                                => 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-white',
+                                                        };
+                                                    @endphp
+
+                                                        <!-- Read-only badge -->
+                                                    <span
+                                                        class="readonly inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold {{ $badgeClass }}">
+                                                            {{ $status }}
+                                                        </span>
+
+                                                    <!-- Editable input field (hidden by default, shown in edit mode) -->
+                                                    <input type="text" name="productionStatus"
+                                                           class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                           value="{{ $status }}" />
                                                 </td>
+
 
                                                 <td class="px-4 py-3 border-r border-gray-300 text-center">
                                                         @if (!$prep->is_reference_locked)

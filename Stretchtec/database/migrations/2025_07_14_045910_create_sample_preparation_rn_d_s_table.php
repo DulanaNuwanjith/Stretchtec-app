@@ -32,7 +32,7 @@ return new class extends Migration
             $table->timestamp('yarnReceiveDate')->nullable();
             $table->date('productionDeadline')->nullable();
             $table->timestamp('sendOrderToProductionStatus')->nullable();
-            $table->string('productionStatus')->nullable();
+            $table->string('productionStatus')->nullable()->default('Pending');
             $table->string('referenceNo')->nullable();
             $table->string('productionOutput')->nullable();
 

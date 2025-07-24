@@ -44,5 +44,4 @@ class SamplePreparationProduction extends Model
             ? asset('storage/' . $this->samplePreparationRnD->sampleInquiry->orderFile)
             : null;
     }
-
 }

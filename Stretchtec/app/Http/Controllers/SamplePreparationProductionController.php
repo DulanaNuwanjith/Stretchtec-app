@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\SamplePreparationProduction;
+use Exception;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class SamplePreparationProductionController extends Controller
 {
@@ -42,28 +44,76 @@ class SamplePreparationProductionController extends Controller
         return redirect()->back()->with('success', 'Production record updated successfully.');
     }
 
-    // Mark order start date/time
     public function markOrderStart(Request $request)
     {
-        $request->validate(['id' => 'required|exists:sample_preparation_production,id']);
+        $request->validate([
+            'id' => 'required|exists:sample_preparation_production,id'
+        ]);
 
-        $production = SamplePreparationProduction::findOrFail($request->id);
-        $production->order_start_at = Carbon::now();
-        $production->save();
+        try {
+            $production = SamplePreparationProduction::findOrFail($request->id);
+            $production->order_start_at = Carbon::now();
+            $production->save();
 
-        return redirect()->back()->with('success', 'Order start date/time marked.');
+            // Fetch related SamplePreparationRnd record via Eloquent relationship
+            $rnd = $production->samplePreparationRnd;
+
+            if ($rnd) {
+                // Update the productionStatus in sample_preparation_rnd table
+                $rnd->productionStatus = 'In Production';
+                $rnd->save();
+
+                // Fetch related SampleInquiry record
+                $inquiry = $rnd->sampleInquiry;
+
+                if ($inquiry) {
+                    $inquiry->productionStatus = 'In Production';
+                    $inquiry->save();
+                }
+            }
+
+            return redirect()->back()->with('success', 'Order start date/time marked and production statuses updated.');
+        } catch (Exception $e) {
+            Log::error('Error in markOrderStart: ' . $e->getMessage());
+
+            return redirect()->back()->with('error', 'Failed to mark order start date/time. Please try again.');
+        }
     }
 
-    // Mark order complete date/time
     public function markOrderComplete(Request $request)
     {
-        $request->validate(['id' => 'required|exists:sample_preparation_production,id']);
+        $request->validate([
+            'id' => 'required|exists:sample_preparation_production,id'
+        ]);
 
-        $production = SamplePreparationProduction::findOrFail($request->id);
-        $production->order_complete_at = Carbon::now();
-        $production->save();
+        try {
+            $production = SamplePreparationProduction::findOrFail($request->id);
+            $production->order_complete_at = Carbon::now();
+            $production->save();
 
-        return redirect()->back()->with('success', 'Order complete date/time marked.');
+            // Fetch related SamplePreparationRnd record
+            $rnd = $production->samplePreparationRnd;
+
+            if ($rnd) {
+                // Update productionStatus in sample_preparation_rnd table
+                $rnd->productionStatus = 'Production Complete';
+                $rnd->save();
+
+                // Fetch related SampleInquiry record
+                $inquiry = $rnd->sampleInquiry;
+
+                if ($inquiry) {
+                    $inquiry->productionStatus = 'Production Complete';
+                    $inquiry->save();
+                }
+            }
+
+            return redirect()->back()->with('success', 'Order complete date/time marked and production statuses updated.');
+        } catch (Exception $e) {
+            Log::error('Error in markOrderComplete: ' . $e->getMessage());
+
+            return redirect()->back()->with('error', 'Failed to mark order complete date/time. Please try again.');
+        }
     }
 
     public function dispatchToRnd(Request $request)
