@@ -8,12 +8,15 @@ use Carbon\Carbon;
 
 class SamplePreparationProductionController extends Controller
 {
-    // Show all productions
     public function index()
     {
         $operators = \App\Models\OperatorsandSupervisors::where('role', 'OPERATOR')->get();
         $supervisors = \App\Models\OperatorsandSupervisors::where('role', 'SUPERVISOR')->get();
-        $productions = SamplePreparationProduction::latest()->get();
+
+        $productions = SamplePreparationProduction::with('samplePreparationRnD.sampleInquiry')
+            ->latest()
+            ->get();
+
         return view('sample-development.pages.sample-preparation-production', compact('productions', 'operators', 'supervisors'));
     }
 

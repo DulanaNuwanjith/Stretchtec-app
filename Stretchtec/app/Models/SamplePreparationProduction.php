@@ -36,4 +36,13 @@ class SamplePreparationProduction extends Model
     {
         return $this->belongsTo(SamplePreparationRnD::class, 'sample_preparation_rnd_id');
     }
+
+    // Helper accessor to simplify blade usage
+    public function getOrderFileUrlAttribute()
+    {
+        return $this->samplePreparationRnD?->sampleInquiry?->orderFile
+            ? asset('storage/' . $this->samplePreparationRnD->sampleInquiry->orderFile)
+            : null;
+    }
+
 }

@@ -606,7 +606,8 @@
                                                                     <div
                                                                         class="sample-dispatch-timestamp text-xs text-gray-500 dark:text-gray-400">
                                                                         Dispatch
-                                                                        on {{ $prod->dispatch_to_rnd_at->format('Y-m-d') }} <br>
+                                                                        on {{ $prod->dispatch_to_rnd_at->format('Y-m-d') }}
+                                                                        <br>
                                                                         at {{ $prod->dispatch_to_rnd_at->format('H:i') }}
                                                                     </div>
                                                                 </span>
@@ -626,7 +627,7 @@
                                                 {{-- Action Buttons --}}
                                                 <td class="px-4 py-3 whitespace-normal break-words text-center">
                                                     <div class="flex space-x-2 justify-center">
-                                                        @auth
+                                                        {{-- @auth
                                                             @if (auth()->user()->role === 'SUPERADMIN')
                                                                 <button type="button"
                                                                     class="bg-green-600 h-10 hover:bg-green-700 text-white px-3 py-1 rounded text-sm"
@@ -639,13 +640,19 @@
                                                                     Save
                                                                 </button>
                                                             @endif
-                                                        @endauth
-
-                                                        {{-- Download button is visible to everyone --}}
-                                                        <button type="button"
-                                                            class="bg-gray-600 h-10 hover:bg-gray-700 text-white px-3 py-1 rounded text-sm">
-                                                            Download
-                                                        </button>
+                                                        @endauth --}}
+                                                        @if ($prod->order_file_url)
+                                                            <a href="{{ $prod->order_file_url }}" target="_blank"
+                                                                class="bg-gray-600 h-10 w-20 hover:bg-gray-700 text-white px-3 py-2 rounded text-sm flex items-center justify-center ml-2">
+                                                                View
+                                                            </a>
+                                                        @else
+                                                            <button type="button"
+                                                                class="bg-gray-300 h-10 w-20 text-gray-500 px-3 py-1 rounded text-sm cursor-not-allowed"
+                                                                disabled>
+                                                                No File
+                                                            </button>
+                                                        @endif
                                                     </div>
                                                 </td>
 
