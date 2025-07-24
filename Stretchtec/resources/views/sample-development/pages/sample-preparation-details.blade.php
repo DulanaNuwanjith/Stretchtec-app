@@ -568,7 +568,7 @@
                                                                     class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                                     required>
                                                                 <button type="submit"
-                                                                    class="mt-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm">
+                                                                    class="w-full mt-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm">
                                                                     Save
                                                                 </button>
                                                             </form>
@@ -628,7 +628,7 @@
                                                                     required>
 
                                                                 <button type="submit"
-                                                                    class="mt-1 px-3 py-1 rounded text-sm transition-all duration-200
+                                                                    class="w-full mt-1 px-3 py-1 rounded text-sm transition-all duration-200
                         {{ $prep->developPlannedDate ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-gray-300 text-gray-500 cursor-not-allowed' }}"
                                                                     {{ $prep->developPlannedDate ? '' : 'disabled' }}
                                                                     title="{{ $prep->developPlannedDate ? '' : 'Please set Develop Plan Date first' }}">
@@ -657,7 +657,7 @@
                                                                     required>
 
                                                                 <button type="submit"
-                                                                    class="mt-1 px-3 py-1 rounded text-sm transition-all duration-200
+                                                                    class="w-full mt-1 px-3 py-1 rounded text-sm transition-all duration-200
                         {{ $prep->developPlannedDate ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-gray-300 text-gray-500 cursor-not-allowed' }}"
                                                                     {{ $prep->developPlannedDate ? '' : 'disabled' }}
                                                                     title="{{ $prep->developPlannedDate ? '' : 'Please set Develop Plan Date first' }}">
@@ -686,7 +686,7 @@
                                                                     required>
 
                                                                 <button type="submit"
-                                                                    class="mt-1 px-3 py-1 rounded text-sm transition-all duration-200
+                                                                    class="w-full mt-1 px-3 py-1 rounded text-sm transition-all duration-200
                         {{ $prep->developPlannedDate ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-gray-300 text-gray-500 cursor-not-allowed' }}"
                                                                     {{ $prep->developPlannedDate ? '' : 'disabled' }}
                                                                     title="{{ $prep->developPlannedDate ? '' : 'Please set Develop Plan Date first' }}">
@@ -715,7 +715,7 @@
                                                                     required>
 
                                                                 <button type="submit"
-                                                                    class="mt-1 px-3 py-1 rounded text-sm transition-all duration-200
+                                                                    class="w-full mt-1 px-3 py-1 rounded text-sm transition-all duration-200
                         {{ $prep->developPlannedDate ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-gray-300 text-gray-500 cursor-not-allowed' }}"
                                                                     {{ $prep->developPlannedDate ? '' : 'disabled' }}
                                                                     title="{{ $prep->developPlannedDate ? '' : 'Please set Develop Plan Date first' }}">
@@ -744,7 +744,7 @@
                                                                     required>
 
                                                                 <button type="submit"
-                                                                    class="mt-1 px-3 py-1 rounded text-sm transition-all duration-200
+                                                                    class="w-full mt-1 px-3 py-1 rounded text-sm transition-all duration-200
                         {{ $prep->developPlannedDate ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-gray-300 text-gray-500 cursor-not-allowed' }}"
                                                                     {{ $prep->developPlannedDate ? '' : 'disabled' }}
                                                                     title="{{ $prep->developPlannedDate ? '' : 'Please set Develop Plan Date first' }}">
@@ -805,7 +805,7 @@
                                                                     required>
 
                                                                 <button type="submit"
-                                                                    class="mt-1 px-3 py-1 rounded text-sm transition-all duration-200
+                                                                    class="w-full mt-1 px-3 py-1 rounded text-sm transition-all duration-200
                         {{ $prep->developPlannedDate ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-gray-300 text-gray-500 cursor-not-allowed' }}"
                                                                     {{ $prep->developPlannedDate ? '' : 'disabled' }}
                                                                     title="{{ $prep->developPlannedDate ? '' : 'Please set Develop Plan Date first' }}">
@@ -878,7 +878,7 @@
                                                                     class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                                     required>
                                                                 <button type="submit"
-                                                                    class="mt-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm">
+                                                                    class="w-full mt-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm">
                                                                     Save
                                                                 </button>
                                                             </form>
@@ -915,7 +915,7 @@
                                                                     class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                                     required>
                                                                 <button type="submit"
-                                                                    class="mt-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm">
+                                                                    class="w-full mt-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm">
                                                                     Save
                                                                 </button>
                                                             </form>
@@ -944,7 +944,7 @@
                                                                     class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                                     required>
                                                                 <button type="submit"
-                                                                    class="mt-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm">
+                                                                    class="w-full mt-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm">
                                                                     Save
                                                                 </button>
                                                             </form>
@@ -969,7 +969,7 @@
                                                                       rows="2" required>{{ old('notes', $prep->note) }}</textarea>
 
                                                             <button type="submit"
-                                                                    class="mt-1 px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition-all duration-200 text-sm">
+                                                                    class="w-full mt-1 px-2 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition-all duration-200 text-sm">
                                                                 Save
                                                             </button>
                                                         </form>

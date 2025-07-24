@@ -629,7 +629,7 @@
                                                                       required>{{ old('notes', $prod->note) }}</textarea>
 
                                                             <button type="submit"
-                                                                    class="mt-1 px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition-all duration-200 text-sm">
+                                                                    class="w-full mt-1 px-2 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition-all duration-200 text-sm">
                                                                 Save
                                                             </button>
                                                         </form>

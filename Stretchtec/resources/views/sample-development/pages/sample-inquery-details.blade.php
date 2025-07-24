@@ -794,7 +794,7 @@
                                                                       rows="2" required>{{ old('notes', $inquiry->notes) }}</textarea>
 
                                                             <button type="submit"
-                                                                    class="mt-1 px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition-all duration-200 text-sm">
+                                                                    class="w-full mt-1 px-2 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition-all duration-200 text-sm">
                                                                 Save
                                                             </button>
                                                         </form>
@@ -806,7 +806,7 @@
                                                 <!-- Actions -->
                                                 <td class="px-4 py-3 whitespace-normal break-words text-center">
                                                     <div class="flex space-x-2 justify-center items-center">
-                                                        @if (Auth::user()->role === 'SUPERADMIN')
+                                                        {{-- @if (Auth::user()->role === 'SUPERADMIN')
                                                             <button
                                                                 class="edit-btn bg-green-600 h-10 hover:bg-green-700 text-white px-3 py-1 rounded text-sm"
                                                                 onclick="editRow('row{{ $inquiry->id }}')">
@@ -818,7 +818,7 @@
                                                             class="save-btn bg-blue-600 h-10 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm hidden"
                                                             onclick="saveRow('row{{ $inquiry->id }}')">
                                                             Save
-                                                        </button>
+                                                        </button> --}}
 
                                                         @if ($inquiry->orderFile)
                                                             <a href="{{ asset('storage/' . $inquiry->orderFile) }}"
@@ -841,7 +841,7 @@
                                                                 @method('DELETE')
                                                                 <button type="button"
                                                                     onclick="confirmDelete('{{ $inquiry->id }}')"
-                                                                    class="bg-red-600 h-10 hover:bg-red-700 text-white px-3 py-1 rounded text-sm">
+                                                                    class="bg-red-600 h-10 mt-3 hover:bg-red-700 text-white px-3 py-1 rounded text-sm">
                                                                     Delete
                                                                 </button>
                                                             </form>
