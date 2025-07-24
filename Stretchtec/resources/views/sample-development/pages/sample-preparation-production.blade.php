@@ -741,35 +741,50 @@
     </script>
 
     <script>
-        document.addEventListener('click', function(event) {
-            document.querySelectorAll('.relative.inline-block').forEach(container => {
-                if (!container.contains(event.target)) {
-                    const dropdown = container.querySelector(
-                        '.dropdown-menu-operator, .dropdown-menu-supervisor');
-                    if (dropdown) dropdown.classList.add('hidden');
+        function selectDropdownOption(button, value, type) {
+            // Update the button text
+            const wrapper = button.closest('.relative');
+            const selectedSpan = wrapper.querySelector(`.selected-${type}`);
+            const hiddenInput = wrapper.querySelector(`.input-${type}`);
+            const dropdownMenu = wrapper.querySelector(`.dropdown-menu-${type}`);
+
+            selectedSpan.textContent = value;
+            hiddenInput.value = value;
+
+            // Hide the dropdown
+            dropdownMenu.classList.add('hidden');
+
+            // Submit the form
+            wrapper.closest('form').submit();
+        }
+
+        function filterDropdownOptions(inputElement) {
+            const searchValue = inputElement.value.toLowerCase();
+            const options = inputElement.closest('.dropdown-menu-operator, .dropdown-menu-supervisor')
+                .querySelectorAll('.dropdown-option');
+
+            options.forEach(option => {
+                const text = option.textContent.toLowerCase();
+                option.style.display = text.includes(searchValue) ? 'block' : 'none';
+            });
+        }
+
+        function toggleDropdown(button, type) {
+            const wrapper = button.closest('.relative');
+            const menu = wrapper.querySelector(`.dropdown-menu-${type}`);
+            document.querySelectorAll('.dropdown-menu-operator, .dropdown-menu-supervisor').forEach(d => {
+                if (d !== menu) d.classList.add('hidden');
+            });
+            menu.classList.toggle('hidden');
+        }
+
+        // Click outside to close dropdown
+        document.addEventListener('click', function(e) {
+            document.querySelectorAll('.dropdown-menu-operator, .dropdown-menu-supervisor').forEach(menu => {
+                if (!menu.closest('.relative').contains(e.target)) {
+                    menu.classList.add('hidden');
                 }
             });
         });
-
-        function toggleDropdown(button, type) {
-            const dropdown = button.parentElement.querySelector(`.dropdown-menu-${type}`);
-            if (dropdown) dropdown.classList.toggle('hidden');
-        }
-
-        function selectDropdownOption(button, value, type) {
-            const container = button.closest('.relative.inline-block');
-            container.querySelector(`.selected-${type}`).innerText = value;
-            container.querySelector(`.input-${type}`).value = value;
-            container.querySelector('form').submit();
-            container.querySelector(`.dropdown-menu-${type}`).classList.add('hidden');
-        }
-
-        function filterDropdownOptions(input) {
-            const filter = input.value.toLowerCase();
-            const options = input.closest('.relative.inline-block').querySelectorAll('.dropdown-option');
-            options.forEach(option => {
-                option.style.display = option.innerText.toLowerCase().includes(filter) ? 'block' : 'none';
-            });
-        }
     </script>
 @endsection
