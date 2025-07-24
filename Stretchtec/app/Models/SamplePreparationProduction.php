@@ -20,6 +20,7 @@ class SamplePreparationProduction extends Model
         'production_output',
         'dispatch_to_rnd_at',
         'note',
+        'is_output_locked',
     ];
 
     protected $casts = [
