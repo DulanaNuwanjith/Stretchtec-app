@@ -1,5 +1,6 @@
 <head>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <div class="flex h-full w-full bg-white">
@@ -472,11 +473,29 @@
 
                                                 {{-- Production Output --}}
                                                 <td
-                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
-                                                    <span class="readonly">{{ $prod->production_output ?? '-' }}</span>
-                                                    <input type="text" name="production_output"
-                                                        class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                        value="{{ $prod->production_output ?? '' }}" />
+                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                                    @if (!$prod->is_output_locked)
+                                                        <form action="{{ route('production.updateOutput') }}"
+                                                            method="POST" class="inline-block w-full">
+                                                            @csrf
+                                                            <input type="hidden" name="id"
+                                                                value="{{ $prod->id }}">
+
+                                                            <input type="number" step="any" name="production_output"
+                                                                value="{{ old('production_output', $prod->production_output) }}"
+                                                                class="w-full px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                                required>
+
+                                                            <button type="submit"
+                                                                class="mt-1 px-3 py-1 rounded text-sm transition-all duration-200 bg-blue-600 hover:bg-blue-700 text-white">
+                                                                Save
+                                                            </button>
+                                                        </form>
+                                                    @else
+                                                        <span class="readonly">
+                                                            {{ is_numeric($prod->production_output) ? $prod->production_output . ' g' : '-' }}
+                                                        </span>
+                                                    @endif
                                                 </td>
 
                                                 {{-- Dispatch to R&D --}}

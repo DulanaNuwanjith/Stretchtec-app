@@ -24,9 +24,7 @@ class SamplePreparationProductionController extends Controller
             'id' => 'required|exists:sample_preparation_production,id',
             'operator_name' => 'nullable|string|max:255',
             'supervisor_name' => 'nullable|string|max:255',
-            'production_output' => 'nullable|string|max:255',
             'note' => 'nullable|string',
-            'order_no' => 'nullable|string|max:255',
         ]);
 
         $production = SamplePreparationProduction::findOrFail($request->id);
@@ -34,13 +32,11 @@ class SamplePreparationProductionController extends Controller
         $production->update([
             'operator_name' => $request->operator_name,
             'supervisor_name' => $request->supervisor_name,
-            'production_output' => $request->production_output,
             'note' => $request->note,
             'production_deadline' => $request->production_deadline,
-            'order_no' => $request->order_no,
         ]);
 
-        return back()->with('success', 'Production record updated successfully.');
+        return redirect()->back()->with('success', 'Production record updated successfully.');
     }
 
     // Mark order start date/time
@@ -52,7 +48,7 @@ class SamplePreparationProductionController extends Controller
         $production->order_start_at = Carbon::now();
         $production->save();
 
-        return back()->with('success', 'Order start date/time marked.');
+        return redirect()->back()->with('success', 'Order start date/time marked.');
     }
 
     // Mark order complete date/time
@@ -64,7 +60,7 @@ class SamplePreparationProductionController extends Controller
         $production->order_complete_at = Carbon::now();
         $production->save();
 
-        return back()->with('success', 'Order complete date/time marked.');
+        return redirect()->back()->with('success', 'Order complete date/time marked.');
     }
 
     // Mark dispatch to R&D date/time
@@ -76,7 +72,7 @@ class SamplePreparationProductionController extends Controller
         $production->dispatch_to_rnd_at = Carbon::now();
         $production->save();
 
-        return back()->with('success', 'Dispatched to R&D.');
+        return redirect()->back()->with('success', 'Dispatched to R&D.');
     }
 
     public function updateOperator(Request $request, $id)
@@ -104,4 +100,26 @@ class SamplePreparationProductionController extends Controller
 
         return redirect()->back()->with('success', 'Supervisor updated successfully.');
     }
+
+    public function updateOutput(Request $request)
+    {
+        // Validate input
+        $request->validate([
+            'id' => 'required|exists:sample_preparation_production,id',
+            'production_output' => 'required|numeric|min:0',
+        ]);
+
+        // Find the production record
+        $prod = SamplePreparationProduction::findOrFail($request->id);
+
+        // Update the production output and lock the field
+        $prod->production_output = $request->production_output;
+        $prod->is_output_locked = true;
+        $prod->save();
+
+        // Redirect back with success message
+        return redirect()->back()->with('success', 'Production output updated and locked.');
+    }
+
+
 }
