@@ -51,69 +51,67 @@
             </form>
 
             <div class="overflow-x-auto bg-white dark:bg-gray-900 shadow rounded-lg">
-            <table class="table-fixed w-full text-sm divide-y divide-gray-200 dark:divide-gray-700">
-                <thead class="bg-gray-100 dark:bg-gray-700 text-center">
-                <tr>
-                    <th class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase text-left border-r border-gray-300 dark:border-gray-600">Shade</th>
-                    <th class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase text-left border-r border-gray-300 dark:border-gray-600">Yarn Ordered PO Number</th>
-                    <th class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase text-center border-r border-gray-300 dark:border-gray-600">Yarn Received Date</th>
-                    <th class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase text-left border-r border-gray-300 dark:border-gray-600">Tkt</th>
-                    <th class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase text-left border-r border-gray-300 dark:border-gray-600">Yarn Supplier</th>
-                    <th class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase text-right border-r border-gray-300 dark:border-gray-600">Available Stock</th>
-                    <th class="px-4 py-3 w-48 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase text-center">Action Admin</th>
-                </tr>
-                </thead>
-
-                <tbody id="sampleInquiryRecords" class="bg-white dark:bg-gray-800 divide-y text-left divide-gray-200 dark:divide-gray-700">
-                @foreach ($leftoverYarns as $record)
-                    <tr id="row{{ $record->id }}">
-                        <td class="px-4 py-3 text-left border-r border-gray-300 dark:border-gray-600">
-                            <span class="readonly">{{ $record->shade }}</span>
-                            <input class="hidden editable w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm" value="{{ $record->shade }}" />
-                        </td>
-                        <td class="px-4 py-3 text-left border-r border-gray-300 dark:border-gray-600">
-                            <span class="readonly">{{ $record->po_number }}</span>
-                            <input class="hidden editable w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm" value="{{ $record->po_number }}" />
-                        </td>
-                        <td class="px-4 py-3 text-center border-r border-gray-300 dark:border-gray-600">
-                            <span class="readonly">{{ $record->yarn_received_date }}</span>
-                            <input type="date" class="hidden editable w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm" value="{{ $record->yarn_received_date }}" />
-                        </td>
-                        <td class="px-4 py-3 text-left border-r border-gray-300 dark:border-gray-600">
-                            <span class="readonly">{{ $record->tkt }}</span>
-                            <input class="hidden editable w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm" value="{{ $record->tkt }}" />
-                        </td>
-                        <td class="px-4 py-3 text-left border-r border-gray-300 dark:border-gray-600">
-                            <span class="readonly">{{ $record->yarn_supplier }}</span>
-                            <input class="hidden editable w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm" value="{{ $record->yarn_supplier }}" />
-                        </td>
-                        <td class="px-4 py-3 text-right border-r border-gray-300 dark:border-gray-600">
-                            <span class="readonly">{{ $record->available_stock }} g</span>
-                            <input class="hidden editable w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm text-right" value="{{ $record->available_stock }}" />
-                        </td>
-
-                        <td class="px-4 py-3 text-center">
-                            <div class="flex flex-col items-center space-y-2">
-                                <!-- Borrow Form -->
-                                <form action="{{ route('leftover-yarn.borrow', $record->id) }}" method="POST" class="flex flex-col items-center space-y-2">
-                                    @csrf
-                                    <input type="number" name="borrow_qty"
-                                           class="w-24 px-2 py-1 border rounded text-sm dark:bg-gray-700 dark:text-white"
-                                           placeholder="Qty" min="1" required>
-                                    <button type="submit"
-                                            class="bg-yellow-600 hover:bg-yellow-700 text-white px-3 py-1 rounded text-sm">
-                                        Borrow
-                                    </button>
-                                </form>
-                            </div>
-                        </td>
-
-
+                <table class="table-fixed w-full text-sm divide-y divide-gray-200 dark:divide-gray-700 text-center"> <!-- text-center added -->
+                    <thead class="bg-gray-100 dark:bg-gray-700">
+                    <tr>
+                        <th class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase border-r border-gray-300 dark:border-gray-600">Shade</th>
+                        <th class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase border-r border-gray-300 dark:border-gray-600">Yarn Ordered PO Number</th>
+                        <th class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase border-r border-gray-300 dark:border-gray-600">Yarn Received Date</th>
+                        <th class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase border-r border-gray-300 dark:border-gray-600">Tkt</th>
+                        <th class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase border-r border-gray-300 dark:border-gray-600">Yarn Supplier</th>
+                        <th class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase border-r border-gray-300 dark:border-gray-600">Available Stock</th>
+                        <th class="px-4 py-3 w-48 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase">Action Admin</th>
                     </tr>
-                @endforeach
-                </tbody>
-            </table>
-        </div>
+                    </thead>
+
+                    <tbody id="sampleInquiryRecords" class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                    @foreach ($leftoverYarns as $record)
+                        <tr id="row{{ $record->id }}">
+                            <td class="px-4 py-3 border-r border-gray-300 dark:border-gray-600">
+                                <span class="readonly">{{ $record->shade }}</span>
+                                <input class="hidden editable w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm text-center" value="{{ $record->shade }}" />
+                            </td>
+                            <td class="px-4 py-3 border-r border-gray-300 dark:border-gray-600">
+                                <span class="readonly">{{ $record->po_number }}</span>
+                                <input class="hidden editable w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm text-center" value="{{ $record->po_number }}" />
+                            </td>
+                            <td class="px-4 py-3 border-r border-gray-300 dark:border-gray-600">
+                                <span class="readonly">{{ \Carbon\Carbon::parse($record->yarn_received_date)->format('Y-m-d') }}</span>
+                                <input type="date" class="hidden editable w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm text-center" value="{{ $record->yarn_received_date }}" />
+                            </td>
+                            <td class="px-4 py-3 border-r border-gray-300 dark:border-gray-600">
+                                <span class="readonly">{{ $record->tkt }}</span>
+                                <input class="hidden editable w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm text-center" value="{{ $record->tkt }}" />
+                            </td>
+                            <td class="px-4 py-3 border-r border-gray-300 dark:border-gray-600">
+                                <span class="readonly">{{ $record->yarn_supplier }}</span>
+                                <input class="hidden editable w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm text-center" value="{{ $record->yarn_supplier }}" />
+                            </td>
+                            <td class="px-4 py-3 border-r border-gray-300 dark:border-gray-600">
+                                <span class="readonly">{{ $record->available_stock }} g</span>
+                                <input class="hidden editable w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm text-center" value="{{ $record->available_stock }}" />
+                            </td>
+
+                            <td class="px-4 py-3">
+                                <div class="flex flex-col items-center space-y-2">
+                                    <!-- Borrow Form -->
+                                    <form action="{{ route('leftover-yarn.borrow', $record->id) }}" method="POST" class="flex flex-col items-center space-y-2">
+                                        @csrf
+                                        <input type="number" name="borrow_qty"
+                                               class="w-24 px-2 py-1 border rounded text-sm dark:bg-gray-700 dark:text-white text-center"
+                                               placeholder="Qty" min="1" required>
+                                        <button type="submit"
+                                                class="bg-yellow-600 hover:bg-yellow-700 text-white px-3 py-1 rounded text-sm">
+                                            Borrow
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    @endforeach
+                    </tbody>
+                </table>
+            </div>
 
             <div class="mt-4">
                 {{ $leftoverYarns->links() }}
