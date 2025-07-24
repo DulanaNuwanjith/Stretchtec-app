@@ -10,11 +10,23 @@ class LeftoverYarnController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $leftoverYarns = LeftoverYarn::all();
-        return view('sample-development.leftover-yarn-details', compact('leftoverYarns'));
+        $search = $request->input('search');
+
+        $leftoverYarns = LeftoverYarn::query()
+            ->when($search, function ($query, $search) {
+                $query->where('shade', 'like', "%{$search}%")
+                    ->orWhere('po_number', 'like', "%{$search}%")
+                    ->orWhere('yarn_supplier', 'like', "%{$search}%");
+                // Add other searchable columns here if needed
+            })
+            ->paginate(10) // Adjust pagination size as needed
+            ->withQueryString(); // Keeps search query param on pagination links
+
+        return view('sample-development.leftover-yarn-details', compact('leftoverYarns', 'search'));
     }
+
 
     /**
      * Show the form for creating a new resource.

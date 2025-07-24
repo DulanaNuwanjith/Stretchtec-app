@@ -24,7 +24,33 @@
             <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Sample Stock Records</h1>
         </div>
 
-        <div class="overflow-x-auto bg-white dark:bg-gray-900 shadow rounded-lg">
+            <form method="GET" action="{{ route('leftoverYarn.index') }}" class="mb-4 flex items-center space-x-2">
+                <input
+                    type="text"
+                    name="search"
+                    value="{{ request('search') }}"
+                    placeholder="Search by Shade, PO Number or Supplier"
+                    class="px-3 py-2 border rounded-md w-1/2 dark:bg-gray-700 dark:text-white"
+                />
+
+                <button
+                    type="submit"
+                    class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                >
+                    Search
+                </button>
+
+                @if(request()->has('search'))
+                    <a
+                        href="{{ route('leftoverYarn.index') }}"
+                        class="px-4 py-2 bg-gray-400 text-white rounded hover:bg-gray-500"
+                    >
+                        Clear
+                    </a>
+                @endif
+            </form>
+
+            <div class="overflow-x-auto bg-white dark:bg-gray-900 shadow rounded-lg">
             <table class="table-fixed w-full text-sm divide-y divide-gray-200 dark:divide-gray-700">
                 <thead class="bg-gray-100 dark:bg-gray-700 text-center">
                 <tr>
@@ -88,6 +114,10 @@
                 </tbody>
             </table>
         </div>
+
+            <div class="mt-4">
+                {{ $leftoverYarns->links() }}
+            </div>
 
     </div>
 </div>
