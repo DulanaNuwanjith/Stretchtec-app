@@ -12,6 +12,8 @@ class SamplePreparationRnDController extends Controller
     public function viewRnD()
     {
         $samplePreparations = SamplePreparationRnD::with('sampleInquiry')->latest()->get();
+
+
         return view('sample-development.pages.sample-preparation-details', compact('samplePreparations'));
     }
 
