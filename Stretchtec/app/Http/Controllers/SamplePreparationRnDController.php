@@ -264,7 +264,7 @@ class SamplePreparationRnDController extends Controller
             LeftoverYarn::create([
                 'shade'              => $prep->shade,
                 'po_number'          => $prep->yarnOrderedPONumber,
-                'yarn_received_date' => $prep->yarnReceivedDate,
+                'yarn_received_date' => \Carbon\Carbon::parse($prep->yarnReceiveDate)->format('Y-m-d'),
                 'tkt'                => $prep->tkt,
                 'yarn_supplier'      => $prep->yarnSupplier,
                 'available_stock'    => $request->value, // using yarnLeftoverWeight as available_stock
