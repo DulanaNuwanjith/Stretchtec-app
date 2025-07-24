@@ -262,6 +262,9 @@
                                             <th
                                                 class="font-bold px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Production Output</th>
+                                                                                        <th
+                                                class="font-bold px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                Damaged Output</th>
                                             <th
                                                 class="font-bold px-4 py-3 w-56 text-center text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Dispatch to R&D
@@ -566,6 +569,42 @@
                                                     @endauth
                                                 </td>
 
+                                                {{-- Damaged Output --}}
+                                                <td
+                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                                    @auth
+                                                        @if (auth()->user()->role === 'ADMIN')
+                                                            <span class="readonly">
+                                                                {{ is_numeric($prod->damaged_output) ? $prod->damaged_output . ' g' : '-' }}
+                                                            </span>
+                                                        @else
+                                                            @if (!$prod->is_damagedOutput_locked)
+                                                                <form action="{{ route('production.updateDamagedOutput') }}"
+                                                                    method="POST" class="inline-block w-full">
+                                                                    @csrf
+                                                                    <input type="hidden" name="id"
+                                                                        value="{{ $prod->id }}">
+
+                                                                    <input type="number" step="any"
+                                                                        name="damaged_output"
+                                                                        value="{{ old('damaged_output', $prod->damaged_output) }}"
+                                                                        class="w-full px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                                        required>
+
+                                                                    <button type="submit"
+                                                                        class="mt-1 px-3 py-1 rounded text-sm transition-all duration-200 bg-blue-600 hover:bg-blue-700 text-white">
+                                                                        Save
+                                                                    </button>
+                                                                </form>
+                                                            @else
+                                                                <span class="readonly">
+                                                                    {{ is_numeric($prod->damaged_output) ? $prod->damaged_output . ' g' : '-' }}
+                                                                </span>
+                                                            @endif
+                                                        @endif
+                                                    @endauth
+                                                </td>
+
                                                 {{-- Dispatch to R&D --}}
                                                 <td
                                                     class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
@@ -629,7 +668,7 @@
                                                                       required>{{ old('notes', $prod->note) }}</textarea>
 
                                                             <button type="submit"
-                                                                    class="mt-1 px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition-all duration-200 text-sm">
+                                                                    class="w-full mt-1 px-2 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition-all duration-200 text-sm">
                                                                 Save
                                                             </button>
                                                         </form>

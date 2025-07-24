@@ -131,6 +131,7 @@ Route::prefix('sample-production')->group(function () {
     Route::post('/mark-complete', [SamplePreparationProductionController::class, 'markOrderComplete'])->name('production.markComplete');
     Route::post('/dispatch-to-rnd', [SamplePreparationProductionController::class, 'dispatchToRnd'])->name('production.dispatchToRnd');
     Route::post('/update-output', [SamplePreparationProductionController::class, 'updateOutput'])->name('production.updateOutput');
+    Route::post('/update-damagedOutput', [SamplePreparationProductionController::class, 'updateDamagedOutput'])->name('production.updateDamagedOutput');
 });
 
 Route::get('/sample-preparation-production', [SamplePreparationProductionController::class, 'index'])

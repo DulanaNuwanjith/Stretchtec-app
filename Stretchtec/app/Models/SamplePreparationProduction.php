@@ -18,6 +18,7 @@ class SamplePreparationProduction extends Model
         'supervisor_name',
         'order_complete_at',
         'production_output',
+        'damaged_output',
         'dispatch_to_rnd_at',
         'note',
         'is_output_locked',

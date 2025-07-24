@@ -26,7 +26,6 @@ return new class extends Migration
             $table->timestamp('yarnOrderedDate')->nullable();
             $table->string('yarnOrderedPONumber')->nullable();
             $table->string('shade')->nullable();
-            $table->string('yarnOrderedQty')->nullable();
             $table->string('tkt')->nullable();
             $table->string('yarnSupplier')->nullable();
             $table->timestamp('yarnReceiveDate')->nullable();

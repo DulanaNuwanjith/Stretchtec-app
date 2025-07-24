@@ -177,5 +177,25 @@ class SamplePreparationProductionController extends Controller
         return redirect()->back()->with('success', 'Production output updated and locked.');
     }
 
+    public function updateDamagedOutput(Request $request)
+    {
+        // Validate input
+        $request->validate([
+            'id' => 'required|exists:sample_preparation_production,id',
+            'damaged_output' => 'required|numeric|min:0',
+        ]);
+
+        // Find the production record
+        $prod = SamplePreparationProduction::findOrFail($request->id);
+
+        // Update the production output and lock the field
+        $prod->damaged_output = $request->damaged_output;
+        $prod->is_damagedOutput_locked = true;
+        $prod->save();
+
+        // Redirect back with success message
+        return redirect()->back()->with('success', 'Production damaged output updated and locked.');
+    }
+
 
 }
