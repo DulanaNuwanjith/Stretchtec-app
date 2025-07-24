@@ -418,6 +418,9 @@
                                                 Production Output</th>
                                             <th
                                                 class="font-bold px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                Damaged Output</th>
+                                            <th
+                                                class="font-bold px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Yarn Leftover Weight</th>
                                             <th
                                                 class="font-bold px-4 py-3 w-72 text-xs text-center font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
@@ -913,6 +916,24 @@
                                                             <input
                                                                 class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                                 value="{{ $prep->production->production_output }} g" />
+                                                        @else
+                                                            <span class="text-gray-400 italic">Pending output</span>
+                                                        @endif
+                                                    @else
+                                                        <span class="text-gray-400 italic">—</span>
+                                                    @endif
+                                                </td>
+
+                                                <td
+                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                                    @if (!$prep->alreadyDeveloped)
+                                                        @if ($prep->production && is_numeric($prep->production->damaged_output))
+                                                            <span class="readonly">
+                                                                {{ $prep->production->damaged_output }} g
+                                                            </span>
+                                                            <input
+                                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                                value="{{ $prep->production->damaged_output }} g" />
                                                         @else
                                                             <span class="text-gray-400 italic">Pending output</span>
                                                         @endif
