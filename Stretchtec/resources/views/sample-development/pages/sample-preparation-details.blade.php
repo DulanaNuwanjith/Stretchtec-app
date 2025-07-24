@@ -133,7 +133,7 @@
 
                             <div id="filterFormContainer" class="hidden mt-4">
                                 <!-- Filter Form -->
-                                <form id="filterForm2" method="GET" action="" class="mb-6">
+                                <form id="filterForm2" method="GET" action="" class="mb-6 sticky top-0 z-20 flex gap-6 items-center">
                                     <div class="flex gap-4 items-center flex-wrap">
                                         <div class="relative inline-block text-left w-48">
                                             <label for="orderDropdown"

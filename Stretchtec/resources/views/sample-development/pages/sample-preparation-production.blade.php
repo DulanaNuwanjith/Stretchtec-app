@@ -134,7 +134,7 @@
                             <div id="filterFormContainer" class="hidden mt-4">
                                 <!-- Filter Form -->
                                 <form id="filterForm3" method="GET" action="" class="mb-6 flex gap-6 items-center">
-                                    <div class="flex items-center gap-4">
+                                    <div class="mb-6 sticky top-0 z-20 flex gap-6 items-center">
                                         <!-- Sample No Dropdown -->
                                         <div class="relative inline-block text-left w-48">
                                             <label for="sampleDropdown"
