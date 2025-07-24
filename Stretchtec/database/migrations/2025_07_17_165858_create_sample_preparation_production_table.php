@@ -19,6 +19,7 @@ class CreateSamplePreparationProductionTable extends Migration
             $table->string('supervisor_name')->nullable();
             $table->dateTime('order_complete_at')->nullable();
             $table->string('production_output')->nullable();
+            $table->string('damaged_output')->nullable();
             $table->dateTime('dispatch_to_rnd_at')->nullable();
             $table->text('note')->nullable();
             $table->timestamps();

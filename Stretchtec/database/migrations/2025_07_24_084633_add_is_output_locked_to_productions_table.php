@@ -10,6 +10,7 @@ return new class extends Migration
     {
         Schema::table('sample_preparation_production', function (Blueprint $table) {
             $table->boolean('is_output_locked')->default(false);
+            $table->boolean('is_damagedOutput_locked')->default(false);
         });
     }
 
@@ -17,6 +18,7 @@ return new class extends Migration
     {
         Schema::table('productions', function (Blueprint $table) {
             $table->dropColumn('is_output_locked');
+            $table->dropColumn('is_damagedOutput_locked');
         });
     }
 
