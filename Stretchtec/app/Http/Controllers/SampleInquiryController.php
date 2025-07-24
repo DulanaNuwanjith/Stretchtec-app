@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\SampleInquiry;
+use App\Models\SamplePreparationProduction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
@@ -61,6 +62,34 @@ class SampleInquiryController extends Controller
         return view('sample-development.pages.sample-inquery-details', compact('inquiries', 'customers', 'merchandisers','items'));
     }
 
+    public function updateNotes(Request $request, $id)
+    {
+        $request->validate([
+            'notes' => 'nullable|string|max:5000',
+        ]);
+
+        // Step 1: Update `sample_inquiries`
+        $inquiry = SampleInquiry::findOrFail($id);
+        $inquiry->notes = $request->notes;
+        $inquiry->save();
+
+        // Step 2: Update related `sample_preparation_rnd` record
+        $rnd = \App\Models\SamplePreparationRND::where('sample_inquiry_id', $id)->first();
+
+        if ($rnd) {
+            $rnd->note = $request->notes;
+            $rnd->save();
+
+            // Step 3: Update related `sample_preparation_production` record
+            $production = \App\Models\SamplePreparationProduction::where('sample_preparation_rnd_id', $rnd->id)->first();
+            if ($production) {
+                $production->note = $request->notes;
+                $production->save();
+            }
+        }
+
+        return redirect()->back()->with('success', 'Notes updated successfully across all tables.');
+    }
 
     /**
      * Show the form for creating a new resource.

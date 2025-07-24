@@ -595,7 +595,7 @@
                                                                     value="{{ $prep->id }}">
 
                                                                 <button type="submit"
-                                                                    class="yarn-ordered-btn px-2 py-1 mt-3 rounded transition-all duration-200 
+                                                                    class="yarn-ordered-btn px-2 py-1 mt-3 rounded transition-all duration-200
                         {{ $prep->developPlannedDate ? 'bg-gray-300 text-black hover:bg-gray-400' : 'bg-gray-200 text-gray-500 cursor-not-allowed' }}"
                                                                     {{ $prep->developPlannedDate ? '' : 'disabled' }}>
                                                                     Pending
@@ -957,13 +957,27 @@
                                                     @endif
                                                 </td>
 
-                                                <td
-                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
-                                                    <span class="readonly">{{ $prep->note ?? 'N/D' }}</span>
-                                                    <textarea name="note"
-                                                        class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                        rows="2">{{ $prep->note ?? 'N/D' }}</textarea>
+                                                <!-- Notes -->
+                                                <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                                    @if (auth()->user()->role !== 'ADMIN')
+                                                        <form action="{{ route('sample-inquery-details.update-notes', $prep->id) }}" method="POST" class="w-full">
+                                                            @csrf
+                                                            @method('PATCH')
+
+                                                            <textarea name="notes"
+                                                                      class="w-full px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                                      rows="2" required>{{ old('notes', $prep->note) }}</textarea>
+
+                                                            <button type="submit"
+                                                                    class="mt-1 px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition-all duration-200 text-sm">
+                                                                Save
+                                                            </button>
+                                                        </form>
+                                                    @else
+                                                        <span class="readonly">{{ $prep->note ?? 'N/D' }}</span>
+                                                    @endif
                                                 </td>
+
 
                                                 <td class="px-4 py-3 whitespace-normal break-words text-center">
                                                     <div class="flex justify-center space-x-2">
@@ -1352,7 +1366,7 @@
             form.classList.toggle('hidden');
         }
     </script>
-    
+
     <script>
         function toggleDevelopedDropdown(event, id) {
             event.preventDefault();

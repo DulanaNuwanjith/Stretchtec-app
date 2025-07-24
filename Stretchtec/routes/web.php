@@ -24,6 +24,8 @@ Route::middleware([
     Route::patch('/sample-preparation-production/update-supervisor/{id}', [SamplePreparationProductionController::class, 'updateSupervisor'])
         ->name('sample-preparation-production.update-supervisor');
 
+    Route::patch('/sample-inquery-details/{id}/update-notes', [SampleInquiryController::class, 'updateNotes'])->name('sample-inquery-details.update-notes');
+
     //Sample inquiry routes
     Route::resource('sampleInquiry', 'App\Http\Controllers\SampleInquiryController')->names([
         'index' => 'sample-inquery-details.index',
