@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\LeftoverYarn;
 use App\Models\SamplePreparationRnD;
 use App\Models\SamplePreparationProduction;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Illuminate\Support\Str;
 
 class SamplePreparationRnDController extends Controller
 {
@@ -249,17 +251,51 @@ class SamplePreparationRnDController extends Controller
             'value' => 'required|numeric',
         ]);
 
-        $prep = SamplePreparationRnD::find($request->id);
-
+        $prep = SamplePreparationRnD::findOrFail($request->id);
         $field = $request->field;
-        $lockField = 'is_' . \Str::snake($field) . '_locked';
+        $lockField = 'is_' . Str::snake($field) . '_locked';
 
         $prep->$field = $request->value;
         $prep->$lockField = true;
         $prep->save();
 
-        return back()->with('success', 'Weight updated successfully.');
+        // ✅ Insert into leftover_yarns if yarnLeftoverWeight is updated
+        if ($field === 'yarnLeftoverWeight') {
+            LeftoverYarn::create([
+                'shade'              => $prep->shade,
+                'po_number'          => $prep->yarnOrderedPONumber,
+                'yarn_received_date' => $prep->yarnReceivedDate,
+                'tkt'                => $prep->tkt,
+                'yarn_supplier'      => $prep->yarnSupplier,
+                'available_stock'    => $request->value, // using yarnLeftoverWeight as available_stock
+            ]);
+        }
+
+        return back()->with('success', 'Weight updated and leftover recorded.');
     }
 
+    public function borrow(Request $request, $id)
+    {
+        $request->validate([
+            'borrow_qty' => 'required|integer|min:1',
+        ]);
+
+        $leftover = LeftoverYarn::findOrFail($id);
+        $borrowQty = $request->borrow_qty;
+
+        if ($borrowQty > $leftover->available_stock) {
+            return back()->with('error', 'Borrowed quantity exceeds available stock.');
+        }
+
+        if ($borrowQty == $leftover->available_stock) {
+            $leftover->delete();
+            return back()->with('success', 'All yarn borrowed. Record deleted.');
+        }
+
+        $leftover->available_stock -= $borrowQty;
+        $leftover->save();
+
+        return back()->with('success', 'Borrowed successfully.');
+    }
 
 }

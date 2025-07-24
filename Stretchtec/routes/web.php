@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\LeftoverYarnController;
 use App\Http\Controllers\SampleInquiryController;
 use App\Http\Controllers\SamplePreparationRnDController;
 use App\Http\Controllers\SamplePreparationProductionController;
@@ -50,6 +51,15 @@ Route::middleware([
     Route::get('/userDetails', [\App\Http\Controllers\UserMananagementController::class, 'index'])->name('userDetails.index');
     Route::delete('/userDetails/{id}', [\App\Http\Controllers\UserMananagementController::class, 'destroy'])->name('userDetails.destroy');
 
+    Route::resource('leftoverYarnManagement', 'App\Http\Controllers\LeftoverYarnController')->names([
+        'index' => 'leftoverYarn.index',
+        'store' => 'leftoverYarn.store',
+        'update' => 'leftoverYarn.update',
+        'destroy' => 'leftoverYarn.destroy',
+    ]);
+
+    Route::post('/leftover-yarn/borrow/{id}', [SamplePreparationRnDController::class, 'borrow'])->name('leftover-yarn.borrow');
+
 });
 
 Route::get('productCatalog', function () {
@@ -67,14 +77,6 @@ Route::get('reports', function () {
 Route::get('sampleStockManagement', function () {
     return view('sample-development.sample-stock-management');
 })->name('sampleStockManagement.index');
-
-Route::get('leftoverYarnManagement', function () {
-    return view('sample-development.leftover-yarn-details');
-})->name('leftoverYarnManagement.index');
-
-// Route::get('sample-preparation-details', function () {
-//     return view('sample-development.pages.sample-preparation-details');
-// })->name('sample-preparation-details.index');
 
 Route::get('sample-preparation-production', function () {
     return view('sample-development.pages.sample-preparation-production');
