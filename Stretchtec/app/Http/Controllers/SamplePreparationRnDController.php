@@ -150,23 +150,6 @@ class SamplePreparationRnDController extends Controller
         return back()->with('success', 'Shade saved.');
     }
 
-    public function lockQtyField(Request $request)
-    {
-        $request->validate([
-            'id' => 'required|exists:sample_preparation_rnd,id',
-            'yarnOrderedQty' => 'required|string',
-        ]);
-
-        $prep = SamplePreparationRnD::findOrFail($request->id);
-        if (!$prep->is_qty_locked) {
-            $prep->yarnOrderedQty = $request->yarnOrderedQty;
-            $prep->is_qty_locked = true;
-            $prep->save();
-        }
-
-        return back()->with('success', 'Yarn Quantity saved.');
-    }
-
     public function lockTktField(Request $request)
     {
         $request->validate([
