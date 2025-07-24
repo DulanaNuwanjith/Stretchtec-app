@@ -783,12 +783,24 @@
                                                 </td>
 
                                                 <!-- Notes -->
-                                                <td
-                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center ">
-                                                    <span class="readonly">{{ $inquiry->notes ?? 'N/D' }}</span>
-                                                    <textarea
-                                                        class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                        rows="2">{{ $inquiry->notes ?? 'N/D' }}</textarea>
+                                                <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                                    @if (auth()->user()->role !== 'ADMIN')
+                                                        <form action="{{ route('sample-inquery-details.update-notes', $inquiry->id) }}" method="POST" class="w-full">
+                                                            @csrf
+                                                            @method('PATCH')
+
+                                                            <textarea name="notes"
+                                                                      class="w-full px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                                      rows="2" required>{{ old('notes', $inquiry->notes) }}</textarea>
+
+                                                            <button type="submit"
+                                                                    class="mt-1 px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition-all duration-200 text-sm">
+                                                                Save
+                                                            </button>
+                                                        </form>
+                                                    @else
+                                                        <span class="readonly">{{ $inquiry->notes ?? 'N/D' }}</span>
+                                                    @endif
                                                 </td>
 
                                                 <!-- Actions -->

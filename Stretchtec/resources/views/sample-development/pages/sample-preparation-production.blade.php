@@ -617,11 +617,25 @@
                                                 </td>
 
                                                 {{-- Note --}}
-                                                <td
-                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
-                                                    <span class="readonly">{{ $prod->note ?? 'N/D' }}</span>
-                                                    <textarea name="note" rows="2"
-                                                        class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">{{ $prod->note ?? '' }}</textarea>
+                                                <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                                    @if (auth()->user()->role !== 'ADMIN')
+                                                        <form action="{{ route('sample-inquery-details.update-notes', $prod->id) }}" method="POST" class="w-full">
+                                                            @csrf
+                                                            @method('PATCH')
+
+                                                            <textarea name="notes"
+                                                                      rows="2"
+                                                                      class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                                      required>{{ old('notes', $prod->note) }}</textarea>
+
+                                                            <button type="submit"
+                                                                    class="mt-1 px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition-all duration-200 text-sm">
+                                                                Save
+                                                            </button>
+                                                        </form>
+                                                    @else
+                                                        <span class="readonly">{{ $prod->note ?? 'N/D' }}</span>
+                                                    @endif
                                                 </td>
 
                                                 {{-- Action Buttons --}}
