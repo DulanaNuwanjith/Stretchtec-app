@@ -262,7 +262,7 @@
                                             <th
                                                 class="font-bold px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Production Output</th>
-                                                                                        <th
+                                            <th
                                                 class="font-bold px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Damaged Output</th>
                                             <th
@@ -511,13 +511,23 @@
                                                             @endif
                                                         @else
                                                             @if (!$prod->order_complete_at)
+                                                                @php
+                                                                    $canComplete =
+                                                                        $prod->order_start_at &&
+                                                                        $prod->operator_name &&
+                                                                        $prod->supervisor_name;
+                                                                @endphp
+
                                                                 <form action="{{ route('production.markComplete') }}"
                                                                     method="POST">
                                                                     @csrf
                                                                     <input type="hidden" name="id"
                                                                         value="{{ $prod->id }}">
                                                                     <button type="submit"
-                                                                        class="order-complete-btn px-2 py-1 mt-3 rounded transition-all duration-200 bg-gray-300 text-black hover:bg-gray-400">
+                                                                        class="order-complete-btn px-2 py-1 mt-3 rounded transition-all duration-200
+                {{ $canComplete ? 'bg-green-600 hover:bg-green-700 text-white' : 'bg-gray-300 text-black cursor-not-allowed' }}"
+                                                                        {{ $canComplete ? '' : 'disabled' }}
+                                                                        title="{{ $canComplete ? '' : 'Start time, Operator, and Supervisor are required' }}">
                                                                         Pending
                                                                     </button>
                                                                 </form>
@@ -630,8 +640,16 @@
                                                                         class="w-full px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                                         required>
 
+                                                                    @php
+                                                                        $disableDispatch =
+                                                                            empty($prod->production_output) ||
+                                                                            empty($prod->damaged_output);
+                                                                    @endphp
+
                                                                     <button type="submit"
-                                                                        class="sample-dispatch-btn bg-gray-300 text-black mt-1 px-2 py-1 rounded hover:bg-gray-400 transition-all duration-200 w-full">
+                                                                        class="sample-dispatch-btn mt-1 px-2 py-1 rounded transition-all duration-200 w-full
+                {{ $disableDispatch ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : 'bg-gray-300 text-black hover:bg-gray-400' }}"
+                                                                        {{ $disableDispatch ? 'disabled title = Please enter Production and Damaged Output first' : '' }}>
                                                                         Dispatch
                                                                     </button>
                                                                 </form>
@@ -644,9 +662,8 @@
                                                                     </div>
                                                                     <div
                                                                         class="sample-dispatch-timestamp text-xs text-gray-500 dark:text-gray-400">
-                                                                        Dispatch
-                                                                        on {{ $prod->dispatch_to_rnd_at->format('Y-m-d') }}
-                                                                        <br>
+                                                                        Dispatch on
+                                                                        {{ $prod->dispatch_to_rnd_at->format('Y-m-d') }}<br>
                                                                         at {{ $prod->dispatch_to_rnd_at->format('H:i') }}
                                                                     </div>
                                                                 </span>
@@ -656,19 +673,20 @@
                                                 </td>
 
                                                 {{-- Note --}}
-                                                <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                                <td
+                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
                                                     @if (auth()->user()->role !== 'ADMIN')
-                                                        <form action="{{ route('sample-inquery-details.update-notes', $prod->id) }}" method="POST" class="w-full">
+                                                        <form
+                                                            action="{{ route('sample-inquery-details.update-notes', $prod->id) }}"
+                                                            method="POST" class="w-full">
                                                             @csrf
                                                             @method('PATCH')
 
-                                                            <textarea name="notes"
-                                                                      rows="2"
-                                                                      class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                                      required>{{ old('notes', $prod->note) }}</textarea>
+                                                            <textarea name="notes" rows="2"
+                                                                class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm" required>{{ old('notes', $prod->note) }}</textarea>
 
                                                             <button type="submit"
-                                                                    class="w-full mt-1 px-2 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition-all duration-200 text-sm">
+                                                                class="w-full mt-1 px-2 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition-all duration-200 text-sm">
                                                                 Save
                                                             </button>
                                                         </form>

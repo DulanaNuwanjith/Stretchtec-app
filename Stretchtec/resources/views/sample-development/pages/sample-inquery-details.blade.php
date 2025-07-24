@@ -602,70 +602,70 @@
                                                 {{-- Sent Order to Sample Development --}}
                                                 <td
                                                     class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
-                                                        <div class="colour-match-sent">
-                                                            @if (is_null($inquiry->sentToSampleDevelopmentDate))
-                                                                {{-- Show form with clickable button --}}
-                                                                <form action="{{ route('inquiry.markSentToSampleDev') }}"
-                                                                    method="POST">
-                                                                    @csrf
-                                                                    <input type="hidden" name="id"
-                                                                        value="{{ $inquiry->id }}">
-                                                                    <button type="submit"
-                                                                        class="delivered-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
-                                                                        Pending
-                                                                    </button>
-                                                                </form>
-                                                            @else
-                                                                {{-- Show static timestamp info --}}
-                                                                <span
-                                                                    class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-yellow-100 dark:bg-gray-800 px-3 py-1 rounded">
-                                                                    Sent on <br>
-                                                                    {{ \Carbon\Carbon::parse($inquiry->sentToSampleDevelopmentDate)->format('Y-m-d') }}
-                                                                    at
-                                                                    {{ \Carbon\Carbon::parse($inquiry->sentToSampleDevelopmentDate)->format('H:i') }}
-                                                                </span>
-                                                            @endif
-                                                        </div>
+                                                    <div class="colour-match-sent">
+                                                        @if (is_null($inquiry->sentToSampleDevelopmentDate))
+                                                            {{-- Show form with clickable button --}}
+                                                            <form action="{{ route('inquiry.markSentToSampleDev') }}"
+                                                                method="POST">
+                                                                @csrf
+                                                                <input type="hidden" name="id"
+                                                                    value="{{ $inquiry->id }}">
+                                                                <button type="submit"
+                                                                    class="delivered-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
+                                                                    Pending
+                                                                </button>
+                                                            </form>
+                                                        @else
+                                                            {{-- Show static timestamp info --}}
+                                                            <span
+                                                                class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-yellow-100 dark:bg-gray-800 px-3 py-1 rounded">
+                                                                Sent on <br>
+                                                                {{ \Carbon\Carbon::parse($inquiry->sentToSampleDevelopmentDate)->format('Y-m-d') }}
+                                                                at
+                                                                {{ \Carbon\Carbon::parse($inquiry->sentToSampleDevelopmentDate)->format('H:i') }}
+                                                            </span>
+                                                        @endif
+                                                    </div>
                                                 </td>
 
                                                 {{-- Develop Plan Date --}}
                                                 <td
                                                     class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
-                                                        <span class="readonly">
-                                                            {{ optional($inquiry->developPlannedDate)->format('Y-m-d') ?? 'N/D' }}
-                                                        </span>
-                                                        <input type="date" name="developPlannedDate"
-                                                            class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                            value="{{ optional($inquiry->developPlannedDate)->format('Y-m-d') }}" />
+                                                    <span class="readonly">
+                                                        {{ optional($inquiry->developPlannedDate)->format('Y-m-d') ?? 'N/D' }}
+                                                    </span>
+                                                    <input type="date" name="developPlannedDate"
+                                                        class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                        value="{{ optional($inquiry->developPlannedDate)->format('Y-m-d') }}" />
                                                 </td>
 
                                                 {{-- Production Status --}}
                                                 <td
                                                     class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
-                                                        @php
-                                                            $status = $inquiry->productionStatus;
-                                                            $badgeClass = match ($status) {
-                                                                'Pending'
-                                                                    => 'bg-blue-100 text-blue-800 dark:bg-blue-700 dark:text-white',
-                                                                'In Production'
-                                                                    => 'bg-yellow-100 text-yellow-800 dark:bg-yellow-700 dark:text-white',
-                                                                'Production Complete'
-                                                                    => 'bg-green-100 text-green-800 dark:bg-green-700 dark:text-white',
-                                                                default
-                                                                    => 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-white',
-                                                            };
-                                                        @endphp
+                                                    @php
+                                                        $status = $inquiry->productionStatus;
+                                                        $badgeClass = match ($status) {
+                                                            'Pending'
+                                                                => 'bg-blue-100 text-blue-800 dark:bg-blue-700 dark:text-white',
+                                                            'In Production'
+                                                                => 'bg-yellow-100 text-yellow-800 dark:bg-yellow-700 dark:text-white',
+                                                            'Production Complete'
+                                                                => 'bg-green-100 text-green-800 dark:bg-green-700 dark:text-white',
+                                                            default
+                                                                => 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-white',
+                                                        };
+                                                    @endphp
 
-                                                        <!-- Read-only badge -->
-                                                        <span
-                                                            class="readonly inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold {{ $badgeClass }}">
-                                                            {{ $status }}
-                                                        </span>
+                                                    <!-- Read-only badge -->
+                                                    <span
+                                                        class="readonly inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold {{ $badgeClass }}">
+                                                        {{ $status }}
+                                                    </span>
 
-                                                        <!-- Editable input field (hidden by default, shown in edit mode) -->
-                                                        <input type="text" name="productionStatus"
-                                                            class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                            value="{{ $status }}" />
+                                                    <!-- Editable input field (hidden by default, shown in edit mode) -->
+                                                    <input type="text" name="productionStatus"
+                                                        class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                        value="{{ $status }}" />
                                                 </td>
 
                                                 <!-- Reference No -->
@@ -678,7 +678,7 @@
                                                 </td>
 
                                                 <td
-                                                    class="py-3 whitespace-normal break-words border-r border-gray-300 text-center ">
+                                                    class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
                                                     <div class="delivery-item">
                                                         @if (is_null($inquiry->customerDeliveryDate))
                                                             <form action="{{ route('inquiry.markCustomerDelivered') }}"
@@ -686,14 +686,22 @@
                                                                 @csrf
                                                                 <input type="hidden" name="id"
                                                                     value="{{ $inquiry->id }}">
+
                                                                 <button type="submit"
-                                                                    class="delivered-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
+                                                                    class="delivered-btn px-2 py-1 mt-3 rounded transition-all duration-200
+                        {{ $inquiry->referenceNo ? 'bg-gray-300 text-black hover:bg-gray-400' : 'bg-gray-200 text-gray-500 cursor-not-allowed' }}"
+                                                                    {{ $inquiry->referenceNo ? '' : 'disabled' }}
+                                                                    title="{{ $inquiry->referenceNo ? '' : 'Please set Reference No first' }}">
                                                                     Pending
                                                                 </button>
                                                             </form>
-                                                            <div
-                                                                class="timestamp mt-1 text-xs text-gray-500 dark:text-gray-400">
-                                                            </div>
+
+                                                            @if (empty($inquiry->referenceNo))
+                                                                <div
+                                                                    class="timestamp mt-1 px-2 text-xs text-red-500 dark:text-red-400">
+                                                                    Reference No is required before marking delivery.
+                                                                </div>
+                                                            @endif
                                                         @else
                                                             <span
                                                                 class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-green-100 dark:bg-gray-800 px-3 py-1 rounded">
@@ -708,93 +716,104 @@
 
                                                 <!-- Customer Decision -->
                                                 <td class="px-4 whitespace-normal break-words border-r border-gray-300">
-                                                    <form
-                                                        action="{{ route('sample-inquery-details.update-decision', $inquiry->id) }}"
-                                                        method="POST" class="relative inline-block text-left w-48">
-                                                        @csrf
-                                                        @method('PATCH')
+                                                    @if ($inquiry->customerDeliveryDate)
+                                                        <form
+                                                            action="{{ route('sample-inquery-details.update-decision', $inquiry->id) }}"
+                                                            method="POST" class="relative inline-block text-left w-48">
+                                                            @csrf
+                                                            @method('PATCH')
 
-                                                        @php
-                                                            $status = $inquiry->customerDecision;
-                                                            $colorClass = match ($status) {
-                                                                'Order Rejected'
-                                                                    => 'bg-red-100 text-red-800 dark:bg-red-700 dark:text-white',
-                                                                'Order Received'
-                                                                    => 'bg-green-100 text-green-800 dark:bg-green-700 dark:text-white',
-                                                                'Order Not Received'
-                                                                    => 'bg-yellow-100 text-yellow-800 dark:bg-yellow-700 dark:text-white',
-                                                                'Pending'
-                                                                    => 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-white',
-                                                                default
-                                                                    => 'bg-white text-gray-900 dark:bg-gray-700 dark:text-white',
-                                                            };
-                                                        @endphp
+                                                            @php
+                                                                $status = $inquiry->customerDecision;
+                                                                $colorClass = match ($status) {
+                                                                    'Order Rejected'
+                                                                        => 'bg-red-100 text-red-800 dark:bg-red-700 dark:text-white',
+                                                                    'Order Received'
+                                                                        => 'bg-green-100 text-green-800 dark:bg-green-700 dark:text-white',
+                                                                    'Order Not Received'
+                                                                        => 'bg-yellow-100 text-yellow-800 dark:bg-yellow-700 dark:text-white',
+                                                                    'Pending'
+                                                                        => 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-white',
+                                                                    default
+                                                                        => 'bg-white text-gray-900 dark:bg-gray-700 dark:text-white',
+                                                                };
+                                                            @endphp
 
-                                                        <!-- Dropdown Button -->
-                                                        <button type="button"
-                                                            id="customerDecisionDropdownTable-{{ $inquiry->id }}"
-                                                            class="inline-flex justify-between w-48 rounded-md px-3 py-2 text-sm font-semibold shadow-sm ring-1 h-10 transition-all duration-200 {{ $colorClass }}"
-                                                            onclick="toggleCustomerDecisionDropdownTable(event, '{{ $inquiry->id }}')">
-                                                            <span
-                                                                id="selectedCustomerDecisionTable-{{ $inquiry->id }}">{{ $status }}</span>
-                                                            <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20"
-                                                                fill="currentColor">
-                                                                <path fill-rule="evenodd"
-                                                                    d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
-                                                                    clip-rule="evenodd" />
-                                                            </svg>
-                                                        </button>
+                                                            <!-- Dropdown Button -->
+                                                            <button type="button"
+                                                                id="customerDecisionDropdownTable-{{ $inquiry->id }}"
+                                                                class="inline-flex justify-between w-48 rounded-md px-3 py-2 text-sm font-semibold shadow-sm ring-1 h-10 transition-all duration-200 {{ $colorClass }}"
+                                                                onclick="toggleCustomerDecisionDropdownTable(event, '{{ $inquiry->id }}')">
+                                                                <span
+                                                                    id="selectedCustomerDecisionTable-{{ $inquiry->id }}">{{ $status }}</span>
+                                                                <svg class="ml-2 h-5 w-5 text-gray-400"
+                                                                    viewBox="0 0 20 20" fill="currentColor">
+                                                                    <path fill-rule="evenodd"
+                                                                        d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
+                                                                        clip-rule="evenodd" />
+                                                                </svg>
+                                                            </button>
 
-                                                        <!-- Dropdown Menu -->
-                                                        <div id="customerDecisionDropdownMenuTable-{{ $inquiry->id }}"
-                                                            class="hidden absolute z-10 mt-2 w-48 rounded-md bg-white shadow-lg ring-1 ring-black/5 dark:bg-gray-700">
-                                                            <div class="py-1" role="listbox" tabindex="-1"
-                                                                aria-labelledby="customerDecisionDropdownTable-{{ $inquiry->id }}">
-                                                                @php
-                                                                    $options = [
-                                                                        'Pending',
-                                                                        'Order Received',
-                                                                        'Order Not Received',
-                                                                        'Order Rejected',
-                                                                    ];
-                                                                    $colors = [
-                                                                        'Pending' =>
-                                                                            'hover:bg-gray-100 text-gray-700 dark:text-white dark:hover:bg-gray-600',
-                                                                        'Order Received' =>
-                                                                            'hover:bg-green-100 text-green-700 dark:text-white dark:hover:bg-green-600',
-                                                                        'Order Not Received' =>
-                                                                            'hover:bg-yellow-100 text-yellow-700 dark:text-white dark:hover:bg-yellow-600',
-                                                                        'Order Rejected' =>
-                                                                            'hover:bg-red-100 text-red-700 dark:text-white dark:hover:bg-red-600',
-                                                                    ];
-                                                                @endphp
+                                                            <!-- Dropdown Menu -->
+                                                            <div id="customerDecisionDropdownMenuTable-{{ $inquiry->id }}"
+                                                                class="hidden absolute z-10 mt-2 w-48 rounded-md bg-white shadow-lg ring-1 ring-black/5 dark:bg-gray-700">
+                                                                <div class="py-1" role="listbox" tabindex="-1"
+                                                                    aria-labelledby="customerDecisionDropdownTable-{{ $inquiry->id }}">
+                                                                    @php
+                                                                        $options = [
+                                                                            'Pending',
+                                                                            'Order Received',
+                                                                            'Order Not Received',
+                                                                            'Order Rejected',
+                                                                        ];
+                                                                        $colors = [
+                                                                            'Pending' =>
+                                                                                'hover:bg-gray-100 text-gray-700 dark:text-white dark:hover:bg-gray-600',
+                                                                            'Order Received' =>
+                                                                                'hover:bg-green-100 text-green-700 dark:text-white dark:hover:bg-green-600',
+                                                                            'Order Not Received' =>
+                                                                                'hover:bg-yellow-100 text-yellow-700 dark:text-white dark:hover:bg-yellow-600',
+                                                                            'Order Rejected' =>
+                                                                                'hover:bg-red-100 text-red-700 dark:text-white dark:hover:bg-red-600',
+                                                                        ];
+                                                                    @endphp
 
-                                                                @foreach ($options as $option)
-                                                                    <button type="submit" name="customerDecision"
-                                                                        value="{{ $option }}"
-                                                                        class="decision-option w-full text-left px-4 py-2 text-sm {{ $colors[$option] }}"
-                                                                        onclick="selectCustomerDecisionTable('{{ $option }}', '{{ $inquiry->id }}')">
-                                                                        {{ $option }}
-                                                                    </button>
-                                                                @endforeach
+                                                                    @foreach ($options as $option)
+                                                                        <button type="submit" name="customerDecision"
+                                                                            value="{{ $option }}"
+                                                                            class="decision-option w-full text-left px-4 py-2 text-sm {{ $colors[$option] }}"
+                                                                            onclick="selectCustomerDecisionTable('{{ $option }}', '{{ $inquiry->id }}')">
+                                                                            {{ $option }}
+                                                                        </button>
+                                                                    @endforeach
+                                                                </div>
                                                             </div>
+                                                        </form>
+                                                    @else
+                                                        <!-- Disabled style or note -->
+                                                        <div class="inline-flex items-center w-48 h-10 px-3 py-2 text-sm rounded-md bg-gray-200 text-gray-500 cursor-not-allowed"
+                                                            title="Customer Decision available after delivery only">
+                                                            Awaiting Delivery
                                                         </div>
-                                                    </form>
+                                                    @endif
                                                 </td>
 
                                                 <!-- Notes -->
-                                                <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                                <td
+                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
                                                     @if (auth()->user()->role !== 'ADMIN')
-                                                        <form action="{{ route('sample-inquery-details.update-notes', $inquiry->id) }}" method="POST" class="w-full">
+                                                        <form
+                                                            action="{{ route('sample-inquery-details.update-notes', $inquiry->id) }}"
+                                                            method="POST" class="w-full">
                                                             @csrf
                                                             @method('PATCH')
 
                                                             <textarea name="notes"
-                                                                      class="w-full px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                                      rows="2" required>{{ old('notes', $inquiry->notes) }}</textarea>
+                                                                class="w-full px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm" rows="2"
+                                                                required>{{ old('notes', $inquiry->notes) }}</textarea>
 
                                                             <button type="submit"
-                                                                    class="w-full mt-1 px-2 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition-all duration-200 text-sm">
+                                                                class="w-full mt-1 px-2 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition-all duration-200 text-sm">
                                                                 Save
                                                             </button>
                                                         </form>
@@ -942,7 +961,8 @@
 
                                                 <div>
                                                     <label for="itemDiscription"
-                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Item Discription</label>
+                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Item
+                                                        Discription</label>
                                                     <input id="itemDiscription" type="text" name="itemDiscription"
                                                         required
                                                         class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">

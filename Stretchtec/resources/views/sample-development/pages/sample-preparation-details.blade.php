@@ -390,7 +390,7 @@
                                                 class="font-bold px-4 py-3 w-40 text-xs font-medium uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">
                                                 Shade</th>
                                             <th
-                                                class="font-bold px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold px-4 py-3 w-40 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Yarn Ordered Weight</th>
                                             <th
                                                 class="font-bold px-4 py-3 w-40 text-xs font-medium uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">
@@ -484,8 +484,12 @@
                                                             @csrf
                                                             <input type="hidden" name="id"
                                                                 value="{{ $prep->id }}">
+
                                                             <button type="submit"
-                                                                class="receive-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
+                                                                class="receive-btn px-2 py-1 mt-3 rounded transition-all duration-200
+                {{ $prep->colourMatchSentDate ? 'bg-gray-300 text-black hover:bg-gray-400' : 'bg-gray-200 text-gray-500 cursor-not-allowed' }}"
+                                                                {{ $prep->colourMatchSentDate ? '' : 'disabled' }}
+                                                                title="{{ $prep->colourMatchSentDate ? '' : 'Please set Colour Match Sent Date first' }}">
                                                                 Pending
                                                             </button>
                                                         </form>
@@ -598,7 +602,8 @@
                                                                 <button type="submit"
                                                                     class="yarn-ordered-btn px-2 py-1 mt-3 rounded transition-all duration-200
                         {{ $prep->developPlannedDate ? 'bg-gray-300 text-black hover:bg-gray-400' : 'bg-gray-200 text-gray-500 cursor-not-allowed' }}"
-                                                                    {{ $prep->developPlannedDate ? '' : 'disabled' }}>
+                                                                    {{ $prep->developPlannedDate ? '' : 'disabled' }}
+                                                                    title="{{ $prep->developPlannedDate ? '' : 'Please set Development Plan Date first' }}">
                                                                     Pending
                                                                 </button>
                                                             </form>
@@ -632,7 +637,7 @@
                                                                     class="w-full mt-1 px-3 py-1 rounded text-sm transition-all duration-200
                         {{ $prep->developPlannedDate ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-gray-300 text-gray-500 cursor-not-allowed' }}"
                                                                     {{ $prep->developPlannedDate ? '' : 'disabled' }}
-                                                                    title="{{ $prep->developPlannedDate ? '' : 'Please set Develop Plan Date first' }}">
+                                                                    title="{{ $prep->developPlannedDate ? '' : 'Please set Development Plan Date first' }}">
                                                                     Save
                                                                 </button>
                                                             </form>
@@ -661,7 +666,7 @@
                                                                     class="w-full mt-1 px-3 py-1 rounded text-sm transition-all duration-200
                         {{ $prep->developPlannedDate ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-gray-300 text-gray-500 cursor-not-allowed' }}"
                                                                     {{ $prep->developPlannedDate ? '' : 'disabled' }}
-                                                                    title="{{ $prep->developPlannedDate ? '' : 'Please set Develop Plan Date first' }}">
+                                                                    title="{{ $prep->developPlannedDate ? '' : 'Please set Development Plan Date first' }}">
                                                                     Save
                                                                 </button>
                                                             </form>
@@ -684,18 +689,22 @@
                                                                     value="{{ $prep->id }}">
                                                                 <input type="hidden" name="field"
                                                                     value="yarnOrderedWeight">
+
                                                                 <input type="number" step="0.01" name="value"
                                                                     value="{{ $prep->yarnOrderedWeight }}"
                                                                     class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                                     required>
+
                                                                 <button type="submit"
-                                                                    class="w-full mt-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm">
+                                                                    class="w-full mt-1 px-3 py-1 rounded text-sm transition-all duration-200
+                    {{ $prep->developPlannedDate ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-gray-300 text-gray-500 cursor-not-allowed' }}"
+                                                                    {{ $prep->developPlannedDate ? '' : 'disabled' }}
+                                                                    title="{{ $prep->developPlannedDate ? '' : 'Please set Development Plan Date first' }}">
                                                                     Save
                                                                 </button>
                                                             </form>
                                                         @else
-                                                            <span class="readonly">{{ $prep->yarnOrderedWeight }}
-                                                                g</span>
+                                                            <span class="readonly">{{ $prep->yarnOrderedWeight }} g</span>
                                                         @endif
                                                     @else
                                                         <span class="text-gray-400 italic">—</span>
@@ -719,7 +728,7 @@
                                                                     class="w-full mt-1 px-3 py-1 rounded text-sm transition-all duration-200
                         {{ $prep->developPlannedDate ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-gray-300 text-gray-500 cursor-not-allowed' }}"
                                                                     {{ $prep->developPlannedDate ? '' : 'disabled' }}
-                                                                    title="{{ $prep->developPlannedDate ? '' : 'Please set Develop Plan Date first' }}">
+                                                                    title="{{ $prep->developPlannedDate ? '' : 'Please set Development Plan Date first' }}">
                                                                     Save
                                                                 </button>
                                                             </form>
@@ -748,7 +757,7 @@
                                                                     class="w-full mt-1 px-3 py-1 rounded text-sm transition-all duration-200
                         {{ $prep->developPlannedDate ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-gray-300 text-gray-500 cursor-not-allowed' }}"
                                                                     {{ $prep->developPlannedDate ? '' : 'disabled' }}
-                                                                    title="{{ $prep->developPlannedDate ? '' : 'Please set Develop Plan Date first' }}">
+                                                                    title="{{ $prep->developPlannedDate ? '' : 'Please set Development Plan Date first' }}">
                                                                     Save
                                                                 </button>
                                                             </form>
@@ -774,7 +783,7 @@
                                                                     class="yarn-receive-btn px-2 py-1 mt-3 rounded transition-all duration-200
                         {{ $prep->developPlannedDate && $prep->yarnOrderedDate ? 'bg-gray-300 text-black hover:bg-gray-400' : 'bg-gray-200 text-gray-500 cursor-not-allowed' }}"
                                                                     {{ $prep->developPlannedDate && $prep->yarnOrderedDate ? '' : 'disabled' }}
-                                                                    title="{{ $prep->developPlannedDate && $prep->yarnOrderedDate ? '' : 'Please set Develop Plan Date and Yarn Ordered Date first' }}">
+                                                                    title="{{ $prep->developPlannedDate && $prep->yarnOrderedDate ? '' : 'Please set Development Plan Date and Yarn Ordered Date first' }}">
                                                                     Pending
                                                                 </button>
                                                             </form>
@@ -835,9 +844,9 @@
                                                                     value="{{ $prep->id }}">
                                                                 <button type="submit"
                                                                     class="send-production-btn px-2 py-1 mt-3 rounded transition-all duration-200
-                        {{ $prep->developPlannedDate ? 'bg-gray-300 text-black hover:bg-gray-400' : 'bg-gray-200 text-gray-500 cursor-not-allowed' }}"
-                                                                    {{ $prep->developPlannedDate ? '' : 'disabled' }}
-                                                                    title="{{ $prep->developPlannedDate ? '' : 'Please set Develop Plan Date first' }}">
+                        {{ $prep->developPlannedDate && $prep->productionDeadline ? 'bg-gray-300 text-black hover:bg-gray-400' : 'bg-gray-200 text-gray-500 cursor-not-allowed' }}"
+                                                                    {{ $prep->developPlannedDate && $prep->productionDeadline ? '' : 'disabled' }}
+                                                                    title="{{ $prep->developPlannedDate && $prep->productionDeadline ? '' : 'Please set Development Plan & Production Deadline Date first' }}">
                                                                     Pending
                                                                 </button>
                                                             </form>
@@ -872,16 +881,16 @@
                                                         };
                                                     @endphp
 
-                                                        <!-- Read-only badge -->
+                                                    <!-- Read-only badge -->
                                                     <span
                                                         class="readonly inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold {{ $badgeClass }}">
-                                                            {{ $status }}
-                                                        </span>
+                                                        {{ $status }}
+                                                    </span>
 
                                                     <!-- Editable input field (hidden by default, shown in edit mode) -->
                                                     <input type="text" name="productionStatus"
-                                                           class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                           value="{{ $status }}" />
+                                                        class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                        value="{{ $status }}" />
                                                 </td>
 
 
@@ -946,6 +955,13 @@
                                                 <td class="px-4 py-3 border-r border-gray-300 text-center">
                                                     @if (!$prep->alreadyDeveloped)
                                                         @if (!$prep->is_yarn_leftover_weight_locked)
+                                                            @php
+                                                                $canSave =
+                                                                    $prep->production &&
+                                                                    is_numeric($prep->production->production_output) &&
+                                                                    is_numeric($prep->production->damaged_output);
+                                                            @endphp
+
                                                             <form action="{{ route('rnd.updateYarnWeights') }}"
                                                                 method="POST">
                                                                 @csrf
@@ -957,8 +973,12 @@
                                                                     value="{{ $prep->yarnLeftoverWeight }}"
                                                                     class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                                     required>
+
                                                                 <button type="submit"
-                                                                    class="w-full mt-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm">
+                                                                    class="w-full mt-1 px-3 py-1 rounded text-sm transition-all duration-200
+                        {{ $canSave ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-gray-300 text-gray-500 cursor-not-allowed' }}"
+                                                                    {{ $canSave ? '' : 'disabled' }}
+                                                                    title="{{ $canSave ? '' : 'Production Output and Damaged Output are required' }}">
                                                                     Save
                                                                 </button>
                                                             </form>
