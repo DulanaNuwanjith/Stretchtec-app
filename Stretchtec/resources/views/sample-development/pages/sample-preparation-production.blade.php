@@ -500,61 +500,73 @@
                                                     @endauth
                                                 </td>
 
-
                                                 {{-- Production Output --}}
-                                                <td
-                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
-                                                    @if (!$prod->is_output_locked)
-                                                        <form action="{{ route('production.updateOutput') }}"
-                                                            method="POST" class="inline-block w-full">
-                                                            @csrf
-                                                            <input type="hidden" name="id"
-                                                                value="{{ $prod->id }}">
+                                                <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                                    @auth
+                                                        @if(auth()->user()->role === 'ADMIN')
+                                                            <span class="readonly">
+                                                                {{ is_numeric($prod->production_output) ? $prod->production_output . ' g' : '-' }}
+                                                            </span>
+                                                        @else
+                                                            @if (!$prod->is_output_locked)
+                                                                <form action="{{ route('production.updateOutput') }}" method="POST" class="inline-block w-full">
+                                                                    @csrf
+                                                                    <input type="hidden" name="id" value="{{ $prod->id }}">
 
-                                                            <input type="number" step="any" name="production_output"
-                                                                value="{{ old('production_output', $prod->production_output) }}"
-                                                                class="w-full px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                                required>
+                                                                    <input type="number" step="any" name="production_output"
+                                                                           value="{{ old('production_output', $prod->production_output) }}"
+                                                                           class="w-full px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                                           required>
 
-                                                            <button type="submit"
-                                                                class="mt-1 px-3 py-1 rounded text-sm transition-all duration-200 bg-blue-600 hover:bg-blue-700 text-white">
-                                                                Save
-                                                            </button>
-                                                        </form>
-                                                    @else
-                                                        <span class="readonly">
-                                                            {{ is_numeric($prod->production_output) ? $prod->production_output . ' g' : '-' }}
-                                                        </span>
-                                                    @endif
+                                                                    <button type="submit"
+                                                                            class="mt-1 px-3 py-1 rounded text-sm transition-all duration-200 bg-blue-600 hover:bg-blue-700 text-white">
+                                                                        Save
+                                                                    </button>
+                                                                </form>
+                                                            @else
+                                                                <span class="readonly">
+                                                                    {{ is_numeric($prod->production_output) ? $prod->production_output . ' g' : '-' }}
+                                                                </span>
+                                                            @endif
+                                                        @endif
+                                                    @endauth
                                                 </td>
 
                                                 {{-- Dispatch to R&D --}}
-                                                <td
-                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
-                                                    @if (!$prod->dispatch_to_rnd_at)
-                                                        <form action="{{ route('production.dispatchToRnd') }}"
-                                                            method="POST">
-                                                            @csrf
-                                                            <input type="hidden" name="id"
-                                                                value="{{ $prod->id }}">
-                                                            <input type="text" name="dispatched_by"
-                                                                placeholder="Enter name"
-                                                                class="w-full px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                                required>
-                                                            <button type="submit"
-                                                                class="sample-dispatch-btn bg-gray-300 text-black mt-1 px-2 py-1 rounded hover:bg-gray-400 transition-all duration-200 w-full">
-                                                                Dispatch
-                                                            </button>
-                                                        </form>
-                                                    @else
-                                                        <div class="text-sm text-gray-800 dark:text-white font-medium">
-                                                            {{ $prod->dispatched_by ?? '-' }}
-                                                        </div>
-                                                        <div
-                                                            class="sample-dispatch-timestamp text-xs text-gray-500 dark:text-gray-400">
-                                                            {{ $prod->dispatch_to_rnd_at->format('Y-m-d H:i') }}
-                                                        </div>
-                                                    @endif
+                                                <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                                    @auth
+                                                        @if(auth()->user()->role === 'ADMIN')
+                                                            <div class="text-sm text-gray-800 dark:text-white font-medium">
+                                                                {{ $prod->dispatched_by ?? '-' }}
+                                                            </div>
+                                                            <div class="sample-dispatch-timestamp text-xs text-gray-500 dark:text-gray-400">
+                                                                {{ $prod->dispatch_to_rnd_at ? $prod->dispatch_to_rnd_at->format('Y-m-d H:i') : '-' }}
+                                                            </div>
+                                                        @else
+                                                            @if (!$prod->dispatch_to_rnd_at)
+                                                                <form action="{{ route('production.dispatchToRnd') }}" method="POST">
+                                                                    @csrf
+                                                                    <input type="hidden" name="id" value="{{ $prod->id }}">
+
+                                                                    <input type="text" name="dispatched_by" placeholder="Enter name"
+                                                                           class="w-full px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                                           required>
+
+                                                                    <button type="submit"
+                                                                            class="sample-dispatch-btn bg-gray-300 text-black mt-1 px-2 py-1 rounded hover:bg-gray-400 transition-all duration-200 w-full">
+                                                                        Dispatch
+                                                                    </button>
+                                                                </form>
+                                                            @else
+                                                                <div class="text-sm text-gray-800 dark:text-white font-medium">
+                                                                    {{ $prod->dispatched_by ?? '-' }}
+                                                                </div>
+                                                                <div class="sample-dispatch-timestamp text-xs text-gray-500 dark:text-gray-400">
+                                                                    {{ $prod->dispatch_to_rnd_at->format('Y-m-d H:i') }}
+                                                                </div>
+                                                            @endif
+                                                        @endif
+                                                    @endauth
                                                 </td>
 
                                                 {{-- Note --}}
