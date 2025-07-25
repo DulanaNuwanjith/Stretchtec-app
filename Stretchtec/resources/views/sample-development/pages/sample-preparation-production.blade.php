@@ -647,10 +647,21 @@
                                                                     <input type="hidden" name="id"
                                                                         value="{{ $prod->id }}">
 
-                                                                    <input type="text" name="dispatched_by"
-                                                                        placeholder="Enter name"
+                                                                    <select name="dispatched_by"
                                                                         class="w-full px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                                         required>
+                                                                        <option value="" disabled selected>Select Name
+                                                                        </option>
+                                                                        <option value="Kanchana Madushani">Kanchana Madushani
+                                                                        </option>
+                                                                        <option value="Imashi Prasangika">Imashi Prasangika
+                                                                        </option>
+                                                                        <option value="Tenuli Dihansa">Tenuli Dihansa</option>
+                                                                        <option value="Sanduni Indeewari">Sanduni Indeewari
+                                                                        </option>
+                                                                        <option value="Kanchana Dharmadasa">Kanchana Dharmadasa
+                                                                        </option>
+                                                                    </select>
 
                                                                     @php
                                                                         $disableDispatch =
