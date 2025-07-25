@@ -41,6 +41,7 @@ Route::middleware([
         ->name('inquiry.markCustomerDelivered');
     Route::patch('/sample-inquery-details/{id}/update-decision', [SampleInquiryController::class, 'updateDecision'])
         ->name('sample-inquery-details.update-decision');
+    Route::post('/inquiry/mark-delivered', [SampleInquiryController::class, 'markCustomerDelivered'])->name('inquiry.markCustomerDelivered');
 
     //Operators and Supervisors routes
     Route::resource('operatorsandSupervisors', 'App\Http\Controllers\OperatorsandSupervisorsController')->names([

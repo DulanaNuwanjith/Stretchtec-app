@@ -434,10 +434,16 @@
                                                 Customer</th>
                                             <th
                                                 class="font-bold px-4 py-3 w-36 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                                Merchandiser</th>
+                                                Customer Merchandiser</th>
+                                            <th
+                                                class="font-bold px-4 py-3 w-36 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                Customer Coordinator</th>
                                             <th
                                                 class="font-bold px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Item</th>
+                                            <th
+                                                class="font-bold px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                Quality Reference</th>
                                             <th
                                                 class="font-bold px-4 py-3 w-40 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Item Description</th>
@@ -526,6 +532,15 @@
                                                         value="{{ $inquiry->merchandiseName }}" />
                                                 </td>
 
+                                                <!-- Coordinator -->
+                                                <td
+                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
+                                                    <span class="readonly">{{ $inquiry->coordinatorName }}</span>
+                                                    <input type="text"
+                                                           class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                           value="{{ $inquiry->coordinatorName }}" />
+                                                </td>
+
                                                 <!-- Item -->
                                                 <td
                                                     class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
@@ -533,6 +548,15 @@
                                                     <input type="text"
                                                         class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                         value="{{ $inquiry->item }}" />
+                                                </td>
+
+                                                <!-- Item -->
+                                                <td
+                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
+                                                    <span class="readonly">{{ $inquiry->qtRef }}</span>
+                                                    <input type="text"
+                                                           class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                           value="{{ $inquiry->qtRef }}" />
                                                 </td>
 
                                                 <!-- Item Discription -->
@@ -675,40 +699,42 @@
                                                         class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                         value="{{ $inquiry->referenceNo ?? 'N/D' }}" />
                                                 </td>
-
-                                                <td
-                                                    class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
-                                                    <div class="delivery-item">
+                                                <td class="px-4 py-3 border-r border-gray-300 text-center">
+                                                    <div class="delivery-item inline-block">
                                                         @if (is_null($inquiry->customerDeliveryDate))
-                                                            <form action="{{ route('inquiry.markCustomerDelivered') }}"
-                                                                method="POST">
-                                                                @csrf
-                                                                <input type="hidden" name="id"
-                                                                    value="{{ $inquiry->id }}">
+                                                            @if ($inquiry->referenceNo)
+                                                                <form action="{{ route('inquiry.markCustomerDelivered') }}" method="POST" class="inline-block text-left">
+                                                                    @csrf
+                                                                    <input type="hidden" name="id" value="{{ $inquiry->id }}">
 
-                                                                <button type="submit"
-                                                                    class="delivered-btn px-2 py-1 mt-3 rounded transition-all duration-200
-                        {{ $inquiry->referenceNo ? 'bg-gray-300 text-black hover:bg-gray-400' : 'bg-gray-200 text-gray-500 cursor-not-allowed' }}"
-                                                                    {{ $inquiry->referenceNo ? '' : 'disabled' }}
-                                                                    title="{{ $inquiry->referenceNo ? '' : 'Please set Reference No first' }}">
-                                                                    Pending
-                                                                </button>
-                                                            </form>
+                                                                    <input type="text"
+                                                                           name="dnote_no"
+                                                                           placeholder="Enter DNote No"
+                                                                           required
+                                                                           class="px-3 py-2 mb-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm w-40">
 
-                                                            @if (empty($inquiry->referenceNo))
-                                                                <div
-                                                                    class="timestamp mt-1 px-2 text-xs text-red-500 dark:text-red-400">
+                                                                    <button type="submit"
+                                                                            class="w-full px-3 py-1 rounded text-sm transition-all duration-200 bg-green-600 hover:bg-green-700 text-white">
+                                                                        Delivered
+                                                                    </button>
+                                                                </form>
+                                                            @else
+                                                                <div class="timestamp mt-1 text-xs text-red-500 dark:text-red-400">
                                                                     Reference No is required before marking delivery.
                                                                 </div>
                                                             @endif
                                                         @else
-                                                            <span
-                                                                class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-green-100 dark:bg-gray-800 px-3 py-1 rounded">
+                                                            <span class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-green-100 dark:bg-gray-800 px-3 py-1 rounded">
                                                                 Delivered on <br>
-                                                                {{ \Carbon\Carbon::parse($inquiry->customerDeliveryDate)->format('Y-m-d') }}
-                                                                at
+                                                                {{ \Carbon\Carbon::parse($inquiry->customerDeliveryDate)->format('Y-m-d') }} at
                                                                 {{ \Carbon\Carbon::parse($inquiry->customerDeliveryDate)->format('H:i') }}
                                                             </span>
+
+                                                            @if ($inquiry->dNoteNumber)
+                                                                <div class="text-xs text-gray-600 dark:text-gray-300 mt-1">
+                                                                    DNote No: <strong>{{ $inquiry->dNoteNumber }}</strong>
+                                                                </div>
+                                                            @endif
                                                         @endif
                                                     </div>
                                                 </td>
@@ -944,36 +970,37 @@
                                                 <div class="flex gap-4">
                                                     <div class="w-1/2">
                                                         <label for="merchandiser"
-                                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">Merchandiser</label>
+                                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer Merchandiser</label>
                                                         <input id="merchandiser" type="text" name="merchandiser"
                                                             required
                                                             class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                     </div>
+                                                    <div class="w-1/2">
+                                                        <label for="coordinator"
+                                                               class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer Coordinator</label>
+                                                        <input id="coordinator"
+                                                               type="text"
+                                                               name="coordinator"
+                                                               value="{{ Auth::user()->name }}"
+                                                               readonly
+                                                               class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md bg-gray-100 dark:bg-gray-700 dark:text-white text-sm cursor-not-allowed">
+                                                    </div>
+                                                </div>
+
+                                                <!-- Size & Colour -->
+                                                <div class="flex gap-4">
                                                     <!-- Item -->
                                                     <div class="w-1/2">
                                                         <label for="item"
-                                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">Item</label>
+                                                               class="block text-sm font-medium text-gray-700 dark:text-gray-300">Item</label>
                                                         <select id="item" name="item" required
-                                                            class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                                class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                             <option value="">Select Item</option>
                                                             <option value="elastic">Elastic</option>
                                                             <option value="code">Code</option>
                                                             <option value="tape">Tape</option>
                                                         </select>
                                                     </div>
-                                                </div>
-
-                                                <div>
-                                                    <label for="itemDiscription"
-                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Item
-                                                        Discription</label>
-                                                    <input id="itemDiscription" type="text" name="itemDiscription"
-                                                        required
-                                                        class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                                </div>
-
-                                                <!-- Size & Colour -->
-                                                <div class="flex gap-4">
                                                     <div class="w-1/2">
                                                         <label for="size"
                                                             class="block text-sm font-medium text-gray-700 dark:text-gray-300">Size</label>
@@ -981,14 +1008,30 @@
                                                             class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                     </div>
                                                     <div class="w-1/2">
-                                                        <label for="colour"
-                                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">Colour</label>
-                                                        <input id="colour" type="text" name="colour" required
-                                                            class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                        <label for="qtRef"
+                                                               class="block text-sm font-medium text-gray-700 dark:text-gray-300">Quality Reference</label>
+                                                        <input id="qtRef" type="text" name="qtRef" required
+                                                               class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                     </div>
                                                 </div>
 
+
+                                                <div>
+                                                    <label for="itemDiscription"
+                                                           class="block text-sm font-medium text-gray-700 dark:text-gray-300">Item
+                                                        Discription</label>
+                                                    <input id="itemDiscription" type="text" name="itemDiscription"
+                                                           required
+                                                           class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                </div>
+
                                                 <div class="flex gap-4">
+                                                    <div class="w-1/2">
+                                                        <label for="colour"
+                                                               class="block text-sm font-medium text-gray-700 dark:text-gray-300">Colour</label>
+                                                        <input id="colour" type="text" name="colour" required
+                                                               class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                    </div>
                                                     <div class="w-1/2">
                                                         <label for="sampleQuantity"
                                                             class="block text-sm font-medium text-gray-700 dark:text-gray-300">Sample
@@ -996,9 +1039,6 @@
                                                         <input id="sampleQuantity" type="text" name="sample_quantity"
                                                             required
                                                             class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm mb-4">
-                                                    </div>
-                                                    <div class="w-1/2">
-
                                                     </div>
                                                 </div>
 
