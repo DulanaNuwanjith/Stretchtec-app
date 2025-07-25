@@ -349,6 +349,12 @@
                                     Records
                                 </h1>
                                 <div class="flex space-x-3">
+                                    <a href="{{ route('sampleStock.index') }}">
+                                        <button
+                                            class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded shadow">
+                                            Sample Stock Management
+                                        </button>
+                                    </a>
                                     <a href="{{ route('leftoverYarn.index') }}">
                                         <button
                                             class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded shadow">
@@ -781,9 +787,9 @@
                                                                     value="{{ $prep->id }}">
                                                                 <button type="submit"
                                                                     class="yarn-receive-btn px-2 py-1 mt-3 rounded transition-all duration-200
-                        {{ $prep->developPlannedDate && $prep->yarnOrderedDate ? 'bg-gray-300 text-black hover:bg-gray-400' : 'bg-gray-200 text-gray-500 cursor-not-allowed' }}"
+                        {{ $prep->developPlannedDate && $prep->yarnOrderedDate && $prep->yarnSupplier && $prep->tkt && $prep->yarnOrderedWeight && $prep->shade && $prep->yarnOrderedPONumber ? 'bg-gray-300 text-black hover:bg-gray-400' : 'bg-gray-200 text-gray-500 cursor-not-allowed' }}"
                                                                     {{ $prep->developPlannedDate && $prep->yarnOrderedDate ? '' : 'disabled' }}
-                                                                    title="{{ $prep->developPlannedDate && $prep->yarnOrderedDate ? '' : 'Please set Development Plan Date and Yarn Ordered Date first' }}">
+                                                                    title="{{ $prep->developPlannedDate && $prep->yarnOrderedDate && $prep->yarnSupplier && $prep->tkt && $prep->yarnOrderedWeight && $prep->shade && $prep->yarnOrderedPONumber ? '' : 'Please set Development Plan Date and Yarn Ordered Date first' }}">
                                                                     Pending
                                                                 </button>
                                                             </form>
@@ -816,9 +822,9 @@
 
                                                                 <button type="submit"
                                                                     class="w-full mt-1 px-3 py-1 rounded text-sm transition-all duration-200
-                        {{ $prep->developPlannedDate ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-gray-300 text-gray-500 cursor-not-allowed' }}"
-                                                                    {{ $prep->developPlannedDate ? '' : 'disabled' }}
-                                                                    title="{{ $prep->developPlannedDate ? '' : 'Please set Develop Plan Date first' }}">
+                        {{ $prep->developPlannedDate && $prep->yarnReceiveDate ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-gray-300 text-gray-500 cursor-not-allowed' }}"
+                                                                    {{ $prep->developPlannedDate && $prep->yarnReceiveDate ? '' : 'disabled' }}
+                                                                    title="{{ $prep->developPlannedDate && $prep->yarnReceiveDate ? '' : 'Please set Develop Plan Date & Yarn Received comfirm first' }}">
                                                                     Save
                                                                 </button>
                                                             </form>
