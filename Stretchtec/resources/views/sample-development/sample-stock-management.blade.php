@@ -13,6 +13,39 @@
         </div>
 
         <div class="overflow-x-auto bg-white dark:bg-gray-900 shadow rounded-lg">
+
+            <div class="px-4 py-3">
+                @if (session('success'))
+                    <div
+                        class="mb-4 p-4 text-sm text-green-800 bg-green-200 rounded border border-green-400"
+                        role="alert">
+                        {{ session('success') }}
+                    </div>
+                @endif
+
+                @if (session('error'))
+                    <div
+                        class="mb-4 p-4 text-sm text-red-800 bg-red-200 rounded border border-red-400"
+                        role="alert">
+                        {{ session('error') }}
+                    </div>
+                @endif
+
+                {{-- Validation Errors --}}
+                @if ($errors->any())
+                    <div
+                        class="mb-4 p-4 text-sm text-red-800 bg-red-200 rounded border border-red-400"
+                        role="alert">
+                        <ul class="list-disc list-inside">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+            </div>
+
+
             <table class="table-fixed w-full text-sm divide-y divide-gray-200 dark:divide-gray-700">
                 <thead class="bg-gray-100 dark:bg-gray-700 text-left">
                     <tr>
@@ -30,7 +63,7 @@
                             Special Note</th>
                         <th
                             class="px-4 py-3 w-48 text-xs text-center font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                            Action Admin</th>
+                            Action</th>
                     </tr>
                 </thead>
                 <tbody id="sampleInquiryRecords"
@@ -39,42 +72,56 @@
                 @foreach ($sampleStocks as $stock)
                     <tr id="row{{ $stock->id }}">
                         <td class="px-4 py-3 w-48 whitespace-normal break-words">
-                <span class="readonly hover:text-blue-600 hover:underline cursor-pointer"
-                      onclick="openModel('{{ $stock->reference_no }}')">
-                    {{ $stock->reference_no }}
-                </span>
-                            <input class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                   value="{{ $stock->reference_no }}" />
+            <span class="hover:text-blue-600 hover:underline cursor-pointer"
+                  onclick="openModel('{{ $stock->reference_no }}')">
+                {{ $stock->reference_no }}
+            </span>
                         </td>
 
                         <td class="px-4 py-3 w-32 whitespace-normal break-words">
-                            <span class="readonly">{{ $stock->shade }}</span>
-                            <input class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                   value="{{ $stock->shade }}" />
+                            {{ $stock->shade }}
                         </td>
 
                         <td class="px-4 py-3 w-32 whitespace-normal break-words">
-                            <span class="readonly">{{ $stock->available_stock }}</span>
-                            <input class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                   value="{{ $stock->available_stock }}" />
+                            {{ $stock->available_stock }}
                         </td>
 
-                        <td class="px-4 py-3 w-72 whitespace-normal break-words">
-                            <span class="readonly">{{ $stock->special_note }}</span>
-                            <input class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                   value="{{ $stock->special_note }}" />
+                        <td class="px-4 py-3 w-[30rem] whitespace-normal break-words">
+                            <div class="flex flex-col gap-3">
+                                {{-- Special Note Update --}}
+                                <form method="POST" action="{{ route('sampleStock.update', $stock->id) }}">
+                                    @csrf
+                                    @method('PUT')
+                                    <textarea name="special_note"
+                                              class="w-full px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm resize-none"
+                                              rows="2"
+                                              placeholder="Enter special note...">{{ $stock->special_note }}</textarea>
+                                    <button type="submit"
+                                            class="mt-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-1 rounded text-sm w-full">
+                                        Save
+                                    </button>
+                                </form>
+                            </div>
                         </td>
 
                         <td class="px-4 py-3 w-48 text-center whitespace-normal break-words">
-                            <div class="flex space-x-2 justify-center">
-                                <button
-                                    class="edit-btn bg-green-600 h-10 hover:bg-green-700 text-white px-3 py-1 rounded text-sm"
-                                    onclick="editRow('row{{ $stock->id }}')">Edit</button>
-                                <button
-                                    class="save-btn bg-blue-600 h-10 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm hidden"
-                                    onclick="saveRow('row{{ $stock->id }}')">Save</button>
+                            <div class="flex justify-center gap-2">
+                                {{-- Borrow Action --}}
+                                <form method="POST" action="{{ route('sampleStock.borrow', $stock->id) }}" class="flex items-center gap-2">
+                                    @csrf
+                                    <input type="number" name="borrow_qty"
+                                           class="w-24 px-3 py-1 border border-gray-300 rounded text-sm"
+                                           min="1"
+                                           max="{{ $stock->available_stock }}"
+                                           placeholder="Qty" required
+                                           oninput="validateQty(this, {{ $stock->available_stock }})">
+                                    <button type="submit"
+                                            class="bg-green-600 hover:bg-green-700 text-white px-4 py-1 rounded text-sm">
+                                        Borrow
+                                    </button>
+                                </form>
                             </div>
-                        </td>
+
                     </tr>
                 @endforeach
 
@@ -100,6 +147,12 @@
         if (saveBtn) saveBtn.classList.remove('hidden');
     }
 
+    function validateQty(input, available) {
+        if (parseInt(input.value) > available) {
+            alert("Borrowing quantity exceeds available stock.");
+            input.value = '';
+        }
+    }
 
     function saveRow(rowId) {
         const row = document.getElementById(rowId);

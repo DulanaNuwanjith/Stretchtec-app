@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\LeftoverYarn;
 use App\Models\SamplePreparationRnD;
 use App\Models\SamplePreparationProduction;
+use App\Models\SampleStock;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
@@ -217,7 +218,22 @@ class SamplePreparationRnDController extends Controller
             $prep->is_reference_locked = true;
             $prep->save();
 
-            // Sync with SampleInquiry
+            // ✅ Fetch production details
+            $production = $prep->production;
+
+            $productionOutput = (int)($production->production_output ?? 0);
+            $damagedOutput = (int)($production->damaged_output ?? 0);
+            $availableStock = max($productionOutput - $damagedOutput, 0);
+
+            // ✅ Create entry in sample_stocks
+            SampleStock::create([
+                'reference_no' => $request->referenceNo,
+                'shade' => $prep->shade ?? $prep->sampleInquiry?->shade ?? 'N/A',
+                'available_stock' => $availableStock,
+                'special_note' => null,
+            ]);
+
+            // ✅ Sync with SampleInquiry
             $inquiry = $prep->sampleInquiry;
             if ($inquiry) {
                 $inquiry->referenceNo = $prep->referenceNo;
@@ -225,7 +241,7 @@ class SamplePreparationRnDController extends Controller
             }
         }
 
-        return back()->with('success', 'Reference No saved.');
+        return back()->with('success', 'Reference No saved and Sample Stock created.');
     }
 
     public function updateDevelopedStatus(Request $request)

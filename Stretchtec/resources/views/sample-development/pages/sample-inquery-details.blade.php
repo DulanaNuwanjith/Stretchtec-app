@@ -410,7 +410,7 @@
                                         class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded shadow">
                                         + Add New Order
                                     </button>
-                                    <a href="{{ route('sampleStockManagement.index') }}">
+                                    <a href="{{ route('sampleStock.index') }}">
                                         <button
                                             class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded shadow">
                                             Sample Stock Management

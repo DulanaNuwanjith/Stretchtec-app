@@ -4,6 +4,7 @@ use App\Http\Controllers\LeftoverYarnController;
 use App\Http\Controllers\SampleInquiryController;
 use App\Http\Controllers\SamplePreparationRnDController;
 use App\Http\Controllers\SamplePreparationProductionController;
+use App\Http\Controllers\SampleStockController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -66,6 +67,7 @@ Route::middleware([
         'update' => 'sampleStock.update',
         'destroy' => 'sampleStock.destroy',
     ]);
+    Route::post('/sample-stock/{id}/borrow', [SampleStockController::class, 'borrow'])->name('sampleStock.borrow');
 
 });
 
