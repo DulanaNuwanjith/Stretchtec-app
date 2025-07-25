@@ -111,6 +111,7 @@ class SampleInquiryController extends Controller
                 'inquiry_date' => 'required|date',
                 'customer' => 'required|string|max:255',
                 'merchandiser' => 'required|string|max:255',
+                'coordinator' => 'string|max:255',
                 'item' => 'required|string|max:255',
                 'itemDiscription' => 'required|string|max:255',
                 'size' => 'required|string|max:255',
@@ -149,6 +150,7 @@ class SampleInquiryController extends Controller
                 'inquiryReceiveDate' => Carbon::now(),
                 'customerName' => $validated['customer'],
                 'merchandiseName' => $validated['merchandiser'],
+                'coordinatorName' => $validated['coordinator'],
                 'item' => $validated['item'],
                 'itemDiscription' => $validated['itemDiscription'],
                 'size' => $validated['size'],
@@ -170,7 +172,7 @@ class SampleInquiryController extends Controller
             Log::error('Sample Inquiry Store Error: ' . $e->getMessage());
 
             return redirect()->back()
-                ->with('error', 'An unexpected error occurred. Please try again later.')
+                ->with('error', 'An unexpected error occurred. Please try again later.' . $e->getMessage())
                 ->withInput();
         }
     }

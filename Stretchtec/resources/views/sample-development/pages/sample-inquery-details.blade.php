@@ -434,7 +434,10 @@
                                                 Customer</th>
                                             <th
                                                 class="font-bold px-4 py-3 w-36 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                                Merchandiser</th>
+                                                Customer Merchandiser</th>
+                                            <th
+                                                class="font-bold px-4 py-3 w-36 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                Customer Coordinator</th>
                                             <th
                                                 class="font-bold px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Item</th>
@@ -524,6 +527,15 @@
                                                     <input type="text"
                                                         class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                         value="{{ $inquiry->merchandiseName }}" />
+                                                </td>
+
+                                                <!-- Coordinator -->
+                                                <td
+                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
+                                                    <span class="readonly">{{ $inquiry->coordinatorName }}</span>
+                                                    <input type="text"
+                                                           class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                           value="{{ $inquiry->coordinatorName }}" />
                                                 </td>
 
                                                 <!-- Item -->
@@ -944,51 +956,62 @@
                                                 <div class="flex gap-4">
                                                     <div class="w-1/2">
                                                         <label for="merchandiser"
-                                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">Merchandiser</label>
+                                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer Merchandiser</label>
                                                         <input id="merchandiser" type="text" name="merchandiser"
                                                             required
                                                             class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                     </div>
+                                                    <div class="w-1/2">
+                                                        <label for="coordinator"
+                                                               class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer Coordinator</label>
+                                                        <input id="coordinator"
+                                                               type="text"
+                                                               name="coordinator"
+                                                               value="{{ Auth::user()->name }}"
+                                                               readonly
+                                                               class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md bg-gray-100 dark:bg-gray-700 dark:text-white text-sm cursor-not-allowed">
+                                                    </div>
+                                                </div>
+
+                                                <!-- Size & Colour -->
+                                                <div class="flex gap-4">
                                                     <!-- Item -->
                                                     <div class="w-1/2">
                                                         <label for="item"
-                                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">Item</label>
+                                                               class="block text-sm font-medium text-gray-700 dark:text-gray-300">Item</label>
                                                         <select id="item" name="item" required
-                                                            class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                                class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                             <option value="">Select Item</option>
                                                             <option value="elastic">Elastic</option>
                                                             <option value="code">Code</option>
                                                             <option value="tape">Tape</option>
                                                         </select>
                                                     </div>
-                                                </div>
-
-                                                <div>
-                                                    <label for="itemDiscription"
-                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Item
-                                                        Discription</label>
-                                                    <input id="itemDiscription" type="text" name="itemDiscription"
-                                                        required
-                                                        class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                                </div>
-
-                                                <!-- Size & Colour -->
-                                                <div class="flex gap-4">
                                                     <div class="w-1/2">
                                                         <label for="size"
                                                             class="block text-sm font-medium text-gray-700 dark:text-gray-300">Size</label>
                                                         <input id="size" type="text" name="size" required
                                                             class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                     </div>
-                                                    <div class="w-1/2">
-                                                        <label for="colour"
-                                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">Colour</label>
-                                                        <input id="colour" type="text" name="colour" required
-                                                            class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                                    </div>
+                                                </div>
+
+
+                                                <div>
+                                                    <label for="itemDiscription"
+                                                           class="block text-sm font-medium text-gray-700 dark:text-gray-300">Item
+                                                        Discription</label>
+                                                    <input id="itemDiscription" type="text" name="itemDiscription"
+                                                           required
+                                                           class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                 </div>
 
                                                 <div class="flex gap-4">
+                                                    <div class="w-1/2">
+                                                        <label for="colour"
+                                                               class="block text-sm font-medium text-gray-700 dark:text-gray-300">Colour</label>
+                                                        <input id="colour" type="text" name="colour" required
+                                                               class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                    </div>
                                                     <div class="w-1/2">
                                                         <label for="sampleQuantity"
                                                             class="block text-sm font-medium text-gray-700 dark:text-gray-300">Sample
@@ -996,9 +1019,6 @@
                                                         <input id="sampleQuantity" type="text" name="sample_quantity"
                                                             required
                                                             class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm mb-4">
-                                                    </div>
-                                                    <div class="w-1/2">
-
                                                     </div>
                                                 </div>
 

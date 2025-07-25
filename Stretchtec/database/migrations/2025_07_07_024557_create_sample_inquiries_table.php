@@ -18,6 +18,7 @@ return new class extends Migration
             $table->date('inquiryReceiveDate');
             $table->string('customerName');
             $table->string('merchandiseName');
+            $table->string('coordinatorName');
             $table->string('item');
             $table->string('size');
             $table->string('color');

@@ -12,6 +12,7 @@ class SampleInquiry extends Model
         'inquiryReceiveDate',
         'customerName',
         'merchandiseName',
+        'coordinatorName',
         'item',
         'itemDiscription',
         'size',
@@ -39,6 +40,6 @@ class SampleInquiry extends Model
     public function samplePreparationRnD()
     {
         return $this->hasOne(SamplePreparationRnD::class);
-    }                                                 
+    }
 
 }
