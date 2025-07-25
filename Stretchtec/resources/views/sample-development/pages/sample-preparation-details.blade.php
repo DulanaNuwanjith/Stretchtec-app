@@ -134,7 +134,7 @@
                             <div id="filterFormContainer" class="hidden mt-4">
                                 <!-- Filter Form -->
                                 <form id="filterForm2" method="GET" action=""
-                                    class="mb-6 sticky top-0 z-20 flex gap-6 items-center">
+                                    class="mb-6 sticky top-0 z-40 flex gap-6 items-center">
                                     <div class="flex gap-4 items-center flex-wrap">
                                         <div class="relative inline-block text-left w-48">
                                             <label for="orderDropdown"
@@ -369,7 +369,7 @@
                                     <thead class="bg-gray-100 dark:bg-gray-700 text-left">
                                         <tr class="text-center">
                                             <th
-                                                class="font-bold sticky left-0 z-10 bg-white px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold sticky left-0 z-30 bg-white px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Order No</th>
                                             <th
                                                 class="font-bold px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
@@ -442,7 +442,7 @@
                                             <tr id="prodRow{{ $prep->id }}"
                                                 class="odd:bg-white even:bg-gray-50 border-b border-gray-200  text-left">
                                                 <td
-                                                    class="sticky left-0 z-10 bg-white px-4 py-3 bg-gray-100 whitespace-normal break-words border-r border-gray-300">
+                                                    class="sticky left-0 z-30 bg-white px-4 py-3 bg-gray-100 whitespace-normal break-words border-r border-gray-300">
                                                     <span
                                                         class="readonly font-bold hover:text-blue-600 hover:underline cursor-pointer"
                                                         onclick="openRndSampleModal(
@@ -552,7 +552,7 @@
 
                                                                 <!-- Dropdown Menu -->
                                                                 <div id="alreadyDevelopedDropdownMenu{{ $prep->id }}"
-                                                                     class="hidden absolute z-5 mt-2 w-48 rounded-md bg-white shadow-lg ring-1 ring-black/5">
+                                                                     class="hidden absolute mt-2 w-48 rounded-md bg-white shadow-lg ring-1 ring-black/5 z-20">
                                                                     <div class="py-1">
                                                                         <button type="submit"
                                                                                 onclick="setDevelopedStatus({{ $prep->id }}, 'Need to Develop')"
