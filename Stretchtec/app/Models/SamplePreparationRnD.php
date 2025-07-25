@@ -57,7 +57,7 @@ class SamplePreparationRnD extends Model
         'is_supplier_locked' => 'boolean',
         'is_deadline_locked' => 'boolean',
         'is_reference_locked' => 'boolean',
-        'alreadyDeveloped' => 'boolean',
+        'alreadyDeveloped' => 'string',
         'is_yarn_ordered_weight_locked' => 'boolean',
         'is_yarn_leftover_weight_locked' => 'boolean',
     ];
