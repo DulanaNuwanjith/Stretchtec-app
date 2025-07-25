@@ -115,6 +115,7 @@ class SampleInquiryController extends Controller
                 'item' => 'required|string|max:255',
                 'itemDiscription' => 'required|string|max:255',
                 'size' => 'required|string|max:255',
+                'qtRef' => 'nullable|string|max:255',
                 'colour' => 'required|string|max:255',
                 'sample_quantity' => 'required|string|max:255',
                 'customer_comments' => 'nullable|string',
@@ -154,6 +155,7 @@ class SampleInquiryController extends Controller
                 'item' => $validated['item'],
                 'itemDiscription' => $validated['itemDiscription'],
                 'size' => $validated['size'],
+                'qtRef' => $validated['qtRef'],
                 'color' => $validated['colour'],
                 'sampleQty' => $validated['sample_quantity'],
                 'customerSpecialComment' => $validated['customer_comments'] ?? null,
@@ -260,13 +262,15 @@ class SampleInquiryController extends Controller
     {
         $request->validate([
             'id' => 'required|exists:sample_inquiries,id',
+            'dnote_no' => 'required|string|max:255',
         ]);
 
         $inquiry = SampleInquiry::findOrFail($request->id);
-        $inquiry->customerDeliveryDate = Carbon::now();
+        $inquiry->customerDeliveryDate = now();
+        $inquiry->dNoteNumber = $request->dnote_no;
         $inquiry->save();
 
-        return back()->with('success', 'Marked as delivered to customer.');
+        return redirect()->back()->with('success', 'Marked as delivered with DNote No');
     }
 
     public function updateDecision(Request $request, $id)

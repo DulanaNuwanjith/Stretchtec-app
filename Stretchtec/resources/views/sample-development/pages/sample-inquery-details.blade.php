@@ -442,6 +442,9 @@
                                                 class="font-bold px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Item</th>
                                             <th
+                                                class="font-bold px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                Quality Reference</th>
+                                            <th
                                                 class="font-bold px-4 py-3 w-40 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Item Description</th>
                                             <th
@@ -545,6 +548,15 @@
                                                     <input type="text"
                                                         class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                         value="{{ $inquiry->item }}" />
+                                                </td>
+
+                                                <!-- Item -->
+                                                <td
+                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
+                                                    <span class="readonly">{{ $inquiry->qtRef }}</span>
+                                                    <input type="text"
+                                                           class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                           value="{{ $inquiry->qtRef }}" />
                                                 </td>
 
                                                 <!-- Item Discription -->
@@ -687,40 +699,42 @@
                                                         class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                         value="{{ $inquiry->referenceNo ?? 'N/D' }}" />
                                                 </td>
-
-                                                <td
-                                                    class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
-                                                    <div class="delivery-item">
+                                                <td class="px-4 py-3 border-r border-gray-300 text-center">
+                                                    <div class="delivery-item inline-block">
                                                         @if (is_null($inquiry->customerDeliveryDate))
-                                                            <form action="{{ route('inquiry.markCustomerDelivered') }}"
-                                                                method="POST">
-                                                                @csrf
-                                                                <input type="hidden" name="id"
-                                                                    value="{{ $inquiry->id }}">
+                                                            @if ($inquiry->referenceNo)
+                                                                <form action="{{ route('inquiry.markCustomerDelivered') }}" method="POST" class="inline-block text-left">
+                                                                    @csrf
+                                                                    <input type="hidden" name="id" value="{{ $inquiry->id }}">
 
-                                                                <button type="submit"
-                                                                    class="delivered-btn px-2 py-1 mt-3 rounded transition-all duration-200
-                        {{ $inquiry->referenceNo ? 'bg-gray-300 text-black hover:bg-gray-400' : 'bg-gray-200 text-gray-500 cursor-not-allowed' }}"
-                                                                    {{ $inquiry->referenceNo ? '' : 'disabled' }}
-                                                                    title="{{ $inquiry->referenceNo ? '' : 'Please set Reference No first' }}">
-                                                                    Pending
-                                                                </button>
-                                                            </form>
+                                                                    <input type="text"
+                                                                           name="dnote_no"
+                                                                           placeholder="Enter DNote No"
+                                                                           required
+                                                                           class="px-3 py-2 mb-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm w-40">
 
-                                                            @if (empty($inquiry->referenceNo))
-                                                                <div
-                                                                    class="timestamp mt-1 px-2 text-xs text-red-500 dark:text-red-400">
+                                                                    <button type="submit"
+                                                                            class="w-full px-3 py-1 rounded text-sm transition-all duration-200 bg-green-600 hover:bg-green-700 text-white">
+                                                                        Delivered
+                                                                    </button>
+                                                                </form>
+                                                            @else
+                                                                <div class="timestamp mt-1 text-xs text-red-500 dark:text-red-400">
                                                                     Reference No is required before marking delivery.
                                                                 </div>
                                                             @endif
                                                         @else
-                                                            <span
-                                                                class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-green-100 dark:bg-gray-800 px-3 py-1 rounded">
+                                                            <span class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-green-100 dark:bg-gray-800 px-3 py-1 rounded">
                                                                 Delivered on <br>
-                                                                {{ \Carbon\Carbon::parse($inquiry->customerDeliveryDate)->format('Y-m-d') }}
-                                                                at
+                                                                {{ \Carbon\Carbon::parse($inquiry->customerDeliveryDate)->format('Y-m-d') }} at
                                                                 {{ \Carbon\Carbon::parse($inquiry->customerDeliveryDate)->format('H:i') }}
                                                             </span>
+
+                                                            @if ($inquiry->dNoteNumber)
+                                                                <div class="text-xs text-gray-600 dark:text-gray-300 mt-1">
+                                                                    DNote No: <strong>{{ $inquiry->dNoteNumber }}</strong>
+                                                                </div>
+                                                            @endif
                                                         @endif
                                                     </div>
                                                 </td>
@@ -992,6 +1006,12 @@
                                                             class="block text-sm font-medium text-gray-700 dark:text-gray-300">Size</label>
                                                         <input id="size" type="text" name="size" required
                                                             class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                    </div>
+                                                    <div class="w-1/2">
+                                                        <label for="qtRef"
+                                                               class="block text-sm font-medium text-gray-700 dark:text-gray-300">Quality Reference</label>
+                                                        <input id="qtRef" type="text" name="qtRef" required
+                                                               class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                     </div>
                                                 </div>
 

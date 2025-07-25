@@ -16,6 +16,7 @@ class SampleInquiry extends Model
         'item',
         'itemDiscription',
         'size',
+        'qtRef',
         'color',
         'sampleQty',
         'customerSpecialComment',
@@ -26,6 +27,7 @@ class SampleInquiry extends Model
         'productionStatus',
         'referenceNo',
         'customerDeliveryDate',
+        'dNoteNumber',
         'customerDecision',
         'notes'
     ];

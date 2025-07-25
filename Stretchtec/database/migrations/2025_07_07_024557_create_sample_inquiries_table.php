@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('coordinatorName');
             $table->string('item');
             $table->string('size');
+            $table->string('qtRef');
             $table->string('color');
             $table->string('sampleQty');
             $table->longText('customerSpecialComment')->nullable();
@@ -31,6 +32,7 @@ return new class extends Migration
             $table->string('productionStatus')->default('Pending');
             $table->string('referenceNo')->nullable();
             $table->dateTime('customerDeliveryDate')->nullable();
+            $table->string('dNoteNumber')->nullable();
             $table->string('customerDecision')->default('pending');
             $table->longText('notes')->nullable();
             $table->timestamps();
