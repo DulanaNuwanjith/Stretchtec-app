@@ -40,7 +40,7 @@
 
                 <li>
                     <a href="{{ route('sample-inquery-details.index') }}"
-                        class="flex items-center px-4 py-2 rounded hover:bg-gray-200 {{ request()->routeIs('sample-inquery-details.*','sample-preparation-details.*','sample-preparation-production.*','sampleStockManagement.*','leftoverYarnManagement.*') ? 'bg-gray-200' : '' }}">
+                        class="flex items-center px-4 py-2 rounded hover:bg-gray-200 {{ request()->routeIs('sample-inquery-details.*','sample-preparation-details.*','sample-preparation-production.*','sampleStock.*','leftoverYarn.*') ? 'bg-gray-200' : '' }}">
                         <img src="{{ asset('icons/research.png') }}" alt="" class="w-6 h-6 mr-5" />
                         <span>Sample Development</span>
                     </a>

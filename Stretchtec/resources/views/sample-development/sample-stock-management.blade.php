@@ -159,6 +159,11 @@
                 </tbody>
 
             </table>
+
+            <div class="px-4 py-4">
+                {{ $sampleStocks->withQueryString()->links('vendor.pagination.tailwind') }}
+            </div>
+
         </div>
 
     </div>
