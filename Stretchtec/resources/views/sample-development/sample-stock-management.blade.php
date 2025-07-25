@@ -12,9 +12,39 @@
             <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Sample Stock Records</h1>
         </div>
 
+        <div class="mb-4">
+            <form method="GET" action="{{ route('sampleStock.index') }}" class="flex items-center space-x-2 max-w-md">
+                <input
+                    type="text"
+                    name="search"
+                    value="{{ request('search') }}"
+                    placeholder="Search by Reference No, Shade or Note"
+                    autocomplete="off"
+                    class="px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm w-full focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 transition duration-200 ease-in-out"
+                />
+
+                <button
+                    type="submit"
+                    class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm whitespace-nowrap"
+                >
+                    Search
+                </button>
+
+                @if(request()->has('search'))
+                    <a
+                        href="{{ route('sampleStock.index') }}"
+                        class="px-4 py-2 bg-gray-400 text-white rounded hover:bg-gray-500 text-sm whitespace-nowrap select-none"
+                    >
+                        Clear
+                    </a>
+                @endif
+            </form>
+        </div>
+
+
         <div class="overflow-x-auto bg-white dark:bg-gray-900 shadow rounded-lg">
 
-            <div class="px-4 py-3">
+                <div class="px-4 py-3">
                 @if (session('success'))
                     <div
                         class="mb-4 p-4 text-sm text-green-800 bg-green-200 rounded border border-green-400"
@@ -48,45 +78,46 @@
 
             <table class="table-fixed w-full text-sm divide-y divide-gray-200 dark:divide-gray-700">
                 <thead class="bg-gray-100 dark:bg-gray-700 text-left">
-                    <tr>
-                        <th
-                            class="px-4 py-3 w-48 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                            Reference No</th>
-                        <th
-                            class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                            Shade</th>
-                        <th
-                            class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                            Available Stock</th>
-                        <th
-                            class="px-4 py-3 w-72 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                            Special Note</th>
-                        <th
-                            class="px-4 py-3 w-48 text-xs text-center font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                            Action</th>
-                    </tr>
+                <tr>
+                    <th class="px-4 py-3 w-48 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words border-r border-gray-300 dark:border-gray-600">
+                        Reference No
+                    </th>
+                    <th class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words border-r border-gray-300 dark:border-gray-600">
+                        Shade
+                    </th>
+                    <th class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words border-r border-gray-300 dark:border-gray-600">
+                        Available Stock
+                    </th>
+                    <th class="px-4 py-3 w-72 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words border-r border-gray-300 dark:border-gray-600">
+                        Special Note
+                    </th>
+                    <th class="px-4 py-3 w-48 text-xs text-center font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                        Action
+                    </th>
+                </tr>
                 </thead>
+
                 <tbody id="sampleInquiryRecords"
                        class="bg-white dark:bg-gray-800 divide-y text-left divide-gray-200 dark:divide-gray-700 ">
 
                 @foreach ($sampleStocks as $stock)
                     <tr id="row{{ $stock->id }}">
-                        <td class="px-4 py-3 w-48 whitespace-normal break-words">
+                        <td class="px-4 py-3 w-48 whitespace-normal break-words border-r border-gray-300 dark:border-gray-600">
             <span class="hover:text-blue-600 hover:underline cursor-pointer"
                   onclick="openModel('{{ $stock->reference_no }}')">
                 {{ $stock->reference_no }}
             </span>
                         </td>
 
-                        <td class="px-4 py-3 w-32 whitespace-normal break-words">
+                        <td class="px-4 py-3 w-32 whitespace-normal break-words border-r border-gray-300 dark:border-gray-600">
                             {{ $stock->shade }}
                         </td>
 
-                        <td class="px-4 py-3 w-32 whitespace-normal break-words">
+                        <td class="px-4 py-3 w-32 whitespace-normal break-words border-r border-gray-300 dark:border-gray-600">
                             {{ $stock->available_stock }}
                         </td>
 
-                        <td class="px-4 py-3 w-[30rem] whitespace-normal break-words">
+                        <td class="px-4 py-3 w-[30rem] whitespace-normal break-words border-r border-gray-300 dark:border-gray-600">
                             <div class="flex flex-col gap-3">
                                 {{-- Special Note Update --}}
                                 <form method="POST" action="{{ route('sampleStock.update', $stock->id) }}">
@@ -121,11 +152,12 @@
                                     </button>
                                 </form>
                             </div>
-
+                        </td>
                     </tr>
                 @endforeach
 
                 </tbody>
+
             </table>
         </div>
 

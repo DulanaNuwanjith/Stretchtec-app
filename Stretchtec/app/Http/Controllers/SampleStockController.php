@@ -10,10 +10,29 @@ class SampleStockController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $sampleStocks = SampleStock::all();
-        return view('sample-development.sample-stock-management', compact('sampleStocks'));
+        // Get search term if any
+        $search = $request->input('search');
+
+        // Query with optional search filter
+        $query = SampleStock::query();
+
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('reference_no', 'like', "%{$search}%")
+                    ->orWhere('shade', 'like', "%{$search}%")
+                    ->orWhere('special_note', 'like', "%{$search}%");
+            });
+        }
+
+        // Paginate results, e.g. 10 per page
+        $sampleStocks = $query->orderBy('reference_no')->paginate(10);
+
+        // Preserve search query on pagination links
+        $sampleStocks->appends(['search' => $search]);
+
+        return view('sample-development.sample-stock-management', compact('sampleStocks', 'search'));
     }
 
     /**
