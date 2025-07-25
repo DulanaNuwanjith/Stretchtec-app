@@ -34,83 +34,52 @@
                     </tr>
                 </thead>
                 <tbody id="sampleInquiryRecords"
-                    class="bg-white dark:bg-gray-800 divide-y text-left divide-gray-200 dark:divide-gray-700 ">
-                    <tr id="row1">
-                        <!-- Each cell has a span for readonly text and a hidden input for editing -->
+                       class="bg-white dark:bg-gray-800 divide-y text-left divide-gray-200 dark:divide-gray-700 ">
+
+                @foreach ($sampleStocks as $stock)
+                    <tr id="row{{ $stock->id }}">
                         <td class="px-4 py-3 w-48 whitespace-normal break-words">
-                            <span class="readonly hover:text-blue-600 hover:underline cursor-pointer"
-                                onclick="document.getElementById('balanceSampleStockModel').classList.remove('hidden')">STKE/2025/JA25-B</span>
-                            <input
-                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                value="STKE/2025/JA25-B" />
+                <span class="readonly hover:text-blue-600 hover:underline cursor-pointer"
+                      onclick="openModel('{{ $stock->reference_no }}')">
+                    {{ $stock->reference_no }}
+                </span>
+                            <input class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                   value="{{ $stock->reference_no }}" />
                         </td>
+
                         <td class="px-4 py-3 w-32 whitespace-normal break-words">
-                            <span class="readonly">AE Black</span>
-                            <input
-                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm5"
-                                value="AE Black" />
+                            <span class="readonly">{{ $stock->shade }}</span>
+                            <input class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                   value="{{ $stock->shade }}" />
                         </td>
+
                         <td class="px-4 py-3 w-32 whitespace-normal break-words">
-                            <span class="readonly">10 Yard</span>
-                            <input
-                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                value="10 Yard" />
+                            <span class="readonly">{{ $stock->available_stock }}</span>
+                            <input class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                   value="{{ $stock->available_stock }}" />
                         </td>
+
                         <td class="px-4 py-3 w-72 whitespace-normal break-words">
-                            <span class="readonly">abc 1234 long sample description to test line
-                                wrapping</span>
-                            <input
-                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                value="abc 1234 long sample description to test line wrapping" />
+                            <span class="readonly">{{ $stock->special_note }}</span>
+                            <input class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                   value="{{ $stock->special_note }}" />
                         </td>
+
                         <td class="px-4 py-3 w-48 text-center whitespace-normal break-words">
                             <div class="flex space-x-2 justify-center">
                                 <button
                                     class="edit-btn bg-green-600 h-10 hover:bg-green-700 text-white px-3 py-1 rounded text-sm"
-                                    onclick="editRow('row1')">Edit</button>
+                                    onclick="editRow('row{{ $stock->id }}')">Edit</button>
                                 <button
                                     class="save-btn bg-blue-600 h-10 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm hidden"
-                                    onclick="saveRow('row1')">Save</button>
+                                    onclick="saveRow('row{{ $stock->id }}')">Save</button>
                             </div>
                         </td>
                     </tr>
+                @endforeach
+
                 </tbody>
             </table>
-        </div>
-        <!-- Add Sample Modal -->
-        <div id="balanceSampleStockModel"
-            class="fixed inset-0 z-50 hidden bg-black bg-opacity-50 flex items-center justify-center py-5">
-            <div class="w-full max-w-[700px] bg-white dark:bg-gray-900 rounded-2xl shadow-2xl p-4 transform transition-all scale-95 max-h-[calc(100vh-10rem)] overflow-y-auto"
-                onclick="event.stopPropagation()">
-                <div class="max-w-[600px] mx-auto p-8">
-                    <h2 class="text-2xl font-semibold mb-8 text-blue-900 mt-4 dark:text-gray-100 text-center">
-                        Dispatched Quantity <br>STKE/2025/JA25-B
-                    </h2>
-                    <form action="" method="POST" enctype="multipart/form-data">
-                        @csrf
-                        <div class="space-y-4">
-
-                            <!-- Dispatched Quantity -->
-                            <div>
-                                <input id="sampleQuantity" type="text" name="sample_quantity" required
-                                    class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm mb-4">
-                            </div>
-
-                        <!-- Buttons -->
-                        <div class="flex justify-end gap-3 mt-12">
-                            <button type="button"
-                                onclick="document.getElementById('balanceSampleStockModel').classList.add('hidden')"
-                                class="px-4 py-2 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 text-sm rounded hover:bg-gray-300">
-                                Cancel
-                            </button>
-                            <button type="submit"
-                                class="px-4 py-2 bg-blue-500 text-white text-sm rounded hover:bg-blue-600">
-                                Save
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
         </div>
 
     </div>

@@ -60,6 +60,13 @@ Route::middleware([
 
     Route::post('/leftover-yarn/borrow/{id}', [SamplePreparationRnDController::class, 'borrow'])->name('leftover-yarn.borrow');
 
+    Route::resource('sampleStockManagement', 'App\Http\Controllers\SampleStockController')->names([
+        'index' => 'sampleStock.index',
+        'store' => 'sampleStock.store',
+        'update' => 'sampleStock.update',
+        'destroy' => 'sampleStock.destroy',
+    ]);
+
 });
 
 Route::get('productCatalog', function () {
@@ -73,10 +80,6 @@ Route::get('storeManagement', function () {
 Route::get('reports', function () {
     return view('reports');
 })->name('reports.index');
-
-Route::get('sampleStockManagement', function () {
-    return view('sample-development.sample-stock-management');
-})->name('sampleStockManagement.index');
 
 Route::get('sample-preparation-production', function () {
     return view('sample-development.pages.sample-preparation-production');
