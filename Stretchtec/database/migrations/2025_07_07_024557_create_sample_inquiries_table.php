@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('size');
             $table->string('qtRef');
             $table->string('color');
+            $table->string('style')->nullable();
             $table->string('sampleQty');
             $table->longText('customerSpecialComment')->nullable();
             $table->date('customerRequestDate')->nullable();

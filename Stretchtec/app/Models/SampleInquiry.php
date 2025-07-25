@@ -18,6 +18,7 @@ class SampleInquiry extends Model
         'size',
         'qtRef',
         'color',
+        'style',
         'sampleQty',
         'customerSpecialComment',
         'customerRequestDate',

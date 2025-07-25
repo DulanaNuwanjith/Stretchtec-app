@@ -454,6 +454,9 @@
                                                 class="font-bold px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Colour</th>
                                             <th
+                                                class="font-bold px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                Style</th>
+                                            <th
                                                 class="font-bold px-4 py-3 w-40 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Customer Requested Sample Quantity</th>
                                             <th
@@ -584,6 +587,15 @@
                                                     <input type="text"
                                                         class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                         value="{{ $inquiry->color }}" />
+                                                </td>
+
+                                                <!-- Color -->
+                                                <td
+                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
+                                                    <span class="readonly">{{ $inquiry->style }}</span>
+                                                    <input type="text"
+                                                           class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                           value="{{ $inquiry->style }}" />
                                                 </td>
 
                                                 <!-- Sample Qty -->
@@ -1007,10 +1019,19 @@
                                                         <input id="size" type="text" name="size" required
                                                             class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                     </div>
+                                                </div>
+
+                                                <div class="flex gap-4">
                                                     <div class="w-1/2">
                                                         <label for="qtRef"
                                                                class="block text-sm font-medium text-gray-700 dark:text-gray-300">Quality Reference</label>
-                                                        <input id="qtRef" type="text" name="qtRef" required
+                                                        <input id="qtRef" type="text" name="qtRef"
+                                                               class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                    </div>
+                                                    <div class="w-1/2">
+                                                        <label for="style"
+                                                               class="block text-sm font-medium text-gray-700 dark:text-gray-300">Style</label>
+                                                        <input id="style" type="text" name="style"
                                                                class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                     </div>
                                                 </div>
