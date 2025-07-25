@@ -20,7 +20,7 @@
 
     <div class="flex-1 overflow-y-auto relative bg-white dark:bg-gray-900">
         <!-- ✅ TAB NAVIGATION (VISIBLE IN ALL PAGES) -->
-        <div class="sticky top-0 z-30 flex space-x-4 border-b border-gray-300 bg-white p-5 dark:bg-gray-800">
+        <div class="sticky top-0 z-50 flex space-x-4 border-b border-gray-300 bg-white p-5 dark:bg-gray-800">
             {{-- Inquiry Details Tab: visible to Customer Coordinator, Admin, Superadmin --}}
             @if (in_array($role, ['CUSTOMERCOORDINATOR', 'ADMIN', 'SUPERADMIN']))
                 <a href="{{ route('sample-inquery-details.index') }}"
