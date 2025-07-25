@@ -613,21 +613,21 @@
                                                 <td class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
                                                     @if ($prep->alreadyDeveloped == 'Need to Develop')
                                                         @if (is_null($prep->yarnOrderedDate))
-                                                            @if ($prep->alreadyDeveloped == 'Tape Match Pan Asia' || ($prep->alreadyDeveloped == 'Need to Develop' && $prep->developPlannedDate))
-                                                                <form action="{{ route('rnd.markYarnOrdered') }}" method="POST">
-                                                                    @csrf
-                                                                    <input type="hidden" name="id" value="{{ $prep->id }}">
+                                                            <form action="{{ route('rnd.markYarnOrdered') }}" method="POST">
+                                                                @csrf
+                                                                <input type="hidden" name="id" value="{{ $prep->id }}">
 
-                                                                    <button type="submit"
-                                                                            class="yarn-ordered-btn px-2 py-1 mt-3 rounded transition-all duration-200
-                                                                        {{ $prep->alreadyDeveloped == 'Need to Develop' && !$prep->developPlannedDate ? 'bg-gray-200 text-gray-500 cursor-not-allowed' : 'bg-gray-300 text-black hover:bg-gray-400' }}"
-                                                                        {{ $prep->alreadyDeveloped == 'Need to Develop' && !$prep->developPlannedDate ? 'disabled title=Please set Development Plan Date first' : '' }}>
-                                                                        Pending
-                                                                    </button>
-                                                                </form>
-                                                            @else
-                                                                <span class="text-gray-400 italic">—</span>
-                                                            @endif
+                                                                @php
+                                                                    $canOrder = $prep->alreadyDeveloped == 'Tape Match Pan Asia' || ($prep->alreadyDeveloped == 'Need to Develop' && $prep->developPlannedDate);
+                                                                @endphp
+
+                                                                <button type="submit"
+                                                                        class="yarn-ordered-btn px-2 py-1 mt-3 rounded transition-all duration-200
+                                                                    {{ $canOrder ? 'bg-gray-300 text-black hover:bg-gray-400' : 'bg-gray-200 text-gray-500 cursor-not-allowed' }}"
+                                                                    {{ $canOrder ? '' : 'disabled title=Please set Development Plan Date first' }}>
+                                                                    Pending
+                                                                </button>
+                                                            </form>
                                                         @else
                                                             <span
                                                                 class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-purple-200 dark:bg-gray-800 px-3 py-1 rounded">
@@ -638,7 +638,14 @@
                                                             </span>
                                                         @endif
                                                     @else
-                                                        <span class="text-gray-400 italic">—</span>
+                                                        {{-- Not "Need to Develop", but still show disabled Pending button --}}
+                                                        <form>
+                                                            <button type="button"
+                                                                    class="yarn-ordered-btn px-2 py-1 mt-3 rounded bg-gray-200 text-gray-500 cursor-not-allowed"
+                                                                    disabled title="Not applicable for this type">
+                                                                Pending
+                                                            </button>
+                                                        </form>
                                                     @endif
                                                 </td>
 
