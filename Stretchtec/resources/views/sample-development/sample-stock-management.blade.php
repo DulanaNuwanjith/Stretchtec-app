@@ -1,3 +1,4 @@
+@php use Illuminate\Support\Facades\Auth; @endphp
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <div class="flex h-full w-full font-sans">
     @include('layouts.side-bar')
@@ -140,36 +141,6 @@
             </form>
         </div>
 
-
-        <div class="overflow-x-auto bg-white dark:bg-gray-900 shadow rounded-lg">
-
-            <div class="px-4 py-3">
-                @if (session('success'))
-                    <div class="mb-4 p-4 text-sm text-green-800 bg-green-200 rounded border border-green-400"
-                        role="alert">
-                        {{ session('success') }}
-                    </div>
-                @endif
-
-                @if (session('error'))
-                    <div class="mb-4 p-4 text-sm text-red-800 bg-red-200 rounded border border-red-400" role="alert">
-                        {{ session('error') }}
-                    </div>
-                @endif
-
-                {{-- Validation Errors --}}
-                @if ($errors->any())
-                    <div class="mb-4 p-4 text-sm text-red-800 bg-red-200 rounded border border-red-400" role="alert">
-                        <ul class="list-disc list-inside">
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
-            </div>
-
-
             <table class="table-fixed w-full text-sm divide-y divide-gray-200 dark:divide-gray-700">
                 <thead class="bg-gray-100 dark:bg-gray-700 text-left">
                     <tr>
@@ -189,10 +160,16 @@
                             class="px-4 py-3 w-72 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words border-r border-gray-300 dark:border-gray-600">
                             Special Note
                         </th>
-                        <th
-                            class="px-4 py-3 w-48 text-xs text-center font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                            Action
-                        </th>
+                        @php
+                            $userRole = Auth::user()->role;
+                        @endphp
+
+                        @if (in_array($userRole, ['SUPERADMIN', 'MERCHANDISER', 'CUSTOMERCOORDINATOR']))
+                            <th class="px-4 py-3 w-48 text-xs text-center font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                Action
+                            </th>
+                        @endif
+
                     </tr>
                 </thead>
 
@@ -237,23 +214,32 @@
                                 </div>
                             </td>
 
-                            <td class="px-4 py-3 w-48 text-center whitespace-normal break-words">
-                                <div class="flex justify-center gap-2">
-                                    {{-- Borrow Action --}}
-                                    <form method="POST" action="{{ route('sampleStock.borrow', $stock->id) }}"
-                                        class="flex items-center gap-2">
-                                        @csrf
-                                        <input type="number" name="borrow_qty"
-                                            class="w-24 px-3 py-1 border border-gray-300 rounded text-sm" min="1"
-                                            max="{{ $stock->available_stock }}" placeholder="Qty" required
-                                            oninput="validateQty(this, {{ $stock->available_stock }})">
-                                        <button type="submit"
-                                            class="bg-green-600 hover:bg-green-700 text-white px-4 py-1 rounded text-sm">
-                                            Borrow
-                                        </button>
-                                    </form>
-                                </div>
-                            </td>
+                            @php
+                                $userRole = Auth::user()->role;
+                            @endphp
+
+                            @if (in_array($userRole, ['SUPERADMIN', 'MERCHANDISER', 'CUSTOMERCOORDINATOR']))
+                                <td class="px-4 py-3 w-48 text-center whitespace-normal break-words">
+                                    <div class="flex justify-center gap-2">
+                                        {{-- Borrow Action --}}
+                                        <form method="POST" action="{{ route('sampleStock.borrow', $stock->id) }}"
+                                              class="flex items-center gap-2">
+                                            @csrf
+                                            <input type="number" name="borrow_qty"
+                                                   class="w-24 px-3 py-1 border border-gray-300 rounded text-sm"
+                                                   min="1"
+                                                   max="{{ $stock->available_stock }}"
+                                                   placeholder="Qty" required
+                                                   oninput="validateQty(this, {{ $stock->available_stock }})">
+                                            <button type="submit"
+                                                    class="bg-green-600 hover:bg-green-700 text-white px-4 py-1 rounded text-sm">
+                                                Borrow
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            @endif
+
                         </tr>
                     @endforeach
 
