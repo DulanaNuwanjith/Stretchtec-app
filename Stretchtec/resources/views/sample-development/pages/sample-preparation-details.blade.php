@@ -585,16 +585,14 @@
                                                     @if ($prep->alreadyDeveloped == 'Need to Develop')
                                                         @if (!$prep->developPlannedDate)
                                                             {{-- Show input if not set --}}
-                                                            <form action="{{ route('rnd.setDevelopPlanDate') }}"
-                                                                method="POST">
+                                                            <form action="{{ route('rnd.setDevelopPlanDate') }}" method="POST">
                                                                 @csrf
-                                                                <input type="hidden" name="id"
-                                                                    value="{{ $prep->id }}">
+                                                                <input type="hidden" name="id" value="{{ $prep->id }}">
                                                                 <input type="date" name="developPlannedDate"
-                                                                    class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                                    required>
+                                                                       class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                                       required>
                                                                 <button type="submit"
-                                                                    class="w-full mt-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm">
+                                                                        class="w-full mt-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm">
                                                                     Save
                                                                 </button>
                                                             </form>
@@ -605,7 +603,15 @@
                                                             </span>
                                                         @endif
                                                     @else
-                                                        <span class="text-gray-400 italic">—</span>
+                                                        {{-- Disabled input and button --}}
+                                                        <input type="date"
+                                                               class="w-full px-3 py-2 border rounded-md bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400 text-sm"
+                                                               disabled>
+                                                        <button type="button"
+                                                                class="w-full mt-1 bg-gray-300 text-gray-500 px-3 py-1 rounded text-sm cursor-not-allowed"
+                                                                title="Only visible when status is 'Need to Develop'">
+                                                            Save
+                                                        </button>
                                                     @endif
                                                 </td>
 
