@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class SamplePreparationRnD extends Model
 {
-    protected $table = 'sample_preparation_rnd'; 
+    protected $table = 'sample_preparation_rnd';
 
     protected $fillable = [
         'sample_inquiry_id',
@@ -21,8 +21,6 @@ class SamplePreparationRnD extends Model
         'is_po_locked',
         'shade',
         'is_shade_locked',
-        'yarnOrderedQty',
-        'is_qty_locked',
         'tkt',
         'is_tkt_locked',
         'yarnSupplier',
@@ -55,12 +53,11 @@ class SamplePreparationRnD extends Model
         'is_dev_plan_locked' => 'boolean',
         'is_po_locked' => 'boolean',
         'is_shade_locked' => 'boolean',
-        'is_qty_locked' => 'boolean',
         'is_tkt_locked' => 'boolean',
         'is_supplier_locked' => 'boolean',
         'is_deadline_locked' => 'boolean',
         'is_reference_locked' => 'boolean',
-        'alreadyDeveloped' => 'boolean',
+        'alreadyDeveloped' => 'string',
         'is_yarn_ordered_weight_locked' => 'boolean',
         'is_yarn_leftover_weight_locked' => 'boolean',
     ];

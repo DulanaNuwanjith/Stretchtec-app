@@ -125,7 +125,7 @@
                             <div class="flex justify-start">
                                 <button onclick="toggleFilterForm()"
                                     class="bg-white border border-blue-500 text-blue-500 hover:text-blue-600 hover:border-blue-600 font-semibold py-1 px-3 rounded shadow flex items-center gap-2 mb-6">
-                                    <img src="{{ asset('icons/filter.png') }}" alt="" class="w-6 h-6"
+                                    <img src="{{ asset('icons/filter.png') }}" class="w-6 h-6"
                                         alt="Filter Icon">
                                     Filters
                                 </button>
@@ -410,13 +410,12 @@
                                         class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded shadow">
                                         + Add New Order
                                     </button>
-                                    <a href="{{ route('sampleStockManagement.index') }}">
+                                    <a href="{{ route('sampleStock.index') }}">
                                         <button
                                             class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded shadow">
                                             Sample Stock Management
                                         </button>
                                     </a>
-
                                 </div>
                             </div>
 
@@ -435,10 +434,16 @@
                                                 Customer</th>
                                             <th
                                                 class="font-bold px-4 py-3 w-36 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                                Merchandiser</th>
+                                                Customer Merchandiser</th>
+                                            <th
+                                                class="font-bold px-4 py-3 w-36 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                Customer Coordinator</th>
                                             <th
                                                 class="font-bold px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Item</th>
+                                            <th
+                                                class="font-bold px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                Quality Reference</th>
                                             <th
                                                 class="font-bold px-4 py-3 w-40 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Item Description</th>
@@ -448,6 +453,9 @@
                                             <th
                                                 class="font-bold px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Colour</th>
+                                            <th
+                                                class="font-bold px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                Style</th>
                                             <th
                                                 class="font-bold px-4 py-3 w-40 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Customer Requested Sample Quantity</th>
@@ -527,6 +535,15 @@
                                                         value="{{ $inquiry->merchandiseName }}" />
                                                 </td>
 
+                                                <!-- Coordinator -->
+                                                <td
+                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
+                                                    <span class="readonly">{{ $inquiry->coordinatorName }}</span>
+                                                    <input type="text"
+                                                           class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                           value="{{ $inquiry->coordinatorName }}" />
+                                                </td>
+
                                                 <!-- Item -->
                                                 <td
                                                     class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
@@ -534,6 +551,15 @@
                                                     <input type="text"
                                                         class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                         value="{{ $inquiry->item }}" />
+                                                </td>
+
+                                                <!-- Item -->
+                                                <td
+                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
+                                                    <span class="readonly">{{ $inquiry->qtRef }}</span>
+                                                    <input type="text"
+                                                           class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                           value="{{ $inquiry->qtRef }}" />
                                                 </td>
 
                                                 <!-- Item Discription -->
@@ -561,6 +587,15 @@
                                                     <input type="text"
                                                         class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                         value="{{ $inquiry->color }}" />
+                                                </td>
+
+                                                <!-- Color -->
+                                                <td
+                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
+                                                    <span class="readonly">{{ $inquiry->style }}</span>
+                                                    <input type="text"
+                                                           class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                           value="{{ $inquiry->style }}" />
                                                 </td>
 
                                                 <!-- Sample Qty -->
@@ -602,70 +637,70 @@
                                                 {{-- Sent Order to Sample Development --}}
                                                 <td
                                                     class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
-                                                        <div class="colour-match-sent">
-                                                            @if (is_null($inquiry->sentToSampleDevelopmentDate))
-                                                                {{-- Show form with clickable button --}}
-                                                                <form action="{{ route('inquiry.markSentToSampleDev') }}"
-                                                                    method="POST">
-                                                                    @csrf
-                                                                    <input type="hidden" name="id"
-                                                                        value="{{ $inquiry->id }}">
-                                                                    <button type="submit"
-                                                                        class="delivered-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
-                                                                        Pending
-                                                                    </button>
-                                                                </form>
-                                                            @else
-                                                                {{-- Show static timestamp info --}}
-                                                                <span
-                                                                    class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-yellow-100 dark:bg-gray-800 px-3 py-1 rounded">
-                                                                    Sent on <br>
-                                                                    {{ \Carbon\Carbon::parse($inquiry->sentToSampleDevelopmentDate)->format('Y-m-d') }}
-                                                                    at
-                                                                    {{ \Carbon\Carbon::parse($inquiry->sentToSampleDevelopmentDate)->format('H:i') }}
-                                                                </span>
-                                                            @endif
-                                                        </div>
+                                                    <div class="colour-match-sent">
+                                                        @if (is_null($inquiry->sentToSampleDevelopmentDate))
+                                                            {{-- Show form with clickable button --}}
+                                                            <form action="{{ route('inquiry.markSentToSampleDev') }}"
+                                                                method="POST">
+                                                                @csrf
+                                                                <input type="hidden" name="id"
+                                                                    value="{{ $inquiry->id }}">
+                                                                <button type="submit"
+                                                                    class="delivered-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
+                                                                    Pending
+                                                                </button>
+                                                            </form>
+                                                        @else
+                                                            {{-- Show static timestamp info --}}
+                                                            <span
+                                                                class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-yellow-100 dark:bg-gray-800 px-3 py-1 rounded">
+                                                                Sent on <br>
+                                                                {{ \Carbon\Carbon::parse($inquiry->sentToSampleDevelopmentDate)->format('Y-m-d') }}
+                                                                at
+                                                                {{ \Carbon\Carbon::parse($inquiry->sentToSampleDevelopmentDate)->format('H:i') }}
+                                                            </span>
+                                                        @endif
+                                                    </div>
                                                 </td>
 
                                                 {{-- Develop Plan Date --}}
                                                 <td
                                                     class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
-                                                        <span class="readonly">
-                                                            {{ optional($inquiry->developPlannedDate)->format('Y-m-d') ?? 'N/D' }}
-                                                        </span>
-                                                        <input type="date" name="developPlannedDate"
-                                                            class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                            value="{{ optional($inquiry->developPlannedDate)->format('Y-m-d') }}" />
+                                                    <span class="readonly">
+                                                        {{ optional($inquiry->developPlannedDate)->format('Y-m-d') ?? 'N/D' }}
+                                                    </span>
+                                                    <input type="date" name="developPlannedDate"
+                                                        class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                        value="{{ optional($inquiry->developPlannedDate)->format('Y-m-d') }}" />
                                                 </td>
 
                                                 {{-- Production Status --}}
                                                 <td
                                                     class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
-                                                        @php
-                                                            $status = $inquiry->productionStatus;
-                                                            $badgeClass = match ($status) {
-                                                                'Pending'
-                                                                    => 'bg-blue-100 text-blue-800 dark:bg-blue-700 dark:text-white',
-                                                                'In_progress'
-                                                                    => 'bg-yellow-100 text-yellow-800 dark:bg-yellow-700 dark:text-white',
-                                                                'Complete'
-                                                                    => 'bg-green-100 text-green-800 dark:bg-green-700 dark:text-white',
-                                                                default
-                                                                    => 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-white',
-                                                            };
-                                                        @endphp
+                                                    @php
+                                                        $status = $inquiry->productionStatus;
+                                                        $badgeClass = match ($status) {
+                                                            'Pending'
+                                                                => 'bg-blue-100 text-blue-800 dark:bg-blue-700 dark:text-white',
+                                                            'In Production'
+                                                                => 'bg-yellow-100 text-yellow-800 dark:bg-yellow-700 dark:text-white',
+                                                            'Production Complete'
+                                                                => 'bg-green-100 text-green-800 dark:bg-green-700 dark:text-white',
+                                                            default
+                                                                => 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-white',
+                                                        };
+                                                    @endphp
 
-                                                        <!-- Read-only badge -->
-                                                        <span
-                                                            class="readonly inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold {{ $badgeClass }}">
-                                                            {{ $status }}
-                                                        </span>
+                                                    <!-- Read-only badge -->
+                                                    <span
+                                                        class="readonly inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold {{ $badgeClass }}">
+                                                        {{ $status }}
+                                                    </span>
 
-                                                        <!-- Editable input field (hidden by default, shown in edit mode) -->
-                                                        <input type="text" name="productionStatus"
-                                                            class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                            value="{{ $status }}" />
+                                                    <!-- Editable input field (hidden by default, shown in edit mode) -->
+                                                    <input type="text" name="productionStatus"
+                                                        class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                        value="{{ $status }}" />
                                                 </td>
 
                                                 <!-- Reference No -->
@@ -676,125 +711,146 @@
                                                         class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                         value="{{ $inquiry->referenceNo ?? 'N/D' }}" />
                                                 </td>
-
-                                                <td
-                                                    class="py-3 whitespace-normal break-words border-r border-gray-300 text-center ">
-                                                    <div class="delivery-item">
+                                                <td class="px-4 py-3 border-r border-gray-300 text-center">
+                                                    <div class="delivery-item inline-block">
                                                         @if (is_null($inquiry->customerDeliveryDate))
-                                                            <form action="{{ route('inquiry.markCustomerDelivered') }}"
-                                                                method="POST">
-                                                                @csrf
-                                                                <input type="hidden" name="id"
-                                                                    value="{{ $inquiry->id }}">
-                                                                <button type="submit"
-                                                                    class="delivered-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
-                                                                    Pending
-                                                                </button>
-                                                            </form>
-                                                            <div
-                                                                class="timestamp mt-1 text-xs text-gray-500 dark:text-gray-400">
-                                                            </div>
+                                                            @if ($inquiry->referenceNo)
+                                                                <form action="{{ route('inquiry.markCustomerDelivered') }}" method="POST" class="inline-block text-left">
+                                                                    @csrf
+                                                                    <input type="hidden" name="id" value="{{ $inquiry->id }}">
+
+                                                                    <input type="text"
+                                                                           name="dnote_no"
+                                                                           placeholder="Enter DNote No"
+                                                                           required
+                                                                           class="px-3 py-2 mb-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm w-40">
+
+                                                                    <button type="submit"
+                                                                            class="w-full px-3 py-1 rounded text-sm transition-all duration-200 bg-green-600 hover:bg-green-700 text-white">
+                                                                        Delivered
+                                                                    </button>
+                                                                </form>
+                                                            @else
+                                                                <div class="timestamp mt-1 text-xs text-red-500 dark:text-red-400">
+                                                                    Reference No is required before marking delivery.
+                                                                </div>
+                                                            @endif
                                                         @else
-                                                            <span
-                                                                class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-green-100 dark:bg-gray-800 px-3 py-1 rounded">
+                                                            <span class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-green-100 dark:bg-gray-800 px-3 py-1 rounded">
                                                                 Delivered on <br>
-                                                                {{ \Carbon\Carbon::parse($inquiry->customerDeliveryDate)->format('Y-m-d') }}
-                                                                at
+                                                                {{ \Carbon\Carbon::parse($inquiry->customerDeliveryDate)->format('Y-m-d') }} at
                                                                 {{ \Carbon\Carbon::parse($inquiry->customerDeliveryDate)->format('H:i') }}
                                                             </span>
+
+                                                            @if ($inquiry->dNoteNumber)
+                                                                <div class="text-xs text-gray-600 dark:text-gray-300 mt-1">
+                                                                    DNote No: <strong>{{ $inquiry->dNoteNumber }}</strong>
+                                                                </div>
+                                                            @endif
                                                         @endif
                                                     </div>
                                                 </td>
 
                                                 <!-- Customer Decision -->
                                                 <td class="px-4 whitespace-normal break-words border-r border-gray-300">
-                                                    <form
-                                                        action="{{ route('sample-inquery-details.update-decision', $inquiry->id) }}"
-                                                        method="POST" class="relative inline-block text-left w-48">
-                                                        @csrf
-                                                        @method('PATCH')
+                                                    @if ($inquiry->customerDeliveryDate)
+                                                        <form
+                                                            action="{{ route('sample-inquery-details.update-decision', $inquiry->id) }}"
+                                                            method="POST" class="relative inline-block text-left w-48">
+                                                            @csrf
+                                                            @method('PATCH')
 
-                                                        @php
-                                                            $status = $inquiry->customerDecision;
-                                                            $colorClass = match ($status) {
-                                                                'Order Rejected'
-                                                                    => 'bg-red-100 text-red-800 dark:bg-red-700 dark:text-white',
-                                                                'Order Received'
-                                                                    => 'bg-green-100 text-green-800 dark:bg-green-700 dark:text-white',
-                                                                'Order Not Received'
-                                                                    => 'bg-yellow-100 text-yellow-800 dark:bg-yellow-700 dark:text-white',
-                                                                'Pending'
-                                                                    => 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-white',
-                                                                default
-                                                                    => 'bg-white text-gray-900 dark:bg-gray-700 dark:text-white',
-                                                            };
-                                                        @endphp
+                                                            @php
+                                                                $status = $inquiry->customerDecision;
+                                                                $colorClass = match ($status) {
+                                                                    'Order Rejected'
+                                                                        => 'bg-red-100 text-red-800 dark:bg-red-700 dark:text-white',
+                                                                    'Order Received'
+                                                                        => 'bg-green-100 text-green-800 dark:bg-green-700 dark:text-white',
+                                                                    'Order Not Received'
+                                                                        => 'bg-yellow-100 text-yellow-800 dark:bg-yellow-700 dark:text-white',
+                                                                    'Pending'
+                                                                        => 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-white',
+                                                                    default
+                                                                        => 'bg-white text-gray-900 dark:bg-gray-700 dark:text-white',
+                                                                };
+                                                            @endphp
 
-                                                        <!-- Dropdown Button -->
-                                                        <button type="button"
-                                                            id="customerDecisionDropdownTable-{{ $inquiry->id }}"
-                                                            class="inline-flex justify-between w-48 rounded-md px-3 py-2 text-sm font-semibold shadow-sm ring-1 h-10 transition-all duration-200 {{ $colorClass }}"
-                                                            onclick="toggleCustomerDecisionDropdownTable(event, '{{ $inquiry->id }}')">
-                                                            <span
-                                                                id="selectedCustomerDecisionTable-{{ $inquiry->id }}">{{ $status }}</span>
-                                                            <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20"
-                                                                fill="currentColor">
-                                                                <path fill-rule="evenodd"
-                                                                    d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
-                                                                    clip-rule="evenodd" />
-                                                            </svg>
-                                                        </button>
+                                                            <!-- Dropdown Button -->
+                                                            <button type="button"
+                                                                id="customerDecisionDropdownTable-{{ $inquiry->id }}"
+                                                                class="inline-flex justify-between w-48 rounded-md px-3 py-2 text-sm font-semibold shadow-sm ring-1 h-10 transition-all duration-200 {{ $colorClass }}"
+                                                                onclick="toggleCustomerDecisionDropdownTable(event, '{{ $inquiry->id }}')">
+                                                                <span
+                                                                    id="selectedCustomerDecisionTable-{{ $inquiry->id }}">{{ $status }}</span>
+                                                                <svg class="ml-2 h-5 w-5 text-gray-400"
+                                                                    viewBox="0 0 20 20" fill="currentColor">
+                                                                    <path fill-rule="evenodd"
+                                                                        d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
+                                                                        clip-rule="evenodd" />
+                                                                </svg>
+                                                            </button>
 
-                                                        <!-- Dropdown Menu -->
-                                                        <div id="customerDecisionDropdownMenuTable-{{ $inquiry->id }}"
-                                                            class="hidden absolute z-10 mt-2 w-48 rounded-md bg-white shadow-lg ring-1 ring-black/5 dark:bg-gray-700">
-                                                            <div class="py-1" role="listbox" tabindex="-1"
-                                                                aria-labelledby="customerDecisionDropdownTable-{{ $inquiry->id }}">
-                                                                @php
-                                                                    $options = [
-                                                                        'Pending',
-                                                                        'Order Received',
-                                                                        'Order Not Received',
-                                                                        'Order Rejected',
-                                                                    ];
-                                                                    $colors = [
-                                                                        'Pending' =>
-                                                                            'hover:bg-gray-100 text-gray-700 dark:text-white dark:hover:bg-gray-600',
-                                                                        'Order Received' =>
-                                                                            'hover:bg-green-100 text-green-700 dark:text-white dark:hover:bg-green-600',
-                                                                        'Order Not Received' =>
-                                                                            'hover:bg-yellow-100 text-yellow-700 dark:text-white dark:hover:bg-yellow-600',
-                                                                        'Order Rejected' =>
-                                                                            'hover:bg-red-100 text-red-700 dark:text-white dark:hover:bg-red-600',
-                                                                    ];
-                                                                @endphp
+                                                            <!-- Dropdown Menu -->
+                                                            <div id="customerDecisionDropdownMenuTable-{{ $inquiry->id }}"
+                                                                class="hidden absolute z-10 mt-2 w-48 rounded-md bg-white shadow-lg ring-1 ring-black/5 dark:bg-gray-700">
+                                                                <div class="py-1" role="listbox" tabindex="-1"
+                                                                    aria-labelledby="customerDecisionDropdownTable-{{ $inquiry->id }}">
+                                                                    @php
+                                                                        $options = [
+                                                                            'Pending',
+                                                                            'Order Received',
+                                                                            'Order Not Received',
+                                                                            'Order Rejected',
+                                                                        ];
+                                                                        $colors = [
+                                                                            'Pending' =>
+                                                                                'hover:bg-gray-100 text-gray-700 dark:text-white dark:hover:bg-gray-600',
+                                                                            'Order Received' =>
+                                                                                'hover:bg-green-100 text-green-700 dark:text-white dark:hover:bg-green-600',
+                                                                            'Order Not Received' =>
+                                                                                'hover:bg-yellow-100 text-yellow-700 dark:text-white dark:hover:bg-yellow-600',
+                                                                            'Order Rejected' =>
+                                                                                'hover:bg-red-100 text-red-700 dark:text-white dark:hover:bg-red-600',
+                                                                        ];
+                                                                    @endphp
 
-                                                                @foreach ($options as $option)
-                                                                    <button type="submit" name="customerDecision"
-                                                                        value="{{ $option }}"
-                                                                        class="decision-option w-full text-left px-4 py-2 text-sm {{ $colors[$option] }}"
-                                                                        onclick="selectCustomerDecisionTable('{{ $option }}', '{{ $inquiry->id }}')">
-                                                                        {{ $option }}
-                                                                    </button>
-                                                                @endforeach
+                                                                    @foreach ($options as $option)
+                                                                        <button type="submit" name="customerDecision"
+                                                                            value="{{ $option }}"
+                                                                            class="decision-option w-full text-left px-4 py-2 text-sm {{ $colors[$option] }}"
+                                                                            onclick="selectCustomerDecisionTable('{{ $option }}', '{{ $inquiry->id }}')">
+                                                                            {{ $option }}
+                                                                        </button>
+                                                                    @endforeach
+                                                                </div>
                                                             </div>
+                                                        </form>
+                                                    @else
+                                                        <!-- Disabled style or note -->
+                                                        <div class="inline-flex items-center w-48 h-10 px-3 py-2 text-sm rounded-md bg-gray-200 text-gray-500 cursor-not-allowed"
+                                                            title="Customer Decision available after delivery only">
+                                                            Awaiting Delivery
                                                         </div>
-                                                    </form>
+                                                    @endif
                                                 </td>
 
                                                 <!-- Notes -->
-                                                <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                                <td
+                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
                                                     @if (auth()->user()->role !== 'ADMIN')
-                                                        <form action="{{ route('sample-inquery-details.update-notes', $inquiry->id) }}" method="POST" class="w-full">
+                                                        <form
+                                                            action="{{ route('sample-inquery-details.update-notes', $inquiry->id) }}"
+                                                            method="POST" class="w-full">
                                                             @csrf
                                                             @method('PATCH')
 
                                                             <textarea name="notes"
-                                                                      class="w-full px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                                      rows="2" required>{{ old('notes', $inquiry->notes) }}</textarea>
+                                                                class="w-full px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm" rows="2"
+                                                                required>{{ old('notes', $inquiry->notes) }}</textarea>
 
                                                             <button type="submit"
-                                                                    class="mt-1 px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition-all duration-200 text-sm">
+                                                                class="w-full mt-1 px-2 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition-all duration-200 text-sm">
                                                                 Save
                                                             </button>
                                                         </form>
@@ -806,7 +862,7 @@
                                                 <!-- Actions -->
                                                 <td class="px-4 py-3 whitespace-normal break-words text-center">
                                                     <div class="flex space-x-2 justify-center items-center">
-                                                        @if (Auth::user()->role === 'SUPERADMIN')
+                                                        {{-- @if (Auth::user()->role === 'SUPERADMIN')
                                                             <button
                                                                 class="edit-btn bg-green-600 h-10 hover:bg-green-700 text-white px-3 py-1 rounded text-sm"
                                                                 onclick="editRow('row{{ $inquiry->id }}')">
@@ -818,7 +874,7 @@
                                                             class="save-btn bg-blue-600 h-10 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm hidden"
                                                             onclick="saveRow('row{{ $inquiry->id }}')">
                                                             Save
-                                                        </button>
+                                                        </button> --}}
 
                                                         @if ($inquiry->orderFile)
                                                             <a href="{{ asset('storage/' . $inquiry->orderFile) }}"
@@ -841,14 +897,13 @@
                                                                 @method('DELETE')
                                                                 <button type="button"
                                                                     onclick="confirmDelete('{{ $inquiry->id }}')"
-                                                                    class="bg-red-600 h-10 hover:bg-red-700 text-white px-3 py-1 rounded text-sm">
+                                                                    class="bg-red-600 h-10 mt-3 hover:bg-red-700 text-white px-3 py-1 rounded text-sm">
                                                                     Delete
                                                                 </button>
                                                             </form>
                                                         @endif
                                                     </div>
                                                 </td>
-
 
                                             </tr>
                                         @endforeach
@@ -875,11 +930,12 @@
                                             <div class="space-y-4">
 
                                                 <!-- File Upload -->
-                                                <div class="flex items-center justify-center w-full">
-                                                    <label for="sampleFile"
+                                                <div class="flex flex-col items-center justify-center w-full">
+                                                    <label for="sampleFile" id="uploadLabel"
                                                         class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50
-                                                     dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
-                                                        <div class="flex flex-col items-center justify-center pt-5 pb-6 ">
+                  dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600 transition duration-200 overflow-hidden">
+                                                        <div id="uploadContent"
+                                                            class="flex flex-col items-center justify-center pt-5 pb-6 text-center w-full h-full">
                                                             <svg class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"
                                                                 aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                                                                 fill="none" viewBox="0 0 20 16">
@@ -894,8 +950,13 @@
                                                             <p class="text-xs text-gray-500 dark:text-gray-400">PDF, JPG
                                                                 (MAX. 800x400px)</p>
                                                         </div>
+
+                                                        <div id="previewContainer"
+                                                            class="hidden w-full h-full flex items-center justify-center overflow-hidden">
+                                                        </div>
+
                                                         <input id="sampleFile" name="order_file" type="file"
-                                                            class="block" accept=".pdf,.jpg,.jpeg" />
+                                                            class="hidden" accept=".pdf,.jpg,.jpeg" />
                                                     </label>
                                                 </div>
 
@@ -921,50 +982,77 @@
                                                 <div class="flex gap-4">
                                                     <div class="w-1/2">
                                                         <label for="merchandiser"
-                                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">Merchandiser</label>
+                                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer Merchandiser</label>
                                                         <input id="merchandiser" type="text" name="merchandiser"
                                                             required
                                                             class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                     </div>
+                                                    <div class="w-1/2">
+                                                        <label for="coordinator"
+                                                               class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer Coordinator</label>
+                                                        <input id="coordinator"
+                                                               type="text"
+                                                               name="coordinator"
+                                                               value="{{ Auth::user()->name }}"
+                                                               readonly
+                                                               class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md bg-gray-100 dark:bg-gray-700 dark:text-white text-sm cursor-not-allowed">
+                                                    </div>
+                                                </div>
+
+                                                <!-- Size & Colour -->
+                                                <div class="flex gap-4">
                                                     <!-- Item -->
                                                     <div class="w-1/2">
                                                         <label for="item"
-                                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">Item</label>
+                                                               class="block text-sm font-medium text-gray-700 dark:text-gray-300">Item</label>
                                                         <select id="item" name="item" required
-                                                            class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                                class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                             <option value="">Select Item</option>
                                                             <option value="elastic">Elastic</option>
                                                             <option value="code">Code</option>
                                                             <option value="tape">Tape</option>
                                                         </select>
                                                     </div>
-                                                </div>
-
-                                                <div>
-                                                    <label for="itemDiscription"
-                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Item Discription</label>
-                                                    <input id="itemDiscription" type="text" name="itemDiscription"
-                                                        required
-                                                        class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                                </div>
-
-                                                <!-- Size & Colour -->
-                                                <div class="flex gap-4">
                                                     <div class="w-1/2">
                                                         <label for="size"
                                                             class="block text-sm font-medium text-gray-700 dark:text-gray-300">Size</label>
                                                         <input id="size" type="text" name="size" required
                                                             class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                     </div>
-                                                    <div class="w-1/2">
-                                                        <label for="colour"
-                                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">Colour</label>
-                                                        <input id="colour" type="text" name="colour" required
-                                                            class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                                    </div>
                                                 </div>
 
                                                 <div class="flex gap-4">
+                                                    <div class="w-1/2">
+                                                        <label for="qtRef"
+                                                               class="block text-sm font-medium text-gray-700 dark:text-gray-300">Quality Reference</label>
+                                                        <input id="qtRef" type="text" name="qtRef"
+                                                               class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                    </div>
+                                                    <div class="w-1/2">
+                                                        <label for="style"
+                                                               class="block text-sm font-medium text-gray-700 dark:text-gray-300">Style</label>
+                                                        <input id="style" type="text" name="style"
+                                                               class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                    </div>
+                                                </div>
+
+
+                                                <div>
+                                                    <label for="ItemDiscription"
+                                                           class="block text-sm font-medium text-gray-700 dark:text-gray-300">Item
+                                                        Discription</label>
+                                                    <input id="ItemDiscription" type="text" name="ItemDiscription"
+                                                           required
+                                                           class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                </div>
+
+                                                <div class="flex gap-4">
+                                                    <div class="w-1/2">
+                                                        <label for="colour"
+                                                               class="block text-sm font-medium text-gray-700 dark:text-gray-300">Colour</label>
+                                                        <input id="colour" type="text" name="colour" required
+                                                               class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                    </div>
                                                     <div class="w-1/2">
                                                         <label for="sampleQuantity"
                                                             class="block text-sm font-medium text-gray-700 dark:text-gray-300">Sample
@@ -972,9 +1060,6 @@
                                                         <input id="sampleQuantity" type="text" name="sample_quantity"
                                                             required
                                                             class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm mb-4">
-                                                    </div>
-                                                    <div class="w-1/2">
-
                                                     </div>
                                                 </div>
 
@@ -1028,6 +1113,78 @@
 
 
     <script>
+        const fileInput = document.getElementById('sampleFile');
+        const previewContainer = document.getElementById('previewContainer');
+        const uploadContent = document.getElementById('uploadContent');
+
+        fileInput.addEventListener('change', () => {
+            const file = fileInput.files[0];
+            previewContainer.innerHTML = ''; // Clear previous preview
+
+            if (!file) {
+                // No file selected, show upload instructions and hide preview
+                previewContainer.classList.add('hidden');
+                uploadContent.style.display = 'flex';
+                return;
+            }
+
+            // Hide upload instructions, show preview container
+            uploadContent.style.display = 'none';
+            previewContainer.classList.remove('hidden');
+
+            const fileType = file.type;
+            if (fileType === 'application/pdf') {
+                // PDF preview: icon + filename
+                const pdfPreview = document.createElement('div');
+                pdfPreview.classList.add('flex', 'flex-col', 'items-center', 'justify-center', 'text-center',
+                    'text-gray-800', 'dark:text-gray-200', 'p-4');
+
+                pdfPreview.innerHTML = `
+                <svg class="w-16 h-16 mb-2 text-red-600" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 0C5.371 0 0 5.371 0 12s5.371 12 12 12 12-5.371 12-12S18.629 0 12 0zm1 17h-2v-2h2v2zm1.07-7.75l-.9.92C12.45 11.9 12 12.5 12 14h-2v-.5c0-.8.45-1.5 1.07-2.18l1.2-1.2c.37-.36.58-.86.58-1.42 0-1.1-.9-2-2-2s-2 .9-2 2H7c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/>
+                </svg>
+                <p class="font-semibold break-words max-w-[90%]">${file.name}</p>
+            `;
+                previewContainer.appendChild(pdfPreview);
+
+            } else if (fileType.startsWith('image/')) {
+                // Image preview thumbnail
+                const img = document.createElement('img');
+                img.classList.add('max-w-full', 'max-h-full', 'object-contain', 'rounded');
+                img.alt = 'Uploaded Image Preview';
+
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+
+                previewContainer.appendChild(img);
+            } else {
+                // Unsupported file type
+                const unsupported = document.createElement('p');
+                unsupported.classList.add('text-red-600', 'font-semibold');
+                unsupported.textContent = 'File preview not available';
+                previewContainer.appendChild(unsupported);
+            }
+        });
+
+        // Set max date for inquiryDate input as tomorrow's date
+        document.addEventListener('DOMContentLoaded', () => {
+            const inquiryDateInput = document.getElementById('inquiryDate');
+            const today = new Date();
+            const tomorrow = new Date(today);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+
+            // Format date as yyyy-mm-dd for the max attribute
+            const yyyy = tomorrow.getFullYear();
+            const mm = String(tomorrow.getMonth() + 1).padStart(2, '0');
+            const dd = String(tomorrow.getDate()).padStart(2, '0');
+            const maxDateStr = `${yyyy}-${mm}-${dd}`;
+
+            inquiryDateInput.setAttribute('max', maxDateStr);
+        });
+
         document.addEventListener('DOMContentLoaded', () => {
             const clearFiltersBtn = document.getElementById('clearFiltersBtn');
             const filterForm = document.getElementById('filterForm');

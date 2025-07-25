@@ -111,9 +111,12 @@ class SampleInquiryController extends Controller
                 'inquiry_date' => 'required|date',
                 'customer' => 'required|string|max:255',
                 'merchandiser' => 'required|string|max:255',
+                'coordinator' => 'string|max:255',
                 'item' => 'required|string|max:255',
-                'itemDiscription' => 'required|string|max:255',
+                'style' => 'nullable|string|max:255',
+                'ItemDiscription' => 'required|string|max:255',
                 'size' => 'required|string|max:255',
+                'qtRef' => 'nullable|string|max:255',
                 'colour' => 'required|string|max:255',
                 'sample_quantity' => 'required|string|max:255',
                 'customer_comments' => 'nullable|string',
@@ -149,10 +152,13 @@ class SampleInquiryController extends Controller
                 'inquiryReceiveDate' => Carbon::now(),
                 'customerName' => $validated['customer'],
                 'merchandiseName' => $validated['merchandiser'],
+                'coordinatorName' => $validated['coordinator'],
                 'item' => $validated['item'],
-                'itemDiscription' => $validated['itemDiscription'],
+                'ItemDiscription' => $validated['ItemDiscription'],
                 'size' => $validated['size'],
+                'qtRef' => $validated['qtRef'],
                 'color' => $validated['colour'],
+                'style' => $validated['style'] ?? null,
                 'sampleQty' => $validated['sample_quantity'],
                 'customerSpecialComment' => $validated['customer_comments'] ?? null,
                 'customerRequestDate' => $validated['customer_requested_date'] ?? null,
@@ -170,7 +176,7 @@ class SampleInquiryController extends Controller
             Log::error('Sample Inquiry Store Error: ' . $e->getMessage());
 
             return redirect()->back()
-                ->with('error', 'An unexpected error occurred. Please try again later.')
+                ->with('error', 'An unexpected error occurred. Please try again later.' . $e->getMessage())
                 ->withInput();
         }
     }
@@ -258,13 +264,15 @@ class SampleInquiryController extends Controller
     {
         $request->validate([
             'id' => 'required|exists:sample_inquiries,id',
+            'dnote_no' => 'required|string|max:255',
         ]);
 
         $inquiry = SampleInquiry::findOrFail($request->id);
-        $inquiry->customerDeliveryDate = Carbon::now();
+        $inquiry->customerDeliveryDate = now();
+        $inquiry->dNoteNumber = $request->dnote_no;
         $inquiry->save();
 
-        return back()->with('success', 'Marked as delivered to customer.');
+        return redirect()->back()->with('success', 'Marked as delivered with DNote No');
     }
 
     public function updateDecision(Request $request, $id)

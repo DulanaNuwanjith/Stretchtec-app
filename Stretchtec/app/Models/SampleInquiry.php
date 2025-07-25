@@ -12,10 +12,13 @@ class SampleInquiry extends Model
         'inquiryReceiveDate',
         'customerName',
         'merchandiseName',
+        'coordinatorName',
         'item',
-        'itemDiscription',
+        'ItemDiscription',
         'size',
+        'qtRef',
         'color',
+        'style',
         'sampleQty',
         'customerSpecialComment',
         'customerRequestDate',
@@ -25,6 +28,7 @@ class SampleInquiry extends Model
         'productionStatus',
         'referenceNo',
         'customerDeliveryDate',
+        'dNoteNumber',
         'customerDecision',
         'notes'
     ];
@@ -39,6 +43,6 @@ class SampleInquiry extends Model
     public function samplePreparationRnD()
     {
         return $this->hasOne(SamplePreparationRnD::class);
-    }                                                 
+    }
 
 }

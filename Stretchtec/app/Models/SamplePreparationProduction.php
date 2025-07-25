@@ -18,6 +18,7 @@ class SamplePreparationProduction extends Model
         'supervisor_name',
         'order_complete_at',
         'production_output',
+        'damaged_output',
         'dispatch_to_rnd_at',
         'note',
         'is_output_locked',
@@ -43,6 +44,11 @@ class SamplePreparationProduction extends Model
         return $this->samplePreparationRnD?->sampleInquiry?->orderFile
             ? asset('storage/' . $this->samplePreparationRnD->sampleInquiry->orderFile)
             : null;
+    }
+
+    public function sampleInquiry()
+    {
+        return $this->belongsTo(SampleInquiry::class, 'order_no', 'orderNo'); // adjust foreign keys if different
     }
 
 }

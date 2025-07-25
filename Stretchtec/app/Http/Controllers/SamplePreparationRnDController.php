@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\LeftoverYarn;
 use App\Models\SamplePreparationRnD;
 use App\Models\SamplePreparationProduction;
+use App\Models\SampleStock;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Illuminate\Support\Str;
 
 class SamplePreparationRnDController extends Controller
 {
@@ -150,23 +153,6 @@ class SamplePreparationRnDController extends Controller
         return back()->with('success', 'Shade saved.');
     }
 
-    public function lockQtyField(Request $request)
-    {
-        $request->validate([
-            'id' => 'required|exists:sample_preparation_rnd,id',
-            'yarnOrderedQty' => 'required|string',
-        ]);
-
-        $prep = SamplePreparationRnD::findOrFail($request->id);
-        if (!$prep->is_qty_locked) {
-            $prep->yarnOrderedQty = $request->yarnOrderedQty;
-            $prep->is_qty_locked = true;
-            $prep->save();
-        }
-
-        return back()->with('success', 'Yarn Quantity saved.');
-    }
-
     public function lockTktField(Request $request)
     {
         $request->validate([
@@ -232,7 +218,22 @@ class SamplePreparationRnDController extends Controller
             $prep->is_reference_locked = true;
             $prep->save();
 
-            // Sync with SampleInquiry
+            // ✅ Fetch production details
+            $production = $prep->production;
+
+            $productionOutput = (int)($production->production_output ?? 0);
+            $damagedOutput = (int)($production->damaged_output ?? 0);
+            $availableStock = max($productionOutput - $damagedOutput, 0);
+
+            // ✅ Create entry in sample_stocks
+            SampleStock::create([
+                'reference_no' => $request->referenceNo,
+                'shade' => $prep->shade ?? $prep->sampleInquiry?->shade ?? 'N/A',
+                'available_stock' => $availableStock,
+                'special_note' => null,
+            ]);
+
+            // ✅ Sync with SampleInquiry
             $inquiry = $prep->sampleInquiry;
             if ($inquiry) {
                 $inquiry->referenceNo = $prep->referenceNo;
@@ -240,7 +241,7 @@ class SamplePreparationRnDController extends Controller
             }
         }
 
-        return back()->with('success', 'Reference No saved.');
+        return back()->with('success', 'Reference No saved and Sample Stock created.');
     }
 
     public function updateDevelopedStatus(Request $request)
@@ -252,7 +253,7 @@ class SamplePreparationRnDController extends Controller
             return back()->with('error', 'Status is locked and cannot be changed.');
         }
 
-        $prep->alreadyDeveloped = (int) $request->alreadyDeveloped;
+        $prep->alreadyDeveloped = $request->alreadyDeveloped;
         $prep->save();
 
         return back()->with('success', 'Developed status updated successfully!');
@@ -266,17 +267,51 @@ class SamplePreparationRnDController extends Controller
             'value' => 'required|numeric',
         ]);
 
-        $prep = SamplePreparationRnD::find($request->id);
-
+        $prep = SamplePreparationRnD::findOrFail($request->id);
         $field = $request->field;
-        $lockField = 'is_' . \Str::snake($field) . '_locked';
+        $lockField = 'is_' . Str::snake($field) . '_locked';
 
         $prep->$field = $request->value;
         $prep->$lockField = true;
         $prep->save();
 
-        return back()->with('success', 'Weight updated successfully.');
+        // ✅ Insert into leftover_yarns if yarnLeftoverWeight is updated
+        if ($field === 'yarnLeftoverWeight') {
+            LeftoverYarn::create([
+                'shade'              => $prep->shade,
+                'po_number'          => $prep->yarnOrderedPONumber,
+                'yarn_received_date' => \Carbon\Carbon::parse($prep->yarnReceiveDate)->format('Y-m-d'),
+                'tkt'                => $prep->tkt,
+                'yarn_supplier'      => $prep->yarnSupplier,
+                'available_stock'    => $request->value, // using yarnLeftoverWeight as available_stock
+            ]);
+        }
+
+        return back()->with('success', 'Weight updated and leftover recorded.');
     }
 
+    public function borrow(Request $request, $id)
+    {
+        $request->validate([
+            'borrow_qty' => 'required|integer|min:1',
+        ]);
+
+        $leftover = LeftoverYarn::findOrFail($id);
+        $borrowQty = $request->borrow_qty;
+
+        if ($borrowQty > $leftover->available_stock) {
+            return back()->with('error', 'Borrowed quantity exceeds available stock.');
+        }
+
+        if ($borrowQty == $leftover->available_stock) {
+            $leftover->delete();
+            return back()->with('success', 'All yarn borrowed. Record deleted.');
+        }
+
+        $leftover->available_stock -= $borrowQty;
+        $leftover->save();
+
+        return back()->with('success', 'Borrowed successfully.');
+    }
 
 }

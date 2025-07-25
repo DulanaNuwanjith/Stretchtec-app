@@ -9,7 +9,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('sample_preparation_rnd', function (Blueprint $table) {
-            $table->boolean('alreadyDeveloped')->default(false)->after('note');
+            $table->string('alreadyDeveloped')->nullable()->after('note');
         });
     }
 

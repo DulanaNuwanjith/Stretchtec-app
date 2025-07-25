@@ -1,6 +1,7 @@
 <head>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <title>StretchTec</title>
 </head>
 
 <div class="flex h-full w-full bg-white">
@@ -263,6 +264,9 @@
                                                 class="font-bold px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Production Output</th>
                                             <th
+                                                class="font-bold px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                Damaged Output</th>
+                                            <th
                                                 class="font-bold px-4 py-3 w-56 text-center text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Dispatch to R&D
                                             </th>
@@ -286,9 +290,20 @@
                                                     class="sticky left-0 z-10 bg-white px-4 py-3 bg-gray-100 whitespace-normal break-words border-r border-gray-300">
                                                     <span
                                                         class="readonly font-bold hover:text-blue-600 hover:underline cursor-pointer"
-                                                        onclick="document.getElementById('viewDetailsSample').classList.remove('hidden')">
+                                                        onclick="openSampleModal(
+            '{{ addslashes($prod->order_no) }}',
+            '{{ addslashes($prod->sampleInquiry->item ?? '-') }}',
+            '{{ addslashes($prod->sampleInquiry->ItemDiscription ?? '-') }}',
+            '{{ addslashes($prod->sampleInquiry->size ?? '-') }}',
+            '{{ addslashes($prod->sampleInquiry->qtRef ?? '-') }}',
+            '{{ addslashes($prod->sampleInquiry->color ?? '-') }}',
+            '{{ addslashes($prod->sampleInquiry->style ?? '-') }}',
+            '{{ addslashes($prod->sampleInquiry->sampleQty ?? '-') }}',
+            '{{ addslashes($prod->samplePreparationRnd->shade ?? '-') }}'
+        )">
                                                         {{ $prod->order_no }}
                                                     </span>
+
                                                     <input type="text" name="order_no"
                                                         class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                         value="{{ $prod->order_no }}" />
@@ -508,13 +523,23 @@
                                                             @endif
                                                         @else
                                                             @if (!$prod->order_complete_at)
+                                                                @php
+                                                                    $canComplete =
+                                                                        $prod->order_start_at &&
+                                                                        $prod->operator_name &&
+                                                                        $prod->supervisor_name;
+                                                                @endphp
+
                                                                 <form action="{{ route('production.markComplete') }}"
                                                                     method="POST">
                                                                     @csrf
                                                                     <input type="hidden" name="id"
                                                                         value="{{ $prod->id }}">
                                                                     <button type="submit"
-                                                                        class="order-complete-btn px-2 py-1 mt-3 rounded transition-all duration-200 bg-gray-300 text-black hover:bg-gray-400">
+                                                                        class="order-complete-btn px-2 py-1 mt-3 rounded transition-all duration-200
+                {{ $canComplete ? 'bg-green-600 hover:bg-green-700 text-white' : 'bg-gray-300 text-black cursor-not-allowed' }}"
+                                                                        {{ $canComplete ? '' : 'disabled' }}
+                                                                        title="{{ $canComplete ? '' : 'Start time, Operator, and Supervisor are required' }}">
                                                                         Pending
                                                                     </button>
                                                                 </form>
@@ -566,6 +591,42 @@
                                                     @endauth
                                                 </td>
 
+                                                {{-- Damaged Output --}}
+                                                <td
+                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                                    @auth
+                                                        @if (auth()->user()->role === 'ADMIN')
+                                                            <span class="readonly">
+                                                                {{ is_numeric($prod->damaged_output) ? $prod->damaged_output . ' g' : '-' }}
+                                                            </span>
+                                                        @else
+                                                            @if (!$prod->is_damagedOutput_locked)
+                                                                <form action="{{ route('production.updateDamagedOutput') }}"
+                                                                    method="POST" class="inline-block w-full">
+                                                                    @csrf
+                                                                    <input type="hidden" name="id"
+                                                                        value="{{ $prod->id }}">
+
+                                                                    <input type="number" step="any"
+                                                                        name="damaged_output"
+                                                                        value="{{ old('damaged_output', $prod->damaged_output) }}"
+                                                                        class="w-full px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                                        required>
+
+                                                                    <button type="submit"
+                                                                        class="mt-1 px-3 py-1 rounded text-sm transition-all duration-200 bg-blue-600 hover:bg-blue-700 text-white">
+                                                                        Save
+                                                                    </button>
+                                                                </form>
+                                                            @else
+                                                                <span class="readonly">
+                                                                    {{ is_numeric($prod->damaged_output) ? $prod->damaged_output . ' g' : '-' }}
+                                                                </span>
+                                                            @endif
+                                                        @endif
+                                                    @endauth
+                                                </td>
+
                                                 {{-- Dispatch to R&D --}}
                                                 <td
                                                     class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
@@ -586,13 +647,32 @@
                                                                     <input type="hidden" name="id"
                                                                         value="{{ $prod->id }}">
 
-                                                                    <input type="text" name="dispatched_by"
-                                                                        placeholder="Enter name"
+                                                                    <select name="dispatched_by"
                                                                         class="w-full px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                                         required>
+                                                                        <option value="" disabled selected>Select Name
+                                                                        </option>
+                                                                        <option value="Kanchana Madushani">Kanchana Madushani
+                                                                        </option>
+                                                                        <option value="Imashi Prasangika">Imashi Prasangika
+                                                                        </option>
+                                                                        <option value="Tenuli Dihansa">Tenuli Dihansa</option>
+                                                                        <option value="Sanduni Indeewari">Sanduni Indeewari
+                                                                        </option>
+                                                                        <option value="Kanchana Dharmadasa">Kanchana Dharmadasa
+                                                                        </option>
+                                                                    </select>
+
+                                                                    @php
+                                                                        $disableDispatch =
+                                                                            empty($prod->production_output) ||
+                                                                            empty($prod->damaged_output);
+                                                                    @endphp
 
                                                                     <button type="submit"
-                                                                        class="sample-dispatch-btn bg-gray-300 text-black mt-1 px-2 py-1 rounded hover:bg-gray-400 transition-all duration-200 w-full">
+                                                                        class="sample-dispatch-btn mt-1 px-2 py-1 rounded transition-all duration-200 w-full
+                {{ $disableDispatch ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : 'bg-gray-300 text-black hover:bg-gray-400' }}"
+                                                                        {{ $disableDispatch ? 'disabled title = Please enter Production and Damaged Output first' : '' }}>
                                                                         Dispatch
                                                                     </button>
                                                                 </form>
@@ -605,9 +685,8 @@
                                                                     </div>
                                                                     <div
                                                                         class="sample-dispatch-timestamp text-xs text-gray-500 dark:text-gray-400">
-                                                                        Dispatch
-                                                                        on {{ $prod->dispatch_to_rnd_at->format('Y-m-d') }}
-                                                                        <br>
+                                                                        Dispatch on
+                                                                        {{ $prod->dispatch_to_rnd_at->format('Y-m-d') }}<br>
                                                                         at {{ $prod->dispatch_to_rnd_at->format('H:i') }}
                                                                     </div>
                                                                 </span>
@@ -617,19 +696,20 @@
                                                 </td>
 
                                                 {{-- Note --}}
-                                                <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                                <td
+                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
                                                     @if (auth()->user()->role !== 'ADMIN')
-                                                        <form action="{{ route('sample-inquery-details.update-notes', $prod->id) }}" method="POST" class="w-full">
+                                                        <form
+                                                            action="{{ route('sample-inquery-details.update-notes', $prod->id) }}"
+                                                            method="POST" class="w-full">
                                                             @csrf
                                                             @method('PATCH')
 
-                                                            <textarea name="notes"
-                                                                      rows="2"
-                                                                      class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                                      required>{{ old('notes', $prod->note) }}</textarea>
+                                                            <textarea name="notes" rows="2"
+                                                                class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm" required>{{ old('notes', $prod->note) }}</textarea>
 
                                                             <button type="submit"
-                                                                    class="mt-1 px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition-all duration-200 text-sm">
+                                                                class="w-full mt-1 px-2 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition-all duration-200 text-sm">
                                                                 Save
                                                             </button>
                                                         </form>
@@ -674,22 +754,64 @@
                                         @endforeach
                                     </tbody>
                                 </table>
-                                <!-- Add Sample Modal -->
+                                <!-- Sample Details Modal -->
                                 <div id="viewDetailsSample"
                                     class="fixed inset-0 z-50 hidden bg-black bg-opacity-50 flex items-center justify-center py-5"
-                                    onclick="document.getElementById('viewDetailsSample').classList.add('hidden')">
+                                    onclick="this.classList.add('hidden')">
 
-                                    <!-- Modal box -->
                                     <div class="w-full max-w-[700px] bg-white dark:bg-gray-900 rounded-2xl shadow-2xl p-4 transform transition-all scale-95 max-h-[calc(100vh-10rem)] overflow-y-auto"
                                         onclick="event.stopPropagation()">
 
-                                        <div class="max-w-[600px] mx-auto p-8">
-                                            <h2
-                                                class="text-2xl font-semibold mb-8 text-blue-900 mt-4 dark:text-gray-100 text-center">
-                                                Order Number 001
+                                        <div class="max-w-[600px] mx-auto p-6">
+                                            <h2 id="modalOrderNo"
+                                                class="text-2xl font-semibold mb-6 text-blue-900 text-center">Order Number
                                             </h2>
-                                        </div>
 
+                                            <table class="w-full text-left border border-gray-300 text-sm">
+                                                <tbody>
+                                                    <tr>
+                                                        <th class="p-2 border">Item</th>
+                                                        <td class="p-2 border" id="modalItem"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="p-2 border">Item Description</th>
+                                                        <td class="p-2 border" id="modalDescription"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="p-2 border">Size</th>
+                                                        <td class="p-2 border" id="modalSize"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="p-2 border">QT Ref</th>
+                                                        <td class="p-2 border" id="modalQTRef"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="p-2 border">Color</th>
+                                                        <td class="p-2 border" id="modalColor"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="p-2 border">Style</th>
+                                                        <td class="p-2 border" id="modalStyle"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="p-2 border">Sample Qty</th>
+                                                        <td class="p-2 border" id="modalSampleQty"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="p-2 border">Shade</th>
+                                                        <td class="p-2 border" id="modalShade"></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+
+                                            <div class="text-center mt-6">
+                                                <button
+                                                    onclick="document.getElementById('viewDetailsSample').classList.add('hidden')"
+                                                    class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-md">
+                                                    Close
+                                                </button>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -928,5 +1050,21 @@
                 }
             });
         });
+    </script>
+
+    <script>
+        function openSampleModal(orderNo, item, description, size, qtRef, color, style, sampleQty, shade) {
+            document.getElementById('modalOrderNo').textContent = 'Order Number: ' + orderNo;
+            document.getElementById('modalItem').textContent = item;
+            document.getElementById('modalDescription').textContent = description;
+            document.getElementById('modalSize').textContent = size;
+            document.getElementById('modalQTRef').textContent = qtRef;
+            document.getElementById('modalColor').textContent = color;
+            document.getElementById('modalStyle').textContent = style;
+            document.getElementById('modalSampleQty').textContent = sampleQty;
+            document.getElementById('modalShade').textContent = shade;
+
+            document.getElementById('viewDetailsSample').classList.remove('hidden');
+        }
     </script>
 @endsection
