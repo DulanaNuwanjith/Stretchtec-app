@@ -384,7 +384,7 @@
                                                 class="font-bold px-4 py-3 w-56 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Already Developed & In Sample Stock</th>
                                             <th
-                                                class="font-bold px-4 py-3 w-32 text-xs font-medium uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">
+                                                class="font-bold px-4 py-3 w-44 text-xs font-medium uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">
                                                 Development Plan Date</th>
                                             <th
                                                 class="font-bold px-4 py-3 w-48 text-center text-xs font-medium uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">
@@ -591,24 +591,24 @@
                                                 </td>
 
                                                 {{-- Yarn Ordered Date --}}
-                                                <td
-                                                    class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                                <td class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
                                                     @if ($prep->alreadyDeveloped == 'Need to Develop')
                                                         @if (is_null($prep->yarnOrderedDate))
-                                                            <form action="{{ route('rnd.markYarnOrdered') }}"
-                                                                method="POST">
-                                                                @csrf
-                                                                <input type="hidden" name="id"
-                                                                    value="{{ $prep->id }}">
+                                                            @if ($prep->alreadyDeveloped == 'Tape Match Pan Asia' || ($prep->alreadyDeveloped == 'Need to Develop' && $prep->developPlannedDate))
+                                                                <form action="{{ route('rnd.markYarnOrdered') }}" method="POST">
+                                                                    @csrf
+                                                                    <input type="hidden" name="id" value="{{ $prep->id }}">
 
-                                                                <button type="submit"
-                                                                    class="yarn-ordered-btn px-2 py-1 mt-3 rounded transition-all duration-200
-                        {{ $prep->developPlannedDate ? 'bg-gray-300 text-black hover:bg-gray-400' : 'bg-gray-200 text-gray-500 cursor-not-allowed' }}"
-                                                                    {{ $prep->developPlannedDate ? '' : 'disabled' }}
-                                                                    title="{{ $prep->developPlannedDate ? '' : 'Please set Development Plan Date first' }}">
-                                                                    Pending
-                                                                </button>
-                                                            </form>
+                                                                    <button type="submit"
+                                                                            class="yarn-ordered-btn px-2 py-1 mt-3 rounded transition-all duration-200
+                                                                        {{ $prep->alreadyDeveloped == 'Need to Develop' && !$prep->developPlannedDate ? 'bg-gray-200 text-gray-500 cursor-not-allowed' : 'bg-gray-300 text-black hover:bg-gray-400' }}"
+                                                                        {{ $prep->alreadyDeveloped == 'Need to Develop' && !$prep->developPlannedDate ? 'disabled title=Please set Development Plan Date first' : '' }}>
+                                                                        Pending
+                                                                    </button>
+                                                                </form>
+                                                            @else
+                                                                <span class="text-gray-400 italic">—</span>
+                                                            @endif
                                                         @else
                                                             <span
                                                                 class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-purple-200 dark:bg-gray-800 px-3 py-1 rounded">
@@ -652,23 +652,27 @@
                                                 </td>
 
                                                 <td class="px-4 py-3 border-r border-gray-300 text-center">
-                                                    @if ($prep->alreadyDeveloped == 'Need to Develop')
+                                                    @if ($prep->alreadyDeveloped == 'Need to Develop' || $prep->alreadyDeveloped == 'Tape Match Pan Asia')
                                                         @if (!$prep->is_shade_locked)
-                                                            <form action="{{ route('rnd.lockShadeField') }}"
-                                                                method="POST">
+                                                            @php
+                                                                $canSaveShade = ($prep->alreadyDeveloped == 'Tape Match Pan Asia') ||
+                                                                                ($prep->alreadyDeveloped == 'Need to Develop' && $prep->developPlannedDate);
+                                                            @endphp
+
+                                                            <form action="{{ route('rnd.lockShadeField') }}" method="POST">
                                                                 @csrf
-                                                                <input type="hidden" name="id"
-                                                                    value="{{ $prep->id }}">
+                                                                <input type="hidden" name="id" value="{{ $prep->id }}">
+
                                                                 <input type="text" name="shade"
-                                                                    value="{{ $prep->shade }}"
-                                                                    class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                                    required>
+                                                                       value="{{ $prep->shade }}"
+                                                                       class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                                       required>
 
                                                                 <button type="submit"
-                                                                    class="w-full mt-1 px-3 py-1 rounded text-sm transition-all duration-200
-                        {{ $prep->developPlannedDate ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-gray-300 text-gray-500 cursor-not-allowed' }}"
-                                                                    {{ $prep->developPlannedDate ? '' : 'disabled' }}
-                                                                    title="{{ $prep->developPlannedDate ? '' : 'Please set Development Plan Date first' }}">
+                                                                        class="w-full mt-1 px-3 py-1 rounded text-sm transition-all duration-200
+                                                                        {{ $canSaveShade ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-gray-300 text-gray-500 cursor-not-allowed' }}"
+                                                                        {{ $canSaveShade ? '' : 'disabled' }}
+                                                                        title="{{ $canSaveShade ? '' : 'Please set Development Plan Date first' }}">
                                                                     Save
                                                                 </button>
                                                             </form>
@@ -682,26 +686,28 @@
 
                                                 <!-- Yarn Ordered Weight -->
                                                 <td class="px-4 py-3 border-r border-gray-300 text-center">
-                                                    @if ($prep->alreadyDeveloped == 'Need to Develop')
+                                                    @if ($prep->alreadyDeveloped == 'Need to Develop' || $prep->alreadyDeveloped == 'Tape Match Pan Asia')
                                                         @if (!$prep->is_yarn_ordered_weight_locked)
-                                                            <form action="{{ route('rnd.updateYarnWeights') }}"
-                                                                method="POST">
+                                                            @php
+                                                                $canSaveYarnWeight = ($prep->alreadyDeveloped == 'Tape Match Pan Asia') ||
+                                                                                     ($prep->alreadyDeveloped == 'Need to Develop' && $prep->developPlannedDate);
+                                                            @endphp
+
+                                                            <form action="{{ route('rnd.updateYarnWeights') }}" method="POST">
                                                                 @csrf
-                                                                <input type="hidden" name="id"
-                                                                    value="{{ $prep->id }}">
-                                                                <input type="hidden" name="field"
-                                                                    value="yarnOrderedWeight">
+                                                                <input type="hidden" name="id" value="{{ $prep->id }}">
+                                                                <input type="hidden" name="field" value="yarnOrderedWeight">
 
                                                                 <input type="number" step="0.01" name="value"
-                                                                    value="{{ $prep->yarnOrderedWeight }}"
-                                                                    class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                                    required>
+                                                                       value="{{ $prep->yarnOrderedWeight }}"
+                                                                       class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                                       required>
 
                                                                 <button type="submit"
-                                                                    class="w-full mt-1 px-3 py-1 rounded text-sm transition-all duration-200
-                    {{ $prep->developPlannedDate ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-gray-300 text-gray-500 cursor-not-allowed' }}"
-                                                                    {{ $prep->developPlannedDate ? '' : 'disabled' }}
-                                                                    title="{{ $prep->developPlannedDate ? '' : 'Please set Development Plan Date first' }}">
+                                                                        class="w-full mt-1 px-3 py-1 rounded text-sm transition-all duration-200
+                                                                        {{ $canSaveYarnWeight ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-gray-300 text-gray-500 cursor-not-allowed' }}"
+                                                                        {{ $canSaveYarnWeight ? '' : 'disabled' }}
+                                                                        title="{{ $canSaveYarnWeight ? '' : 'Please set Development Plan Date first' }}">
                                                                     Save
                                                                 </button>
                                                             </form>
@@ -714,23 +720,27 @@
                                                 </td>
 
                                                 <td class="px-4 py-3 border-r border-gray-300 text-center">
-                                                    @if ($prep->alreadyDeveloped == 'Need to Develop')
+                                                    @if ($prep->alreadyDeveloped == 'Need to Develop' || $prep->alreadyDeveloped == 'Tape Match Pan Asia')
                                                         @if (!$prep->is_tkt_locked)
-                                                            <form action="{{ route('rnd.lockTktField') }}"
-                                                                method="POST">
+                                                            @php
+                                                                $canSaveTkt = ($prep->alreadyDeveloped == 'Tape Match Pan Asia') ||
+                                                                              ($prep->alreadyDeveloped == 'Need to Develop' && $prep->developPlannedDate);
+                                                            @endphp
+
+                                                            <form action="{{ route('rnd.lockTktField') }}" method="POST">
                                                                 @csrf
-                                                                <input type="hidden" name="id"
-                                                                    value="{{ $prep->id }}">
+                                                                <input type="hidden" name="id" value="{{ $prep->id }}">
+
                                                                 <input type="number" name="tkt"
-                                                                    value="{{ $prep->tkt }}"
-                                                                    class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                                    required>
+                                                                       value="{{ $prep->tkt }}"
+                                                                       class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                                       required>
 
                                                                 <button type="submit"
-                                                                    class="w-full mt-1 px-3 py-1 rounded text-sm transition-all duration-200
-                        {{ $prep->developPlannedDate ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-gray-300 text-gray-500 cursor-not-allowed' }}"
-                                                                    {{ $prep->developPlannedDate ? '' : 'disabled' }}
-                                                                    title="{{ $prep->developPlannedDate ? '' : 'Please set Development Plan Date first' }}">
+                                                                        class="w-full mt-1 px-3 py-1 rounded text-sm transition-all duration-200
+                                                                        {{ $canSaveTkt ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-gray-300 text-gray-500 cursor-not-allowed' }}"
+                                                                        {{ $canSaveTkt ? '' : 'disabled' }}
+                                                                        title="{{ $canSaveTkt ? '' : 'Please set Development Plan Date first' }}">
                                                                     Save
                                                                 </button>
                                                             </form>
@@ -743,23 +753,28 @@
                                                 </td>
 
                                                 <td class="px-4 py-3 border-r border-gray-300 text-center">
-                                                    @if ($prep->alreadyDeveloped == 'Need to Develop')
+                                                    @if ($prep->alreadyDeveloped == 'Need to Develop' || $prep->alreadyDeveloped == 'Tape Match Pan Asia')
                                                         @if (!$prep->is_supplier_locked)
-                                                            <form action="{{ route('rnd.lockSupplierField') }}"
-                                                                method="POST">
+                                                            @php
+                                                                $canSaveSupplier = ($prep->alreadyDeveloped == 'Tape Match Pan Asia') ||
+                                                                                   ($prep->alreadyDeveloped == 'Need to Develop' && $prep->developPlannedDate);
+                                                                $defaultSupplier = ($prep->alreadyDeveloped == 'Tape Match Pan Asia') ? 'Pan Asia' : $prep->yarnSupplier;
+                                                            @endphp
+
+                                                            <form action="{{ route('rnd.lockSupplierField') }}" method="POST">
                                                                 @csrf
-                                                                <input type="hidden" name="id"
-                                                                    value="{{ $prep->id }}">
+                                                                <input type="hidden" name="id" value="{{ $prep->id }}">
+
                                                                 <input type="text" name="yarnSupplier"
-                                                                    value="{{ $prep->yarnSupplier }}"
-                                                                    class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                                    required>
+                                                                       value="{{ $defaultSupplier }}"
+                                                                       class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                                       required>
 
                                                                 <button type="submit"
-                                                                    class="w-full mt-1 px-3 py-1 rounded text-sm transition-all duration-200
-                        {{ $prep->developPlannedDate ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-gray-300 text-gray-500 cursor-not-allowed' }}"
-                                                                    {{ $prep->developPlannedDate ? '' : 'disabled' }}
-                                                                    title="{{ $prep->developPlannedDate ? '' : 'Please set Development Plan Date first' }}">
+                                                                        class="w-full mt-1 px-3 py-1 rounded text-sm transition-all duration-200
+                               {{ $canSaveSupplier ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-gray-300 text-gray-500 cursor-not-allowed' }}"
+                                                                        {{ $canSaveSupplier ? '' : 'disabled' }}
+                                                                        title="{{ $canSaveSupplier ? '' : 'Please set Development Plan Date first' }}">
                                                                     Save
                                                                 </button>
                                                             </form>
@@ -783,7 +798,7 @@
                                                                     value="{{ $prep->id }}">
                                                                 <button type="submit"
                                                                     class="yarn-receive-btn px-2 py-1 mt-3 rounded transition-all duration-200
-                        {{ $prep->developPlannedDate && $prep->yarnOrderedDate && $prep->yarnSupplier && $prep->tkt && $prep->yarnOrderedWeight && $prep->shade && $prep->yarnOrderedPONumber ? 'bg-gray-300 text-black hover:bg-gray-400' : 'bg-gray-200 text-gray-500 cursor-not-allowed' }}"
+                                                                    {{ $prep->developPlannedDate && $prep->yarnOrderedDate && $prep->yarnSupplier && $prep->tkt && $prep->yarnOrderedWeight && $prep->shade && $prep->yarnOrderedPONumber ? 'bg-gray-300 text-black hover:bg-gray-400' : 'bg-gray-200 text-gray-500 cursor-not-allowed' }}"
                                                                     {{ $prep->developPlannedDate && $prep->yarnOrderedDate ? '' : 'disabled' }}
                                                                     title="{{ $prep->developPlannedDate && $prep->yarnOrderedDate && $prep->yarnSupplier && $prep->tkt && $prep->yarnOrderedWeight && $prep->shade && $prep->yarnOrderedPONumber ? '' : 'Please set Development Plan Date and Yarn Ordered Date first' }}">
                                                                     Pending
@@ -818,7 +833,7 @@
 
                                                                 <button type="submit"
                                                                     class="w-full mt-1 px-3 py-1 rounded text-sm transition-all duration-200
-                        {{ $prep->developPlannedDate && $prep->yarnReceiveDate ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-gray-300 text-gray-500 cursor-not-allowed' }}"
+                                                                    {{ $prep->developPlannedDate && $prep->yarnReceiveDate ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-gray-300 text-gray-500 cursor-not-allowed' }}"
                                                                     {{ $prep->developPlannedDate && $prep->yarnReceiveDate ? '' : 'disabled' }}
                                                                     title="{{ $prep->developPlannedDate && $prep->yarnReceiveDate ? '' : 'Please set Develop Plan Date & Yarn Received comfirm first' }}">
                                                                     Save
