@@ -1038,10 +1038,10 @@
 
 
                                                 <div>
-                                                    <label for="itemDiscription"
+                                                    <label for="ItemDiscription"
                                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">Item
                                                         Discription</label>
-                                                    <input id="itemDiscription" type="text" name="itemDiscription"
+                                                    <input id="ItemDiscription" type="text" name="ItemDiscription"
                                                            required
                                                            class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                 </div>

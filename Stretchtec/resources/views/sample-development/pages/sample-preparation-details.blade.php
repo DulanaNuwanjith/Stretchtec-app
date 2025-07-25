@@ -443,11 +443,29 @@
                                                 class="odd:bg-white even:bg-gray-50 border-b border-gray-200  text-left">
                                                 <td
                                                     class="sticky left-0 z-10 bg-white px-4 py-3 bg-gray-100 whitespace-normal break-words border-r border-gray-300">
-                                                    <span class="readonly font-bold">{{ $prep->orderNo }}</span>
+                                                    <span
+                                                        class="readonly font-bold hover:text-blue-600 hover:underline cursor-pointer"
+                                                        onclick="openRndSampleModal(
+            '{{ addslashes($prep->orderNo) }}',
+            '{{ addslashes($prep->sampleInquiry->coordinatorName ?? '-') }}',
+            '{{ addslashes($prep->sampleInquiry->item ?? '-') }}',
+            '{{ addslashes($prep->sampleInquiry->ItemDiscription ?? '-') }}',
+            '{{ addslashes($prep->sampleInquiry->size ?? '-') }}',
+            '{{ addslashes($prep->sampleInquiry->qtRef ?? '-') }}',
+            '{{ addslashes($prep->sampleInquiry->color ?? '-') }}',
+            '{{ addslashes($prep->sampleInquiry->style ?? '-') }}',
+            '{{ addslashes($prep->sampleInquiry->sampleQty ?? '-') }}',
+            '{{ addslashes($prep->sampleInquiry->customerSpecialComment ?? '-') }}',
+            '{{ addslashes(optional($prep->sampleInquiry->customerRequestDate)->format('Y-m-d') ?? '-') }}'
+        )">
+                                                        {{ $prep->orderNo }}
+                                                    </span>
+
                                                     <input type="text" name="orderNo"
                                                         class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                         value="{{ $prep->orderNo }}" />
                                                 </td>
+
                                                 <td
                                                     class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
                                                     <span
@@ -1050,6 +1068,74 @@
                                         @endforeach
                                     </tbody>
                                 </table>
+                                <!-- Sample R&D Details Modal -->
+                                <div id="openRndSampleModal"
+                                    class="fixed inset-0 z-50 hidden bg-black bg-opacity-50 flex items-center justify-center py-5"
+                                    onclick="this.classList.add('hidden')">
+                                    <div class="w-full max-w-[700px] bg-white dark:bg-gray-900 rounded-2xl shadow-2xl p-4 transform transition-all scale-95 max-h-[calc(100vh-10rem)] overflow-y-auto"
+                                        onclick="event.stopPropagation()">
+
+                                        <div class="max-w-[600px] mx-auto p-6">
+                                            <h2 id="modalRndOrderNo"
+                                                class="text-2xl font-semibold mb-6 text-blue-900 text-center">Order Number
+                                            </h2>
+
+                                            <table class="w-full text-left border border-gray-300 text-sm">
+                                                <tbody>
+                                                    <tr>
+                                                        <th class="p-2 border">Coordinator Name</th>
+                                                        <td class="p-2 border" id="modalCoordinatorName"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="p-2 border">Item</th>
+                                                        <td class="p-2 border" id="modalItem"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="p-2 border">Item Description</th>
+                                                        <td class="p-2 border" id="modalDescription"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="p-2 border">Size</th>
+                                                        <td class="p-2 border" id="modalSize"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="p-2 border">QT Ref</th>
+                                                        <td class="p-2 border" id="modalQTRef"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="p-2 border">Color</th>
+                                                        <td class="p-2 border" id="modalColor"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="p-2 border">Style</th>
+                                                        <td class="p-2 border" id="modalStyle"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="p-2 border">Sample Qty</th>
+                                                        <td class="p-2 border" id="modalSampleQty"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="p-2 border">Customer Special Comment</th>
+                                                        <td class="p-2 border" id="modalSpecialComment"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="p-2 border">Customer Request Date</th>
+                                                        <td class="p-2 border" id="modalRequestDate"></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+
+                                            <div class="text-center mt-6">
+                                                <button
+                                                    onclick="document.getElementById('openRndSampleModal').classList.add('hidden')"
+                                                    class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-md">
+                                                    Close
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
                     </div>
@@ -1438,5 +1524,23 @@
                 }
             });
         });
+    </script>
+    <script>
+        function openRndSampleModal(orderNo, coordinatorName, item, description, size, qtRef, color, style, sampleQty,
+            specialComment, requestDate) {
+            document.getElementById('modalRndOrderNo').textContent = 'Order Number ' + orderNo;
+            document.getElementById('modalCoordinatorName').textContent = coordinatorName;
+            document.getElementById('modalItem').textContent = item;
+            document.getElementById('modalDescription').textContent = description;
+            document.getElementById('modalSize').textContent = size;
+            document.getElementById('modalQTRef').textContent = qtRef;
+            document.getElementById('modalColor').textContent = color;
+            document.getElementById('modalStyle').textContent = style;
+            document.getElementById('modalSampleQty').textContent = sampleQty;
+            document.getElementById('modalSpecialComment').textContent = specialComment;
+            document.getElementById('modalRequestDate').textContent = requestDate;
+
+            document.getElementById('openRndSampleModal').classList.remove('hidden');
+        }
     </script>
 @endsection

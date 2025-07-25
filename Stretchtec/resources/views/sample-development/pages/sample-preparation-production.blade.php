@@ -744,7 +744,6 @@
                                     </tbody>
                                 </table>
                                 <!-- Sample Details Modal -->
-                                <!-- Sample Details Modal -->
                                 <div id="viewDetailsSample"
                                     class="fixed inset-0 z-50 hidden bg-black bg-opacity-50 flex items-center justify-center py-5"
                                     onclick="this.classList.add('hidden')">
@@ -804,7 +803,6 @@
                                         </div>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
                     </div>
