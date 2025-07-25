@@ -290,9 +290,20 @@
                                                     class="sticky left-0 z-10 bg-white px-4 py-3 bg-gray-100 whitespace-normal break-words border-r border-gray-300">
                                                     <span
                                                         class="readonly font-bold hover:text-blue-600 hover:underline cursor-pointer"
-                                                        onclick="document.getElementById('viewDetailsSample').classList.remove('hidden')">
+                                                        onclick="openSampleModal(
+            '{{ addslashes($prod->order_no) }}',
+            '{{ addslashes($prod->sampleInquiry->item ?? '-') }}',
+            '{{ addslashes($prod->sampleInquiry->ItemDiscription ?? '-') }}',
+            '{{ addslashes($prod->sampleInquiry->size ?? '-') }}',
+            '{{ addslashes($prod->sampleInquiry->qtRef ?? '-') }}',
+            '{{ addslashes($prod->sampleInquiry->color ?? '-') }}',
+            '{{ addslashes($prod->sampleInquiry->style ?? '-') }}',
+            '{{ addslashes($prod->sampleInquiry->sampleQty ?? '-') }}',
+            '{{ addslashes($prod->samplePreparationRnd->shade ?? '-') }}'
+        )">
                                                         {{ $prod->order_no }}
                                                     </span>
+
                                                     <input type="text" name="order_no"
                                                         class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                         value="{{ $prod->order_no }}" />
@@ -732,24 +743,68 @@
                                         @endforeach
                                     </tbody>
                                 </table>
-                                <!-- Add Sample Modal -->
+                                <!-- Sample Details Modal -->
+                                <!-- Sample Details Modal -->
                                 <div id="viewDetailsSample"
                                     class="fixed inset-0 z-50 hidden bg-black bg-opacity-50 flex items-center justify-center py-5"
-                                    onclick="document.getElementById('viewDetailsSample').classList.add('hidden')">
+                                    onclick="this.classList.add('hidden')">
 
-                                    <!-- Modal box -->
                                     <div class="w-full max-w-[700px] bg-white dark:bg-gray-900 rounded-2xl shadow-2xl p-4 transform transition-all scale-95 max-h-[calc(100vh-10rem)] overflow-y-auto"
                                         onclick="event.stopPropagation()">
 
-                                        <div class="max-w-[600px] mx-auto p-8">
-                                            <h2
-                                                class="text-2xl font-semibold mb-8 text-blue-900 mt-4 dark:text-gray-100 text-center">
-                                                Order Number 001
+                                        <div class="max-w-[600px] mx-auto p-6">
+                                            <h2 id="modalOrderNo"
+                                                class="text-2xl font-semibold mb-6 text-blue-900 text-center">Order Number
                                             </h2>
-                                        </div>
 
+                                            <table class="w-full text-left border border-gray-300 text-sm">
+                                                <tbody>
+                                                    <tr>
+                                                        <th class="p-2 border">Item</th>
+                                                        <td class="p-2 border" id="modalItem"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="p-2 border">Item Description</th>
+                                                        <td class="p-2 border" id="modalDescription"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="p-2 border">Size</th>
+                                                        <td class="p-2 border" id="modalSize"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="p-2 border">QT Ref</th>
+                                                        <td class="p-2 border" id="modalQTRef"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="p-2 border">Color</th>
+                                                        <td class="p-2 border" id="modalColor"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="p-2 border">Style</th>
+                                                        <td class="p-2 border" id="modalStyle"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="p-2 border">Sample Qty</th>
+                                                        <td class="p-2 border" id="modalSampleQty"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="p-2 border">Shade</th>
+                                                        <td class="p-2 border" id="modalShade"></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+
+                                            <div class="text-center mt-6">
+                                                <button
+                                                    onclick="document.getElementById('viewDetailsSample').classList.add('hidden')"
+                                                    class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-md">
+                                                    Close
+                                                </button>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
+
                             </div>
                         </div>
                     </div>
@@ -986,5 +1041,21 @@
                 }
             });
         });
+    </script>
+
+    <script>
+        function openSampleModal(orderNo, item, description, size, qtRef, color, style, sampleQty, shade) {
+            document.getElementById('modalOrderNo').textContent = 'Order Number: ' + orderNo;
+            document.getElementById('modalItem').textContent = item;
+            document.getElementById('modalDescription').textContent = description;
+            document.getElementById('modalSize').textContent = size;
+            document.getElementById('modalQTRef').textContent = qtRef;
+            document.getElementById('modalColor').textContent = color;
+            document.getElementById('modalStyle').textContent = style;
+            document.getElementById('modalSampleQty').textContent = sampleQty;
+            document.getElementById('modalShade').textContent = shade;
+
+            document.getElementById('viewDetailsSample').classList.remove('hidden');
+        }
     </script>
 @endsection

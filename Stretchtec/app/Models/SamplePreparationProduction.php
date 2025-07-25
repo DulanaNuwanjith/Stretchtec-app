@@ -45,4 +45,10 @@ class SamplePreparationProduction extends Model
             ? asset('storage/' . $this->samplePreparationRnD->sampleInquiry->orderFile)
             : null;
     }
+
+    public function sampleInquiry()
+    {
+        return $this->belongsTo(SampleInquiry::class, 'order_no', 'orderNo'); // adjust foreign keys if different
+    }
+
 }

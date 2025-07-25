@@ -14,7 +14,7 @@ class SampleInquiry extends Model
         'merchandiseName',
         'coordinatorName',
         'item',
-        'itemDiscription',
+        'ItemDiscription',
         'size',
         'qtRef',
         'color',
