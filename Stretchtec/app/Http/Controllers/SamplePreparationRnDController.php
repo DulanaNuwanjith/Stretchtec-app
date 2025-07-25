@@ -253,7 +253,7 @@ class SamplePreparationRnDController extends Controller
             return back()->with('error', 'Status is locked and cannot be changed.');
         }
 
-        $prep->alreadyDeveloped = (int) $request->alreadyDeveloped;
+        $prep->alreadyDeveloped = $request->alreadyDeveloped;
         $prep->save();
 
         return back()->with('success', 'Developed status updated successfully!');
