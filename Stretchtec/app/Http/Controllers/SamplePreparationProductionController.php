@@ -15,9 +15,8 @@ class SamplePreparationProductionController extends Controller
         $operators = \App\Models\OperatorsandSupervisors::where('role', 'OPERATOR')->get();
         $supervisors = \App\Models\OperatorsandSupervisors::where('role', 'SUPERVISOR')->get();
 
-        $productions = SamplePreparationProduction::with('samplePreparationRnD.sampleInquiry')
-            ->latest()
-            ->paginate(10); // you can change 10 to the number of records you want per page
+        $productionsQuery = SamplePreparationProduction::with('samplePreparationRnD.sampleInquiry')
+            ->latest();
 
         // Tab 3 Filters
         if ($request->filled('tab') && $request->tab == '3') {
@@ -30,15 +29,22 @@ class SamplePreparationProductionController extends Controller
             }
         }
 
-        $productions = $productionsQuery->get();
+        // Apply pagination and keep filters in links
+        $productions = $productionsQuery
+            ->paginate(10)
+            ->appends($request->query());
 
         // For Order No dropdown
-        $orderNosTab3 = SamplePreparationProduction::select('order_no')->distinct()->orderBy('order_no')->pluck('order_no');
+        $orderNosTab3 = SamplePreparationProduction::select('order_no')
+            ->distinct()
+            ->orderBy('order_no')
+            ->pluck('order_no');
 
         return view('sample-development.pages.sample-preparation-production', compact(
             'productions', 'operators', 'supervisors', 'orderNosTab3'
         ));
     }
+
 
     // Update editable fields like operator_name, supervisor_name, production_output, note, deadline, order_no
     public function update(Request $request)
