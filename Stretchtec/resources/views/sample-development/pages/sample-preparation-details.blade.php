@@ -1046,23 +1046,33 @@
 
 
                                                 <td class="px-4 py-3 border-r border-gray-300 text-center">
-                                                    @if (!$prep->is_reference_locked)
-                                                        <form action="{{ route('rnd.lockReferenceField') }}"
-                                                            method="POST">
+                                                    @php
+                                                        $canEditReference =
+                                                            in_array($prep->alreadyDeveloped, ['No Need to Develop', 'Tape Match Pan Asia']) ||
+                                                            ($prep->alreadyDeveloped == 'Need to Develop' && optional($prep->production)->status == 'Complete');
+                                                    @endphp
+
+                                                    @if ($canEditReference && !$prep->is_reference_locked)
+                                                        <form action="{{ route('rnd.lockReferenceField') }}" method="POST">
                                                             @csrf
-                                                            <input type="hidden" name="id"
-                                                                value="{{ $prep->id }}">
+                                                            <input type="hidden" name="id" value="{{ $prep->id }}">
+
                                                             <input type="text" name="referenceNo"
-                                                                value="{{ $prep->referenceNo }}"
-                                                                class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                                required>
+                                                                   value="{{ $prep->referenceNo }}"
+                                                                   class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                                   required>
+
                                                             <button type="submit"
-                                                                class="w-full mt-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm">
+                                                                    class="w-full mt-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm">
                                                                 Save
                                                             </button>
                                                         </form>
-                                                    @else
+                                                    @elseif ($prep->is_reference_locked)
+                                                        {{-- Already locked - show readonly --}}
                                                         <span class="readonly">{{ $prep->referenceNo }}</span>
+                                                    @else
+                                                        {{-- Not yet available --}}
+                                                        <span class="timestamp mt-1 text-xs text-red-500 dark:text-red-400">Not Available Until production is Completed</span>
                                                     @endif
                                                 </td>
 
