@@ -10,17 +10,41 @@ use Illuminate\Support\Facades\Log;
 
 class SamplePreparationProductionController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $operators = \App\Models\OperatorsandSupervisors::where('role', 'OPERATOR')->get();
         $supervisors = \App\Models\OperatorsandSupervisors::where('role', 'SUPERVISOR')->get();
 
-        $productions = SamplePreparationProduction::with('samplePreparationRnD.sampleInquiry')
-            ->latest()
-            ->get();
+        $productionsQuery = SamplePreparationProduction::with('samplePreparationRnD.sampleInquiry')
+            ->latest();
 
-        return view('sample-development.pages.sample-preparation-production', compact('productions', 'operators', 'supervisors'));
+        // Tab 3 Filters
+        if ($request->filled('tab') && $request->tab == '3') {
+            if ($request->filled('order_no')) {
+                $productionsQuery->where('order_no', $request->order_no);
+            }
+
+            if ($request->filled('development_plan_date')) {
+                $productionsQuery->whereDate('production_deadline', $request->development_plan_date);
+            }
+        }
+
+        // Apply pagination and keep filters in links
+        $productions = $productionsQuery
+            ->paginate(10)
+            ->appends($request->query());
+
+        // For Order No dropdown
+        $orderNosTab3 = SamplePreparationProduction::select('order_no')
+            ->distinct()
+            ->orderBy('order_no')
+            ->pluck('order_no');
+
+        return view('sample-development.pages.sample-preparation-production', compact(
+            'productions', 'operators', 'supervisors', 'orderNosTab3'
+        ));
     }
+
 
     // Update editable fields like operator_name, supervisor_name, production_output, note, deadline, order_no
     public function update(Request $request)

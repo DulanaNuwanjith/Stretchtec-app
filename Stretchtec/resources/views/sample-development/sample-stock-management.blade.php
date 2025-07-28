@@ -111,17 +111,12 @@
                 });
             }
         </script>
-        <a href="{{ route('sample-inquery-details.index') }}">
-            <button class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded shadow mb-6">
-                Back Sample Development
-            </button>
-        </a>
 
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Sample Stock Records</h1>
         </div>
 
-        <div class="mb-4">
+        <div class="mb-8">
             <form method="GET" action="{{ route('sampleStock.index') }}" class="flex items-center space-x-2 max-w-md">
                 <input type="text" name="search" value="{{ request('search') }}"
                     placeholder="Search by Reference No, Shade or Note" autocomplete="off"
@@ -140,9 +135,9 @@
                 @endif
             </form>
         </div>
-
-            <table class="table-fixed w-full text-sm divide-y divide-gray-200 dark:divide-gray-700">
-                <thead class="bg-gray-100 dark:bg-gray-700 text-left">
+        <div class="overflow-x-auto bg-white dark:bg-gray-900 shadow rounded-lg">
+            <table class="table-fixed w-full text-sm divide-y divide-gray-200 dark:divide-gray-700 text-center">
+                <thead class="bg-gray-100 dark:bg-gray-700">
                     <tr>
                         <th
                             class="px-4 py-3 w-48 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words border-r border-gray-300 dark:border-gray-600">
@@ -165,7 +160,8 @@
                         @endphp
 
                         @if (in_array($userRole, ['SUPERADMIN', 'MERCHANDISER', 'CUSTOMERCOORDINATOR']))
-                            <th class="px-4 py-3 w-48 text-xs text-center font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                            <th
+                                class="px-4 py-3 w-48 text-xs text-center font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                 Action
                             </th>
                         @endif
@@ -174,30 +170,26 @@
                 </thead>
 
                 <tbody id="sampleInquiryRecords"
-                    class="bg-white dark:bg-gray-800 divide-y text-left divide-gray-200 dark:divide-gray-700 ">
+                    class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
 
                     @foreach ($sampleStocks as $stock)
                         <tr id="row{{ $stock->id }}">
-                            <td
-                                class="px-4 py-3 w-48 whitespace-normal break-words border-r border-gray-300 dark:border-gray-600">
+                            <td class="px-4 py-3 border-r border-gray-300 dark:border-gray-600">
                                 <span class="hover:text-blue-600 hover:underline cursor-pointer"
                                     onclick="openModel('{{ $stock->reference_no }}')">
                                     {{ $stock->reference_no }}
                                 </span>
                             </td>
 
-                            <td
-                                class="px-4 py-3 w-32 whitespace-normal break-words border-r border-gray-300 dark:border-gray-600">
+                            <td class="px-4 py-3 border-r border-gray-300 dark:border-gray-600">
                                 {{ $stock->shade }}
                             </td>
 
-                            <td
-                                class="px-4 py-3 w-32 whitespace-normal break-words border-r border-gray-300 dark:border-gray-600">
+                            <td class="px-4 py-3 border-r border-gray-300 dark:border-gray-600">
                                 {{ $stock->available_stock }}
                             </td>
 
-                            <td
-                                class="px-4 py-3 w-[30rem] whitespace-normal break-words border-r border-gray-300 dark:border-gray-600">
+                            <td class="px-4 py-3 border-r border-gray-300 dark:border-gray-600">
                                 <div class="flex flex-col gap-3">
                                     {{-- Special Note Update --}}
                                     <form method="POST" action="{{ route('sampleStock.update', $stock->id) }}">
@@ -223,16 +215,14 @@
                                     <div class="flex justify-center gap-2">
                                         {{-- Borrow Action --}}
                                         <form method="POST" action="{{ route('sampleStock.borrow', $stock->id) }}"
-                                              class="flex items-center gap-2">
+                                            class="flex items-center gap-2">
                                             @csrf
                                             <input type="number" name="borrow_qty"
-                                                   class="w-24 px-3 py-1 border border-gray-300 rounded text-sm"
-                                                   min="1"
-                                                   max="{{ $stock->available_stock }}"
-                                                   placeholder="Qty" required
-                                                   oninput="validateQty(this, {{ $stock->available_stock }})">
+                                                class="w-24 px-3 py-1 border border-gray-300 rounded text-sm"
+                                                min="1" max="{{ $stock->available_stock }}" placeholder="Qty"
+                                                required oninput="validateQty(this, {{ $stock->available_stock }})">
                                             <button type="submit"
-                                                    class="bg-green-600 hover:bg-green-700 text-white px-4 py-1 rounded text-sm">
+                                                class="bg-green-600 hover:bg-green-700 text-white px-4 py-1 rounded text-sm">
                                                 Borrow
                                             </button>
                                         </form>
@@ -246,14 +236,16 @@
                 </tbody>
 
             </table>
+        </div>
 
-            <div class="px-4 py-4">
-                {{ $sampleStocks->withQueryString()->links('vendor.pagination.tailwind') }}
-            </div>
 
+        <div class="px-4 py-4">
+            {{ $sampleStocks->withQueryString()->links('vendor.pagination.tailwind') }}
         </div>
 
     </div>
+
+</div>
 </div>
 
 <script>

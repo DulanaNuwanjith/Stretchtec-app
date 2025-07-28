@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ColorMatchReject;
 use App\Models\LeftoverYarn;
 use App\Models\SamplePreparationRnD;
 use App\Models\SamplePreparationProduction;
@@ -12,12 +13,52 @@ use Illuminate\Support\Str;
 
 class SamplePreparationRnDController extends Controller
 {
-    public function viewRnD()
+    public function viewRnD(Request $request)
     {
-        $samplePreparations = SamplePreparationRnD::with('sampleInquiry')->latest()->get();
+        $query = SamplePreparationRnD::with('sampleInquiry');
 
+        // Filters
+        if ($request->filled('order_no')) {
+            $query->where('orderNo', $request->order_no);
+        }
 
-        return view('sample-development.pages.sample-preparation-details', compact('samplePreparations'));
+        if ($request->filled('po_no')) {
+            $query->where('yarnOrderedPONumber', $request->po_no);
+        }
+
+        if ($request->filled('shade')) {
+            $query->where('shade', $request->shade);
+        }
+
+        if ($request->filled('reference_no')) {
+            $query->where('referenceNo', $request->reference_no);
+        }
+
+        // FILTER DATE FIELDS USING snake_case input names AND camelCase columns
+        if ($request->filled('customer_requested_date')) {
+            $query->whereDate('customerRequestDate', $request->customer_requested_date);
+        }
+
+        if ($request->filled('development_plan_date')) {
+            $query->whereDate('developPlannedDate', $request->development_plan_date);
+        }
+
+        // Pagination or just all?
+        $samplePreparations = $query->latest()->paginate(10); // Or ->get() if needed
+
+        // Dynamic values for dropdowns
+        $orderNos = SamplePreparationRnD::select('orderNo')->distinct()->orderBy('orderNo')->pluck('orderNo');
+        $poNos = SamplePreparationRnD::select('yarnOrderedPONumber')->distinct()->orderBy('yarnOrderedPONumber')->pluck('yarnOrderedPONumber');
+        $shades = SamplePreparationRnD::select('shade')->distinct()->orderBy('shade')->pluck('shade');
+        $references = SamplePreparationRnD::select('referenceNo')->distinct()->orderBy('referenceNo')->pluck('referenceNo');
+
+        return view('sample-development.pages.sample-preparation-details', compact(
+            'samplePreparations',
+            'orderNos',
+            'poNos',
+            'shades',
+            'references',
+        ));
     }
 
     public function markColourMatchSent(Request $request)
@@ -50,10 +91,29 @@ class SamplePreparationRnDController extends Controller
     {
         $request->validate([
             'id' => 'required|exists:sample_preparation_rnd,id',
+            'yarnOrderedPONumber' => 'required|string',
+            'value'=> 'required|numeric',
+            'shade' => 'required|string',
+            'tkt' => 'required|string',
+            'yarnSupplier' => 'required|string',
+            'customSupplier' => 'nullable|string',
         ]);
+
+        if ($request->customSupplier) {
+            $request->yarnSupplier = $request->customSupplier;
+        }
 
         $rnd = SamplePreparationRnD::findOrFail($request->id);
         $rnd->yarnOrderedDate = Carbon::now();
+        $rnd->yarnOrderedPONumber = $request->yarnOrderedPONumber;
+        $rnd->yarnOrderedWeight = $request->value;
+        $rnd->shade = $request->shade;
+        $rnd->tkt = $request->tkt;
+        $rnd->yarnSupplier = $request->yarnSupplier;
+        $rnd->is_po_locked = true; // Lock the PO field
+        $rnd->is_shade_locked = true; // Lock the shade field
+        $rnd->is_tkt_locked = true; // Lock the TKT field
+        $rnd->is_supplier_locked = true; // Lock the supplier field
         $rnd->save();
 
         return back()->with('success', 'Yarn Ordered Date marked.');
@@ -213,14 +273,20 @@ class SamplePreparationRnDController extends Controller
 
         $prep = SamplePreparationRnD::findOrFail($request->id);
 
+        // ✅ Check for duplicate reference number in sample_stocks
+        if (SampleStock::where('reference_no', $request->referenceNo)->exists()) {
+            return back()
+                ->withInput()
+                ->withErrors(['referenceNo' => 'This Reference Number is already in use. Please enter a unique one.']);
+        }
+
         if (!$prep->is_reference_locked) {
             $prep->referenceNo = $request->referenceNo;
             $prep->is_reference_locked = true;
             $prep->save();
 
-            // ✅ Fetch production details
+            // ✅ Fetch production details safely
             $production = $prep->production;
-
             $productionOutput = (int)($production->production_output ?? 0);
             $damagedOutput = (int)($production->damaged_output ?? 0);
             $availableStock = max($productionOutput - $damagedOutput, 0);
@@ -246,18 +312,44 @@ class SamplePreparationRnDController extends Controller
 
     public function updateDevelopedStatus(Request $request)
     {
+        $request->validate([
+            'id' => 'required|exists:sample_preparation_rnd,id',
+            'alreadyDeveloped' => 'required|string',
+            'shade' => 'nullable|string',
+            'tkt' => 'nullable|string',
+            'yarnSupplier' => 'nullable|string',
+            'value' => 'nullable|numeric',
+        ]);
+
         $prep = SamplePreparationRnD::findOrFail($request->id);
 
-        // Disallow update if locked
+        // Disallow update if locked (you can adjust this condition if locking rules differ)
         if ($prep->alreadyDeveloped || $prep->developPlannedDate) {
             return back()->with('error', 'Status is locked and cannot be changed.');
         }
 
+        // Always update alreadyDeveloped
         $prep->alreadyDeveloped = $request->alreadyDeveloped;
+
+        // Only update extra fields when Tape Match Pan Asia
+        if ($request->alreadyDeveloped === 'Tape Match Pan Asia') {
+            $prep->shade = $request->shade;
+            $prep->tkt = $request->tkt;
+            $prep->yarnSupplier = $request->yarnSupplier;
+            $prep->yarnOrderedWeight = $request->value;
+
+            // Lock related fields
+            $prep->is_shade_locked = true;
+            $prep->is_tkt_locked = true;
+            $prep->is_supplier_locked = true;
+            $prep->is_yarn_ordered_weight_locked = true;
+        }
+
         $prep->save();
 
         return back()->with('success', 'Developed status updated successfully!');
     }
+
 
     public function updateYarnWeights(Request $request)
     {
