@@ -161,7 +161,8 @@
                                                 class="absolute z-40 mt-1 w-full bg-white border rounded-lg shadow-lg hidden max-h-48 overflow-y-auto p-2"
                                                 role="listbox" aria-labelledby="orderDropdown">
                                                 <input type="text" id="orderSearchInput" onkeyup="filterOrders()"
-                                                    placeholder="Search..." class="w-full px-2 py-1 text-sm border rounded-md dark:bg-gray-600 dark:text-white dark:placeholder-gray-300"
+                                                    placeholder="Search..."
+                                                    class="w-full px-2 py-1 text-sm border rounded-md dark:bg-gray-600 dark:text-white dark:placeholder-gray-300"
                                                     autocomplete="off">
                                                 @foreach ($orderNos as $order)
                                                     <div onclick="selectOrder('{{ $order }}')" tabindex="0"
@@ -195,7 +196,8 @@
                                                 class="absolute z-40 mt-1 w-full bg-white border rounded-lg shadow-lg hidden max-h-48 overflow-y-auto p-2"
                                                 role="listbox" aria-labelledby="poDropdown">
                                                 <input type="text" id="poSearchInput" onkeyup="filterPOs()"
-                                                    placeholder="Search..." class="w-full px-2 py-1 text-sm border rounded-md dark:bg-gray-600 dark:text-white dark:placeholder-gray-300"
+                                                    placeholder="Search..."
+                                                    class="w-full px-2 py-1 text-sm border rounded-md dark:bg-gray-600 dark:text-white dark:placeholder-gray-300"
                                                     autocomplete="off">
                                                 @foreach ($poNos as $po)
                                                     <div onclick="selectPO('{{ $po }}')" tabindex="0"
@@ -228,7 +230,8 @@
                                                 class="absolute z-40 mt-1 w-full bg-white border rounded-lg shadow-lg hidden max-h-48 overflow-y-auto p-2"
                                                 role="listbox" aria-labelledby="shadeDropdown">
                                                 <input type="text" id="shadeSearchInput" onkeyup="filterShades()"
-                                                    placeholder="Search..." class="w-full px-2 py-1 text-sm border rounded-md dark:bg-gray-600 dark:text-white dark:placeholder-gray-300"
+                                                    placeholder="Search..."
+                                                    class="w-full px-2 py-1 text-sm border rounded-md dark:bg-gray-600 dark:text-white dark:placeholder-gray-300"
                                                     autocomplete="off">
                                                 @foreach ($shades as $shade)
                                                     <div onclick="selectShade('{{ $shade }}')" tabindex="0"
@@ -263,7 +266,8 @@
                                                 class="absolute z-40 mt-1 w-full bg-white border rounded-lg shadow-lg hidden max-h-48 overflow-y-auto p-2"
                                                 role="listbox" aria-labelledby="refDropdown">
                                                 <input type="text" id="refSearchInput" onkeyup="filterRefs()"
-                                                    placeholder="Search..." class="w-full px-2 py-1 text-sm border rounded-md dark:bg-gray-600 dark:text-white dark:placeholder-gray-300"
+                                                    placeholder="Search..."
+                                                    class="w-full px-2 py-1 text-sm border rounded-md dark:bg-gray-600 dark:text-white dark:placeholder-gray-300"
                                                     autocomplete="off">
                                                 @foreach ($references as $ref)
                                                     <div onclick="selectRef('{{ $ref }}')" tabindex="0"
@@ -298,8 +302,9 @@
                                         {{-- Buttons --}}
                                         <div class="flex items-end space-x-2 mt-2">
                                             <button type="submit"
-                                                class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Apply Filters</button>
-                                            <button type="button" onclick="clearFilters()"
+                                                class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Apply
+                                                Filters</button>
+                                            <button type="button" id="clearFiltersBtn" onclick="clearFilters()"
                                                 class="mt-4 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 px-4 py-2 rounded hover:bg-gray-300">Clear</button>
                                         </div>
                                     </div>
@@ -1693,5 +1698,11 @@
 
             document.getElementById("filterForm2").submit();
         }
+    </script>
+    <script>
+        document.getElementById('clearFiltersBtn').addEventListener('click', function() {
+            // Reload the page to clear all filters and reset state
+            window.location.href = window.location.pathname;
+        });
     </script>
 @endsection
