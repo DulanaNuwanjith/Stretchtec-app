@@ -487,13 +487,15 @@
                                                         </form>
                                                     @else
                                                         <div class="flex flex-wrap justify-center gap-2">
-                                                            <span
-                                                                class="inline-block text-sm font-semibold text-gray-700 dark:text-white bg-blue-100 dark:bg-gray-800 px-3 py-1 rounded">
+                                                            <button type="button"
+                                                                class="openRejectDetails inline-block text-sm font-semibold text-gray-700 dark:text-white bg-blue-100 dark:bg-gray-800 px-3 py-1 rounded"
+                                                                data-id="{{ $prep->id }}">
                                                                 Received on <br>
                                                                 {{ \Carbon\Carbon::parse($prep->colourMatchReceiveDate)->format('Y-m-d') }}
                                                                 at
                                                                 {{ \Carbon\Carbon::parse($prep->colourMatchReceiveDate)->format('H:i') }}
-                                                            </span>
+                                                            </button>
+
 
                                                             {{-- Reject button --}}
                                                             <form action="" method="POST">
@@ -1311,22 +1313,48 @@
                                     </tbody>
                                 </table>
 
+                                <div id="rejectDetailsModal"
+                                    class="fixed inset-0 z-50 hidden overflow-y-auto bg-gray-900 bg-opacity-50 ">
+                                    <div class="flex items-center justify-center min-h-screen px-4">
+                                        <div
+                                            class="relative w-full max-w-md p-10 overflow-y-auto bg-white rounded-lg shadow-lg dark:bg-gray-800 max-h-[80vh]">
+
+                                            <!-- Close Button -->
+                                            <button id="closeModal" aria-label="Close modal"
+                                                class="absolute top-2 right-2 text-xl text-gray-500 transition hover:text-red-600 focus:outline-none">
+                                                &times;
+                                            </button>
+
+                                            <!-- Modal Title -->
+                                            <h2 class="mb-4 text-xl font-semibold text-gray-800 dark:text-white">
+                                                Color Match Reject Details
+                                            </h2>
+
+                                            <!-- Modal Content -->
+                                            <div id="rejectDetailsContent"
+                                                class="text-sm text-gray-700 dark:text-gray-300">
+                                                <!-- Content will be dynamically injected here -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <!-- Reject Reason Modal -->
                                 <div id="rejectModal"
-                                     class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+                                    class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
                                     <div class="bg-white p-6 rounded-xl shadow-md w-96">
                                         <h2 class="text-lg font-semibold mb-4 text-blue-900">Reject Reason</h2>
-                                        <form action="{{ route('colorMatchRejects.store') }}" method="POST" id="rejectForm">
+                                        <form action="{{ route('colorMatchRejects.store') }}" method="POST"
+                                            id="rejectForm">
                                             @csrf
                                             <input type="hidden" name="id" id="rejectOrderNo">
                                             <textarea name="rejectReason" id="rejectReason" rows="4" required
-                                                      class="w-full border border-gray-300 rounded p-2 mb-4"
-                                                      placeholder="Enter reason for rejection..."></textarea>
+                                                class="w-full border border-gray-300 rounded p-2 mb-4" placeholder="Enter reason for rejection..."></textarea>
                                             <div class="flex justify-end gap-2 text-sm">
                                                 <button type="button" onclick="closeRejectModal()"
-                                                        class="px-3 py-1 bg-gray-300 hover:bg-gray-400 rounded">Cancel</button>
+                                                    class="px-3 py-1 bg-gray-300 hover:bg-gray-400 rounded">Cancel</button>
                                                 <button type="submit"
-                                                        class="px-3 py-1 bg-red-500 text-white hover:bg-red-700 rounded">Submit</button>
+                                                    class="px-3 py-1 bg-red-500 text-white hover:bg-red-700 rounded">Submit</button>
                                             </div>
                                         </form>
                                     </div>
@@ -1955,4 +1983,55 @@
             document.getElementById('rejectModal').classList.add('hidden');
         }
     </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const modal = document.getElementById('rejectDetailsModal');
+            const modalContent = document.getElementById('rejectDetailsContent');
+            const closeModal = document.getElementById('closeModal');
+
+            document.querySelectorAll('.openRejectDetails').forEach(button => {
+                button.addEventListener('click', function() {
+                    const id = this.getAttribute('data-id');
+
+                    fetch(`/color-match-reject/${id}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                const list = data.rejects.map((item, index) => `
+            <div class="mb-4 border-b pb-2">
+                <p><strong>#${index + 1}</strong></p>
+                <p><strong>Sent Date:</strong> ${item.sentDate}</p>
+                <p><strong>Receive Date:</strong> ${item.receiveDate}</p>
+                <p><strong>Reject Date:</strong> ${item.rejectDate}</p>
+                <p><strong>Reject Reason:</strong> ${item.rejectReason}</p>
+            </div>
+        `).join('');
+
+                                modalContent.innerHTML = `
+            <p class="font-semibold mb-2 text-sm text-gray-800 dark:text-white">Order No: ${data.orderNo}</p>
+            ${list}
+        `;
+                            } else {
+                                modalContent.innerHTML =
+                                    `<p class="text-red-500">${data.message}</p>`;
+                            }
+
+                            modal.classList.remove('hidden');
+                        })
+
+                        .catch(() => {
+                            modalContent.innerHTML =
+                                '<p class="text-red-500">Something went wrong.</p>';
+                            modal.classList.remove('hidden');
+                        });
+                });
+            });
+
+            closeModal.addEventListener('click', () => {
+                modal.classList.add('hidden');
+            });
+        });
+    </script>
+
 @endsection

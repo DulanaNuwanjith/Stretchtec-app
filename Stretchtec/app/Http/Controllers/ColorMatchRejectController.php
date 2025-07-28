@@ -10,10 +10,39 @@ class ColorMatchRejectController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function getRejectDetails($id)
     {
-        //
+        $sample = \App\Models\SamplePreparationRnD::with('sampleInquiry')->find($id);
+
+        if (!$sample) {
+            return response()->json(['success' => false, 'message' => 'Sample not found.']);
+        }
+
+        // Get all rejects for this orderNo, sorted by rejectDate
+        $rejects = ColorMatchReject::where('orderNo', $sample->orderNo)
+            ->orderBy('rejectDate', 'desc')
+            ->get()
+            ->map(function ($reject) {
+                return [
+                    'sentDate'     => optional($reject->sentDate)->format('Y-m-d H:i'),
+                    'receiveDate'  => optional($reject->receiveDate)->format('Y-m-d H:i'),
+                    'rejectDate'   => optional($reject->rejectDate)->format('Y-m-d H:i'),
+                    'rejectReason' => $reject->rejectReason,
+                ];
+            });
+
+        if ($rejects->isEmpty()) {
+            return response()->json(['success' => false, 'message' => 'No reject records found.']);
+        }
+
+        return response()->json([
+            'success' => true,
+            'orderNo' => $sample->orderNo,
+            'rejects' => $rejects,
+        ]);
     }
+
+
 
     /**
      * Show the form for creating a new resource.

@@ -153,6 +153,7 @@ Route::middleware(['auth'])->group(function () {
             ->name('rnd.updateYarnWeights');
         Route::post('/color-match-rejects/store', [ColorMatchRejectController::class, 'store'])
             ->name('colorMatchRejects.store');
+        Route::get('/color-match-reject/{id}', [\App\Http\Controllers\ColorMatchRejectController::class, 'getRejectDetails']);
     });
 });
 

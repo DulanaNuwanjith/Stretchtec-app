@@ -16,6 +16,13 @@ class ColorMatchReject extends Model
         'rejectReason',
     ];
 
+    protected $casts = [
+        'sentDate' => 'datetime',
+        'receiveDate' => 'datetime',
+        'rejectDate' => 'datetime',
+    ];
+
+
     public function sampleInquiry()
     {
         return $this->belongsTo(SampleInquiry::class, 'orderNo', 'orderNo');
