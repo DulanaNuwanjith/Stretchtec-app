@@ -266,14 +266,20 @@ class SamplePreparationRnDController extends Controller
 
         $prep = SamplePreparationRnD::findOrFail($request->id);
 
+        // ✅ Check for duplicate reference number in sample_stocks
+        if (SampleStock::where('reference_no', $request->referenceNo)->exists()) {
+            return back()
+                ->withInput()
+                ->withErrors(['referenceNo' => 'This Reference Number is already in use. Please enter a unique one.']);
+        }
+
         if (!$prep->is_reference_locked) {
             $prep->referenceNo = $request->referenceNo;
             $prep->is_reference_locked = true;
             $prep->save();
 
-            // ✅ Fetch production details
+            // ✅ Fetch production details safely
             $production = $prep->production;
-
             $productionOutput = (int)($production->production_output ?? 0);
             $damagedOutput = (int)($production->damaged_output ?? 0);
             $availableStock = max($productionOutput - $damagedOutput, 0);
