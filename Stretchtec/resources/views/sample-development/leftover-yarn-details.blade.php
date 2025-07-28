@@ -121,12 +121,13 @@
             <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Sample leftover yarn Records</h1>
         </div>
 
-        <form method="GET" action="{{ route('leftoverYarn.index') }}" class="mb-4 flex items-center space-x-2">
+        <form method="GET" action="{{ route('leftoverYarn.index') }}" class="flex items-center space-x-2 max-w-md">
             <input type="text" name="search" value="{{ request('search') }}"
                 placeholder="Search by Shade, PO Number or Supplier"
-                class="px-3 py-2 border rounded-md w-1/2 dark:bg-gray-700 dark:text-white" />
+                class="px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm w-full focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 transition duration-200 ease-in-out" />
 
-            <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+            <button type="submit"
+                class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm whitespace-nowrap">
                 Search
             </button>
 
@@ -209,10 +210,10 @@
                             </td>
 
                             <td class="px-4 py-3">
-                                <div class="flex flex-col items-center space-y-2">
+                                <div class="flex justify-center gap-2">
                                     <!-- Borrow Form -->
                                     <form action="{{ route('leftover-yarn.borrow', $record->id) }}" method="POST"
-                                        class="flex flex-col items-center space-y-2">
+                                        class="flex items-center gap-2">
                                         @csrf
                                         <input type="number" name="borrow_qty"
                                             class="w-24 px-2 py-1 border rounded text-sm dark:bg-gray-700 dark:text-white text-center"
