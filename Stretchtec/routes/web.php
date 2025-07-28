@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ColorMatchRejectController;
 use App\Http\Controllers\LeftoverYarnController;
 use App\Http\Controllers\OperatorsandSupervisorsController;
 use App\Http\Controllers\SampleInquiryController;
@@ -150,6 +151,8 @@ Route::middleware(['auth'])->group(function () {
             ->name('rnd.updateDevelopedStatus');
         Route::post('/rnd/update-yarn-weights', [SamplePreparationRnDController::class, 'updateYarnWeights'])
             ->name('rnd.updateYarnWeights');
+        Route::post('/color-match-rejects/store', [ColorMatchRejectController::class, 'store'])
+            ->name('colorMatchRejects.store');
     });
 });
 

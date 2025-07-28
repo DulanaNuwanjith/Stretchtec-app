@@ -1310,21 +1310,23 @@
                                         @endforeach
                                     </tbody>
                                 </table>
+
                                 <!-- Reject Reason Modal -->
                                 <div id="rejectModal"
-                                    class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+                                     class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
                                     <div class="bg-white p-6 rounded-xl shadow-md w-96">
                                         <h2 class="text-lg font-semibold mb-4 text-blue-900">Reject Reason</h2>
-                                        <form action="" method="POST">
+                                        <form action="{{ route('colorMatchRejects.store') }}" method="POST" id="rejectForm">
                                             @csrf
-                                            <input type="hidden" name="id" id="rejectSampleId">
-                                            <textarea name="reason" id="rejectReason" rows="4" required
-                                                class="w-full border border-gray-300 rounded p-2 mb-4" placeholder="Enter reason for rejection..."></textarea>
+                                            <input type="hidden" name="id" id="rejectOrderNo">
+                                            <textarea name="rejectReason" id="rejectReason" rows="4" required
+                                                      class="w-full border border-gray-300 rounded p-2 mb-4"
+                                                      placeholder="Enter reason for rejection..."></textarea>
                                             <div class="flex justify-end gap-2 text-sm">
                                                 <button type="button" onclick="closeRejectModal()"
-                                                    class="px-3 py-1 bg-gray-300 hover:bg-gray-400 rounded">Cancel</button>
+                                                        class="px-3 py-1 bg-gray-300 hover:bg-gray-400 rounded">Cancel</button>
                                                 <button type="submit"
-                                                    class="px-3 py-1 bg-red-500 text-white hover:bg-red-700 rounded">Submit</button>
+                                                        class="px-3 py-1 bg-red-500 text-white hover:bg-red-700 rounded">Submit</button>
                                             </div>
                                         </form>
                                     </div>
@@ -1943,14 +1945,14 @@
         });
     </script>
     <script>
-        function openRejectModal(prepId) {
-            document.getElementById('rejectSampleId').value = prepId;
+        // Function to open modal and set orderNo dynamically
+        function openRejectModal(orderNo) {
+            document.getElementById('rejectOrderNo').value = orderNo;
             document.getElementById('rejectModal').classList.remove('hidden');
         }
 
         function closeRejectModal() {
             document.getElementById('rejectModal').classList.add('hidden');
-            document.getElementById('rejectReason').value = ''; // Optional: clear input
         }
     </script>
 @endsection

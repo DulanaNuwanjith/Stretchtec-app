@@ -29,24 +29,39 @@ class ColorMatchRejectController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'orderNo' => 'required|string|max:255',
+            'id' => 'required|integer',
             'rejectReason' => 'required|string|max:500',
         ]);
 
-        //Get the sent_date and receive_date from the sample preparation R&D
-        $sampleInquiry = \App\Models\SamplePreparationRnD::where('orderNo', $request->orderNo)->first();
+        // Find the SamplePreparationRnD record using the provided ID
+        $sampleInquiry = \App\Models\SamplePreparationRnD::with('sampleInquiry') // eager load if relation exists
+        ->find($request->id);
+
         if (!$sampleInquiry) {
-            return redirect()->back()->withErrors(['orderNo' => 'Sample Inquiry not found for the provided order number.']);
+            return redirect()->back()
+                ->withErrors(['id' => 'Sample Inquiry not found for the provided ID.']);
         }
-        $request->merge([
+
+        // Get orderNo from related SampleInquiry (if relationship exists)
+        $orderNo = $sampleInquiry->orderNo ?? $sampleInquiry->sampleInquiry->orderNo;
+
+        // Prepare data for insert
+        $data = [
+            'orderNo' => $orderNo,
+            'rejectReason' => $request->rejectReason,
             'sentDate' => $sampleInquiry->colourMatchSentDate,
             'receiveDate' => $sampleInquiry->colourMatchReceiveDate,
-            'rejectDate' => now(), // Set the reject date to the current time
-        ]);
+            'rejectDate' => now(),
+        ];
 
-        ColorMatchReject::create($request->all());
+        ColorMatchReject::create($data);
 
-        return response()->json(['message' => 'Color match reject created successfully.'], 201);
+        // Reset fields
+        $sampleInquiry->colourMatchSentDate = null;
+        $sampleInquiry->colourMatchReceiveDate = null;
+        $sampleInquiry->save();
+
+        return redirect()->back()->with('success', 'Color match reject created successfully.');
     }
 
     /**
