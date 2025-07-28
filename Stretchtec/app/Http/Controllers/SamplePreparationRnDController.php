@@ -12,12 +12,51 @@ use Illuminate\Support\Str;
 
 class SamplePreparationRnDController extends Controller
 {
-    public function viewRnD()
+    public function viewRnD(Request $request)
     {
-        $samplePreparations = SamplePreparationRnD::with('sampleInquiry')->latest()->get();
+        $query = SamplePreparationRnD::with('sampleInquiry');
 
+        // Filters
+        if ($request->filled('order_no')) {
+            $query->where('orderNo', $request->order_no);
+        }
 
-        return view('sample-development.pages.sample-preparation-details', compact('samplePreparations'));
+        if ($request->filled('po_no')) {
+            $query->where('yarnOrderedPONumber', $request->po_no);
+        }
+
+        if ($request->filled('shade')) {
+            $query->where('shade', $request->shade);
+        }
+
+        if ($request->filled('reference_no')) {
+            $query->where('referenceNo', $request->reference_no);
+        }
+
+        if ($request->filled('customer_requested_date')) {
+            $query->whereDate('customerRequestedDate', $request->customer_requested_date);
+        }
+
+        if ($request->filled('development_plan_date')) {
+            $query->whereDate('developPlannedDate', $request->development_plan_date);
+        }
+
+        // Pagination or just all?
+        $samplePreparations = $query->latest()->paginate(10); // Or ->get() if needed
+
+        // Dynamic values for dropdowns
+        $orderNos = SamplePreparationRnD::select('orderNo')->distinct()->orderBy('orderNo')->pluck('orderNo');
+        $poNos = SamplePreparationRnD::select('yarnOrderedPONumber')->distinct()->orderBy('yarnOrderedPONumber')->pluck('yarnOrderedPONumber');
+        $shades = SamplePreparationRnD::select('shade')->distinct()->orderBy('shade')->pluck('shade');
+        $references = SamplePreparationRnD::select('referenceNo')->distinct()->orderBy('referenceNo')->pluck('referenceNo');
+
+        return view('sample-development.pages.sample-preparation-details', compact(
+            'samplePreparations',
+            'orderNos',
+            'poNos',
+            'shades',
+            'references'
+        ));
     }
 
     public function markColourMatchSent(Request $request)

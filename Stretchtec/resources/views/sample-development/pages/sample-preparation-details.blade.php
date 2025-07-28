@@ -134,114 +134,89 @@
 
                             <div id="filterFormContainer" class="hidden mt-4">
                                 <!-- Filter Form -->
-                                <form id="filterForm2" method="GET" action=""
-                                    class="mb-6 sticky top-0 z-40 flex gap-6 items-center">
-                                    <div class="flex gap-4 items-center flex-wrap">
+                                <form id="filterForm2" method="GET"
+                                    action="{{ route('sample-preparation-details.index') }}">
+                                    <div class="flex items-center gap-4 flex-wrap">
+
+                                        {{-- Order No Dropdown --}}
                                         <div class="relative inline-block text-left w-48">
-                                            <label for="orderDropdown"
+                                            <label for="customerDropdown"
                                                 class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Order
                                                 No</label>
-                                            <div>
-                                                <button type="button" id="orderDropdown"
-                                                    class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10 dark:bg-gray-700 dark:text-white"
-                                                    onclick="toggleOrderDropdown()" aria-haspopup="listbox"
-                                                    aria-expanded="false">
-                                                    <span id="selectedOrderNo">Select Order No</span>
-                                                    <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20"
-                                                        fill="currentColor">
-                                                        <path fill-rule="evenodd"
-                                                            d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
-                                                            clip-rule="evenodd" />
-                                                    </svg>
-                                                </button>
-                                            </div>
-
+                                            <input type="hidden" name="order_no" id="orderInput"
+                                                value="{{ request('order_no') }}">
+                                            <button id="orderDropdown" type="button" onclick="toggleOrderDropdown()"
+                                                class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10 dark:bg-gray-700 dark:text-white"
+                                                aria-expanded="false" aria-haspopup="listbox">
+                                                <span
+                                                    id="selectedOrderNo">{{ request('order_no') ?? 'Select Order No' }}</span>
+                                                <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20"
+                                                    fill="currentColor">
+                                                    <path fill-rule="evenodd"
+                                                        d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
+                                                        clip-rule="evenodd" />
+                                                </svg>
+                                            </button>
                                             <div id="orderDropdownMenu"
-                                                class="hidden absolute z-10 mt-2 w-full rounded-md bg-white shadow-lg ring-1 ring-black/5 dark:bg-gray-700 max-h-48 overflow-y-auto">
-                                                <!-- Search box -->
-                                                <div class="p-2 sticky top-0 bg-white dark:bg-gray-700 z-10">
-                                                    <input type="text" id="orderSearchInput"
-                                                        placeholder="Search order no..."
-                                                        class="w-full px-2 py-1 text-sm border rounded-md dark:bg-gray-600 dark:text-white dark:placeholder-gray-300"
-                                                        onkeyup="filterOrders()" />
-                                                </div>
-
-                                                <div class="py-1" role="listbox" tabindex="-1"
-                                                    aria-labelledby="orderDropdown">
-                                                    <button type="button"
-                                                        class="order-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                                                        onclick="selectOrder('')">Select Order No</button>
-                                                    <button type="button"
-                                                        class="order-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                                                        onclick="selectOrder('ORD001')">ORD001</button>
-                                                    <button type="button"
-                                                        class="order-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                                                        onclick="selectOrder('ORD002')">ORD002</button>
-                                                    <button type="button"
-                                                        class="order-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                                                        onclick="selectOrder('ORD003')">ORD003</button>
-                                                </div>
+                                                class="absolute z-40 mt-1 w-full bg-white border rounded-lg shadow-lg hidden max-h-48 overflow-y-auto p-2"
+                                                role="listbox" aria-labelledby="orderDropdown">
+                                                <input type="text" id="orderSearchInput" onkeyup="filterOrders()"
+                                                    placeholder="Search..." class="w-full px-2 py-1 text-sm border rounded-md dark:bg-gray-600 dark:text-white dark:placeholder-gray-300"
+                                                    autocomplete="off">
+                                                @foreach ($orderNos as $order)
+                                                    <div onclick="selectOrder('{{ $order }}')" tabindex="0"
+                                                        class="order-option px-4 py-2 hover:bg-gray-100 cursor-pointer text-sm"
+                                                        role="option">
+                                                        {{ $order }}
+                                                    </div>
+                                                @endforeach
                                             </div>
-
-                                            <input type="hidden" name="order_no" id="orderInput" value="">
                                         </div>
 
+                                        {{-- PO No Dropdown --}}
                                         <div class="relative inline-block text-left w-48">
-                                            <label for="poDropdown"
+                                            <label for="customerDropdown"
                                                 class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">PO
                                                 No</label>
-                                            <div>
-                                                <button type="button" id="poDropdown"
-                                                    class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10 dark:bg-gray-700 dark:text-white"
-                                                    onclick="togglePODropdown()" aria-haspopup="listbox"
-                                                    aria-expanded="false">
-                                                    <span id="selectedPONo">Select PO No</span>
-                                                    <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20"
-                                                        fill="currentColor">
-                                                        <path fill-rule="evenodd"
-                                                            d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
-                                                            clip-rule="evenodd" />
-                                                    </svg>
-                                                </button>
-                                            </div>
-
+                                            <input type="hidden" name="po_no" id="poInput"
+                                                value="{{ request('po_no') }}">
+                                            <button id="poDropdown" type="button" onclick="togglePODropdown()"
+                                                class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10 dark:bg-gray-700 dark:text-white"
+                                                aria-expanded="false" aria-haspopup="listbox">
+                                                <span id="selectedPONo">{{ request('po_no') ?? 'Select PO No' }}</span>
+                                                <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20"
+                                                    fill="currentColor">
+                                                    <path fill-rule="evenodd"
+                                                        d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
+                                                        clip-rule="evenodd" />
+                                                </svg>
+                                            </button>
                                             <div id="poDropdownMenu"
-                                                class="hidden absolute z-10 mt-2 w-full rounded-md bg-white shadow-lg ring-1 ring-black/5 dark:bg-gray-700 max-h-48 overflow-y-auto">
-                                                <!-- Search box -->
-                                                <div class="p-2 sticky top-0 bg-white dark:bg-gray-700 z-10">
-                                                    <input type="text" id="poSearchInput" placeholder="Search PO no..."
-                                                        class="w-full px-2 py-1 text-sm border rounded-md dark:bg-gray-600 dark:text-white dark:placeholder-gray-300"
-                                                        onkeyup="filterPOs()" />
-                                                </div>
-
-                                                <div class="py-1" role="listbox" tabindex="-1"
-                                                    aria-labelledby="poDropdown">
-                                                    <button type="button"
-                                                        class="po-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                                                        onclick="selectPO('')">Select PO No</button>
-                                                    <button type="button"
-                                                        class="po-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                                                        onclick="selectPO('PO001')">PO001</button>
-                                                    <button type="button"
-                                                        class="po-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                                                        onclick="selectPO('PO002')">PO002</button>
-                                                    <button type="button"
-                                                        class="po-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                                                        onclick="selectPO('PO003')">PO003</button>
-                                                </div>
+                                                class="absolute z-40 mt-1 w-full bg-white border rounded-lg shadow-lg hidden max-h-48 overflow-y-auto p-2"
+                                                role="listbox" aria-labelledby="poDropdown">
+                                                <input type="text" id="poSearchInput" onkeyup="filterPOs()"
+                                                    placeholder="Search..." class="w-full px-2 py-1 text-sm border rounded-md dark:bg-gray-600 dark:text-white dark:placeholder-gray-300"
+                                                    autocomplete="off">
+                                                @foreach ($poNos as $po)
+                                                    <div onclick="selectPO('{{ $po }}')" tabindex="0"
+                                                        class="po-option px-4 py-2 hover:bg-gray-100 cursor-pointer text-sm"
+                                                        role="option">
+                                                        {{ $po }}
+                                                    </div>
+                                                @endforeach
                                             </div>
-
-                                            <input type="hidden" name="po_no" id="poInput" value="">
                                         </div>
 
+                                        {{-- Shade Dropdown --}}
                                         <div class="relative inline-block text-left w-48">
-                                            <label for="shadeDropdown"
+                                            <label for="customerDropdown"
                                                 class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Shade</label>
-                                            <button type="button" id="shadeDropdown"
+                                            <input type="hidden" name="shade" id="shadeInput"
+                                                value="{{ request('shade') }}">
+                                            <button id="shadeDropdown" type="button" onclick="toggleShadeDropdown()"
                                                 class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10 dark:bg-gray-700 dark:text-white"
-                                                onclick="toggleShadeDropdown()" aria-haspopup="listbox"
-                                                aria-expanded="false">
-                                                <span id="selectedShade">Select Shade</span>
+                                                aria-expanded="false" aria-haspopup="listbox">
+                                                <span id="selectedShade">{{ request('shade') ?? 'Select Shade' }}</span>
                                                 <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20"
                                                     fill="currentColor">
                                                     <path fill-rule="evenodd"
@@ -250,35 +225,33 @@
                                                 </svg>
                                             </button>
                                             <div id="shadeDropdownMenu"
-                                                class="hidden absolute z-10 mt-2 w-full rounded-md bg-white shadow-lg ring-1 ring-black/5 dark:bg-gray-700 max-h-48 overflow-y-auto">
-                                                <div class="p-2 sticky top-0 bg-white dark:bg-gray-700 z-10">
-                                                    <input type="text" id="shadeSearchInput"
-                                                        placeholder="Search shade..."
-                                                        class="w-full px-2 py-1 text-sm border rounded-md dark:bg-gray-600 dark:text-white dark:placeholder-gray-300"
-                                                        onkeyup="filterShades()" />
-                                                </div>
-                                                <div class="py-1" role="listbox" tabindex="-1"
-                                                    aria-labelledby="shadeDropdown">
-                                                    <button type="button"
-                                                        class="shade-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                                                        onclick="selectShade('SHADE001')">SHADE001</button>
-                                                    <button type="button"
-                                                        class="shade-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                                                        onclick="selectShade('SHADE002')">SHADE002</button>
-                                                </div>
+                                                class="absolute z-40 mt-1 w-full bg-white border rounded-lg shadow-lg hidden max-h-48 overflow-y-auto p-2"
+                                                role="listbox" aria-labelledby="shadeDropdown">
+                                                <input type="text" id="shadeSearchInput" onkeyup="filterShades()"
+                                                    placeholder="Search..." class="w-full px-2 py-1 text-sm border rounded-md dark:bg-gray-600 dark:text-white dark:placeholder-gray-300"
+                                                    autocomplete="off">
+                                                @foreach ($shades as $shade)
+                                                    <div onclick="selectShade('{{ $shade }}')" tabindex="0"
+                                                        class="shade-option px-4 py-2 hover:bg-gray-100 cursor-pointer text-sm"
+                                                        role="option">
+                                                        {{ $shade }}
+                                                    </div>
+                                                @endforeach
                                             </div>
-                                            <input type="hidden" name="shade" id="shadeInput" value="">
                                         </div>
 
+                                        {{-- Reference No Dropdown --}}
                                         <div class="relative inline-block text-left w-48">
-                                            <label for="refDropdown"
+                                            <label for="customerDropdown"
                                                 class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Reference
                                                 No</label>
-                                            <button type="button" id="refDropdown"
+                                            <input type="hidden" name="reference_no" id="refInput"
+                                                value="{{ request('reference_no') }}">
+                                            <button id="refDropdown" type="button" onclick="toggleRefDropdown()"
                                                 class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10 dark:bg-gray-700 dark:text-white"
-                                                onclick="toggleRefDropdown()" aria-haspopup="listbox"
-                                                aria-expanded="false">
-                                                <span id="selectedRef">Select Reference No</span>
+                                                aria-expanded="false" aria-haspopup="listbox">
+                                                <span
+                                                    id="selectedRef">{{ request('reference_no') ?? 'Select Reference No' }}</span>
                                                 <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20"
                                                     fill="currentColor">
                                                     <path fill-rule="evenodd"
@@ -287,60 +260,48 @@
                                                 </svg>
                                             </button>
                                             <div id="refDropdownMenu"
-                                                class="hidden absolute z-10 mt-2 w-full rounded-md bg-white shadow-lg ring-1 ring-black/5 dark:bg-gray-700 max-h-48 overflow-y-auto">
-                                                <div class="p-2 sticky top-0 bg-white dark:bg-gray-700 z-10">
-                                                    <input type="text" id="refSearchInput"
-                                                        placeholder="Search reference no..."
-                                                        class="w-full px-2 py-1 text-sm border rounded-md dark:bg-gray-600 dark:text-white dark:placeholder-gray-300"
-                                                        onkeyup="filterRefs()" />
-                                                </div>
-                                                <div class="py-1" role="listbox" tabindex="-1"
-                                                    aria-labelledby="refDropdown">
-                                                    <button type="button"
-                                                        class="ref-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                                                        onclick="selectRef('REF001')">REF001</button>
-                                                    <button type="button"
-                                                        class="ref-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                                                        onclick="selectRef('REF002')">REF002</button>
-                                                </div>
+                                                class="absolute z-40 mt-1 w-full bg-white border rounded-lg shadow-lg hidden max-h-48 overflow-y-auto p-2"
+                                                role="listbox" aria-labelledby="refDropdown">
+                                                <input type="text" id="refSearchInput" onkeyup="filterRefs()"
+                                                    placeholder="Search..." class="w-full px-2 py-1 text-sm border rounded-md dark:bg-gray-600 dark:text-white dark:placeholder-gray-300"
+                                                    autocomplete="off">
+                                                @foreach ($references as $ref)
+                                                    <div onclick="selectRef('{{ $ref }}')" tabindex="0"
+                                                        class="ref-option px-4 py-2 hover:bg-gray-100 cursor-pointer text-sm"
+                                                        role="option">
+                                                        {{ $ref }}
+                                                    </div>
+                                                @endforeach
                                             </div>
-                                            <input type="hidden" name="reference_no" id="refInput" value="">
                                         </div>
-                                    </div>
 
-                                    <!-- Second row: Date inputs and buttons -->
-                                    <div class="flex flex-wrap gap-6 items-end mt-4">
-                                        <div>
-                                            <label for="customerRequestedDate"
-                                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                                Customer Requested Date
-                                            </label>
-                                            <input type="date" id="customerRequestedDate"
-                                                name="customer_requested_date"
+                                        {{-- Date pickers --}}
+                                        <div class="inline-block text-left w-48">
+                                            <label for="customer_requested_date"
+                                                class="block text-sm font-medium text-gray-700">Customer
+                                                Requested Date</label>
+                                            <input type="date" name="customer_requested_date"
+                                                id="customerRequestedDate"
                                                 value="{{ request('customer_requested_date') }}"
-                                                class="w-48 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm" />
+                                                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 text-sm">
                                         </div>
 
-                                        <div>
-                                            <label for="developmentPlanDate"
-                                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                                Development Plan Date
-                                            </label>
-                                            <input type="date" id="developmentPlanDate" name="development_plan_date"
+                                        <div class="inline-block text-left w-48">
+                                            <label for="development_plan_date"
+                                                class="block text-sm font-medium text-gray-700">Development Plan
+                                                Date</label>
+                                            <input type="date" name="development_plan_date" id="developmentPlanDate"
                                                 value="{{ request('development_plan_date') }}"
-                                                class="w-48 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm" />
+                                                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 text-sm">
                                         </div>
 
-                                        <button type="submit"
-                                            class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-                                            Apply Filters
-                                        </button>
-
-                                        <button type="button" id="clearFiltersBtn"
-                                            class="bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 px-4 py-2 rounded hover:bg-gray-300"
-                                            onclick="clearFilters()">
-                                            Clear Filters
-                                        </button>
+                                        {{-- Buttons --}}
+                                        <div class="flex items-end space-x-2 mt-2">
+                                            <button type="submit"
+                                                class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Apply Filters</button>
+                                            <button type="button" onclick="clearFilters()"
+                                                class="mt-4 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 px-4 py-2 rounded hover:bg-gray-300">Clear</button>
+                                        </div>
                                     </div>
                                 </form>
                             </div>
@@ -530,51 +491,60 @@
                                                 </td>
 
                                                 <!-- Already Developed Column -->
-                                                <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300">
+                                                <td
+                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300">
                                                     <div class="relative inline-block text-left">
                                                         @if ($prep->alreadyDeveloped == null)
-                                                            <form method="POST" action="{{ route('rnd.updateDevelopedStatus') }}">
+                                                            <form method="POST"
+                                                                action="{{ route('rnd.updateDevelopedStatus') }}">
                                                                 @csrf
-                                                                <input type="hidden" name="id" value="{{ $prep->id }}">
-                                                                <input type="hidden" name="alreadyDeveloped" id="alreadyDevelopedInput{{ $prep->id }}" value="Need to Develop">
+                                                                <input type="hidden" name="id"
+                                                                    value="{{ $prep->id }}">
+                                                                <input type="hidden" name="alreadyDeveloped"
+                                                                    id="alreadyDevelopedInput{{ $prep->id }}"
+                                                                    value="Need to Develop">
 
                                                                 <!-- Dropdown Button -->
                                                                 <button type="button"
-                                                                        id="alreadyDevelopedDropdown{{ $prep->id }}"
-                                                                        class="inline-flex justify-between w-48 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10"
-                                                                        onclick="toggleDevelopedDropdown(event, {{ $prep->id }})">
-                                                                    <span id="selectedAlreadyDeveloped{{ $prep->id }}">Need to Develop</span>
-                                                                    <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                                                                    id="alreadyDevelopedDropdown{{ $prep->id }}"
+                                                                    class="inline-flex justify-between w-48 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10"
+                                                                    onclick="toggleDevelopedDropdown(event, {{ $prep->id }})">
+                                                                    <span
+                                                                        id="selectedAlreadyDeveloped{{ $prep->id }}">Need
+                                                                        to Develop</span>
+                                                                    <svg class="ml-2 h-5 w-5 text-gray-400"
+                                                                        viewBox="0 0 20 20" fill="currentColor">
                                                                         <path fill-rule="evenodd"
-                                                                              d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
-                                                                              clip-rule="evenodd" />
+                                                                            d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
+                                                                            clip-rule="evenodd" />
                                                                     </svg>
                                                                 </button>
 
                                                                 <!-- Dropdown Menu -->
                                                                 <div id="alreadyDevelopedDropdownMenu{{ $prep->id }}"
-                                                                     class="hidden absolute mt-2 w-48 rounded-md bg-white shadow-lg ring-1 ring-black/5 z-20">
+                                                                    class="hidden absolute mt-2 w-48 rounded-md bg-white shadow-lg ring-1 ring-black/5 z-20">
                                                                     <div class="py-1">
                                                                         <button type="submit"
-                                                                                onclick="setDevelopedStatus({{ $prep->id }}, 'Need to Develop')"
-                                                                                class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                                                            onclick="setDevelopedStatus({{ $prep->id }}, 'Need to Develop')"
+                                                                            class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                                                             Need to Develop
                                                                         </button>
                                                                         <button type="submit"
-                                                                                onclick="setDevelopedStatus({{ $prep->id }}, 'No Need to Develop')"
-                                                                                class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                                                            onclick="setDevelopedStatus({{ $prep->id }}, 'No Need to Develop')"
+                                                                            class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                                                             No Need to Develop
                                                                         </button>
                                                                         <button type="submit"
-                                                                                onclick="setDevelopedStatus({{ $prep->id }}, 'Tape Match Pan Asia')"
-                                                                                class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                                                            onclick="setDevelopedStatus({{ $prep->id }}, 'Tape Match Pan Asia')"
+                                                                            class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                                                             Tape Match Pan Asia
                                                                         </button>
                                                                     </div>
                                                                 </div>
                                                             </form>
                                                         @else
-                                                            <div class="inline-flex items-center w-48 rounded-md bg-gray-200 px-3 py-2 text-sm font-semibold text-gray-500 shadow-inner h-10">
+                                                            <div
+                                                                class="inline-flex items-center w-48 rounded-md bg-gray-200 px-3 py-2 text-sm font-semibold text-gray-500 shadow-inner h-10">
                                                                 {{ $prep->alreadyDeveloped }}
                                                             </div>
                                                         @endif
@@ -585,14 +555,16 @@
                                                     @if ($prep->alreadyDeveloped == 'Need to Develop')
                                                         @if (!$prep->developPlannedDate)
                                                             {{-- Show input if not set --}}
-                                                            <form action="{{ route('rnd.setDevelopPlanDate') }}" method="POST">
+                                                            <form action="{{ route('rnd.setDevelopPlanDate') }}"
+                                                                method="POST">
                                                                 @csrf
-                                                                <input type="hidden" name="id" value="{{ $prep->id }}">
+                                                                <input type="hidden" name="id"
+                                                                    value="{{ $prep->id }}">
                                                                 <input type="date" name="developPlannedDate"
-                                                                       class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                                       required>
+                                                                    class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                                    required>
                                                                 <button type="submit"
-                                                                        class="w-full mt-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm">
+                                                                    class="w-full mt-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm">
                                                                     Save
                                                                 </button>
                                                             </form>
@@ -605,30 +577,37 @@
                                                     @else
                                                         {{-- Disabled input and button --}}
                                                         <input type="date"
-                                                               class="w-full px-3 py-2 border rounded-md bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400 text-sm"
-                                                               disabled>
+                                                            class="w-full px-3 py-2 border rounded-md bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400 text-sm"
+                                                            disabled>
                                                         <button type="button"
-                                                                class="w-full mt-1 bg-gray-300 text-gray-500 px-3 py-1 rounded text-sm cursor-not-allowed"
-                                                                title="Only visible when status is 'Need to Develop'">
+                                                            class="w-full mt-1 bg-gray-300 text-gray-500 px-3 py-1 rounded text-sm cursor-not-allowed"
+                                                            title="Only visible when status is 'Need to Develop'">
                                                             Save
                                                         </button>
                                                     @endif
                                                 </td>
 
                                                 {{-- Yarn Ordered Date --}}
-                                                <td class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                                <td
+                                                    class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
                                                     @if ($prep->alreadyDeveloped == 'Need to Develop')
                                                         @if (is_null($prep->yarnOrderedDate))
-                                                            <form action="{{ route('rnd.markYarnOrdered') }}" method="POST">
+                                                            <form action="{{ route('rnd.markYarnOrdered') }}"
+                                                                method="POST">
                                                                 @csrf
-                                                                <input type="hidden" name="id" value="{{ $prep->id }}">
+                                                                <input type="hidden" name="id"
+                                                                    value="{{ $prep->id }}">
 
                                                                 @php
-                                                                    $canOrder = $prep->alreadyDeveloped == 'Tape Match Pan Asia' || ($prep->alreadyDeveloped == 'Need to Develop' && $prep->developPlannedDate);
+                                                                    $canOrder =
+                                                                        $prep->alreadyDeveloped ==
+                                                                            'Tape Match Pan Asia' ||
+                                                                        ($prep->alreadyDeveloped == 'Need to Develop' &&
+                                                                            $prep->developPlannedDate);
                                                                 @endphp
 
                                                                 <button type="submit"
-                                                                        class="yarn-ordered-btn px-2 py-1 mt-3 rounded transition-all duration-200
+                                                                    class="yarn-ordered-btn px-2 py-1 mt-3 rounded transition-all duration-200
                                                                     {{ $canOrder ? 'bg-gray-300 text-black hover:bg-gray-400' : 'bg-gray-200 text-gray-500 cursor-not-allowed' }}"
                                                                     {{ $canOrder ? '' : 'disabled title=Please set Development Plan Date first' }}>
                                                                     Pending
@@ -647,8 +626,8 @@
                                                         {{-- Not "Need to Develop", but still show disabled Pending button --}}
                                                         <form>
                                                             <button type="button"
-                                                                    class="yarn-ordered-btn px-2 py-1 mt-3 rounded bg-gray-200 text-gray-500 cursor-not-allowed"
-                                                                    disabled title="Not applicable for this type">
+                                                                class="yarn-ordered-btn px-2 py-1 mt-3 rounded bg-gray-200 text-gray-500 cursor-not-allowed"
+                                                                disabled title="Not applicable for this type">
                                                                 Pending
                                                             </button>
                                                         </form>
@@ -687,24 +666,28 @@
                                                     @if ($prep->alreadyDeveloped == 'Need to Develop' || $prep->alreadyDeveloped == 'Tape Match Pan Asia')
                                                         @if (!$prep->is_shade_locked)
                                                             @php
-                                                                $canSaveShade = ($prep->alreadyDeveloped == 'Tape Match Pan Asia') ||
-                                                                                ($prep->alreadyDeveloped == 'Need to Develop' && $prep->developPlannedDate);
+                                                                $canSaveShade =
+                                                                    $prep->alreadyDeveloped == 'Tape Match Pan Asia' ||
+                                                                    ($prep->alreadyDeveloped == 'Need to Develop' &&
+                                                                        $prep->developPlannedDate);
                                                             @endphp
 
-                                                            <form action="{{ route('rnd.lockShadeField') }}" method="POST">
+                                                            <form action="{{ route('rnd.lockShadeField') }}"
+                                                                method="POST">
                                                                 @csrf
-                                                                <input type="hidden" name="id" value="{{ $prep->id }}">
+                                                                <input type="hidden" name="id"
+                                                                    value="{{ $prep->id }}">
 
                                                                 <input type="text" name="shade"
-                                                                       value="{{ $prep->shade }}"
-                                                                       class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                                       required>
+                                                                    value="{{ $prep->shade }}"
+                                                                    class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                                    required>
 
                                                                 <button type="submit"
-                                                                        class="w-full mt-1 px-3 py-1 rounded text-sm transition-all duration-200
+                                                                    class="w-full mt-1 px-3 py-1 rounded text-sm transition-all duration-200
                                                                         {{ $canSaveShade ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-gray-300 text-gray-500 cursor-not-allowed' }}"
-                                                                        {{ $canSaveShade ? '' : 'disabled' }}
-                                                                        title="{{ $canSaveShade ? '' : 'Please set Development Plan Date first' }}">
+                                                                    {{ $canSaveShade ? '' : 'disabled' }}
+                                                                    title="{{ $canSaveShade ? '' : 'Please set Development Plan Date first' }}">
                                                                     Save
                                                                 </button>
                                                             </form>
@@ -721,25 +704,30 @@
                                                     @if ($prep->alreadyDeveloped == 'Need to Develop' || $prep->alreadyDeveloped == 'Tape Match Pan Asia')
                                                         @if (!$prep->is_yarn_ordered_weight_locked)
                                                             @php
-                                                                $canSaveYarnWeight = ($prep->alreadyDeveloped == 'Tape Match Pan Asia') ||
-                                                                                     ($prep->alreadyDeveloped == 'Need to Develop' && $prep->developPlannedDate);
+                                                                $canSaveYarnWeight =
+                                                                    $prep->alreadyDeveloped == 'Tape Match Pan Asia' ||
+                                                                    ($prep->alreadyDeveloped == 'Need to Develop' &&
+                                                                        $prep->developPlannedDate);
                                                             @endphp
 
-                                                            <form action="{{ route('rnd.updateYarnWeights') }}" method="POST">
+                                                            <form action="{{ route('rnd.updateYarnWeights') }}"
+                                                                method="POST">
                                                                 @csrf
-                                                                <input type="hidden" name="id" value="{{ $prep->id }}">
-                                                                <input type="hidden" name="field" value="yarnOrderedWeight">
+                                                                <input type="hidden" name="id"
+                                                                    value="{{ $prep->id }}">
+                                                                <input type="hidden" name="field"
+                                                                    value="yarnOrderedWeight">
 
                                                                 <input type="number" step="0.01" name="value"
-                                                                       value="{{ $prep->yarnOrderedWeight }}"
-                                                                       class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                                       required>
+                                                                    value="{{ $prep->yarnOrderedWeight }}"
+                                                                    class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                                    required>
 
                                                                 <button type="submit"
-                                                                        class="w-full mt-1 px-3 py-1 rounded text-sm transition-all duration-200
+                                                                    class="w-full mt-1 px-3 py-1 rounded text-sm transition-all duration-200
                                                                         {{ $canSaveYarnWeight ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-gray-300 text-gray-500 cursor-not-allowed' }}"
-                                                                        {{ $canSaveYarnWeight ? '' : 'disabled' }}
-                                                                        title="{{ $canSaveYarnWeight ? '' : 'Please set Development Plan Date first' }}">
+                                                                    {{ $canSaveYarnWeight ? '' : 'disabled' }}
+                                                                    title="{{ $canSaveYarnWeight ? '' : 'Please set Development Plan Date first' }}">
                                                                     Save
                                                                 </button>
                                                             </form>
@@ -755,24 +743,28 @@
                                                     @if ($prep->alreadyDeveloped == 'Need to Develop' || $prep->alreadyDeveloped == 'Tape Match Pan Asia')
                                                         @if (!$prep->is_tkt_locked)
                                                             @php
-                                                                $canSaveTkt = ($prep->alreadyDeveloped == 'Tape Match Pan Asia') ||
-                                                                              ($prep->alreadyDeveloped == 'Need to Develop' && $prep->developPlannedDate);
+                                                                $canSaveTkt =
+                                                                    $prep->alreadyDeveloped == 'Tape Match Pan Asia' ||
+                                                                    ($prep->alreadyDeveloped == 'Need to Develop' &&
+                                                                        $prep->developPlannedDate);
                                                             @endphp
 
-                                                            <form action="{{ route('rnd.lockTktField') }}" method="POST">
+                                                            <form action="{{ route('rnd.lockTktField') }}"
+                                                                method="POST">
                                                                 @csrf
-                                                                <input type="hidden" name="id" value="{{ $prep->id }}">
+                                                                <input type="hidden" name="id"
+                                                                    value="{{ $prep->id }}">
 
                                                                 <input type="number" name="tkt"
-                                                                       value="{{ $prep->tkt }}"
-                                                                       class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                                       required>
+                                                                    value="{{ $prep->tkt }}"
+                                                                    class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                                    required>
 
                                                                 <button type="submit"
-                                                                        class="w-full mt-1 px-3 py-1 rounded text-sm transition-all duration-200
+                                                                    class="w-full mt-1 px-3 py-1 rounded text-sm transition-all duration-200
                                                                         {{ $canSaveTkt ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-gray-300 text-gray-500 cursor-not-allowed' }}"
-                                                                        {{ $canSaveTkt ? '' : 'disabled' }}
-                                                                        title="{{ $canSaveTkt ? '' : 'Please set Development Plan Date first' }}">
+                                                                    {{ $canSaveTkt ? '' : 'disabled' }}
+                                                                    title="{{ $canSaveTkt ? '' : 'Please set Development Plan Date first' }}">
                                                                     Save
                                                                 </button>
                                                             </form>
@@ -788,25 +780,32 @@
                                                     @if ($prep->alreadyDeveloped == 'Need to Develop' || $prep->alreadyDeveloped == 'Tape Match Pan Asia')
                                                         @if (!$prep->is_supplier_locked)
                                                             @php
-                                                                $canSaveSupplier = ($prep->alreadyDeveloped == 'Tape Match Pan Asia') ||
-                                                                                   ($prep->alreadyDeveloped == 'Need to Develop' && $prep->developPlannedDate);
-                                                                $defaultSupplier = ($prep->alreadyDeveloped == 'Tape Match Pan Asia') ? 'Pan Asia' : $prep->yarnSupplier;
+                                                                $canSaveSupplier =
+                                                                    $prep->alreadyDeveloped == 'Tape Match Pan Asia' ||
+                                                                    ($prep->alreadyDeveloped == 'Need to Develop' &&
+                                                                        $prep->developPlannedDate);
+                                                                $defaultSupplier =
+                                                                    $prep->alreadyDeveloped == 'Tape Match Pan Asia'
+                                                                        ? 'Pan Asia'
+                                                                        : $prep->yarnSupplier;
                                                             @endphp
 
-                                                            <form action="{{ route('rnd.lockSupplierField') }}" method="POST">
+                                                            <form action="{{ route('rnd.lockSupplierField') }}"
+                                                                method="POST">
                                                                 @csrf
-                                                                <input type="hidden" name="id" value="{{ $prep->id }}">
+                                                                <input type="hidden" name="id"
+                                                                    value="{{ $prep->id }}">
 
                                                                 <input type="text" name="yarnSupplier"
-                                                                       value="{{ $defaultSupplier }}"
-                                                                       class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                                       required>
+                                                                    value="{{ $defaultSupplier }}"
+                                                                    class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                                    required>
 
                                                                 <button type="submit"
-                                                                        class="w-full mt-1 px-3 py-1 rounded text-sm transition-all duration-200
+                                                                    class="w-full mt-1 px-3 py-1 rounded text-sm transition-all duration-200
                                {{ $canSaveSupplier ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-gray-300 text-gray-500 cursor-not-allowed' }}"
-                                                                        {{ $canSaveSupplier ? '' : 'disabled' }}
-                                                                        title="{{ $canSaveSupplier ? '' : 'Please set Development Plan Date first' }}">
+                                                                    {{ $canSaveSupplier ? '' : 'disabled' }}
+                                                                    title="{{ $canSaveSupplier ? '' : 'Please set Development Plan Date first' }}">
                                                                     Save
                                                                 </button>
                                                             </form>
@@ -1534,8 +1533,9 @@
             document.getElementById(`selectedAlreadyDeveloped${id}`).innerText = statusText;
         }
 
-        document.addEventListener('click', function () {
-            document.querySelectorAll('[id^="alreadyDevelopedDropdownMenu"]').forEach(menu => menu.classList.add('hidden'));
+        document.addEventListener('click', function() {
+            document.querySelectorAll('[id^="alreadyDevelopedDropdownMenu"]').forEach(menu => menu.classList.add(
+                'hidden'));
         });
     </script>
     <script>
@@ -1554,6 +1554,144 @@
             document.getElementById('modalRequestDate').textContent = requestDate;
 
             document.getElementById('openRndSampleModal').classList.remove('hidden');
+        }
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const tab2Filters = ['order', 'po', 'shade', 'ref'];
+
+            // Toggle dropdowns
+            tab2Filters.forEach(type => {
+                const button = document.getElementById(⁠$ {
+                        type
+                    }
+                    Dropdown⁠);
+                const menu = document.getElementById(⁠$ {
+                        type
+                    }
+                    DropdownMenu⁠);
+
+                if (button && menu) {
+                    button.addEventListener("click", (e) => {
+                        e.stopPropagation();
+                        closeAllDropdownsTab2();
+                        menu.classList.toggle("hidden");
+                        button.setAttribute("aria-expanded", !menu.classList.contains("hidden"));
+                    });
+                }
+            });
+
+            // Close dropdowns on outside click
+            document.addEventListener("click", (e) => {
+                tab2Filters.forEach(type => {
+                    const menu = document.getElementById(⁠$ {
+                            type
+                        }
+                        DropdownMenu⁠);
+                    const button = document.getElementById(⁠$ {
+                            type
+                        }
+                        Dropdown⁠);
+                    if (menu && button && !menu.contains(e.target) && !button.contains(e.target)) {
+                        menu.classList.add("hidden");
+                        button.setAttribute("aria-expanded", "false");
+                    }
+                });
+            });
+
+            function closeAllDropdownsTab2() {
+                tab2Filters.forEach(type => {
+                    const menu = document.getElementById(⁠$ {
+                            type
+                        }
+                        DropdownMenu⁠);
+                    const button = document.getElementById(⁠$ {
+                            type
+                        }
+                        Dropdown⁠);
+                    if (menu && button) {
+                        menu.classList.add("hidden");
+                        button.setAttribute("aria-expanded", "false");
+                    }
+                });
+            }
+        });
+
+        // Selection handlers
+        function selectOrder(value) {
+            document.getElementById("orderInput").value = value;
+            document.getElementById("selectedOrderNo").textContent = value || "Select Order No";
+            document.getElementById("orderDropdownMenu").classList.add("hidden");
+        }
+
+        function selectPO(value) {
+            document.getElementById("poInput").value = value;
+            document.getElementById("selectedPONo").textContent = value || "Select PO No";
+            document.getElementById("poDropdownMenu").classList.add("hidden");
+        }
+
+        function selectShade(value) {
+            document.getElementById("shadeInput").value = value;
+            document.getElementById("selectedShade").textContent = value || "Select Shade";
+            document.getElementById("shadeDropdownMenu").classList.add("hidden");
+        }
+
+        function selectRef(value) {
+            document.getElementById("refInput").value = value;
+            document.getElementById("selectedRef").textContent = value || "Select Reference No";
+            document.getElementById("refDropdownMenu").classList.add("hidden");
+        }
+
+        // Search filters
+        function filterOrders() {
+            filterOptions('orderSearchInput', 'order-option');
+        }
+
+        function filterPOs() {
+            filterOptions('poSearchInput', 'po-option');
+        }
+
+        function filterShades() {
+            filterOptions('shadeSearchInput', 'shade-option');
+        }
+
+        function filterRefs() {
+            filterOptions('refSearchInput', 'ref-option');
+        }
+
+        function filterOptions(inputId, optionClass) {
+            const input = document.getElementById(inputId);
+            const query = input.value.toLowerCase();
+            const options = document.querySelectorAll(⁠.$ {
+                optionClass
+            }⁠);
+            options.forEach(option => {
+                option.style.display = option.textContent.toLowerCase().includes(query) ? "block" : "none";
+            });
+        }
+
+        // Clear button handler
+        function clearFilters() {
+            const ids = ["orderInput", "poInput", "shadeInput", "refInput", "customerRequestedDate", "developmentPlanDate"];
+            const labels = {
+                orderInput: "Select Order No",
+                poInput: "Select PO No",
+                shadeInput: "Select Shade",
+                refInput: "Select Reference No"
+            };
+
+            ids.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.value = "";
+            });
+
+            Object.entries(labels).forEach(([id, label]) => {
+                const spanId = id.replace("Input", "selected");
+                const span = document.getElementById(spanId);
+                if (span) span.textContent = label;
+            });
+
+            document.getElementById("filterForm2").submit();
         }
     </script>
 @endsection
