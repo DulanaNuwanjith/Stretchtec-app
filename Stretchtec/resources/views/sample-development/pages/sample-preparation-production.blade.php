@@ -246,7 +246,7 @@
                                                 class="font-bold px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Damaged Output</th>
                                             <th
-                                                class="font-bold px-4 py-3 w-56 text-center text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold px-4 py-3 w-64 text-center text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Dispatch to R&D
                                             </th>
                                             <th
@@ -619,6 +619,19 @@
                                                                 {{ $prod->dispatch_to_rnd_at ? $prod->dispatch_to_rnd_at->format('Y-m-d H:i') : '-' }}
                                                             </div>
                                                         @else
+                                                            @php
+                                                                $dispatchNames = [
+                                                                    'Kanchana Madushani',
+                                                                    'Imashi Prasangika',
+                                                                    'Tenuli Dihansa',
+                                                                    'Sanduni Indeewari',
+                                                                    'Kanchana Dharmadasa',
+                                                                ];
+                                                                $disableDispatch =
+                                                                    empty($prod->production_output) ||
+                                                                    empty($prod->damaged_output);
+                                                            @endphp
+
                                                             @if (!$prod->dispatch_to_rnd_at)
                                                                 <form action="{{ route('production.dispatchToRnd') }}"
                                                                     method="POST">
@@ -626,32 +639,48 @@
                                                                     <input type="hidden" name="id"
                                                                         value="{{ $prod->id }}">
 
-                                                                    <select name="dispatched_by"
-                                                                        class="w-full px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                                        required>
-                                                                        <option value="" disabled selected>Select Name
-                                                                        </option>
-                                                                        <option value="Kanchana Madushani">Kanchana Madushani
-                                                                        </option>
-                                                                        <option value="Imashi Prasangika">Imashi Prasangika
-                                                                        </option>
-                                                                        <option value="Tenuli Dihansa">Tenuli Dihansa</option>
-                                                                        <option value="Sanduni Indeewari">Sanduni Indeewari
-                                                                        </option>
-                                                                        <option value="Kanchana Dharmadasa">Kanchana Dharmadasa
-                                                                        </option>
-                                                                    </select>
+                                                                    <div class="relative inline-block text-left w-56">
+                                                                        <button type="button"
+                                                                            class="dropdown-btn inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50"
+                                                                            onclick="toggleDropdownDispatch(this, 'dispatch')">
+                                                                            <span class="selected-dispatch">Select Name</span>
+                                                                            <svg class="ml-2 h-5 w-5 text-gray-400"
+                                                                                viewBox="0 0 20 20" fill="currentColor">
+                                                                                <path fill-rule="evenodd"
+                                                                                    d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
+                                                                                    clip-rule="evenodd" />
+                                                                            </svg>
+                                                                        </button>
 
-                                                                    @php
-                                                                        $disableDispatch =
-                                                                            empty($prod->production_output) ||
-                                                                            empty($prod->damaged_output);
-                                                                    @endphp
+                                                                        <div
+                                                                            class="dropdown-menu-dispatch hidden absolute z-10 mt-2 w-full rounded-md bg-white shadow-lg ring-1 ring-black/5 max-h-48 overflow-y-auto">
+                                                                            <div class="p-2 sticky top-0 bg-white z-10">
+                                                                                <input type="text"
+                                                                                    placeholder="Search name..."
+                                                                                    class="w-full px-2 py-1 text-sm border rounded-md"
+                                                                                    oninput="filterDropdownOptionsDispatch(this)" />
+                                                                            </div>
+
+                                                                            <div class="py-1" role="listbox"
+                                                                                tabindex="-1">
+                                                                                @foreach ($dispatchNames as $name)
+                                                                                    <button type="button"
+                                                                                        class="dropdown-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                                                                        onclick="selectDropdownOptionDispatch(this, '{{ $name }}', 'dispatch')">
+                                                                                        {{ $name }}
+                                                                                    </button>
+                                                                                @endforeach
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <input type="hidden" name="dispatched_by"
+                                                                            class="input-dispatch">
+                                                                    </div>
 
                                                                     <button type="submit"
                                                                         class="sample-dispatch-btn mt-1 px-2 py-1 rounded transition-all duration-200 w-full
-                {{ $disableDispatch ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : 'bg-gray-300 text-black hover:bg-gray-400' }}"
-                                                                        {{ $disableDispatch ? 'disabled title = Please enter Production and Damaged Output first' : '' }}>
+                        {{ $disableDispatch ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : 'bg-gray-300 text-black hover:bg-gray-400' }}"
+                                                                        {{ $disableDispatch ? 'disabled title=Please enter Production and Damaged Output first' : '' }}>
                                                                         Dispatch
                                                                     </button>
                                                                 </form>
@@ -1112,6 +1141,40 @@
 
                 });
             }
+        });
+    </script>
+
+    <script>
+        function toggleDropdownDispatch(button, type) {
+            const dropdownMenu = button.nextElementSibling;
+            document.querySelectorAll('.dropdown-menu-' + type).forEach(menu => {
+                if (menu !== dropdownMenu) menu.classList.add('hidden');
+            });
+            dropdownMenu.classList.toggle('hidden');
+        }
+
+        function selectDropdownOptionDispatch(button, selectedValue, type) {
+            const dropdown = button.closest('.relative');
+            dropdown.querySelector('.selected-' + type).innerText = selectedValue;
+            dropdown.querySelector('.input-' + type).value = selectedValue;
+            dropdown.querySelector('.dropdown-menu-' + type).classList.add('hidden');
+        }
+
+        function filterDropdownOptionsDispatch(input) {
+            const filter = input.value.toLowerCase();
+            const options = input.closest('[class^="dropdown-menu-"]').querySelectorAll('.dropdown-option');
+            options.forEach(option => {
+                const text = option.textContent.toLowerCase();
+                option.style.display = text.includes(filter) ? 'block' : 'none';
+            });
+        }
+
+        document.addEventListener('click', function(event) {
+            document.querySelectorAll('[class^="dropdown-menu-"]').forEach(menu => {
+                if (!menu.contains(event.target) && !menu.previousElementSibling.contains(event.target)) {
+                    menu.classList.add('hidden');
+                }
+            });
         });
     </script>
 @endsection
