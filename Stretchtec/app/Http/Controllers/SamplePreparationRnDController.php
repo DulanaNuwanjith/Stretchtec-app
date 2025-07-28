@@ -299,18 +299,44 @@ class SamplePreparationRnDController extends Controller
 
     public function updateDevelopedStatus(Request $request)
     {
+        $request->validate([
+            'id' => 'required|exists:sample_preparation_rnd,id',
+            'alreadyDeveloped' => 'required|string',
+            'shade' => 'nullable|string',
+            'tkt' => 'nullable|string',
+            'yarnSupplier' => 'nullable|string',
+            'value' => 'nullable|numeric',
+        ]);
+
         $prep = SamplePreparationRnD::findOrFail($request->id);
 
-        // Disallow update if locked
+        // Disallow update if locked (you can adjust this condition if locking rules differ)
         if ($prep->alreadyDeveloped || $prep->developPlannedDate) {
             return back()->with('error', 'Status is locked and cannot be changed.');
         }
 
+        // Always update alreadyDeveloped
         $prep->alreadyDeveloped = $request->alreadyDeveloped;
+
+        // Only update extra fields when Tape Match Pan Asia
+        if ($request->alreadyDeveloped === 'Tape Match Pan Asia') {
+            $prep->shade = $request->shade;
+            $prep->tkt = $request->tkt;
+            $prep->yarnSupplier = $request->yarnSupplier;
+            $prep->yarnOrderedWeight = $request->value;
+
+            // Lock related fields
+            $prep->is_shade_locked = true;
+            $prep->is_tkt_locked = true;
+            $prep->is_supplier_locked = true;
+            $prep->is_yarn_ordered_weight_locked = true;
+        }
+
         $prep->save();
 
         return back()->with('success', 'Developed status updated successfully!');
     }
+
 
     public function updateYarnWeights(Request $request)
     {

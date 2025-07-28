@@ -490,61 +490,156 @@
                                                     @endif
                                                 </td>
 
-                                                <!-- Already Developed Column -->
-                                                <td
-                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300">
-                                                    <div class="relative inline-block text-left">
+                                                <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300">
+                                                    <div x-data="{
+            openDropdown: false,
+            openModal: false,
+            selectedStatus: '{{ $prep->alreadyDeveloped ?? 'Need to Develop' }}',
+            id: {{ $prep->id }},
+            setStatus(status) {
+                if(status === 'Tape Match Pan Asia') {
+                    // Open modal instead of submitting form immediately
+                    this.openModal = true;
+                    this.openDropdown = false;
+                } else {
+                    this.selectedStatus = status;
+                    // Submit the form for other statuses
+                    this.$refs.formAlreadyDevelopedInput.value = status;
+                    this.$refs.form.submit();
+                }
+            },
+            toggleDropdown() {
+                this.openDropdown = !this.openDropdown;
+            }
+        }"
+                                                         class="relative inline-block text-left"
+                                                         @click.away="openDropdown = false; openModal = false">
+
                                                         @if ($prep->alreadyDeveloped == null)
-                                                            <form method="POST"
-                                                                action="{{ route('rnd.updateDevelopedStatus') }}">
+                                                            {{-- Form for Need to Develop or No Need to Develop --}}
+                                                            <form method="POST" action="{{ route('rnd.updateDevelopedStatus') }}" x-ref="form">
                                                                 @csrf
-                                                                <input type="hidden" name="id"
-                                                                    value="{{ $prep->id }}">
-                                                                <input type="hidden" name="alreadyDeveloped"
-                                                                    id="alreadyDevelopedInput{{ $prep->id }}"
-                                                                    value="Need to Develop">
+                                                                <input type="hidden" name="id" value="{{ $prep->id }}">
+                                                                <input type="hidden" name="alreadyDeveloped" x-ref="formAlreadyDevelopedInput" value="Need to Develop">
 
                                                                 <!-- Dropdown Button -->
                                                                 <button type="button"
-                                                                    id="alreadyDevelopedDropdown{{ $prep->id }}"
-                                                                    class="inline-flex justify-between w-48 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10"
-                                                                    onclick="toggleDevelopedDropdown(event, {{ $prep->id }})">
-                                                                    <span
-                                                                        id="selectedAlreadyDeveloped{{ $prep->id }}">Need
-                                                                        to Develop</span>
-                                                                    <svg class="ml-2 h-5 w-5 text-gray-400"
-                                                                        viewBox="0 0 20 20" fill="currentColor">
+                                                                        class="inline-flex justify-between w-48 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10"
+                                                                        @click="toggleDropdown()"
+                                                                        aria-haspopup="true" aria-expanded="openDropdown">
+                                                                    <span x-text="selectedStatus"></span>
+                                                                    <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                                                         <path fill-rule="evenodd"
-                                                                            d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
-                                                                            clip-rule="evenodd" />
+                                                                              d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
+                                                                              clip-rule="evenodd" />
                                                                     </svg>
                                                                 </button>
 
                                                                 <!-- Dropdown Menu -->
-                                                                <div id="alreadyDevelopedDropdownMenu{{ $prep->id }}"
-                                                                    class="hidden absolute mt-2 w-48 rounded-md bg-white shadow-lg ring-1 ring-black/5 z-20">
+                                                                <div x-show="openDropdown" x-transition
+                                                                     class="absolute mt-2 w-48 rounded-md bg-white shadow-lg ring-1 ring-black/5 z-20"
+                                                                     style="display: none;">
                                                                     <div class="py-1">
-                                                                        <button type="submit"
-                                                                            onclick="setDevelopedStatus({{ $prep->id }}, 'Need to Develop')"
-                                                                            class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                                                        <button type="button"
+                                                                                @click.prevent="setStatus('Need to Develop')"
+                                                                                class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                                                             Need to Develop
                                                                         </button>
-                                                                        <button type="submit"
-                                                                            onclick="setDevelopedStatus({{ $prep->id }}, 'No Need to Develop')"
-                                                                            class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                                                        <button type="button"
+                                                                                @click.prevent="setStatus('No Need to Develop')"
+                                                                                class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                                                             No Need to Develop
                                                                         </button>
-                                                                        <button type="submit"
-                                                                            onclick="setDevelopedStatus({{ $prep->id }}, 'Tape Match Pan Asia')"
-                                                                            class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                                                        <button type="button"
+                                                                                @click.prevent="setStatus('Tape Match Pan Asia')"
+                                                                                class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                                                             Tape Match Pan Asia
                                                                         </button>
                                                                     </div>
                                                                 </div>
                                                             </form>
+
+                                                            {{-- Modal for Tape Match Pan Asia --}}
+                                                            <div x-show="openModal" x-transition
+                                                                 class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+                                                                 style="display: none;">
+                                                                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 w-full max-w-md relative">
+                                                                    <button @click="openModal = false"
+                                                                            class="absolute top-2 right-2 text-gray-600 hover:text-gray-900">✕</button>
+
+                                                                    <h2 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">
+                                                                        Additional Info for Tape Match Pan Asia
+                                                                    </h2>
+
+                                                                    {{-- Example form, you can add fields here as required --}}
+                                                                    <form method="POST" action="{{ route('rnd.updateDevelopedStatus') }}">
+                                                                        @csrf
+                                                                        <input type="hidden" name="id" value="{{ $prep->id }}">
+                                                                        <input type="hidden" name="alreadyDeveloped" value="Tape Match Pan Asia">
+
+                                                                        {{-- Add any extra inputs here if needed --}}
+                                                                        <p class="mb-4 text-sm text-gray-600 dark:text-gray-300">
+                                                                            Please confirm your Selection and add extra information.
+                                                                        </p>
+
+                                                                        {{-- Shade Input --}}
+                                                                        <div class="mb-4">
+                                                                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                                                                Shade
+                                                                            </label>
+                                                                            <input type="text" name="shade"
+                                                                                   class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                                                   required>
+
+                                                                        </div>
+
+                                                                        {{-- Weight Input --}}
+                                                                        <div class="mb-4">
+                                                                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                                                                Weight
+                                                                            </label>
+                                                                            <input type="number" step="0.01" name="value"
+                                                                                   class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                                                   required>
+                                                                        </div>
+
+                                                                        {{-- Ticket Input --}}
+                                                                        <div class="mb-4">
+                                                                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                                                                Ticket Number
+                                                                            </label>
+                                                                            <input type="number" name="tkt"
+                                                                                   class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                                                   required>
+                                                                        </div>
+
+                                                                        {{-- Supplier Input --}}
+                                                                        <div class="mb-4">
+                                                                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                                                                Supplier
+                                                                            </label>
+                                                                            <input type="text" name="yarnSupplier"
+                                                                                   class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                                                   required>
+                                                                        </div>
+
+                                                                        <div class="flex justify-end gap-3">
+                                                                            <button type="button" @click="openModal = false"
+                                                                                    class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400">
+                                                                                Cancel
+                                                                            </button>
+                                                                            <button type="submit"
+                                                                                    class="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700">
+                                                                                Confirm
+                                                                            </button>
+                                                                        </div>
+                                                                    </form>
+                                                                </div>
+                                                            </div>
+
                                                         @else
-                                                            <div
-                                                                class="inline-flex items-center w-48 rounded-md bg-gray-200 px-3 py-2 text-sm font-semibold text-gray-500 shadow-inner h-10">
+                                                            {{-- Show locked status --}}
+                                                            <div class="inline-flex items-center w-48 rounded-md bg-gray-200 px-3 py-2 text-sm font-semibold text-gray-500 shadow-inner h-10">
                                                                 {{ $prep->alreadyDeveloped }}
                                                             </div>
                                                         @endif
@@ -610,9 +705,8 @@
                                                                     Pending
                                                                 </button>
 
-                                                                {{-- Modal --}}
-                                                                <div x-show="open"
-                                                                     x-transition
+                                                                {{-- Modal for Marking Yarn Ordered --}}
+                                                                <div x-show="open" x-transition
                                                                      class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
                                                                      style="display: none;">
                                                                     <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 w-full max-w-md relative">
@@ -623,10 +717,17 @@
                                                                             ✕
                                                                         </button>
 
-                                                                        <h2 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">
+                                                                        {{-- Title --}}
+                                                                        <h2 class="text-lg font-semibold text-gray-800 dark:text-white mb-2">
                                                                             Mark Yarn Ordered
                                                                         </h2>
 
+                                                                        {{-- Description --}}
+                                                                        <p class="mb-5 text-sm text-gray-600 dark:text-gray-300">
+                                                                            Please provide the required details for the yarn order. All fields are mandatory.
+                                                                        </p>
+
+                                                                        {{-- Form --}}
                                                                         <form action="{{ route('rnd.markYarnOrdered') }}" method="POST">
                                                                             @csrf
                                                                             <input type="hidden" name="id" value="{{ $prep->id }}">
@@ -637,7 +738,8 @@
                                                                                     PO Number
                                                                                 </label>
                                                                                 <input type="text" name="yarnOrderedPONumber"
-                                                                                       class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                                                       placeholder="Enter PO Number"
+                                                                                       class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm focus:ring-2 focus:ring-indigo-400 focus:outline-none"
                                                                                        required>
                                                                             </div>
 
@@ -647,18 +749,19 @@
                                                                                     Shade
                                                                                 </label>
                                                                                 <input type="text" name="shade"
-                                                                                       class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                                                       placeholder="Enter Shade"
+                                                                                       class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm focus:ring-2 focus:ring-indigo-400 focus:outline-none"
                                                                                        required>
-
                                                                             </div>
 
                                                                             {{-- Weight Input --}}
                                                                             <div class="mb-4">
                                                                                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                                                                    Weight
+                                                                                    Weight (in grams)
                                                                                 </label>
                                                                                 <input type="number" step="0.01" name="value"
-                                                                                       class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                                                       placeholder="e.g. 150.50"
+                                                                                       class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm focus:ring-2 focus:ring-indigo-400 focus:outline-none"
                                                                                        required>
                                                                             </div>
 
@@ -668,17 +771,19 @@
                                                                                     Ticket Number
                                                                                 </label>
                                                                                 <input type="number" name="tkt"
-                                                                                       class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                                                       placeholder="Enter Ticket Number"
+                                                                                       class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm focus:ring-2 focus:ring-indigo-400 focus:outline-none"
                                                                                        required>
                                                                             </div>
 
                                                                             {{-- Supplier Input --}}
-                                                                            <div class="mb-4">
+                                                                            <div class="mb-6">
                                                                                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                                                                                     Supplier
                                                                                 </label>
                                                                                 <input type="text" name="yarnSupplier"
-                                                                                       class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                                                       placeholder="Enter Supplier Name"
+                                                                                       class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm focus:ring-2 focus:ring-indigo-400 focus:outline-none"
                                                                                        required>
                                                                             </div>
 
@@ -686,11 +791,11 @@
                                                                             <div class="flex justify-end gap-3">
                                                                                 <button type="button"
                                                                                         @click="open = false"
-                                                                                        class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400">
+                                                                                        class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400 transition">
                                                                                     Cancel
                                                                                 </button>
                                                                                 <button type="submit"
-                                                                                        class="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700">
+                                                                                        class="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition">
                                                                                     Save
                                                                                 </button>
                                                                             </div>
