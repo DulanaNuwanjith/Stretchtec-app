@@ -15,8 +15,9 @@ class SamplePreparationProductionController extends Controller
         $operators = \App\Models\OperatorsandSupervisors::where('role', 'OPERATOR')->get();
         $supervisors = \App\Models\OperatorsandSupervisors::where('role', 'SUPERVISOR')->get();
 
-        // Base query
-        $productionsQuery = SamplePreparationProduction::with('samplePreparationRnD.sampleInquiry')->latest();
+        $productions = SamplePreparationProduction::with('samplePreparationRnD.sampleInquiry')
+            ->latest()
+            ->paginate(10); // you can change 10 to the number of records you want per page
 
         // Tab 3 Filters
         if ($request->filled('tab') && $request->tab == '3') {
