@@ -346,7 +346,7 @@
                                                 class="font-bold px-4 py-3 w-48 text-center text-xs font-medium uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">
                                                 Colour Match Sent Date</th>
                                             <th
-                                                class="font-bold px-4 py-3 w-48 text-center text-xs font-medium uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">
+                                                class="font-bold px-4 py-3 w-72 text-center text-xs font-medium uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">
                                                 Colour Match Receive Date</th>
                                             <th
                                                 class="font-bold px-4 py-3 w-56 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
@@ -486,13 +486,28 @@
                                                             </button>
                                                         </form>
                                                     @else
-                                                        <span
-                                                            class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-blue-100 dark:bg-gray-800 px-3 py-1 rounded">
-                                                            Received on <br>
-                                                            {{ \Carbon\Carbon::parse($prep->colourMatchReceiveDate)->format('Y-m-d') }}
-                                                            at
-                                                            {{ \Carbon\Carbon::parse($prep->colourMatchReceiveDate)->format('H:i') }}
-                                                        </span>
+                                                        <div class="flex flex-wrap justify-center gap-2">
+                                                            <span
+                                                                class="inline-block text-sm font-semibold text-gray-700 dark:text-white bg-blue-100 dark:bg-gray-800 px-3 py-1 rounded">
+                                                                Received on <br>
+                                                                {{ \Carbon\Carbon::parse($prep->colourMatchReceiveDate)->format('Y-m-d') }}
+                                                                at
+                                                                {{ \Carbon\Carbon::parse($prep->colourMatchReceiveDate)->format('H:i') }}
+                                                            </span>
+
+                                                            {{-- Reject button --}}
+                                                            <form action="" method="POST">
+                                                                @csrf
+                                                                <input type="hidden" name="id"
+                                                                    value="{{ $prep->id }}">
+                                                                <!-- Trigger Button -->
+                                                                <button type="button"
+                                                                    class="reject-btn mt-3 px-3 py-1 text-white bg-red-500 hover:bg-red-600 rounded text-sm"
+                                                                    onclick="openRejectModal({{ $prep->id }})">
+                                                                    Reject
+                                                                </button>
+                                                            </form>
+                                                        </div>
                                                     @endif
                                                 </td>
 
@@ -1295,6 +1310,26 @@
                                         @endforeach
                                     </tbody>
                                 </table>
+                                <!-- Reject Reason Modal -->
+                                <div id="rejectModal"
+                                    class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+                                    <div class="bg-white p-6 rounded-xl shadow-md w-96">
+                                        <h2 class="text-lg font-semibold mb-4 text-blue-900">Reject Reason</h2>
+                                        <form action="" method="POST">
+                                            @csrf
+                                            <input type="hidden" name="id" id="rejectSampleId">
+                                            <textarea name="reason" id="rejectReason" rows="4" required
+                                                class="w-full border border-gray-300 rounded p-2 mb-4" placeholder="Enter reason for rejection..."></textarea>
+                                            <div class="flex justify-end gap-2 text-sm">
+                                                <button type="button" onclick="closeRejectModal()"
+                                                    class="px-3 py-1 bg-gray-300 hover:bg-gray-400 rounded">Cancel</button>
+                                                <button type="submit"
+                                                    class="px-3 py-1 bg-red-500 text-white hover:bg-red-700 rounded">Submit</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+
                                 <!-- Sample R&D Details Modal -->
                                 <div id="openRndSampleModal"
                                     class="fixed inset-0 z-50 hidden bg-black bg-opacity-50 flex items-center justify-center py-5"
@@ -1906,5 +1941,16 @@
             // Reload the page to clear all filters and reset state
             window.location.href = window.location.pathname;
         });
+    </script>
+    <script>
+        function openRejectModal(prepId) {
+            document.getElementById('rejectSampleId').value = prepId;
+            document.getElementById('rejectModal').classList.remove('hidden');
+        }
+
+        function closeRejectModal() {
+            document.getElementById('rejectModal').classList.add('hidden');
+            document.getElementById('rejectReason').value = ''; // Optional: clear input
+        }
     </script>
 @endsection
