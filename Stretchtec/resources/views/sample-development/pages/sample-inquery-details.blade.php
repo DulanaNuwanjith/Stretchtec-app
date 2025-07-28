@@ -402,14 +402,17 @@
                                 </form>
                             </div>
 
-
                             <div class="flex justify-between items-center mb-6">
                                 <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Sample Inquiry Records</h1>
                                 <div class="flex space-x-3">
-                                    <button onclick="document.getElementById('addSampleModal').classList.remove('hidden')"
-                                        class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded shadow">
-                                        + Add New Order
-                                    </button>
+                                    {{-- Only show Add New Order if NOT ADMIN --}}
+                                    @if (Auth::user()->role !== 'ADMIN')
+                                        <button onclick="document.getElementById('addSampleModal').classList.remove('hidden')"
+                                                class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded shadow">
+                                            + Add New Order
+                                        </button>
+                                    @endif
+
                                     <a href="{{ route('sampleStock.index') }}">
                                         <button
                                             class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded shadow">
@@ -635,21 +638,27 @@
                                                 </td>
 
                                                 {{-- Sent Order to Sample Development --}}
-                                                <td
-                                                    class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                                <td class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
                                                     <div class="colour-match-sent">
                                                         @if (is_null($inquiry->sentToSampleDevelopmentDate))
-                                                            {{-- Show form with clickable button --}}
-                                                            <form action="{{ route('inquiry.markSentToSampleDev') }}"
-                                                                method="POST">
-                                                                @csrf
-                                                                <input type="hidden" name="id"
-                                                                    value="{{ $inquiry->id }}">
-                                                                <button type="submit"
-                                                                    class="delivered-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
+                                                            @if (Auth::user()->role === 'ADMIN')
+                                                                {{-- Read-only for ADMIN --}}
+                                                                <button type="button"
+                                                                        class="delivered-btn bg-gray-200 text-gray-500 px-2 py-1 mt-3 rounded cursor-not-allowed"
+                                                                        disabled>
                                                                     Pending
                                                                 </button>
-                                                            </form>
+                                                            @else
+                                                                {{-- Show form with clickable button for others --}}
+                                                                <form action="{{ route('inquiry.markSentToSampleDev') }}" method="POST">
+                                                                    @csrf
+                                                                    <input type="hidden" name="id" value="{{ $inquiry->id }}">
+                                                                    <button type="submit"
+                                                                            class="delivered-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
+                                                                        Pending
+                                                                    </button>
+                                                                </form>
+                                                            @endif
                                                         @else
                                                             {{-- Show static timestamp info --}}
                                                             <span
@@ -711,31 +720,46 @@
                                                         class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                         value="{{ $inquiry->referenceNo ?? 'N/D' }}" />
                                                 </td>
+
                                                 <td class="px-4 py-3 border-r border-gray-300 text-center">
                                                     <div class="delivery-item inline-block">
                                                         @if (is_null($inquiry->customerDeliveryDate))
                                                             @if ($inquiry->referenceNo)
-                                                                <form action="{{ route('inquiry.markCustomerDelivered') }}" method="POST" class="inline-block text-left">
-                                                                    @csrf
-                                                                    <input type="hidden" name="id" value="{{ $inquiry->id }}">
-
-                                                                    <input type="text"
-                                                                           name="dnote_no"
-                                                                           placeholder="Enter DNote No"
-                                                                           required
-                                                                           class="px-3 py-2 mb-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm w-40">
-
-                                                                    <button type="submit"
-                                                                            class="w-full px-3 py-1 rounded text-sm transition-all duration-200 bg-green-600 hover:bg-green-700 text-white">
+                                                                @if (Auth::user()->role === 'ADMIN')
+                                                                    {{-- Read-only for ADMIN --}}
+                                                                    <div class="bg-gray-200 text-gray-500 px-3 py-2 rounded-md text-sm w-40 cursor-not-allowed">
+                                                                        Enter DNote No
+                                                                    </div>
+                                                                    <button type="button"
+                                                                            class="w-full px-3 py-1 mt-2 rounded text-sm bg-green-300 text-white cursor-not-allowed"
+                                                                            disabled>
                                                                         Delivered
                                                                     </button>
-                                                                </form>
+                                                                @else
+                                                                    {{-- Editable form for non-admin users --}}
+                                                                    <form action="{{ route('inquiry.markCustomerDelivered') }}" method="POST" class="inline-block text-left">
+                                                                        @csrf
+                                                                        <input type="hidden" name="id" value="{{ $inquiry->id }}">
+
+                                                                        <input type="text"
+                                                                               name="dnote_no"
+                                                                               placeholder="Enter DNote No"
+                                                                               required
+                                                                               class="px-3 py-2 mb-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm w-40">
+
+                                                                        <button type="submit"
+                                                                                class="w-full px-3 py-1 rounded text-sm transition-all duration-200 bg-green-600 hover:bg-green-700 text-white">
+                                                                            Delivered
+                                                                        </button>
+                                                                    </form>
+                                                                @endif
                                                             @else
                                                                 <div class="timestamp mt-1 text-xs text-red-500 dark:text-red-400">
                                                                     Reference No is required before marking delivery.
                                                                 </div>
                                                             @endif
                                                         @else
+                                                            {{-- Show static timestamp info --}}
                                                             <span class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-green-100 dark:bg-gray-800 px-3 py-1 rounded">
                                                                 Delivered on <br>
                                                                 {{ \Carbon\Carbon::parse($inquiry->customerDeliveryDate)->format('Y-m-d') }} at
@@ -754,12 +778,8 @@
                                                 <!-- Customer Decision -->
                                                 <td class="px-4 whitespace-normal break-words border-r border-gray-300">
                                                     @if ($inquiry->customerDeliveryDate)
-                                                        <form
-                                                            action="{{ route('sample-inquery-details.update-decision', $inquiry->id) }}"
-                                                            method="POST" class="relative inline-block text-left w-48">
-                                                            @csrf
-                                                            @method('PATCH')
-
+                                                        @if (Auth::user()->role === 'ADMIN')
+                                                            {{-- Read-only for ADMIN --}}
                                                             @php
                                                                 $status = $inquiry->customerDecision;
                                                                 $colorClass = match ($status) {
@@ -776,60 +796,88 @@
                                                                 };
                                                             @endphp
 
-                                                            <!-- Dropdown Button -->
-                                                            <button type="button"
-                                                                id="customerDecisionDropdownTable-{{ $inquiry->id }}"
-                                                                class="inline-flex justify-between w-48 rounded-md px-3 py-2 text-sm font-semibold shadow-sm ring-1 h-10 transition-all duration-200 {{ $colorClass }}"
-                                                                onclick="toggleCustomerDecisionDropdownTable(event, '{{ $inquiry->id }}')">
-                                                                <span
-                                                                    id="selectedCustomerDecisionTable-{{ $inquiry->id }}">{{ $status }}</span>
-                                                                <svg class="ml-2 h-5 w-5 text-gray-400"
-                                                                    viewBox="0 0 20 20" fill="currentColor">
-                                                                    <path fill-rule="evenodd"
-                                                                        d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
-                                                                        clip-rule="evenodd" />
-                                                                </svg>
-                                                            </button>
-
-                                                            <!-- Dropdown Menu -->
-                                                            <div id="customerDecisionDropdownMenuTable-{{ $inquiry->id }}"
-                                                                class="hidden absolute z-10 mt-2 w-48 rounded-md bg-white shadow-lg ring-1 ring-black/5 dark:bg-gray-700">
-                                                                <div class="py-1" role="listbox" tabindex="-1"
-                                                                    aria-labelledby="customerDecisionDropdownTable-{{ $inquiry->id }}">
-                                                                    @php
-                                                                        $options = [
-                                                                            'Pending',
-                                                                            'Order Received',
-                                                                            'Order Not Received',
-                                                                            'Order Rejected',
-                                                                        ];
-                                                                        $colors = [
-                                                                            'Pending' =>
-                                                                                'hover:bg-gray-100 text-gray-700 dark:text-white dark:hover:bg-gray-600',
-                                                                            'Order Received' =>
-                                                                                'hover:bg-green-100 text-green-700 dark:text-white dark:hover:bg-green-600',
-                                                                            'Order Not Received' =>
-                                                                                'hover:bg-yellow-100 text-yellow-700 dark:text-white dark:hover:bg-yellow-600',
-                                                                            'Order Rejected' =>
-                                                                                'hover:bg-red-100 text-red-700 dark:text-white dark:hover:bg-red-600',
-                                                                        ];
-                                                                    @endphp
-
-                                                                    @foreach ($options as $option)
-                                                                        <button type="submit" name="customerDecision"
-                                                                            value="{{ $option }}"
-                                                                            class="decision-option w-full text-left px-4 py-2 text-sm {{ $colors[$option] }}"
-                                                                            onclick="selectCustomerDecisionTable('{{ $option }}', '{{ $inquiry->id }}')">
-                                                                            {{ $option }}
-                                                                        </button>
-                                                                    @endforeach
-                                                                </div>
+                                                            <div class="inline-flex justify-between items-center w-48 rounded-md px-3 py-2 text-sm font-semibold shadow-sm h-10 {{ $colorClass }} cursor-not-allowed"
+                                                                 title="Admins cannot change customer decision">
+                                                                <span>{{ $status }}</span>
                                                             </div>
-                                                        </form>
+                                                        @else
+                                                            {{-- Editable dropdown for non-admins --}}
+                                                            <form
+                                                                action="{{ route('sample-inquery-details.update-decision', $inquiry->id) }}"
+                                                                method="POST" class="relative inline-block text-left w-48">
+                                                                @csrf
+                                                                @method('PATCH')
+
+                                                                @php
+                                                                    $status = $inquiry->customerDecision;
+                                                                    $colorClass = match ($status) {
+                                                                        'Order Rejected'
+                                                                            => 'bg-red-100 text-red-800 dark:bg-red-700 dark:text-white',
+                                                                        'Order Received'
+                                                                            => 'bg-green-100 text-green-800 dark:bg-green-700 dark:text-white',
+                                                                        'Order Not Received'
+                                                                            => 'bg-yellow-100 text-yellow-800 dark:bg-yellow-700 dark:text-white',
+                                                                        'Pending'
+                                                                            => 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-white',
+                                                                        default
+                                                                            => 'bg-white text-gray-900 dark:bg-gray-700 dark:text-white',
+                                                                    };
+                                                                @endphp
+
+                                                                    <!-- Dropdown Button -->
+                                                                <button type="button"
+                                                                        id="customerDecisionDropdownTable-{{ $inquiry->id }}"
+                                                                        class="inline-flex justify-between w-48 rounded-md px-3 py-2 text-sm font-semibold shadow-sm ring-1 h-10 transition-all duration-200 {{ $colorClass }}"
+                                                                        onclick="toggleCustomerDecisionDropdownTable(event, '{{ $inquiry->id }}')">
+                                                                    <span id="selectedCustomerDecisionTable-{{ $inquiry->id }}">{{ $status }}</span>
+                                                                    <svg class="ml-2 h-5 w-5 text-gray-400"
+                                                                         viewBox="0 0 20 20" fill="currentColor">
+                                                                        <path fill-rule="evenodd"
+                                                                              d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
+                                                                              clip-rule="evenodd" />
+                                                                    </svg>
+                                                                </button>
+
+                                                                <!-- Dropdown Menu -->
+                                                                <div id="customerDecisionDropdownMenuTable-{{ $inquiry->id }}"
+                                                                     class="hidden absolute z-10 mt-2 w-48 rounded-md bg-white shadow-lg ring-1 ring-black/5 dark:bg-gray-700">
+                                                                    <div class="py-1" role="listbox" tabindex="-1"
+                                                                         aria-labelledby="customerDecisionDropdownTable-{{ $inquiry->id }}">
+                                                                        @php
+                                                                            $options = [
+                                                                                'Pending',
+                                                                                'Order Received',
+                                                                                'Order Not Received',
+                                                                                'Order Rejected',
+                                                                            ];
+                                                                            $colors = [
+                                                                                'Pending' =>
+                                                                                    'hover:bg-gray-100 text-gray-700 dark:text-white dark:hover:bg-gray-600',
+                                                                                'Order Received' =>
+                                                                                    'hover:bg-green-100 text-green-700 dark:text-white dark:hover:bg-green-600',
+                                                                                'Order Not Received' =>
+                                                                                    'hover:bg-yellow-100 text-yellow-700 dark:text-white dark:hover:bg-yellow-600',
+                                                                                'Order Rejected' =>
+                                                                                    'hover:bg-red-100 text-red-700 dark:text-white dark:hover:bg-red-600',
+                                                                            ];
+                                                                        @endphp
+
+                                                                        @foreach ($options as $option)
+                                                                            <button type="submit" name="customerDecision"
+                                                                                    value="{{ $option }}"
+                                                                                    class="decision-option w-full text-left px-4 py-2 text-sm {{ $colors[$option] }}"
+                                                                                    onclick="selectCustomerDecisionTable('{{ $option }}', '{{ $inquiry->id }}')">
+                                                                                {{ $option }}
+                                                                            </button>
+                                                                        @endforeach
+                                                                    </div>
+                                                                </div>
+                                                            </form>
+                                                        @endif
                                                     @else
-                                                        <!-- Disabled style or note -->
+                                                        <!-- Disabled style before delivery -->
                                                         <div class="inline-flex items-center w-48 h-10 px-3 py-2 text-sm rounded-md bg-gray-200 text-gray-500 cursor-not-allowed"
-                                                            title="Customer Decision available after delivery only">
+                                                             title="Customer Decision available after delivery only">
                                                             Awaiting Delivery
                                                         </div>
                                                     @endif
