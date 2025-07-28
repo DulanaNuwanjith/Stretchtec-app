@@ -89,10 +89,24 @@ class SamplePreparationRnDController extends Controller
     {
         $request->validate([
             'id' => 'required|exists:sample_preparation_rnd,id',
+            'yarnOrderedPONumber' => 'required|string',
+            'value'=> 'required|numeric',
+            'shade' => 'required|string',
+            'tkt' => 'required|string',
+            'yarnSupplier' => 'required|string',
         ]);
 
         $rnd = SamplePreparationRnD::findOrFail($request->id);
         $rnd->yarnOrderedDate = Carbon::now();
+        $rnd->yarnOrderedPONumber = $request->yarnOrderedPONumber;
+        $rnd->yarnOrderedWeight = $request->value;
+        $rnd->shade = $request->shade;
+        $rnd->tkt = $request->tkt;
+        $rnd->yarnSupplier = $request->yarnSupplier;
+        $rnd->is_po_locked = true; // Lock the PO field
+        $rnd->is_shade_locked = true; // Lock the shade field
+        $rnd->is_tkt_locked = true; // Lock the TKT field
+        $rnd->is_supplier_locked = true; // Lock the supplier field
         $rnd->save();
 
         return back()->with('success', 'Yarn Ordered Date marked.');
