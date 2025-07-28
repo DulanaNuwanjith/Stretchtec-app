@@ -1,3 +1,4 @@
+@php use Illuminate\Support\Facades\Auth; @endphp
 <!DOCTYPE html>
 <html lang="en">
 
@@ -44,12 +45,28 @@
                 </li>
 
                 <li>
-                    <a href="{{ route('sample-inquery-details.index') }}"
-                       class="flex items-center px-4 py-2 rounded hover:bg-gray-200 {{ request()->routeIs('sample-inquery-details.*','sample-preparation-details.*','sample-preparation-production.*','sampleStock.*','leftoverYarn.*') ? 'bg-gray-200' : '' }}">
+                    @php
+                        $userRole = Auth::user()->role;
+                        if ($userRole === 'SUPERADMIN' || $userRole === 'ADMIN' || $userRole === 'CUSTOMERCOORDINATOR') {
+                            $route = route('sample-inquery-details.index');
+                        } elseif ($userRole === 'SUPERADMIN' || $userRole === 'ADMIN' || $userRole === 'SAMPLEDEVELOPER') {
+                            $route = route('sample-preparation-details.index');
+                        } elseif ($userRole === 'SUPERADMIN' || $userRole === 'ADMIN' || $userRole === 'PRODUCTIONOFFICER') {
+                            $route = route('sample-preparation-production.index');
+                        } else {
+                            $route = route('sampleStock.index'); // fallback link for other roles
+                        }
+                    @endphp
+
+                    <a href="{{ $route }}"
+                       class="flex items-center px-4 py-2 rounded hover:bg-gray-200
+                              {{ request()->routeIs('sample-inquery-details.*','sample-preparation-details.*',
+                              'sample-preparation-production.*','sampleStock.*','leftoverYarn.*') ? 'bg-gray-200' : '' }}">
                         <img src="{{ asset('icons/research.png') }}" alt="" class="w-6 h-6 mr-5" />
                         <span>Sample Development</span>
                     </a>
                 </li>
+
 
                 {{-- Only for admin and superadmin --}}
                 @if(in_array($role, ['ADMIN', 'SUPERADMIN']))
