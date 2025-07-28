@@ -133,20 +133,27 @@
                                 </button>
                             </div>
 
-                            <div id="filterFormContainer" class="hidden mt-4">
-                                <!-- Filter Form -->
-                                <form id="filterForm3" method="GET" action="" class="mb-6 flex gap-6 items-center">
-                                    <div class="mb-6 sticky top-0 z-20 flex gap-6 items-center">
-                                        <!-- Sample No Dropdown -->
-                                        <div class="relative inline-block text-left w-48">
-                                            <label for="sampleDropdown"
-                                                class="block text-sm font-medium text-gray-700 mb-1">Sample No</label>
+                            <div id="filterFormContainerTab3" class="mt-4 hidden">
+                                <form id="filterForm3" method="GET"
+                                    action="{{ route('sample-preparation-production.index') }}" class="mb-6">
+                                    {{-- Keep the tab=3 in query to know which tab is active --}}
+                                    <input type="hidden" name="tab" value="3">
 
-                                            <button type="button" id="sampleDropdown"
-                                                class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50"
-                                                onclick="toggleSampleDropdown()" aria-haspopup="listbox"
-                                                aria-expanded="false">
-                                                <span id="selectedSample">Select Sample No</span>
+                                    <div class="flex items-center gap-4 flex-wrap">
+
+                                        {{-- Order No Dropdown --}}
+                                        <div class="relative inline-block text-left w-48">
+                                            <label for="orderDropdownTab3"
+                                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Order
+                                                No</label>
+                                            <input type="hidden" name="order_no" id="orderInputTab3"
+                                                value="{{ request('order_no') }}">
+                                            <button id="orderDropdownTab3" type="button"
+                                                class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10 dark:bg-gray-700 dark:text-white"
+                                                aria-expanded="false" aria-haspopup="listbox"
+                                                onclick="toggleOrderDropdownTab3(event)">
+                                                <span
+                                                    id="selectedOrderNoTab3">{{ request('order_no') ?? 'Select Order No' }}</span>
                                                 <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20"
                                                     fill="currentColor">
                                                     <path fill-rule="evenodd"
@@ -155,71 +162,43 @@
                                                 </svg>
                                             </button>
 
-                                            <div id="sampleDropdownMenu"
-                                                class="hidden absolute z-10 mt-2 w-full rounded-md bg-white shadow-lg ring-1 ring-black/5 max-h-48 overflow-y-auto">
-
-                                                <!-- Search box -->
-                                                <div class="p-2 sticky top-0 bg-white z-10">
-                                                    <input type="text" id="sampleSearchInput"
-                                                        placeholder="Search Sample No..."
-                                                        class="w-full px-2 py-1 text-sm border rounded-md"
-                                                        oninput="filterSamples()" />
-                                                </div>
-
-                                                <div class="py-1" role="listbox" tabindex="-1">
-                                                    <!-- Clear / Reset -->
-                                                    <button type="button"
-                                                        class="sample-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                                        onclick="selectSample('', 'Select Sample No')">
-                                                        All Sample No
-                                                    </button>
-
-                                                    <!-- Sample Options -->
-                                                    <button type="button"
-                                                        class="sample-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                                        onclick="selectSample('001', 'SAMPLE-001')">SAMPLE-001</button>
-                                                    <button type="button"
-                                                        class="sample-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                                        onclick="selectSample('002', 'SAMPLE-002')">SAMPLE-002</button>
-                                                    <button type="button"
-                                                        class="sample-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                                        onclick="selectSample('003', 'SAMPLE-003')">SAMPLE-003</button>
-                                                </div>
+                                            <div id="orderDropdownMenuTab3"
+                                                class="absolute z-40 mt-1 w-full bg-white border rounded-lg shadow-lg hidden max-h-48 overflow-y-auto p-2"
+                                                role="listbox" aria-labelledby="orderDropdownTab3">
+                                                <input type="text" id="orderSearchInputTab3" onkeyup="filterOrdersTab3()"
+                                                    placeholder="Search..."
+                                                    class="w-full px-2 py-1 text-sm border rounded-md dark:bg-gray-600 dark:text-white"
+                                                    autocomplete="off">
+                                                @foreach ($orderNosTab3 as $order)
+                                                    <div onclick="selectOrderTab3('{{ $order }}')" tabindex="0"
+                                                        class="order-option-tab3 px-4 py-2 hover:bg-gray-100 cursor-pointer text-sm">
+                                                        {{ $order }}
+                                                    </div>
+                                                @endforeach
                                             </div>
-
-                                            <input type="hidden" name="sample_no" id="sampleInput">
                                         </div>
 
-                                        <div>
-                                            <label
-                                                class="block text-sm font-medium text-gray-700 dark:text-gray-300">Production
-                                                Deadline</label>
-                                            <input type="date" id="productionDeadlineFilter" name="production_deadline"
-                                                value="{{ request('') }}"
-                                                class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                        {{-- Development Plan Date --}}
+                                        <div class="inline-block text-left w-48">
+                                            <label for="developmentPlanDateTab3"
+                                                class="block text-sm font-medium text-gray-700">Production Deadline</label>
+                                            <input type="date" name="development_plan_date" id="developmentPlanDateTab3"
+                                                value="{{ request('development_plan_date') }}"
+                                                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 text-sm">
                                         </div>
 
-                                        <div>
-                                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Order
-                                                Complete Date</label>
-                                            <input type="date" id="oderCompleteDateFilter" name="order_complete_date"
-                                                value="{{ request('') }}"
-                                                class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                        {{-- Buttons --}}
+                                        <div class="flex items-end space-x-2 mt-2">
+                                            <button type="submit"
+                                                class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Apply
+                                                Filters</button>
+                                            <button type="button" id="clearFiltersBtnTab3" onclick="clearFiltersTab3()"
+                                                class="mt-4 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 px-4 py-2 rounded hover:bg-gray-300">Clear</button>
                                         </div>
+
                                     </div>
-
-                                    <button type="submit"
-                                        class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-                                        Apply Filters
-                                    </button>
-
-                                    <button type="button" id="clearFiltersBtnProduction"
-                                        class="mt-4 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 px-4 py-2 rounded hover:bg-gray-300">
-                                        Clear Filters
-                                    </button>
                                 </form>
                             </div>
-
 
                             <div class="flex justify-between items-center mb-6">
                                 <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Sample Preparation
@@ -822,74 +801,6 @@
         </div>
     </div>
 
-
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const clearFiltersBtn = document.getElementById('clearFiltersBtnProduction');
-            const filterForm = document.getElementById('filterForm3');
-
-            clearFiltersBtn.addEventListener('click', () => {
-                // Reset dropdown label and hidden sample input
-                document.getElementById('selectedSample').innerText = 'All Sample No';
-                document.getElementById('sampleInput').value = '';
-
-                // Reset date fields manually
-                document.getElementById('productionDeadlineFilter').value = '';
-                document.getElementById('oderCompleteDateFilter').value = '';
-
-                // Close dropdown
-                document.getElementById('sampleDropdownMenu').classList.add('hidden');
-                document.getElementById('sampleDropdown').setAttribute('aria-expanded', 'false');
-
-                // Prevent form submission and page reload
-                // filterForm.submit(); // Removed as per your request
-            });
-        });
-
-
-        function toggleSampleDropdown() {
-            const menu = document.getElementById('sampleDropdownMenu');
-            const btn = document.getElementById('sampleDropdown');
-            const expanded = btn.getAttribute('aria-expanded') === 'true';
-
-            menu.classList.toggle('hidden');
-            btn.setAttribute('aria-expanded', String(!expanded));
-
-            if (!menu.classList.contains('hidden')) {
-                document.getElementById('sampleSearchInput').value = '';
-                filterSamples();
-            }
-        }
-
-        function filterSamples() {
-            const filter = document.getElementById('sampleSearchInput').value.toLowerCase();
-            const options = document.querySelectorAll('#sampleDropdownMenu .sample-option');
-
-            options.forEach(option => {
-                const text = option.textContent.toLowerCase();
-                option.style.display = text.includes(filter) ? '' : 'none';
-            });
-        }
-
-        function selectSample(id, label) {
-            document.getElementById('selectedSample').innerText = label;
-            document.getElementById('sampleInput').value = id;
-            document.getElementById('sampleDropdownMenu').classList.add('hidden');
-            document.getElementById('sampleDropdown').setAttribute('aria-expanded', 'false');
-        }
-
-        // Close dropdown if clicking outside of it
-        document.addEventListener('click', function(e) {
-            const btn = document.getElementById('sampleDropdown');
-            const menu = document.getElementById('sampleDropdownMenu');
-
-            if (!btn.contains(e.target) && !menu.contains(e.target)) {
-                menu.classList.add('hidden');
-                btn.setAttribute('aria-expanded', 'false');
-            }
-        });
-    </script>
-
     <script>
         function editServiceRow(rowId) {
             const row = document.getElementById(rowId);
@@ -999,7 +910,7 @@
 
     <script>
         function toggleFilterForm() {
-            const form = document.getElementById('filterFormContainer');
+            const form = document.getElementById('filterFormContainerTab3');
             form.classList.toggle('hidden');
         }
     </script>
@@ -1066,5 +977,137 @@
 
             document.getElementById('viewDetailsSample').classList.remove('hidden');
         }
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // ======= ORDER NO DROPDOWN (Tab 3) =======
+            const orderDropdownBtn = document.getElementById("orderDropdownTab3");
+            const orderDropdownMenu = document.getElementById("orderDropdownMenuTab3");
+            const clearFiltersBtnTab3 = document.getElementById('clearFiltersBtnTab3');
+
+            // Prevent clicks inside dropdown menu from closing it
+            orderDropdownMenu.addEventListener("click", (event) => {
+                event.stopPropagation();
+            });
+
+            // Toggle Order No dropdown
+            window.toggleOrderDropdownTab3 = function(event) {
+                event.stopPropagation();
+                closeAllOrderDropdowns();
+                orderDropdownMenu.classList.toggle("hidden");
+                orderDropdownBtn.setAttribute("aria-expanded", !orderDropdownMenu.classList.contains("hidden"));
+            };
+
+            function closeAllOrderDropdowns() {
+                orderDropdownMenu.classList.add("hidden");
+                orderDropdownBtn.setAttribute("aria-expanded", "false");
+            }
+
+            // Close dropdown when clicking outside
+            document.addEventListener("click", () => {
+                closeAllOrderDropdowns();
+            });
+
+            // Select order from dropdown
+            window.selectOrderTab3 = function(value) {
+                document.getElementById("orderInputTab3").value = value;
+                document.getElementById("selectedOrderNoTab3").textContent = value || "Select Order No";
+                closeAllOrderDropdowns();
+            };
+
+            // Filter orders as user types
+            window.filterOrdersTab3 = function() {
+                const input = document.getElementById("orderSearchInputTab3");
+                const filter = input.value.toLowerCase();
+                const options = document.querySelectorAll(".order-option-tab3");
+
+                options.forEach(option => {
+                    option.style.display = option.textContent.toLowerCase().includes(filter) ? "block" :
+                        "none";
+                });
+            };
+
+            // Clear filters button Tab3 - clears inputs and submits form
+            clearFiltersBtnTab3.addEventListener('click', (e) => {
+                e.preventDefault();
+                // Option: either reload page without filters:
+                // window.location.href = window.location.pathname + '?tab=3';
+
+                // Or clear inputs and submit form (uncomment below if preferred)
+                document.getElementById("orderInputTab3").value = "";
+                document.getElementById("selectedOrderNoTab3").textContent = "Select Order No";
+                document.getElementById("developmentPlanDateTab3").value = "";
+                document.getElementById("filterForm3").submit();
+            });
+
+
+            // ======= SAMPLE DROPDOWN =======
+            const sampleDropdownBtn = document.getElementById('sampleDropdown');
+            const sampleDropdownMenu = document.getElementById('sampleDropdownMenu');
+            const clearFiltersBtnProduction = document.getElementById('clearFiltersBtnProduction');
+
+            // Prevent clicks inside sample dropdown menu from closing it
+            sampleDropdownMenu.addEventListener('click', (e) => {
+                e.stopPropagation();
+            });
+
+            // Toggle sample dropdown
+            window.toggleSampleDropdown = function() {
+                const expanded = sampleDropdownBtn.getAttribute('aria-expanded') === 'true';
+
+                sampleDropdownMenu.classList.toggle('hidden');
+                sampleDropdownBtn.setAttribute('aria-expanded', String(!expanded));
+
+                if (!sampleDropdownMenu.classList.contains('hidden')) {
+                    document.getElementById('sampleSearchInput').value = '';
+                    filterSamples();
+                }
+            };
+
+            // Filter sample dropdown options
+            window.filterSamples = function() {
+                const filter = document.getElementById('sampleSearchInput').value.toLowerCase();
+                const options = document.querySelectorAll('#sampleDropdownMenu .sample-option');
+
+                options.forEach(option => {
+                    option.style.display = option.textContent.toLowerCase().includes(filter) ? '' :
+                        'none';
+                });
+            };
+
+            // Select sample from dropdown
+            window.selectSample = function(id, label) {
+                document.getElementById('selectedSample').innerText = label;
+                document.getElementById('sampleInput').value = id;
+                sampleDropdownMenu.classList.add('hidden');
+                sampleDropdownBtn.setAttribute('aria-expanded', 'false');
+            };
+
+            // Close sample dropdown when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!sampleDropdownBtn.contains(e.target) && !sampleDropdownMenu.contains(e.target)) {
+                    sampleDropdownMenu.classList.add('hidden');
+                    sampleDropdownBtn.setAttribute('aria-expanded', 'false');
+                }
+            });
+
+            // Clear filters button for production filters (sample dropdown etc)
+            if (clearFiltersBtnProduction) {
+                clearFiltersBtnProduction.addEventListener('click', (e) => {
+                    e.preventDefault();
+
+                    document.getElementById('selectedSample').innerText = 'All Sample No';
+                    document.getElementById('sampleInput').value = '';
+
+                    document.getElementById('productionDeadlineFilter').value = '';
+                    document.getElementById('oderCompleteDateFilter').value = '';
+
+                    sampleDropdownMenu.classList.add('hidden');
+                    sampleDropdownBtn.setAttribute('aria-expanded', 'false');
+
+                });
+            }
+        });
     </script>
 @endsection

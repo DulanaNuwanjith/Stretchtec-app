@@ -135,7 +135,7 @@
                             <div id="filterFormContainer" class="hidden mt-4">
                                 <!-- Filter Form -->
                                 <form id="filterForm2" method="GET"
-                                    action="{{ route('sample-preparation-details.index') }}">
+                                    action="{{ route('sample-preparation-details.index') }}" class="mb-6">
                                     <div class="flex items-center gap-4 flex-wrap">
 
                                         {{-- Order No Dropdown --}}
