@@ -669,7 +669,7 @@
                                                         @endif
                                                     @elseif(in_array($prep->alreadyDeveloped, ['No Need to Develop', 'Tape Match Pan Asia']))
                                                         {{-- Not available for these statuses --}}
-                                                        <span class="inline-block bg-yellow-100 dark:bg-yellow-800 text-yellow-800 dark:text-yellow-200 text-sm font-semibold px-3 py-1 rounded">
+                                                        <span class="text-red-500 dark:text-red-200 text-sm font-semibold px-3 py-1 rounded">
                                                             Not Available
                                                         </span>
                                                     @else
@@ -815,7 +815,7 @@
                                                         @endif
                                                     @elseif(in_array($prep->alreadyDeveloped, ['No Need to Develop', 'Tape Match Pan Asia']))
                                                         {{-- Not Available for these statuses --}}
-                                                        <span class="inline-block bg-yellow-100 dark:bg-yellow-800 text-yellow-800 dark:text-yellow-200 text-sm font-semibold px-3 py-1 rounded">
+                                                        <span class="text-red-500 dark:text-red-200 text-sm font-semibold px-3 py-1 rounded">
                                                             Not Available
                                                         </span>
                                                     @else
@@ -843,7 +843,7 @@
                                                         @endif
                                                     @elseif($prep->alreadyDeveloped == 'Tape Match Pan Asia' || $prep->alreadyDeveloped == 'No Need to Develop')
                                                         {{-- PO not applicable --}}
-                                                        <span class="inline-block bg-yellow-100 dark:bg-yellow-800 text-yellow-800 dark:text-yellow-200 text-sm font-semibold px-3 py-1 rounded">
+                                                        <span class="text-red-500 dark:text-red-200 text-sm font-semibold px-3 py-1 rounded">
                                                             Not Available
                                                         </span>
                                                     @else
@@ -862,7 +862,7 @@
                                                         </span>
                                                     @elseif(in_array($prep->alreadyDeveloped, ['No Need to Develop']))
                                                         {{-- Not available for these statuses --}}
-                                                        <span class="inline-block bg-yellow-100 dark:bg-yellow-800 text-yellow-800 dark:text-yellow-200 text-sm font-semibold px-3 py-1 rounded">
+                                                        <span class="text-red-500 dark:text-red-200 text-sm font-semibold px-3 py-1 rounded">
                                                             Not Available
                                                         </span>
                                                     @else
@@ -882,7 +882,7 @@
                                                         </span>
                                                     @elseif(in_array($prep->alreadyDeveloped, ['No Need to Develop']))
                                                         {{-- Not available for these statuses --}}
-                                                        <span class="inline-block bg-yellow-100 dark:bg-yellow-800 text-yellow-800 dark:text-yellow-200 text-sm font-semibold px-3 py-1 rounded">
+                                                        <span class="text-red-500 dark:text-red-200 text-sm font-semibold px-3 py-1 rounded">
                                                             Not Available
                                                         </span>
                                                     @else
@@ -902,7 +902,7 @@
                                                     </span>
                                                     @elseif(in_array($prep->alreadyDeveloped, ['No Need to Develop']))
                                                         {{-- Not available for these statuses --}}
-                                                        <span class="inline-block bg-yellow-100 dark:bg-yellow-800 text-yellow-800 dark:text-yellow-200 text-sm font-semibold px-3 py-1 rounded">
+                                                        <span class="text-red-500 dark:text-red-200 text-sm font-semibold px-3 py-1 rounded">
                                                         Not Available
                                                     </span>
                                                     @else
@@ -922,7 +922,7 @@
                                                         </span>
                                                     @elseif ($prep->alreadyDeveloped == 'No Need to Develop')
                                                         {{-- Not available for No Need to Develop --}}
-                                                        <span class="inline-block bg-yellow-100 dark:bg-yellow-800 text-yellow-800 dark:text-yellow-200 text-sm font-semibold px-3 py-1 rounded">
+                                                        <span class="text-red-500 dark:text-red-200 text-sm font-semibold px-3 py-1 rounded">
                                                             Not Available
                                                         </span>
                                                     @else
