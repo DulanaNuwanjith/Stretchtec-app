@@ -718,12 +718,12 @@
                                                                         </button>
 
                                                                         {{-- Title --}}
-                                                                        <h2 class="text-lg font-semibold text-gray-800 dark:text-white mb-2">
+                                                                        <h2 class="text-lg font-semibold text-gray-800 dark:text-white mb-2 text-left">
                                                                             Mark Yarn Ordered
                                                                         </h2>
 
                                                                         {{-- Description --}}
-                                                                        <p class="mb-5 text-sm text-gray-600 dark:text-gray-300">
+                                                                        <p class="mb-5 text-sm text-gray-600 dark:text-gray-300 text-left">
                                                                             Please provide the required details for the yarn order. All fields are mandatory.
                                                                         </p>
 
@@ -734,7 +734,7 @@
 
                                                                             {{-- PO Number Input --}}
                                                                             <div class="mb-4">
-                                                                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                                                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 text-left">
                                                                                     PO Number
                                                                                 </label>
                                                                                 <input type="text" name="yarnOrderedPONumber"
@@ -745,7 +745,7 @@
 
                                                                             {{-- Shade Input --}}
                                                                             <div class="mb-4">
-                                                                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                                                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 text-left">
                                                                                     Shade
                                                                                 </label>
                                                                                 <input type="text" name="shade"
@@ -756,7 +756,7 @@
 
                                                                             {{-- Weight Input --}}
                                                                             <div class="mb-4">
-                                                                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                                                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 text-left">
                                                                                     Weight (in grams)
                                                                                 </label>
                                                                                 <input type="number" step="0.01" name="value"
@@ -767,7 +767,7 @@
 
                                                                             {{-- Ticket Input --}}
                                                                             <div class="mb-4">
-                                                                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                                                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 text-left">
                                                                                     Ticket Number
                                                                                 </label>
                                                                                 <input type="number" name="tkt"
@@ -778,7 +778,7 @@
 
                                                                             {{-- Supplier Input --}}
                                                                             <div class="mb-6">
-                                                                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                                                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 text-left">
                                                                                     Supplier
                                                                                 </label>
                                                                                 <input type="text" name="yarnSupplier"
@@ -827,6 +827,7 @@
                                                         </button>
                                                     @endif
                                                 </td>
+
 
                                                 <td class="px-4 py-3 border-r border-gray-300 text-center">
                                                     @if ($prep->alreadyDeveloped == 'Need to Develop')
