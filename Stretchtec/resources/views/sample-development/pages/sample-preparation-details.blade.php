@@ -619,7 +619,9 @@
                                                                                 Supplier
                                                                             </label>
                                                                             <input type="text" name="yarnSupplier"
-                                                                                   class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                                                   value="Pan Asia"
+                                                                                   readonly
+                                                                                   class="w-full px-3 py-2 border rounded-md bg-gray-100 dark:bg-gray-700 dark:text-white text-sm cursor-not-allowed"
                                                                                    required>
                                                                         </div>
 
@@ -707,7 +709,7 @@
                                                                 <div x-show="open" x-transition
                                                                      class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
                                                                      style="display: none;">
-                                                                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 w-full max-w-md relative">
+                                                                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-12 w-full max-w-md relative">
 
                                                                         {{-- Close button (X) --}}
                                                                         <button @click="open = false"
@@ -775,14 +777,30 @@
                                                                             </div>
 
                                                                             {{-- Supplier Input --}}
-                                                                            <div class="mb-6">
+                                                                            <div class="mb-6" x-data="{ supplier: 'Pan Asia' }">
                                                                                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 text-left">
                                                                                     Supplier
                                                                                 </label>
-                                                                                <input type="text" name="yarnSupplier"
-                                                                                       placeholder="Enter Supplier Name"
-                                                                                       class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm focus:ring-2 focus:ring-indigo-400 focus:outline-none"
-                                                                                       required>
+
+                                                                                <select name="yarnSupplier"
+                                                                                        x-model="supplier"
+                                                                                        class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm focus:ring-2 focus:ring-indigo-400 focus:outline-none"
+                                                                                        required>
+                                                                                    <option value="Pan Asia">Pan Asia</option>
+                                                                                    <option value="Ocean Lanka">Ocean Lanka</option>
+                                                                                    <option value="A and E">A and E</option>
+                                                                                    <option value="Other">Other</option>
+                                                                                </select>
+
+                                                                                {{-- Show custom input if "Other" is selected --}}
+                                                                                <div x-show="supplier === 'Other'" class="mt-4">
+                                                                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                                                                        Please specify
+                                                                                    </label>
+                                                                                    <input type="text" name="customSupplier"
+                                                                                           placeholder="Enter Supplier Name"
+                                                                                           class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm focus:ring-2 focus:ring-indigo-400 focus:outline-none">
+                                                                                </div>
                                                                             </div>
 
                                                                             {{-- Buttons --}}

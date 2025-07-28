@@ -94,7 +94,12 @@ class SamplePreparationRnDController extends Controller
             'shade' => 'required|string',
             'tkt' => 'required|string',
             'yarnSupplier' => 'required|string',
+            'customSupplier' => 'nullable|string',
         ]);
+
+        if ($request->customSupplier) {
+            $request->yarnSupplier = $request->customSupplier;
+        }
 
         $rnd = SamplePreparationRnD::findOrFail($request->id);
         $rnd->yarnOrderedDate = Carbon::now();
