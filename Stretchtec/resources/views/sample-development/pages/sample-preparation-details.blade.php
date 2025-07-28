@@ -567,52 +567,61 @@
                                                         @if ($prep->alreadyDeveloped == null)
                                                             {{-- Form for Need to Develop or No Need to Develop --}}
                                                             <form method="POST"
-                                                                action="{{ route('rnd.updateDevelopedStatus') }}"
-                                                                x-ref="form">
+                                                                  action="{{ route('rnd.updateDevelopedStatus') }}"
+                                                                  x-ref="form">
                                                                 @csrf
-                                                                <input type="hidden" name="id"
-                                                                    value="{{ $prep->id }}">
+                                                                <input type="hidden" name="id" value="{{ $prep->id }}">
                                                                 <input type="hidden" name="alreadyDeveloped"
-                                                                    x-ref="formAlreadyDevelopedInput"
-                                                                    value="Need to Develop">
+                                                                       x-ref="formAlreadyDevelopedInput"
+                                                                       value="Need to Develop">
 
-                                                                <!-- Dropdown Button -->
-                                                                <button type="button"
-                                                                    class="inline-flex justify-between w-48 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10"
-                                                                    @click="toggleDropdown()" aria-haspopup="true"
-                                                                    aria-expanded="openDropdown">
-                                                                    <span x-text="selectedStatus"></span>
-                                                                    <svg class="ml-2 h-5 w-5 text-gray-400"
-                                                                        viewBox="0 0 20 20" fill="currentColor"
-                                                                        aria-hidden="true">
-                                                                        <path fill-rule="evenodd"
-                                                                            d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
-                                                                            clip-rule="evenodd" />
-                                                                    </svg>
-                                                                </button>
-
-                                                                <!-- Dropdown Menu -->
-                                                                <div x-show="openDropdown" x-transition
-                                                                    class="absolute mt-2 w-48 rounded-md bg-white shadow-lg ring-1 ring-black/5 z-20"
-                                                                    style="display: none;">
-                                                                    <div class="py-1">
-                                                                        <button type="button"
-                                                                            @click.prevent="setStatus('Need to Develop')"
-                                                                            class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                                                            Need to Develop
-                                                                        </button>
-                                                                        <button type="button"
-                                                                            @click.prevent="setStatus('No Need to Develop')"
-                                                                            class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                                                            No Need to Develop
-                                                                        </button>
-                                                                        <button type="button"
-                                                                            @click.prevent="setStatus('Tape Match Pan Asia')"
-                                                                            class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                                                            Tape Match Pan Asia
-                                                                        </button>
+                                                                @if (Auth::user()->role === 'ADMIN')
+                                                                    {{-- Read-only for ADMIN --}}
+                                                                    <div class="inline-flex justify-between w-48 rounded-md px-3 py-2 text-sm font-semibold
+                                                                                 text-gray-500 bg-gray-200 shadow-sm h-10 cursor-not-allowed"
+                                                                         title="Admins cannot update Developed Status">
+                                                                        {{ $prep->alreadyDeveloped ?? 'Select Development' }}
                                                                     </div>
-                                                                </div>
+                                                                @else
+                                                                    {{-- Editable for non-admins --}}
+                                                                    <!-- Dropdown Button -->
+                                                                    <button type="button"
+                                                                            class="inline-flex justify-between w-48 rounded-md bg-white px-3 py-2 text-sm font-semibold
+                                                                                    text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10"
+                                                                            @click="toggleDropdown()" aria-haspopup="true" aria-expanded="openDropdown">
+                                                                        <span x-text="selectedStatus"></span>
+                                                                        <svg class="ml-2 h-5 w-5 text-gray-400"
+                                                                             viewBox="0 0 20 20" fill="currentColor"
+                                                                             aria-hidden="true">
+                                                                            <path fill-rule="evenodd"
+                                                                                  d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
+                                                                                  clip-rule="evenodd" />
+                                                                        </svg>
+                                                                    </button>
+
+                                                                    <!-- Dropdown Menu -->
+                                                                    <div x-show="openDropdown" x-transition
+                                                                         class="absolute mt-2 w-48 rounded-md bg-white shadow-lg ring-1 ring-black/5 z-20"
+                                                                         style="display: none;">
+                                                                        <div class="py-1">
+                                                                            <button type="button"
+                                                                                    @click.prevent="setStatus('Need to Develop')"
+                                                                                    class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                                                                Need to Develop
+                                                                            </button>
+                                                                            <button type="button"
+                                                                                    @click.prevent="setStatus('No Need to Develop')"
+                                                                                    class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                                                                No Need to Develop
+                                                                            </button>
+                                                                            <button type="button"
+                                                                                    @click.prevent="setStatus('Tape Match Pan Asia')"
+                                                                                    class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                                                                Tape Match Pan Asia
+                                                                            </button>
+                                                                        </div>
+                                                                    </div>
+                                                                @endif
                                                             </form>
 
                                                             {{-- Modal for Tape Match Pan Asia --}}
@@ -717,41 +726,61 @@
                                                 </td>
 
                                                 <td class="px-4 py-3 text-center border-r border-gray-300">
-                                                    @if ($prep->alreadyDeveloped == 'Need to Develop')
-                                                        @if (!$prep->developPlannedDate)
-                                                            {{-- Show input if not set --}}
-                                                            <form action="{{ route('rnd.setDevelopPlanDate') }}"
-                                                                method="POST">
-                                                                @csrf
-                                                                <input type="hidden" name="id"
-                                                                    value="{{ $prep->id }}">
-                                                                <input type="date" name="developPlannedDate"
-                                                                    class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                                    required>
-                                                                <button type="submit"
-                                                                    class="w-full mt-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm">
-                                                                    Save
-                                                                </button>
-                                                            </form>
+                                                    @if (Auth::user()->role === 'ADMIN')
+                                                        {{-- Read-only for ADMIN --}}
+                                                        @if ($prep->alreadyDeveloped == 'Need to Develop')
+                                                            @if ($prep->developPlannedDate)
+                                                                <span class="readonly">
+                                                                    {{ \Carbon\Carbon::parse($prep->developPlannedDate)->format('Y-m-d') }}
+                                                                </span>
+                                                            @else
+                                                                <span class="inline-block px-3 py-1 text-xs font-semibold text-gray-600 bg-gray-200 rounded">
+                                                                    Not Set
+                                                                </span>
+                                                            @endif
+                                                        @elseif (in_array($prep->alreadyDeveloped, ['No Need to Develop', 'Tape Match Pan Asia']))
+                                                            <span class="text-gray-400 italic">—</span>
                                                         @else
-                                                            {{-- Locked and readonly --}}
-                                                            <span class="readonly">
-                                                                {{ $prep->developPlannedDate->format('Y-m-d') }}
+                                                            <span class="inline-block px-3 py-1 text-xs font-semibold text-gray-600 bg-gray-200 rounded">
+                                                                Not Applicable
                                                             </span>
                                                         @endif
-                                                    @elseif(in_array($prep->alreadyDeveloped, ['No Need to Develop', 'Tape Match Pan Asia']))
-                                                        {{-- Not available for these statuses --}}
-                                                        <span class="text-gray-400 italic">—</span>
                                                     @else
-                                                        {{-- Disabled input and button --}}
-                                                        <input type="date"
-                                                            class="w-full px-3 py-2 border rounded-md bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400 text-sm"
-                                                            disabled>
-                                                        <button type="button"
-                                                            class="w-full mt-1 bg-gray-300 text-gray-500 px-3 py-1 rounded text-sm cursor-not-allowed"
-                                                            title="Only visible when status is 'Need to Develop'">
-                                                            Save
-                                                        </button>
+                                                        {{-- Editable for non-admins --}}
+                                                        @if ($prep->alreadyDeveloped == 'Need to Develop')
+                                                            @if (!$prep->developPlannedDate)
+                                                                {{-- Show input if not set --}}
+                                                                <form action="{{ route('rnd.setDevelopPlanDate') }}" method="POST">
+                                                                    @csrf
+                                                                    <input type="hidden" name="id" value="{{ $prep->id }}">
+                                                                    <input type="date" name="developPlannedDate"
+                                                                           class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                                           required>
+                                                                    <button type="submit"
+                                                                            class="w-full mt-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm">
+                                                                        Save
+                                                                    </button>
+                                                                </form>
+                                                            @else
+                                                                {{-- Locked and readonly --}}
+                                                                <span class="readonly">
+                                                                    {{ \Carbon\Carbon::parse($prep->developPlannedDate)->format('Y-m-d') }}
+                                                                </span>
+                                                            @endif
+                                                        @elseif (in_array($prep->alreadyDeveloped, ['No Need to Develop', 'Tape Match Pan Asia']))
+                                                            {{-- Not available for these statuses --}}
+                                                            <span class="text-gray-400 italic">—</span>
+                                                        @else
+                                                            {{-- Disabled input and button --}}
+                                                            <input type="date"
+                                                                   class="w-full px-3 py-2 border rounded-md bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400 text-sm"
+                                                                   disabled>
+                                                            <button type="button"
+                                                                    class="w-full mt-1 bg-gray-300 text-gray-500 px-3 py-1 rounded text-sm cursor-not-allowed"
+                                                                    title="Only visible when status is 'Need to Develop'">
+                                                                Save
+                                                            </button>
+                                                        @endif
                                                     @endif
                                                 </td>
 
