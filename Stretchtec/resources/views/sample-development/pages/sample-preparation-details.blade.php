@@ -434,30 +434,50 @@
                                                         value="{{ $prep->orderNo }}" />
                                                 </td>
 
-                                                <td
-                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
-                                                    <span
-                                                        class="readonly">{{ $prep->customerRequestDate->format('Y-m-d') }}</span>
-                                                    <input type="date" name="customerRequestDate"
-                                                        class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                        value="{{ $prep->customerRequestDate->format('Y-m-d') }}" />
+                                                <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                                    @if ($prep->customerRequestDate)
+                                                        <span class="readonly">
+                                                            {{ \Carbon\Carbon::parse($prep->customerRequestDate)->format('Y-m-d') }}
+                                                        </span>
+                                                        <input type="date"
+                                                               name="customerRequestDate"
+                                                               class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                               value="{{ \Carbon\Carbon::parse($prep->customerRequestDate)->format('Y-m-d') }}" />
+                                                    @else
+                                                        <span class="inline-block px-3 py-1 text-xs font-semibold text-gray-600 bg-gray-200 rounded">
+                                                            Not Given
+                                                        </span>
+                                                        <input type="date"
+                                                               name="customerRequestDate"
+                                                               class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                               value="" />
+                                                    @endif
                                                 </td>
 
+
                                                 {{-- Colour Match Sent Date --}}
-                                                <td
-                                                    class="text-center py-3 border-r border-gray-300 whitespace-normal break-words">
+                                                <td class="text-center py-3 border-r border-gray-300 whitespace-normal break-words">
                                                     @if (is_null($prep->colourMatchSentDate))
-                                                        <form action="{{ route('rnd.markColourMatchSent') }}"
-                                                            method="POST">
-                                                            @csrf
-                                                            <input type="hidden" name="id"
-                                                                value="{{ $prep->id }}">
-                                                            <button type="submit"
-                                                                class="delivered-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
+                                                        @if (Auth::user()->role === 'ADMIN')
+                                                            {{-- Read-only for ADMIN --}}
+                                                            <button type="button"
+                                                                    class="delivered-btn bg-gray-200 text-gray-500 px-2 py-1 mt-3 rounded cursor-not-allowed"
+                                                                    disabled>
                                                                 Pending
                                                             </button>
-                                                        </form>
+                                                        @else
+                                                            {{-- Editable for non-admins --}}
+                                                            <form action="{{ route('rnd.markColourMatchSent') }}" method="POST">
+                                                                @csrf
+                                                                <input type="hidden" name="id" value="{{ $prep->id }}">
+                                                                <button type="submit"
+                                                                        class="delivered-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
+                                                                    Pending
+                                                                </button>
+                                                            </form>
+                                                        @endif
                                                     @else
+                                                        {{-- Show static timestamp --}}
                                                         <span
                                                             class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-yellow-100 dark:bg-gray-800 px-3 py-1 rounded">
                                                             Sent on <br>
@@ -468,47 +488,53 @@
                                                     @endif
                                                 </td>
 
-                                                <td
-                                                    class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                                <td class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
                                                     @if (is_null($prep->colourMatchReceiveDate))
-                                                        <form action="{{ route('rnd.markColourMatchReceive') }}"
-                                                            method="POST">
-                                                            @csrf
-                                                            <input type="hidden" name="id"
-                                                                value="{{ $prep->id }}">
-
-                                                            <button type="submit"
-                                                                class="receive-btn px-2 py-1 mt-3 rounded transition-all duration-200
-                                                                {{ $prep->colourMatchSentDate ? 'bg-gray-300 text-black hover:bg-gray-400' : 'bg-gray-200 text-gray-500 cursor-not-allowed' }}"
-                                                                {{ $prep->colourMatchSentDate ? '' : 'disabled' }}
-                                                                title="{{ $prep->colourMatchSentDate ? '' : 'Please set Colour Match Sent Date first' }}">
+                                                        @if (Auth::user()->role === 'ADMIN')
+                                                            {{-- Read-only for ADMIN --}}
+                                                            <button type="button"
+                                                                    class="receive-btn px-2 py-1 mt-3 rounded bg-gray-200 text-gray-500 cursor-not-allowed"
+                                                                    disabled
+                                                                    title="Admins cannot update Colour Match Receive Date">
                                                                 Pending
                                                             </button>
-                                                        </form>
+                                                        @else
+                                                            {{-- Editable for non-admins --}}
+                                                            <form action="{{ route('rnd.markColourMatchReceive') }}" method="POST">
+                                                                @csrf
+                                                                <input type="hidden" name="id" value="{{ $prep->id }}">
+                                                                <button type="submit"
+                                                                        class="receive-btn px-2 py-1 mt-3 rounded transition-all duration-200
+                                                                        {{ $prep->colourMatchSentDate ? 'bg-gray-300 text-black hover:bg-gray-400' : 'bg-gray-200 text-gray-500 cursor-not-allowed' }}"
+                                                                        {{ $prep->colourMatchSentDate ? '' : 'disabled' }}
+                                                                        title="{{ $prep->colourMatchSentDate ? '' : 'Please set Colour Match Sent Date first' }}">
+                                                                    Pending
+                                                                </button>
+                                                            </form>
+                                                        @endif
                                                     @else
                                                         <div class="flex flex-wrap justify-center gap-2">
                                                             <button type="button"
-                                                                class="openRejectDetails inline-block text-sm font-semibold text-gray-700 dark:text-white bg-blue-100 dark:bg-gray-800 px-3 py-1 rounded"
-                                                                data-id="{{ $prep->id }}">
+                                                                    class="openRejectDetails inline-block text-sm font-semibold text-gray-700 dark:text-white bg-blue-100 dark:bg-gray-800 px-3 py-1 rounded"
+                                                                    data-id="{{ $prep->id }}">
                                                                 Received on <br>
                                                                 {{ \Carbon\Carbon::parse($prep->colourMatchReceiveDate)->format('Y-m-d') }}
                                                                 at
                                                                 {{ \Carbon\Carbon::parse($prep->colourMatchReceiveDate)->format('H:i') }}
                                                             </button>
 
-
-                                                            {{-- Reject button --}}
-                                                            <form action="" method="POST">
-                                                                @csrf
-                                                                <input type="hidden" name="id"
-                                                                    value="{{ $prep->id }}">
-                                                                <!-- Trigger Button -->
-                                                                <button type="button"
-                                                                    class="reject-btn mt-3 px-3 py-1 text-white bg-red-500 hover:bg-red-600 rounded text-sm"
-                                                                    onclick="openRejectModal({{ $prep->id }})">
-                                                                    Reject
-                                                                </button>
-                                                            </form>
+                                                            @if (Auth::user()->role !== 'ADMIN')
+                                                                {{-- Reject button (hidden for Admin) --}}
+                                                                <form action="" method="POST">
+                                                                    @csrf
+                                                                    <input type="hidden" name="id" value="{{ $prep->id }}">
+                                                                    <button type="button"
+                                                                            class="reject-btn mt-3 px-3 py-1 text-white bg-red-500 hover:bg-red-600 rounded text-sm"
+                                                                            onclick="openRejectModal({{ $prep->id }})">
+                                                                        Reject
+                                                                    </button>
+                                                                </form>
+                                                            @endif
                                                         </div>
                                                     @endif
                                                 </td>
