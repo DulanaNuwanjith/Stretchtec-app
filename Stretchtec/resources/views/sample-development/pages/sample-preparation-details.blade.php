@@ -669,9 +669,7 @@
                                                         @endif
                                                     @elseif(in_array($prep->alreadyDeveloped, ['No Need to Develop', 'Tape Match Pan Asia']))
                                                         {{-- Not available for these statuses --}}
-                                                        <span class="text-red-500 dark:text-red-200 text-sm font-semibold px-3 py-1 rounded">
-                                                            Not Available
-                                                        </span>
+                                                        <span class="text-gray-400 italic">—</span>
                                                     @else
                                                         {{-- Disabled input and button --}}
                                                         <input type="date"
@@ -815,9 +813,7 @@
                                                         @endif
                                                     @elseif(in_array($prep->alreadyDeveloped, ['No Need to Develop', 'Tape Match Pan Asia']))
                                                         {{-- Not Available for these statuses --}}
-                                                        <span class="text-red-500 dark:text-red-200 text-sm font-semibold px-3 py-1 rounded">
-                                                            Not Available
-                                                        </span>
+                                                        <span class="text-gray-400 italic">—</span>
                                                     @else
                                                         {{-- Not applicable --}}
                                                         <button type="button"
@@ -844,9 +840,7 @@
                                                         @endif
                                                     @elseif($prep->alreadyDeveloped == 'Tape Match Pan Asia' || $prep->alreadyDeveloped == 'No Need to Develop')
                                                         {{-- PO not applicable --}}
-                                                        <span class="text-red-500 dark:text-red-200 text-sm font-semibold px-3 py-1 rounded">
-                                                            Not Available
-                                                        </span>
+                                                        <span class="text-gray-400 italic">—</span>
                                                     @else
                                                         {{-- Default fallback --}}
                                                         <span class="inline-block bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 text-sm font-medium px-3 py-1 rounded">
@@ -863,9 +857,7 @@
                                                         </span>
                                                     @elseif(in_array($prep->alreadyDeveloped, ['No Need to Develop']))
                                                         {{-- Not available for these statuses --}}
-                                                        <span class="text-red-500 dark:text-red-200 text-sm font-semibold px-3 py-1 rounded">
-                                                            Not Available
-                                                        </span>
+                                                        <span class="text-gray-400 italic">—</span>
                                                     @else
                                                         {{-- Not yet added --}}
                                                         <span class="inline-block bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 text-sm font-medium px-3 py-1 rounded">
@@ -883,9 +875,7 @@
                                                         </span>
                                                     @elseif(in_array($prep->alreadyDeveloped, ['No Need to Develop']))
                                                         {{-- Not available for these statuses --}}
-                                                        <span class="text-red-500 dark:text-red-200 text-sm font-semibold px-3 py-1 rounded">
-                                                            Not Available
-                                                        </span>
+                                                        <span class="text-gray-400 italic">—</span>
                                                     @else
                                                         {{-- Not yet added --}}
                                                         <span class="inline-block bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 text-sm font-medium px-3 py-1 rounded">
@@ -903,9 +893,7 @@
                                                     </span>
                                                     @elseif(in_array($prep->alreadyDeveloped, ['No Need to Develop']))
                                                         {{-- Not available for these statuses --}}
-                                                        <span class="text-red-500 dark:text-red-200 text-sm font-semibold px-3 py-1 rounded">
-                                                        Not Available
-                                                    </span>
+                                                        <span class="text-gray-400 italic">—</span>
                                                     @else
                                                         {{-- Not yet added --}}
                                                         <span class="inline-block bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 text-sm font-medium px-3 py-1 rounded">
@@ -923,9 +911,7 @@
                                                         </span>
                                                     @elseif ($prep->alreadyDeveloped == 'No Need to Develop')
                                                         {{-- Not available for No Need to Develop --}}
-                                                        <span class="text-red-500 dark:text-red-200 text-sm font-semibold px-3 py-1 rounded">
-                                                            Not Available
-                                                        </span>
+                                                        <span class="text-gray-400 italic">—</span>
                                                     @else
                                                         {{-- Not yet added --}}
                                                         <span class="inline-block bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 text-sm font-medium px-3 py-1 rounded">
