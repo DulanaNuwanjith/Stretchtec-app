@@ -742,7 +742,7 @@
                                                             <span class="text-gray-400 italic">—</span>
                                                         @else
                                                             <span class="inline-block px-3 py-1 text-xs font-semibold text-gray-600 bg-gray-200 rounded">
-                                                                Not Applicable
+                                                                Not Set
                                                             </span>
                                                         @endif
                                                     @else
@@ -784,181 +784,175 @@
                                                     @endif
                                                 </td>
 
-                                                {{-- Yarn Ordered Date --}}
-                                                <td
-                                                    class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
-                                                    @if ($prep->alreadyDeveloped == 'Need to Develop')
-                                                        @if (is_null($prep->yarnOrderedDate))
-                                                            @php
-                                                                $canOrder =
-                                                                    $prep->alreadyDeveloped == 'Tape Match Pan Asia' ||
-                                                                    ($prep->alreadyDeveloped == 'Need to Develop' &&
-                                                                        $prep->developPlannedDate);
-                                                            @endphp
-
-                                                            {{-- Wrap button + modal inside Alpine component --}}
-                                                            <div x-data="{ open: false }" class="relative">
-                                                                {{-- Trigger Button --}}
-                                                                <button type="button"
-                                                                    class="yarn-ordered-btn px-2 py-1 mt-3 rounded transition-all duration-200
-                                                                        {{ $canOrder ? 'bg-gray-300 text-black hover:bg-gray-400' : 'bg-gray-200 text-gray-500 cursor-not-allowed' }}"
-                                                                    @if ($canOrder) @click="open = true" @else disabled title="Please set Development Plan Date first" @endif>
-                                                                    Pending
-                                                                </button>
-
-                                                                {{-- Modal for Marking Yarn Ordered --}}
-                                                                <div x-show="open" x-transition
-                                                                    class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
-                                                                    style="display: none;">
-                                                                    <div
-                                                                        class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-12 w-full max-w-md relative">
-
-                                                                        {{-- Close button (X) --}}
-                                                                        <button @click="open = false"
-                                                                            class="absolute top-2 right-2 text-gray-600 hover:text-gray-900">
-                                                                            ✕
-                                                                        </button>
-
-                                                                        {{-- Title --}}
-                                                                        <h2
-                                                                            class="text-lg font-semibold text-gray-800 dark:text-white mb-2 text-left">
-                                                                            Mark Yarn Ordered
-                                                                        </h2>
-
-                                                                        {{-- Description --}}
-                                                                        <p
-                                                                            class="mb-5 text-sm text-gray-600 dark:text-gray-300 text-left">
-                                                                            Please provide the required details for the yarn
-                                                                            order. All fields are mandatory.
-                                                                        </p>
-
-                                                                        {{-- Form --}}
-                                                                        <form action="{{ route('rnd.markYarnOrdered') }}"
-                                                                            method="POST">
-                                                                            @csrf
-                                                                            <input type="hidden" name="id"
-                                                                                value="{{ $prep->id }}">
-
-                                                                            {{-- PO Number Input --}}
-                                                                            <div class="mb-4">
-                                                                                <label
-                                                                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 text-left">
-                                                                                    PO Number
-                                                                                </label>
-                                                                                <input type="text"
-                                                                                    name="yarnOrderedPONumber"
-                                                                                    placeholder="Enter PO Number"
-                                                                                    class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm focus:ring-2 focus:ring-indigo-400 focus:outline-none"
-                                                                                    required>
-                                                                            </div>
-
-                                                                            {{-- Shade Input --}}
-                                                                            <div class="mb-4">
-                                                                                <label
-                                                                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 text-left">
-                                                                                    Shade
-                                                                                </label>
-                                                                                <input type="text" name="shade"
-                                                                                    placeholder="Enter Shade"
-                                                                                    class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm focus:ring-2 focus:ring-indigo-400 focus:outline-none"
-                                                                                    required>
-                                                                            </div>
-
-                                                                            {{-- Weight Input --}}
-                                                                            <div class="mb-4">
-                                                                                <label
-                                                                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 text-left">
-                                                                                    Weight (in grams)
-                                                                                </label>
-                                                                                <input type="number" step="0.01"
-                                                                                    name="value"
-                                                                                    placeholder="e.g. 150.50"
-                                                                                    class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm focus:ring-2 focus:ring-indigo-400 focus:outline-none"
-                                                                                    required>
-                                                                            </div>
-
-                                                                            {{-- Ticket Input --}}
-                                                                            <div class="mb-4">
-                                                                                <label
-                                                                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 text-left">
-                                                                                    Ticket Number
-                                                                                </label>
-                                                                                <input type="number" name="tkt"
-                                                                                    placeholder="Enter Ticket Number"
-                                                                                    class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm focus:ring-2 focus:ring-indigo-400 focus:outline-none"
-                                                                                    required>
-                                                                            </div>
-
-                                                                            {{-- Supplier Input --}}
-                                                                            <div class="mb-6" x-data="{ supplier: 'Pan Asia' }">
-                                                                                <label
-                                                                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 text-left">
-                                                                                    Supplier
-                                                                                </label>
-
-                                                                                <select name="yarnSupplier"
-                                                                                    x-model="supplier"
-                                                                                    class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm focus:ring-2 focus:ring-indigo-400 focus:outline-none"
-                                                                                    required>
-                                                                                    <option value="Pan Asia">Pan Asia
-                                                                                    </option>
-                                                                                    <option value="Ocean Lanka">Ocean Lanka
-                                                                                    </option>
-                                                                                    <option value="A and E">A and E
-                                                                                    </option>
-                                                                                    <option value="Other">Other</option>
-                                                                                </select>
-
-                                                                                {{-- Show custom input if "Other" is selected --}}
-                                                                                <div x-show="supplier === 'Other'"
-                                                                                    class="mt-4">
-                                                                                    <label
-                                                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                                                                        Please specify
-                                                                                    </label>
-                                                                                    <input type="text"
-                                                                                        name="customSupplier"
-                                                                                        placeholder="Enter Supplier Name"
-                                                                                        class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm focus:ring-2 focus:ring-indigo-400 focus:outline-none">
-                                                                                </div>
-                                                                            </div>
-
-                                                                            {{-- Buttons --}}
-                                                                            <div class="flex justify-end gap-3">
-                                                                                <button type="button"
-                                                                                    @click="open = false"
-                                                                                    class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400 transition">
-                                                                                    Cancel
-                                                                                </button>
-                                                                                <button type="submit"
-                                                                                    class="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition">
-                                                                                    Save
-                                                                                </button>
-                                                                            </div>
-                                                                        </form>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
+                                                <td class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                                    @if (Auth::user()->role === 'ADMIN')
+                                                        {{-- ADMIN: Read-only --}}
+                                                        @if ($prep->alreadyDeveloped == 'Need to Develop')
+                                                            @if ($prep->yarnOrderedDate)
+                                                                <span
+                                                                    class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-purple-200 dark:bg-gray-800 px-3 py-1 rounded">
+                                                                    Ordered on <br>
+                                                                    {{ \Carbon\Carbon::parse($prep->yarnOrderedDate)->format('Y-m-d') }}
+                                                                    at
+                                                                    {{ \Carbon\Carbon::parse($prep->yarnOrderedDate)->format('H:i') }}
+                                                                </span>
+                                                            @else
+                                                                <span
+                                                                    class="inline-block px-3 py-1 text-xs font-semibold text-gray-600 bg-gray-200 rounded">
+                                                                    Not Ordered
+                                                                </span>
+                                                            @endif
+                                                        @elseif(in_array($prep->alreadyDeveloped, ['No Need to Develop', 'Tape Match Pan Asia']))
+                                                            <span class="text-gray-400 italic">—</span>
                                                         @else
-                                                            {{-- Already Ordered --}}
                                                             <span
-                                                                class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-purple-200 dark:bg-gray-800 px-3 py-1 rounded">
-                                                                Ordered on <br>
-                                                                {{ \Carbon\Carbon::parse($prep->yarnOrderedDate)->format('Y-m-d') }}
-                                                                at
-                                                                {{ \Carbon\Carbon::parse($prep->yarnOrderedDate)->format('H:i') }}
+                                                                class="inline-block px-3 py-1 text-xs font-semibold text-gray-600 bg-gray-200 rounded">
+                                                                Not Set
                                                             </span>
                                                         @endif
-                                                    @elseif(in_array($prep->alreadyDeveloped, ['No Need to Develop', 'Tape Match Pan Asia']))
-                                                        {{-- Not Available for these statuses --}}
-                                                        <span class="text-gray-400 italic">—</span>
                                                     @else
-                                                        {{-- Not applicable --}}
-                                                        <button type="button"
-                                                            class="yarn-ordered-btn px-2 py-1 mt-3 rounded bg-gray-200 text-gray-500 cursor-not-allowed"
-                                                            disabled title="Not applicable for this type">
-                                                            Pending
-                                                        </button>
+                                                        {{-- Non-admin: Editable --}}
+                                                        @if ($prep->alreadyDeveloped == 'Need to Develop')
+                                                            @if (is_null($prep->yarnOrderedDate))
+                                                                @php
+                                                                    $canOrder =
+                                                                        $prep->alreadyDeveloped == 'Tape Match Pan Asia' ||
+                                                                        ($prep->alreadyDeveloped == 'Need to Develop' && $prep->developPlannedDate);
+                                                                @endphp
+
+                                                                {{-- Wrap button + modal inside Alpine component --}}
+                                                                <div x-data="{ open: false }" class="relative">
+                                                                    {{-- Trigger Button --}}
+                                                                    <button type="button"
+                                                                            class="yarn-ordered-btn px-2 py-1 mt-3 rounded transition-all duration-200
+                                                                            {{ $canOrder ? 'bg-gray-300 text-black hover:bg-gray-400' : 'bg-gray-200 text-gray-500 cursor-not-allowed' }}"
+                                                                            @if ($canOrder) @click="open = true" @else disabled title="Please set Development Plan Date first" @endif>
+                                                                        Pending
+                                                                    </button>
+
+                                                                    {{-- Modal for Marking Yarn Ordered --}}
+                                                                    <div x-show="open" x-transition
+                                                                         class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+                                                                         style="display: none;">
+                                                                        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-12 w-full max-w-md relative">
+
+                                                                            {{-- Close button (X) --}}
+                                                                            <button @click="open = false"
+                                                                                    class="absolute top-2 right-2 text-gray-600 hover:text-gray-900">
+                                                                                ✕
+                                                                            </button>
+
+                                                                            {{-- Title --}}
+                                                                            <h2 class="text-lg font-semibold text-gray-800 dark:text-white mb-2 text-left">
+                                                                                Mark Yarn Ordered
+                                                                            </h2>
+
+                                                                            <p class="mb-5 text-sm text-gray-600 dark:text-gray-300 text-left">
+                                                                                Please provide the required details for the yarn order. All fields are mandatory.
+                                                                            </p>
+
+                                                                            {{-- Form --}}
+                                                                            <form action="{{ route('rnd.markYarnOrdered') }}" method="POST">
+                                                                                @csrf
+                                                                                <input type="hidden" name="id" value="{{ $prep->id }}">
+
+                                                                                {{-- PO Number --}}
+                                                                                <div class="mb-4">
+                                                                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 text-left">
+                                                                                        PO Number
+                                                                                    </label>
+                                                                                    <input type="text" name="yarnOrderedPONumber" placeholder="Enter PO Number"
+                                                                                           class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                                                           required>
+                                                                                </div>
+
+                                                                                {{-- Shade --}}
+                                                                                <div class="mb-4">
+                                                                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 text-left">
+                                                                                        Shade
+                                                                                    </label>
+                                                                                    <input type="text" name="shade" placeholder="Enter Shade"
+                                                                                           class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                                                           required>
+                                                                                </div>
+
+                                                                                {{-- Weight --}}
+                                                                                <div class="mb-4">
+                                                                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 text-left">
+                                                                                        Weight (in grams)
+                                                                                    </label>
+                                                                                    <input type="number" step="0.01" name="value" placeholder="e.g. 150.50"
+                                                                                           class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                                                           required>
+                                                                                </div>
+
+                                                                                {{-- Ticket --}}
+                                                                                <div class="mb-4">
+                                                                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 text-left">
+                                                                                        Ticket Number
+                                                                                    </label>
+                                                                                    <input type="number" name="tkt" placeholder="Enter Ticket Number"
+                                                                                           class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                                                           required>
+                                                                                </div>
+
+                                                                                {{-- Supplier --}}
+                                                                                <div class="mb-6" x-data="{ supplier: 'Pan Asia' }">
+                                                                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 text-left">
+                                                                                        Supplier
+                                                                                    </label>
+
+                                                                                    <select name="yarnSupplier" x-model="supplier"
+                                                                                            class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                                                            required>
+                                                                                        <option value="Pan Asia">Pan Asia</option>
+                                                                                        <option value="Ocean Lanka">Ocean Lanka</option>
+                                                                                        <option value="A and E">A and E</option>
+                                                                                        <option value="Other">Other</option>
+                                                                                    </select>
+
+                                                                                    <div x-show="supplier === 'Other'" class="mt-4">
+                                                                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                                                                            Please specify
+                                                                                        </label>
+                                                                                        <input type="text" name="customSupplier" placeholder="Enter Supplier Name"
+                                                                                               class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                <div class="flex justify-end gap-3">
+                                                                                    <button type="button" @click="open = false"
+                                                                                            class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400 transition">
+                                                                                        Cancel
+                                                                                    </button>
+                                                                                    <button type="submit"
+                                                                                            class="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition">
+                                                                                        Save
+                                                                                    </button>
+                                                                                </div>
+                                                                            </form>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            @else
+                                                                {{-- Already Ordered --}}
+                                                                <span
+                                                                    class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-purple-200 dark:bg-gray-800 px-3 py-1 rounded">
+                                                                    Ordered on <br>
+                                                                    {{ \Carbon\Carbon::parse($prep->yarnOrderedDate)->format('Y-m-d') }}
+                                                                    at
+                                                                    {{ \Carbon\Carbon::parse($prep->yarnOrderedDate)->format('H:i') }}
+                                                                </span>
+                                                            @endif
+                                                        @elseif(in_array($prep->alreadyDeveloped, ['No Need to Develop', 'Tape Match Pan Asia']))
+                                                            <span class="text-gray-400 italic">—</span>
+                                                        @else
+                                                            <button type="button"
+                                                                    class="yarn-ordered-btn px-2 py-1 mt-3 rounded bg-gray-200 text-gray-500 cursor-not-allowed"
+                                                                    disabled title="Not applicable for this type">
+                                                                Pending
+                                                            </button>
+                                                        @endif
                                                     @endif
                                                 </td>
 
@@ -1064,67 +1058,113 @@
                                                         </span>
                                                     @endif
                                                 </td>
-
                                                 {{-- Yarn Receive Date --}}
-                                                <td
-                                                    class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
-                                                    @if ($prep->alreadyDeveloped == 'Need to Develop')
-                                                        @if (is_null($prep->yarnReceiveDate))
-                                                            <form action="{{ route('rnd.markYarnReceived') }}"
-                                                                method="POST">
-                                                                @csrf
-                                                                <input type="hidden" name="id"
-                                                                    value="{{ $prep->id }}">
-                                                                <button type="submit"
-                                                                    class="yarn-receive-btn px-2 py-1 mt-3 rounded transition-all duration-200
-                                                                    {{ $prep->developPlannedDate && $prep->yarnOrderedDate && $prep->yarnSupplier && $prep->tkt && $prep->yarnOrderedWeight && $prep->shade && $prep->yarnOrderedPONumber ? 'bg-gray-300 text-black hover:bg-gray-400' : 'bg-gray-200 text-gray-500 cursor-not-allowed' }}"
-                                                                    {{ $prep->developPlannedDate && $prep->yarnOrderedDate ? '' : 'disabled' }}
-                                                                    title="{{ $prep->developPlannedDate && $prep->yarnOrderedDate && $prep->yarnSupplier && $prep->tkt && $prep->yarnOrderedWeight && $prep->shade && $prep->yarnOrderedPONumber ? '' : 'Please set Development Plan Date and Yarn Ordered Date first' }}">
+                                                <td class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                                    @if (Auth::user()->role === 'ADMIN')
+                                                        {{-- ADMIN: Read-only --}}
+                                                        @if ($prep->alreadyDeveloped == 'Need to Develop')
+                                                            @if (is_null($prep->yarnReceiveDate))
+                                                                <span
+                                                                    class="inline-block bg-gray-200 dark:bg-gray-600 text-gray-500 dark:text-gray-400 text-sm font-medium px-3 py-1 rounded cursor-not-allowed"
+                                                                    title="Admin view only">
                                                                     Pending
-                                                                </button>
-                                                            </form>
+                                                                </span>
+                                                            @else
+                                                                <span
+                                                                    class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-pink-200 dark:bg-gray-800 px-3 py-1 rounded">
+                                                                    Received on <br>
+                                                                    {{ \Carbon\Carbon::parse($prep->yarnReceiveDate)->format('Y-m-d') }}
+                                                                    at
+                                                                    {{ \Carbon\Carbon::parse($prep->yarnReceiveDate)->format('H:i') }}
+                                                                </span>
+                                                            @endif
                                                         @else
-                                                            <span
-                                                                class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-pink-200 dark:bg-gray-800 px-3 py-1 rounded">
-                                                                Received on <br>
-                                                                {{ \Carbon\Carbon::parse($prep->yarnReceiveDate)->format('Y-m-d') }}
-                                                                at
-                                                                {{ \Carbon\Carbon::parse($prep->yarnReceiveDate)->format('H:i') }}
-                                                            </span>
+                                                            <span class="text-gray-400 italic">—</span>
                                                         @endif
                                                     @else
-                                                        <span class="text-gray-400 italic">—</span>
+                                                        {{-- Other Roles: Editable --}}
+                                                        @if ($prep->alreadyDeveloped == 'Need to Develop')
+                                                            @if (is_null($prep->yarnReceiveDate))
+                                                                <form action="{{ route('rnd.markYarnReceived') }}" method="POST">
+                                                                    @csrf
+                                                                    <input type="hidden" name="id" value="{{ $prep->id }}">
+                                                                    <button type="submit"
+                                                                            class="yarn-receive-btn px-2 py-1 mt-3 rounded transition-all duration-200
+                                                                                    {{ $prep->developPlannedDate && $prep->yarnOrderedDate && $prep->yarnSupplier && $prep->tkt && $prep->yarnOrderedWeight && $prep->shade && $prep->yarnOrderedPONumber
+                                                                                        ? 'bg-gray-300 text-black hover:bg-gray-400'
+                                                                                        : 'bg-gray-200 text-gray-500 cursor-not-allowed' }}"
+                                                                                                                                        {{ $prep->developPlannedDate && $prep->yarnOrderedDate && $prep->yarnSupplier && $prep->tkt && $prep->yarnOrderedWeight && $prep->shade && $prep->yarnOrderedPONumber
+                                                                                                                                            ? ''
+                                                                                                                                            : 'disabled' }}
+                                                                                                                                        title="{{ $prep->developPlannedDate && $prep->yarnOrderedDate && $prep->yarnSupplier && $prep->tkt && $prep->yarnOrderedWeight && $prep->shade && $prep->yarnOrderedPONumber
+                                                                                        ? ''
+                                                                                        : 'Please set Development Plan Date and Yarn Ordered Date first' }}">
+                                                                        Pending
+                                                                    </button>
+                                                                </form>
+                                                            @else
+                                                                <span
+                                                                    class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-pink-200 dark:bg-gray-800 px-3 py-1 rounded">
+                                                                        Received on <br>
+                                                                        {{ \Carbon\Carbon::parse($prep->yarnReceiveDate)->format('Y-m-d') }}
+                                                                        at
+                                                                        {{ \Carbon\Carbon::parse($prep->yarnReceiveDate)->format('H:i') }}
+                                                                    </span>
+                                                            @endif
+                                                        @else
+                                                            <span class="text-gray-400 italic">—</span>
+                                                        @endif
                                                     @endif
                                                 </td>
 
                                                 <td class="px-4 py-3 border-r border-gray-300 text-center">
-                                                    @if ($prep->alreadyDeveloped == 'Need to Develop')
-                                                        @if (!$prep->is_deadline_locked)
-                                                            <form action="{{ route('rnd.lockDeadlineField') }}"
-                                                                method="POST">
-                                                                @csrf
-                                                                <input type="hidden" name="id"
-                                                                    value="{{ $prep->id }}">
-                                                                <input type="date" name="productionDeadline"
-                                                                    value="{{ $prep->productionDeadline?->format('Y-m-d') }}"
-                                                                    class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                                    required>
-
-                                                                <button type="submit"
-                                                                    class="w-full mt-1 px-3 py-1 rounded text-sm transition-all duration-200
-                                                                    {{ $prep->developPlannedDate && $prep->yarnReceiveDate ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-gray-300 text-gray-500 cursor-not-allowed' }}"
-                                                                    {{ $prep->developPlannedDate && $prep->yarnReceiveDate ? '' : 'disabled' }}
-                                                                    title="{{ $prep->developPlannedDate && $prep->yarnReceiveDate ? '' : 'Please set Develop Plan Date & Yarn Received comfirm first' }}">
-                                                                    Save
-                                                                </button>
-                                                            </form>
+                                                    @if (Auth::user()->role === 'ADMIN')
+                                                        {{-- ADMIN: Read-only --}}
+                                                        @if ($prep->alreadyDeveloped == 'Need to Develop')
+                                                            @if (!$prep->is_deadline_locked)
+                                                                <span
+                                                                    class="inline-block bg-gray-200 dark:bg-gray-600 text-gray-500 dark:text-gray-400 text-sm font-medium px-3 py-1 rounded cursor-not-allowed"
+                                                                    title="Admin view only">
+                    {{ $prep->productionDeadline?->format('Y-m-d') ?? 'Pending' }}
+                </span>
+                                                            @else
+                                                                <span class="readonly">
+                    {{ $prep->productionDeadline?->format('Y-m-d') ?? '-' }}
+                </span>
+                                                            @endif
                                                         @else
-                                                            <span class="readonly">
-                                                                {{ $prep->productionDeadline?->format('Y-m-d') ?? '-' }}
-                                                            </span>
+                                                            <span class="text-gray-400 italic">—</span>
                                                         @endif
                                                     @else
-                                                        <span class="text-gray-400 italic">—</span>
+                                                        {{-- Other Roles: Editable --}}
+                                                        @if ($prep->alreadyDeveloped == 'Need to Develop')
+                                                            @if (!$prep->is_deadline_locked)
+                                                                <form action="{{ route('rnd.lockDeadlineField') }}" method="POST">
+                                                                    @csrf
+                                                                    <input type="hidden" name="id" value="{{ $prep->id }}">
+                                                                    <input type="date" name="productionDeadline"
+                                                                           value="{{ $prep->productionDeadline?->format('Y-m-d') }}"
+                                                                           class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                                           required>
+
+                                                                    <button type="submit"
+                                                                            class="w-full mt-1 px-3 py-1 rounded text-sm transition-all duration-200
+                                                                            {{ $prep->developPlannedDate && $prep->yarnReceiveDate
+                                                                                ? 'bg-blue-600 hover:bg-blue-700 text-white'
+                                                                                : 'bg-gray-300 text-gray-500 cursor-not-allowed' }}"
+                                                                            {{ $prep->developPlannedDate && $prep->yarnReceiveDate ? '' : 'disabled' }}
+                                                                            title="{{ $prep->developPlannedDate && $prep->yarnReceiveDate ? '' : 'Please set Develop Plan Date & Yarn Received first' }}">
+                                                                        Save
+                                                                    </button>
+                                                                </form>
+                                                            @else
+                                                                <span class="readonly">
+                                                                    {{ $prep->productionDeadline?->format('Y-m-d') ?? '-' }}
+                                                                </span>
+                                                            @endif
+                                                        @else
+                                                            <span class="text-gray-400 italic">—</span>
+                                                        @endif
                                                     @endif
                                                 </td>
 
@@ -1208,33 +1248,47 @@
                                                         }
                                                     @endphp
 
-                                                    @if ($canEditReference && !$prep->is_reference_locked)
-                                                        {{-- Editable form --}}
-                                                        <form action="{{ route('rnd.lockReferenceField') }}"
-                                                            method="POST">
-                                                            @csrf
-                                                            <input type="hidden" name="id"
-                                                                value="{{ $prep->id }}">
-
-                                                            <input type="text" name="referenceNo"
-                                                                value="{{ $prep->referenceNo }}"
-                                                                class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                                required>
-
-                                                            <button type="submit"
-                                                                class="w-full mt-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm">
-                                                                Save
-                                                            </button>
-                                                        </form>
-                                                    @elseif ($prep->is_reference_locked)
-                                                        {{-- Already locked - show readonly --}}
-                                                        <span class="readonly">{{ $prep->referenceNo }}</span>
+                                                    @if (Auth::user()->role === 'ADMIN')
+                                                        {{-- ADMIN: Read-only --}}
+                                                        @if ($prep->is_reference_locked)
+                                                            <span class="readonly">{{ $prep->referenceNo }}</span>
+                                                        @elseif ($canEditReference)
+                                                            <span
+                                                                class="inline-block bg-gray-200 dark:bg-gray-600 text-gray-500 dark:text-gray-400 text-sm font-medium px-3 py-1 rounded cursor-not-allowed"
+                                                                title="Admin view only">
+                                                                {{ $prep->referenceNo ?? 'Pending' }}
+                                                            </span>
+                                                        @else
+                                                            <span class="timestamp mt-1 text-xs text-red-500 dark:text-red-400">
+                                                                Not Available Until Production is Completed
+                                                            </span>
+                                                        @endif
                                                     @else
-                                                        {{-- Not yet available --}}
-                                                        <span
-                                                            class="timestamp mt-1 text-xs text-red-500 dark:text-red-400">
-                                                            Not Available Until Production is Completed
-                                                        </span>
+                                                        {{-- Other Roles --}}
+                                                        @if ($canEditReference && !$prep->is_reference_locked)
+                                                            {{-- Editable form --}}
+                                                            <form action="{{ route('rnd.lockReferenceField') }}" method="POST">
+                                                                @csrf
+                                                                <input type="hidden" name="id" value="{{ $prep->id }}">
+
+                                                                <input type="text" name="referenceNo" value="{{ $prep->referenceNo }}"
+                                                                       class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                                       required>
+
+                                                                <button type="submit"
+                                                                        class="w-full mt-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm">
+                                                                    Save
+                                                                </button>
+                                                            </form>
+                                                        @elseif ($prep->is_reference_locked)
+                                                            {{-- Locked - Read-only --}}
+                                                            <span class="readonly">{{ $prep->referenceNo }}</span>
+                                                        @else
+                                                            {{-- Not yet available --}}
+                                                            <span class="timestamp mt-1 text-xs text-red-500 dark:text-red-400">
+                                                                Not Available Until Production is Completed
+                                                            </span>
+                                                        @endif
                                                     @endif
                                                 </td>
 
@@ -1277,7 +1331,25 @@
                                                 <!-- Yarn Leftover Weight -->
                                                 <td class="px-4 py-3 border-r border-gray-300 text-center">
                                                     @if ($prep->alreadyDeveloped == 'Need to Develop')
-                                                        @if (!$prep->is_yarn_leftover_weight_locked)
+                                                        @if (Auth::user()->role === 'ADMIN')
+                                                            {{-- ADMIN: Read-only --}}
+                                                            @if ($prep->is_yarn_leftover_weight_locked)
+                                                                <span class="readonly">{{ $prep->yarnLeftoverWeight }} g</span>
+                                                            @elseif ($prep->yarnLeftoverWeight)
+                                                                <span
+                                                                    class="inline-block bg-gray-200 dark:bg-gray-600 text-gray-500 dark:text-gray-400 text-sm font-medium px-3 py-1 rounded cursor-not-allowed"
+                                                                    title="Admin view only">
+                                                                    {{ $prep->yarnLeftoverWeight }} g
+                                                                </span>
+                                                            @else
+                                                                <span
+                                                                    class="inline-block bg-gray-200 dark:bg-gray-600 text-gray-500 dark:text-gray-400 text-sm font-medium px-3 py-1 rounded cursor-not-allowed"
+                                                                    title="Admin view only">
+                                                                    Not Provided
+                                                                </span>
+                                                            @endif
+                                                        @else
+                                                            {{-- Non-Admin Users --}}
                                                             @php
                                                                 $canSave =
                                                                     $prep->production &&
@@ -1285,29 +1357,29 @@
                                                                     is_numeric($prep->production->damaged_output);
                                                             @endphp
 
-                                                            <form action="{{ route('rnd.updateYarnWeights') }}"
-                                                                method="POST">
-                                                                @csrf
-                                                                <input type="hidden" name="id"
-                                                                    value="{{ $prep->id }}">
-                                                                <input type="hidden" name="field"
-                                                                    value="yarnLeftoverWeight">
-                                                                <input type="number" step="0.01" name="value"
-                                                                    value="{{ $prep->yarnLeftoverWeight }}"
-                                                                    class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                                    required>
+                                                            @if (!$prep->is_yarn_leftover_weight_locked)
+                                                                {{-- Editable form --}}
+                                                                <form action="{{ route('rnd.updateYarnWeights') }}" method="POST">
+                                                                    @csrf
+                                                                    <input type="hidden" name="id" value="{{ $prep->id }}">
+                                                                    <input type="hidden" name="field" value="yarnLeftoverWeight">
+                                                                    <input type="number" step="0.01" name="value"
+                                                                           value="{{ $prep->yarnLeftoverWeight }}"
+                                                                           class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                                           required>
 
-                                                                <button type="submit"
-                                                                    class="w-full mt-1 px-3 py-1 rounded text-sm transition-all duration-200
-                        {{ $canSave ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-gray-300 text-gray-500 cursor-not-allowed' }}"
-                                                                    {{ $canSave ? '' : 'disabled' }}
-                                                                    title="{{ $canSave ? '' : 'Production Output and Damaged Output are required' }}">
-                                                                    Save
-                                                                </button>
-                                                            </form>
-                                                        @else
-                                                            <span class="readonly">{{ $prep->yarnLeftoverWeight }}
-                                                                g</span>
+                                                                    <button type="submit"
+                                                                            class="w-full mt-1 px-3 py-1 rounded text-sm transition-all duration-200
+                                                                            {{ $canSave ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-gray-300 text-gray-500 cursor-not-allowed' }}"
+                                                                            {{ $canSave ? '' : 'disabled' }}
+                                                                            title="{{ $canSave ? '' : 'Production Output and Damaged Output are required' }}">
+                                                                        Save
+                                                                    </button>
+                                                                </form>
+                                                            @else
+                                                                {{-- Locked - readonly --}}
+                                                                <span class="readonly">{{ $prep->yarnLeftoverWeight }} g</span>
+                                                            @endif
                                                         @endif
                                                     @else
                                                         <span class="text-gray-400 italic">—</span>
