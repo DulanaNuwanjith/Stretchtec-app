@@ -1099,7 +1099,7 @@
                                                         </span>
                                                     @endif
                                                 </td>
-                                                
+
                                                 <td
                                                     class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
                                                     @if ($prep->alreadyDeveloped == 'Need to Develop')
@@ -1298,6 +1298,10 @@
                                 </div>
 
                             </div>
+                            <div class="mt-4">
+                                {{ $samplePreparations->links() }}
+                            </div>
+
                         </div>
                     </div>
                 </div>

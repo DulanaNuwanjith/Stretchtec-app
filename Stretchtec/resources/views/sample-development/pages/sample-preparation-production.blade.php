@@ -814,6 +814,11 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                <div class="mt-4">
+                                    {{ $productions->links() }}
+                                </div>
+
                             </div>
                         </div>
                     </div>

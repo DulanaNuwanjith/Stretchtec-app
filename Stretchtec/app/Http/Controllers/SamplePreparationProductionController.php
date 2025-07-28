@@ -15,9 +15,10 @@ class SamplePreparationProductionController extends Controller
         $operators = \App\Models\OperatorsandSupervisors::where('role', 'OPERATOR')->get();
         $supervisors = \App\Models\OperatorsandSupervisors::where('role', 'SUPERVISOR')->get();
 
+        // Use pagination instead of get()
         $productions = SamplePreparationProduction::with('samplePreparationRnD.sampleInquiry')
             ->latest()
-            ->get();
+            ->paginate(10); // you can change 10 to the number of records you want per page
 
         return view('sample-development.pages.sample-preparation-production', compact('productions', 'operators', 'supervisors'));
     }
