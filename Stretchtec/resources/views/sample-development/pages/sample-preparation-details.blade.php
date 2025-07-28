@@ -1062,15 +1062,19 @@
                                                         value="{{ $status }}" />
                                                 </td>
 
-
                                                 <td class="px-4 py-3 border-r border-gray-300 text-center">
                                                     @php
-                                                        $canEditReference =
-                                                            in_array($prep->alreadyDeveloped, ['No Need to Develop', 'Tape Match Pan Asia']) ||
-                                                            ($prep->alreadyDeveloped == 'Need to Develop' && optional($prep->production)->status == 'Complete');
+                                                        $canEditReference = false;
+
+                                                        if (in_array($prep->alreadyDeveloped, ['No Need to Develop', 'Tape Match Pan Asia'])) {
+                                                            $canEditReference = true;
+                                                        } elseif ($prep->alreadyDeveloped === 'Need to Develop' && $prep->productionStatus === 'Production Complete') {
+                                                            $canEditReference = true;
+                                                        }
                                                     @endphp
 
                                                     @if ($canEditReference && !$prep->is_reference_locked)
+                                                        {{-- Editable form --}}
                                                         <form action="{{ route('rnd.lockReferenceField') }}" method="POST">
                                                             @csrf
                                                             <input type="hidden" name="id" value="{{ $prep->id }}">
@@ -1090,10 +1094,12 @@
                                                         <span class="readonly">{{ $prep->referenceNo }}</span>
                                                     @else
                                                         {{-- Not yet available --}}
-                                                        <span class="timestamp mt-1 text-xs text-red-500 dark:text-red-400">Not Available Until production is Completed</span>
+                                                        <span class="timestamp mt-1 text-xs text-red-500 dark:text-red-400">
+                                                            Not Available Until Production is Completed
+                                                        </span>
                                                     @endif
                                                 </td>
-
+                                                
                                                 <td
                                                     class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
                                                     @if ($prep->alreadyDeveloped == 'Need to Develop')
