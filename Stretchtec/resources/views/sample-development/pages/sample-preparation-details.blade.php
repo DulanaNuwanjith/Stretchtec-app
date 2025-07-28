@@ -1304,7 +1304,7 @@
                                 </div>
 
                             </div>
-                            <div class="mt-4">
+                            <div class="py-6 flex justify-center">
                                 {{ $samplePreparations->links() }}
                             </div>
 

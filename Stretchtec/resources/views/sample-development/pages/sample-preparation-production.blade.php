@@ -793,11 +793,10 @@
                                         </div>
                                     </div>
                                 </div>
-
-                                <div class="mt-4">
-                                    {{ $productions->links() }}
-                                </div>
-
+                            </div>
+                            <div class="py-6 flex justify-center">
+                                {{-- Pagination --}}
+                                {{ $productions->links() }}
                             </div>
                         </div>
                     </div>
