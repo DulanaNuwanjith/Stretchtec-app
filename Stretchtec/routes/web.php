@@ -69,6 +69,14 @@ Route::middleware([
     Route::get('tapeCatalog', function () {
         return view('production-catalog.pages.tapeCatalog');
     })->name('tapeCatalog.index');
+
+    Route::get('production-inquery-details', function () {
+        return view('production.pages.production-inquery-details');
+    })->name('production-inquery-details.index');
+
+    Route::get('production-order-preparation', function () {
+        return view('production.pages.production-order-preparation');
+    })->name('production-order-preparation.index');
 });
 
 
