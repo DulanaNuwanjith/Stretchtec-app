@@ -279,17 +279,18 @@
                                             </div>
                                         </div>
 
-                                        {{-- Date pickers --}}
+                                        {{-- Date: Customer Requested --}}
                                         <div class="inline-block text-left w-48">
                                             <label for="customer_requested_date"
-                                                class="block text-sm font-medium text-gray-700">Customer
-                                                Requested Date</label>
+                                                class="block text-sm font-medium text-gray-700">Customer Requested
+                                                Date</label>
                                             <input type="date" name="customer_requested_date"
                                                 id="customerRequestedDate"
                                                 value="{{ request('customer_requested_date') }}"
                                                 class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 text-sm">
                                         </div>
 
+                                        {{-- Date: Development Plan --}}
                                         <div class="inline-block text-left w-48">
                                             <label for="development_plan_date"
                                                 class="block text-sm font-medium text-gray-700">Development Plan

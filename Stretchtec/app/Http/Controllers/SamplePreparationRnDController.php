@@ -33,8 +33,9 @@ class SamplePreparationRnDController extends Controller
             $query->where('referenceNo', $request->reference_no);
         }
 
+        // FILTER DATE FIELDS USING snake_case input names AND camelCase columns
         if ($request->filled('customer_requested_date')) {
-            $query->whereDate('customerRequestedDate', $request->customer_requested_date);
+            $query->whereDate('customerRequestDate', $request->customer_requested_date);
         }
 
         if ($request->filled('development_plan_date')) {
