@@ -135,7 +135,7 @@
                             <div id="filterFormContainer" class="hidden mt-4">
                                 <!-- Filter Form -->
                                 <form id="filterForm2" method="GET"
-                                    action="{{ route('sample-preparation-details.index') }}">
+                                    action="{{ route('sample-preparation-details.index') }}" class="mb-6">
                                     <div class="flex items-center gap-4 flex-wrap">
 
                                         {{-- Order No Dropdown --}}
@@ -161,7 +161,8 @@
                                                 class="absolute z-40 mt-1 w-full bg-white border rounded-lg shadow-lg hidden max-h-48 overflow-y-auto p-2"
                                                 role="listbox" aria-labelledby="orderDropdown">
                                                 <input type="text" id="orderSearchInput" onkeyup="filterOrders()"
-                                                    placeholder="Search..." class="w-full px-2 py-1 text-sm border rounded-md dark:bg-gray-600 dark:text-white dark:placeholder-gray-300"
+                                                    placeholder="Search..."
+                                                    class="w-full px-2 py-1 text-sm border rounded-md dark:bg-gray-600 dark:text-white dark:placeholder-gray-300"
                                                     autocomplete="off">
                                                 @foreach ($orderNos as $order)
                                                     <div onclick="selectOrder('{{ $order }}')" tabindex="0"
@@ -195,7 +196,8 @@
                                                 class="absolute z-40 mt-1 w-full bg-white border rounded-lg shadow-lg hidden max-h-48 overflow-y-auto p-2"
                                                 role="listbox" aria-labelledby="poDropdown">
                                                 <input type="text" id="poSearchInput" onkeyup="filterPOs()"
-                                                    placeholder="Search..." class="w-full px-2 py-1 text-sm border rounded-md dark:bg-gray-600 dark:text-white dark:placeholder-gray-300"
+                                                    placeholder="Search..."
+                                                    class="w-full px-2 py-1 text-sm border rounded-md dark:bg-gray-600 dark:text-white dark:placeholder-gray-300"
                                                     autocomplete="off">
                                                 @foreach ($poNos as $po)
                                                     <div onclick="selectPO('{{ $po }}')" tabindex="0"
@@ -228,7 +230,8 @@
                                                 class="absolute z-40 mt-1 w-full bg-white border rounded-lg shadow-lg hidden max-h-48 overflow-y-auto p-2"
                                                 role="listbox" aria-labelledby="shadeDropdown">
                                                 <input type="text" id="shadeSearchInput" onkeyup="filterShades()"
-                                                    placeholder="Search..." class="w-full px-2 py-1 text-sm border rounded-md dark:bg-gray-600 dark:text-white dark:placeholder-gray-300"
+                                                    placeholder="Search..."
+                                                    class="w-full px-2 py-1 text-sm border rounded-md dark:bg-gray-600 dark:text-white dark:placeholder-gray-300"
                                                     autocomplete="off">
                                                 @foreach ($shades as $shade)
                                                     <div onclick="selectShade('{{ $shade }}')" tabindex="0"
@@ -263,7 +266,8 @@
                                                 class="absolute z-40 mt-1 w-full bg-white border rounded-lg shadow-lg hidden max-h-48 overflow-y-auto p-2"
                                                 role="listbox" aria-labelledby="refDropdown">
                                                 <input type="text" id="refSearchInput" onkeyup="filterRefs()"
-                                                    placeholder="Search..." class="w-full px-2 py-1 text-sm border rounded-md dark:bg-gray-600 dark:text-white dark:placeholder-gray-300"
+                                                    placeholder="Search..."
+                                                    class="w-full px-2 py-1 text-sm border rounded-md dark:bg-gray-600 dark:text-white dark:placeholder-gray-300"
                                                     autocomplete="off">
                                                 @foreach ($references as $ref)
                                                     <div onclick="selectRef('{{ $ref }}')" tabindex="0"
@@ -275,17 +279,18 @@
                                             </div>
                                         </div>
 
-                                        {{-- Date pickers --}}
+                                        {{-- Date: Customer Requested --}}
                                         <div class="inline-block text-left w-48">
                                             <label for="customer_requested_date"
-                                                class="block text-sm font-medium text-gray-700">Customer
-                                                Requested Date</label>
+                                                class="block text-sm font-medium text-gray-700">Customer Requested
+                                                Date</label>
                                             <input type="date" name="customer_requested_date"
                                                 id="customerRequestedDate"
                                                 value="{{ request('customer_requested_date') }}"
                                                 class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 text-sm">
                                         </div>
 
+                                        {{-- Date: Development Plan --}}
                                         <div class="inline-block text-left w-48">
                                             <label for="development_plan_date"
                                                 class="block text-sm font-medium text-gray-700">Development Plan
@@ -298,8 +303,9 @@
                                         {{-- Buttons --}}
                                         <div class="flex items-end space-x-2 mt-2">
                                             <button type="submit"
-                                                class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Apply Filters</button>
-                                            <button type="button" onclick="clearFilters()"
+                                                class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Apply
+                                                Filters</button>
+                                            <button type="button" id="clearFiltersBtn" onclick="clearFilters()"
                                                 class="mt-4 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 px-4 py-2 rounded hover:bg-gray-300">Clear</button>
                                         </div>
                                     </div>
@@ -1834,5 +1840,11 @@
 
             document.getElementById("filterForm2").submit();
         }
+    </script>
+    <script>
+        document.getElementById('clearFiltersBtn').addEventListener('click', function() {
+            // Reload the page to clear all filters and reset state
+            window.location.href = window.location.pathname;
+        });
     </script>
 @endsection
