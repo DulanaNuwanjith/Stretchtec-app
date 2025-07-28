@@ -544,7 +544,7 @@
                                                     <div x-data="{
                                                         openDropdown: false,
                                                         openModal: false,
-                                                        selectedStatus: '{{ $prep->alreadyDeveloped ?? 'Need to Develop' }}',
+                                                        selectedStatus: '{{ $prep->alreadyDeveloped ?? 'Select Development' }}',
                                                         id: {{ $prep->id }},
                                                         setStatus(status) {
                                                             if (status === 'Tape Match Pan Asia') {
