@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ColorMatchReject;
 use App\Models\LeftoverYarn;
 use App\Models\SamplePreparationRnD;
 use App\Models\SamplePreparationProduction;
@@ -15,6 +16,7 @@ class SamplePreparationRnDController extends Controller
     public function viewRnD(Request $request)
     {
         $query = SamplePreparationRnD::with('sampleInquiry');
+        $rejects = ColorMatchReject::all();
 
         // Filters
         if ($request->filled('order_no')) {
@@ -56,7 +58,8 @@ class SamplePreparationRnDController extends Controller
             'orderNos',
             'poNos',
             'shades',
-            'references'
+            'references',
+            'rejects'
         ));
     }
 
