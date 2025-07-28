@@ -402,14 +402,17 @@
                                 </form>
                             </div>
 
-
                             <div class="flex justify-between items-center mb-6">
                                 <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Sample Inquiry Records</h1>
                                 <div class="flex space-x-3">
-                                    <button onclick="document.getElementById('addSampleModal').classList.remove('hidden')"
-                                        class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded shadow">
-                                        + Add New Order
-                                    </button>
+                                    {{-- Only show Add New Order if NOT ADMIN --}}
+                                    @if (Auth::user()->role !== 'ADMIN')
+                                        <button onclick="document.getElementById('addSampleModal').classList.remove('hidden')"
+                                                class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded shadow">
+                                            + Add New Order
+                                        </button>
+                                    @endif
+
                                     <a href="{{ route('sampleStock.index') }}">
                                         <button
                                             class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded shadow">
