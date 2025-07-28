@@ -832,7 +832,7 @@
                                                     @if ($prep->alreadyDeveloped == 'Need to Develop')
                                                         @if (!empty($prep->yarnOrderedPONumber))
                                                             {{-- Show saved PO Number --}}
-                                                            <span class="inline-block bg-purple-100 dark:bg-purple-800 text-purple-800 dark:text-purple-200 text-sm font-semibold px-3 py-1 rounded">
+                                                            <span class="text-sm font-medium text-gray-800 dark:text-gray-200">
                                                                 {{ $prep->yarnOrderedPONumber }}
                                                             </span>
                                                         @else
@@ -857,7 +857,7 @@
                                                 <td class="px-4 py-3 border-r border-gray-300 text-center">
                                                     @if (!empty($prep->shade))
                                                         {{-- Show saved Shade --}}
-                                                        <span class="inline-block bg-purple-100 dark:bg-purple-800 text-purple-800 dark:text-purple-200 text-sm font-semibold px-3 py-1 rounded">
+                                                        <span class="text-sm font-medium text-gray-800 dark:text-gray-200">
                                                             {{ $prep->shade }}
                                                         </span>
                                                     @elseif(in_array($prep->alreadyDeveloped, ['No Need to Develop']))
@@ -877,7 +877,7 @@
                                                 <td class="px-4 py-3 border-r border-gray-300 text-center">
                                                     @if (!empty($prep->yarnOrderedWeight))
                                                         {{-- Show saved Yarn Ordered Weight --}}
-                                                        <span class="inline-block bg-purple-100 dark:bg-purple-800 text-purple-800 dark:text-purple-200 text-sm font-semibold px-3 py-1 rounded">
+                                                        <span class="text-sm font-medium text-gray-800 dark:text-gray-200">
                                                             {{ $prep->yarnOrderedWeight }} g
                                                         </span>
                                                     @elseif(in_array($prep->alreadyDeveloped, ['No Need to Develop']))
@@ -897,7 +897,7 @@
                                                 <td class="px-4 py-3 border-r border-gray-300 text-center">
                                                     @if (!empty($prep->tkt))
                                                         {{-- Show saved TKT --}}
-                                                        <span class="inline-block bg-purple-100 dark:bg-purple-800 text-purple-800 dark:text-purple-200 text-sm font-semibold px-3 py-1 rounded">
+                                                        <span class="text-sm font-medium text-gray-800 dark:text-gray-200">
                                                         {{ $prep->tkt }}
                                                     </span>
                                                     @elseif(in_array($prep->alreadyDeveloped, ['No Need to Develop']))
@@ -917,7 +917,7 @@
                                                 <td class="px-4 py-3 border-r border-gray-300 text-center">
                                                     @if (!empty($prep->yarnSupplier))
                                                         {{-- Show saved Supplier --}}
-                                                        <span class="inline-block bg-purple-100 dark:bg-purple-800 text-purple-800 dark:text-purple-200 text-sm font-semibold px-3 py-1 rounded">
+                                                        <span class="text-sm font-medium text-gray-800 dark:text-gray-200">
                                                             {{ $prep->yarnSupplier }}
                                                         </span>
                                                     @elseif ($prep->alreadyDeveloped == 'No Need to Develop')
