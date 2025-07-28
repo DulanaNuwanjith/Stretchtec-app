@@ -111,17 +111,12 @@
                 });
             }
         </script>
-        <a href="{{ route('sample-inquery-details.index') }}">
-            <button class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded shadow mb-6">
-                Back Sample Development
-            </button>
-        </a>
 
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Sample Stock Records</h1>
         </div>
 
-        <div class="mb-4">
+        <div class="mb-8">
             <form method="GET" action="{{ route('sampleStock.index') }}" class="flex items-center space-x-2 max-w-md">
                 <input type="text" name="search" value="{{ request('search') }}"
                     placeholder="Search by Reference No, Shade or Note" autocomplete="off"
