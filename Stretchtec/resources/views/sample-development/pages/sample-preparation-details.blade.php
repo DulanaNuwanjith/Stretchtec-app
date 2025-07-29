@@ -2194,20 +2194,28 @@
                         .then(response => response.json())
                         .then(data => {
                             if (data.success) {
-                                const list = data.rejects.map((item, index) => `
-            <div class="mb-4 border-b pb-2">
-                <p><strong>#${index + 1}</strong></p>
-                <p><strong>Sent Date:</strong> ${item.sentDate}</p>
-                <p><strong>Receive Date:</strong> ${item.receiveDate}</p>
-                <p><strong>Reject Date:</strong> ${item.rejectDate}</p>
-                <p><strong>Reject Reason:</strong> ${item.rejectReason}</p>
-            </div>
-        `).join('');
+                                const sorted = data.rejects.sort((a, b) => new Date(b
+                                    .rejectDate) - new Date(a.rejectDate));
+                                const total = sorted.length;
+
+                                const list = sorted.map((item, index) => {
+                                    return `
+                                    <div class="mb-4 border-b pb-2">
+                                        <p><strong>#${total - index}</strong></p>
+                                        <p><strong>Sent Date:</strong> ${item.sentDate}</p>
+                                        <p><strong>Receive Date:</strong> ${item.receiveDate}</p>
+                                        <p><strong>Reject Date:</strong> ${item.rejectDate}</p>
+                                        <p><strong>Reject Reason:</strong> ${item.rejectReason}</p>
+                                    </div>
+                                `;
+                                }).join('');
 
                                 modalContent.innerHTML = `
-            <p class="font-semibold mb-2 text-sm text-gray-800 dark:text-white">Order No: ${data.orderNo}</p>
-            ${list}
-        `;
+                                <p class="font-semibold mb-2 text-sm text-gray-800 dark:text-white">
+                                    Order No: ${data.orderNo}
+                                </p>
+                                ${list}
+                            `;
                             } else {
                                 modalContent.innerHTML =
                                     `<p class="text-red-500">${data.message}</p>`;
@@ -2215,7 +2223,6 @@
 
                             modal.classList.remove('hidden');
                         })
-
                         .catch(() => {
                             modalContent.innerHTML =
                                 '<p class="text-red-500">Something went wrong.</p>';
