@@ -278,35 +278,38 @@
                                                 @endforeach
                                             </div>
                                         </div>
+                                        <div class="flex gap-6 items-end">
 
-                                        {{-- Date: Customer Requested --}}
-                                        <div class="inline-block text-left w-48">
-                                            <label for="customer_requested_date"
-                                                class="block text-sm font-medium text-gray-700">Customer Requested
-                                                Date</label>
-                                            <input type="date" name="customer_requested_date"
-                                                id="customerRequestedDate"
-                                                value="{{ request('customer_requested_date') }}"
-                                                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 text-sm">
-                                        </div>
+                                            {{-- Date: Customer Requested --}}
+                                            <div class="inline-block text-left w-48">
+                                                <label for="customer_requested_date"
+                                                    class="block text-sm font-medium text-gray-700">Customer Requested
+                                                    Date</label>
+                                                <input type="date" name="customer_requested_date"
+                                                    id="customerRequestedDate"
+                                                    value="{{ request('customer_requested_date') }}"
+                                                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 text-sm">
+                                            </div>
 
-                                        {{-- Date: Development Plan --}}
-                                        <div class="inline-block text-left w-48">
-                                            <label for="development_plan_date"
-                                                class="block text-sm font-medium text-gray-700">Development Plan
-                                                Date</label>
-                                            <input type="date" name="development_plan_date" id="developmentPlanDate"
-                                                value="{{ request('development_plan_date') }}"
-                                                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 text-sm">
-                                        </div>
+                                            {{-- Date: Development Plan --}}
+                                            <div class="inline-block text-left w-48">
+                                                <label for="development_plan_date"
+                                                    class="block text-sm font-medium text-gray-700">Development Plan
+                                                    Date</label>
+                                                <input type="date" name="development_plan_date"
+                                                    id="developmentPlanDate"
+                                                    value="{{ request('development_plan_date') }}"
+                                                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 text-sm">
+                                            </div>
 
-                                        {{-- Buttons --}}
-                                        <div class="flex items-end space-x-2 mt-2">
-                                            <button type="submit"
-                                                class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Apply
-                                                Filters</button>
-                                            <button type="button" id="clearFiltersBtn" onclick="clearFilters()"
-                                                class="mt-4 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 px-4 py-2 rounded hover:bg-gray-300">Clear</button>
+                                            {{-- Buttons --}}
+                                            <div class="flex items-end space-x-2 mt-2">
+                                                <button type="submit"
+                                                    class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Apply
+                                                    Filters</button>
+                                                <button type="button" id="clearFiltersBtn" onclick="clearFilters()"
+                                                    class="mt-4 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 px-4 py-2 rounded hover:bg-gray-300">Clear</button>
+                                            </div>
                                         </div>
                                     </div>
                                 </form>
@@ -1427,7 +1430,8 @@
                                                                         value="{{ $prep->id }}">
                                                                     <input type="hidden" name="field"
                                                                         value="yarnLeftoverWeight">
-                                                                    <input type="number" step="0.01" min="0" name="value"
+                                                                    <input type="number" step="0.01" min="0"
+                                                                        name="value"
                                                                         value="{{ $prep->yarnLeftoverWeight }}"
                                                                         class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                                         required>
