@@ -550,7 +550,7 @@
                                                                     <input type="hidden" name="id"
                                                                         value="{{ $prod->id }}">
 
-                                                                    <input type="number" step="any"
+                                                                    <input type="number" min="0" step="any"
                                                                         name="production_output"
                                                                         value="{{ old('production_output', $prod->production_output) }}"
                                                                         class="w-full px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
@@ -586,7 +586,7 @@
                                                                     <input type="hidden" name="id"
                                                                         value="{{ $prod->id }}">
 
-                                                                    <input type="number" step="any"
+                                                                    <input type="number" min="0" step="any"
                                                                         name="damaged_output"
                                                                         value="{{ old('damaged_output', $prod->damaged_output) }}"
                                                                         class="w-full px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
