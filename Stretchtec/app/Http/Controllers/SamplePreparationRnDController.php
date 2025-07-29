@@ -356,7 +356,7 @@ class SamplePreparationRnDController extends Controller
         $request->validate([
             'id' => 'required|exists:sample_preparation_rnd,id',
             'field' => 'required|in:yarnOrderedWeight,yarnLeftoverWeight',
-            'value' => 'required|numeric',
+            'value' => 'required|numeric|min:0',
         ]);
 
         $prep = SamplePreparationRnD::findOrFail($request->id);

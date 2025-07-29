@@ -1427,7 +1427,7 @@
                                                                         value="{{ $prep->id }}">
                                                                     <input type="hidden" name="field"
                                                                         value="yarnLeftoverWeight">
-                                                                    <input type="number" step="0.01" name="value"
+                                                                    <input type="number" step="0.01" min="0" name="value"
                                                                         value="{{ $prep->yarnLeftoverWeight }}"
                                                                         class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                                         required>
