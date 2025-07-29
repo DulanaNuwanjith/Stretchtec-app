@@ -13,7 +13,7 @@ class OperatorsandSupervisors extends Model
         'name',
         'phoneNo',
         'address',
-        'role', // 'operator' or 'supervisor'
+        'role',
     ];
 
     public $timestamps = true;

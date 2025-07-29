@@ -45,9 +45,11 @@ class OperatorsandSupervisorsController extends Controller
             $validatedData = $request->validate([
                 'empID' => 'required|unique:operatorsand_supervisors,empID',
                 'name' => 'required|string|max:255',
-                'phoneNo' => 'required|string|max:15',
+                'phoneNo' => ['required', 'regex:/^[0-9]{10}$/'],
                 'address' => 'nullable|string|max:255',
-                'role' => 'required' . '|in:OPERATOR,SUPERVISOR',
+                'role' => 'required|in:OPERATOR,SUPERVISOR',
+            ], [
+                'phoneNo.regex' => 'The phone number must be exactly 10 digits.',
             ]);
 
             // Only fill fields that are necessary
