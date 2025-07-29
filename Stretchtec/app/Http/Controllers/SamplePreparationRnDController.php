@@ -151,7 +151,6 @@ class SamplePreparationRnDController extends Controller
             'order_no' => $rnd->orderNo,
             'production_deadline' => $rnd->productionDeadline,
             'order_received_at' => now(),
-            'note' => $rnd->note,
         ]);
 
         return back()->with('success', 'Sent to production successfully.');

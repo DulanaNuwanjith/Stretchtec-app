@@ -1460,14 +1460,14 @@
                                                     class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
                                                     @if (auth()->user()->role !== 'ADMIN')
                                                         <form
-                                                            action="{{ route('sample-inquery-details.update-notes', $prep->id) }}"
+                                                            action="{{ route('sample-inquery-details.update-notes', $prep->sample_inquiry_id) }}"
                                                             method="POST" class="w-full">
                                                             @csrf
                                                             @method('PATCH')
 
                                                             <textarea name="notes"
                                                                 class="w-full px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm" rows="2"
-                                                                required>{{ old('notes', $prep->note) }}</textarea>
+                                                                required>{{ old('notes', $prep->sampleInquiry->notes) }}</textarea>
 
                                                             <button type="submit"
                                                                 class="w-full mt-1 px-2 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition-all duration-200 text-sm">
@@ -1475,10 +1475,10 @@
                                                             </button>
                                                         </form>
                                                     @else
-                                                        <span class="readonly">{{ $prep->note ?? 'N/D' }}</span>
+                                                        <span
+                                                            class="readonly">{{ $prep->sampleInquiry->notes ?? 'N/D' }}</span>
                                                     @endif
                                                 </td>
-
 
                                                 <td class="px-4 py-3 whitespace-normal break-words text-center">
                                                     <div class="flex justify-center space-x-2">
