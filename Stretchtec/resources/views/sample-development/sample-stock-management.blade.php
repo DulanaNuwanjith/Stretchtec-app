@@ -222,7 +222,7 @@
                                                 min="1" max="{{ $stock->available_stock }}" placeholder="Qty"
                                                 required oninput="validateQty(this, {{ $stock->available_stock }})">
                                             <button type="submit"
-                                                class="bg-green-600 hover:bg-green-700 text-white px-4 py-1 rounded text-sm">
+                                                class="bg-yellow-600 hover:bg-yellow-700 text-white px-4 py-1 rounded text-sm">
                                                 Borrow
                                             </button>
                                         </form>
