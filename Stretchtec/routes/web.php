@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\ColorMatchRejectController;
-use App\Http\Controllers\LeftoverYarnController;
 use App\Http\Controllers\OperatorsandSupervisorsController;
 use App\Http\Controllers\SampleInquiryController;
 use App\Http\Controllers\SamplePreparationRnDController;
