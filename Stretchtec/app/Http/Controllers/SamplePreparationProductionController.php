@@ -46,14 +46,13 @@ class SamplePreparationProductionController extends Controller
     }
 
 
-    // Update editable fields like operator_name, supervisor_name, production_output, note, deadline, order_no
+    // Update editable fields like operator_name, supervisor_name, production_output, deadline, order_no
     public function update(Request $request)
     {
         $request->validate([
             'id' => 'required|exists:sample_preparation_production,id',
             'operator_name' => 'nullable|string|max:255',
             'supervisor_name' => 'nullable|string|max:255',
-            'note' => 'nullable|string',
         ]);
 
         $production = SamplePreparationProduction::findOrFail($request->id);
@@ -61,7 +60,6 @@ class SamplePreparationProductionController extends Controller
         $production->update([
             'operator_name' => $request->operator_name,
             'supervisor_name' => $request->supervisor_name,
-            'note' => $request->note,
             'production_deadline' => $request->production_deadline,
         ]);
 

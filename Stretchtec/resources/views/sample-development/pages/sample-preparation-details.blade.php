@@ -1460,14 +1460,14 @@
                                                     class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
                                                     @if (auth()->user()->role !== 'ADMIN')
                                                         <form
-                                                            action="{{ route('sample-inquery-details.update-notes', $prep->id) }}"
+                                                            action="{{ route('sample-inquery-details.update-notes', $prep->sample_inquiry_id) }}"
                                                             method="POST" class="w-full">
                                                             @csrf
                                                             @method('PATCH')
 
                                                             <textarea name="notes"
                                                                 class="w-full px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm" rows="2"
-                                                                required>{{ old('notes', $prep->note) }}</textarea>
+                                                                required>{{ old('notes', $prep->sampleInquiry->notes) }}</textarea>
 
                                                             <button type="submit"
                                                                 class="w-full mt-1 px-2 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition-all duration-200 text-sm">
@@ -1475,10 +1475,10 @@
                                                             </button>
                                                         </form>
                                                     @else
-                                                        <span class="readonly">{{ $prep->note ?? 'N/D' }}</span>
+                                                        <span
+                                                            class="readonly">{{ $prep->sampleInquiry->notes ?? 'N/D' }}</span>
                                                     @endif
                                                 </td>
-
 
                                                 <td class="px-4 py-3 whitespace-normal break-words text-center">
                                                     <div class="flex justify-center space-x-2">
@@ -2194,20 +2194,28 @@
                         .then(response => response.json())
                         .then(data => {
                             if (data.success) {
-                                const list = data.rejects.map((item, index) => `
-            <div class="mb-4 border-b pb-2">
-                <p><strong>#${index + 1}</strong></p>
-                <p><strong>Sent Date:</strong> ${item.sentDate}</p>
-                <p><strong>Receive Date:</strong> ${item.receiveDate}</p>
-                <p><strong>Reject Date:</strong> ${item.rejectDate}</p>
-                <p><strong>Reject Reason:</strong> ${item.rejectReason}</p>
-            </div>
-        `).join('');
+                                const sorted = data.rejects.sort((a, b) => new Date(b
+                                    .rejectDate) - new Date(a.rejectDate));
+                                const total = sorted.length;
+
+                                const list = sorted.map((item, index) => {
+                                    return `
+                                    <div class="mb-4 border-b pb-2">
+                                        <p><strong>#${total - index}</strong></p>
+                                        <p><strong>Sent Date:</strong> ${item.sentDate}</p>
+                                        <p><strong>Receive Date:</strong> ${item.receiveDate}</p>
+                                        <p><strong>Reject Date:</strong> ${item.rejectDate}</p>
+                                        <p><strong>Reject Reason:</strong> ${item.rejectReason}</p>
+                                    </div>
+                                `;
+                                }).join('');
 
                                 modalContent.innerHTML = `
-            <p class="font-semibold mb-2 text-sm text-gray-800 dark:text-white">Order No: ${data.orderNo}</p>
-            ${list}
-        `;
+                                <p class="font-semibold mb-2 text-sm text-gray-800 dark:text-white">
+                                    Order No: ${data.orderNo}
+                                </p>
+                                ${list}
+                            `;
                             } else {
                                 modalContent.innerHTML =
                                     `<p class="text-red-500">${data.message}</p>`;
@@ -2215,7 +2223,6 @@
 
                             modal.classList.remove('hidden');
                         })
-
                         .catch(() => {
                             modalContent.innerHTML =
                                 '<p class="text-red-500">Something went wrong.</p>';

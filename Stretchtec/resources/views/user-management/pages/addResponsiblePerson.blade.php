@@ -217,7 +217,7 @@
                         <div class="py-6 flex justify-center">
                             {{ $operatorsAndSupervisors->links() }}
                         </div>
-                        <!-- Add Product Modal -->
+
                         <div id="addNewOperatorSupervisorModal"
                             class="fixed inset-0 z-50 hidden bg-black bg-opacity-50 flex items-center justify-center py-5">
                             <div class="w-full max-w-[700px] bg-white dark:bg-gray-900 rounded-2xl shadow-2xl p-4 transform transition-all scale-95 max-h-[calc(100vh-10rem)] overflow-y-auto"
@@ -255,6 +255,8 @@
                                                         class="block text-sm font-medium text-gray-700 dark:text-gray-300">Telephone
                                                         No</label>
                                                     <input id="phoneNo" type="text" name="phoneNo" required
+                                                        pattern="\d{10}" maxlength="10"
+                                                        title="Enter a 10-digit phone number"
                                                         class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                 </div>
                                                 <div class="w-1/2">

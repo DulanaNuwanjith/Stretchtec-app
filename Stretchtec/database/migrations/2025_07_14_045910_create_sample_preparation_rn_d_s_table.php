@@ -16,7 +16,6 @@ return new class extends Migration
             $table->foreignId('sample_inquiry_id')->constrained()->onDelete('cascade');
             $table->string('orderNo');
             $table->date('customerRequestDate')->nullable();
-            $table->text('note')->nullable();
 
             // Future fields (optional placeholders)
             $table->date('developPlannedDate')->nullable();

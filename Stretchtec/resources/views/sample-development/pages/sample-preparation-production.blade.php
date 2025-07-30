@@ -706,23 +706,26 @@
                                                 {{-- Note --}}
                                                 <td
                                                     class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
-                                                    @if (auth()->user()->role !== 'ADMIN')
+                                                    @if (auth()->user()->role !== 'ADMIN' && $prod->sampleInquiry)
                                                         <form
-                                                            action="{{ route('sample-inquery-details.update-notes', $prod->id) }}"
+                                                            action="{{ route('sample-inquery-details.update-notes', $prod->sampleInquiry->id) }}"
                                                             method="POST" class="w-full">
                                                             @csrf
                                                             @method('PATCH')
 
                                                             <textarea name="notes" rows="2"
-                                                                class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm" required>{{ old('notes', $prod->note) }}</textarea>
+                                                                class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm" required>{{ old('notes', $prod->sampleInquiry->notes) }}</textarea>
 
                                                             <button type="submit"
                                                                 class="w-full mt-1 px-2 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition-all duration-200 text-sm">
                                                                 Save
                                                             </button>
                                                         </form>
+                                                    @elseif(auth()->user()->role !== 'ADMIN')
+                                                        <span>No linked inquiry found</span>
                                                     @else
-                                                        <span class="readonly">{{ $prod->note ?? 'N/D' }}</span>
+                                                        <span
+                                                            class="readonly">{{ $prod->sampleInquiry->notes ?? 'N/D' }}</span>
                                                     @endif
                                                 </td>
 
