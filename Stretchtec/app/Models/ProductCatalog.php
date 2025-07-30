@@ -21,6 +21,7 @@ class ProductCatalog extends Model
         'colour',
         'shade',
         'tkt',
+        'order_image',
     ];
 
     protected $casts = [

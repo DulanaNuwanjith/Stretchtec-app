@@ -284,7 +284,8 @@
                             <div class="flex justify-between items-center mb-6">
                                 <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Tape Production Catalog
                                 </h1>
-                                <button onclick="document.getElementById('addTapeCatalogModal').classList.remove('hidden')"
+                                <button
+                                    onclick="document.getElementById('addTapeCatalogModal').classList.remove('hidden')"
                                     class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded shadow">
                                     + Add New Item
                                 </button>
@@ -295,7 +296,7 @@
                                     <thead class="bg-gray-200 dark:bg-gray-700 text-left">
                                         <tr class="text-center">
                                             <th
-                                                class="font-bold sticky left-0 z-10 bg-white px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold sticky left-0 z-10 bg-white px-4 py-3 w-36 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Order No</th>
                                             <th
                                                 class="font-bold px-4 py-3 w-48 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
@@ -325,50 +326,88 @@
                                         @foreach ($catalogs as $catalog)
                                             <tr class="odd:bg-white even:bg-gray-50 border-b border-gray-200 text-center">
                                                 <td
-                                                    class="sticky left-0 z-10 bg-white px-4 py-3 bg-gray-100 whitespace-normal break-words border-r border-gray-300 text-left">
-                                                    <span class="readonly font-bold">{{ $catalog->order_no }}</span>
-                                                    <input
-                                                        class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                        value="{{ $catalog->order_no }}" />
+                                                    class="sticky left-0 z-10 bg-white px-4 py-3 bg-gray-100 border-r border-gray-300 text-left whitespace-normal break-words">
+
+                                                    <form id="uploadForm-{{ $catalog->id }}"
+                                                        action="{{ route('catalog.uploadImage', $catalog->id) }}"
+                                                        method="POST" enctype="multipart/form-data" class="m-0 p-0">
+                                                        @csrf
+
+                                                        <span id="orderNo-{{ $catalog->id }}"
+                                                            class="font-semibold text-sm text-blue-700 cursor-pointer hover:underline select-none"
+                                                            onclick="handleOrderNoClick({{ $catalog->id }}, {{ $catalog->order_image ? 'true' : 'false' }})">
+                                                            {{ $catalog->order_no }}
+                                                        </span>
+
+                                                        <!-- Show 'Need to upload image' if no image -->
+                                                        @if (!$catalog->order_image)
+                                                            <div class="text-xs text-red-600 mt-1">Need to upload image</div>
+                                                            </div>
+                                                        @endif
+
+                                                        <input id="file-upload-{{ $catalog->id }}" type="file"
+                                                            name="order_image" accept="image/*" class="hidden"
+                                                            onchange="document.getElementById('uploadForm-{{ $catalog->id }}').submit()" />
+
+                                                        @if ($catalog->order_image)
+                                                            <div id="imagePreview-{{ $catalog->id }}"
+                                                                class="hidden mt-2">
+                                                                <a href="{{ asset('storage/order_images/' . $catalog->order_image) }}"
+                                                                    target="_blank"
+                                                                    class="block w-24 h-24 rounded overflow-hidden border border-gray-300 shadow-sm hover:shadow-md transition">
+                                                                    <img src="{{ asset('storage/order_images/' . $catalog->order_image) }}"
+                                                                        alt="Order Image"
+                                                                        class="w-full h-full object-cover" />
+                                                                </a>
+                                                            </div>
+                                                        @endif
+                                                    </form>
                                                 </td>
-                                                <td class="px-4 py-3 w-48 whitespace-normal break-words">
+                                                <td
+                                                    class="px-4 py-3 w-48 whitespace-normal break-words border-r border-gray-300">
                                                     <span class="readonly">{{ $catalog->reference_no }}</span>
                                                     <input
                                                         class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                         value="{{ $catalog->reference }}" />
                                                 </td>
-                                                <td class="px-4 py-3 w-40 whitespace-normal break-words">
+                                                <td
+                                                    class="px-4 py-3 w-40 whitespace-normal break-words border-r border-gray-300">
                                                     <span
                                                         class="readonly">{{ $catalog->reference_added_date?->format('Y-m-d') }}</span>
                                                     <input type="date"
                                                         class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                         value="{{ $catalog->reference_added_date?->format('Y-m-d') }}" />
                                                 </td>
-                                                <td class="px-4 py-3 w-36 whitespace-normal break-words">
+                                                <td
+                                                    class="px-4 py-3 w-36 whitespace-normal break-words border-r border-gray-300">
                                                     <span class="readonly">{{ $catalog->coordinator_name }}</span>
                                                     <input
                                                         class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                         value="{{ $catalog->coordinator_name }}" />
                                                 </td>
-                                                <td class="px-4 py-3 w-32 whitespace-normal break-words">
+                                                <td
+                                                    class="px-4 py-3 w-32 whitespace-normal break-words border-r border-gray-300">
                                                     <span class="readonly">{{ $catalog->size }}</span>
                                                     <input
                                                         class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                         value="{{ $catalog->size }}" />
                                                 </td>
-                                                <td class="px-4 py-3 w-32 whitespace-normal break-words">
+                                                <td
+                                                    class="px-4 py-3 w-32 whitespace-normal break-words border-r border-gray-300">
                                                     <span class="readonly">{{ $catalog->colour }}</span>
                                                     <input
                                                         class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                         value="{{ $catalog->colour }}" />
                                                 </td>
-                                                <td class="px-4 py-3 w-32 whitespace-normal break-words">
+                                                <td
+                                                    class="px-4 py-3 w-32 whitespace-normal break-words border-r border-gray-300">
                                                     <span class="readonly">{{ $catalog->shade }}</span>
                                                     <input
                                                         class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                         value="{{ $catalog->shade }}" />
                                                 </td>
-                                                <td class="px-4 py-3 w-32 whitespace-normal break-words">
+                                                <td
+                                                    class="px-4 py-3 w-32 whitespace-normal break-words border-r border-gray-300">
                                                     <span class="readonly">{{ $catalog->tkt }}</span>
                                                     <input
                                                         class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
@@ -378,9 +417,9 @@
                                         @endforeach
                                     </tbody>
                                 </table>
-                                <div class="flex justify-center">
-                                    {{ $catalogs->links() }}
-                                </div>
+                            </div>
+                            <div class="py-6 flex justify-center">
+                                {{ $catalogs->links() }}
                             </div>
 
                             <div id="addTapeCatalogModal"
@@ -390,7 +429,7 @@
                                     <div class="max-w-[600px] mx-auto p-8">
                                         <h2
                                             class="text-2xl font-semibold mb-8 text-blue-900 mt-4 dark:text-gray-100 text-center">
-                                            Add New Tape Catalog Item
+                                            Add New Code Catalog Item
                                         </h2>
                                         <form action="{{ route('tapeCatalog.store') }}" method="POST"
                                             enctype="multipart/form-data">
@@ -575,6 +614,20 @@
 
             row.querySelector('button.bg-green-600').classList.remove('hidden'); // Show Edit button
             row.querySelector('button.bg-blue-600').classList.add('hidden'); // Hide Save button
+        }
+    </script>
+    <script>
+        function handleOrderNoClick(id, hasImage) {
+            if (hasImage) {
+                // Toggle image visibility
+                const preview = document.getElementById('imagePreview-' + id);
+                if (preview) {
+                    preview.classList.toggle('hidden');
+                }
+            } else {
+                // No image — open file picker
+                document.getElementById('file-upload-' + id).click();
+            }
         }
     </script>
 @endsection

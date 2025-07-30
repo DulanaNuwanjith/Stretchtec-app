@@ -68,6 +68,7 @@ Route::middleware([
     Route::post('elasticCatalog/store', [ProductCatalogController::class, 'storeElastic'])->name('elasticCatalog.store');
     Route::post('codeCatalog/store', [ProductCatalogController::class, 'storeCode'])->name('codeCatalog.store');
     Route::post('tapeCatalog/store', [ProductCatalogController::class, 'storeTape'])->name('tapeCatalog.store');
+    Route::post('catalog/{catalog}/upload-image', [ProductCatalogController::class, 'uploadOrderImage'])->name('catalog.uploadImage');
 
     Route::get('production-inquery-details', function () {
         return view('production.pages.production-inquery-details');

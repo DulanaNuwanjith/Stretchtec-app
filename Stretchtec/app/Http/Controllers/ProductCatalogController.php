@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ProductCatalog;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 
 class ProductCatalogController extends Controller
@@ -124,6 +125,30 @@ class ProductCatalogController extends Controller
         ProductCatalog::create($data);
 
         return redirect()->route('tapeCatalog.index')->with('success', 'Tape catalog entry created.');
+    }
+
+    public function uploadOrderImage(Request $request, ProductCatalog $catalog)
+    {
+        $request->validate([
+            'order_image' => 'required|image|max:2048',
+        ]);
+
+        if ($request->hasFile('order_image')) {
+            // Delete old image if exists
+            if ($catalog->order_image && Storage::disk('public')->exists('order_images/' . $catalog->order_image)) {
+                Storage::disk('public')->delete('order_images/' . $catalog->order_image);
+            }
+
+            // Store new image in storage/app/public/order_images
+            $file = $request->file('order_image');
+            $filename = time() . '_' . preg_replace('/\s+/', '_', $file->getClientOriginalName());
+            $file->storeAs('order_images', $filename, 'public');
+
+            $catalog->order_image = $filename;
+            $catalog->save();
+        }
+
+        return back()->with('success', 'Order image uploaded successfully.');
     }
 
     // Show the form for editing the specified product catalog entry
