@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\ProductCatalog;
 
 class SampleInquiry extends Model
 {
@@ -45,4 +46,35 @@ class SampleInquiry extends Model
         return $this->hasOne(SamplePreparationRnD::class);
     }
 
+    public function productCatalog()
+    {
+        return $this->hasOne(ProductCatalog::class);
+    }
+
+    protected static function booted()
+    {
+        static::updated(function ($inquiry) {
+            if (
+                $inquiry->isDirty('referenceNo') &&
+                !empty($inquiry->referenceNo) &&
+                !$inquiry->productCatalog
+            ) {
+                $rnd = $inquiry->samplePreparationRnD;
+
+                ProductCatalog::create([
+                    'order_no'             => $inquiry->orderNo,
+                    'reference_no'         => $inquiry->referenceNo,
+                    'reference_added_date' => now(),
+                    'coordinator_name'     => $inquiry->coordinatorName,
+                    'item'                 => $inquiry->item,
+                    'size'                 => $inquiry->size,
+                    'colour'               => $inquiry->color,
+                    'shade'                => $rnd->shade,
+                    'tkt'                  => $rnd->tkt,
+                    'sample_inquiry_id'    => $inquiry->id,
+                    'sample_preparation_rnd_id' => $rnd->id, // 🔥 This fixes the NOT NULL issue
+                ]);
+            }
+        });
+    }
 }

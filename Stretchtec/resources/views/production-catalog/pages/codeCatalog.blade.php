@@ -1,5 +1,6 @@
 <head>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <div class="flex h-full w-full">
@@ -11,20 +12,114 @@
                 <div class="w-full px-6 lg:px-2">
                     <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                         <div class="p-4 text-gray-900 dark:text-gray-100">
+                            <style>
+                                .swal2-toast {
+                                    font-size: 0.875rem;
+                                    padding: 0.75rem 1rem;
+                                    border-radius: 8px;
+                                    background-color: #ffffff !important;
+                                    position: relative;
+                                    box-sizing: border-box;
+                                    color: #3b82f6 !important;
+                                }
 
-                            @if (session('success'))
-                                <div
-                                    class="mb-4 p-4 text-green-800 bg-green-100 border border-green-300 rounded-md dark:text-green-200 dark:bg-green-900 dark:border-green-800">
-                                    {{ session('success') }}
-                                </div>
-                            @endif
+                                .swal2-toast .swal2-title,
+                                .swal2-toast .swal2-html-container {
+                                    color: #3b82f6 !important;
+                                }
 
-                            @if (session('error'))
-                                <div
-                                    class="mb-4 p-4 text-red-800 bg-red-100 border border-red-300 rounded-md dark:text-red-200 dark:bg-red-900 dark:border-red-800">
-                                    {{ session('error') }}
-                                </div>
-                            @endif
+                                .swal2-toast .swal2-icon {
+                                    color: #3b82f6 !important;
+                                }
+
+                                .swal2-shadow {
+                                    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+                                }
+
+                                .swal2-toast::after {
+                                    content: '';
+                                    position: absolute;
+                                    bottom: 0;
+                                    left: 0;
+                                    width: 100%;
+                                    height: 3px;
+                                    background-color: #3b82f6;
+                                    border-radius: 0 0 8px 8px;
+                                }
+                            </style>
+
+                            <script>
+                                document.addEventListener('DOMContentLoaded', () => {
+                                    @if (session('success'))
+                                        Swal.fire({
+                                            toast: true,
+                                            position: 'top-end',
+                                            icon: 'success',
+                                            title: '{{ session('success') }}',
+                                            showConfirmButton: false,
+                                            timer: 2000,
+                                            timerProgressBar: true,
+                                            customClass: {
+                                                popup: 'swal2-toast swal2-shadow'
+                                            },
+                                        });
+                                    @endif
+
+                                    @if (session('error'))
+                                        Swal.fire({
+                                            toast: true,
+                                            position: 'top-end',
+                                            icon: 'error',
+                                            title: '{{ session('error') }}',
+                                            showConfirmButton: false,
+                                            timer: 2000,
+                                            timerProgressBar: true,
+                                            customClass: {
+                                                popup: 'swal2-toast swal2-shadow'
+                                            },
+                                        });
+                                    @endif
+
+                                    @if ($errors->any())
+                                        Swal.fire({
+                                            toast: true,
+                                            position: 'top-end',
+                                            icon: 'warning',
+                                            title: 'Validation Errors',
+                                            html: `{!! implode('<br>', $errors->all()) !!}`,
+                                            showConfirmButton: false,
+                                            timer: 3000,
+                                            timerProgressBar: true,
+                                            customClass: {
+                                                popup: 'swal2-toast swal2-shadow'
+                                            },
+                                        });
+                                    @endif
+                                });
+                            </script>
+
+                            <script>
+                                function confirmDelete(id) {
+                                    Swal.fire({
+                                        title: 'Are you sure?',
+                                        text: "This record will be permanently deleted!",
+                                        icon: 'warning',
+                                        showCancelButton: true,
+                                        confirmButtonColor: '#3b82f6',
+                                        cancelButtonColor: '#6c757d',
+                                        confirmButtonText: 'Yes, delete it!',
+                                        background: '#ffffff',
+                                        color: '#3b82f6',
+                                        customClass: {
+                                            popup: 'swal2-toast swal2-shadow'
+                                        }
+                                    }).then((result) => {
+                                        if (result.isConfirmed) {
+                                            document.getElementById(`delete-form-${id}`).submit();
+                                        }
+                                    });
+                                }
+                            </script>
 
                             <!-- Filter Form -->
                             <form id="filterForm1" method="GET" action="" class="mb-6 flex gap-6 items-center">
@@ -33,7 +128,7 @@
                                     <!-- CUSTOMER DROPDOWN -->
                                     <div class="relative inline-block text-left w-48">
                                         <label for="customerDropdown"
-                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Sample
+                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Order
                                             No</label>
                                         <div>
                                             <button type="button" id="customerDropdown"
@@ -81,7 +176,7 @@
                                     <!-- MERCHANDISER DROPDOWN -->
                                     <div class="relative inline-block text-left w-48">
                                         <label for="merchandiserDropdown"
-                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Merchandiser</label>
+                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Customer Coordinator</label>
                                         <div>
                                             <button type="button" id="merchandiserDropdown"
                                                 class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10 dark:bg-gray-700 dark:text-white"
@@ -126,7 +221,7 @@
                                     <!-- ITEM DROPDOWN -->
                                     <div class="relative inline-block text-left w-48">
                                         <label for="itemDropdown"
-                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Item</label>
+                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Reference No</label>
                                         <div>
                                             <button type="button" id="itemDropdown"
                                                 class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10 dark:bg-gray-700 dark:text-white"
@@ -185,7 +280,7 @@
 
 
                             <div class="flex justify-between items-center mb-6">
-                                <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Cords Production Catalog
+                                <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Code Production Catalog
                                 </h1>
                                 <button onclick="document.getElementById('addProductModal').classList.remove('hidden')"
                                     class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded shadow">
@@ -195,134 +290,94 @@
 
                             <div class="overflow-x-auto bg-white dark:bg-gray-900 shadow rounded-lg">
                                 <table class="table-fixed w-full text-sm divide-y divide-gray-200 dark:divide-gray-700">
-                                    <thead class="bg-gray-100 dark:bg-gray-700 text-left">
-                                        <tr>
+                                    <thead class="bg-gray-200 dark:bg-gray-700 text-left">
+                                        <tr class="text-center">
                                             <th
-                                                class="px-4 py-3 w-24 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                                Sample No</th>
+                                                class="font-bold sticky left-0 z-10 bg-white px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                Order No</th>
                                             <th
-                                                class="px-4 py-3 w-40 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                                Date</th>
-                                            <th
-                                                class="px-4 py-3 w-36 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                                Merchandiser</th>
-                                            <th
-                                                class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                                Item</th>
-                                            <th
-                                                class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                                Size</th>
-                                            <th
-                                                class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                                Colour</th>
-                                            <th
-                                                class="px-4 py-3 w-48 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold px-4 py-3 w-48 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Reference No</th>
                                             <th
-                                                class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                Date</th>
+                                            <th
+                                                class="font-bold px-4 py-3 w-36 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                Customer Coordinator</th>
+                                            <th
+                                                class="font-bold px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                Size</th>
+                                            <th
+                                                class="font-bold px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                Colour</th>
+                                            <th
+                                                class="font-bold px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Shade</th>
                                             <th
-                                                class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 TKT</th>
-                                            <th
-                                                class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                                Approval</th>
-                                            <th
-                                                class="px-4 py-3 w-72 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                                Special Note</th>
-                                            <th
-                                                class="px-4 py-3 w-48 text-xs text-center font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                                Action</th>
                                         </tr>
                                     </thead>
-                                    <tbody id="serviceRecords"
-                                        class="bg-white dark:bg-gray-800 divide-y text-left divide-gray-200 dark:divide-gray-700">
-                                        <tr id="row1">
-                                            <!-- Each cell has a span for readonly text and a hidden input for editing -->
-                                            <td class="px-4 py-3 w-24 whitespace-normal break-words">
-                                                <span class="readonly">1880</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="1880" />
-                                            </td>
-                                            <td class="px-4 py-3 w-40 whitespace-normal break-words">
-                                                <span class="readonly">2025-05-05</span>
-                                                <input type="date"
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="2025-05-05" />
-                                            </td>
-                                            <td class="px-4 py-3 w-32 whitespace-normal break-words">
-                                                <span class="readonly">Ama liyanage</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="Ama liyanage" />
-                                            </td>
-                                            <td class="px-4 py-3 w-32 whitespace-normal break-words">
-                                                <span class="readonly">Elastic</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="Elastic" />
-                                            </td>
-                                            <td class="px-4 py-3 w-32 whitespace-normal break-words">
-                                                <span class="readonly">2 1/4</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="2 1/4" />
-                                            </td>
-                                            <td class="px-4 py-3 w-32 whitespace-normal break-words">
-                                                <span class="readonly">Black</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="Black" />
-                                            </td>
-                                            <td class="px-4 py-3 w-48 whitespace-normal break-words">
-                                                <span class="readonly">STKE/2025/JA25-B</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="STKE/2025/JA25-B" />
-                                            </td>
-                                            <td class="px-4 py-3 w-32 whitespace-normal break-words">
-                                                <span class="readonly">AE Black</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm5"
-                                                    value="AE Black" />
-                                            </td>
-                                            <td class="px-4 py-3 w-32 whitespace-normal break-words">
-                                                <span class="readonly">TKT 120</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="TKT 120" />
-                                            </td>
-                                            <td class="px-4 py-3 w-32 whitespace-normal break-words">
-                                                <span class="readonly">AE</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="AE" />
-                                            </td>
-                                            <td class="px-4 py-3 w-72 whitespace-normal break-words">
-                                                <span class="readonly">abc 1234 long sample description to test line
-                                                    wrapping</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="abc 1234 long sample description to test line wrapping" />
-                                            </td>
-                                            <td class="px-4 py-3 w-48 text-center whitespace-normal break-words">
-                                                <div class="flex space-x-2 justify-center">
-                                                    <button
-                                                        class="bg-green-600 h-10 hover:bg-green-700 text-white px-3 py-1 rounded text-sm"
-                                                        onclick="editRow('row1')">Edit</button>
-                                                    <button
-                                                        class="bg-blue-600 h-10 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm hidden"
-                                                        onclick="saveRow('row1')">Save</button>
-                                                    <button
-                                                        class="bg-gray-600 h-10 hover:bg-gray-700 text-white px-3 py-1 rounded text-sm">Download</button>
-                                                </div>
-                                            </td>
-                                        </tr>
+                                    <tbody id="productionCatalogTable"
+                                        class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                                        @foreach ($catalogs as $catalog)
+                                            <tr class="odd:bg-white even:bg-gray-50 border-b border-gray-200 text-center">
+                                                <td
+                                                    class="sticky left-0 z-10 bg-white px-4 py-3 bg-gray-100 whitespace-normal break-words border-r border-gray-300 text-left">
+                                                    <span class="readonly font-bold">{{ $catalog->order_no }}</span>
+                                                    <input
+                                                        class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                        value="{{ $catalog->order_no }}" />
+                                                </td>
+                                                <td class="px-4 py-3 w-48 whitespace-normal break-words">
+                                                    <span class="readonly">{{ $catalog->reference_no }}</span>
+                                                    <input
+                                                        class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                        value="{{ $catalog->reference }}" />
+                                                </td>
+                                                <td class="px-4 py-3 w-40 whitespace-normal break-words">
+                                                    <span
+                                                        class="readonly">{{ $catalog->reference_added_date?->format('Y-m-d') }}</span>
+                                                    <input type="date"
+                                                        class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                        value="{{ $catalog->reference_added_date?->format('Y-m-d') }}" />
+                                                </td>
+                                                <td class="px-4 py-3 w-36 whitespace-normal break-words">
+                                                    <span class="readonly">{{ $catalog->coordinator_name }}</span>
+                                                    <input
+                                                        class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                        value="{{ $catalog->coordinator_name }}" />
+                                                </td>
+                                                <td class="px-4 py-3 w-32 whitespace-normal break-words">
+                                                    <span class="readonly">{{ $catalog->size }}</span>
+                                                    <input
+                                                        class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                        value="{{ $catalog->size }}" />
+                                                </td>
+                                                <td class="px-4 py-3 w-32 whitespace-normal break-words">
+                                                    <span class="readonly">{{ $catalog->colour }}</span>
+                                                    <input
+                                                        class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                        value="{{ $catalog->colour }}" />
+                                                </td>
+                                                <td class="px-4 py-3 w-32 whitespace-normal break-words">
+                                                    <span class="readonly">{{ $catalog->shade }}</span>
+                                                    <input
+                                                        class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                        value="{{ $catalog->shade }}" />
+                                                </td>
+                                                <td class="px-4 py-3 w-32 whitespace-normal break-words">
+                                                    <span class="readonly">{{ $catalog->tkt }}</span>
+                                                    <input
+                                                        class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                        value="{{ $catalog->tkt }}" />
+                                                </td>
+                                            </tr>
+                                        @endforeach
                                     </tbody>
                                 </table>
-                                <div class="py-6 flex justify-center">
-
+                                <div class="flex justify-center">
+                                    {{ $catalogs->links() }}
                                 </div>
                             </div>
                             <!-- Add Product Modal -->
