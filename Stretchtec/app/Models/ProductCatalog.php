@@ -22,10 +22,16 @@ class ProductCatalog extends Model
         'shade',
         'tkt',
         'order_image',
+        'approved_by',
+        'approval_card',
+        'is_approved_by_locked',
+        'is_approval_card_locked',
     ];
 
     protected $casts = [
         'reference_added_date' => 'date',
+        'is_approved_by_locked' => 'boolean',
+        'is_approval_card_locked' => 'boolean',
     ];
 
     // Relationships

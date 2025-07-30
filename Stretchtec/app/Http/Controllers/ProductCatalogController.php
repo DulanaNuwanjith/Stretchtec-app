@@ -151,6 +151,42 @@ class ProductCatalogController extends Controller
         return back()->with('success', 'Order image uploaded successfully.');
     }
 
+    public function updateApproval(Request $request, ProductCatalog $productCatalog)
+    {
+        $request->validate([
+            'approved_by' => 'nullable|string|max:255',
+            'approval_card' => 'nullable|image|max:2048',
+        ]);
+
+        $updateData = [];
+
+        // Handle approved_by
+        if (!$productCatalog->is_approved_by_locked && $request->filled('approved_by')) {
+            $updateData['approved_by'] = $request->input('approved_by');
+            $updateData['is_approved_by_locked'] = true;
+        }
+
+        // Handle approval_card
+        if (!$productCatalog->is_approval_card_locked && $request->hasFile('approval_card')) {
+            // Delete old image if exists
+            if ($productCatalog->approval_card && Storage::disk('public')->exists($productCatalog->approval_card)) {
+                Storage::disk('public')->delete($productCatalog->approval_card);
+            }
+
+            $path = $request->file('approval_card')->store('approval_cards', 'public');
+            $updateData['approval_card'] = $path;
+            $updateData['is_approval_card_locked'] = true;
+        }
+
+        // Save updates if any
+        if (!empty($updateData)) {
+            $productCatalog->update($updateData);
+        }
+
+        return back()->with('success', 'Approval details updated successfully.');
+    }
+
+
     // Show the form for editing the specified product catalog entry
     public function edit(ProductCatalog $productCatalog)
     {
