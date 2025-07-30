@@ -62,6 +62,70 @@ class ProductCatalogController extends Controller
         return redirect()->route('product-catalog.index')->with('success', 'Catalog entry created.');
     }
 
+    // Store method forcing item = Elastic
+    public function storeElastic(Request $request)
+    {
+        $request->validate([
+            'order_no' => 'required|string|max:255',
+            'reference_no' => 'required|string|max:255',
+            'reference_added_date' => 'nullable|date',
+            'coordinator_name' => 'nullable|string|max:255',
+            'size' => 'nullable|string|max:255',
+            'colour' => 'nullable|string|max:255',
+            'shade' => 'nullable|string|max:255',
+            'tkt' => 'nullable|string|max:255',
+        ]);
+
+        $data = $request->all();
+        $data['item'] = 'Elastic'; // force item
+
+        ProductCatalog::create($data);
+
+        return redirect()->route('elasticCatalog.index')->with('success', 'Elastic catalog entry created.');
+    }
+
+    public function storeCode(Request $request)
+    {
+        $request->validate([
+            'order_no' => 'required|string|max:255',
+            'reference_no' => 'required|string|max:255',
+            'reference_added_date' => 'nullable|date',
+            'coordinator_name' => 'nullable|string|max:255',
+            'size' => 'nullable|string|max:255',
+            'colour' => 'nullable|string|max:255',
+            'shade' => 'nullable|string|max:255',
+            'tkt' => 'nullable|string|max:255',
+        ]);
+
+        $data = $request->all();
+        $data['item'] = 'Code'; // force item
+
+        ProductCatalog::create($data);
+
+        return redirect()->route('codeCatalog.index')->with('success', 'Code catalog entry created.');
+    }
+
+    public function storeTape(Request $request)
+    {
+        $request->validate([
+            'order_no' => 'required|string|max:255',
+            'reference_no' => 'required|string|max:255',
+            'reference_added_date' => 'nullable|date',
+            'coordinator_name' => 'nullable|string|max:255',
+            'size' => 'nullable|string|max:255',
+            'colour' => 'nullable|string|max:255',
+            'shade' => 'nullable|string|max:255',
+            'tkt' => 'nullable|string|max:255',
+        ]);
+
+        $data = $request->all();
+        $data['item'] = 'Tape'; // force item
+
+        ProductCatalog::create($data);
+
+        return redirect()->route('tapeCatalog.index')->with('success', 'Tape catalog entry created.');
+    }
+
     // Show the form for editing the specified product catalog entry
     public function edit(ProductCatalog $productCatalog)
     {

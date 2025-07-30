@@ -383,7 +383,7 @@
                                     {{ $catalogs->links() }}
                                 </div>
                             </div>
-                            <!-- Add Product Modal -->
+
                             <div id="addElasticCatalogModal"
                                 class="fixed inset-0 z-50 hidden bg-black bg-opacity-50 flex items-center justify-center py-5">
                                 <div class="w-full max-w-[700px] bg-white dark:bg-gray-900 rounded-2xl shadow-2xl p-4 transform transition-all scale-95 max-h-[calc(100vh-10rem)] overflow-y-auto"
@@ -393,41 +393,42 @@
                                             class="text-2xl font-semibold mb-8 text-blue-900 mt-4 dark:text-gray-100 text-center">
                                             Add New Elastic Catalog Item
                                         </h2>
-                                        <form action="" method="POST" enctype="multipart/form-data">
+                                        <form action="{{ route('elasticCatalog.store') }}" method="POST"
+                                            enctype="multipart/form-data">
                                             @csrf
                                             <div class="space-y-4">
                                                 <div class="flex gap-4">
                                                     <div class="w-1/2">
-                                                        <label for="sampleQuantity"
+                                                        <label for="order_no"
                                                             class="block text-sm font-medium text-gray-700 dark:text-gray-300">Order
-                                                            Number
-                                                        </label>
-                                                        <input id="sampleQuantity" type="text" name="sample_quantity"
-                                                            required
+                                                            Number</label>
+                                                        <input id="order_no" type="text" name="order_no" required
                                                             class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm mb-4">
                                                     </div>
                                                     <div class="w-1/2">
-                                                        <label for="item"
-                                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">Referance
+                                                        <label for="reference_no"
+                                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">Reference
                                                             No</label>
-                                                        <input id="item" type="text" name="item" required
+                                                        <input id="reference_no" type="text" name="reference_no"
+                                                            required
                                                             class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                     </div>
                                                 </div>
 
-                                                <!-- Referance No -->
                                                 <div class="flex gap-4">
                                                     <div class="w-1/2">
-                                                        <label for="inquiryDate"
+                                                        <label for="reference_added_date"
                                                             class="block text-sm font-medium text-gray-700 dark:text-gray-300">Date</label>
-                                                        <input id="Date" type="date" name="inquiry_date" required
+                                                        <input id="reference_added_date" type="date"
+                                                            name="reference_added_date" required
                                                             class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                     </div>
                                                     <div class="w-1/2">
-                                                        <label for="merchandiser"
+                                                        <label for="coordinator_name"
                                                             class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer
                                                             Coordinator</label>
-                                                        <input id="Merchandiser" type="text" name="customer" required
+                                                        <input id="coordinator_name" type="text"
+                                                            name="coordinator_name" required
                                                             class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                     </div>
                                                 </div>
@@ -440,25 +441,24 @@
                                                             class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                     </div>
                                                     <div class="w-1/2">
-                                                        <label for="item"
+                                                        <label for="colour"
                                                             class="block text-sm font-medium text-gray-700 dark:text-gray-300">Colour</label>
-                                                        <input id="item" type="text" name="item" required
+                                                        <input id="colour" type="text" name="colour" required
                                                             class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                     </div>
                                                 </div>
 
-                                                <!-- Merchandiser & Item -->
                                                 <div class="flex gap-4">
                                                     <div class="w-1/2">
-                                                        <label for="size"
+                                                        <label for="shade"
                                                             class="block text-sm font-medium text-gray-700 dark:text-gray-300">Shade</label>
-                                                        <input id="size" type="text" name="size" required
+                                                        <input id="shade" type="text" name="shade" required
                                                             class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                     </div>
                                                     <div class="w-1/2">
-                                                        <label for="colour"
+                                                        <label for="tkt"
                                                             class="block text-sm font-medium text-gray-700 dark:text-gray-300">TKT</label>
-                                                        <input id="colour" type="text" name="colour" required
+                                                        <input id="tkt" type="text" name="tkt" required
                                                             class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                     </div>
                                                 </div>

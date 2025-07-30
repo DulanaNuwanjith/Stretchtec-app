@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
 
             // Foreign keys (assuming each catalog belongs to one R&D record)
-            $table->unsignedBigInteger('sample_preparation_rnd_id');
-            $table->unsignedBigInteger('sample_inquiry_id');
+            $table->unsignedBigInteger('sample_preparation_rnd_id')->nullable();
+            $table->unsignedBigInteger('sample_inquiry_id')->nullable();
 
             // Fields from R&D and Inquiry
             $table->string('order_no'); // from R&D

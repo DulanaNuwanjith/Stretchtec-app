@@ -176,7 +176,8 @@
                                     <!-- MERCHANDISER DROPDOWN -->
                                     <div class="relative inline-block text-left w-48">
                                         <label for="merchandiserDropdown"
-                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Customer Coordinator</label>
+                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Customer
+                                            Coordinator</label>
                                         <div>
                                             <button type="button" id="merchandiserDropdown"
                                                 class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10 dark:bg-gray-700 dark:text-white"
@@ -221,7 +222,8 @@
                                     <!-- ITEM DROPDOWN -->
                                     <div class="relative inline-block text-left w-48">
                                         <label for="itemDropdown"
-                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Reference No</label>
+                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Reference
+                                            No</label>
                                         <div>
                                             <button type="button" id="itemDropdown"
                                                 class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10 dark:bg-gray-700 dark:text-white"
@@ -282,7 +284,7 @@
                             <div class="flex justify-between items-center mb-6">
                                 <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Tape Production Catalog
                                 </h1>
-                                <button onclick="document.getElementById('addProductModal').classList.remove('hidden')"
+                                <button onclick="document.getElementById('addTapeCatalogModal').classList.remove('hidden')"
                                     class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded shadow">
                                     + Add New Item
                                 </button>
@@ -380,143 +382,91 @@
                                     {{ $catalogs->links() }}
                                 </div>
                             </div>
-                            <!-- Add Product Modal -->
-                            <div id="addProductModal"
+
+                            <div id="addTapeCatalogModal"
                                 class="fixed inset-0 z-50 hidden bg-black bg-opacity-50 flex items-center justify-center py-5">
                                 <div class="w-full max-w-[700px] bg-white dark:bg-gray-900 rounded-2xl shadow-2xl p-4 transform transition-all scale-95 max-h-[calc(100vh-10rem)] overflow-y-auto"
                                     onclick="event.stopPropagation()">
                                     <div class="max-w-[600px] mx-auto p-8">
                                         <h2
                                             class="text-2xl font-semibold mb-8 text-blue-900 mt-4 dark:text-gray-100 text-center">
-                                            Add New Sample Development
+                                            Add New Tape Catalog Item
                                         </h2>
-                                        <form action="" method="POST" enctype="multipart/form-data">
+                                        <form action="{{ route('tapeCatalog.store') }}" method="POST"
+                                            enctype="multipart/form-data">
                                             @csrf
                                             <div class="space-y-4">
-
-                                                <!-- File Upload -->
-                                                <div class="flex items-center justify-center w-full">
-                                                    <label for="sampleFile"
-                                                        class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50
-                                                     dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
-                                                        <div class="flex flex-col items-center justify-center pt-5 pb-6 ">
-                                                            <svg class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"
-                                                                aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                                                                fill="none" viewBox="0 0 20 16">
-                                                                <path stroke="currentColor" stroke-linecap="round"
-                                                                    stroke-linejoin="round" stroke-width="2"
-                                                                    d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
-                                                            </svg>
-                                                            <p class="mb-2 text-sm text-gray-500 dark:text-gray-400">
-                                                                <span class="font-semibold">Upload Sample Photo</span>
-                                                                or drag and drop
-                                                            </p>
-                                                            <p class="text-xs text-gray-500 dark:text-gray-400">PDF, JPG
-                                                                (MAX. 800x400px)</p>
-                                                        </div>
-                                                        <input id="sampleFile" name="order_file" type="file"
-                                                            class="hidden" accept=".pdf,.jpg,.jpeg" />
-                                                    </label>
-                                                </div>
-
-                                                <!-- Oder Number -->
-                                                <div>
-                                                    <label for="sampleQuantity"
-                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Sample
-                                                        Number
-                                                    </label>
-                                                    <input id="sampleQuantity" type="text" name="sample_quantity"
-                                                        required
-                                                        class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm mb-4">
-                                                </div>
-
-                                                <!-- Inquiry receive date & Customer -->
                                                 <div class="flex gap-4">
                                                     <div class="w-1/2">
-                                                        <label for="inquiryDate"
+                                                        <label for="order_no"
+                                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">Order
+                                                            Number</label>
+                                                        <input id="order_no" type="text" name="order_no" required
+                                                            class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm mb-4">
+                                                    </div>
+                                                    <div class="w-1/2">
+                                                        <label for="reference_no"
+                                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">Reference
+                                                            No</label>
+                                                        <input id="reference_no" type="text" name="reference_no"
+                                                            required
+                                                            class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                    </div>
+                                                </div>
+
+                                                <div class="flex gap-4">
+                                                    <div class="w-1/2">
+                                                        <label for="reference_added_date"
                                                             class="block text-sm font-medium text-gray-700 dark:text-gray-300">Date</label>
-                                                        <input id="Date" type="date" name="inquiry_date" required
+                                                        <input id="reference_added_date" type="date"
+                                                            name="reference_added_date" required
                                                             class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                     </div>
                                                     <div class="w-1/2">
-                                                        <label for="merchandiser"
-                                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">Merchandiser</label>
-                                                        <input id="Merchandiser" type="text" name="customer" required
+                                                        <label for="coordinator_name"
+                                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer
+                                                            Coordinator</label>
+                                                        <input id="coordinator_name" type="text"
+                                                            name="coordinator_name" required
                                                             class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                     </div>
                                                 </div>
 
-                                                <!-- Merchandiser & Item -->
                                                 <div class="flex gap-4">
-                                                    <div class="w-1/2">
-                                                        <label for="item"
-                                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">Item</label>
-                                                        <input id="item" type="text" name="item" required
-                                                            class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                                    </div>
-
                                                     <div class="w-1/2">
                                                         <label for="size"
                                                             class="block text-sm font-medium text-gray-700 dark:text-gray-300">Size</label>
                                                         <input id="size" type="text" name="size" required
                                                             class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                     </div>
-                                                </div>
-
-                                                <!-- Size & Colour -->
-                                                <div class="flex gap-4">
                                                     <div class="w-1/2">
                                                         <label for="colour"
                                                             class="block text-sm font-medium text-gray-700 dark:text-gray-300">Colour</label>
                                                         <input id="colour" type="text" name="colour" required
                                                             class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                     </div>
+                                                </div>
+
+                                                <div class="flex gap-4">
                                                     <div class="w-1/2">
                                                         <label for="shade"
                                                             class="block text-sm font-medium text-gray-700 dark:text-gray-300">Shade</label>
                                                         <input id="shade" type="text" name="shade" required
                                                             class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                     </div>
-                                                </div>
-                                                <!-- Size & Colour -->
-                                                <div class="flex gap-4">
                                                     <div class="w-1/2">
-                                                        <label for="colour"
+                                                        <label for="tkt"
                                                             class="block text-sm font-medium text-gray-700 dark:text-gray-300">TKT</label>
-                                                        <input id="TKT" type="text" name="TKT" required
+                                                        <input id="tkt" type="text" name="tkt" required
                                                             class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                     </div>
-                                                    <div class="w-1/2">
-                                                        <label for="shade"
-                                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">Approval</label>
-                                                        <input id="approval" type="text" name="approval" required
-                                                            class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                                    </div>
-                                                </div>
-
-                                                <!-- Sample Quantity -->
-                                                <div>
-                                                    <label for="sampleQuantity"
-                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Reference
-                                                        No</label>
-                                                    <input id="Reference No" type="text" name="Reference No" required
-                                                        class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm mb-4">
-                                                </div>
-
-                                                <!-- Sample Quantity -->
-                                                <div>
-                                                    <label for="sampleQuantity"
-                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Special
-                                                        Note</label>
-                                                    <input id="Special Note" type="text" name="Special Note" required
-                                                        class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm mb-4">
                                                 </div>
                                             </div>
 
                                             <!-- Buttons -->
                                             <div class="flex justify-end gap-3 mt-12">
                                                 <button type="button"
-                                                    onclick="document.getElementById('addProductModal').classList.add('hidden')"
+                                                    onclick="document.getElementById('addTapeCatalogModal').classList.add('hidden')"
                                                     class="px-4 py-2 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 text-sm rounded hover:bg-gray-300">
                                                     Cancel
                                                 </button>

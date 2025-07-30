@@ -62,9 +62,12 @@ Route::middleware([
 
     Route::get('elasticCatalog', [ProductCatalogController::class, 'elasticCatalog'])->name('elasticCatalog.index');
     Route::get('tapeCatalog', [ProductCatalogController::class, 'tapeCatalog'])->name('tapeCatalog.index');
-        Route::get('codeCatalog', [ProductCatalogController::class, 'codeCatalog'])->name('codeCatalog.index');
+    Route::get('codeCatalog', [ProductCatalogController::class, 'codeCatalog'])->name('codeCatalog.index');
     Route::resource('product-catalog', ProductCatalogController::class);
     Route::post('/product-catalog', [ProductCatalogController::class, 'store'])->name('product-catalog.store');
+    Route::post('elasticCatalog/store', [ProductCatalogController::class, 'storeElastic'])->name('elasticCatalog.store');
+    Route::post('codeCatalog/store', [ProductCatalogController::class, 'storeCode'])->name('codeCatalog.store');
+    Route::post('tapeCatalog/store', [ProductCatalogController::class, 'storeTape'])->name('tapeCatalog.store');
 
     Route::get('production-inquery-details', function () {
         return view('production.pages.production-inquery-details');
