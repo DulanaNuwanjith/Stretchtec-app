@@ -252,43 +252,38 @@ class SampleInquiryController extends Controller
     {
         $request->validate([
             'id' => 'required|exists:sample_inquiries,id',
-            'delivered_qty' => 'required|integer|min:1',
+            'delivered_qty' => '',
         ]);
 
         $inquiry = SampleInquiry::findOrFail($request->id);
-
-        if (!$inquiry->referenceNo) {
-            return redirect()->back()->with('error', 'Reference No is required to deduct stock.');
-        }
-
-        $stock = \App\Models\SampleStock::where('reference_no', $inquiry->referenceNo)->first();
-
-        if (!$stock) {
-            return redirect()->back()->with('error', 'Sample Stock not found for the given reference number.');
-        }
-
         $deliveredQty = (int) $request->delivered_qty;
 
-        if ($deliveredQty > $stock->available_stock) {
-            return redirect()->back()->with('error', 'Delivered quantity exceeds available stock.');
-        }
+        // Try to deduct stock only if referenceNo is available
+        if ($inquiry->referenceNo) {
+            $stock = \App\Models\SampleStock::where('reference_no', $inquiry->referenceNo)->first();
 
-        // Deduct stock
-        $stock->available_stock -= $deliveredQty;
-        if ($stock->available_stock == 0) {
-            $stock->delete();
-        } else {
-            $stock->save();
+            if (!$stock) {
+                return redirect()->back()->with('error', 'Sample Stock not found for the given reference number.');
+            }
+
+            if ($deliveredQty > $stock->available_stock) {
+                return redirect()->back()->with('error', 'Delivered quantity exceeds available stock.');
+            }
+
+            // Deduct stock
+            $stock->available_stock -= $deliveredQty;
+            if ($stock->available_stock == 0) {
+                $stock->delete();
+            } else {
+                $stock->save();
+            }
         }
 
         $inquiry->customerDeliveryDate = now();
 
         try {
             // Generate next dispatch code
-            $lastInquiryWithCode = SampleInquiry::whereNotNull('dNoteNumber')
-                ->orderByDesc('id')
-                ->first();
-
+            $lastInquiryWithCode = SampleInquiry::whereNotNull('dNoteNumber')->orderByDesc('id')->first();
             $lastCode = 0;
 
             if ($lastInquiryWithCode && preg_match('/DISP-(\d+)/', $lastInquiryWithCode->dNoteNumber, $matches)) {
@@ -303,16 +298,17 @@ class SampleInquiryController extends Controller
             $spreadsheet = IOFactory::load($templatePath);
             $sheet = $spreadsheet->getActiveSheet();
 
-            $sheet->setCellValue('D5', $now->format('Y-m-d H:i:s'));             // Printed date & time
-            $sheet->setCellValue('D6', $dispatchCode);                           // Dispatch Code
-            $sheet->setCellValue('B8', $inquiry->customerName);                 // Customer
-            $sheet->setCellValue('F8', $inquiry->merchandiseName);              // Merchandiser
-            $sheet->setCellValue('A12', $inquiry->orderNo);                     // Sam.No / Order No
-            $sheet->setCellValue('B12', $inquiry->item . ' / ' . $inquiry->size); // Item & Size
-            $sheet->setCellValue('B13', $inquiry->referenceNo);                 // Reference No
-            $sheet->setCellValue('F12', $inquiry->color);                       // Colour
-            $sheet->setCellValue('H12', $deliveredQty);                         // Delivered Quantity
-            $sheet->setCellValue('B16', Auth::user()->name);                    // Created by
+            // Fill dispatch note
+            $sheet->setCellValue('D5', $now->format('Y-m-d H:i:s'));             
+            $sheet->setCellValue('D6', $dispatchCode);                           
+            $sheet->setCellValue('B8', $inquiry->customerName);                 
+            $sheet->setCellValue('F8', $inquiry->merchandiseName);              
+            $sheet->setCellValue('A12', $inquiry->orderNo);                     
+            $sheet->setCellValue('B12', $inquiry->item . ' / ' . $inquiry->size);
+            $sheet->setCellValue('B13', $inquiry->referenceNo ?? '-');          
+            $sheet->setCellValue('F12', $inquiry->color);                       
+            $sheet->setCellValue('H12', $deliveredQty);                         
+            $sheet->setCellValue('B16', Auth::user()->name);                    
 
             $sheet->setCellValue('D24', $now->format('Y-m-d H:i:s'));
             $sheet->setCellValue('D25', $dispatchCode);
@@ -320,7 +316,7 @@ class SampleInquiryController extends Controller
             $sheet->setCellValue('F27', $inquiry->merchandiseName);
             $sheet->setCellValue('A31', $inquiry->orderNo);
             $sheet->setCellValue('B31', $inquiry->item . ' / ' . $inquiry->size);
-            $sheet->setCellValue('B32', $inquiry->referenceNo);
+            $sheet->setCellValue('B32', $inquiry->referenceNo ?? '-');
             $sheet->setCellValue('F31', $inquiry->color);
             $sheet->setCellValue('H31', $deliveredQty);
             $sheet->setCellValue('B35', Auth::user()->name);
@@ -337,13 +333,14 @@ class SampleInquiryController extends Controller
         } catch (\Exception $e) {
             \Log::error('Dispatch Note Generation Failed: ' . $e->getMessage());
             $inquiry->save();
-            return redirect()->back()->with('error', 'Stock delivered, but failed to generate dispatch note.');
+            return redirect()->back()->with('error', 'Delivery marked, but dispatch note generation failed.');
         }
 
         $inquiry->save();
 
-        return redirect()->back()->with('success', 'Stock deducted, marked as delivered, and dispatch note created.');
+        return redirect()->back()->with('success', 'Delivered successfully. Dispatch note created.');
     }
+
 
     public function updateDecision(Request $request, $id)
     {

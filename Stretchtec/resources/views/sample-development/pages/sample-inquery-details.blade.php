@@ -727,7 +727,7 @@
                                                 <td class="px-4 py-3 border-r border-gray-300 text-center">
                                                     <div class="delivery-item inline-block">
                                                         @if (is_null($inquiry->customerDeliveryDate))
-                                                            @if ($inquiry->referenceNo)
+                                                            @if (!empty(trim($inquiry->referenceNo)))
                                                                 @if (Auth::user()->role === 'ADMIN')
                                                                     <div
                                                                         class="bg-gray-200 text-gray-500 px-3 py-2 rounded-md text-sm w-40 cursor-not-allowed">
@@ -749,7 +749,7 @@
                                                                         <input type="number" name="delivered_qty"
                                                                             min="1"
                                                                             max="{{ optional($inquiry->referenceNo ? \App\Models\SampleStock::where('reference_no', $inquiry->referenceNo)->first() : null)?->available_stock ?? 1 }}"
-                                                                            required placeholder="Delivered Qty"
+                                                                            placeholder="Delivered Qty"
                                                                             class="px-3 py-2 mb-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm w-40">
 
                                                                         <button type="submit"
