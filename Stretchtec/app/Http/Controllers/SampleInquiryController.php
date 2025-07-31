@@ -252,30 +252,34 @@ class SampleInquiryController extends Controller
     {
         $request->validate([
             'id' => 'required|exists:sample_inquiries,id',
-            'delivered_qty' => '',
+            'delivered_qty' => 'nullable|integer|min:1',
         ]);
 
         $inquiry = SampleInquiry::findOrFail($request->id);
         $deliveredQty = (int) $request->delivered_qty;
 
-        // Try to deduct stock only if referenceNo is available
+        // Check if sample stock is required
         if ($inquiry->referenceNo) {
             $stock = \App\Models\SampleStock::where('reference_no', $inquiry->referenceNo)->first();
 
-            if (!$stock) {
-                return redirect()->back()->with('error', 'Sample Stock not found for the given reference number.');
-            }
+            // If stock exists, delivered_qty is required
+            if ($stock) {
+                if (!$request->filled('delivered_qty')) {
+                    return redirect()->back()->with('error', 'The delivered quantity field is required.');
+                }
 
-            if ($deliveredQty > $stock->available_stock) {
-                return redirect()->back()->with('error', 'Delivered quantity exceeds available stock.');
-            }
+                if ($deliveredQty > $stock->available_stock) {
+                    return redirect()->back()->with('error', 'Delivered quantity exceeds available stock.');
+                }
 
-            // Deduct stock
-            $stock->available_stock -= $deliveredQty;
-            if ($stock->available_stock == 0) {
-                $stock->delete();
-            } else {
-                $stock->save();
+                // Deduct stock
+                $stock->available_stock -= $deliveredQty;
+
+                if ($stock->available_stock <= 0) {
+                    $stock->delete(); // delete if stock is now 0
+                } else {
+                    $stock->save();
+                }
             }
         }
 
@@ -298,18 +302,19 @@ class SampleInquiryController extends Controller
             $spreadsheet = IOFactory::load($templatePath);
             $sheet = $spreadsheet->getActiveSheet();
 
-            // Fill dispatch note
-            $sheet->setCellValue('D5', $now->format('Y-m-d H:i:s'));             
-            $sheet->setCellValue('D6', $dispatchCode);                           
-            $sheet->setCellValue('B8', $inquiry->customerName);                 
-            $sheet->setCellValue('F8', $inquiry->merchandiseName);              
-            $sheet->setCellValue('A12', $inquiry->orderNo);                     
+            // Fill dispatch note (first copy)
+            $sheet->setCellValue('D5', $now->format('Y-m-d H:i:s'));
+            $sheet->setCellValue('D6', $dispatchCode);
+            $sheet->setCellValue('B8', $inquiry->customerName);
+            $sheet->setCellValue('F8', $inquiry->merchandiseName);
+            $sheet->setCellValue('A12', $inquiry->orderNo);
             $sheet->setCellValue('B12', $inquiry->item . ' / ' . $inquiry->size);
-            $sheet->setCellValue('B13', $inquiry->referenceNo ?? '-');          
-            $sheet->setCellValue('F12', $inquiry->color);                       
-            $sheet->setCellValue('H12', $deliveredQty);                         
-            $sheet->setCellValue('B16', Auth::user()->name);                    
+            $sheet->setCellValue('B13', $inquiry->referenceNo ?? '-');
+            $sheet->setCellValue('F12', $inquiry->color);
+            $sheet->setCellValue('H12', $deliveredQty);
+            $sheet->setCellValue('B16', Auth::user()->name);
 
+            // Fill dispatch note (second copy)
             $sheet->setCellValue('D24', $now->format('Y-m-d H:i:s'));
             $sheet->setCellValue('D25', $dispatchCode);
             $sheet->setCellValue('B27', $inquiry->customerName);
@@ -321,9 +326,9 @@ class SampleInquiryController extends Controller
             $sheet->setCellValue('H31', $deliveredQty);
             $sheet->setCellValue('B35', Auth::user()->name);
 
+            // Save file
             $fileName = 'dispatch_note_' . $dispatchCode . '.xlsx';
             $savePath = storage_path('app/public/dispatches/' . $fileName);
-
             $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
             $writer->save($savePath);
 
@@ -340,6 +345,7 @@ class SampleInquiryController extends Controller
 
         return redirect()->back()->with('success', 'Delivered successfully. Dispatch note created.');
     }
+
 
 
     public function updateDecision(Request $request, $id)

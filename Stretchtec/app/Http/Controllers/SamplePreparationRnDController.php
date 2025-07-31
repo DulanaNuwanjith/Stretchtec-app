@@ -290,13 +290,15 @@ class SamplePreparationRnDController extends Controller
             $damagedOutput = (int)($production->damaged_output ?? 0);
             $availableStock = max($productionOutput - $damagedOutput, 0);
 
-            // ✅ Create entry in sample_stocks
-            SampleStock::create([
-                'reference_no' => $request->referenceNo,
-                'shade' => $prep->shade ?? $prep->sampleInquiry?->shade ?? 'N/A',
-                'available_stock' => $availableStock,
-                'special_note' => null,
-            ]);
+            // ✅ Only create SampleStock if availableStock > 0
+            if ($availableStock > 0) {
+                SampleStock::create([
+                    'reference_no' => $request->referenceNo,
+                    'shade' => $prep->shade ?? $prep->sampleInquiry?->shade ?? 'N/A',
+                    'available_stock' => $availableStock,
+                    'special_note' => null,
+                ]);
+            }
 
             // ✅ Sync with SampleInquiry
             $inquiry = $prep->sampleInquiry;
