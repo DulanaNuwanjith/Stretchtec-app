@@ -229,7 +229,6 @@
                                     </div>
                                 </td>
                             @endif
-
                         </tr>
                     @endforeach
 

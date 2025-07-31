@@ -248,16 +248,41 @@ class SampleInquiryController extends Controller
     {
         $request->validate([
             'id' => 'required|exists:sample_inquiries,id',
-            'dnote_no' => 'required|string|max:255',
+            'delivered_qty' => 'required|integer|min:1',
         ]);
 
         $inquiry = SampleInquiry::findOrFail($request->id);
+
+        if (!$inquiry->referenceNo) {
+            return redirect()->back()->with('error', 'Reference No is required to deduct stock.');
+        }
+
+        $stock = \App\Models\SampleStock::where('reference_no', $inquiry->referenceNo)->first();
+
+        if (!$stock) {
+            return redirect()->back()->with('error', 'Sample Stock not found for the given reference number.');
+        }
+
+        $deliveredQty = (int) $request->delivered_qty;
+
+        if ($deliveredQty > $stock->available_stock) {
+            return redirect()->back()->with('error', 'Delivered quantity exceeds available stock.');
+        }
+
+        // Deduct stock
+        $stock->available_stock -= $deliveredQty;
+        if ($stock->available_stock == 0) {
+            $stock->special_note = 'No more stock available';
+        }
+        $stock->save();
+
+        // Mark delivery
         $inquiry->customerDeliveryDate = now();
-        $inquiry->dNoteNumber = $request->dnote_no;
         $inquiry->save();
 
-        return redirect()->back()->with('success', 'Marked as delivered with DNote No');
+        return redirect()->back()->with('success', 'Stock deducted and marked as delivered.');
     }
+
 
     public function updateDecision(Request $request, $id)
     {
