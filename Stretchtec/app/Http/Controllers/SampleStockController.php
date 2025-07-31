@@ -116,6 +116,5 @@ class SampleStockController extends Controller
             return redirect()->back()->with('success', 'Stock borrowed successfully.');
         }
     }
-
-
+    
 }

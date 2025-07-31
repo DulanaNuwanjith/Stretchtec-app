@@ -11,6 +11,10 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\DB;
 use App\Models\SamplePreparationRnD;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
+use App\Models\DispatchCounter;
 
 class SampleInquiryController extends Controller
 {
@@ -272,17 +276,74 @@ class SampleInquiryController extends Controller
         // Deduct stock
         $stock->available_stock -= $deliveredQty;
         if ($stock->available_stock == 0) {
-            $stock->special_note = 'No more stock available';
+            $stock->delete();
+        } else {
+            $stock->save();
         }
-        $stock->save();
 
-        // Mark delivery
         $inquiry->customerDeliveryDate = now();
+
+        try {
+            // Generate next dispatch code
+            $lastInquiryWithCode = SampleInquiry::whereNotNull('dNoteNumber')
+                ->orderByDesc('id')
+                ->first();
+
+            $lastCode = 0;
+
+            if ($lastInquiryWithCode && preg_match('/DISP-(\d+)/', $lastInquiryWithCode->dNoteNumber, $matches)) {
+                $lastCode = (int) $matches[1];
+            }
+
+            $nextCode = $lastCode + 1;
+            $dispatchCode = 'DISP-' . str_pad($nextCode, 5, '0', STR_PAD_LEFT);
+
+            $now = now();
+            $templatePath = storage_path('app/public/templates/DISPATCH NOTICES.xlsx');
+            $spreadsheet = IOFactory::load($templatePath);
+            $sheet = $spreadsheet->getActiveSheet();
+
+            $sheet->setCellValue('D5', $now->format('Y-m-d H:i:s'));             // Printed date & time
+            $sheet->setCellValue('D6', $dispatchCode);                           // Dispatch Code
+            $sheet->setCellValue('B8', $inquiry->customerName);                 // Customer
+            $sheet->setCellValue('F8', $inquiry->merchandiseName);              // Merchandiser
+            $sheet->setCellValue('A12', $inquiry->orderNo);                     // Sam.No / Order No
+            $sheet->setCellValue('B12', $inquiry->item . ' / ' . $inquiry->size); // Item & Size
+            $sheet->setCellValue('B13', $inquiry->referenceNo);                 // Reference No
+            $sheet->setCellValue('F12', $inquiry->color);                       // Colour
+            $sheet->setCellValue('H12', $deliveredQty);                         // Delivered Quantity
+            $sheet->setCellValue('B16', Auth::user()->name);                    // Created by
+
+            $sheet->setCellValue('D24', $now->format('Y-m-d H:i:s'));
+            $sheet->setCellValue('D25', $dispatchCode);
+            $sheet->setCellValue('B27', $inquiry->customerName);
+            $sheet->setCellValue('F27', $inquiry->merchandiseName);
+            $sheet->setCellValue('A31', $inquiry->orderNo);
+            $sheet->setCellValue('B31', $inquiry->item . ' / ' . $inquiry->size);
+            $sheet->setCellValue('B32', $inquiry->referenceNo);
+            $sheet->setCellValue('F31', $inquiry->color);
+            $sheet->setCellValue('H31', $deliveredQty);
+            $sheet->setCellValue('B35', Auth::user()->name);
+
+            $fileName = 'dispatch_note_' . $dispatchCode . '.xlsx';
+            $savePath = storage_path('app/public/dispatches/' . $fileName);
+
+            $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
+            $writer->save($savePath);
+
+            // Save dispatch note filename
+            $inquiry->dNoteNumber = $fileName;
+
+        } catch (\Exception $e) {
+            \Log::error('Dispatch Note Generation Failed: ' . $e->getMessage());
+            $inquiry->save();
+            return redirect()->back()->with('error', 'Stock delivered, but failed to generate dispatch note.');
+        }
+
         $inquiry->save();
 
-        return redirect()->back()->with('success', 'Stock deducted and marked as delivered.');
+        return redirect()->back()->with('success', 'Stock deducted, marked as delivered, and dispatch note created.');
     }
-
 
     public function updateDecision(Request $request, $id)
     {

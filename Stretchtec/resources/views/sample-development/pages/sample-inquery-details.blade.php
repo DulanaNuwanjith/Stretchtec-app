@@ -481,7 +481,7 @@
                                                 class="font-bold px-4 py-3 w-48 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Reference No</th>
                                             <th
-                                                class="font-bold px-4 py-3 w-48 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold px-4 py-3 w-52 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Customer Delivery Status</th>
                                             <th
                                                 class="font-bold px-4 py-3 w-56 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
@@ -765,13 +765,24 @@
                                                                 </div>
                                                             @endif
                                                         @else
-                                                            <span
-                                                                class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-green-100 dark:bg-gray-800 px-3 py-1 rounded">
-                                                                Delivered on <br>
-                                                                {{ \Carbon\Carbon::parse($inquiry->customerDeliveryDate)->format('Y-m-d') }}
-                                                                at
-                                                                {{ \Carbon\Carbon::parse($inquiry->customerDeliveryDate)->format('H:i') }}
-                                                            </span>
+                                                                <span
+                                                                    class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-green-100 dark:bg-gray-800 px-3 py-1 rounded">
+                                                                    Delivered on <br>
+                                                                    {{ \Carbon\Carbon::parse($inquiry->customerDeliveryDate)->format('Y-m-d') }}
+                                                                    at
+                                                                    {{ \Carbon\Carbon::parse($inquiry->customerDeliveryDate)->format('H:i') }}
+                                                                </span>
+
+                                                                @if ($inquiry->dNoteNumber)
+                                                                    <div class="flex justify-center">
+                                                                        <a href="{{ asset('storage/dispatches/' . $inquiry->dNoteNumber) }}"
+                                                                            target="_blank"
+                                                                            class="inline-block text-sm font-semibold text-gray-700 bg-gray-300 p-2 rounded hover:bg-gray-400 transition duration-200">
+                                                                            Dispatch Note
+                                                                        </a>
+                                                                    </div>
+                                                                @endif
+
                                                         @endif
                                                     </div>
                                                 </td>
