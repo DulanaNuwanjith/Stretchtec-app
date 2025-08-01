@@ -9,33 +9,88 @@ use Illuminate\Http\Request;
 class ProductCatalogController extends Controller
 {
     // Display a listing of the product catalog entries
-    public function elasticCatalog()
+    public function elasticCatalog(Request $request)
     {
-        $catalogs = ProductCatalog::where('item', 'Elastic')
-                    ->latest()
-                    ->paginate(15);
+        $query = ProductCatalog::where('item', 'Elastic');
 
-        return view('production-catalog.pages.elasticCatalog', compact('catalogs'));
+        // Apply filters
+        if ($request->filled('orderNo')) {
+            $query->where('order_no', $request->orderNo);
+        }
+
+        if ($request->filled('merchandiser')) {
+            $query->where('coordinator_name', $request->merchandiser);
+        }
+
+        if ($request->filled('referenceNo')) {
+            $query->where('reference_no', $request->referenceNo);
+        }
+
+        $catalogs = $query->latest()->paginate(15)->appends($request->query());
+
+        // Pass dropdown values for filtering (unique list)
+        $orderNos = ProductCatalog::where('item', 'Elastic')->distinct()->pluck('order_no');
+        $merchandisers = ProductCatalog::where('item', 'Elastic')->distinct()->pluck('coordinator_name');
+        $referenceNos = ProductCatalog::where('item', 'Elastic')->distinct()->pluck('reference_no');
+
+        return view('production-catalog.pages.elasticCatalog', compact('catalogs', 'orderNos', 'merchandisers', 'referenceNos'));
     }
 
-    public function tapeCatalog()
+    // Display a listing of the product catalog entries
+    public function codeCatalog(Request $request)
     {
-        $catalogs = ProductCatalog::where('item', 'Tape')
-                    ->latest()
-                    ->paginate(15);
+        $query = ProductCatalog::where('item', 'Code');
 
-        return view('production-catalog.pages.tapeCatalog', compact('catalogs'));
+        // Apply filters
+        if ($request->filled('orderNo')) {
+            $query->where('order_no', $request->orderNo);
+        }
+
+        if ($request->filled('merchandiser')) {
+            $query->where('coordinator_name', $request->merchandiser);
+        }
+
+        if ($request->filled('referenceNo')) {
+            $query->where('reference_no', $request->referenceNo);
+        }
+
+        $catalogs = $query->latest()->paginate(15)->appends($request->query());
+
+        // Pass dropdown values for filtering (unique list)
+        $orderNos = ProductCatalog::where('item', 'Code')->distinct()->pluck('order_no');
+        $merchandisers = ProductCatalog::where('item', 'Code')->distinct()->pluck('coordinator_name');
+        $referenceNos = ProductCatalog::where('item', 'Code')->distinct()->pluck('reference_no');
+
+        return view('production-catalog.pages.codeCatalog', compact('catalogs', 'orderNos', 'merchandisers', 'referenceNos'));
     }
 
-    public function codeCatalog()
+    // Display a listing of the product catalog entries
+    public function tapeCatalog(Request $request)
     {
-        $catalogs = ProductCatalog::where('item', 'Code')
-                    ->latest()
-                    ->paginate(15);
+        $query = ProductCatalog::where('item', 'Tape');
 
-        return view('production-catalog.pages.codeCatalog', compact('catalogs'));
+        // Apply filters
+        if ($request->filled('orderNo')) {
+            $query->where('order_no', $request->orderNo);
+        }
+
+        if ($request->filled('merchandiser')) {
+            $query->where('coordinator_name', $request->merchandiser);
+        }
+
+        if ($request->filled('referenceNo')) {
+            $query->where('reference_no', $request->referenceNo);
+        }
+
+        $catalogs = $query->latest()->paginate(15)->appends($request->query());
+
+        // Pass dropdown values for filtering (unique list)
+        $orderNos = ProductCatalog::where('item', 'Tape')->distinct()->pluck('order_no');
+        $merchandisers = ProductCatalog::where('item', 'Tape')->distinct()->pluck('coordinator_name');
+        $referenceNos = ProductCatalog::where('item', 'Tape')->distinct()->pluck('reference_no');
+
+        return view('production-catalog.pages.tapeCatalog', compact('catalogs', 'orderNos', 'merchandisers', 'referenceNos'));
     }
-
 
     // Show the form for creating a new product catalog entry (optional)
     public function create()

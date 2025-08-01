@@ -122,166 +122,147 @@
                             </script>
 
                             <!-- Filter Form -->
-                            <form id="filterForm1" method="GET" action=""
+                            <form id="filterForm1" method="GET" action="{{ route('tapeCatalog.index') }}"
                                 class="mb-6 sticky top-0 z-20 flex gap-6 items-center">
-                                <div class="flex items-center gap-4">
 
-                                    <!-- CUSTOMER DROPDOWN -->
-                                    <div class="relative inline-block text-left w-48">
-                                        <label for="customerDropdown"
+                                <div class="flex items-center gap-4 flex-wrap">
+
+                                    {{-- Order DROPDOWN --}}
+                                    <div class="relative inline-block text-left w-48 dropdown-group">
+                                        <label for="orderNoDropdown"
                                             class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Order
                                             No</label>
-                                        <div>
-                                            <button type="button" id="customerDropdown"
-                                                class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10 dark:bg-gray-700 dark:text-white"
-                                                onclick="toggleDropdown('customer')" aria-haspopup="listbox"
-                                                aria-expanded="false">
-                                                <span
-                                                    id="selectedCustomer">{{ request('customer') ? request('customer') : 'Select Sample No' }}</span>
-                                                <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20"
-                                                    fill="currentColor">
-                                                    <path fill-rule="evenodd"
-                                                        d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
-                                                        clip-rule="evenodd" />
-                                                </svg>
-                                            </button>
-                                        </div>
-                                        <div id="customerDropdownMenu"
+
+                                        <button type="button" id="orderNoDropdown"
+                                            class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10 dark:bg-gray-700 dark:text-white"
+                                            onclick="toggleDropdown('orderNo')" aria-haspopup="listbox"
+                                            aria-expanded="false">
+                                            <span id="selectedOrderNo">{{ request('orderNo') ?: 'Select Order No' }}</span>
+                                            <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                                                <path fill-rule="evenodd"
+                                                    d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
+                                                    clip-rule="evenodd" />
+                                            </svg>
+                                        </button>
+
+                                        <div id="orderNoDropdownMenu"
                                             class="hidden absolute z-10 mt-2 w-full rounded-md bg-white shadow-lg ring-1 ring-black/5 dark:bg-gray-700 max-h-48 overflow-y-auto">
                                             <div class="p-2 sticky top-0 bg-white dark:bg-gray-700 z-10">
-                                                <input type="text" id="customerSearchInput"
-                                                    placeholder="Search customers..."
-                                                    class="w-full px-2 py-1 text-sm border rounded-md dark:bg-gray-600 dark:text-white dark:placeholder-gray-300"
-                                                    onkeyup="filterOptions('customer')" />
+                                                <input type="text" id="orderNoSearchInput"
+                                                    placeholder="Search Order No..."
+                                                    class="w-full px-2 py-1 text-sm border rounded-md dark:bg-gray-600 dark:text-white"
+                                                    onkeyup="filterOptions('orderNo')" />
                                             </div>
-                                            <div class="py-1" role="listbox" tabindex="-1"
-                                                aria-labelledby="customerDropdown">
+                                            <div class="py-1" role="listbox">
                                                 <button type="button"
-                                                    class="customer-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                                                    onclick="selectOption('customer', '')">Select Customer</button>
-                                                <button type="button"
-                                                    class="customer-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                                                    onclick="selectOption('customer', 'TIMEX')">TIMEX</button>
-                                                <button type="button"
-                                                    class="customer-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                                                    onclick="selectOption('customer', 'NESTLE')">NESTLE</button>
-                                                <button type="button"
-                                                    class="customer-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                                                    onclick="selectOption('customer', 'PEPSI')">PEPSI</button>
+                                                    class="orderNo-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
+                                                    onclick="selectOption('orderNo', '')">All</button>
+                                                @foreach ($orderNos as $orderNo)
+                                                    <button type="button"
+                                                        class="orderNo-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
+                                                        onclick="selectOption('orderNo', '{{ $orderNo }}')">{{ $orderNo }}</button>
+                                                @endforeach
                                             </div>
                                         </div>
-                                        <input type="hidden" name="customer" id="customerInput"
-                                            value="{{ request('customer') }}">
+                                        <input type="hidden" name="orderNo" id="orderNoInput"
+                                            value="{{ request('orderNo') }}">
                                     </div>
 
-                                    <!-- MERCHANDISER DROPDOWN -->
-                                    <div class="relative inline-block text-left w-48">
+                                    {{-- MERCHANDISER DROPDOWN --}}
+                                    <div class="relative inline-block text-left w-48 dropdown-group">
                                         <label for="merchandiserDropdown"
-                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Customer
-                                            Coordinator</label>
-                                        <div>
-                                            <button type="button" id="merchandiserDropdown"
-                                                class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10 dark:bg-gray-700 dark:text-white"
-                                                onclick="toggleDropdown('merchandiser')" aria-haspopup="listbox"
-                                                aria-expanded="false">
-                                                <span
-                                                    id="selectedMerchandiser">{{ request('merchandiser') ? request('merchandiser') : 'Select Merchandiser' }}</span>
-                                                <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20"
-                                                    fill="currentColor">
-                                                    <path fill-rule="evenodd"
-                                                        d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
-                                                        clip-rule="evenodd" />
-                                                </svg>
-                                            </button>
-                                        </div>
+                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Merchandiser</label>
+
+                                        <button type="button" id="merchandiserDropdown"
+                                            class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10 dark:bg-gray-700 dark:text-white"
+                                            onclick="toggleDropdown('merchandiser')" aria-haspopup="listbox"
+                                            aria-expanded="false">
+                                            <span
+                                                id="selectedMerchandiser">{{ request('merchandiser') ?: 'Select Merchandiser' }}</span>
+                                            <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                                                <path fill-rule="evenodd"
+                                                    d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
+                                                    clip-rule="evenodd" />
+                                            </svg>
+                                        </button>
+
                                         <div id="merchandiserDropdownMenu"
                                             class="hidden absolute z-10 mt-2 w-full rounded-md bg-white shadow-lg ring-1 ring-black/5 dark:bg-gray-700 max-h-48 overflow-y-auto">
                                             <div class="p-2 sticky top-0 bg-white dark:bg-gray-700 z-10">
                                                 <input type="text" id="merchandiserSearchInput"
-                                                    placeholder="Search merchandisers..."
-                                                    class="w-full px-2 py-1 text-sm border rounded-md dark:bg-gray-600 dark:text-white dark:placeholder-gray-300"
+                                                    placeholder="Search Merchandisers..."
+                                                    class="w-full px-2 py-1 text-sm border rounded-md dark:bg-gray-600 dark:text-white"
                                                     onkeyup="filterOptions('merchandiser')" />
                                             </div>
-                                            <div class="py-1" role="listbox" tabindex="-1"
-                                                aria-labelledby="merchandiserDropdown">
+                                            <div class="py-1" role="listbox">
                                                 <button type="button"
                                                     class="merchandiser-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                                                    onclick="selectOption('merchandiser', '')">Select Merchandiser</button>
-                                                <button type="button"
-                                                    class="merchandiser-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                                                    onclick="selectOption('merchandiser', 'John Doe')">John Doe</button>
-                                                <button type="button"
-                                                    class="merchandiser-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                                                    onclick="selectOption('merchandiser', 'Jane Smith')">Jane
-                                                    Smith</button>
+                                                    onclick="selectOption('merchandiser', '')">All</button>
+                                                @foreach ($merchandisers as $merchandiser)
+                                                    <button type="button"
+                                                        class="merchandiser-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
+                                                        onclick="selectOption('merchandiser', '{{ $merchandiser }}')">{{ $merchandiser }}</button>
+                                                @endforeach
                                             </div>
                                         </div>
                                         <input type="hidden" name="merchandiser" id="merchandiserInput"
                                             value="{{ request('merchandiser') }}">
                                     </div>
 
-                                    <!-- ITEM DROPDOWN -->
-                                    <div class="relative inline-block text-left w-48">
-                                        <label for="itemDropdown"
+                                    {{-- REFERENCE NO DROPDOWN --}}
+                                    <div class="relative inline-block text-left w-48 dropdown-group">
+                                        <label for="referenceNoDropdown"
                                             class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Reference
                                             No</label>
-                                        <div>
-                                            <button type="button" id="itemDropdown"
-                                                class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10 dark:bg-gray-700 dark:text-white"
-                                                onclick="toggleDropdown('item')" aria-haspopup="listbox"
-                                                aria-expanded="false">
-                                                <span
-                                                    id="selectedItem">{{ request('item') ? request('item') : 'Select Item' }}</span>
-                                                <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20"
-                                                    fill="currentColor">
-                                                    <path fill-rule="evenodd"
-                                                        d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
-                                                        clip-rule="evenodd" />
-                                                </svg>
-                                            </button>
-                                        </div>
-                                        <div id="itemDropdownMenu"
+
+                                        <button type="button" id="referenceNoDropdown"
+                                            class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10 dark:bg-gray-700 dark:text-white"
+                                            onclick="toggleDropdown('referenceNo')" aria-haspopup="listbox"
+                                            aria-expanded="false">
+                                            <span
+                                                id="selectedReferenceNo">{{ request('referenceNo') ?: 'Select Reference No' }}</span>
+                                            <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                                                <path fill-rule="evenodd"
+                                                    d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
+                                                    clip-rule="evenodd" />
+                                            </svg>
+                                        </button>
+
+                                        <div id="referenceNoDropdownMenu"
                                             class="hidden absolute z-10 mt-2 w-full rounded-md bg-white shadow-lg ring-1 ring-black/5 dark:bg-gray-700 max-h-48 overflow-y-auto">
                                             <div class="p-2 sticky top-0 bg-white dark:bg-gray-700 z-10">
-                                                <input type="text" id="itemSearchInput" placeholder="Search items..."
-                                                    class="w-full px-2 py-1 text-sm border rounded-md dark:bg-gray-600 dark:text-white dark:placeholder-gray-300"
-                                                    onkeyup="filterOptions('item')" />
+                                                <input type="text" id="referenceNoSearchInput"
+                                                    placeholder="Search Reference Nos..."
+                                                    class="w-full px-2 py-1 text-sm border rounded-md dark:bg-gray-600 dark:text-white"
+                                                    onkeyup="filterOptions('referenceNo')" />
                                             </div>
-                                            <div class="py-1" role="listbox" tabindex="-1"
-                                                aria-labelledby="itemDropdown">
+                                            <div class="py-1" role="listbox">
                                                 <button type="button"
-                                                    class="item-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                                                    onclick="selectOption('item', '')">Select Item</button>
-                                                <button type="button"
-                                                    class="item-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                                                    onclick="selectOption('item', 'ITEM001')">ITEM001</button>
-                                                <button type="button"
-                                                    class="item-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                                                    onclick="selectOption('item', 'ITEM002')">ITEM002</button>
-                                                <button type="button"
-                                                    class="item-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                                                    onclick="selectOption('item', 'ITEM003')">ITEM003</button>
+                                                    class="referenceNo-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
+                                                    onclick="selectOption('referenceNo', '')">All</button>
+                                                @foreach ($referenceNos as $referenceNo)
+                                                    <button type="button"
+                                                        class="referenceNo-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
+                                                        onclick="selectOption('referenceNo', '{{ $referenceNo }}')">{{ $referenceNo }}</button>
+                                                @endforeach
                                             </div>
                                         </div>
-                                        <input type="hidden" name="item" id="itemInput"
-                                            value="{{ request('item') }}">
+                                        <input type="hidden" name="referenceNo" id="referenceNoInput"
+                                            value="{{ request('referenceNo') }}">
                                     </div>
 
-
                                 </div>
-                                <div class="flex items-end space-x-2 mt-2">
-                                    <button type="submit"
-                                        class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-                                        Apply Filters
-                                    </button>
 
+                                {{-- ACTION BUTTONS --}}
+                                <div class="flex items-end gap-2 mt-2">
+                                    <button type="submit"
+                                        class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Apply
+                                        Filters</button>
                                     <button type="button" id="clearFiltersBtn"
-                                        class="mt-4 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 px-4 py-2 rounded hover:bg-gray-300">
-                                        Clear
-                                    </button>
+                                        class="mt-4 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-white px-4 py-2 rounded hover:bg-gray-300"
+                                        onclick="clearAllFilters()">Clear</button>
                                 </div>
                             </form>
-
 
                             <div class="flex justify-between items-center mb-6">
                                 <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Tape Production Catalog
@@ -307,7 +288,7 @@
                                                 Date</th>
                                             <th
                                                 class="font-bold px-4 py-3 w-36 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                                Customer Coordinator</th>
+                                                Merchandiser</th>
                                             <th
                                                 class="font-bold px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Size</th>
@@ -587,53 +568,46 @@
     </div>
     </div>
 
-
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const clearFiltersBtn = document.getElementById('clearFiltersBtn');
-            const selectedVehicle = document.getElementById('selectedVehicle');
-            const filterForm = document.getElementById('filterForm');
-
-            clearFiltersBtn.addEventListener('click', () => {
-                // Clear values
-                document.getElementById('customerInput').value = '';
-                document.getElementById('merchandiserInput').value = '';
-                document.getElementById('itemInput').value = '';
-
-                document.getElementById('selectedCustomer').textContent = 'Select Sample No';
-                document.getElementById('selectedMerchandiser').textContent = 'Select Merchandiser';
-                document.getElementById('selectedItem').textContent = 'Select Item';
-
-                // Submit the form
-                filterForm.submit();
-            });
-
-        });
-    </script>
-
     <script>
         function toggleDropdown(type) {
-            const menu = document.getElementById(`${type}DropdownMenu`);
-            const btn = document.getElementById(`${type}Dropdown`);
-            const expanded = btn.getAttribute('aria-expanded') === 'true';
-            menu.classList.toggle('hidden');
-            btn.setAttribute('aria-expanded', !expanded);
+            closeAllDropdowns();
+            const dropdownMenu = document.getElementById(`${type}DropdownMenu`);
+            if (dropdownMenu) dropdownMenu.classList.toggle('hidden');
         }
 
         function selectOption(type, value) {
-            const displayText = value || `Select ${type.charAt(0).toUpperCase() + type.slice(1)}`;
-            document.getElementById(`selected${capitalize(type)}`).innerText = value || `All ${capitalize(type)}s`;
-            document.getElementById(`${type}Input`).value = value;
+            const inputId = `${type}Input`;
+            const labelId = `selected${capitalize(type)}`;
+            const input = document.getElementById(inputId);
+            const label = document.getElementById(labelId);
+
+            input.value = value;
+            label.textContent = value || `Select ${formatLabel(type)}`;
+
             document.getElementById(`${type}DropdownMenu`).classList.add('hidden');
-            document.getElementById(`${type}Dropdown`).setAttribute('aria-expanded', false);
         }
 
         function filterOptions(type) {
-            const input = document.getElementById(`${type}SearchInput`).value.toLowerCase();
-            const options = document.querySelectorAll(`.${type}-option`);
-            options.forEach(option => {
-                const text = option.textContent.toLowerCase();
-                option.style.display = text.includes(input) ? 'block' : 'none';
+            const input = document.getElementById(`${type}SearchInput`);
+            const filter = input.value.toLowerCase();
+            document.querySelectorAll(`.${type}-option`).forEach(option => {
+                option.style.display = option.textContent.toLowerCase().includes(filter) ? '' : 'none';
+            });
+        }
+
+        function clearAllFilters() {
+            ['orderNo', 'merchandiser', 'referenceNo'].forEach(type => {
+                document.getElementById(`${type}Input`).value = '';
+                document.getElementById(`selected${capitalize(type)}`).textContent = `Select ${formatLabel(type)}`;
+            });
+
+            document.getElementById('filterForm1').submit();
+        }
+
+        function closeAllDropdowns() {
+            ['orderNo', 'merchandiser', 'referenceNo'].forEach(type => {
+                const dropdown = document.getElementById(`${type}DropdownMenu`);
+                if (dropdown) dropdown.classList.add('hidden');
             });
         }
 
@@ -641,16 +615,17 @@
             return str.charAt(0).toUpperCase() + str.slice(1);
         }
 
-        // Close dropdowns on outside click
+        function formatLabel(key) {
+            if (key === 'orderNo') return 'Order No';
+            if (key === 'merchandiser') return 'Merchandiser';
+            if (key === 'referenceNo') return 'Reference No';
+            return key;
+        }
+
         document.addEventListener('click', function(e) {
-            ['item', 'customer', 'merchandiser'].forEach(type => {
-                const btn = document.getElementById(`${type}Dropdown`);
-                const menu = document.getElementById(`${type}DropdownMenu`);
-                if (!btn.contains(e.target) && !menu.contains(e.target)) {
-                    menu.classList.add('hidden');
-                    btn.setAttribute('aria-expanded', false);
-                }
-            });
+            if (!e.target.closest('.dropdown-group')) {
+                closeAllDropdowns();
+            }
         });
     </script>
 
