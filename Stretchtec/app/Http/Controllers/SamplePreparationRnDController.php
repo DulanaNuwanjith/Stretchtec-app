@@ -47,10 +47,10 @@ class SamplePreparationRnDController extends Controller
         $samplePreparations = $query->latest()->paginate(10); // Or ->get() if needed
 
         // Dynamic values for dropdowns
-        $orderNos = SamplePreparationRnD::select('orderNo')->distinct()->orderBy('orderNo')->pluck('orderNo');
-        $poNos = SamplePreparationRnD::select('yarnOrderedPONumber')->distinct()->orderBy('yarnOrderedPONumber')->pluck('yarnOrderedPONumber');
-        $shades = SamplePreparationRnD::select('shade')->distinct()->orderBy('shade')->pluck('shade');
-        $references = SamplePreparationRnD::select('referenceNo')->distinct()->orderBy('referenceNo')->pluck('referenceNo');
+        $orderNos = SamplePreparationRnD::whereNotNull('orderNo')->where('orderNo', '!=', '')->distinct()->orderBy('orderNo')->pluck('orderNo');
+        $poNos = SamplePreparationRnD::whereNotNull('yarnOrderedPONumber')->where('yarnOrderedPONumber', '!=', '')->distinct()->orderBy('yarnOrderedPONumber')->pluck('yarnOrderedPONumber');
+        $shades = SamplePreparationRnD::whereNotNull('shade')->where('shade', '!=', '')->distinct()->orderBy('shade')->pluck('shade');
+        $references = SamplePreparationRnD::whereNotNull('referenceNo')->where('referenceNo', '!=', '')->distinct()->orderBy('referenceNo')->pluck('referenceNo');
 
         // ✅ Add this to pass SampleStock reference list
         $sampleStockReferences = SampleStock::pluck('reference_no')->unique();
