@@ -386,16 +386,17 @@
                                                 <input type="hidden" name="customerDecision" id="customerDecisionInput"
                                                     value="{{ request('customerDecision') }}">
                                             </div>
+                                            <div class="flex items-end space-x-2 mt-2">
+                                                <button type="submit"
+                                                    class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                                                    Apply Filters
+                                                </button>
 
-                                            <button type="submit"
-                                                class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-                                                Apply Filters
-                                            </button>
-
-                                            <button type="button" id="clearFiltersBtn"
-                                                class="mt-4 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 px-4 py-2 rounded hover:bg-gray-300">
-                                                Clear Filters
-                                            </button>
+                                                <button type="button" id="clearFiltersBtn"
+                                                    class="mt-4 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 px-4 py-2 rounded hover:bg-gray-300">
+                                                    Clear Filters
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                 </form>
@@ -481,7 +482,7 @@
                                                 class="font-bold px-4 py-3 w-48 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Reference No</th>
                                             <th
-                                                class="font-bold px-4 py-3 w-48 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold px-4 py-3 w-52 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Customer Delivery Status</th>
                                             <th
                                                 class="font-bold px-4 py-3 w-56 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
@@ -727,12 +728,11 @@
                                                 <td class="px-4 py-3 border-r border-gray-300 text-center">
                                                     <div class="delivery-item inline-block">
                                                         @if (is_null($inquiry->customerDeliveryDate))
-                                                            @if ($inquiry->referenceNo)
+                                                            @if (!empty(trim($inquiry->referenceNo)))
                                                                 @if (Auth::user()->role === 'ADMIN')
-                                                                    {{-- Read-only for ADMIN --}}
                                                                     <div
                                                                         class="bg-gray-200 text-gray-500 px-3 py-2 rounded-md text-sm w-40 cursor-not-allowed">
-                                                                        Enter DNote No
+                                                                        Delivery Not Editable
                                                                     </div>
                                                                     <button type="button"
                                                                         class="w-full px-3 py-1 mt-2 rounded text-sm bg-green-300 text-white cursor-not-allowed"
@@ -740,7 +740,6 @@
                                                                         Delivered
                                                                     </button>
                                                                 @else
-                                                                    {{-- Editable form for non-admin users --}}
                                                                     <form
                                                                         action="{{ route('inquiry.markCustomerDelivered') }}"
                                                                         method="POST" class="inline-block text-left">
@@ -748,8 +747,10 @@
                                                                         <input type="hidden" name="id"
                                                                             value="{{ $inquiry->id }}">
 
-                                                                        <input type="text" name="dnote_no"
-                                                                            placeholder="Enter DNote No" required
+                                                                        <input type="number" name="delivered_qty"
+                                                                            min="1"
+                                                                            max="{{ optional($inquiry->referenceNo ? \App\Models\SampleStock::where('reference_no', $inquiry->referenceNo)->first() : null)?->available_stock ?? 1 }}"
+                                                                            placeholder="Delivered Qty"
                                                                             class="px-3 py-2 mb-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm w-40">
 
                                                                         <button type="submit"
@@ -765,7 +766,6 @@
                                                                 </div>
                                                             @endif
                                                         @else
-                                                            {{-- Show static timestamp info --}}
                                                             <span
                                                                 class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-green-100 dark:bg-gray-800 px-3 py-1 rounded">
                                                                 Delivered on <br>
@@ -775,8 +775,12 @@
                                                             </span>
 
                                                             @if ($inquiry->dNoteNumber)
-                                                                <div class="text-xs text-gray-600 dark:text-gray-300 mt-1">
-                                                                    DNote No: <strong>{{ $inquiry->dNoteNumber }}</strong>
+                                                                <div class="flex justify-center">
+                                                                    <a href="{{ asset('storage/dispatches/' . $inquiry->dNoteNumber) }}"
+                                                                        target="_blank"
+                                                                        class="inline-block text-sm font-semibold text-gray-700 bg-gray-300 p-2 rounded hover:bg-gray-400 transition duration-200">
+                                                                        Dispatch Note
+                                                                    </a>
                                                                 </div>
                                                             @endif
                                                         @endif

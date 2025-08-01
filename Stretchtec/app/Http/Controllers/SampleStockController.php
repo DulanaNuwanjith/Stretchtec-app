@@ -98,22 +98,23 @@ class SampleStockController extends Controller
         ]);
 
         $stock = SampleStock::findOrFail($id);
-
         $borrowQty = $request->borrow_qty;
 
         if ($borrowQty > $stock->available_stock) {
             return redirect()->back()->withErrors(['borrow_qty' => 'Borrowing quantity exceeds available stock.']);
         }
 
+        // Subtract borrowed quantity
         $stock->available_stock -= $borrowQty;
 
+        // If stock becomes 0, delete it
         if ($stock->available_stock == 0) {
-            $stock->special_note = 'No more stock available';
+            $stock->delete();
+            return redirect()->back()->with('success', 'Stock fully borrowed and record removed.');
+        } else {
+            $stock->save();
+            return redirect()->back()->with('success', 'Stock borrowed successfully.');
         }
-
-        $stock->save();
-
-        return redirect()->back()->with('success', 'Stock borrowed successfully.');
     }
-
+    
 }

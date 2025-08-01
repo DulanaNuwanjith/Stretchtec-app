@@ -7,6 +7,7 @@ use App\Http\Controllers\SamplePreparationRnDController;
 use App\Http\Controllers\SamplePreparationProductionController;
 use App\Http\Controllers\SampleStockController;
 use App\Http\Controllers\UserMananagementController;
+use App\Http\Controllers\ProductCatalogController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -58,17 +59,17 @@ Route::middleware([
         return view('reports');
     })->name('reports.index');
 
-    Route::get('codeCatalog', function () {
-        return view('production-catalog.pages.codeCatalog');
-    })->name('codeCatalog.index');
 
-    Route::get('elasticCatalog', function () {
-        return view('production-catalog.pages.elasticCatalog');
-    })->name('elasticCatalog.index');
-
-    Route::get('tapeCatalog', function () {
-        return view('production-catalog.pages.tapeCatalog');
-    })->name('tapeCatalog.index');
+    Route::get('elasticCatalog', [ProductCatalogController::class, 'elasticCatalog'])->name('elasticCatalog.index');
+    Route::get('tapeCatalog', [ProductCatalogController::class, 'tapeCatalog'])->name('tapeCatalog.index');
+    Route::get('codeCatalog', [ProductCatalogController::class, 'codeCatalog'])->name('codeCatalog.index');
+    Route::resource('product-catalog', ProductCatalogController::class);
+    Route::post('/product-catalog', [ProductCatalogController::class, 'store'])->name('product-catalog.store');
+    Route::post('elasticCatalog/store', [ProductCatalogController::class, 'storeElastic'])->name('elasticCatalog.store');
+    Route::post('codeCatalog/store', [ProductCatalogController::class, 'storeCode'])->name('codeCatalog.store');
+    Route::post('tapeCatalog/store', [ProductCatalogController::class, 'storeTape'])->name('tapeCatalog.store');
+    Route::post('catalog/{catalog}/upload-image', [ProductCatalogController::class, 'uploadOrderImage'])->name('catalog.uploadImage');
+    Route::patch('product-catalog/{productCatalog}/approval', [ProductCatalogController::class, 'updateApproval'])->name('product-catalog.updateApproval');
 
     Route::get('production-inquery-details', function () {
         return view('production.pages.production-inquery-details');

@@ -11,6 +11,10 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\DB;
 use App\Models\SamplePreparationRnD;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
+use App\Models\DispatchCounter;
 
 class SampleInquiryController extends Controller
 {
@@ -248,16 +252,101 @@ class SampleInquiryController extends Controller
     {
         $request->validate([
             'id' => 'required|exists:sample_inquiries,id',
-            'dnote_no' => 'required|string|max:255',
+            'delivered_qty' => 'nullable|integer|min:1',
         ]);
 
         $inquiry = SampleInquiry::findOrFail($request->id);
+        $deliveredQty = (int) $request->delivered_qty;
+
+        // Check if sample stock is required
+        if ($inquiry->referenceNo) {
+            $stock = \App\Models\SampleStock::where('reference_no', $inquiry->referenceNo)->first();
+
+            // If stock exists, delivered_qty is required
+            if ($stock) {
+                if (!$request->filled('delivered_qty')) {
+                    return redirect()->back()->with('error', 'The delivered quantity field is required.');
+                }
+
+                if ($deliveredQty > $stock->available_stock) {
+                    return redirect()->back()->with('error', 'Delivered quantity exceeds available stock.');
+                }
+
+                // Deduct stock
+                $stock->available_stock -= $deliveredQty;
+
+                if ($stock->available_stock <= 0) {
+                    $stock->delete(); // delete if stock is now 0
+                } else {
+                    $stock->save();
+                }
+            }
+        }
+
         $inquiry->customerDeliveryDate = now();
-        $inquiry->dNoteNumber = $request->dnote_no;
+
+        try {
+            // Generate next dispatch code
+            $lastInquiryWithCode = SampleInquiry::whereNotNull('dNoteNumber')->orderByDesc('id')->first();
+            $lastCode = 0;
+
+            if ($lastInquiryWithCode && preg_match('/DISP-(\d+)/', $lastInquiryWithCode->dNoteNumber, $matches)) {
+                $lastCode = (int) $matches[1];
+            }
+
+            $nextCode = $lastCode + 1;
+            $dispatchCode = 'DISP-' . str_pad($nextCode, 5, '0', STR_PAD_LEFT);
+
+            $now = now();
+            $templatePath = storage_path('app/public/templates/DISPATCH NOTICES.xlsx');
+            $spreadsheet = IOFactory::load($templatePath);
+            $sheet = $spreadsheet->getActiveSheet();
+
+            // Fill dispatch note (first copy)
+            $sheet->setCellValue('D5', $now->format('Y-m-d H:i:s'));
+            $sheet->setCellValue('D6', $dispatchCode);
+            $sheet->setCellValue('B8', $inquiry->customerName);
+            $sheet->setCellValue('F8', $inquiry->merchandiseName);
+            $sheet->setCellValue('A12', $inquiry->orderNo);
+            $sheet->setCellValue('B12', $inquiry->item . ' / ' . $inquiry->size);
+            $sheet->setCellValue('B13', $inquiry->referenceNo ?? '-');
+            $sheet->setCellValue('F12', $inquiry->color);
+            $sheet->setCellValue('H12', $deliveredQty);
+            $sheet->setCellValue('B16', Auth::user()->name);
+
+            // Fill dispatch note (second copy)
+            $sheet->setCellValue('D24', $now->format('Y-m-d H:i:s'));
+            $sheet->setCellValue('D25', $dispatchCode);
+            $sheet->setCellValue('B27', $inquiry->customerName);
+            $sheet->setCellValue('F27', $inquiry->merchandiseName);
+            $sheet->setCellValue('A31', $inquiry->orderNo);
+            $sheet->setCellValue('B31', $inquiry->item . ' / ' . $inquiry->size);
+            $sheet->setCellValue('B32', $inquiry->referenceNo ?? '-');
+            $sheet->setCellValue('F31', $inquiry->color);
+            $sheet->setCellValue('H31', $deliveredQty);
+            $sheet->setCellValue('B35', Auth::user()->name);
+
+            // Save file
+            $fileName = 'dispatch_note_' . $dispatchCode . '.xlsx';
+            $savePath = storage_path('app/public/dispatches/' . $fileName);
+            $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
+            $writer->save($savePath);
+
+            // Save dispatch note filename
+            $inquiry->dNoteNumber = $fileName;
+
+        } catch (\Exception $e) {
+            \Log::error('Dispatch Note Generation Failed: ' . $e->getMessage());
+            $inquiry->save();
+            return redirect()->back()->with('error', 'Delivery marked, but dispatch note generation failed.');
+        }
+
         $inquiry->save();
 
-        return redirect()->back()->with('success', 'Marked as delivered with DNote No');
+        return redirect()->back()->with('success', 'Delivered successfully. Dispatch note created.');
     }
+
+
 
     public function updateDecision(Request $request, $id)
     {

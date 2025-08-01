@@ -1,5 +1,6 @@
 <head>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <div class="flex h-full w-full">
@@ -11,29 +12,124 @@
                 <div class="w-full px-6 lg:px-2">
                     <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                         <div class="p-4 text-gray-900 dark:text-gray-100">
+                            <style>
+                                .swal2-toast {
+                                    font-size: 0.875rem;
+                                    padding: 0.75rem 1rem;
+                                    border-radius: 8px;
+                                    background-color: #ffffff !important;
+                                    position: relative;
+                                    box-sizing: border-box;
+                                    color: #3b82f6 !important;
+                                }
 
-                            @if (session('success'))
-                                <div
-                                    class="mb-4 p-4 text-green-800 bg-green-100 border border-green-300 rounded-md dark:text-green-200 dark:bg-green-900 dark:border-green-800">
-                                    {{ session('success') }}
-                                </div>
-                            @endif
+                                .swal2-toast .swal2-title,
+                                .swal2-toast .swal2-html-container {
+                                    color: #3b82f6 !important;
+                                }
 
-                            @if (session('error'))
-                                <div
-                                    class="mb-4 p-4 text-red-800 bg-red-100 border border-red-300 rounded-md dark:text-red-200 dark:bg-red-900 dark:border-red-800">
-                                    {{ session('error') }}
-                                </div>
-                            @endif
+                                .swal2-toast .swal2-icon {
+                                    color: #3b82f6 !important;
+                                }
+
+                                .swal2-shadow {
+                                    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+                                }
+
+                                .swal2-toast::after {
+                                    content: '';
+                                    position: absolute;
+                                    bottom: 0;
+                                    left: 0;
+                                    width: 100%;
+                                    height: 3px;
+                                    background-color: #3b82f6;
+                                    border-radius: 0 0 8px 8px;
+                                }
+                            </style>
+
+                            <script>
+                                document.addEventListener('DOMContentLoaded', () => {
+                                    @if (session('success'))
+                                        Swal.fire({
+                                            toast: true,
+                                            position: 'top-end',
+                                            icon: 'success',
+                                            title: '{{ session('success') }}',
+                                            showConfirmButton: false,
+                                            timer: 2000,
+                                            timerProgressBar: true,
+                                            customClass: {
+                                                popup: 'swal2-toast swal2-shadow'
+                                            },
+                                        });
+                                    @endif
+
+                                    @if (session('error'))
+                                        Swal.fire({
+                                            toast: true,
+                                            position: 'top-end',
+                                            icon: 'error',
+                                            title: '{{ session('error') }}',
+                                            showConfirmButton: false,
+                                            timer: 2000,
+                                            timerProgressBar: true,
+                                            customClass: {
+                                                popup: 'swal2-toast swal2-shadow'
+                                            },
+                                        });
+                                    @endif
+
+                                    @if ($errors->any())
+                                        Swal.fire({
+                                            toast: true,
+                                            position: 'top-end',
+                                            icon: 'warning',
+                                            title: 'Validation Errors',
+                                            html: `{!! implode('<br>', $errors->all()) !!}`,
+                                            showConfirmButton: false,
+                                            timer: 3000,
+                                            timerProgressBar: true,
+                                            customClass: {
+                                                popup: 'swal2-toast swal2-shadow'
+                                            },
+                                        });
+                                    @endif
+                                });
+                            </script>
+
+                            <script>
+                                function confirmDelete(id) {
+                                    Swal.fire({
+                                        title: 'Are you sure?',
+                                        text: "This record will be permanently deleted!",
+                                        icon: 'warning',
+                                        showCancelButton: true,
+                                        confirmButtonColor: '#3b82f6',
+                                        cancelButtonColor: '#6c757d',
+                                        confirmButtonText: 'Yes, delete it!',
+                                        background: '#ffffff',
+                                        color: '#3b82f6',
+                                        customClass: {
+                                            popup: 'swal2-toast swal2-shadow'
+                                        }
+                                    }).then((result) => {
+                                        if (result.isConfirmed) {
+                                            document.getElementById(`delete-form-${id}`).submit();
+                                        }
+                                    });
+                                }
+                            </script>
 
                             <!-- Filter Form -->
-                            <form id="filterForm1" method="GET" action="" class="mb-6 flex gap-6 items-center">
+                            <form id="filterForm1" method="GET" action=""
+                                class="mb-6 sticky top-0 z-20 flex gap-6 items-center">
                                 <div class="flex items-center gap-4">
 
                                     <!-- CUSTOMER DROPDOWN -->
                                     <div class="relative inline-block text-left w-48">
                                         <label for="customerDropdown"
-                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Sample
+                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Order
                                             No</label>
                                         <div>
                                             <button type="button" id="customerDropdown"
@@ -81,7 +177,8 @@
                                     <!-- MERCHANDISER DROPDOWN -->
                                     <div class="relative inline-block text-left w-48">
                                         <label for="merchandiserDropdown"
-                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Merchandiser</label>
+                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Customer
+                                            Coordinator</label>
                                         <div>
                                             <button type="button" id="merchandiserDropdown"
                                                 class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10 dark:bg-gray-700 dark:text-white"
@@ -126,7 +223,8 @@
                                     <!-- ITEM DROPDOWN -->
                                     <div class="relative inline-block text-left w-48">
                                         <label for="itemDropdown"
-                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Item</label>
+                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Reference
+                                            No</label>
                                         <div>
                                             <button type="button" id="itemDropdown"
                                                 class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10 dark:bg-gray-700 dark:text-white"
@@ -168,26 +266,23 @@
                                         <input type="hidden" name="item" id="itemInput"
                                             value="{{ request('item') }}">
                                     </div>
-
-
                                 </div>
+                                <div class="flex items-end space-x-2 mt-2">
+                                    <button type="submit"
+                                        class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                                        Apply Filters
+                                    </button>
 
-                                <button type="submit"
-                                    class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-                                    Apply Filters
-                                </button>
-
-                                <button type="button" id="clearFiltersBtn"
-                                    class="mt-4 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 px-4 py-2 rounded hover:bg-gray-300">
-                                    Clear Filters
-                                </button>
+                                    <button type="button" id="clearFiltersBtn"
+                                        class="mt-4 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 px-4 py-2 rounded hover:bg-gray-300">
+                                        Clear
+                                    </button>
+                                </div>
                             </form>
-
-
                             <div class="flex justify-between items-center mb-6">
-                                <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Cords Production Catalog
+                                <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Code Production Catalog
                                 </h1>
-                                <button onclick="document.getElementById('addProductModal').classList.remove('hidden')"
+                                <button onclick="document.getElementById('addCodeCatalogModal').classList.remove('hidden')"
                                     class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded shadow">
                                     + Add New Item
                                 </button>
@@ -195,283 +290,289 @@
 
                             <div class="overflow-x-auto bg-white dark:bg-gray-900 shadow rounded-lg">
                                 <table class="table-fixed w-full text-sm divide-y divide-gray-200 dark:divide-gray-700">
-                                    <thead class="bg-gray-100 dark:bg-gray-700 text-left">
-                                        <tr>
+                                    <thead class="bg-gray-200 dark:bg-gray-700 text-left">
+                                        <tr class="text-center">
                                             <th
-                                                class="px-4 py-3 w-24 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                                Sample No</th>
+                                                class="font-bold sticky left-0 z-10 bg-white px-4 py-3 w-36 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                Order No</th>
                                             <th
-                                                class="px-4 py-3 w-40 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                                Date</th>
-                                            <th
-                                                class="px-4 py-3 w-36 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                                Merchandiser</th>
-                                            <th
-                                                class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                                Item</th>
-                                            <th
-                                                class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                                Size</th>
-                                            <th
-                                                class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                                Colour</th>
-                                            <th
-                                                class="px-4 py-3 w-48 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold px-4 py-3 w-48 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Reference No</th>
                                             <th
-                                                class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                Date</th>
+                                            <th
+                                                class="font-bold px-4 py-3 w-36 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                Customer Coordinator</th>
+                                            <th
+                                                class="font-bold px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                Size</th>
+                                            <th
+                                                class="font-bold px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                Colour</th>
+                                            <th
+                                                class="font-bold px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Shade</th>
                                             <th
-                                                class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 TKT</th>
                                             <th
-                                                class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                                Approval</th>
-                                            <th
-                                                class="px-4 py-3 w-72 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                                Special Note</th>
-                                            <th
-                                                class="px-4 py-3 w-48 text-xs text-center font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                                Action</th>
+                                                class="font-bold px-4 py-3 w-56 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                Approved By</th>
                                         </tr>
                                     </thead>
-                                    <tbody id="serviceRecords"
-                                        class="bg-white dark:bg-gray-800 divide-y text-left divide-gray-200 dark:divide-gray-700">
-                                        <tr id="row1">
-                                            <!-- Each cell has a span for readonly text and a hidden input for editing -->
-                                            <td class="px-4 py-3 w-24 whitespace-normal break-words">
-                                                <span class="readonly">1880</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="1880" />
-                                            </td>
-                                            <td class="px-4 py-3 w-40 whitespace-normal break-words">
-                                                <span class="readonly">2025-05-05</span>
-                                                <input type="date"
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="2025-05-05" />
-                                            </td>
-                                            <td class="px-4 py-3 w-32 whitespace-normal break-words">
-                                                <span class="readonly">Ama liyanage</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="Ama liyanage" />
-                                            </td>
-                                            <td class="px-4 py-3 w-32 whitespace-normal break-words">
-                                                <span class="readonly">Elastic</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="Elastic" />
-                                            </td>
-                                            <td class="px-4 py-3 w-32 whitespace-normal break-words">
-                                                <span class="readonly">2 1/4</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="2 1/4" />
-                                            </td>
-                                            <td class="px-4 py-3 w-32 whitespace-normal break-words">
-                                                <span class="readonly">Black</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="Black" />
-                                            </td>
-                                            <td class="px-4 py-3 w-48 whitespace-normal break-words">
-                                                <span class="readonly">STKE/2025/JA25-B</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="STKE/2025/JA25-B" />
-                                            </td>
-                                            <td class="px-4 py-3 w-32 whitespace-normal break-words">
-                                                <span class="readonly">AE Black</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm5"
-                                                    value="AE Black" />
-                                            </td>
-                                            <td class="px-4 py-3 w-32 whitespace-normal break-words">
-                                                <span class="readonly">TKT 120</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="TKT 120" />
-                                            </td>
-                                            <td class="px-4 py-3 w-32 whitespace-normal break-words">
-                                                <span class="readonly">AE</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="AE" />
-                                            </td>
-                                            <td class="px-4 py-3 w-72 whitespace-normal break-words">
-                                                <span class="readonly">abc 1234 long sample description to test line
-                                                    wrapping</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="abc 1234 long sample description to test line wrapping" />
-                                            </td>
-                                            <td class="px-4 py-3 w-48 text-center whitespace-normal break-words">
-                                                <div class="flex space-x-2 justify-center">
-                                                    <button
-                                                        class="bg-green-600 h-10 hover:bg-green-700 text-white px-3 py-1 rounded text-sm"
-                                                        onclick="editRow('row1')">Edit</button>
-                                                    <button
-                                                        class="bg-blue-600 h-10 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm hidden"
-                                                        onclick="saveRow('row1')">Save</button>
-                                                    <button
-                                                        class="bg-gray-600 h-10 hover:bg-gray-700 text-white px-3 py-1 rounded text-sm">Download</button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                <div class="py-6 flex justify-center">
+                                    <tbody id="productionCatalogTable"
+                                        class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                                        @foreach ($catalogs as $catalog)
+                                            <tr class="odd:bg-white even:bg-gray-50 border-b border-gray-200 text-center">
+                                                <td
+                                                    class="sticky left-0 z-10 bg-white px-4 py-3 bg-gray-100 border-r border-gray-300 text-left whitespace-normal break-words">
 
-                                </div>
+                                                    <form id="uploadForm-{{ $catalog->id }}"
+                                                        action="{{ route('catalog.uploadImage', $catalog->id) }}"
+                                                        method="POST" enctype="multipart/form-data" class="m-0 p-0">
+                                                        @csrf
+
+                                                        <span id="orderNo-{{ $catalog->id }}"
+                                                            class="font-semibold text-sm text-blue-700 cursor-pointer hover:underline select-none"
+                                                            onclick="handleOrderNoClick({{ $catalog->id }}, {{ $catalog->order_image ? 'true' : 'false' }})">
+                                                            {{ $catalog->order_no }}
+                                                        </span>
+
+                                                        <!-- Show 'Need to upload image' if no image -->
+                                                        @if (!$catalog->order_image)
+                                                            <div class="text-xs text-red-600 mt-1">Need to upload image
+                                                            </div>
                             </div>
-                            <!-- Add Product Modal -->
-                            <div id="addProductModal"
-                                class="fixed inset-0 z-50 hidden bg-black bg-opacity-50 flex items-center justify-center py-5">
-                                <div class="w-full max-w-[700px] bg-white dark:bg-gray-900 rounded-2xl shadow-2xl p-4 transform transition-all scale-95 max-h-[calc(100vh-10rem)] overflow-y-auto"
-                                    onclick="event.stopPropagation()">
-                                    <div class="max-w-[600px] mx-auto p-8">
-                                        <h2
-                                            class="text-2xl font-semibold mb-8 text-blue-900 mt-4 dark:text-gray-100 text-center">
-                                            Add New Sample Development
-                                        </h2>
-                                        <form action="" method="POST" enctype="multipart/form-data">
-                                            @csrf
-                                            <div class="space-y-4">
+                            @endif
 
-                                                <!-- File Upload -->
-                                                <div class="flex items-center justify-center w-full">
-                                                    <label for="sampleFile"
-                                                        class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50
-                                                     dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
-                                                        <div class="flex flex-col items-center justify-center pt-5 pb-6 ">
-                                                            <svg class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"
-                                                                aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                                                                fill="none" viewBox="0 0 20 16">
-                                                                <path stroke="currentColor" stroke-linecap="round"
-                                                                    stroke-linejoin="round" stroke-width="2"
-                                                                    d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
-                                                            </svg>
-                                                            <p class="mb-2 text-sm text-gray-500 dark:text-gray-400">
-                                                                <span class="font-semibold">Upload Sample Photo</span>
-                                                                or drag and drop
-                                                            </p>
-                                                            <p class="text-xs text-gray-500 dark:text-gray-400">PDF, JPG
-                                                                (MAX. 800x400px)</p>
-                                                        </div>
-                                                        <input id="sampleFile" name="order_file" type="file"
-                                                            class="hidden" accept=".pdf,.jpg,.jpeg" />
-                                                    </label>
-                                                </div>
+                            <input id="file-upload-{{ $catalog->id }}" type="file" name="order_image"
+                                accept="image/*" class="hidden"
+                                onchange="document.getElementById('uploadForm-{{ $catalog->id }}').submit()" />
 
-                                                <!-- Oder Number -->
-                                                <div>
-                                                    <label for="sampleQuantity"
-                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Sample
-                                                        Number
-                                                    </label>
-                                                    <input id="sampleQuantity" type="text" name="sample_quantity"
-                                                        required
+                            @if ($catalog->order_image)
+                                <div id="imagePreview-{{ $catalog->id }}" class="hidden mt-2">
+                                    <a href="{{ asset('storage/order_images/' . $catalog->order_image) }}"
+                                        target="_blank"
+                                        class="block w-24 h-24 rounded overflow-hidden border border-gray-300 shadow-sm hover:shadow-md transition">
+                                        <img src="{{ asset('storage/order_images/' . $catalog->order_image) }}"
+                                            alt="Order Image" class="w-full h-full object-cover" />
+                                    </a>
+                                </div>
+                            @endif
+                            </form>
+                            </td>
+                            <td class="px-4 py-3 w-48 whitespace-normal break-words border-r border-gray-300">
+                                <span class="readonly">{{ $catalog->reference_no }}</span>
+                                <input
+                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                    value="{{ $catalog->reference_no }}" />
+                            </td>
+                            <td class="px-4 py-3 w-40 whitespace-normal break-words border-r border-gray-300">
+                                <span class="readonly">{{ $catalog->reference_added_date?->format('Y-m-d') }}</span>
+                                <input type="date"
+                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                    value="{{ $catalog->reference_added_date?->format('Y-m-d') }}" />
+                            </td>
+                            <td class="px-4 py-3 w-36 whitespace-normal break-words border-r border-gray-300">
+                                <span class="readonly">{{ $catalog->coordinator_name }}</span>
+                                <input
+                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                    value="{{ $catalog->coordinator_name }}" />
+                            </td>
+                            <td class="px-4 py-3 w-32 whitespace-normal break-words border-r border-gray-300">
+                                <span class="readonly">{{ $catalog->size }}</span>
+                                <input
+                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                    value="{{ $catalog->size }}" />
+                            </td>
+                            <td class="px-4 py-3 w-32 whitespace-normal break-words border-r border-gray-300">
+                                <span class="readonly">{{ $catalog->colour }}</span>
+                                <input
+                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                    value="{{ $catalog->colour }}" />
+                            </td>
+                            <td class="px-4 py-3 w-32 whitespace-normal break-words border-r border-gray-300">
+                                <span class="readonly">{{ $catalog->shade }}</span>
+                                <input
+                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                    value="{{ $catalog->shade }}" />
+                            </td>
+                            <td class="px-4 py-3 w-32 whitespace-normal break-words border-r border-gray-300">
+                                <span class="readonly">{{ $catalog->tkt }}</span>
+                                <input
+                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                    value="{{ $catalog->tkt }}" />
+                            </td>
+                            <!-- Approval Section -->
+                            <td colspan="2" class="px-4 py-3 border-r border-gray-300 text-left">
+                                @if (!$catalog->is_approved_by_locked || !$catalog->is_approval_card_locked)
+                                    <form action="{{ route('product-catalog.updateApproval', $catalog->id) }}"
+                                        method="POST" enctype="multipart/form-data">
+                                        @csrf
+                                        @method('PATCH')
+
+                                        <!-- Approved By -->
+                                        @if (!$catalog->is_approved_by_locked)
+                                            <input type="text" name="approved_by"
+                                                value="{{ old('approved_by', $catalog->approved_by) }}"
+                                                class="w-full mb-2 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                placeholder="Approved By" required>
+                                        @else
+                                            <div class="mb-2 text-sm ">
+                                                <strong>Approved By:</strong> {{ $catalog->approved_by ?? '-' }}
+                                            </div>
+                                        @endif
+
+                                        <!-- Approval Card -->
+                                        @if (!$catalog->is_approval_card_locked)
+                                            <input type="file" name="approval_card" accept="image/*"
+                                                class="w-full mb-2 text-sm dark:text-white dark:bg-gray-700">
+                                        @elseif ($catalog->approval_card)
+                                            <div class="mb-2">
+                                                <strong>Approval Card:</strong>
+                                                <a href="{{ asset('storage/' . $catalog->approval_card) }}"
+                                                    target="_blank"
+                                                    class="inline-block px-3 py-1 rounded text-sm bg-green-600 hover:bg-green-700 text-white transition">
+                                                    View
+                                                </a>
+                                            </div>
+                                        @else
+                                            <div class="text-sm text-red-500 mb-2">
+                                                <strong>Approval Card:</strong> No Image
+                                            </div>
+                                        @endif
+
+                                        <!-- Show Save button only if at least one input is unlocked -->
+                                        @if (!$catalog->is_approved_by_locked || !$catalog->is_approval_card_locked)
+                                            <button type="submit"
+                                                class="w-full px-3 py-1 rounded text-sm transition-all duration-200 bg-blue-600 hover:bg-blue-700 text-white">
+                                                Save
+                                            </button>
+                                        @endif
+                                    </form>
+                                @else
+                                    <!-- When both are locked, show read-only info -->
+                                    <div class="text-sm mb-2">
+                                        <strong>Approved By:</strong> {{ $catalog->approved_by ?? '-' }}
+                                    </div>
+
+                                    @if ($catalog->approval_card)
+                                        <div>
+                                            <strong>Approval Card:</strong>
+                                            <a href="{{ asset('storage/' . $catalog->approval_card) }}" target="_blank"
+                                                class="inline-block px-3 py-1 rounded text-sm bg-green-600 hover:bg-green-700 text-white transition">
+                                                View
+                                            </a>
+                                        </div>
+                                    @else
+                                        <div class="text-sm text-red-500">
+                                            <strong>Approval Card:</strong> No Image
+                                        </div>
+                                    @endif
+                                @endif
+                            </td>
+                            </tr>
+                            @endforeach
+                            </tbody>
+                            </table>
+                        </div>
+                        <div class="py-6 flex justify-center">
+                            {{ $catalogs->links() }}
+                        </div>
+
+                        <div id="addCodeCatalogModal"
+                            class="fixed inset-0 z-50 hidden bg-black bg-opacity-50 flex items-center justify-center py-5">
+                            <div class="w-full max-w-[700px] bg-white dark:bg-gray-900 rounded-2xl shadow-2xl p-4 transform transition-all scale-95 max-h-[calc(100vh-10rem)] overflow-y-auto"
+                                onclick="event.stopPropagation()">
+                                <div class="max-w-[600px] mx-auto p-8">
+                                    <h2
+                                        class="text-2xl font-semibold mb-8 text-blue-900 mt-4 dark:text-gray-100 text-center">
+                                        Add New Code Catalog Item
+                                    </h2>
+                                    <form action="{{ route('codeCatalog.store') }}" method="POST"
+                                        enctype="multipart/form-data">
+                                        @csrf
+                                        <div class="space-y-4">
+                                            <div class="flex gap-4">
+                                                <div class="w-1/2">
+                                                    <label for="order_no"
+                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Order
+                                                        Number</label>
+                                                    <input id="order_no" type="text" name="order_no" required
                                                         class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm mb-4">
                                                 </div>
-
-                                                <!-- Inquiry receive date & Customer -->
-                                                <div class="flex gap-4">
-                                                    <div class="w-1/2">
-                                                        <label for="inquiryDate"
-                                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">Date</label>
-                                                        <input id="Date" type="date" name="inquiry_date" required
-                                                            class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                                    </div>
-                                                    <div class="w-1/2">
-                                                        <label for="merchandiser"
-                                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">Merchandiser</label>
-                                                        <input id="Merchandiser" type="text" name="customer" required
-                                                            class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                                    </div>
-                                                </div>
-
-                                                <!-- Merchandiser & Item -->
-                                                <div class="flex gap-4">
-                                                    <div class="w-1/2">
-                                                        <label for="item"
-                                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">Item</label>
-                                                        <input id="item" type="text" name="item" required
-                                                            class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                                    </div>
-
-                                                    <div class="w-1/2">
-                                                        <label for="size"
-                                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">Size</label>
-                                                        <input id="size" type="text" name="size" required
-                                                            class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                                    </div>
-                                                </div>
-
-                                                <!-- Size & Colour -->
-                                                <div class="flex gap-4">
-                                                    <div class="w-1/2">
-                                                        <label for="colour"
-                                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">Colour</label>
-                                                        <input id="colour" type="text" name="colour" required
-                                                            class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                                    </div>
-                                                    <div class="w-1/2">
-                                                        <label for="shade"
-                                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">Shade</label>
-                                                        <input id="shade" type="text" name="shade" required
-                                                            class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                                    </div>
-                                                </div>
-                                                <!-- Size & Colour -->
-                                                <div class="flex gap-4">
-                                                    <div class="w-1/2">
-                                                        <label for="colour"
-                                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">TKT</label>
-                                                        <input id="TKT" type="text" name="TKT" required
-                                                            class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                                    </div>
-                                                    <div class="w-1/2">
-                                                        <label for="shade"
-                                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">Approval</label>
-                                                        <input id="approval" type="text" name="approval" required
-                                                            class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                                    </div>
-                                                </div>
-
-                                                <!-- Sample Quantity -->
-                                                <div>
-                                                    <label for="sampleQuantity"
+                                                <div class="w-1/2">
+                                                    <label for="reference_no"
                                                         class="block text-sm font-medium text-gray-700 dark:text-gray-300">Reference
                                                         No</label>
-                                                    <input id="Reference No" type="text" name="Reference No" required
-                                                        class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm mb-4">
-                                                </div>
-
-                                                <!-- Sample Quantity -->
-                                                <div>
-                                                    <label for="sampleQuantity"
-                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Special
-                                                        Note</label>
-                                                    <input id="Special Note" type="text" name="Special Note" required
-                                                        class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm mb-4">
+                                                    <input id="reference_no" type="text" name="reference_no" required
+                                                        class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                 </div>
                                             </div>
 
-                                            <!-- Buttons -->
-                                            <div class="flex justify-end gap-3 mt-12">
-                                                <button type="button"
-                                                    onclick="document.getElementById('addProductModal').classList.add('hidden')"
-                                                    class="px-4 py-2 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 text-sm rounded hover:bg-gray-300">
-                                                    Cancel
-                                                </button>
-                                                <button type="submit"
-                                                    class="px-4 py-2 bg-blue-500 text-white text-sm rounded hover:bg-blue-600">
-                                                    Create Order
-                                                </button>
+                                            <div class="flex gap-4">
+                                                <div class="w-1/2">
+                                                    <label for="reference_added_date"
+                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Date</label>
+                                                    <input id="reference_added_date" type="date"
+                                                        name="reference_added_date" required
+                                                        class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                </div>
+                                                <div class="w-1/2">
+                                                    <label for="coordinator_name"
+                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer
+                                                        Coordinator</label>
+                                                    <input id="coordinator_name" type="text" name="coordinator_name"
+                                                        required
+                                                        class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                </div>
                                             </div>
-                                        </form>
-                                    </div>
+
+                                            <div class="flex gap-4">
+                                                <div class="w-1/2">
+                                                    <label for="size"
+                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Size</label>
+                                                    <input id="size" type="text" name="size" required
+                                                        class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                </div>
+                                                <div class="w-1/2">
+                                                    <label for="colour"
+                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Colour</label>
+                                                    <input id="colour" type="text" name="colour" required
+                                                        class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                </div>
+                                            </div>
+
+                                            <div class="flex gap-4">
+                                                <div class="w-1/2">
+                                                    <label for="shade"
+                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Shade</label>
+                                                    <input id="shade" type="text" name="shade" required
+                                                        class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                </div>
+                                                <div class="w-1/2">
+                                                    <label for="tkt"
+                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">TKT</label>
+                                                    <input id="tkt" type="text" name="tkt" required
+                                                        class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Buttons -->
+                                        <div class="flex justify-end gap-3 mt-12">
+                                            <button type="button"
+                                                onclick="document.getElementById('addCodeCatalogModal').classList.add('hidden')"
+                                                class="px-4 py-2 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 text-sm rounded hover:bg-gray-300">
+                                                Cancel
+                                            </button>
+                                            <button type="submit"
+                                                class="px-4 py-2 bg-blue-500 text-white text-sm rounded hover:bg-blue-600">
+                                                Create Order
+                                            </button>
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -479,6 +580,7 @@
                 </div>
             </div>
         </div>
+    </div>
     </div>
 
 
@@ -570,6 +672,20 @@
 
             row.querySelector('button.bg-green-600').classList.remove('hidden'); // Show Edit button
             row.querySelector('button.bg-blue-600').classList.add('hidden'); // Hide Save button
+        }
+    </script>
+    <script>
+        function handleOrderNoClick(id, hasImage) {
+            if (hasImage) {
+                // Toggle image visibility
+                const preview = document.getElementById('imagePreview-' + id);
+                if (preview) {
+                    preview.classList.toggle('hidden');
+                }
+            } else {
+                // No image — open file picker
+                document.getElementById('file-upload-' + id).click();
+            }
         }
     </script>
 @endsection
