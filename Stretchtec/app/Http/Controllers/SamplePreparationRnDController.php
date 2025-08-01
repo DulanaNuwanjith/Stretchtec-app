@@ -52,12 +52,16 @@ class SamplePreparationRnDController extends Controller
         $shades = SamplePreparationRnD::select('shade')->distinct()->orderBy('shade')->pluck('shade');
         $references = SamplePreparationRnD::select('referenceNo')->distinct()->orderBy('referenceNo')->pluck('referenceNo');
 
+        // ✅ Add this to pass SampleStock reference list
+        $sampleStockReferences = SampleStock::pluck('reference_no')->unique();
+
         return view('sample-development.pages.sample-preparation-details', compact(
             'samplePreparations',
             'orderNos',
             'poNos',
             'shades',
             'references',
+            'sampleStockReferences'
         ));
     }
 
@@ -272,11 +276,13 @@ class SamplePreparationRnDController extends Controller
 
         $prep = SamplePreparationRnD::findOrFail($request->id);
 
-        // ✅ Check for duplicate reference number in sample_stocks
-        if (SampleStock::where('reference_no', $request->referenceNo)->exists()) {
-            return back()
-                ->withInput()
-                ->withErrors(['referenceNo' => 'This Reference Number is already in use. Please enter a unique one.']);
+        // ✅ Skip duplicate check if alreadyDeveloped === 'No Need to Develop'
+        if ($prep->alreadyDeveloped !== 'No Need to Develop') {
+            if (SampleStock::where('reference_no', $request->referenceNo)->exists()) {
+                return back()
+                    ->withInput()
+                    ->withErrors(['referenceNo' => 'This Reference Number is already in use. Please enter a unique one.']);
+            }
         }
 
         if (!$prep->is_reference_locked) {

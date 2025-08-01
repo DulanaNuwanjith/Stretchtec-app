@@ -388,7 +388,7 @@
                                                 class="font-bold px-4 py-3 w-36 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Production Status</th>
                                             <th
-                                                class="font-bold px-4 py-3 w-48 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold px-4 py-3 w-56 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Reference No</th>
                                             <th
                                                 class="font-bold px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
@@ -1332,10 +1332,52 @@
                                                                 <input type="hidden" name="id"
                                                                     value="{{ $prep->id }}">
 
-                                                                <input type="text" name="referenceNo"
-                                                                    value="{{ $prep->referenceNo }}"
-                                                                    class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                                    required>
+                                                                @if ($prep->alreadyDeveloped === 'No Need to Develop')
+                                                                    <div class="relative inline-block text-left w-full">
+                                                                        <button type="button"
+                                                                            class="dropdown-btn inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50"
+                                                                            onclick="toggleDropdownRef(this, 'ref')">
+                                                                            <span
+                                                                                class="selected-ref">{{ $prep->referenceNo ?? 'Select Reference No' }}</span>
+                                                                            <svg class="ml-2 h-5 w-5 text-gray-400"
+                                                                                viewBox="0 0 20 20" fill="currentColor">
+                                                                                <path fill-rule="evenodd"
+                                                                                    d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
+                                                                                    clip-rule="evenodd" />
+                                                                            </svg>
+                                                                        </button>
+
+                                                                        <div
+                                                                            class="dropdown-menu-ref hidden absolute z-10 mt-2 w-full rounded-md bg-white shadow-lg ring-1 ring-black/5 max-h-48 overflow-y-auto">
+                                                                            <div class="p-2 sticky top-0 bg-white z-10">
+                                                                                <input type="text"
+                                                                                    placeholder="Search reference..."
+                                                                                    class="w-full px-2 py-1 text-sm border rounded-md"
+                                                                                    oninput="filterDropdownOptionsRef(this)" />
+                                                                            </div>
+
+                                                                            <div class="py-1" role="listbox"
+                                                                                tabindex="-1">
+                                                                                @foreach ($sampleStockReferences as $ref)
+                                                                                    <button type="button"
+                                                                                        class="dropdown-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                                                                        onclick="selectDropdownOptionRef(this, '{{ $ref }}', 'ref')">
+                                                                                        {{ $ref }}
+                                                                                    </button>
+                                                                                @endforeach
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <input type="hidden" name="referenceNo"
+                                                                            class="input-ref"
+                                                                            value="{{ $prep->referenceNo }}">
+                                                                    </div>
+                                                                @else
+                                                                    <input type="text" name="referenceNo"
+                                                                        value="{{ $prep->referenceNo }}"
+                                                                        class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                                        required>
+                                                                @endif
 
                                                                 <button type="submit"
                                                                     class="w-full mt-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm">
@@ -2236,5 +2278,37 @@
             });
         });
     </script>
+    <script>
+        function toggleDropdownRef(button, type) {
+            const dropdownMenu = button.nextElementSibling;
+            document.querySelectorAll('.dropdown-menu-' + type).forEach(menu => {
+                if (menu !== dropdownMenu) menu.classList.add('hidden');
+            });
+            dropdownMenu.classList.toggle('hidden');
+        }
 
+        function selectDropdownOptionRef(button, selectedValue, type) {
+            const dropdown = button.closest('.relative');
+            dropdown.querySelector('.selected-' + type).innerText = selectedValue;
+            dropdown.querySelector('.input-' + type).value = selectedValue;
+            dropdown.querySelector('.dropdown-menu-' + type).classList.add('hidden');
+        }
+
+        function filterDropdownOptionsRef(input) {
+            const filter = input.value.toLowerCase();
+            const options = input.closest('[class^="dropdown-menu-"]').querySelectorAll('.dropdown-option');
+            options.forEach(option => {
+                const text = option.textContent.toLowerCase();
+                option.style.display = text.includes(filter) ? 'block' : 'none';
+            });
+        }
+
+        document.addEventListener('click', function(event) {
+            document.querySelectorAll('[class^="dropdown-menu-"]').forEach(menu => {
+                if (!menu.contains(event.target) && !menu.previousElementSibling.contains(event.target)) {
+                    menu.classList.add('hidden');
+                }
+            });
+        });
+    </script>
 @endsection
