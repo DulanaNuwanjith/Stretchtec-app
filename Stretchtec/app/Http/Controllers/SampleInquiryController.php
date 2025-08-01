@@ -258,31 +258,6 @@ class SampleInquiryController extends Controller
         $inquiry = SampleInquiry::findOrFail($request->id);
         $deliveredQty = (int) $request->delivered_qty;
 
-        // Check if sample stock is required
-        if ($inquiry->referenceNo) {
-            $stock = \App\Models\SampleStock::where('reference_no', $inquiry->referenceNo)->first();
-
-            // If stock exists, delivered_qty is required
-            if ($stock) {
-                if (!$request->filled('delivered_qty')) {
-                    return redirect()->back()->with('error', 'The delivered quantity field is required.');
-                }
-
-                if ($deliveredQty > $stock->available_stock) {
-                    return redirect()->back()->with('error', 'Delivered quantity exceeds available stock.');
-                }
-
-                // Deduct stock
-                $stock->available_stock -= $deliveredQty;
-
-                if ($stock->available_stock <= 0) {
-                    $stock->delete(); // delete if stock is now 0
-                } else {
-                    $stock->save();
-                }
-            }
-        }
-
         $inquiry->customerDeliveryDate = now();
 
         try {
@@ -339,6 +314,31 @@ class SampleInquiryController extends Controller
             \Log::error('Dispatch Note Generation Failed: ' . $e->getMessage());
             $inquiry->save();
             return redirect()->back()->with('error', 'Delivery marked, but dispatch note generation failed.');
+        }
+
+        // Check if sample stock is required
+        if ($inquiry->referenceNo) {
+            $stock = \App\Models\SampleStock::where('reference_no', $inquiry->referenceNo)->first();
+
+            // If stock exists, delivered_qty is required
+            if ($stock) {
+                if (!$request->filled('delivered_qty')) {
+                    return redirect()->back()->with('error', 'The delivered quantity field is required.');
+                }
+
+                if ($deliveredQty > $stock->available_stock) {
+                    return redirect()->back()->with('error', 'Delivered quantity exceeds available stock.');
+                }
+
+                // Deduct stock
+                $stock->available_stock -= $deliveredQty;
+
+                if ($stock->available_stock <= 0) {
+                    $stock->delete(); // delete if stock is now 0
+                } else {
+                    $stock->save();
+                }
+            }
         }
 
         $inquiry->save();
