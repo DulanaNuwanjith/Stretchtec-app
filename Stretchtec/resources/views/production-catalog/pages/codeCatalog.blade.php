@@ -122,7 +122,8 @@
                             </script>
 
                             <!-- Filter Form -->
-                            <form id="filterForm1" method="GET" action="" class="mb-6 flex gap-6 items-center">
+                            <form id="filterForm1" method="GET" action=""
+                                class="mb-6 sticky top-0 z-20 flex gap-6 items-center">
                                 <div class="flex items-center gap-4">
 
                                     <!-- CUSTOMER DROPDOWN -->
@@ -265,22 +266,19 @@
                                         <input type="hidden" name="item" id="itemInput"
                                             value="{{ request('item') }}">
                                     </div>
-
-
                                 </div>
+                                <div class="flex items-end space-x-2 mt-2">
+                                    <button type="submit"
+                                        class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                                        Apply Filters
+                                    </button>
 
-                                <button type="submit"
-                                    class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-                                    Apply Filters
-                                </button>
-
-                                <button type="button" id="clearFiltersBtn"
-                                    class="mt-4 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 px-4 py-2 rounded hover:bg-gray-300">
-                                    Clear Filters
-                                </button>
+                                    <button type="button" id="clearFiltersBtn"
+                                        class="mt-4 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 px-4 py-2 rounded hover:bg-gray-300">
+                                        Clear
+                                    </button>
+                                </div>
                             </form>
-
-
                             <div class="flex justify-between items-center mb-6">
                                 <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Code Production Catalog
                                 </h1>

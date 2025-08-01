@@ -386,16 +386,17 @@
                                                 <input type="hidden" name="customerDecision" id="customerDecisionInput"
                                                     value="{{ request('customerDecision') }}">
                                             </div>
+                                            <div class="flex items-end space-x-2 mt-2">
+                                                <button type="submit"
+                                                    class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                                                    Apply Filters
+                                                </button>
 
-                                            <button type="submit"
-                                                class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-                                                Apply Filters
-                                            </button>
-
-                                            <button type="button" id="clearFiltersBtn"
-                                                class="mt-4 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 px-4 py-2 rounded hover:bg-gray-300">
-                                                Clear Filters
-                                            </button>
+                                                <button type="button" id="clearFiltersBtn"
+                                                    class="mt-4 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 px-4 py-2 rounded hover:bg-gray-300">
+                                                    Clear Filters
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                 </form>
@@ -765,24 +766,23 @@
                                                                 </div>
                                                             @endif
                                                         @else
-                                                                <span
-                                                                    class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-green-100 dark:bg-gray-800 px-3 py-1 rounded">
-                                                                    Delivered on <br>
-                                                                    {{ \Carbon\Carbon::parse($inquiry->customerDeliveryDate)->format('Y-m-d') }}
-                                                                    at
-                                                                    {{ \Carbon\Carbon::parse($inquiry->customerDeliveryDate)->format('H:i') }}
-                                                                </span>
+                                                            <span
+                                                                class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-green-100 dark:bg-gray-800 px-3 py-1 rounded">
+                                                                Delivered on <br>
+                                                                {{ \Carbon\Carbon::parse($inquiry->customerDeliveryDate)->format('Y-m-d') }}
+                                                                at
+                                                                {{ \Carbon\Carbon::parse($inquiry->customerDeliveryDate)->format('H:i') }}
+                                                            </span>
 
-                                                                @if ($inquiry->dNoteNumber)
-                                                                    <div class="flex justify-center">
-                                                                        <a href="{{ asset('storage/dispatches/' . $inquiry->dNoteNumber) }}"
-                                                                            target="_blank"
-                                                                            class="inline-block text-sm font-semibold text-gray-700 bg-gray-300 p-2 rounded hover:bg-gray-400 transition duration-200">
-                                                                            Dispatch Note
-                                                                        </a>
-                                                                    </div>
-                                                                @endif
-
+                                                            @if ($inquiry->dNoteNumber)
+                                                                <div class="flex justify-center">
+                                                                    <a href="{{ asset('storage/dispatches/' . $inquiry->dNoteNumber) }}"
+                                                                        target="_blank"
+                                                                        class="inline-block text-sm font-semibold text-gray-700 bg-gray-300 p-2 rounded hover:bg-gray-400 transition duration-200">
+                                                                        Dispatch Note
+                                                                    </a>
+                                                                </div>
+                                                            @endif
                                                         @endif
                                                     </div>
                                                 </td>
