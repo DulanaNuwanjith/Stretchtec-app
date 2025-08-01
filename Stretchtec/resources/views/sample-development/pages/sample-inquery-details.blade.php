@@ -1203,35 +1203,46 @@
         const fileInput = document.getElementById('sampleFile');
         const previewContainer = document.getElementById('previewContainer');
         const uploadContent = document.getElementById('uploadContent');
+        const uploadLabel = document.getElementById('uploadLabel');
 
-        fileInput.addEventListener('change', () => {
-            const file = fileInput.files[0];
+        // Show preview for a given file
+        function showPreview(file) {
             previewContainer.innerHTML = ''; // Clear previous preview
 
             if (!file) {
-                // No file selected, show upload instructions and hide preview
+                // No file: show instructions, hide preview
                 previewContainer.classList.add('hidden');
                 uploadContent.style.display = 'flex';
                 return;
             }
 
-            // Hide upload instructions, show preview container
+            // Hide instructions, show preview
             uploadContent.style.display = 'none';
             previewContainer.classList.remove('hidden');
 
             const fileType = file.type;
+
             if (fileType === 'application/pdf') {
                 // PDF preview: icon + filename
                 const pdfPreview = document.createElement('div');
-                pdfPreview.classList.add('flex', 'flex-col', 'items-center', 'justify-center', 'text-center',
-                    'text-gray-800', 'dark:text-gray-200', 'p-4');
+                pdfPreview.classList.add(
+                    'flex',
+                    'flex-col',
+                    'items-center',
+                    'justify-center',
+                    'text-center',
+                    'text-gray-800',
+                    'dark:text-gray-200',
+                    'p-4'
+                );
 
                 pdfPreview.innerHTML = `
-                <svg class="w-16 h-16 mb-2 text-red-600" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 0C5.371 0 0 5.371 0 12s5.371 12 12 12 12-5.371 12-12S18.629 0 12 0zm1 17h-2v-2h2v2zm1.07-7.75l-.9.92C12.45 11.9 12 12.5 12 14h-2v-.5c0-.8.45-1.5 1.07-2.18l1.2-1.2c.37-.36.58-.86.58-1.42 0-1.1-.9-2-2-2s-2 .9-2 2H7c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/>
-                </svg>
-                <p class="font-semibold break-words max-w-[90%]">${file.name}</p>
-            `;
+            <svg class="w-16 h-16 mb-2 text-red-600" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 0C5.371 0 0 5.371 0 12s5.371 12 12 12 12-5.371 12-12S18.629 0 12 0zm1 17h-2v-2h2v2zm1.07-7.75l-.9.92C12.45 11.9 12 12.5 12 14h-2v-.5c0-.8.45-1.5 1.07-2.18l1.2-1.2c.37-.36.58-.86.58-1.42 0-1.1-.9-2-2-2s-2 .9-2 2H7c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/>
+            </svg>
+            <p class="font-semibold break-words max-w-[90%]">${file.name}</p>
+        `;
+
                 previewContainer.appendChild(pdfPreview);
 
             } else if (fileType.startsWith('image/')) {
@@ -1247,6 +1258,7 @@
                 reader.readAsDataURL(file);
 
                 previewContainer.appendChild(img);
+
             } else {
                 // Unsupported file type
                 const unsupported = document.createElement('p');
@@ -1254,7 +1266,40 @@
                 unsupported.textContent = 'File preview not available';
                 previewContainer.appendChild(unsupported);
             }
+        }
+
+        // Handle file input change
+        fileInput.addEventListener('change', () => {
+            const file = fileInput.files[0];
+            showPreview(file);
         });
+
+        // Drag and drop handlers
+        ['dragenter', 'dragover'].forEach(eventName => {
+            uploadLabel.addEventListener(eventName, e => {
+                e.preventDefault();
+                e.stopPropagation();
+                uploadLabel.classList.add('bg-gray-200', 'dark:bg-gray-600');
+            });
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            uploadLabel.addEventListener(eventName, e => {
+                e.preventDefault();
+                e.stopPropagation();
+                uploadLabel.classList.remove('bg-gray-200', 'dark:bg-gray-600');
+            });
+        });
+
+        // Handle drop event - assign dropped files to input and show preview
+        uploadLabel.addEventListener('drop', e => {
+            const dt = e.dataTransfer;
+            if (dt.files.length) {
+                fileInput.files = dt.files;
+                showPreview(dt.files[0]);
+            }
+        });
+
 
         // Set max date for inquiryDate input as tomorrow's date
         document.addEventListener('DOMContentLoaded', () => {
