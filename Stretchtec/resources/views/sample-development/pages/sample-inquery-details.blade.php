@@ -309,13 +309,13 @@
                                                 <div class="py-1" role="listbox" tabindex="-1"
                                                     aria-labelledby="deliveryStatusDropdown">
                                                     @php
-                                                        $statuses = ['', 'Delivered', 'Pending'];
+                                                        $statuses = ['Delivered', 'Pending'];
                                                     @endphp
                                                     @foreach ($statuses as $status)
                                                         <button type="button"
                                                             class="deliveryStatus-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
                                                             onclick="selectOption('deliveryStatus', '{{ $status }}')">
-                                                            {{ $status === '' ? 'All Statuses' : $status }}
+                                                            {{ $status }}
                                                         </button>
                                                     @endforeach
                                                 </div>
@@ -366,7 +366,6 @@
                                                         aria-labelledby="customerDecisionDropdown">
                                                         @php
                                                             $decisions = [
-                                                                '', // For "All"
                                                                 'Pending',
                                                                 'Order Received',
                                                                 'Order Not Received',
@@ -377,7 +376,7 @@
                                                             <button type="button"
                                                                 class="customerDecision-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
                                                                 onclick="selectOption('customerDecision', '{{ $decision }}')">
-                                                                {{ $decision === '' ? 'All Decisions' : $decision }}
+                                                                {{ $decision }}
                                                             </button>
                                                         @endforeach
                                                     </div>
@@ -1315,106 +1314,6 @@
             const maxDateStr = `${yyyy}-${mm}-${dd}`;
 
             inquiryDateInput.setAttribute('max', maxDateStr);
-        });
-
-        document.addEventListener('DOMContentLoaded', () => {
-            const clearFiltersBtn = document.getElementById('clearFiltersBtn');
-            const filterForm = document.getElementById('filterForm');
-
-            clearFiltersBtn.addEventListener('click', () => {
-                document.getElementById('customerInput').value = '';
-                document.getElementById('merchandiserInput').value = '';
-                document.getElementById('itemInput').value = '';
-                document.getElementById('deliveryStatusInput').value = '';
-                document.getElementById('customerDecisionInput').value = '';
-
-                document.getElementById('selectedCustomer').textContent = 'Select Customer';
-                document.getElementById('selectedMerchandiser').textContent = 'Select Merchandiser';
-                document.getElementById('selectedItem').textContent = 'Select Item';
-                document.getElementById('selectedDeliveryStatus').textContent = 'Select Status';
-                document.getElementById('selectedCustomerDecision').textContent = 'Select Decision';
-
-                filterForm.submit();
-            });
-
-            document.querySelectorAll('td').forEach(td => {
-                const timestampDiv = td.querySelector('.timestamp');
-                const deliveredBtn = td.querySelector('button.delivered-btn');
-
-                if (timestampDiv && timestampDiv.textContent.trim() && deliveredBtn) {
-                    deliveredBtn.classList.add('hidden');
-                } else if (timestampDiv && !timestampDiv.textContent.trim() && deliveredBtn) {
-                    deliveredBtn.classList.remove('hidden');
-                }
-            });
-        });
-
-        function toggleDropdown(type) {
-            const menu = document.getElementById(`${type}DropdownMenu`);
-            const btn = document.getElementById(`${type}Dropdown`);
-            const expanded = btn.getAttribute('aria-expanded') === 'true';
-            menu.classList.toggle('hidden');
-            btn.setAttribute('aria-expanded', !expanded);
-        }
-
-        // Helper function to get custom "All ..." label for each type
-        function getDisplayLabel(type, value) {
-            if (value) return value;
-            switch (type) {
-                case 'customer':
-                    return 'All Customer';
-                case 'merchandiser':
-                    return 'All Merchandiser';
-                case 'item':
-                    return 'All Item';
-                case 'deliveryStatus':
-                    return 'All Delivery Status';
-                case 'customerDecision':
-                    return 'All Decision';
-                default:
-                    return 'All';
-            }
-        }
-
-        function formatDisplayValue(value, type) {
-            // You can decide if you want to use getDisplayLabel here or keep generic
-            // Using getDisplayLabel to keep consistency
-            return getDisplayLabel(type, value);
-        }
-
-        function selectOption(type, value) {
-            const displayText = value || `Select ${capitalize(type)}`;
-            const displayValue = getDisplayLabel(type, value);
-
-            document.getElementById(`selected${capitalize(type)}`).innerText = displayValue;
-            document.getElementById(`${type}Input`).value = value || '';
-            document.getElementById(`${type}DropdownMenu`).classList.add('hidden');
-            document.getElementById(`${type}Dropdown`).setAttribute('aria-expanded', false);
-        }
-
-        function filterOptions(type) {
-            const input = document.getElementById(`${type}SearchInput`).value.toLowerCase();
-            const options = document.querySelectorAll(`.${type}-option`);
-            options.forEach(option => {
-                const text = option.textContent.toLowerCase();
-                option.style.display = text.includes(input) ? 'block' : 'none';
-            });
-        }
-
-        function capitalize(str) {
-            return str.charAt(0).toUpperCase() + str.slice(1);
-        }
-
-        // Close dropdown menus when clicking outside
-        document.addEventListener('click', function(e) {
-            ['item', 'customer', 'merchandiser', 'deliveryStatus', 'customerDecision'].forEach(type => {
-                const btn = document.getElementById(`${type}Dropdown`);
-                const menu = document.getElementById(`${type}DropdownMenu`);
-                if (!btn.contains(e.target) && !menu.contains(e.target)) {
-                    menu.classList.add('hidden');
-                    btn.setAttribute('aria-expanded', false);
-                }
-            });
         });
     </script>
 
