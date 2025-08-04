@@ -156,8 +156,14 @@
                         <th
                             class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase border-r border-gray-300 dark:border-gray-600">
                             Available Stock</th>
-                        <th class="px-4 py-3 w-48 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase">Action
-                            Admin</th>
+                        @php
+                            $userRole = Auth::user()->role;
+                        @endphp
+
+                        @if (in_array($userRole, ['SUPERADMIN', 'SAMPLEDEVELOPER']))
+                            <th class="px-4 py-3 w-48 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase">
+                                Action</th>
+                        @endif
                     </tr>
                 </thead>
 
@@ -203,22 +209,27 @@
                                     value="{{ $record->available_stock }}" />
                             </td>
 
-                            <td class="px-4 py-3">
-                                <div class="flex justify-center gap-2">
-                                    <!-- Borrow Form -->
-                                    <form action="{{ route('leftover-yarn.borrow', $record->id) }}" method="POST"
-                                        class="flex items-center gap-2">
-                                        @csrf
-                                        <input type="number" name="borrow_qty"
-                                            class="w-24 px-2 py-1 border rounded text-sm dark:bg-gray-700 dark:text-white text-center"
-                                            placeholder="Qty" min="1" required>
-                                        <button type="submit"
-                                            class="bg-yellow-600 hover:bg-yellow-700 text-white px-3 py-1 rounded text-sm">
-                                            Borrow
-                                        </button>
-                                    </form>
-                                </div>
-                            </td>
+                            @php
+                                $userRole = Auth::user()->role;
+                            @endphp
+                            @if (in_array($userRole, ['SUPERADMIN', 'SAMPLEDEVELOPER']))
+                                <td class="px-4 py-3">
+                                    <div class="flex justify-center gap-2">
+                                        <!-- Borrow Form -->
+                                        <form action="{{ route('leftover-yarn.borrow', $record->id) }}" method="POST"
+                                            class="flex items-center gap-2">
+                                            @csrf
+                                            <input type="number" name="borrow_qty"
+                                                class="w-24 px-2 py-1 border rounded text-sm dark:bg-gray-700 dark:text-white text-center"
+                                                placeholder="Qty" min="1" required>
+                                            <button type="submit"
+                                                class="bg-yellow-600 hover:bg-yellow-700 text-white px-3 py-1 rounded text-sm">
+                                                Borrow
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            @endif
                         </tr>
                     @endforeach
                 </tbody>

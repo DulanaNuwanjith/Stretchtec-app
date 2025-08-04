@@ -159,7 +159,7 @@
                             $userRole = Auth::user()->role;
                         @endphp
 
-                        @if (in_array($userRole, ['SUPERADMIN', 'MERCHANDISER', 'CUSTOMERCOORDINATOR']))
+                        @if (in_array($userRole, ['SUPERADMIN', 'SAMPLEDEVELOPER', 'CUSTOMERCOORDINATOR']))
                             <th
                                 class="px-4 py-3 w-48 text-xs text-center font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                 Action
@@ -175,7 +175,7 @@
                     @foreach ($sampleStocks as $stock)
                         <tr id="row{{ $stock->id }}">
                             <td class="px-4 py-3 border-r border-gray-300 dark:border-gray-600">
-                                    {{ $stock->reference_no }}
+                                {{ $stock->reference_no }}
                             </td>
 
                             <td class="px-4 py-3 border-r border-gray-300 dark:border-gray-600">
@@ -187,27 +187,31 @@
                             </td>
 
                             <td class="px-4 py-3 border-r border-gray-300 dark:border-gray-600">
-                                <div class="flex flex-col gap-3">
-                                    {{-- Special Note Update --}}
-                                    <form method="POST" action="{{ route('sampleStock.update', $stock->id) }}">
-                                        @csrf
-                                        @method('PUT')
-                                        <textarea name="special_note"
-                                            class="w-full px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm resize-none"
-                                            rows="2" placeholder="Enter special note...">{{ $stock->special_note }}</textarea>
-                                        <button type="submit"
-                                            class="mt-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-1 rounded text-sm w-full">
-                                            Save
-                                        </button>
-                                    </form>
-                                </div>
+                                @if (auth()->user()->role !== 'ADMIN')
+                                    <div class="flex flex-col gap-3">
+                                        {{-- Special Note Update --}}
+                                        <form method="POST" action="{{ route('sampleStock.update', $stock->id) }}">
+                                            @csrf
+                                            @method('PUT')
+                                            <textarea name="special_note"
+                                                class="w-full px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm resize-none"
+                                                rows="2" placeholder="Enter special note...">{{ $stock->special_note }}</textarea>
+                                            <button type="submit"
+                                                class="mt-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-1 rounded text-sm w-full">
+                                                Save
+                                            </button>
+                                        </form>
+                                    </div>
+                                @else
+                                    <span class="readonly">{{ $inquiry->notes ?? 'N/D' }}</span>
+                                @endif
                             </td>
 
                             @php
                                 $userRole = Auth::user()->role;
                             @endphp
 
-                            @if (in_array($userRole, ['SUPERADMIN', 'MERCHANDISER', 'CUSTOMERCOORDINATOR']))
+                            @if (in_array($userRole, ['SUPERADMIN', 'SAMPLEDEVELOPER', 'CUSTOMERCOORDINATOR']))
                                 <td class="px-4 py-3 w-48 text-center whitespace-normal break-words">
                                     <div class="flex justify-center gap-2">
                                         {{-- Borrow Action --}}
