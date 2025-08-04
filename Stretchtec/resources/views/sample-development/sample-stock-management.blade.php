@@ -159,7 +159,7 @@
                             $userRole = Auth::user()->role;
                         @endphp
 
-                        @if (in_array($userRole, ['SUPERADMIN', 'SAMPLEDEVELOPER', 'CUSTOMERCOORDINATOR']))
+                        @if (in_array($userRole, ['SUPERADMIN', 'SAMPLEDEVELOPER']))
                             <th
                                 class="px-4 py-3 w-48 text-xs text-center font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                 Action
@@ -211,7 +211,7 @@
                                 $userRole = Auth::user()->role;
                             @endphp
 
-                            @if (in_array($userRole, ['SUPERADMIN', 'SAMPLEDEVELOPER', 'CUSTOMERCOORDINATOR']))
+                            @if (in_array($userRole, ['SUPERADMIN', 'SAMPLEDEVELOPER']))
                                 <td class="px-4 py-3 w-48 text-center whitespace-normal break-words">
                                     <div class="flex justify-center gap-2">
                                         {{-- Borrow Action --}}
