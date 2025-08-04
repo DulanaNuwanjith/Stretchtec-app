@@ -539,7 +539,10 @@
                                                                     <input type="hidden" name="id"
                                                                         value="{{ $prep->id }}">
                                                                     <button type="button"
-                                                                        class="reject-btn mt-3 px-3 py-1 text-white bg-red-500 hover:bg-red-600 rounded text-sm"
+                                                                        class="reject-btn mt-3 px-3 py-1 text-white bg-red-500 hover:bg-red-600 rounded text-sm
+        {{ $prep->alreadyDeveloped ? 'cursor-not-allowed bg-red-300 hover:bg-red-300' : '' }}"
+                                                                        @if ($prep->alreadyDeveloped) disabled @endif
+                                                                        title="{{ $prep->alreadyDeveloped ? 'You cannot reject after development selection' : '' }}"
                                                                         onclick="openRejectModal({{ $prep->id }})">
                                                                         Reject
                                                                     </button>
