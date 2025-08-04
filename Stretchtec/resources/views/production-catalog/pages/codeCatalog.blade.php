@@ -304,9 +304,10 @@
                                             <th
                                                 class="font-bold px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 TKT</th>
-                                            <th
-                                                class="font-bold px-4 py-3 w-56 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                                Approved By</th>
+                                            <th colspan="2"
+                                                class="font-bold px-4 py-3 w-[14rem] text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                Approved By
+                                            </th>
                                         </tr>
                                     </thead>
                                     <tbody id="productionCatalogTable"
