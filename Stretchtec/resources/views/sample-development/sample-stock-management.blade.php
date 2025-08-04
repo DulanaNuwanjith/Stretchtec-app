@@ -175,10 +175,7 @@
                     @foreach ($sampleStocks as $stock)
                         <tr id="row{{ $stock->id }}">
                             <td class="px-4 py-3 border-r border-gray-300 dark:border-gray-600">
-                                <span class="hover:text-blue-600 hover:underline cursor-pointer"
-                                    onclick="openModel('{{ $stock->reference_no }}')">
                                     {{ $stock->reference_no }}
-                                </span>
                             </td>
 
                             <td class="px-4 py-3 border-r border-gray-300 dark:border-gray-600">
