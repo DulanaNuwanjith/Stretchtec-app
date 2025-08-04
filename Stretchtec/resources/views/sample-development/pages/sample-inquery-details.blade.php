@@ -309,13 +309,13 @@
                                                 <div class="py-1" role="listbox" tabindex="-1"
                                                     aria-labelledby="deliveryStatusDropdown">
                                                     @php
-                                                        $statuses = ['', 'Delivered', 'Pending'];
+                                                        $statuses = ['Delivered', 'Pending'];
                                                     @endphp
                                                     @foreach ($statuses as $status)
                                                         <button type="button"
                                                             class="deliveryStatus-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
                                                             onclick="selectOption('deliveryStatus', '{{ $status }}')">
-                                                            {{ $status === '' ? 'All Statuses' : $status }}
+                                                            {{ $status }}
                                                         </button>
                                                     @endforeach
                                                 </div>
@@ -366,7 +366,6 @@
                                                         aria-labelledby="customerDecisionDropdown">
                                                         @php
                                                             $decisions = [
-                                                                '', // For "All"
                                                                 'Pending',
                                                                 'Order Received',
                                                                 'Order Not Received',
@@ -377,7 +376,7 @@
                                                             <button type="button"
                                                                 class="customerDecision-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
                                                                 onclick="selectOption('customerDecision', '{{ $decision }}')">
-                                                                {{ $decision === '' ? 'All Decisions' : $decision }}
+                                                                {{ $decision }}
                                                             </button>
                                                         @endforeach
                                                     </div>
@@ -1065,7 +1064,7 @@
                                                     <!-- Custom-Styled Dropdown for Item -->
                                                     <div class="w-1/2">
                                                         <label for="item"
-                                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">Item</label>
+                                                            class="block text-sm mb-1 font-medium text-gray-700 dark:text-gray-300">Item</label>
 
                                                         <div class="relative inline-block w-full text-left">
                                                             <button type="button"
@@ -1203,35 +1202,46 @@
         const fileInput = document.getElementById('sampleFile');
         const previewContainer = document.getElementById('previewContainer');
         const uploadContent = document.getElementById('uploadContent');
+        const uploadLabel = document.getElementById('uploadLabel');
 
-        fileInput.addEventListener('change', () => {
-            const file = fileInput.files[0];
+        // Show preview for a given file
+        function showPreview(file) {
             previewContainer.innerHTML = ''; // Clear previous preview
 
             if (!file) {
-                // No file selected, show upload instructions and hide preview
+                // No file: show instructions, hide preview
                 previewContainer.classList.add('hidden');
                 uploadContent.style.display = 'flex';
                 return;
             }
 
-            // Hide upload instructions, show preview container
+            // Hide instructions, show preview
             uploadContent.style.display = 'none';
             previewContainer.classList.remove('hidden');
 
             const fileType = file.type;
+
             if (fileType === 'application/pdf') {
                 // PDF preview: icon + filename
                 const pdfPreview = document.createElement('div');
-                pdfPreview.classList.add('flex', 'flex-col', 'items-center', 'justify-center', 'text-center',
-                    'text-gray-800', 'dark:text-gray-200', 'p-4');
+                pdfPreview.classList.add(
+                    'flex',
+                    'flex-col',
+                    'items-center',
+                    'justify-center',
+                    'text-center',
+                    'text-gray-800',
+                    'dark:text-gray-200',
+                    'p-4'
+                );
 
                 pdfPreview.innerHTML = `
-                <svg class="w-16 h-16 mb-2 text-red-600" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 0C5.371 0 0 5.371 0 12s5.371 12 12 12 12-5.371 12-12S18.629 0 12 0zm1 17h-2v-2h2v2zm1.07-7.75l-.9.92C12.45 11.9 12 12.5 12 14h-2v-.5c0-.8.45-1.5 1.07-2.18l1.2-1.2c.37-.36.58-.86.58-1.42 0-1.1-.9-2-2-2s-2 .9-2 2H7c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/>
-                </svg>
-                <p class="font-semibold break-words max-w-[90%]">${file.name}</p>
-            `;
+            <svg class="w-16 h-16 mb-2 text-red-600" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 0C5.371 0 0 5.371 0 12s5.371 12 12 12 12-5.371 12-12S18.629 0 12 0zm1 17h-2v-2h2v2zm1.07-7.75l-.9.92C12.45 11.9 12 12.5 12 14h-2v-.5c0-.8.45-1.5 1.07-2.18l1.2-1.2c.37-.36.58-.86.58-1.42 0-1.1-.9-2-2-2s-2 .9-2 2H7c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/>
+            </svg>
+            <p class="font-semibold break-words max-w-[90%]">${file.name}</p>
+        `;
+
                 previewContainer.appendChild(pdfPreview);
 
             } else if (fileType.startsWith('image/')) {
@@ -1247,6 +1257,7 @@
                 reader.readAsDataURL(file);
 
                 previewContainer.appendChild(img);
+
             } else {
                 // Unsupported file type
                 const unsupported = document.createElement('p');
@@ -1254,7 +1265,40 @@
                 unsupported.textContent = 'File preview not available';
                 previewContainer.appendChild(unsupported);
             }
+        }
+
+        // Handle file input change
+        fileInput.addEventListener('change', () => {
+            const file = fileInput.files[0];
+            showPreview(file);
         });
+
+        // Drag and drop handlers
+        ['dragenter', 'dragover'].forEach(eventName => {
+            uploadLabel.addEventListener(eventName, e => {
+                e.preventDefault();
+                e.stopPropagation();
+                uploadLabel.classList.add('bg-gray-200', 'dark:bg-gray-600');
+            });
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            uploadLabel.addEventListener(eventName, e => {
+                e.preventDefault();
+                e.stopPropagation();
+                uploadLabel.classList.remove('bg-gray-200', 'dark:bg-gray-600');
+            });
+        });
+
+        // Handle drop event - assign dropped files to input and show preview
+        uploadLabel.addEventListener('drop', e => {
+            const dt = e.dataTransfer;
+            if (dt.files.length) {
+                fileInput.files = dt.files;
+                showPreview(dt.files[0]);
+            }
+        });
+
 
         // Set max date for inquiryDate input as tomorrow's date
         document.addEventListener('DOMContentLoaded', () => {
@@ -1270,106 +1314,6 @@
             const maxDateStr = `${yyyy}-${mm}-${dd}`;
 
             inquiryDateInput.setAttribute('max', maxDateStr);
-        });
-
-        document.addEventListener('DOMContentLoaded', () => {
-            const clearFiltersBtn = document.getElementById('clearFiltersBtn');
-            const filterForm = document.getElementById('filterForm');
-
-            clearFiltersBtn.addEventListener('click', () => {
-                document.getElementById('customerInput').value = '';
-                document.getElementById('merchandiserInput').value = '';
-                document.getElementById('itemInput').value = '';
-                document.getElementById('deliveryStatusInput').value = '';
-                document.getElementById('customerDecisionInput').value = '';
-
-                document.getElementById('selectedCustomer').textContent = 'Select Customer';
-                document.getElementById('selectedMerchandiser').textContent = 'Select Merchandiser';
-                document.getElementById('selectedItem').textContent = 'Select Item';
-                document.getElementById('selectedDeliveryStatus').textContent = 'Select Status';
-                document.getElementById('selectedCustomerDecision').textContent = 'Select Decision';
-
-                filterForm.submit();
-            });
-
-            document.querySelectorAll('td').forEach(td => {
-                const timestampDiv = td.querySelector('.timestamp');
-                const deliveredBtn = td.querySelector('button.delivered-btn');
-
-                if (timestampDiv && timestampDiv.textContent.trim() && deliveredBtn) {
-                    deliveredBtn.classList.add('hidden');
-                } else if (timestampDiv && !timestampDiv.textContent.trim() && deliveredBtn) {
-                    deliveredBtn.classList.remove('hidden');
-                }
-            });
-        });
-
-        function toggleDropdown(type) {
-            const menu = document.getElementById(`${type}DropdownMenu`);
-            const btn = document.getElementById(`${type}Dropdown`);
-            const expanded = btn.getAttribute('aria-expanded') === 'true';
-            menu.classList.toggle('hidden');
-            btn.setAttribute('aria-expanded', !expanded);
-        }
-
-        // Helper function to get custom "All ..." label for each type
-        function getDisplayLabel(type, value) {
-            if (value) return value;
-            switch (type) {
-                case 'customer':
-                    return 'All Customer';
-                case 'merchandiser':
-                    return 'All Merchandiser';
-                case 'item':
-                    return 'All Item';
-                case 'deliveryStatus':
-                    return 'All Delivery Status';
-                case 'customerDecision':
-                    return 'All Decision';
-                default:
-                    return 'All';
-            }
-        }
-
-        function formatDisplayValue(value, type) {
-            // You can decide if you want to use getDisplayLabel here or keep generic
-            // Using getDisplayLabel to keep consistency
-            return getDisplayLabel(type, value);
-        }
-
-        function selectOption(type, value) {
-            const displayText = value || `Select ${capitalize(type)}`;
-            const displayValue = getDisplayLabel(type, value);
-
-            document.getElementById(`selected${capitalize(type)}`).innerText = displayValue;
-            document.getElementById(`${type}Input`).value = value || '';
-            document.getElementById(`${type}DropdownMenu`).classList.add('hidden');
-            document.getElementById(`${type}Dropdown`).setAttribute('aria-expanded', false);
-        }
-
-        function filterOptions(type) {
-            const input = document.getElementById(`${type}SearchInput`).value.toLowerCase();
-            const options = document.querySelectorAll(`.${type}-option`);
-            options.forEach(option => {
-                const text = option.textContent.toLowerCase();
-                option.style.display = text.includes(input) ? 'block' : 'none';
-            });
-        }
-
-        function capitalize(str) {
-            return str.charAt(0).toUpperCase() + str.slice(1);
-        }
-
-        // Close dropdown menus when clicking outside
-        document.addEventListener('click', function(e) {
-            ['item', 'customer', 'merchandiser', 'deliveryStatus', 'customerDecision'].forEach(type => {
-                const btn = document.getElementById(`${type}Dropdown`);
-                const menu = document.getElementById(`${type}DropdownMenu`);
-                if (!btn.contains(e.target) && !menu.contains(e.target)) {
-                    menu.classList.add('hidden');
-                    btn.setAttribute('aria-expanded', false);
-                }
-            });
         });
     </script>
 
