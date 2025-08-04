@@ -314,254 +314,299 @@
                                         class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                                         @foreach ($catalogs as $catalog)
                                             <tr class="odd:bg-white even:bg-gray-50 border-b border-gray-200 text-center">
-                                                <td
-                                                    class="sticky left-0 z-10 bg-white px-4 py-3 bg-gray-100 border-r border-gray-300 text-left whitespace-normal break-words">
+                                                @php
+                                                    $userRole = Auth::user()->role;
+                                                @endphp
+                                                @if (in_array($userRole, ['SUPERADMIN', 'SAMPLEDEVELOPER', 'CUSTOMERCOORDINATOR']))
+                                                    {{-- Editable: Upload allowed --}}
+                                                    <td
+                                                        class="sticky left-0 z-10 bg-white px-4 py-3 bg-gray-100 border-r border-gray-300 text-left whitespace-normal break-words">
+                                                        <form id="uploadForm-{{ $catalog->id }}"
+                                                            action="{{ route('catalog.uploadImage', $catalog->id) }}"
+                                                            method="POST" enctype="multipart/form-data" class="m-0 p-0">
+                                                            @csrf
 
-                                                    <form id="uploadForm-{{ $catalog->id }}"
-                                                        action="{{ route('catalog.uploadImage', $catalog->id) }}"
-                                                        method="POST" enctype="multipart/form-data" class="m-0 p-0">
-                                                        @csrf
+                                                            <span id="orderNo-{{ $catalog->id }}"
+                                                                class="font-semibold text-sm text-blue-700 cursor-pointer hover:underline select-none"
+                                                                onclick="handleOrderNoClick({{ $catalog->id }}, {{ $catalog->order_image ? 'true' : 'false' }})">
+                                                                {{ $catalog->order_no }}
+                                                            </span>
 
-                                                        <span id="orderNo-{{ $catalog->id }}"
-                                                            class="font-semibold text-sm text-blue-700 cursor-pointer hover:underline select-none"
-                                                            onclick="handleOrderNoClick({{ $catalog->id }}, {{ $catalog->order_image ? 'true' : 'false' }})">
+                                                            @if (!$catalog->order_image)
+                                                                <div class="text-xs text-red-600 mt-1">Need to upload image
+                                                                </div>
+                                                            @endif
+
+                                                            <input id="file-upload-{{ $catalog->id }}" type="file"
+                                                                name="order_image" accept="image/*" class="hidden"
+                                                                onchange="document.getElementById('uploadForm-{{ $catalog->id }}').submit()" />
+
+                                                            @if ($catalog->order_image)
+                                                                <div id="imagePreview-{{ $catalog->id }}"
+                                                                    class="hidden mt-2">
+                                                                    <a href="{{ asset('storage/order_images/' . $catalog->order_image) }}"
+                                                                        target="_blank"
+                                                                        class="block w-24 h-24 rounded overflow-hidden border border-gray-300 shadow-sm hover:shadow-md transition">
+                                                                        <img src="{{ asset('storage/order_images/' . $catalog->order_image) }}"
+                                                                            alt="Order Image"
+                                                                            class="w-full h-full object-cover" />
+                                                                    </a>
+                                                                </div>
+                                                            @endif
+                                                        </form>
+                                                    </td>
+                                                @else
+                                                    {{-- View-only for other roles --}}
+                                                    <td
+                                                        class="sticky left-0 z-10 bg-white px-4 py-3 bg-gray-100 border-r border-gray-300 text-left whitespace-normal break-words">
+                                                        <span class="font-semibold text-sm text-gray-700">
                                                             {{ $catalog->order_no }}
                                                         </span>
 
-                                                        <!-- Show 'Need to upload image' if no image -->
-                                                        @if (!$catalog->order_image)
-                                                            <div class="text-xs text-red-600 mt-1">Need to upload image
+                                                        @if ($catalog->order_image)
+                                                            <div class="mt-2">
+                                                                <a href="{{ asset('storage/order_images/' . $catalog->order_image) }}"
+                                                                    target="_blank"
+                                                                    class="block w-24 h-24 rounded overflow-hidden border border-gray-300 shadow-sm hover:shadow-md transition">
+                                                                    <img src="{{ asset('storage/order_images/' . $catalog->order_image) }}"
+                                                                        alt="Order Image"
+                                                                        class="w-full h-full object-cover" />
+                                                                </a>
                                                             </div>
+                                                        @else
+                                                            <div class="text-xs text-red-600 mt-1">No image uploaded</div>
+                                                        @endif
+                                                    </td>
+                                                @endif
+
+                                                <td
+                                                    class="px-4 py-3 w-48 whitespace-normal break-words border-r border-gray-300">
+                                                    <span class="readonly">{{ $catalog->reference_no }}</span>
+                                                    <input
+                                                        class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                        value="{{ $catalog->reference_no }}" />
+                                                </td>
+                                                <td
+                                                    class="px-4 py-3 w-40 whitespace-normal break-words border-r border-gray-300">
+                                                    <span
+                                                        class="readonly">{{ $catalog->reference_added_date?->format('Y-m-d') }}</span>
+                                                    <input type="date"
+                                                        class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                        value="{{ $catalog->reference_added_date?->format('Y-m-d') }}" />
+                                                </td>
+                                                <td
+                                                    class="px-4 py-3 w-36 whitespace-normal break-words border-r border-gray-300">
+                                                    <span class="readonly">{{ $catalog->coordinator_name }}</span>
+                                                    <input
+                                                        class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                        value="{{ $catalog->coordinator_name }}" />
+                                                </td>
+                                                <td
+                                                    class="px-4 py-3 w-32 whitespace-normal break-words border-r border-gray-300">
+                                                    <span class="readonly">{{ $catalog->size }}</span>
+                                                    <input
+                                                        class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                        value="{{ $catalog->size }}" />
+                                                </td>
+                                                <td
+                                                    class="px-4 py-3 w-32 whitespace-normal break-words border-r border-gray-300">
+                                                    <span class="readonly">{{ $catalog->colour }}</span>
+                                                    <input
+                                                        class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                        value="{{ $catalog->colour }}" />
+                                                </td>
+                                                <td
+                                                    class="px-4 py-3 w-32 whitespace-normal break-words border-r border-gray-300">
+                                                    <span class="readonly">{{ $catalog->shade }}</span>
+                                                    <input
+                                                        class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                        value="{{ $catalog->shade }}" />
+                                                </td>
+                                                <td
+                                                    class="px-4 py-3 w-32 whitespace-normal break-words border-r border-gray-300">
+                                                    <span class="readonly">{{ $catalog->tkt }}</span>
+                                                    <input
+                                                        class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                        value="{{ $catalog->tkt }}" />
+                                                </td>
+                                                <!-- Approval Section -->
+                                                <!-- Approval Section -->
+                                                <td colspan="2" class="px-4 py-3 border-r border-gray-300 text-left">
+                                                    @if (in_array($userRole, ['SUPERADMIN', 'SAMPLEDEVELOPER', 'CUSTOMERCOORDINATOR']))
+                                                        {{-- Editable form for permitted roles --}}
+                                                        <form
+                                                            action="{{ route('product-catalog.updateApproval', $catalog->id) }}"
+                                                            method="POST" enctype="multipart/form-data">
+                                                            @csrf
+                                                            @method('PATCH')
+
+                                                            {{-- Approved By --}}
+                                                            @if (!$catalog->is_approved_by_locked)
+                                                                <input type="text" name="approved_by"
+                                                                    value="{{ old('approved_by', $catalog->approved_by) }}"
+                                                                    class="w-full mb-2 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                                    placeholder="Approved By" required>
+                                                            @else
+                                                                <div class="mb-2 text-sm">
+                                                                    <strong>Approved By:</strong>
+                                                                    {{ $catalog->approved_by ?? '-' }}
+                                                                </div>
+                                                            @endif
+
+                                                            {{-- Approval Card --}}
+                                                            @if (!$catalog->is_approval_card_locked)
+                                                                <input type="file" name="approval_card"
+                                                                    accept="image/*"
+                                                                    class="w-full mb-2 text-sm dark:text-white dark:bg-gray-700">
+                                                            @elseif ($catalog->approval_card)
+                                                                <div class="mb-2">
+                                                                    <strong>Approval Card:</strong>
+                                                                    <a href="{{ asset('storage/' . $catalog->approval_card) }}"
+                                                                        target="_blank"
+                                                                        class="inline-block px-3 py-1 rounded text-sm bg-green-600 hover:bg-green-700 text-white transition">
+                                                                        View
+                                                                    </a>
+                                                                </div>
+                                                            @else
+                                                                <div class="text-sm text-red-500 mb-2">
+                                                                    <strong>Approval Card:</strong> No Image
+                                                                </div>
+                                                            @endif
+
+                                                            {{-- Show Save button only if at least one field is unlocked --}}
+                                                            @if (!$catalog->is_approved_by_locked || !$catalog->is_approval_card_locked)
+                                                                <button type="submit"
+                                                                    class="w-full px-3 py-1 rounded text-sm transition-all duration-200 bg-blue-600 hover:bg-blue-700 text-white">
+                                                                    Save
+                                                                </button>
+                                                            @endif
+                                                        </form>
+                                                    @else
+                                                        {{-- View-only for unauthorized roles --}}
+                                                        <div class="text-sm mb-2">
+                                                            <strong>Approved By:</strong>
+                                                            {{ $catalog->approved_by ?? '-' }}
+                                                        </div>
+
+                                                        @if ($catalog->approval_card)
+                                                            <div>
+                                                                <strong>Approval Card:</strong>
+                                                                <a href="{{ asset('storage/' . $catalog->approval_card) }}"
+                                                                    target="_blank"
+                                                                    class="inline-block px-3 py-1 rounded text-sm bg-green-600 hover:bg-green-700 text-white transition">
+                                                                    View
+                                                                </a>
+                                                            </div>
+                                                        @else
+                                                            <div class="text-sm text-red-500">
+                                                                <strong>Approval Card:</strong> No Image
+                                                            </div>
+                                                        @endif
+                                                    @endif
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
                             </div>
-                            @endif
+                            <div class="py-6 flex justify-center">
+                                {{ $catalogs->links() }}
+                            </div>
 
-                            <input id="file-upload-{{ $catalog->id }}" type="file" name="order_image"
-                                accept="image/*" class="hidden"
-                                onchange="document.getElementById('uploadForm-{{ $catalog->id }}').submit()" />
+                            <div id="addTapeCatalogModal"
+                                class="fixed inset-0 z-50 hidden bg-black bg-opacity-50 flex items-center justify-center py-5">
+                                <div class="w-full max-w-[700px] bg-white dark:bg-gray-900 rounded-2xl shadow-2xl p-4 transform transition-all scale-95 max-h-[calc(100vh-10rem)] overflow-y-auto"
+                                    onclick="event.stopPropagation()">
+                                    <div class="max-w-[600px] mx-auto p-8">
+                                        <h2
+                                            class="text-2xl font-semibold mb-8 text-blue-900 mt-4 dark:text-gray-100 text-center">
+                                            Add New Code Catalog Item
+                                        </h2>
+                                        <form action="{{ route('tapeCatalog.store') }}" method="POST"
+                                            enctype="multipart/form-data">
+                                            @csrf
+                                            <div class="space-y-4">
+                                                <div class="flex gap-4">
+                                                    <div class="w-1/2">
+                                                        <label for="order_no"
+                                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">Order
+                                                            Number</label>
+                                                        <input id="order_no" type="text" name="order_no" required
+                                                            class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm mb-4">
+                                                    </div>
+                                                    <div class="w-1/2">
+                                                        <label for="reference_no"
+                                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">Reference
+                                                            No</label>
+                                                        <input id="reference_no" type="text" name="reference_no"
+                                                            required
+                                                            class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                    </div>
+                                                </div>
 
-                            @if ($catalog->order_image)
-                                <div id="imagePreview-{{ $catalog->id }}" class="hidden mt-2">
-                                    <a href="{{ asset('storage/order_images/' . $catalog->order_image) }}"
-                                        target="_blank"
-                                        class="block w-24 h-24 rounded overflow-hidden border border-gray-300 shadow-sm hover:shadow-md transition">
-                                        <img src="{{ asset('storage/order_images/' . $catalog->order_image) }}"
-                                            alt="Order Image" class="w-full h-full object-cover" />
-                                    </a>
-                                </div>
-                            @endif
-                            </form>
-                            </td>
-                            <td class="px-4 py-3 w-48 whitespace-normal break-words border-r border-gray-300">
-                                <span class="readonly">{{ $catalog->reference_no }}</span>
-                                <input
-                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                    value="{{ $catalog->reference_no }}" />
-                            </td>
-                            <td class="px-4 py-3 w-40 whitespace-normal break-words border-r border-gray-300">
-                                <span class="readonly">{{ $catalog->reference_added_date?->format('Y-m-d') }}</span>
-                                <input type="date"
-                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                    value="{{ $catalog->reference_added_date?->format('Y-m-d') }}" />
-                            </td>
-                            <td class="px-4 py-3 w-36 whitespace-normal break-words border-r border-gray-300">
-                                <span class="readonly">{{ $catalog->coordinator_name }}</span>
-                                <input
-                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                    value="{{ $catalog->coordinator_name }}" />
-                            </td>
-                            <td class="px-4 py-3 w-32 whitespace-normal break-words border-r border-gray-300">
-                                <span class="readonly">{{ $catalog->size }}</span>
-                                <input
-                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                    value="{{ $catalog->size }}" />
-                            </td>
-                            <td class="px-4 py-3 w-32 whitespace-normal break-words border-r border-gray-300">
-                                <span class="readonly">{{ $catalog->colour }}</span>
-                                <input
-                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                    value="{{ $catalog->colour }}" />
-                            </td>
-                            <td class="px-4 py-3 w-32 whitespace-normal break-words border-r border-gray-300">
-                                <span class="readonly">{{ $catalog->shade }}</span>
-                                <input
-                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                    value="{{ $catalog->shade }}" />
-                            </td>
-                            <td class="px-4 py-3 w-32 whitespace-normal break-words border-r border-gray-300">
-                                <span class="readonly">{{ $catalog->tkt }}</span>
-                                <input
-                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                    value="{{ $catalog->tkt }}" />
-                            </td>
-                            <!-- Approval Section -->
-                            <td colspan="2" class="px-4 py-3 border-r border-gray-300 text-left">
-                                @if (!$catalog->is_approved_by_locked || !$catalog->is_approval_card_locked)
-                                    <form action="{{ route('product-catalog.updateApproval', $catalog->id) }}"
-                                        method="POST" enctype="multipart/form-data">
-                                        @csrf
-                                        @method('PATCH')
+                                                <div class="flex gap-4">
+                                                    <div class="w-1/2">
+                                                        <label for="reference_added_date"
+                                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">Date</label>
+                                                        <input id="reference_added_date" type="date"
+                                                            name="reference_added_date" required
+                                                            class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                    </div>
+                                                    <div class="w-1/2">
+                                                        <label for="coordinator_name"
+                                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer
+                                                            Coordinator</label>
+                                                        <input id="coordinator_name" type="text"
+                                                            name="coordinator_name" required
+                                                            class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                    </div>
+                                                </div>
 
-                                        <!-- Approved By -->
-                                        @if (!$catalog->is_approved_by_locked)
-                                            <input type="text" name="approved_by"
-                                                value="{{ old('approved_by', $catalog->approved_by) }}"
-                                                class="w-full mb-2 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                placeholder="Approved By" required>
-                                        @else
-                                            <div class="mb-2 text-sm ">
-                                                <strong>Approved By:</strong> {{ $catalog->approved_by ?? '-' }}
+                                                <div class="flex gap-4">
+                                                    <div class="w-1/2">
+                                                        <label for="size"
+                                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">Size</label>
+                                                        <input id="size" type="text" name="size" required
+                                                            class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                    </div>
+                                                    <div class="w-1/2">
+                                                        <label for="colour"
+                                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">Colour</label>
+                                                        <input id="colour" type="text" name="colour" required
+                                                            class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                    </div>
+                                                </div>
+
+                                                <div class="flex gap-4">
+                                                    <div class="w-1/2">
+                                                        <label for="shade"
+                                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">Shade</label>
+                                                        <input id="shade" type="text" name="shade" required
+                                                            class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                    </div>
+                                                    <div class="w-1/2">
+                                                        <label for="tkt"
+                                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">TKT</label>
+                                                        <input id="tkt" type="text" name="tkt" required
+                                                            class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                    </div>
+                                                </div>
                                             </div>
-                                        @endif
 
-                                        <!-- Approval Card -->
-                                        @if (!$catalog->is_approval_card_locked)
-                                            <input type="file" name="approval_card" accept="image/*"
-                                                class="w-full mb-2 text-sm dark:text-white dark:bg-gray-700">
-                                        @elseif ($catalog->approval_card)
-                                            <div class="mb-2">
-                                                <strong>Approval Card:</strong>
-                                                <a href="{{ asset('storage/' . $catalog->approval_card) }}"
-                                                    target="_blank"
-                                                    class="inline-block px-3 py-1 rounded text-sm bg-green-600 hover:bg-green-700 text-white transition">
-                                                    View
-                                                </a>
+                                            <!-- Buttons -->
+                                            <div class="flex justify-end gap-3 mt-12">
+                                                <button type="button"
+                                                    onclick="document.getElementById('addTapeCatalogModal').classList.add('hidden')"
+                                                    class="px-4 py-2 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 text-sm rounded hover:bg-gray-300">
+                                                    Cancel
+                                                </button>
+                                                <button type="submit"
+                                                    class="px-4 py-2 bg-blue-500 text-white text-sm rounded hover:bg-blue-600">
+                                                    Create Order
+                                                </button>
                                             </div>
-                                        @else
-                                            <div class="text-sm text-red-500 mb-2">
-                                                <strong>Approval Card:</strong> No Image
-                                            </div>
-                                        @endif
-
-                                        <!-- Show Save button only if at least one input is unlocked -->
-                                        @if (!$catalog->is_approved_by_locked || !$catalog->is_approval_card_locked)
-                                            <button type="submit"
-                                                class="w-full px-3 py-1 rounded text-sm transition-all duration-200 bg-blue-600 hover:bg-blue-700 text-white">
-                                                Save
-                                            </button>
-                                        @endif
-                                    </form>
-                                @else
-                                    <!-- When both are locked, show read-only info -->
-                                    <div class="text-sm mb-2">
-                                        <strong>Approved By:</strong> {{ $catalog->approved_by ?? '-' }}
+                                        </form>
                                     </div>
-
-                                    @if ($catalog->approval_card)
-                                        <div>
-                                            <strong>Approval Card:</strong>
-                                            <a href="{{ asset('storage/' . $catalog->approval_card) }}" target="_blank"
-                                                class="inline-block px-3 py-1 rounded text-sm bg-green-600 hover:bg-green-700 text-white transition">
-                                                View
-                                            </a>
-                                        </div>
-                                    @else
-                                        <div class="text-sm text-red-500">
-                                            <strong>Approval Card:</strong> No Image
-                                        </div>
-                                    @endif
-                                @endif
-                            </td>
-                            </tr>
-                            @endforeach
-                            </tbody>
-                            </table>
-                        </div>
-                        <div class="py-6 flex justify-center">
-                            {{ $catalogs->links() }}
-                        </div>
-
-                        <div id="addTapeCatalogModal"
-                            class="fixed inset-0 z-50 hidden bg-black bg-opacity-50 flex items-center justify-center py-5">
-                            <div class="w-full max-w-[700px] bg-white dark:bg-gray-900 rounded-2xl shadow-2xl p-4 transform transition-all scale-95 max-h-[calc(100vh-10rem)] overflow-y-auto"
-                                onclick="event.stopPropagation()">
-                                <div class="max-w-[600px] mx-auto p-8">
-                                    <h2
-                                        class="text-2xl font-semibold mb-8 text-blue-900 mt-4 dark:text-gray-100 text-center">
-                                        Add New Code Catalog Item
-                                    </h2>
-                                    <form action="{{ route('tapeCatalog.store') }}" method="POST"
-                                        enctype="multipart/form-data">
-                                        @csrf
-                                        <div class="space-y-4">
-                                            <div class="flex gap-4">
-                                                <div class="w-1/2">
-                                                    <label for="order_no"
-                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Order
-                                                        Number</label>
-                                                    <input id="order_no" type="text" name="order_no" required
-                                                        class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm mb-4">
-                                                </div>
-                                                <div class="w-1/2">
-                                                    <label for="reference_no"
-                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Reference
-                                                        No</label>
-                                                    <input id="reference_no" type="text" name="reference_no" required
-                                                        class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                                </div>
-                                            </div>
-
-                                            <div class="flex gap-4">
-                                                <div class="w-1/2">
-                                                    <label for="reference_added_date"
-                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Date</label>
-                                                    <input id="reference_added_date" type="date"
-                                                        name="reference_added_date" required
-                                                        class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                                </div>
-                                                <div class="w-1/2">
-                                                    <label for="coordinator_name"
-                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer
-                                                        Coordinator</label>
-                                                    <input id="coordinator_name" type="text" name="coordinator_name"
-                                                        required
-                                                        class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                                </div>
-                                            </div>
-
-                                            <div class="flex gap-4">
-                                                <div class="w-1/2">
-                                                    <label for="size"
-                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Size</label>
-                                                    <input id="size" type="text" name="size" required
-                                                        class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                                </div>
-                                                <div class="w-1/2">
-                                                    <label for="colour"
-                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Colour</label>
-                                                    <input id="colour" type="text" name="colour" required
-                                                        class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                                </div>
-                                            </div>
-
-                                            <div class="flex gap-4">
-                                                <div class="w-1/2">
-                                                    <label for="shade"
-                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Shade</label>
-                                                    <input id="shade" type="text" name="shade" required
-                                                        class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                                </div>
-                                                <div class="w-1/2">
-                                                    <label for="tkt"
-                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">TKT</label>
-                                                    <input id="tkt" type="text" name="tkt" required
-                                                        class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <!-- Buttons -->
-                                        <div class="flex justify-end gap-3 mt-12">
-                                            <button type="button"
-                                                onclick="document.getElementById('addTapeCatalogModal').classList.add('hidden')"
-                                                class="px-4 py-2 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 text-sm rounded hover:bg-gray-300">
-                                                Cancel
-                                            </button>
-                                            <button type="submit"
-                                                class="px-4 py-2 bg-blue-500 text-white text-sm rounded hover:bg-blue-600">
-                                                Create Order
-                                            </button>
-                                        </div>
-                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -569,7 +614,6 @@
                 </div>
             </div>
         </div>
-    </div>
     </div>
 
     <script>
