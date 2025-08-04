@@ -1064,7 +1064,7 @@
                                                     <!-- Custom-Styled Dropdown for Item -->
                                                     <div class="w-1/2">
                                                         <label for="item"
-                                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">Item</label>
+                                                            class="block text-sm mb-1 font-medium text-gray-700 dark:text-gray-300">Item</label>
 
                                                         <div class="relative inline-block w-full text-left">
                                                             <button type="button"
