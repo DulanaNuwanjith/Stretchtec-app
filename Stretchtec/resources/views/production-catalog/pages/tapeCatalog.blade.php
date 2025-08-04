@@ -267,10 +267,13 @@
                             <div class="flex justify-between items-center mb-6">
                                 <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Tape Production Catalog
                                 </h1>
-                                <button onclick="document.getElementById('addTapeCatalogModal').classList.remove('hidden')"
-                                    class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded shadow">
-                                    + Add New Item
-                                </button>
+                                @if (Auth::user()->role == 'SAMPLEDEVELOPER')
+                                    <button
+                                        onclick="document.getElementById('addTapeCatalogModal').classList.remove('hidden')"
+                                        class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded shadow">
+                                        + Add New Item
+                                    </button>
+                                @endif
                             </div>
 
                             <div class="overflow-x-auto bg-white dark:bg-gray-900 shadow rounded-lg">
