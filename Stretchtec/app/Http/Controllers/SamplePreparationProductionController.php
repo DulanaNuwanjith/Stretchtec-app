@@ -16,8 +16,9 @@ class SamplePreparationProductionController extends Controller
         $supervisors = \App\Models\OperatorsandSupervisors::where('role', 'SUPERVISOR')->get();
 
         $productionsQuery = SamplePreparationProduction::with('samplePreparationRnD.sampleInquiry')
-            ->orderByRaw('dispatch_to_rnd_at IS NOT NULL')
-            ->latest();
+            ->orderByRaw('dispatch_to_rnd_at IS NULL DESC') // dispatched rows first
+            ->orderBy('production_deadline', 'asc')             // nearest upcoming deadline first
+            ->latest();                                         // fallback to newest created
 
         // Tab 3 Filters
         if ($request->filled('tab') && $request->tab == '3') {

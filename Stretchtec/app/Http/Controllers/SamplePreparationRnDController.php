@@ -46,9 +46,9 @@ class SamplePreparationRnDController extends Controller
 
         // Pagination or just all?
         $samplePreparations = $query
-            ->orderByRaw('referenceNo IS NULL DESC') // pending (null) referenceNos first
-            ->orderByDesc('developPlannedDate')      // optional secondary sort
-            ->orderByDesc('id')                      // fallback to latest entries
+            ->orderByRaw('CASE WHEN referenceNo IS NULL THEN 0 ELSE 1 END ASC')  // NULL referenceNo first
+            ->orderBy('customerRequestDate', 'asc')                            // nearest upcoming date first
+            ->orderByDesc('id')                                                 // fallback to latest entries
             ->paginate(10);
 
         // Dynamic values for dropdowns
