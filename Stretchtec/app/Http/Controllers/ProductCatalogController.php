@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ProductCatalog;
+use App\Models\SamplePreparationRnD;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 
@@ -113,10 +114,23 @@ class ProductCatalogController extends Controller
             'tkt' => 'nullable|string|max:255',
         ]);
 
+        // 🔎 Check related R&D record
+        $rndRecord = SamplePreparationRnD::where('orderNo', $request->order_no)->first();
+
+        if ($rndRecord && $rndRecord->alreadyDeveloped === 'No Need to Develop') {
+            return redirect()
+                ->route('product-catalog.index')
+                ->with('error', 'This order does not require development. Entry not added.');
+        }
+
+        // ✅ Proceed if allowed
         ProductCatalog::create($request->all());
 
-        return redirect()->route('product-catalog.index')->with('success', 'Catalog entry created.');
+        return redirect()
+            ->route('product-catalog.index')
+            ->with('success', 'Catalog entry created.');
     }
+
 
     // Store method forcing item = Elastic
     public function storeElastic(Request $request)
@@ -132,12 +146,24 @@ class ProductCatalogController extends Controller
             'tkt' => 'nullable|string|max:255',
         ]);
 
+        // 🔎 Check related R&D record
+        $rndRecord = SamplePreparationRnD::where('orderNo', $request->order_no)->first();
+
+        if ($rndRecord && $rndRecord->alreadyDeveloped === 'No Need to Develop') {
+            return redirect()
+                ->route('elasticCatalog.index')
+                ->with('error', 'This order does not require development. Entry not added.');
+        }
+
+        // ✅ Proceed if no restriction
         $data = $request->all();
         $data['item'] = 'Elastic'; // force item
 
         ProductCatalog::create($data);
 
-        return redirect()->route('elasticCatalog.index')->with('success', 'Elastic catalog entry created.');
+        return redirect()
+            ->route('elasticCatalog.index')
+            ->with('success', 'Elastic catalog entry created.');
     }
 
     public function storeCode(Request $request)
@@ -153,12 +179,24 @@ class ProductCatalogController extends Controller
             'tkt' => 'nullable|string|max:255',
         ]);
 
+        // 🔎 Check related R&D record
+        $rndRecord = SamplePreparationRnD::where('orderNo', $request->order_no)->first();
+
+        if ($rndRecord && $rndRecord->alreadyDeveloped === 'No Need to Develop') {
+            return redirect()
+                ->route('codeCatalog.index')
+                ->with('error', 'This order does not require development. Entry not added.');
+        }
+
+        // ✅ Proceed if no restriction
         $data = $request->all();
         $data['item'] = 'Code'; // force item
 
         ProductCatalog::create($data);
 
-        return redirect()->route('codeCatalog.index')->with('success', 'Code catalog entry created.');
+        return redirect()
+            ->route('codeCatalog.index')
+            ->with('success', 'Code catalog entry created.');
     }
 
     public function storeTape(Request $request)
@@ -174,12 +212,24 @@ class ProductCatalogController extends Controller
             'tkt' => 'nullable|string|max:255',
         ]);
 
+        // 🔎 Check related R&D record
+        $rndRecord = SamplePreparationRnD::where('orderNo', $request->order_no)->first();
+
+        if ($rndRecord && $rndRecord->alreadyDeveloped === 'No Need to Develop') {
+            return redirect()
+                ->route('tapeCatalog.index')
+                ->with('error', 'This order does not require development. Entry not added.');
+        }
+
+        // ✅ Proceed if no restriction
         $data = $request->all();
         $data['item'] = 'Tape'; // force item
 
         ProductCatalog::create($data);
 
-        return redirect()->route('tapeCatalog.index')->with('success', 'Tape catalog entry created.');
+        return redirect()
+            ->route('tapeCatalog.index')
+            ->with('success', 'Tape catalog entry created.');
     }
 
     public function uploadOrderImage(Request $request, ProductCatalog $catalog)
