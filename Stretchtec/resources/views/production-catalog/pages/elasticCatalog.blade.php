@@ -266,7 +266,7 @@
                             <div class="flex justify-between items-center mb-6">
                                 <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Elastic Production Catalog
                                 </h1>
-                                @if (Auth::user()->role == 'SAMPLEDEVELOPER')
+                                @if (Auth::user()->role == 'SAMPLEDEVELOPER', 'SUPERADMIN')
                                     <button
                                         onclick="document.getElementById('addElasticCatalogModal').classList.remove('hidden')"
                                         class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded shadow">
