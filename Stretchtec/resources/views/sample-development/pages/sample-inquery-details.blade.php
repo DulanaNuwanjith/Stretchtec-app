@@ -692,18 +692,21 @@
                                                     @php
                                                         $status = $inquiry->productionStatus;
                                                         $badgeClass = match ($status) {
-                                                            'Pending'
-                                                                => 'bg-blue-100 text-blue-800 dark:bg-blue-700 dark:text-white',
-                                                            'In Production'
-                                                                => 'bg-yellow-100 text-yellow-800 dark:bg-yellow-700 dark:text-white',
-                                                            'Production Complete'
-                                                                => 'bg-green-100 text-green-800 dark:bg-green-700 dark:text-white',
-                                                            default
-                                                                => 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-white',
+                                                            'Pending' => 'bg-blue-100 text-blue-800 dark:bg-blue-700 dark:text-white',
+                                                            'In Production' => 'bg-yellow-100 text-yellow-800 dark:bg-yellow-700 dark:text-white',
+                                                            'Production Complete' => 'bg-green-100 text-green-800 dark:bg-green-700 dark:text-white',
+                                                            'Tape Match' => 'bg-purple-100 text-purple-800 dark:bg-purple-700 dark:text-white',
+                                                            'No Development' => 'bg-red-100 text-red-800 dark:bg-red-700 dark:text-white',
+                                                            'Yarn Ordered' => 'bg-orange-100 text-orange-800 dark:bg-orange-700 dark:text-white',
+                                                            'Yarn Received' => 'bg-indigo-100 text-indigo-800 dark:bg-indigo-700 dark:text-white',
+                                                            'Sent to Production' => 'bg-teal-100 text-teal-800 dark:bg-teal-700 dark:text-white',
+                                                            'Colour Match Sent' => 'bg-pink-100 text-pink-800 dark:bg-pink-700 dark:text-white',
+                                                            'Colour Match Received' => 'bg-emerald-100 text-emerald-800 dark:bg-emerald-700 dark:text-white',
+                                                            default => 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-white',
                                                         };
                                                     @endphp
 
-                                                    <!-- Read-only badge -->
+                                                        <!-- Read-only badge -->
                                                     <span
                                                         class="readonly inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold {{ $badgeClass }}">
                                                         {{ $status }}
