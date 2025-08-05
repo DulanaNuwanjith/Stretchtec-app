@@ -737,7 +737,7 @@
                                                                         Delivery Not Editable
                                                                     </div>
                                                                     <button type="button"
-                                                                        class="w-full px-3 py-1 mt-2 rounded text-sm bg-green-300 text-white cursor-not-allowed"
+                                                                        class="w-full px-3 py-1 mt-2 rounded text-sm bg-green-600 text-white cursor-not-allowed"
                                                                         disabled>
                                                                         Delivered
                                                                     </button>
