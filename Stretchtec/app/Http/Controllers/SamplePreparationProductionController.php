@@ -16,6 +16,7 @@ class SamplePreparationProductionController extends Controller
         $supervisors = \App\Models\OperatorsandSupervisors::where('role', 'SUPERVISOR')->get();
 
         $productionsQuery = SamplePreparationProduction::with('samplePreparationRnD.sampleInquiry')
+            ->orderByRaw('dispatch_to_rnd_at IS NOT NULL')
             ->latest();
 
         // Tab 3 Filters
@@ -44,7 +45,6 @@ class SamplePreparationProductionController extends Controller
             'productions', 'operators', 'supervisors', 'orderNosTab3'
         ));
     }
-
 
     // Update editable fields like operator_name, supervisor_name, production_output, deadline, order_no
     public function update(Request $request)
