@@ -259,8 +259,7 @@
                                         class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Apply
                                         Filters</button>
                                     <button type="button" id="clearFiltersBtn"
-                                        class="mt-4 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-white px-4 py-2 rounded hover:bg-gray-300"
-                                        onclick="clearAllFilters()">Clear</button>
+                                        class="mt-4 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-white px-4 py-2 rounded hover:bg-gray-300">Clear</button>
                                 </div>
                             </form>
 
@@ -643,15 +642,6 @@
             });
         }
 
-        function clearAllFilters() {
-            ['orderNo', 'merchandiser', 'referenceNo'].forEach(type => {
-                document.getElementById(`${type}Input`).value = '';
-                document.getElementById(`selected${capitalize(type)}`).textContent = `Select ${formatLabel(type)}`;
-            });
-
-            document.getElementById('filterForm1').submit();
-        }
-
         function closeAllDropdowns() {
             ['orderNo', 'merchandiser', 'referenceNo'].forEach(type => {
                 const dropdown = document.getElementById(`${type}DropdownMenu`);
@@ -669,6 +659,11 @@
             if (key === 'referenceNo') return 'Reference No';
             return key;
         }
+
+        document.getElementById('clearFiltersBtn').addEventListener('click', function() {
+            // Reload the page to clear all filters and reset state
+            window.location.href = window.location.pathname;
+        });
 
         document.addEventListener('click', function(e) {
             if (!e.target.closest('.dropdown-group')) {
