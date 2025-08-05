@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ColorMatchReject;
 use App\Models\LeftoverYarn;
+use App\Models\SampleInquiry;
 use App\Models\SamplePreparationRnD;
 use App\Models\SamplePreparationProduction;
 use App\Models\SampleStock;
@@ -44,7 +45,11 @@ class SamplePreparationRnDController extends Controller
         }
 
         // Pagination or just all?
-        $samplePreparations = $query->latest()->paginate(10); // Or ->get() if needed
+        $samplePreparations = $query
+            ->orderByRaw('CASE WHEN referenceNo IS NULL THEN 0 ELSE 1 END ASC')  // NULL referenceNo first
+            ->orderBy('customerRequestDate', 'asc')                            // nearest upcoming date first
+            ->orderByDesc('id')                                                 // fallback to latest entries
+            ->paginate(10);
 
         // Dynamic values for dropdowns
         $orderNos = SamplePreparationRnD::whereNotNull('orderNo')->where('orderNo', '!=', '')->distinct()->orderBy('orderNo')->pluck('orderNo');
@@ -73,7 +78,14 @@ class SamplePreparationRnDController extends Controller
 
         $rnd = SamplePreparationRnD::findOrFail($request->id);
         $rnd->colourMatchSentDate = Carbon::now();
+        $rnd->productionStatus = 'Colour Match Sent'; // Update production status
         $rnd->save();
+
+        $sampleInquiry = SampleInquiry::where('orderNo', $rnd->orderNo)->first();
+        if ($sampleInquiry) {
+            $sampleInquiry->productionStatus = 'Colour Match Sent'; // Update production status in SampleInquiry
+            $sampleInquiry->save();
+        }
 
         return back()->with('success', 'Colour Match marked as sent.');
     }
@@ -86,7 +98,14 @@ class SamplePreparationRnDController extends Controller
 
         $rnd = SamplePreparationRnD::findOrFail($request->id);
         $rnd->colourMatchReceiveDate = Carbon::now();
+        $rnd->productionStatus = 'Colour Match Received'; // Update production status
         $rnd->save();
+
+        $sampleInquiry = SampleInquiry::where('orderNo', $rnd->orderNo)->first();
+        if ($sampleInquiry) {
+            $sampleInquiry->productionStatus = 'Colour Match Received'; // Update production status in SampleInquiry
+            $sampleInquiry->save();
+        }
 
         return back()->with('success', 'Colour Match marked as received.');
     }
@@ -118,7 +137,14 @@ class SamplePreparationRnDController extends Controller
         $rnd->is_shade_locked = true; // Lock the shade field
         $rnd->is_tkt_locked = true; // Lock the TKT field
         $rnd->is_supplier_locked = true; // Lock the supplier field
+        $rnd->productionStatus = 'Yarn Ordered';
         $rnd->save();
+
+        $sampleInquiry = SampleInquiry::where('orderNo', $rnd->orderNo)->first();
+        if ($sampleInquiry) {
+            $sampleInquiry->productionStatus = 'Yarn Ordered'; // Update production status in SampleInquiry
+            $sampleInquiry->save();
+        }
 
         return back()->with('success', 'Yarn Ordered Date marked.');
     }
@@ -131,7 +157,14 @@ class SamplePreparationRnDController extends Controller
 
         $rnd = SamplePreparationRnD::findOrFail($request->id);
         $rnd->yarnReceiveDate = Carbon::now();
+        $rnd->productionStatus = 'Yarn Received'; // Update production status
         $rnd->save();
+
+        $sampleInquiry = SampleInquiry::where('orderNo', $rnd->orderNo)->first();
+        if ($sampleInquiry) {
+            $sampleInquiry->productionStatus = 'Yarn Received'; // Update production status in SampleInquiry
+            $sampleInquiry->save();
+        }
 
         return back()->with('success', 'Yarn Receive Date marked.');
     }
@@ -147,7 +180,14 @@ class SamplePreparationRnDController extends Controller
 
         // Update sendOrderToProductionStatus
         $rnd->sendOrderToProductionStatus = now();
+        $rnd->productionStatus = 'Sent to Production'; // Update production status
         $rnd->save();
+
+        $sampleInquiry = SampleInquiry::where('orderNo', $rnd->orderNo)->first();
+        if ($sampleInquiry) {
+            $sampleInquiry->productionStatus = 'Sent to Production'; // Update production status in SampleInquiry
+            $sampleInquiry->save();
+        }
 
         // Create production record
         SamplePreparationProduction::create([
@@ -344,12 +384,30 @@ class SamplePreparationRnDController extends Controller
             $prep->tkt = $request->tkt;
             $prep->yarnSupplier = $request->yarnSupplier;
             $prep->yarnOrderedWeight = $request->value;
+            $prep->productionStatus = 'Tape Match';
+
+            $sampleInquiry = SampleInquiry::where('orderNo', $prep->orderNo)->first();
+            if ($sampleInquiry) {
+                $sampleInquiry->productionStatus = 'Tape Match'; // Update production status in SampleInquiry
+                $sampleInquiry->save();
+            }
 
             // Lock related fields
             $prep->is_shade_locked = true;
             $prep->is_tkt_locked = true;
             $prep->is_supplier_locked = true;
             $prep->is_yarn_ordered_weight_locked = true;
+        }
+
+        if ($request->alreadyDeveloped === 'No Need to Develop'){
+            $prep->productionStatus = 'No Development';
+
+            $sampleInquiry = SampleInquiry::where('orderNo', $prep->orderNo)->first();
+            if ($sampleInquiry) {
+                $sampleInquiry->productionStatus = 'No Development'; // Update production status in SampleInquiry
+                $sampleInquiry->save();
+            }
+
         }
 
         $prep->save();

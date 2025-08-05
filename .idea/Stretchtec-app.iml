@@ -8,6 +8,9 @@
       <sourceFolder url="file://$MODULE_DIR$/Stretchtec/tests" isTestSource="true" packagePrefix="Tests\" />
       <sourceFolder url="file://$MODULE_DIR$/Stretchtec/tests/Feature" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/Stretchtec/tests/Unit" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/Stretchtec/spec" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/spec" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/tests" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/bacon/bacon-qr-code" />
       <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/brick/math" />
       <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/carbonphp/carbon-doctrine-types" />
@@ -18,22 +21,16 @@
       <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/doctrine/lexer" />
       <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/dragonmantank/cron-expression" />
       <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/egulias/email-validator" />
-      <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/fakerphp/faker" />
-      <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/filp/whoops" />
       <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/fruitcake/php-cors" />
       <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/graham-campbell/result-type" />
       <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/guzzlehttp/guzzle" />
       <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/guzzlehttp/promises" />
       <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/guzzlehttp/psr7" />
       <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/guzzlehttp/uri-template" />
-      <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/hamcrest/hamcrest-php" />
       <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/laravel/fortify" />
       <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/laravel/framework" />
       <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/laravel/jetstream" />
-      <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/laravel/pail" />
-      <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/laravel/pint" />
       <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/laravel/prompts" />
-      <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/laravel/sail" />
       <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/laravel/sanctum" />
       <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/laravel/serializable-closure" />
       <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/laravel/tinker" />
@@ -46,25 +43,15 @@
       <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/league/uri-interfaces" />
       <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/livewire/livewire" />
       <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/mobiledetect/mobiledetectlib" />
-      <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/mockery/mockery" />
       <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/monolog/monolog" />
       <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/myclabs/deep-copy" />
       <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/nesbot/carbon" />
       <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/nette/schema" />
       <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/nette/utils" />
       <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/nikic/php-parser" />
-      <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/nunomaduro/collision" />
       <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/nunomaduro/termwind" />
       <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/paragonie/constant_time_encoding" />
-      <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/phar-io/manifest" />
-      <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/phar-io/version" />
       <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/phpoption/phpoption" />
-      <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/phpunit/php-code-coverage" />
-      <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/phpunit/php-file-iterator" />
-      <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/phpunit/php-invoker" />
-      <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/phpunit/php-text-template" />
-      <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/phpunit/php-timer" />
-      <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/phpunit/phpunit" />
       <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/pragmarx/google2fa" />
       <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/psr/cache" />
       <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/psr/clock" />
@@ -79,22 +66,6 @@
       <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/ralouphie/getallheaders" />
       <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/ramsey/collection" />
       <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/ramsey/uuid" />
-      <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/sebastian/cli-parser" />
-      <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/sebastian/code-unit" />
-      <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/sebastian/code-unit-reverse-lookup" />
-      <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/sebastian/comparator" />
-      <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/sebastian/complexity" />
-      <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/sebastian/diff" />
-      <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/sebastian/environment" />
-      <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/sebastian/exporter" />
-      <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/sebastian/global-state" />
-      <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/sebastian/lines-of-code" />
-      <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/sebastian/object-enumerator" />
-      <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/sebastian/object-reflector" />
-      <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/sebastian/recursion-context" />
-      <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/sebastian/type" />
-      <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/sebastian/version" />
-      <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/staabm/side-effects-detector" />
       <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/symfony/clock" />
       <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/symfony/console" />
       <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/symfony/css-selector" />
@@ -123,12 +94,53 @@
       <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/symfony/translation-contracts" />
       <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/symfony/uid" />
       <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/symfony/var-dumper" />
-      <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/symfony/yaml" />
-      <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/theseer/tokenizer" />
       <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/tijsverkoyen/css-to-inline-styles" />
       <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/vlucas/phpdotenv" />
       <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/voku/portable-ascii" />
       <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/webmozart/assert" />
+      <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/maennchen/zipstream-php" />
+      <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/markbaker/complex" />
+      <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/markbaker/matrix" />
+      <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/mpdf/mpdf" />
+      <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/mpdf/psr-http-message-shim" />
+      <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/mpdf/psr-log-aware-trait" />
+      <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/paragonie/random_compat" />
+      <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/phpoffice/phpspreadsheet" />
+      <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/setasign/fpdi" />
+      <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/fakerphp/faker" />
+      <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/filp/whoops" />
+      <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/hamcrest/hamcrest-php" />
+      <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/laravel/pail" />
+      <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/laravel/pint" />
+      <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/laravel/sail" />
+      <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/mockery/mockery" />
+      <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/nunomaduro/collision" />
+      <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/phar-io/manifest" />
+      <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/phar-io/version" />
+      <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/phpunit/php-code-coverage" />
+      <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/phpunit/php-file-iterator" />
+      <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/phpunit/php-invoker" />
+      <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/phpunit/php-text-template" />
+      <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/phpunit/php-timer" />
+      <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/phpunit/phpunit" />
+      <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/sebastian/cli-parser" />
+      <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/sebastian/code-unit" />
+      <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/sebastian/code-unit-reverse-lookup" />
+      <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/sebastian/comparator" />
+      <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/sebastian/complexity" />
+      <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/sebastian/diff" />
+      <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/sebastian/environment" />
+      <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/sebastian/exporter" />
+      <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/sebastian/global-state" />
+      <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/sebastian/lines-of-code" />
+      <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/sebastian/object-enumerator" />
+      <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/sebastian/object-reflector" />
+      <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/sebastian/recursion-context" />
+      <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/sebastian/type" />
+      <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/sebastian/version" />
+      <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/staabm/side-effects-detector" />
+      <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/symfony/yaml" />
+      <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/theseer/tokenizer" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

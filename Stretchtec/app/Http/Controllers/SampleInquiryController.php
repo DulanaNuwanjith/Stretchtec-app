@@ -56,7 +56,11 @@ class SampleInquiryController extends Controller
             $query->where('customerDecision', $request->customerDecision);
         }
 
-        $inquiries = $query->latest()->paginate(10);
+        $inquiries = $query
+            ->orderByRaw('customerDeliveryDate IS NULL DESC') // Pending first
+            ->orderByDesc('customerDeliveryDate')              // then recently delivered
+            ->orderByDesc('orderNo')                           // fallback
+            ->paginate(10);
 
         // Dynamic dropdown values
         $customers = SampleInquiry::select('customerName')->distinct()->orderBy('customerName')->pluck('customerName');
@@ -114,7 +118,7 @@ class SampleInquiryController extends Controller
 
             // 🔢 Generate next unique order number safely
             $lastOrderNo = DB::table('sample_inquiries')
-                ->selectRaw("MAX(CAST(SUBSTR(orderNo, 7) AS INTEGER)) as max_number")
+                ->selectRaw("MAX(CAST(SUBSTR(orderNo, 7) AS UNSIGNED)) as max_number")
                 ->value('max_number');
 
             $nextNumber = $lastOrderNo ? $lastOrderNo + 1 : 1;
@@ -244,7 +248,6 @@ class SampleInquiryController extends Controller
             ]);
         }
 
-
         return back()->with('success', 'Marked as sent to sample development.');
     }
 
@@ -345,8 +348,6 @@ class SampleInquiryController extends Controller
 
         return redirect()->back()->with('success', 'Delivered successfully. Dispatch note created.');
     }
-
-
 
     public function updateDecision(Request $request, $id)
     {
