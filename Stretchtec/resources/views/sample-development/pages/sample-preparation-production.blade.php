@@ -516,7 +516,7 @@
                                                                         value="{{ $prod->id }}">
                                                                     <button type="submit"
                                                                         class="order-complete-btn px-2 py-1 mt-3 rounded transition-all duration-200
-                {{ $canComplete ? 'bg-green-600 hover:bg-green-700 text-white' : 'bg-gray-300 text-black cursor-not-allowed' }}"
+                                                                        {{ $canComplete ? 'bg-green-600 hover:bg-green-700 text-white' : 'bg-gray-300 text-black cursor-not-allowed' }}"
                                                                         {{ $canComplete ? '' : 'disabled' }}
                                                                         title="{{ $canComplete ? '' : 'Start time, Operator, and Supervisor are required' }}">
                                                                         Pending
@@ -535,8 +535,7 @@
                                                 </td>
 
                                                 {{-- Production Output --}}
-                                                <td
-                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                                <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
                                                     @auth
                                                         @if (auth()->user()->role === 'ADMIN')
                                                             <span class="readonly">
@@ -544,20 +543,18 @@
                                                             </span>
                                                         @else
                                                             @if (!$prod->is_output_locked)
-                                                                <form action="{{ route('production.updateOutput') }}"
-                                                                    method="POST" class="inline-block w-full">
+                                                                <form action="{{ route('production.updateOutput') }}" method="POST" class="inline-block w-full">
                                                                     @csrf
-                                                                    <input type="hidden" name="id"
-                                                                        value="{{ $prod->id }}">
+                                                                    <input type="hidden" name="id" value="{{ $prod->id }}">
 
                                                                     <input type="number" min="0" step="any"
-                                                                        name="production_output"
-                                                                        value="{{ old('production_output', $prod->production_output) }}"
-                                                                        class="w-full px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                                        required>
+                                                                           name="production_output"
+                                                                           value="{{ old('production_output', $prod->production_output) }}"
+                                                                           class="w-full px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                                           required>
 
                                                                     <button type="submit"
-                                                                        class="mt-1 px-3 py-1 rounded text-sm transition-all duration-200 bg-blue-600 hover:bg-blue-700 text-white">
+                                                                            class="mt-1 px-3 py-1 rounded text-sm transition-all duration-200 bg-blue-600 hover:bg-blue-700 text-white">
                                                                         Save
                                                                     </button>
                                                                 </form>
@@ -571,8 +568,7 @@
                                                 </td>
 
                                                 {{-- Damaged Output --}}
-                                                <td
-                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                                <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
                                                     @auth
                                                         @if (auth()->user()->role === 'ADMIN')
                                                             <span class="readonly">
@@ -580,20 +576,20 @@
                                                             </span>
                                                         @else
                                                             @if (!$prod->is_damagedOutput_locked)
-                                                                <form action="{{ route('production.updateDamagedOutput') }}"
-                                                                    method="POST" class="inline-block w-full">
+                                                                <form action="{{ route('production.updateDamagedOutput') }}" method="POST" class="inline-block w-full">
                                                                     @csrf
-                                                                    <input type="hidden" name="id"
-                                                                        value="{{ $prod->id }}">
+                                                                    <input type="hidden" name="id" value="{{ $prod->id }}">
 
-                                                                    <input type="number" min="0" step="any"
-                                                                        name="damaged_output"
-                                                                        value="{{ old('damaged_output', $prod->damaged_output) }}"
-                                                                        class="w-full px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                                        required>
+                                                                    <input type="number" min="0"
+                                                                           max="{{ $prod->production_output ?? 0 }}" {{-- ✅ ensure it can't exceed production_output --}}
+                                                                           step="any"
+                                                                           name="damaged_output"
+                                                                           value="{{ old('damaged_output', $prod->damaged_output) }}"
+                                                                           class="w-full px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                                           required>
 
                                                                     <button type="submit"
-                                                                        class="mt-1 px-3 py-1 rounded text-sm transition-all duration-200 bg-blue-600 hover:bg-blue-700 text-white">
+                                                                            class="mt-1 px-3 py-1 rounded text-sm transition-all duration-200 bg-blue-600 hover:bg-blue-700 text-white">
                                                                         Save
                                                                     </button>
                                                                 </form>
