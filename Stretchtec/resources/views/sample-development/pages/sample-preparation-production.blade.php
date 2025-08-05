@@ -192,7 +192,7 @@
                                             <button type="submit"
                                                 class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Apply
                                                 Filters</button>
-                                            <button type="button" id="clearFiltersBtnTab3" onclick="clearFiltersTab3()"
+                                            <button type="button" id="clearFiltersBtnTab3"
                                                 class="mt-4 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 px-4 py-2 rounded hover:bg-gray-300">Clear</button>
                                         </div>
 
@@ -1064,20 +1064,6 @@
                 });
             };
 
-            // Clear filters button Tab3 - clears inputs and submits form
-            clearFiltersBtnTab3.addEventListener('click', (e) => {
-                e.preventDefault();
-                // Option: either reload page without filters:
-                // window.location.href = window.location.pathname + '?tab=3';
-
-                // Or clear inputs and submit form (uncomment below if preferred)
-                document.getElementById("orderInputTab3").value = "";
-                document.getElementById("selectedOrderNoTab3").textContent = "Select Order No";
-                document.getElementById("developmentPlanDateTab3").value = "";
-                document.getElementById("filterForm3").submit();
-            });
-
-
             // ======= SAMPLE DROPDOWN =======
             const sampleDropdownBtn = document.getElementById('sampleDropdown');
             const sampleDropdownMenu = document.getElementById('sampleDropdownMenu');
@@ -1127,23 +1113,10 @@
                     sampleDropdownBtn.setAttribute('aria-expanded', 'false');
                 }
             });
-
-            // Clear filters button for production filters (sample dropdown etc)
-            if (clearFiltersBtnProduction) {
-                clearFiltersBtnProduction.addEventListener('click', (e) => {
-                    e.preventDefault();
-
-                    document.getElementById('selectedSample').innerText = 'All Sample No';
-                    document.getElementById('sampleInput').value = '';
-
-                    document.getElementById('productionDeadlineFilter').value = '';
-                    document.getElementById('oderCompleteDateFilter').value = '';
-
-                    sampleDropdownMenu.classList.add('hidden');
-                    sampleDropdownBtn.setAttribute('aria-expanded', 'false');
-
-                });
-            }
+        });
+        // Clear filters button for Tab 3
+        document.getElementById('clearFiltersBtnTab3').addEventListener('click', function() {
+            window.location.href = window.location.pathname;
         });
     </script>
 

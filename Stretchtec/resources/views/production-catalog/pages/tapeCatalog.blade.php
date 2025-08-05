@@ -259,8 +259,7 @@
                                         class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Apply
                                         Filters</button>
                                     <button type="button" id="clearFiltersBtn"
-                                        class="mt-4 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-white px-4 py-2 rounded hover:bg-gray-300"
-                                        onclick="clearAllFilters()">Clear</button>
+                                        class="mt-4 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-white px-4 py-2 rounded hover:bg-gray-300">Clear</button>
                                 </div>
                             </form>
 
@@ -429,7 +428,6 @@
                                                         class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                         value="{{ $catalog->tkt }}" />
                                                 </td>
-                                                <!-- Approval Section -->
                                                 <!-- Approval Section -->
                                                 <td colspan="2" class="px-4 py-3 border-r border-gray-300 text-left">
                                                     @if (in_array($userRole, ['SUPERADMIN', 'SAMPLEDEVELOPER', 'CUSTOMERCOORDINATOR']))
@@ -643,14 +641,10 @@
             });
         }
 
-        function clearAllFilters() {
-            ['orderNo', 'merchandiser', 'referenceNo'].forEach(type => {
-                document.getElementById(`${type}Input`).value = '';
-                document.getElementById(`selected${capitalize(type)}`).textContent = `Select ${formatLabel(type)}`;
-            });
-
-            document.getElementById('filterForm1').submit();
-        }
+        document.getElementById('clearFiltersBtn').addEventListener('click', function() {
+            // Reload the page to clear all filters and reset state
+            window.location.href = window.location.pathname;
+        });
 
         function closeAllDropdowns() {
             ['orderNo', 'merchandiser', 'referenceNo'].forEach(type => {
