@@ -66,8 +66,8 @@ Route::middleware([
     Route::resource('product-catalog', ProductCatalogController::class);
     Route::post('/product-catalog', [ProductCatalogController::class, 'store'])->name('product-catalog.store');
     Route::post('elasticCatalog/store', [ProductCatalogController::class, 'storeElastic'])->name('elasticCatalog.store');
-//    Route::post('codeCatalog/store', [ProductCatalogController::class, 'storeCode'])->name('codeCatalog.store');
-//    Route::post('tapeCatalog/store', [ProductCatalogController::class, 'storeTape'])->name('tapeCatalog.store');
+    Route::post('codeCatalog/store', [ProductCatalogController::class, 'storeCode'])->name('codeCatalog.store');
+    Route::post('tapeCatalog/store', [ProductCatalogController::class, 'storeTape'])->name('tapeCatalog.store');
     Route::post('catalog/{catalog}/upload-image', [ProductCatalogController::class, 'uploadOrderImage'])->name('catalog.uploadImage');
     Route::patch('product-catalog/{productCatalog}/approval', [ProductCatalogController::class, 'updateApproval'])->name('product-catalog.updateApproval');
 
