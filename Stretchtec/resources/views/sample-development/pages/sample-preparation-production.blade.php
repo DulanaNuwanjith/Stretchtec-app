@@ -628,8 +628,8 @@
                                                                     'Kanchana Dharmadasa',
                                                                 ];
                                                                 $disableDispatch =
-                                                                    empty($prod->production_output) ||
-                                                                    empty($prod->damaged_output);
+                                                                    is_null($prod->production_output) ||
+                                                                    is_null($prod->damaged_output);
                                                             @endphp
 
                                                             @if (!$prod->dispatch_to_rnd_at)
