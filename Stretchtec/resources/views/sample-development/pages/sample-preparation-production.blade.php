@@ -135,7 +135,7 @@
 
                             <div id="filterFormContainerTab3" class="mt-4 hidden">
                                 <form id="filterForm3" method="GET"
-                                    action="{{ route('sample-preparation-production.index') }}" class="mb-6">
+                                    action="{{ route('sample-preparation-production.index') }}" class="mb-6 sticky top-0 z-20 flex gap-6 items-center">
                                     {{-- Keep the tab=3 in query to know which tab is active --}}
                                     <input type="hidden" name="tab" value="3">
 
@@ -201,7 +201,7 @@
                             </div>
 
                             <div class="flex justify-between items-center mb-6">
-                                <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Sample Preparation
+                                <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100 py-1">Sample Preparation
                                     Production
                                     Records
                                 </h1>
