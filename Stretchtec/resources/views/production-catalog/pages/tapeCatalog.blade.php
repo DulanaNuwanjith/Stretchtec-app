@@ -1,469 +1,610 @@
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+
 <div class="flex h-full w-full">
-    <div class="flex-1 overflow-y-auto">
-        <div class="py-4">
-            <div class="w-full px-6 lg:px-2">
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-4 text-gray-900 dark:text-gray-100">
+    @extends('layouts.product-catalog-tabs')
 
-                        @if (session('success'))
-                            <div
-                                class="mb-4 p-4 text-green-800 bg-green-100 border border-green-300 rounded-md dark:text-green-200 dark:bg-green-900 dark:border-green-800">
-                                {{ session('success') }}
-                            </div>
-                        @endif
+    @section('content')
+        <div class="flex-1 overflow-y-auto">
+            <div class="">
+                <div class="w-full px-6 lg:px-2">
+                    <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+                        <div class="p-4 text-gray-900 dark:text-gray-100">
+                            <style>
+                                .swal2-toast {
+                                    font-size: 0.875rem;
+                                    padding: 0.75rem 1rem;
+                                    border-radius: 8px;
+                                    background-color: #ffffff !important;
+                                    position: relative;
+                                    box-sizing: border-box;
+                                    color: #3b82f6 !important;
+                                }
 
-                        @if (session('error'))
-                            <div
-                                class="mb-4 p-4 text-red-800 bg-red-100 border border-red-300 rounded-md dark:text-red-200 dark:bg-red-900 dark:border-red-800">
-                                {{ session('error') }}
-                            </div>
-                        @endif
+                                .swal2-toast .swal2-title,
+                                .swal2-toast .swal2-html-container {
+                                    color: #3b82f6 !important;
+                                }
 
-                        <!-- Filter Form -->
-                        <form id="filterForm1" method="GET" action="" class="mb-6 flex gap-6 items-center">
-                            <div class="flex items-center gap-4">
+                                .swal2-toast .swal2-icon {
+                                    color: #3b82f6 !important;
+                                }
 
-                                <!-- CUSTOMER DROPDOWN -->
-                                <div class="relative inline-block text-left w-48">
-                                    <label for="customerDropdown"
-                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Sample
-                                        No</label>
-                                    <div>
-                                        <button type="button" id="customerDropdown"
+                                .swal2-shadow {
+                                    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+                                }
+
+                                .swal2-toast::after {
+                                    content: '';
+                                    position: absolute;
+                                    bottom: 0;
+                                    left: 0;
+                                    width: 100%;
+                                    height: 3px;
+                                    background-color: #3b82f6;
+                                    border-radius: 0 0 8px 8px;
+                                }
+                            </style>
+
+                            <script>
+                                document.addEventListener('DOMContentLoaded', () => {
+                                    @if (session('success'))
+                                        Swal.fire({
+                                            toast: true,
+                                            position: 'top-end',
+                                            icon: 'success',
+                                            title: '{{ session('success') }}',
+                                            showConfirmButton: false,
+                                            timer: 2000,
+                                            timerProgressBar: true,
+                                            customClass: {
+                                                popup: 'swal2-toast swal2-shadow'
+                                            },
+                                        });
+                                    @endif
+
+                                    @if (session('error'))
+                                        Swal.fire({
+                                            toast: true,
+                                            position: 'top-end',
+                                            icon: 'error',
+                                            title: '{{ session('error') }}',
+                                            showConfirmButton: false,
+                                            timer: 2000,
+                                            timerProgressBar: true,
+                                            customClass: {
+                                                popup: 'swal2-toast swal2-shadow'
+                                            },
+                                        });
+                                    @endif
+
+                                    @if ($errors->any())
+                                        Swal.fire({
+                                            toast: true,
+                                            position: 'top-end',
+                                            icon: 'warning',
+                                            title: 'Validation Errors',
+                                            html: `{!! implode('<br>', $errors->all()) !!}`,
+                                            showConfirmButton: false,
+                                            timer: 3000,
+                                            timerProgressBar: true,
+                                            customClass: {
+                                                popup: 'swal2-toast swal2-shadow'
+                                            },
+                                        });
+                                    @endif
+                                });
+                            </script>
+
+                            <script>
+                                function confirmDelete(id) {
+                                    Swal.fire({
+                                        title: 'Are you sure?',
+                                        text: "This record will be permanently deleted!",
+                                        icon: 'warning',
+                                        showCancelButton: true,
+                                        confirmButtonColor: '#3b82f6',
+                                        cancelButtonColor: '#6c757d',
+                                        confirmButtonText: 'Yes, delete it!',
+                                        background: '#ffffff',
+                                        color: '#3b82f6',
+                                        customClass: {
+                                            popup: 'swal2-toast swal2-shadow'
+                                        }
+                                    }).then((result) => {
+                                        if (result.isConfirmed) {
+                                            document.getElementById(`delete-form-${id}`).submit();
+                                        }
+                                    });
+                                }
+                            </script>
+
+                            <!-- Filter Form -->
+                            <form id="filterForm1" method="GET" action="{{ route('tapeCatalog.index') }}"
+                                class="mb-6 sticky top-0 z-20 flex gap-6 items-center">
+
+                                <div class="flex items-center gap-4 flex-wrap">
+
+                                    {{-- Order DROPDOWN --}}
+                                    <div class="relative inline-block text-left w-48 dropdown-group">
+                                        <label for="orderNoDropdown"
+                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Order
+                                            No</label>
+
+                                        <button type="button" id="orderNoDropdown"
                                             class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10 dark:bg-gray-700 dark:text-white"
-                                            onclick="toggleDropdown('customer')" aria-haspopup="listbox"
+                                            onclick="toggleDropdown('orderNo')" aria-haspopup="listbox"
                                             aria-expanded="false">
-                                            <span
-                                                id="selectedCustomer">{{ request('customer') ? request('customer') : 'Select Sample No' }}</span>
-                                            <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20"
-                                                fill="currentColor">
+                                            <span id="selectedOrderNo">{{ request('orderNo') ?: 'Select Order No' }}</span>
+                                            <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
                                                 <path fill-rule="evenodd"
                                                     d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
                                                     clip-rule="evenodd" />
                                             </svg>
                                         </button>
-                                    </div>
-                                    <div id="customerDropdownMenu"
-                                        class="hidden absolute z-10 mt-2 w-full rounded-md bg-white shadow-lg ring-1 ring-black/5 dark:bg-gray-700 max-h-48 overflow-y-auto">
-                                        <div class="p-2 sticky top-0 bg-white dark:bg-gray-700 z-10">
-                                            <input type="text" id="customerSearchInput"
-                                                placeholder="Search customers..."
-                                                class="w-full px-2 py-1 text-sm border rounded-md dark:bg-gray-600 dark:text-white dark:placeholder-gray-300"
-                                                onkeyup="filterOptions('customer')" />
-                                        </div>
-                                        <div class="py-1" role="listbox" tabindex="-1"
-                                            aria-labelledby="customerDropdown">
-                                            <button type="button"
-                                                class="customer-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                                                onclick="selectOption('customer', '')">Select Customer</button>
-                                            <button type="button"
-                                                class="customer-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                                                onclick="selectOption('customer', 'TIMEX')">TIMEX</button>
-                                            <button type="button"
-                                                class="customer-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                                                onclick="selectOption('customer', 'NESTLE')">NESTLE</button>
-                                            <button type="button"
-                                                class="customer-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                                                onclick="selectOption('customer', 'PEPSI')">PEPSI</button>
-                                        </div>
-                                    </div>
-                                    <input type="hidden" name="customer" id="customerInput"
-                                        value="{{ request('customer') }}">
-                                </div>
 
-                                <!-- MERCHANDISER DROPDOWN -->
-                                <div class="relative inline-block text-left w-48">
-                                    <label for="merchandiserDropdown"
-                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Merchandiser</label>
-                                    <div>
+                                        <div id="orderNoDropdownMenu"
+                                            class="hidden absolute z-10 mt-2 w-full rounded-md bg-white shadow-lg ring-1 ring-black/5 dark:bg-gray-700 max-h-48 overflow-y-auto">
+                                            <div class="p-2 sticky top-0 bg-white dark:bg-gray-700 z-10">
+                                                <input type="text" id="orderNoSearchInput"
+                                                    placeholder="Search Order No..."
+                                                    class="w-full px-2 py-1 text-sm border rounded-md dark:bg-gray-600 dark:text-white"
+                                                    onkeyup="filterOptions('orderNo')" />
+                                            </div>
+                                            <div class="py-1" role="listbox">
+                                                <button type="button"
+                                                    class="orderNo-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
+                                                    onclick="selectOption('orderNo', '')">All</button>
+                                                @foreach ($orderNos as $orderNo)
+                                                    <button type="button"
+                                                        class="orderNo-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
+                                                        onclick="selectOption('orderNo', '{{ $orderNo }}')">{{ $orderNo }}</button>
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                        <input type="hidden" name="orderNo" id="orderNoInput"
+                                            value="{{ request('orderNo') }}">
+                                    </div>
+
+                                    {{-- MERCHANDISER DROPDOWN --}}
+                                    <div class="relative inline-block text-left w-48 dropdown-group">
+                                        <label for="merchandiserDropdown"
+                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Merchandiser</label>
+
                                         <button type="button" id="merchandiserDropdown"
                                             class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10 dark:bg-gray-700 dark:text-white"
                                             onclick="toggleDropdown('merchandiser')" aria-haspopup="listbox"
                                             aria-expanded="false">
                                             <span
-                                                id="selectedMerchandiser">{{ request('merchandiser') ? request('merchandiser') : 'Select Merchandiser' }}</span>
-                                            <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20"
-                                                fill="currentColor">
+                                                id="selectedMerchandiser">{{ request('merchandiser') ?: 'Select Merchandiser' }}</span>
+                                            <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
                                                 <path fill-rule="evenodd"
                                                     d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
                                                     clip-rule="evenodd" />
                                             </svg>
                                         </button>
-                                    </div>
-                                    <div id="merchandiserDropdownMenu"
-                                        class="hidden absolute z-10 mt-2 w-full rounded-md bg-white shadow-lg ring-1 ring-black/5 dark:bg-gray-700 max-h-48 overflow-y-auto">
-                                        <div class="p-2 sticky top-0 bg-white dark:bg-gray-700 z-10">
-                                            <input type="text" id="merchandiserSearchInput"
-                                                placeholder="Search merchandisers..."
-                                                class="w-full px-2 py-1 text-sm border rounded-md dark:bg-gray-600 dark:text-white dark:placeholder-gray-300"
-                                                onkeyup="filterOptions('merchandiser')" />
-                                        </div>
-                                        <div class="py-1" role="listbox" tabindex="-1"
-                                            aria-labelledby="merchandiserDropdown">
-                                            <button type="button"
-                                                class="merchandiser-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                                                onclick="selectOption('merchandiser', '')">Select Merchandiser</button>
-                                            <button type="button"
-                                                class="merchandiser-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                                                onclick="selectOption('merchandiser', 'John Doe')">John Doe</button>
-                                            <button type="button"
-                                                class="merchandiser-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                                                onclick="selectOption('merchandiser', 'Jane Smith')">Jane
-                                                Smith</button>
-                                        </div>
-                                    </div>
-                                    <input type="hidden" name="merchandiser" id="merchandiserInput"
-                                        value="{{ request('merchandiser') }}">
-                                </div>
 
-                                <!-- ITEM DROPDOWN -->
-                                <div class="relative inline-block text-left w-48">
-                                    <label for="itemDropdown"
-                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Item</label>
-                                    <div>
-                                        <button type="button" id="itemDropdown"
+                                        <div id="merchandiserDropdownMenu"
+                                            class="hidden absolute z-10 mt-2 w-full rounded-md bg-white shadow-lg ring-1 ring-black/5 dark:bg-gray-700 max-h-48 overflow-y-auto">
+                                            <div class="p-2 sticky top-0 bg-white dark:bg-gray-700 z-10">
+                                                <input type="text" id="merchandiserSearchInput"
+                                                    placeholder="Search Merchandisers..."
+                                                    class="w-full px-2 py-1 text-sm border rounded-md dark:bg-gray-600 dark:text-white"
+                                                    onkeyup="filterOptions('merchandiser')" />
+                                            </div>
+                                            <div class="py-1" role="listbox">
+                                                <button type="button"
+                                                    class="merchandiser-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
+                                                    onclick="selectOption('merchandiser', '')">All</button>
+                                                @foreach ($merchandisers as $merchandiser)
+                                                    <button type="button"
+                                                        class="merchandiser-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
+                                                        onclick="selectOption('merchandiser', '{{ $merchandiser }}')">{{ $merchandiser }}</button>
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                        <input type="hidden" name="merchandiser" id="merchandiserInput"
+                                            value="{{ request('merchandiser') }}">
+                                    </div>
+
+                                    {{-- REFERENCE NO DROPDOWN --}}
+                                    <div class="relative inline-block text-left w-48 dropdown-group">
+                                        <label for="referenceNoDropdown"
+                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Reference
+                                            No</label>
+
+                                        <button type="button" id="referenceNoDropdown"
                                             class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10 dark:bg-gray-700 dark:text-white"
-                                            onclick="toggleDropdown('item')" aria-haspopup="listbox"
+                                            onclick="toggleDropdown('referenceNo')" aria-haspopup="listbox"
                                             aria-expanded="false">
                                             <span
-                                                id="selectedItem">{{ request('item') ? request('item') : 'Select Item' }}</span>
-                                            <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20"
-                                                fill="currentColor">
+                                                id="selectedReferenceNo">{{ request('referenceNo') ?: 'Select Reference No' }}</span>
+                                            <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
                                                 <path fill-rule="evenodd"
                                                     d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
                                                     clip-rule="evenodd" />
                                             </svg>
                                         </button>
-                                    </div>
-                                    <div id="itemDropdownMenu"
-                                        class="hidden absolute z-10 mt-2 w-full rounded-md bg-white shadow-lg ring-1 ring-black/5 dark:bg-gray-700 max-h-48 overflow-y-auto">
-                                        <div class="p-2 sticky top-0 bg-white dark:bg-gray-700 z-10">
-                                            <input type="text" id="itemSearchInput" placeholder="Search items..."
-                                                class="w-full px-2 py-1 text-sm border rounded-md dark:bg-gray-600 dark:text-white dark:placeholder-gray-300"
-                                                onkeyup="filterOptions('item')" />
+
+                                        <div id="referenceNoDropdownMenu"
+                                            class="hidden absolute z-10 mt-2 w-full rounded-md bg-white shadow-lg ring-1 ring-black/5 dark:bg-gray-700 max-h-48 overflow-y-auto">
+                                            <div class="p-2 sticky top-0 bg-white dark:bg-gray-700 z-10">
+                                                <input type="text" id="referenceNoSearchInput"
+                                                    placeholder="Search Reference Nos..."
+                                                    class="w-full px-2 py-1 text-sm border rounded-md dark:bg-gray-600 dark:text-white"
+                                                    onkeyup="filterOptions('referenceNo')" />
+                                            </div>
+                                            <div class="py-1" role="listbox">
+                                                <button type="button"
+                                                    class="referenceNo-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
+                                                    onclick="selectOption('referenceNo', '')">All</button>
+                                                @foreach ($referenceNos as $referenceNo)
+                                                    <button type="button"
+                                                        class="referenceNo-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
+                                                        onclick="selectOption('referenceNo', '{{ $referenceNo }}')">{{ $referenceNo }}</button>
+                                                @endforeach
+                                            </div>
                                         </div>
-                                        <div class="py-1" role="listbox" tabindex="-1"
-                                            aria-labelledby="itemDropdown">
-                                            <button type="button"
-                                                class="item-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                                                onclick="selectOption('item', '')">Select Item</button>
-                                            <button type="button"
-                                                class="item-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                                                onclick="selectOption('item', 'ITEM001')">ITEM001</button>
-                                            <button type="button"
-                                                class="item-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                                                onclick="selectOption('item', 'ITEM002')">ITEM002</button>
-                                            <button type="button"
-                                                class="item-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                                                onclick="selectOption('item', 'ITEM003')">ITEM003</button>
-                                        </div>
+                                        <input type="hidden" name="referenceNo" id="referenceNoInput"
+                                            value="{{ request('referenceNo') }}">
                                     </div>
-                                    <input type="hidden" name="item" id="itemInput"
-                                        value="{{ request('item') }}">
+
                                 </div>
 
+                                {{-- ACTION BUTTONS --}}
+                                <div class="flex items-end gap-2 mt-2">
+                                    <button type="submit"
+                                        class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Apply
+                                        Filters</button>
+                                    <button type="button" id="clearFiltersBtn"
+                                        class="mt-4 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-white px-4 py-2 rounded hover:bg-gray-300">Clear</button>
+                                </div>
+                            </form>
 
+                            <div class="flex justify-between items-center mb-6">
+                                <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Tape Production Catalog
+                                </h1>
+                                @if (in_array(Auth::user()->role, ['SAMPLEDEVELOPER', 'SUPERADMIN']))
+                                    <button
+                                        onclick="document.getElementById('addTapeCatalogModal').classList.remove('hidden')"
+                                        class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded shadow">
+                                        + Add New Item
+                                    </button>
+                                @endif
                             </div>
 
-                            <button type="submit"
-                                class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-                                Apply Filters
-                            </button>
+                            <div class="overflow-x-auto bg-white dark:bg-gray-900 shadow rounded-lg">
+                                <table class="table-fixed w-full text-sm divide-y divide-gray-200 dark:divide-gray-700">
+                                    <thead class="bg-gray-200 dark:bg-gray-700 text-left">
+                                        <tr class="text-center">
+                                            <th
+                                                class="font-bold sticky left-0 z-10 bg-white px-4 py-3 w-36 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                Order No</th>
+                                            <th
+                                                class="font-bold px-4 py-3 w-48 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                Reference No</th>
+                                            <th
+                                                class="font-bold px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                Date</th>
+                                            <th
+                                                class="font-bold px-4 py-3 w-36 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                Merchandiser</th>
+                                            <th
+                                                class="font-bold px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                Size</th>
+                                            <th
+                                                class="font-bold px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                Colour</th>
+                                            <th
+                                                class="font-bold px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                Shade</th>
+                                            <th
+                                                class="font-bold px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                TKT</th>
+                                            <th colspan="2"
+                                                class="font-bold px-4 py-3 w-[14rem] text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                Approved By
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="productionCatalogTable"
+                                        class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                                        @foreach ($catalogs as $catalog)
+                                            <tr class="odd:bg-white even:bg-gray-50 border-b border-gray-200 text-center">
+                                                @php
+                                                    $userRole = Auth::user()->role;
+                                                @endphp
+                                                @if (in_array($userRole, ['SUPERADMIN', 'SAMPLEDEVELOPER', 'CUSTOMERCOORDINATOR']))
+                                                    {{-- Editable: Upload allowed --}}
+                                                    <td
+                                                        class="sticky left-0 z-10 bg-white px-4 py-3 bg-gray-100 border-r border-gray-300 text-left whitespace-normal break-words">
+                                                        <form id="uploadForm-{{ $catalog->id }}"
+                                                            action="{{ route('catalog.uploadImage', $catalog->id) }}"
+                                                            method="POST" enctype="multipart/form-data" class="m-0 p-0">
+                                                            @csrf
 
-                            <button type="button" id="clearFiltersBtn"
-                                class="mt-4 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 px-4 py-2 rounded hover:bg-gray-300">
-                                Clear Filters
-                            </button>
-                        </form>
+                                                            <span id="orderNo-{{ $catalog->id }}"
+                                                                class="font-semibold text-sm text-blue-700 cursor-pointer hover:underline select-none"
+                                                                onclick="handleOrderNoClick({{ $catalog->id }}, {{ $catalog->order_image ? 'true' : 'false' }})">
+                                                                {{ $catalog->order_no }}
+                                                            </span>
 
+                                                            @if (!$catalog->order_image)
+                                                                <div class="text-xs text-red-600 mt-1">Need to upload image
+                                                                </div>
+                                                            @endif
 
-                        <div class="flex justify-between items-center mb-6">
-                            <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Tapes Production Catalog
-                            </h1>
-                            <button onclick="document.getElementById('addProductModal').classList.remove('hidden')"
-                                class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded shadow">
-                                + Add New Item
-                            </button>
-                        </div>
+                                                            <input id="file-upload-{{ $catalog->id }}" type="file"
+                                                                name="order_image" accept="image/*" class="hidden"
+                                                                onchange="document.getElementById('uploadForm-{{ $catalog->id }}').submit()" />
 
-                        <div class="overflow-x-auto bg-white dark:bg-gray-900 shadow rounded-lg">
-                            <table class="table-fixed w-full text-sm divide-y divide-gray-200 dark:divide-gray-700">
-                                <thead class="bg-gray-100 dark:bg-gray-700 text-left">
-                                    <tr>
-                                        <th
-                                            class="px-4 py-3 w-24 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                            Sample No</th>
-                                        <th
-                                            class="px-4 py-3 w-40 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                            Date</th>
-                                        <th
-                                            class="px-4 py-3 w-36 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                            Merchandiser</th>
-                                        <th
-                                            class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                            Item</th>
-                                        <th
-                                            class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                            Size</th>
-                                        <th
-                                            class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                            Colour</th>
-                                        <th
-                                            class="px-4 py-3 w-48 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                            Reference No</th>
-                                        <th
-                                            class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                            Shade</th>
-                                        <th
-                                            class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                            TKT</th>
-                                        <th
-                                            class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                            Approval</th>
-                                        <th
-                                            class="px-4 py-3 w-72 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                            Special Note</th>
-                                        <th
-                                            class="px-4 py-3 w-48 text-xs text-center font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                            Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="serviceRecords"
-                                    class="bg-white dark:bg-gray-800 divide-y text-left divide-gray-200 dark:divide-gray-700">
-                                    <tr id="row1">
-                                        <!-- Each cell has a span for readonly text and a hidden input for editing -->
-                                        <td class="px-4 py-3 w-24 whitespace-normal break-words">
-                                            <span class="readonly">1880</span>
-                                            <input
-                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                value="1880" />
-                                        </td>
-                                        <td class="px-4 py-3 w-40 whitespace-normal break-words">
-                                            <span class="readonly">2025-05-05</span>
-                                            <input type="date"
-                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                value="2025-05-05" />
-                                        </td>
-                                        <td class="px-4 py-3 w-32 whitespace-normal break-words">
-                                            <span class="readonly">Ama liyanage</span>
-                                            <input
-                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                value="Ama liyanage" />
-                                        </td>
-                                        <td class="px-4 py-3 w-32 whitespace-normal break-words">
-                                            <span class="readonly">Elastic</span>
-                                            <input
-                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                value="Elastic" />
-                                        </td>
-                                        <td class="px-4 py-3 w-32 whitespace-normal break-words">
-                                            <span class="readonly">2 1/4</span>
-                                            <input
-                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                value="2 1/4" />
-                                        </td>
-                                        <td class="px-4 py-3 w-32 whitespace-normal break-words">
-                                            <span class="readonly">Black</span>
-                                            <input
-                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                value="Black" />
-                                        </td>
-                                        <td class="px-4 py-3 w-48 whitespace-normal break-words">
-                                            <span class="readonly">STKE/2025/JA25-B</span>
-                                            <input
-                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                value="STKE/2025/JA25-B" />
-                                        </td>
-                                        <td class="px-4 py-3 w-32 whitespace-normal break-words">
-                                            <span class="readonly">AE Black</span>
-                                            <input
-                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm5"
-                                                value="AE Black" />
-                                        </td>
-                                        <td class="px-4 py-3 w-32 whitespace-normal break-words">
-                                            <span class="readonly">TKT 120</span>
-                                            <input
-                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                value="TKT 120" />
-                                        </td>
-                                        <td class="px-4 py-3 w-32 whitespace-normal break-words">
-                                            <span class="readonly">AE</span>
-                                            <input
-                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                value="AE" />
-                                        </td>
-                                        <td class="px-4 py-3 w-72 whitespace-normal break-words">
-                                            <span class="readonly">abc 1234 long sample description to test line
-                                                wrapping</span>
-                                            <input
-                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                value="abc 1234 long sample description to test line wrapping" />
-                                        </td>
-                                        <td class="px-4 py-3 w-48 text-center whitespace-normal break-words">
-                                            <div class="flex space-x-2 justify-center">
-                                                <button
-                                                    class="bg-green-600 h-10 hover:bg-green-700 text-white px-3 py-1 rounded text-sm"
-                                                    onclick="editRow('row1')">Edit</button>
-                                                <button
-                                                    class="bg-blue-600 h-10 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm hidden"
-                                                    onclick="saveRow('row1')">Save</button>
-                                                <button
-                                                    class="bg-gray-600 h-10 hover:bg-gray-700 text-white px-3 py-1 rounded text-sm">Download</button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                                                            @if ($catalog->order_image)
+                                                                <div id="imagePreview-{{ $catalog->id }}"
+                                                                    class="hidden mt-2">
+                                                                    <a href="{{ asset('storage/order_images/' . $catalog->order_image) }}"
+                                                                        target="_blank"
+                                                                        class="block w-24 h-24 rounded overflow-hidden border border-gray-300 shadow-sm hover:shadow-md transition">
+                                                                        <img src="{{ asset('storage/order_images/' . $catalog->order_image) }}"
+                                                                            alt="Order Image"
+                                                                            class="w-full h-full object-cover" />
+                                                                    </a>
+                                                                </div>
+                                                            @endif
+                                                        </form>
+                                                    </td>
+                                                @else
+                                                    {{-- View-only for other roles --}}
+                                                    <td
+                                                        class="sticky left-0 z-10 bg-white px-4 py-3 bg-gray-100 border-r border-gray-300 text-left whitespace-normal break-words">
+                                                        <span class="font-semibold text-sm text-gray-700">
+                                                            {{ $catalog->order_no }}
+                                                        </span>
+
+                                                        @if ($catalog->order_image)
+                                                            <div class="mt-2">
+                                                                <a href="{{ asset('storage/order_images/' . $catalog->order_image) }}"
+                                                                    target="_blank"
+                                                                    class="block w-24 h-24 rounded overflow-hidden border border-gray-300 shadow-sm hover:shadow-md transition">
+                                                                    <img src="{{ asset('storage/order_images/' . $catalog->order_image) }}"
+                                                                        alt="Order Image"
+                                                                        class="w-full h-full object-cover" />
+                                                                </a>
+                                                            </div>
+                                                        @else
+                                                            <div class="text-xs text-red-600 mt-1">No image uploaded</div>
+                                                        @endif
+                                                    </td>
+                                                @endif
+
+                                                <td
+                                                    class="px-4 py-3 w-48 whitespace-normal break-words border-r border-gray-300">
+                                                    <span class="readonly">{{ $catalog->reference_no }}</span>
+                                                    <input
+                                                        class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                        value="{{ $catalog->reference_no }}" />
+                                                </td>
+                                                <td
+                                                    class="px-4 py-3 w-40 whitespace-normal break-words border-r border-gray-300">
+                                                    <span
+                                                        class="readonly">{{ $catalog->reference_added_date?->format('Y-m-d') }}</span>
+                                                    <input type="date"
+                                                        class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                        value="{{ $catalog->reference_added_date?->format('Y-m-d') }}" />
+                                                </td>
+                                                <td
+                                                    class="px-4 py-3 w-36 whitespace-normal break-words border-r border-gray-300">
+                                                    <span class="readonly">{{ $catalog->coordinator_name }}</span>
+                                                    <input
+                                                        class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                        value="{{ $catalog->coordinator_name }}" />
+                                                </td>
+                                                <td
+                                                    class="px-4 py-3 w-32 whitespace-normal break-words border-r border-gray-300">
+                                                    <span class="readonly">{{ $catalog->size }}</span>
+                                                    <input
+                                                        class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                        value="{{ $catalog->size }}" />
+                                                </td>
+                                                <td
+                                                    class="px-4 py-3 w-32 whitespace-normal break-words border-r border-gray-300">
+                                                    <span class="readonly">{{ $catalog->colour }}</span>
+                                                    <input
+                                                        class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                        value="{{ $catalog->colour }}" />
+                                                </td>
+                                                <td
+                                                    class="px-4 py-3 w-32 whitespace-normal break-words border-r border-gray-300">
+                                                    <span class="readonly">{{ $catalog->shade }}</span>
+                                                    <input
+                                                        class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                        value="{{ $catalog->shade }}" />
+                                                </td>
+                                                <td
+                                                    class="px-4 py-3 w-32 whitespace-normal break-words border-r border-gray-300">
+                                                    <span class="readonly">{{ $catalog->tkt }}</span>
+                                                    <input
+                                                        class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                        value="{{ $catalog->tkt }}" />
+                                                </td>
+                                                <!-- Approval Section -->
+                                                <td colspan="2" class="px-4 py-3 border-r border-gray-300 text-left">
+                                                    @if (in_array($userRole, ['SUPERADMIN', 'SAMPLEDEVELOPER', 'CUSTOMERCOORDINATOR']))
+                                                        {{-- Editable form for permitted roles --}}
+                                                        <form
+                                                            action="{{ route('product-catalog.updateApproval', $catalog->id) }}"
+                                                            method="POST" enctype="multipart/form-data">
+                                                            @csrf
+                                                            @method('PATCH')
+
+                                                            {{-- Approved By --}}
+                                                            @if (!$catalog->is_approved_by_locked)
+                                                                <input type="text" name="approved_by"
+                                                                    value="{{ old('approved_by', $catalog->approved_by) }}"
+                                                                    class="w-full mb-2 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                                    placeholder="Approved By" required>
+                                                            @else
+                                                                <div class="mb-2 text-sm">
+                                                                    <strong>Approved By:</strong>
+                                                                    {{ $catalog->approved_by ?? '-' }}
+                                                                </div>
+                                                            @endif
+
+                                                            {{-- Approval Card --}}
+                                                            @if (!$catalog->is_approval_card_locked)
+                                                                <input type="file" name="approval_card"
+                                                                    accept="image/*"
+                                                                    class="w-full mb-2 text-sm dark:text-white dark:bg-gray-700">
+                                                            @elseif ($catalog->approval_card)
+                                                                <div class="mb-2">
+                                                                    <strong>Approval Card:</strong>
+                                                                    <a href="{{ asset('storage/' . $catalog->approval_card) }}"
+                                                                        target="_blank"
+                                                                        class="inline-block px-3 py-1 rounded text-sm bg-green-600 hover:bg-green-700 text-white transition">
+                                                                        View
+                                                                    </a>
+                                                                </div>
+                                                            @else
+                                                                <div class="text-sm text-red-500 mb-2">
+                                                                    <strong>Approval Card:</strong> No Image
+                                                                </div>
+                                                            @endif
+
+                                                            {{-- Show Save button only if at least one field is unlocked --}}
+                                                            @if (!$catalog->is_approved_by_locked || !$catalog->is_approval_card_locked)
+                                                                <button type="submit"
+                                                                    class="w-full px-3 py-1 rounded text-sm transition-all duration-200 bg-blue-600 hover:bg-blue-700 text-white">
+                                                                    Save
+                                                                </button>
+                                                            @endif
+                                                        </form>
+                                                    @else
+                                                        {{-- View-only for unauthorized roles --}}
+                                                        <div class="text-sm mb-2">
+                                                            <strong>Approved By:</strong>
+                                                            {{ $catalog->approved_by ?? '-' }}
+                                                        </div>
+
+                                                        @if ($catalog->approval_card)
+                                                            <div>
+                                                                <strong>Approval Card:</strong>
+                                                                <a href="{{ asset('storage/' . $catalog->approval_card) }}"
+                                                                    target="_blank"
+                                                                    class="inline-block px-3 py-1 rounded text-sm bg-green-600 hover:bg-green-700 text-white transition">
+                                                                    View
+                                                                </a>
+                                                            </div>
+                                                        @else
+                                                            <div class="text-sm text-red-500">
+                                                                <strong>Approval Card:</strong> No Image
+                                                            </div>
+                                                        @endif
+                                                    @endif
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
                             <div class="py-6 flex justify-center">
-
+                                {{ $catalogs->links() }}
                             </div>
-                        </div>
-                        <!-- Add Product Modal -->
-                        <div id="addProductModal"
-                            class="fixed inset-0 z-50 hidden bg-black bg-opacity-50 flex items-center justify-center py-5">
-                            <div class="w-full max-w-[700px] bg-white dark:bg-gray-900 rounded-2xl shadow-2xl p-4 transform transition-all scale-95 max-h-[calc(100vh-10rem)] overflow-y-auto"
-                                onclick="event.stopPropagation()">
-                                <div class="max-w-[600px] mx-auto p-8">
-                                    <h2
-                                        class="text-2xl font-semibold mb-8 text-blue-900 mt-4 dark:text-gray-100 text-center">
-                                        Add New Sample Development
-                                    </h2>
-                                    <form action="" method="POST" enctype="multipart/form-data">
-                                        @csrf
-                                        <div class="space-y-4">
 
-                                            <!-- File Upload -->
-                                            <div class="flex items-center justify-center w-full">
-                                                <label for="sampleFile"
-                                                    class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50
-                                                     dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
-                                                    <div class="flex flex-col items-center justify-center pt-5 pb-6 ">
-                                                        <svg class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"
-                                                            aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                                                            fill="none" viewBox="0 0 20 16">
-                                                            <path stroke="currentColor" stroke-linecap="round"
-                                                                stroke-linejoin="round" stroke-width="2"
-                                                                d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
-                                                        </svg>
-                                                        <p class="mb-2 text-sm text-gray-500 dark:text-gray-400">
-                                                            <span class="font-semibold">Upload Sample Photo</span>
-                                                            or drag and drop
-                                                        </p>
-                                                        <p class="text-xs text-gray-500 dark:text-gray-400">PDF, JPG
-                                                            (MAX. 800x400px)</p>
+                            <div id="addTapeCatalogModal"
+                                class="fixed inset-0 z-50 hidden bg-black bg-opacity-50 flex items-center justify-center py-5">
+                                <div class="w-full max-w-[700px] bg-white dark:bg-gray-900 rounded-2xl shadow-2xl p-4 transform transition-all scale-95 max-h-[calc(100vh-10rem)] overflow-y-auto"
+                                    onclick="event.stopPropagation()">
+                                    <div class="max-w-[600px] mx-auto p-8">
+                                        <h2
+                                            class="text-2xl font-semibold mb-8 text-blue-900 mt-4 dark:text-gray-100 text-center">
+                                            Add New Code Catalog Item
+                                        </h2>
+                                        <form action="{{ route('tapeCatalog.store') }}" method="POST"
+                                            enctype="multipart/form-data">
+                                            @csrf
+                                            <div class="space-y-4">
+                                                <div class="flex gap-4">
+                                                    <div class="w-1/2">
+                                                        <label for="order_no"
+                                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">Order
+                                                            Number</label>
+                                                        <input id="order_no" type="text" name="order_no" required
+                                                            class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm mb-4">
                                                     </div>
-                                                    <input id="sampleFile" name="order_file" type="file"
-                                                        class="hidden" accept=".pdf,.jpg,.jpeg" />
-                                                </label>
-                                            </div>
-
-                                            <!-- Oder Number -->
-                                            <div>
-                                                <label for="sampleQuantity"
-                                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">Sample
-                                                    Number
-                                                </label>
-                                                <input id="sampleQuantity" type="text" name="sample_quantity"
-                                                    required
-                                                    class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm mb-4">
-                                            </div>
-
-                                            <!-- Inquiry receive date & Customer -->
-                                            <div class="flex gap-4">
-                                                <div class="w-1/2">
-                                                    <label for="inquiryDate"
-                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Date</label>
-                                                    <input id="Date" type="date" name="inquiry_date" required
-                                                        class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                                </div>
-                                                <div class="w-1/2">
-                                                    <label for="merchandiser"
-                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Merchandiser</label>
-                                                    <input id="Merchandiser" type="text" name="customer" required
-                                                        class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                                </div>
-                                            </div>
-
-                                            <!-- Merchandiser & Item -->
-                                            <div class="flex gap-4">
-                                                <div class="w-1/2">
-                                                    <label for="item"
-                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Item</label>
-                                                    <input id="item" type="text" name="item" required
-                                                        class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                    <div class="w-1/2">
+                                                        <label for="reference_no"
+                                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">Reference
+                                                            No</label>
+                                                        <input id="reference_no" type="text" name="reference_no"
+                                                            required
+                                                            class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                    </div>
                                                 </div>
 
-                                                <div class="w-1/2">
-                                                    <label for="size"
-                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Size</label>
-                                                    <input id="size" type="text" name="size" required
-                                                        class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                <div class="flex gap-4">
+                                                    <div class="w-1/2">
+                                                        <label for="reference_added_date"
+                                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">Date</label>
+                                                        <input id="reference_added_date" type="date"
+                                                            name="reference_added_date" required
+                                                            class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                    </div>
+                                                    <div class="w-1/2">
+                                                        <label for="coordinator_name"
+                                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer
+                                                            Coordinator</label>
+                                                        <input id="coordinator_name" type="text"
+                                                            name="coordinator_name" required
+                                                            class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                    </div>
                                                 </div>
-                                            </div>
 
-                                            <!-- Size & Colour -->
-                                            <div class="flex gap-4">
-                                                <div class="w-1/2">
-                                                    <label for="colour"
-                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Colour</label>
-                                                    <input id="colour" type="text" name="colour" required
-                                                        class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                <div class="flex gap-4">
+                                                    <div class="w-1/2">
+                                                        <label for="size"
+                                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">Size</label>
+                                                        <input id="size" type="text" name="size" required
+                                                            class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                    </div>
+                                                    <div class="w-1/2">
+                                                        <label for="colour"
+                                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">Colour</label>
+                                                        <input id="colour" type="text" name="colour" required
+                                                            class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                    </div>
                                                 </div>
-                                                <div class="w-1/2">
-                                                    <label for="shade"
-                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Shade</label>
-                                                    <input id="shade" type="text" name="shade" required
-                                                        class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                                </div>
-                                            </div>
-                                            <!-- Size & Colour -->
-                                            <div class="flex gap-4">
-                                                <div class="w-1/2">
-                                                    <label for="colour"
-                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">TKT</label>
-                                                    <input id="TKT" type="text" name="TKT" required
-                                                        class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                                </div>
-                                                <div class="w-1/2">
-                                                    <label for="shade"
-                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Approval</label>
-                                                    <input id="approval" type="text" name="approval" required
-                                                        class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
+
+                                                <div class="flex gap-4">
+                                                    <div class="w-1/2">
+                                                        <label for="shade"
+                                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">Shade</label>
+                                                        <input id="shade" type="text" name="shade" required
+                                                            class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                    </div>
+                                                    <div class="w-1/2">
+                                                        <label for="tkt"
+                                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">TKT</label>
+                                                        <input id="tkt" type="text" name="tkt" required
+                                                            class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                    </div>
                                                 </div>
                                             </div>
 
-                                            <!-- Sample Quantity -->
-                                            <div>
-                                                <label for="sampleQuantity"
-                                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">Reference
-                                                    No</label>
-                                                <input id="Reference No" type="text" name="Reference No" required
-                                                    class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm mb-4">
+                                            <!-- Buttons -->
+                                            <div class="flex justify-end gap-3 mt-12">
+                                                <button type="button"
+                                                    onclick="document.getElementById('addTapeCatalogModal').classList.add('hidden')"
+                                                    class="px-4 py-2 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 text-sm rounded hover:bg-gray-300">
+                                                    Cancel
+                                                </button>
+                                                <button type="submit"
+                                                    class="px-4 py-2 bg-blue-500 text-white text-sm rounded hover:bg-blue-600">
+                                                    Create Order
+                                                </button>
                                             </div>
-
-                                            <!-- Sample Quantity -->
-                                            <div>
-                                                <label for="sampleQuantity"
-                                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">Special
-                                                    Note</label>
-                                                <input id="Special Note" type="text" name="Special Note" required
-                                                    class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm mb-4">
-                                            </div>
-                                        </div>
-
-                                        <!-- Buttons -->
-                                        <div class="flex justify-end gap-3 mt-12">
-                                            <button type="button"
-                                                onclick="document.getElementById('addProductModal').classList.add('hidden')"
-                                                class="px-4 py-2 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 text-sm rounded hover:bg-gray-300">
-                                                Cancel
-                                            </button>
-                                            <button type="submit"
-                                                class="px-4 py-2 bg-blue-500 text-white text-sm rounded hover:bg-blue-600">
-                                                Create Order
-                                            </button>
-                                        </div>
-                                    </form>
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -472,96 +613,100 @@
             </div>
         </div>
     </div>
-</div>
 
+    <script>
+        function toggleDropdown(type) {
+            closeAllDropdowns();
+            const dropdownMenu = document.getElementById(`${type}DropdownMenu`);
+            if (dropdownMenu) dropdownMenu.classList.toggle('hidden');
+        }
 
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const clearFiltersBtn = document.getElementById('clearFiltersBtn');
-        const selectedVehicle = document.getElementById('selectedVehicle');
-        const filterForm = document.getElementById('filterForm');
+        function selectOption(type, value) {
+            const inputId = `${type}Input`;
+            const labelId = `selected${capitalize(type)}`;
+            const input = document.getElementById(inputId);
+            const label = document.getElementById(labelId);
 
-        clearFiltersBtn.addEventListener('click', () => {
-            // Clear values
-            document.getElementById('customerInput').value = '';
-            document.getElementById('merchandiserInput').value = '';
-            document.getElementById('itemInput').value = '';
+            input.value = value;
+            label.textContent = value || `Select ${formatLabel(type)}`;
 
-            document.getElementById('selectedCustomer').textContent = 'Select Sample No';
-            document.getElementById('selectedMerchandiser').textContent = 'Select Merchandiser';
-            document.getElementById('selectedItem').textContent = 'Select Item';
+            document.getElementById(`${type}DropdownMenu`).classList.add('hidden');
+        }
 
-            // Submit the form
-            filterForm.submit();
+        function filterOptions(type) {
+            const input = document.getElementById(`${type}SearchInput`);
+            const filter = input.value.toLowerCase();
+            document.querySelectorAll(`.${type}-option`).forEach(option => {
+                option.style.display = option.textContent.toLowerCase().includes(filter) ? '' : 'none';
+            });
+        }
+
+        document.getElementById('clearFiltersBtn').addEventListener('click', function() {
+            // Reload the page to clear all filters and reset state
+            window.location.href = window.location.pathname;
         });
 
-    });
-</script>
+        function closeAllDropdowns() {
+            ['orderNo', 'merchandiser', 'referenceNo'].forEach(type => {
+                const dropdown = document.getElementById(`${type}DropdownMenu`);
+                if (dropdown) dropdown.classList.add('hidden');
+            });
+        }
 
-<script>
-    function toggleDropdown(type) {
-        const menu = document.getElementById(`${type}DropdownMenu`);
-        const btn = document.getElementById(`${type}Dropdown`);
-        const expanded = btn.getAttribute('aria-expanded') === 'true';
-        menu.classList.toggle('hidden');
-        btn.setAttribute('aria-expanded', !expanded);
-    }
+        function capitalize(str) {
+            return str.charAt(0).toUpperCase() + str.slice(1);
+        }
 
-    function selectOption(type, value) {
-        const displayText = value || `Select ${type.charAt(0).toUpperCase() + type.slice(1)}`;
-        document.getElementById(`selected${capitalize(type)}`).innerText = value || `All ${capitalize(type)}s`;
-        document.getElementById(`${type}Input`).value = value;
-        document.getElementById(`${type}DropdownMenu`).classList.add('hidden');
-        document.getElementById(`${type}Dropdown`).setAttribute('aria-expanded', false);
-    }
+        function formatLabel(key) {
+            if (key === 'orderNo') return 'Order No';
+            if (key === 'merchandiser') return 'Merchandiser';
+            if (key === 'referenceNo') return 'Reference No';
+            return key;
+        }
 
-    function filterOptions(type) {
-        const input = document.getElementById(`${type}SearchInput`).value.toLowerCase();
-        const options = document.querySelectorAll(`.${type}-option`);
-        options.forEach(option => {
-            const text = option.textContent.toLowerCase();
-            option.style.display = text.includes(input) ? 'block' : 'none';
-        });
-    }
-
-    function capitalize(str) {
-        return str.charAt(0).toUpperCase() + str.slice(1);
-    }
-
-    // Close dropdowns on outside click
-    document.addEventListener('click', function(e) {
-        ['item', 'customer', 'merchandiser'].forEach(type => {
-            const btn = document.getElementById(`${type}Dropdown`);
-            const menu = document.getElementById(`${type}DropdownMenu`);
-            if (!btn.contains(e.target) && !menu.contains(e.target)) {
-                menu.classList.add('hidden');
-                btn.setAttribute('aria-expanded', false);
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.dropdown-group')) {
+                closeAllDropdowns();
             }
         });
-    });
-</script>
+    </script>
 
-<script>
-    function editRow(rowId) {
-        const row = document.getElementById(rowId);
-        row.querySelectorAll('.readonly').forEach(span => span.classList.add('hidden'));
-        row.querySelectorAll('.editable').forEach(input => input.classList.remove('hidden'));
-        row.querySelector('button.bg-green-600').classList.add('hidden'); // Hide Edit button
-        row.querySelector('button.bg-blue-600').classList.remove('hidden'); // Show Save button
-    }
+    <script>
+        function editRow(rowId) {
+            const row = document.getElementById(rowId);
+            row.querySelectorAll('.readonly').forEach(span => span.classList.add('hidden'));
+            row.querySelectorAll('.editable').forEach(input => input.classList.remove('hidden'));
+            row.querySelector('button.bg-green-600').classList.add('hidden'); // Hide Edit button
+            row.querySelector('button.bg-blue-600').classList.remove('hidden'); // Show Save button
+        }
 
-    function saveRow(rowId) {
-        const row = document.getElementById(rowId);
-        const inputs = row.querySelectorAll('.editable');
-        const spans = row.querySelectorAll('.readonly');
+        function saveRow(rowId) {
+            const row = document.getElementById(rowId);
+            const inputs = row.querySelectorAll('.editable');
+            const spans = row.querySelectorAll('.readonly');
 
-        inputs.forEach((input, i) => {
-            spans[i].textContent = input.value;
-            input.classList.add('hidden');
-        });
-        spans.forEach(span => span.classList.remove('hidden'));
+            inputs.forEach((input, i) => {
+                spans[i].textContent = input.value;
+                input.classList.add('hidden');
+            });
+            spans.forEach(span => span.classList.remove('hidden'));
 
-        row.querySelector('button.bg-green-600').classList.remove('hidden'); // Show Edit button
-        row.querySelector('button.bg-blue-600').classList.add('hidden'); // Hide Save button
-    }
-</script>
+            row.querySelector('button.bg-green-600').classList.remove('hidden'); // Show Edit button
+            row.querySelector('button.bg-blue-600').classList.add('hidden'); // Hide Save button
+        }
+    </script>
+    <script>
+        function handleOrderNoClick(id, hasImage) {
+            if (hasImage) {
+                // Toggle image visibility
+                const preview = document.getElementById('imagePreview-' + id);
+                if (preview) {
+                    preview.classList.toggle('hidden');
+                }
+            } else {
+                // No image — open file picker
+                document.getElementById('file-upload-' + id).click();
+            }
+        }
+    </script>
+@endsection
