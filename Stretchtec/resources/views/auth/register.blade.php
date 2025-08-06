@@ -23,12 +23,12 @@
                 <x-label for="role" value="{{ __('Role') }}" />
                 <select id="role" name="role" required class="block mt-1 w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
                     <option value="">-- Select Role --</option>
-                    <option value="Admin">Admin</option>
-                    <option value="Super_admin">Super Admin</option>
-                    <option value="Merchandiser">Merchandiser</option>
-                    <option value="Customer_coordinator">Customer Coordinator</option>
-                    <option value="Sample_developers">Sample Developers</option>
-                    <option value="Production_officer">Production Officer</option>
+                    <option value="ADMIN">Admin</option>
+                    <option value="SUPERADMIN">Super Admin</option>
+                    <option value="MERCHANDISER">Merchandiser</option>
+                    <option value="CUSTOMERCOORDINATOR">Customer Coordinator</option>
+                    <option value="SAMPLEDEVELOPER">Sample Developers</option>
+                    <option value="PRODUCTIONOFFICER">Production Officer</option>
                 </select>
             </div>
 

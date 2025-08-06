@@ -17,8 +17,8 @@
 
             <!-- ✅ TAB NAVIGATION (VISIBLE IN ALL PAGES) -->
             <div class="sticky top-0 z-10 flex space-x-4 border-b border-gray-300 bg-white p-5 dark:bg-gray-800">
-                <a href="{{ route('addResponsiblePerson.index') }}"
-                    class="pb-2 px-3 font-semibold {{ request()->routeIs('addResponsiblePerson.*') ? 'border-b-2 border-blue-500 text-blue-600' : 'text-gray-600' }}">
+                <a href="{{ route('operatorsandSupervisors.index') }}"
+                    class="pb-2 px-3 font-semibold {{ request()->routeIs('operatorsandSupervisors.*') ? 'border-b-2 border-blue-500 text-blue-600' : 'text-gray-600' }}">
                     Operators & Supervisors Management
                 </a>
                 <a href="{{ route('userDetails.index') }}"

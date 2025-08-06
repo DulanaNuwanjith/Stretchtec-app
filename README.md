@@ -84,6 +84,12 @@ From the spark of a customer inquiry to the shipment of the final product, IPEMS
   <li>Create a symbolic link from `public/storage` to `storage/app/public`:
     <pre><code>php artisan storage:link</code></pre>
   </li>
+
+  <li>Ensure the <code>DISPATCH NOTICES.xlsx</code> template is available:
+    <pre><code>storage/app/public/templates/DISPATCH NOTICES.xlsx</code></pre>
+    <p>If missing, create the <code>templates</code> folder and place the Excel file inside it manually or pull it from version control.</p>
+  </li>
+
 </ol>
 
 ---

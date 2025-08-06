@@ -1,5 +1,7 @@
 <head>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <title>StretchTec</title>
 </head>
 
 <div class="flex h-full w-full bg-white">
@@ -7,111 +9,199 @@
     @extends('layouts.sample-tabs')
 
     @section('content')
-        <div class="flex-1 overflow-y-hidden mb-20">
+        <div class="flex-1 overflow-y-hidden">
             <div class="">
                 <div class="w-full px-6 lg:px-2">
                     <div class="bg-white dark:bg-gray-800 overflow-hidden">
                         <div class="p-4 text-gray-900 dark:text-gray-100">
 
-                            @if (session('success'))
-                                <div
-                                    class="mb-4 p-4 text-green-800 bg-green-100 border border-green-300 rounded-md dark:text-green-200 dark:bg-green-900 dark:border-green-800">
-                                    {{ session('success') }}
-                                </div>
-                            @endif
+                            <style>
+                                .swal2-toast {
+                                    font-size: 0.875rem;
+                                    padding: 0.75rem 1rem;
+                                    border-radius: 8px;
+                                    background-color: #ffffff !important;
+                                    position: relative;
+                                    box-sizing: border-box;
+                                    color: #3b82f6 !important;
+                                }
 
-                            @if (session('error'))
-                                <div
-                                    class="mb-4 p-4 text-red-800 bg-red-100 border border-red-300 rounded-md dark:text-red-200 dark:bg-red-900 dark:border-red-800">
-                                    {{ session('error') }}
-                                </div>
-                            @endif
+                                .swal2-toast .swal2-title,
+                                .swal2-toast .swal2-html-container {
+                                    color: #3b82f6 !important;
+                                }
 
-                            <!-- Filter Form -->
-                            <form id="filterForm3" method="GET" action="" class="mb-6 flex gap-6 items-center">
-                                <div class="flex items-center gap-4">
-                                    <!-- Sample No Dropdown -->
-                                    <div class="relative inline-block text-left w-48">
-                                        <label for="sampleDropdown"
-                                            class="block text-sm font-medium text-gray-700 mb-1">Sample No</label>
+                                .swal2-toast .swal2-icon {
+                                    color: #3b82f6 !important;
+                                }
 
-                                        <button type="button" id="sampleDropdown"
-                                            class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50"
-                                            onclick="toggleSampleDropdown()" aria-haspopup="listbox" aria-expanded="false">
-                                            <span id="selectedSample">Select Sample No</span>
-                                            <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
-                                                <path fill-rule="evenodd"
-                                                    d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
-                                                    clip-rule="evenodd" />
-                                            </svg>
-                                        </button>
+                                .swal2-shadow {
+                                    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+                                }
 
-                                        <div id="sampleDropdownMenu"
-                                            class="hidden absolute z-10 mt-2 w-full rounded-md bg-white shadow-lg ring-1 ring-black/5 max-h-48 overflow-y-auto">
+                                .swal2-toast::after {
+                                    content: '';
+                                    position: absolute;
+                                    bottom: 0;
+                                    left: 0;
+                                    width: 100%;
+                                    height: 3px;
+                                    background-color: #3b82f6;
+                                    border-radius: 0 0 8px 8px;
+                                }
+                            </style>
 
-                                            <!-- Search box -->
-                                            <div class="p-2 sticky top-0 bg-white z-10">
-                                                <input type="text" id="sampleSearchInput"
-                                                    placeholder="Search Sample No..."
-                                                    class="w-full px-2 py-1 text-sm border rounded-md"
-                                                    oninput="filterSamples()" />
-                                            </div>
+                            <script>
+                                document.addEventListener('DOMContentLoaded', () => {
+                                    @if (session('success'))
+                                        Swal.fire({
+                                            toast: true,
+                                            position: 'top-end',
+                                            icon: 'success',
+                                            title: '{{ session('success') }}',
+                                            showConfirmButton: false,
+                                            timer: 2000,
+                                            timerProgressBar: true,
+                                            customClass: {
+                                                popup: 'swal2-toast swal2-shadow'
+                                            },
+                                        });
+                                    @endif
 
-                                            <div class="py-1" role="listbox" tabindex="-1">
-                                                <!-- Clear / Reset -->
-                                                <button type="button"
-                                                    class="sample-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                                    onclick="selectSample('', 'Select Sample No')">
-                                                    All Sample No
-                                                </button>
+                                    @if (session('error'))
+                                        Swal.fire({
+                                            toast: true,
+                                            position: 'top-end',
+                                            icon: 'error',
+                                            title: '{{ session('error') }}',
+                                            showConfirmButton: false,
+                                            timer: 2000,
+                                            timerProgressBar: true,
+                                            customClass: {
+                                                popup: 'swal2-toast swal2-shadow'
+                                            },
+                                        });
+                                    @endif
 
-                                                <!-- Sample Options -->
-                                                <button type="button"
-                                                    class="sample-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                                    onclick="selectSample('001', 'SAMPLE-001')">SAMPLE-001</button>
-                                                <button type="button"
-                                                    class="sample-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                                    onclick="selectSample('002', 'SAMPLE-002')">SAMPLE-002</button>
-                                                <button type="button"
-                                                    class="sample-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                                    onclick="selectSample('003', 'SAMPLE-003')">SAMPLE-003</button>
+                                    @if ($errors->any())
+                                        Swal.fire({
+                                            toast: true,
+                                            position: 'top-end',
+                                            icon: 'warning',
+                                            title: 'Validation Errors',
+                                            html: `{!! implode('<br>', $errors->all()) !!}`,
+                                            showConfirmButton: false,
+                                            timer: 3000,
+                                            timerProgressBar: true,
+                                            customClass: {
+                                                popup: 'swal2-toast swal2-shadow'
+                                            },
+                                        });
+                                    @endif
+                                });
+                            </script>
+
+                            <script>
+                                function confirmDelete(id) {
+                                    Swal.fire({
+                                        title: 'Are you sure?',
+                                        text: "This record will be permanently deleted!",
+                                        icon: 'warning',
+                                        showCancelButton: true,
+                                        confirmButtonColor: '#3b82f6',
+                                        cancelButtonColor: '#6c757d',
+                                        confirmButtonText: 'Yes, delete it!',
+                                        background: '#ffffff',
+                                        color: '#3b82f6',
+                                        customClass: {
+                                            popup: 'swal2-toast swal2-shadow'
+                                        }
+                                    }).then((result) => {
+                                        if (result.isConfirmed) {
+                                            document.getElementById(`delete-form-${id}`).submit();
+                                        }
+                                    });
+                                }
+                            </script>
+
+                            <div class="flex justify-start">
+                                <button onclick="toggleFilterForm()"
+                                    class="bg-white border border-blue-500 text-blue-500 hover:text-blue-600 hover:border-blue-600 font-semibold py-1 px-3 rounded shadow flex items-center gap-2 mb-6">
+                                    <img src="{{ asset('icons/filter.png') }}" alt="" class="w-6 h-6"
+                                        alt="Filter Icon">
+                                    Filters
+                                </button>
+                            </div>
+
+                            <div id="filterFormContainerTab3" class="mt-4 hidden">
+                                <form id="filterForm3" method="GET"
+                                    action="{{ route('sample-preparation-production.index') }}" class="mb-6 sticky top-0 z-20 flex gap-6 items-center">
+                                    {{-- Keep the tab=3 in query to know which tab is active --}}
+                                    <input type="hidden" name="tab" value="3">
+
+                                    <div class="flex items-center gap-4 flex-wrap">
+
+                                        {{-- Order No Dropdown --}}
+                                        <div class="relative inline-block text-left w-48">
+                                            <label for="orderDropdownTab3"
+                                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Order
+                                                No</label>
+                                            <input type="hidden" name="order_no" id="orderInputTab3"
+                                                value="{{ request('order_no') }}">
+                                            <button id="orderDropdownTab3" type="button"
+                                                class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10 dark:bg-gray-700 dark:text-white"
+                                                aria-expanded="false" aria-haspopup="listbox"
+                                                onclick="toggleOrderDropdownTab3(event)">
+                                                <span
+                                                    id="selectedOrderNoTab3">{{ request('order_no') ?? 'Select Order No' }}</span>
+                                                <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20"
+                                                    fill="currentColor">
+                                                    <path fill-rule="evenodd"
+                                                        d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
+                                                        clip-rule="evenodd" />
+                                                </svg>
+                                            </button>
+
+                                            <div id="orderDropdownMenuTab3"
+                                                class="absolute z-40 mt-1 w-full bg-white border rounded-lg shadow-lg hidden max-h-48 overflow-y-auto p-2"
+                                                role="listbox" aria-labelledby="orderDropdownTab3">
+                                                <input type="text" id="orderSearchInputTab3" onkeyup="filterOrdersTab3()"
+                                                    placeholder="Search..."
+                                                    class="w-full px-2 py-1 text-sm border rounded-md dark:bg-gray-600 dark:text-white"
+                                                    autocomplete="off">
+                                                @foreach ($orderNosTab3 as $order)
+                                                    <div onclick="selectOrderTab3('{{ $order }}')" tabindex="0"
+                                                        class="order-option-tab3 px-4 py-2 hover:bg-gray-100 cursor-pointer text-sm">
+                                                        {{ $order }}
+                                                    </div>
+                                                @endforeach
                                             </div>
                                         </div>
 
-                                        <input type="hidden" name="sample_no" id="sampleInput">
+                                        {{-- Development Plan Date --}}
+                                        <div class="inline-block text-left w-48">
+                                            <label for="developmentPlanDateTab3"
+                                                class="block text-sm font-medium text-gray-700">Production Deadline</label>
+                                            <input type="date" name="development_plan_date" id="developmentPlanDateTab3"
+                                                value="{{ request('development_plan_date') }}"
+                                                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 text-sm">
+                                        </div>
+
+                                        {{-- Buttons --}}
+                                        <div class="flex items-end space-x-2 mt-2">
+                                            <button type="submit"
+                                                class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Apply
+                                                Filters</button>
+                                            <button type="button" id="clearFiltersBtnTab3"
+                                                class="mt-4 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 px-4 py-2 rounded hover:bg-gray-300">Clear</button>
+                                        </div>
+
                                     </div>
-
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Production
-                                            Deadline</label>
-                                        <input type="date" id="productionDeadlineFilter" name="production_deadline"
-                                            value="{{ request('') }}"
-                                            class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                    </div>
-
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Order
-                                            Complete Date</label>
-                                        <input type="date" id="oderCompleteDateFilter" name="order_complete_date"
-                                            value="{{ request('') }}"
-                                            class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                    </div>
-                                </div>
-
-                                <button type="submit"
-                                    class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-                                    Apply Filters
-                                </button>
-
-                                <button type="button" id="clearFiltersBtnProduction"
-                                    class="mt-4 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 px-4 py-2 rounded hover:bg-gray-300">
-                                    Clear Filters
-                                </button>
-                            </form>
-
+                                </form>
+                            </div>
 
                             <div class="flex justify-between items-center mb-6">
-                                <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Sample Preparation
+                                <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100 py-1">Sample Preparation
                                     Production
                                     Records
                                 </h1>
@@ -120,552 +210,621 @@
                             <div class="overflow-x-auto bg-white dark:bg-gray-900 shadow rounded-lg">
                                 <table class="table-fixed w-full text-sm divide-y divide-gray-200 dark:divide-gray-700">
                                     <thead class="bg-gray-100 dark:bg-gray-700 text-left">
-                                        <tr>
+                                        <tr class="text-center">
                                             <th
-                                                class="px-4 py-3 w-20 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold sticky left-0 z-10 bg-white px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Order No
                                             </th>
                                             <th
-                                                class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Production Deadline
                                             </th>
                                             <th
-                                                class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold px-4 py-3 w-48 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Order Received Date & Time
                                             </th>
                                             <th
-                                                class="px-4 py-3 w-56 text-center text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold px-4 py-3 w-48 text-center text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Order Start Date & Time
                                             </th>
                                             <th
-                                                class="px-4 py-3 w-40 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold px-4 py-3 w-52 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Operator Name
                                             </th>
                                             <th
-                                                class="px-4 py-3 w-40 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold px-4 py-3 w-52 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Supervisor Name
                                             </th>
                                             <th
-                                                class="px-4 py-3 w-56 text-center text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold px-4 py-3 w-48 text-center text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Order Complete Date & Time
                                             </th>
                                             <th
-                                                class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Production Output</th>
                                             <th
-                                                class="px-4 py-3 w-56 text-center text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                Damaged Output</th>
+                                            <th
+                                                class="font-bold px-4 py-3 w-64 text-center text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Dispatch to R&D
                                             </th>
                                             <th
-                                                class="px-4 py-3 w-72 text-center text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold px-4 py-3 w-72 text-center text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Note
                                             </th>
                                             <th
-                                                class="px-4 py-3 w-48 text-center text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold px-4 py-3 w-48 text-center text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Action
                                             </th>
                                         </tr>
                                     </thead>
                                     <tbody id="serviceRecords"
-                                        class="bg-white dark:bg-gray-800 divide-y text-left divide-gray-200 dark:divide-gray-700">
+                                        class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                                        @foreach ($productions as $prod)
+                                            <tr id="serviceRow{{ $prod->id }}"
+                                                class="odd:bg-white even:bg-gray-50 border-b border-gray-200  text-left">
+                                                {{-- Order No --}}
+                                                <td
+                                                    class="sticky left-0 z-10 bg-white px-4 py-3 bg-gray-100 whitespace-normal break-words border-r border-gray-300">
+                                                    <span
+                                                        class="readonly font-bold hover:text-blue-600 hover:underline cursor-pointer"
+                                                        onclick="openSampleModal(
+            '{{ addslashes($prod->order_no) }}',
+            '{{ addslashes($prod->sampleInquiry->item ?? '-') }}',
+            '{{ addslashes($prod->sampleInquiry->ItemDiscription ?? '-') }}',
+            '{{ addslashes($prod->sampleInquiry->size ?? '-') }}',
+            '{{ addslashes($prod->sampleInquiry->qtRef ?? '-') }}',
+            '{{ addslashes($prod->sampleInquiry->color ?? '-') }}',
+            '{{ addslashes($prod->sampleInquiry->style ?? '-') }}',
+            '{{ addslashes($prod->sampleInquiry->sampleQty ?? '-') }}',
+            '{{ addslashes($prod->samplePreparationRnd->shade ?? '-') }}'
+        )">
+                                                        {{ $prod->order_no }}
+                                                    </span>
 
-                                        <tr id="serviceRow1">
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly hover:text-blue-600 hover:underline cursor-pointer"
-                                                    onclick="document.getElementById('viewDetailsSample').classList.remove('hidden')">
-                                                    001
-                                                </span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="001" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">2025-05-05</span>
-                                                <input type="date"
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="2025-05-05" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">2025-05-05</span>
-                                                <input type="date"
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="2025-05-05" />
-                                            </td>
-                                            <td class="py-3 whitespace-normal break-words text-center">
-                                                <div class="order-start-item mb-4">
-                                                    <button onclick="toggleOrderStart(event, this)" type="button"
-                                                        class="order-start-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
-                                                        Pending
-                                                    </button>
-                                                    <div
-                                                        class="order-start-timestamp mt-1 text-xs text-gray-500 dark:text-gray-400">
+                                                    <input type="text" name="order_no"
+                                                        class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                        value="{{ $prod->order_no }}" />
+                                                </td>
+
+                                                {{-- Production Deadline --}}
+                                                <td
+                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
+                                                    <span class="readonly">
+                                                        {{ $prod->production_deadline ? $prod->production_deadline->format('Y-m-d') : '-' }}
+                                                    </span>
+                                                    <input type="date" name="production_deadline"
+                                                        class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                        value="{{ $prod->production_deadline ? $prod->production_deadline->format('Y-m-d') : '' }}" />
+                                                </td>
+
+                                                {{-- Order Received Date & Time --}}
+                                                <td
+                                                    class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                                    <span
+                                                        class="readonly inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-yellow-100 dark:bg-gray-800 px-3 py-1 rounded">
+                                                        Received on <br>
+                                                        {{ \Carbon\Carbon::parse($prod->order_received_at)->format('Y-m-d') }}
+                                                        at
+                                                        {{ \Carbon\Carbon::parse($prod->order_received_at)->format('H:i') }}
+                                                    </span>
+                                                    <input type="datetime-local" name="order_received_at"
+                                                        class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                        value="{{ $prod->order_received_at ? $prod->order_received_at->format('Y-m-d\TH:i') : '' }}" />
+                                                </td>
+
+                                                {{-- Order Start Date & Time --}}
+                                                <td
+                                                    class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                                    @auth
+                                                        @if (auth()->user()->role === 'ADMIN')
+                                                            @if (!$prod->order_start_at)
+                                                                <span
+                                                                    class="inline-block mt-3 text-sm font-semibold text-gray-700 dark:text-white bg-gray-200 dark:bg-gray-800 px-3 py-1 rounded">
+                                                                    Pending
+                                                                </span>
+                                                            @else
+                                                                <span
+                                                                    class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-pink-200 dark:bg-gray-800 px-3 py-1 rounded">
+                                                                    Started on <br>
+                                                                    {{ $prod->order_start_at->format('Y-m-d') }} at
+                                                                    {{ $prod->order_start_at->format('H:i') }}
+                                                                </span>
+                                                            @endif
+                                                        @else
+                                                            @if (!$prod->order_start_at)
+                                                                <form action="{{ route('production.markStart') }}"
+                                                                    method="POST">
+                                                                    @csrf
+                                                                    <input type="hidden" name="id"
+                                                                        value="{{ $prod->id }}">
+                                                                    <button type="submit"
+                                                                        class="order-start-btn px-2 py-1 mt-3 rounded transition-all duration-200 bg-gray-300 text-black hover:bg-gray-400">
+                                                                        Pending
+                                                                    </button>
+                                                                </form>
+                                                            @else
+                                                                <span
+                                                                    class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-pink-200 dark:bg-gray-800 px-3 py-1 rounded">
+                                                                    Started on <br>
+                                                                    {{ $prod->order_start_at->format('Y-m-d') }} at
+                                                                    {{ $prod->order_start_at->format('H:i') }}
+                                                                </span>
+                                                            @endif
+                                                        @endif
+                                                    @endauth
+                                                </td>
+
+                                                {{-- Operator Name --}}
+                                                <td
+                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                                    @auth
+                                                        @if (auth()->user()->role === 'ADMIN')
+                                                            @if ($prod->operator_name)
+                                                                <span>{{ $prod->operator_name }}</span>
+                                                            @else
+                                                                <span class="italic text-gray-500">Not Assigned</span>
+                                                            @endif
+                                                        @else
+                                                            @if ($prod->operator_name)
+                                                                <span>{{ $prod->operator_name }}</span>
+                                                            @else
+                                                                <form method="POST"
+                                                                    action="{{ route('sample-preparation-production.update-operator', $prod->id) }}">
+                                                                    @csrf
+                                                                    @method('PATCH')
+
+                                                                    <div class="relative inline-block text-left w-44">
+                                                                        <button type="button"
+                                                                            class="dropdown-btn inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50"
+                                                                            onclick="toggleDropdown(this, 'operator')">
+                                                                            <span class="selected-operator">Select
+                                                                                Operator</span>
+                                                                            <svg class="ml-2 h-5 w-5 text-gray-400"
+                                                                                viewBox="0 0 20 20" fill="currentColor">
+                                                                                <path fill-rule="evenodd"
+                                                                                    d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
+                                                                                    clip-rule="evenodd" />
+                                                                            </svg>
+                                                                        </button>
+
+                                                                        <div
+                                                                            class="dropdown-menu-operator hidden absolute z-10 mt-2 w-full rounded-md bg-white shadow-lg ring-1 ring-black/5 max-h-48 overflow-y-auto">
+                                                                            <div class="p-2 sticky top-0 bg-white z-10">
+                                                                                <input type="text"
+                                                                                    placeholder="Search Operator..."
+                                                                                    class="w-full px-2 py-1 text-sm border rounded-md"
+                                                                                    oninput="filterDropdownOptions(this)" />
+                                                                            </div>
+
+                                                                            <div class="py-1" role="listbox"
+                                                                                tabindex="-1">
+                                                                                @foreach ($operators as $operator)
+                                                                                    <button type="button"
+                                                                                        class="dropdown-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                                                                        onclick="selectDropdownOption(this, '{{ $operator->name }}', 'operator')">
+                                                                                        {{ $operator->name }}
+                                                                                    </button>
+                                                                                @endforeach
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <input type="hidden" name="operator_name"
+                                                                            class="input-operator">
+                                                                    </div>
+                                                                </form>
+                                                            @endif
+                                                        @endif
+                                                    @endauth
+                                                </td>
+
+                                                {{-- Supervisor Name --}}
+                                                <td
+                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                                    @auth
+                                                        @if (auth()->user()->role === 'ADMIN')
+                                                            @if ($prod->supervisor_name)
+                                                                <span>{{ $prod->supervisor_name }}</span>
+                                                            @else
+                                                                <span class="italic text-gray-500">Not Assigned</span>
+                                                            @endif
+                                                        @else
+                                                            @if ($prod->supervisor_name)
+                                                                <span>{{ $prod->supervisor_name }}</span>
+                                                            @else
+                                                                <form method="POST"
+                                                                    action="{{ route('sample-preparation-production.update-supervisor', $prod->id) }}">
+                                                                    @csrf
+                                                                    @method('PATCH')
+
+                                                                    <div class="relative inline-block text-left w-44">
+                                                                        <button type="button"
+                                                                            class="dropdown-btn inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50"
+                                                                            onclick="toggleDropdown(this, 'supervisor')">
+                                                                            <span class="selected-supervisor">Select
+                                                                                Supervisor</span>
+                                                                            <svg class="ml-2 h-5 w-5 text-gray-400"
+                                                                                viewBox="0 0 20 20" fill="currentColor">
+                                                                                <path fill-rule="evenodd"
+                                                                                    d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
+                                                                                    clip-rule="evenodd" />
+                                                                            </svg>
+                                                                        </button>
+
+                                                                        <div
+                                                                            class="dropdown-menu-supervisor hidden absolute z-10 mt-2 w-full rounded-md bg-white shadow-lg ring-1 ring-black/5 max-h-48 overflow-y-auto">
+                                                                            <div class="p-2 sticky top-0 bg-white z-10">
+                                                                                <input type="text"
+                                                                                    placeholder="Search Supervisor..."
+                                                                                    class="w-full px-2 py-1 text-sm border rounded-md"
+                                                                                    oninput="filterDropdownOptions(this)" />
+                                                                            </div>
+
+                                                                            <div class="py-1" role="listbox"
+                                                                                tabindex="-1">
+                                                                                @foreach ($supervisors as $supervisor)
+                                                                                    <button type="button"
+                                                                                        class="dropdown-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                                                                        onclick="selectDropdownOption(this, '{{ $supervisor->name }}', 'supervisor')">
+                                                                                        {{ $supervisor->name }}
+                                                                                    </button>
+                                                                                @endforeach
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <input type="hidden" name="supervisor_name"
+                                                                            class="input-supervisor">
+                                                                    </div>
+                                                                </form>
+                                                            @endif
+                                                        @endif
+                                                    @endauth
+                                                </td>
+
+                                                {{-- Order Complete Date & Time --}}
+                                                <td
+                                                    class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                                    @auth
+                                                        @if (auth()->user()->role === 'ADMIN')
+                                                            @if (!$prod->order_complete_at)
+                                                                <span
+                                                                    class="inline-block mt-3 text-sm font-semibold text-gray-700 dark:text-white bg-gray-200 dark:bg-gray-800 px-3 py-1 rounded">
+                                                                    Pending
+                                                                </span>
+                                                            @else
+                                                                <span
+                                                                    class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-green-100 dark:bg-gray-800 px-3 py-1 rounded">
+                                                                    Completed on <br>
+                                                                    {{ $prod->order_complete_at->format('Y-m-d') }} at
+                                                                    {{ $prod->order_complete_at->format('H:i') }}
+                                                                </span>
+                                                            @endif
+                                                        @else
+                                                            @if (!$prod->order_complete_at)
+                                                                @php
+                                                                    $canComplete =
+                                                                        $prod->order_start_at &&
+                                                                        $prod->operator_name &&
+                                                                        $prod->supervisor_name;
+                                                                @endphp
+
+                                                                <form action="{{ route('production.markComplete') }}"
+                                                                    method="POST">
+                                                                    @csrf
+                                                                    <input type="hidden" name="id"
+                                                                        value="{{ $prod->id }}">
+                                                                    <button type="submit"
+                                                                        class="order-complete-btn px-2 py-1 mt-3 rounded transition-all duration-200
+                                                                        {{ $canComplete ? 'bg-green-600 hover:bg-green-700 text-white' : 'bg-gray-300 text-black cursor-not-allowed' }}"
+                                                                        {{ $canComplete ? '' : 'disabled' }}
+                                                                        title="{{ $canComplete ? '' : 'Start time, Operator, and Supervisor are required' }}">
+                                                                        Pending
+                                                                    </button>
+                                                                </form>
+                                                            @else
+                                                                <span
+                                                                    class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-green-100 dark:bg-gray-800 px-3 py-1 rounded">
+                                                                    Completed on <br>
+                                                                    {{ $prod->order_complete_at->format('Y-m-d') }} at
+                                                                    {{ $prod->order_complete_at->format('H:i') }}
+                                                                </span>
+                                                            @endif
+                                                        @endif
+                                                    @endauth
+                                                </td>
+
+                                                {{-- Production Output --}}
+                                                <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                                    @auth
+                                                        @if (auth()->user()->role === 'ADMIN')
+                                                            <span class="readonly">
+                                                                {{ is_numeric($prod->production_output) ? $prod->production_output . ' g' : '-' }}
+                                                            </span>
+                                                        @else
+                                                            @if (!$prod->is_output_locked)
+                                                                <form action="{{ route('production.updateOutput') }}" method="POST" class="inline-block w-full">
+                                                                    @csrf
+                                                                    <input type="hidden" name="id" value="{{ $prod->id }}">
+
+                                                                    <input type="number" min="0" step="any"
+                                                                           name="production_output"
+                                                                           value="{{ old('production_output', $prod->production_output) }}"
+                                                                           class="w-full px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                                           required>
+
+                                                                    <button type="submit"
+                                                                            class="mt-1 px-3 py-1 rounded text-sm transition-all duration-200 bg-blue-600 hover:bg-blue-700 text-white">
+                                                                        Save
+                                                                    </button>
+                                                                </form>
+                                                            @else
+                                                                <span class="readonly">
+                                                                    {{ is_numeric($prod->production_output) ? $prod->production_output . ' g' : '-' }}
+                                                                </span>
+                                                            @endif
+                                                        @endif
+                                                    @endauth
+                                                </td>
+
+                                                {{-- Damaged Output --}}
+                                                <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                                    @auth
+                                                        @if (auth()->user()->role === 'ADMIN')
+                                                            <span class="readonly">
+                                                                {{ is_numeric($prod->damaged_output) ? $prod->damaged_output . ' g' : '-' }}
+                                                            </span>
+                                                        @else
+                                                            @if (!$prod->is_damagedOutput_locked)
+                                                                <form action="{{ route('production.updateDamagedOutput') }}" method="POST" class="inline-block w-full">
+                                                                    @csrf
+                                                                    <input type="hidden" name="id" value="{{ $prod->id }}">
+
+                                                                    <input type="number" min="0"
+                                                                           max="{{ $prod->production_output ?? 0 }}" {{-- ✅ ensure it can't exceed production_output --}}
+                                                                           step="any"
+                                                                           name="damaged_output"
+                                                                           value="{{ old('damaged_output', $prod->damaged_output) }}"
+                                                                           class="w-full px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                                           required>
+
+                                                                    <button type="submit"
+                                                                            class="mt-1 px-3 py-1 rounded text-sm transition-all duration-200 bg-blue-600 hover:bg-blue-700 text-white">
+                                                                        Save
+                                                                    </button>
+                                                                </form>
+                                                            @else
+                                                                <span class="readonly">
+                                                                    {{ is_numeric($prod->damaged_output) ? $prod->damaged_output . ' g' : '-' }}
+                                                                </span>
+                                                            @endif
+                                                        @endif
+                                                    @endauth
+                                                </td>
+
+                                                {{-- Dispatch to R&D --}}
+                                                <td
+                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                                    @auth
+                                                        @if (auth()->user()->role === 'ADMIN')
+                                                            <div class="text-sm text-gray-800 dark:text-white font-medium">
+                                                                {{ $prod->dispatched_by ?? '-' }}
+                                                            </div>
+                                                            <div
+                                                                class="sample-dispatch-timestamp text-xs text-gray-500 dark:text-gray-400">
+                                                                {{ $prod->dispatch_to_rnd_at ? $prod->dispatch_to_rnd_at->format('Y-m-d H:i') : '-' }}
+                                                            </div>
+                                                        @else
+                                                            @php
+                                                                $dispatchNames = [
+                                                                    'Kanchana Madushani',
+                                                                    'Imashi Prasangika',
+                                                                    'Tenuli Dihansa',
+                                                                    'Sanduni Indeewari',
+                                                                    'Kanchana Dharmadasa',
+                                                                ];
+                                                                $disableDispatch =
+                                                                    is_null($prod->production_output) ||
+                                                                    is_null($prod->damaged_output);
+                                                            @endphp
+
+                                                            @if (!$prod->dispatch_to_rnd_at)
+                                                                <form action="{{ route('production.dispatchToRnd') }}"
+                                                                    method="POST">
+                                                                    @csrf
+                                                                    <input type="hidden" name="id"
+                                                                        value="{{ $prod->id }}">
+
+                                                                    <div class="relative inline-block text-left w-56">
+                                                                        <button type="button"
+                                                                            class="dropdown-btn inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50"
+                                                                            onclick="toggleDropdownDispatch(this, 'dispatch')">
+                                                                            <span class="selected-dispatch">Select Name</span>
+                                                                            <svg class="ml-2 h-5 w-5 text-gray-400"
+                                                                                viewBox="0 0 20 20" fill="currentColor">
+                                                                                <path fill-rule="evenodd"
+                                                                                    d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
+                                                                                    clip-rule="evenodd" />
+                                                                            </svg>
+                                                                        </button>
+
+                                                                        <div
+                                                                            class="dropdown-menu-dispatch hidden absolute z-10 mt-2 w-full rounded-md bg-white shadow-lg ring-1 ring-black/5 max-h-48 overflow-y-auto">
+                                                                            <div class="p-2 sticky top-0 bg-white z-10">
+                                                                                <input type="text"
+                                                                                    placeholder="Search name..."
+                                                                                    class="w-full px-2 py-1 text-sm border rounded-md"
+                                                                                    oninput="filterDropdownOptionsDispatch(this)" />
+                                                                            </div>
+
+                                                                            <div class="py-1" role="listbox"
+                                                                                tabindex="-1">
+                                                                                @foreach ($dispatchNames as $name)
+                                                                                    <button type="button"
+                                                                                        class="dropdown-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                                                                        onclick="selectDropdownOptionDispatch(this, '{{ $name }}', 'dispatch')">
+                                                                                        {{ $name }}
+                                                                                    </button>
+                                                                                @endforeach
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <input type="hidden" name="dispatched_by"
+                                                                            class="input-dispatch">
+                                                                    </div>
+
+                                                                    <button type="submit"
+                                                                        class="sample-dispatch-btn mt-1 px-2 py-1 rounded transition-all duration-200 w-full
+                        {{ $disableDispatch ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : 'bg-gray-300 text-black hover:bg-gray-400' }}"
+                                                                        {{ $disableDispatch ? 'disabled title=Please enter Production and Damaged Output first' : '' }}>
+                                                                        Dispatch
+                                                                    </button>
+                                                                </form>
+                                                            @else
+                                                                <span
+                                                                    class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-blue-100 dark:bg-gray-800 px-3 py-1 rounded">
+                                                                    <div
+                                                                        class="text-sm text-gray-800 dark:text-white font-medium">
+                                                                        Dispatch to {{ $prod->dispatched_by ?? '-' }}
+                                                                    </div>
+                                                                    <div
+                                                                        class="sample-dispatch-timestamp text-xs text-gray-500 dark:text-gray-400">
+                                                                        Dispatch on
+                                                                        {{ $prod->dispatch_to_rnd_at->format('Y-m-d') }}<br>
+                                                                        at {{ $prod->dispatch_to_rnd_at->format('H:i') }}
+                                                                    </div>
+                                                                </span>
+                                                            @endif
+                                                        @endif
+                                                    @endauth
+                                                </td>
+
+                                                {{-- Note --}}
+                                                <td
+                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                                    @if (auth()->user()->role !== 'ADMIN' && $prod->sampleInquiry)
+                                                        <form
+                                                            action="{{ route('sample-inquery-details.update-notes', $prod->sampleInquiry->id) }}"
+                                                            method="POST" class="w-full">
+                                                            @csrf
+                                                            @method('PATCH')
+
+                                                            <textarea name="notes" rows="2"
+                                                                class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm" required>{{ old('notes', $prod->sampleInquiry->notes) }}</textarea>
+
+                                                            <button type="submit"
+                                                                class="w-full mt-1 px-2 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition-all duration-200 text-sm">
+                                                                Save
+                                                            </button>
+                                                        </form>
+                                                    @elseif(auth()->user()->role !== 'ADMIN')
+                                                        <span>No linked inquiry found</span>
+                                                    @else
+                                                        <span
+                                                            class="readonly">{{ $prod->sampleInquiry->notes ?? 'N/D' }}</span>
+                                                    @endif
+                                                </td>
+
+                                                {{-- Action Buttons --}}
+                                                <td class="px-4 py-3 whitespace-normal break-words text-center">
+                                                    <div class="flex space-x-2 justify-center">
+                                                        {{-- @auth
+                                                            @if (auth()->user()->role === 'SUPERADMIN')
+                                                                <button type="button"
+                                                                    class="bg-green-600 h-10 hover:bg-green-700 text-white px-3 py-1 rounded text-sm"
+                                                                    onclick="editServiceRow('serviceRow{{ $prod->id }}')">
+                                                                    Edit
+                                                                </button>
+                                                                <button type="button"
+                                                                    class="bg-blue-600 h-10 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm hidden"
+                                                                    onclick="saveServiceRow('serviceRow{{ $prod->id }}')">
+                                                                    Save
+                                                                </button>
+                                                            @endif
+                                                        @endauth --}}
+                                                        @if ($prod->order_file_url)
+                                                            <a href="{{ $prod->order_file_url }}" target="_blank"
+                                                                class="bg-gray-600 h-10 w-20 hover:bg-gray-700 text-white px-3 py-2 rounded text-sm flex items-center justify-center ml-2">
+                                                                View
+                                                            </a>
+                                                        @else
+                                                            <button type="button"
+                                                                class="bg-gray-300 h-10 w-20 text-gray-500 px-3 py-1 rounded text-sm cursor-not-allowed"
+                                                                disabled>
+                                                                No File
+                                                            </button>
+                                                        @endif
                                                     </div>
-                                                </div>
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">Operator 001</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="Operator 001" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">Supervisor 001</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="Supervisor 001" />
-                                            </td>
-                                            <td class="py-3 whitespace-normal break-words text-center">
-                                                <div class="order-complete-item mb-4">
-                                                    <button onclick="toggleOrderComplete(event, this)" type="button"
-                                                        class="order-complete-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
-                                                        Pending
-                                                    </button>
-                                                    <div
-                                                        class="order-complete-timestamp mt-1 text-xs text-gray-500 dark:text-gray-400">
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">5 yard</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="5 yard" />
-                                            </td>
-                                            <td class="py-3 whitespace-normal break-words text-center">
-                                                <div class="sample-dispatch-item mb-4">
-                                                    <button onclick="toggleSampleDispatch(event, this)" type="button"
-                                                        class="sample-dispatch-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
-                                                        Pending
-                                                    </button>
-                                                    <div
-                                                        class="sample-dispatch-timestamp mt-1 text-xs text-gray-500 dark:text-gray-400">
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">abc 1234 long sample description to test line
-                                                    wrapping</span>
-                                                <textarea
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    rows="2">abc 1234 long sample description to test line wrapping</textarea>
-                                            </td>
-                                            <td class="px-4 py-3 text-center">
-                                                <div class="flex text-center space-x-2 justify-center">
-                                                    <button
-                                                        class="bg-green-600 h-10 hover:bg-green-700 text-white px-3 py-1 rounded text-sm"
-                                                        onclick="editServiceRow('serviceRow1')">
-                                                        Edit
-                                                    </button>
-                                                    <button
-                                                        class="bg-blue-600 h-10 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm hidden"
-                                                        onclick="saveServiceRow('serviceRow1')">
-                                                        Save
-                                                    </button>
-                                                    <button
-                                                        class="bg-gray-600 h-10 hover:bg-gray-700 text-white px-3 py-1 rounded text-sm">Download</button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr id="serviceRow1">
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">001</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="001" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">2025-05-05</span>
-                                                <input type="date"
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="2025-05-05" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">2025-05-05</span>
-                                                <input type="date"
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="2025-05-05" />
-                                            </td>
-                                            <td class="py-3 whitespace-normal break-words text-center">
-                                                <div class="order-start-item mb-4">
-                                                    <button onclick="toggleOrderStart(event, this)" type="button"
-                                                        class="order-start-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
-                                                        Pending
-                                                    </button>
-                                                    <div
-                                                        class="order-start-timestamp mt-1 text-xs text-gray-500 dark:text-gray-400">
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">Operator 001</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="Operator 001" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">Supervisor 001</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="Supervisor 001" />
-                                            </td>
-                                            <td class="py-3 whitespace-normal break-words text-center">
-                                                <div class="order-complete-item mb-4">
-                                                    <button onclick="toggleOrderComplete(event, this)" type="button"
-                                                        class="order-complete-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
-                                                        Pending
-                                                    </button>
-                                                    <div
-                                                        class="order-complete-timestamp mt-1 text-xs text-gray-500 dark:text-gray-400">
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">5 yard</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="5 yard" />
-                                            </td>
-                                            <td class="py-3 whitespace-normal break-words text-center">
-                                                <div class="sample-dispatch-item mb-4">
-                                                    <button onclick="toggleSampleDispatch(event, this)" type="button"
-                                                        class="sample-dispatch-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
-                                                        Pending
-                                                    </button>
-                                                    <div
-                                                        class="sample-dispatch-timestamp mt-1 text-xs text-gray-500 dark:text-gray-400">
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">abc 1234 long sample description to test line
-                                                    wrapping</span>
-                                                <textarea
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    rows="2">abc 1234 long sample description to test line wrapping</textarea>
-                                            </td>
-                                            <td class="px-4 py-3 text-center">
-                                                <div class="flex text-center space-x-2 justify-center">
-                                                    <button
-                                                        class="bg-green-600 h-10 hover:bg-green-700 text-white px-3 py-1 rounded text-sm"
-                                                        onclick="editServiceRow('serviceRow1')">
-                                                        Edit
-                                                    </button>
-                                                    <button
-                                                        class="bg-blue-600 h-10 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm hidden"
-                                                        onclick="saveServiceRow('serviceRow1')">
-                                                        Save
-                                                    </button>
-                                                    <button
-                                                        class="bg-gray-600 h-10 hover:bg-gray-700 text-white px-3 py-1 rounded text-sm">Download</button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr id="serviceRow1">
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">001</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="001" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">2025-05-05</span>
-                                                <input type="date"
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="2025-05-05" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">2025-05-05</span>
-                                                <input type="date"
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="2025-05-05" />
-                                            </td>
-                                            <td class="py-3 whitespace-normal break-words text-center">
-                                                <div class="order-start-item mb-4">
-                                                    <button onclick="toggleOrderStart(event, this)" type="button"
-                                                        class="order-start-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
-                                                        Pending
-                                                    </button>
-                                                    <div
-                                                        class="order-start-timestamp mt-1 text-xs text-gray-500 dark:text-gray-400">
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">Operator 001</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="Operator 001" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">Supervisor 001</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="Supervisor 001" />
-                                            </td>
-                                            <td class="py-3 whitespace-normal break-words text-center">
-                                                <div class="order-complete-item mb-4">
-                                                    <button onclick="toggleOrderComplete(event, this)" type="button"
-                                                        class="order-complete-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
-                                                        Pending
-                                                    </button>
-                                                    <div
-                                                        class="order-complete-timestamp mt-1 text-xs text-gray-500 dark:text-gray-400">
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">5 yard</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="5 yard" />
-                                            </td>
-                                            <td class="py-3 whitespace-normal break-words text-center">
-                                                <div class="sample-dispatch-item mb-4">
-                                                    <button onclick="toggleSampleDispatch(event, this)" type="button"
-                                                        class="sample-dispatch-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
-                                                        Pending
-                                                    </button>
-                                                    <div
-                                                        class="sample-dispatch-timestamp mt-1 text-xs text-gray-500 dark:text-gray-400">
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">abc 1234 long sample description to test line
-                                                    wrapping</span>
-                                                <textarea
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    rows="2">abc 1234 long sample description to test line wrapping</textarea>
-                                            </td>
-                                            <td class="px-4 py-3 text-center">
-                                                <div class="flex text-center space-x-2 justify-center">
-                                                    <button
-                                                        class="bg-green-600 h-10 hover:bg-green-700 text-white px-3 py-1 rounded text-sm"
-                                                        onclick="editServiceRow('serviceRow1')">
-                                                        Edit
-                                                    </button>
-                                                    <button
-                                                        class="bg-blue-600 h-10 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm hidden"
-                                                        onclick="saveServiceRow('serviceRow1')">
-                                                        Save
-                                                    </button>
-                                                    <button
-                                                        class="bg-gray-600 h-10 hover:bg-gray-700 text-white px-3 py-1 rounded text-sm">Download</button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr id="serviceRow1">
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">001</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="001" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">2025-05-05</span>
-                                                <input type="date"
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="2025-05-05" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">2025-05-05</span>
-                                                <input type="date"
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="2025-05-05" />
-                                            </td>
-                                            <td class="py-3 whitespace-normal break-words text-center">
-                                                <div class="order-start-item mb-4">
-                                                    <button onclick="toggleOrderStart(event, this)" type="button"
-                                                        class="order-start-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
-                                                        Pending
-                                                    </button>
-                                                    <div
-                                                        class="order-start-timestamp mt-1 text-xs text-gray-500 dark:text-gray-400">
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">Operator 001</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="Operator 001" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">Supervisor 001</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="Supervisor 001" />
-                                            </td>
-                                            <td class="py-3 whitespace-normal break-words text-center">
-                                                <div class="order-complete-item mb-4">
-                                                    <button onclick="toggleOrderComplete(event, this)" type="button"
-                                                        class="order-complete-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
-                                                        Pending
-                                                    </button>
-                                                    <div
-                                                        class="order-complete-timestamp mt-1 text-xs text-gray-500 dark:text-gray-400">
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">5 yard</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="5 yard" />
-                                            </td>
-                                            <td class="py-3 whitespace-normal break-words text-center">
-                                                <div class="sample-dispatch-item mb-4">
-                                                    <button onclick="toggleSampleDispatch(event, this)" type="button"
-                                                        class="sample-dispatch-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
-                                                        Pending
-                                                    </button>
-                                                    <div
-                                                        class="sample-dispatch-timestamp mt-1 text-xs text-gray-500 dark:text-gray-400">
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">abc 1234 long sample description to test line
-                                                    wrapping</span>
-                                                <textarea
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    rows="2">abc 1234 long sample description to test line wrapping</textarea>
-                                            </td>
-                                            <td class="px-4 py-3 text-center">
-                                                <div class="flex text-center space-x-2 justify-center">
-                                                    <button
-                                                        class="bg-green-600 h-10 hover:bg-green-700 text-white px-3 py-1 rounded text-sm"
-                                                        onclick="editServiceRow('serviceRow1')">
-                                                        Edit
-                                                    </button>
-                                                    <button
-                                                        class="bg-blue-600 h-10 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm hidden"
-                                                        onclick="saveServiceRow('serviceRow1')">
-                                                        Save
-                                                    </button>
-                                                    <button
-                                                        class="bg-gray-600 h-10 hover:bg-gray-700 text-white px-3 py-1 rounded text-sm">Download</button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr id="serviceRow1">
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">001</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="001" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">2025-05-05</span>
-                                                <input type="date"
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="2025-05-05" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">2025-05-05</span>
-                                                <input type="date"
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="2025-05-05" />
-                                            </td>
-                                            <td class="py-3 whitespace-normal break-words text-center">
-                                                <div class="order-start-item mb-4">
-                                                    <button onclick="toggleOrderStart(event, this)" type="button"
-                                                        class="order-start-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
-                                                        Pending
-                                                    </button>
-                                                    <div
-                                                        class="order-start-timestamp mt-1 text-xs text-gray-500 dark:text-gray-400">
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">Operator 001</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="Operator 001" />
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">Supervisor 001</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="Supervisor 001" />
-                                            </td>
-                                            <td class="py-3 whitespace-normal break-words text-center">
-                                                <div class="order-complete-item mb-4">
-                                                    <button onclick="toggleOrderComplete(event, this)" type="button"
-                                                        class="order-complete-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
-                                                        Pending
-                                                    </button>
-                                                    <div
-                                                        class="order-complete-timestamp mt-1 text-xs text-gray-500 dark:text-gray-400">
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">5 yard</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="5 yard" />
-                                            </td>
-                                            <td class="py-3 whitespace-normal break-words text-center">
-                                                <div class="sample-dispatch-item mb-4">
-                                                    <button onclick="toggleSampleDispatch(event, this)" type="button"
-                                                        class="sample-dispatch-btn bg-gray-300 text-black px-2 py-1 mt-3 rounded hover:bg-gray-400 transition-all duration-200">
-                                                        Pending
-                                                    </button>
-                                                    <div
-                                                        class="sample-dispatch-timestamp mt-1 text-xs text-gray-500 dark:text-gray-400">
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="px-4 py-3 whitespace-normal break-words">
-                                                <span class="readonly">abc 1234 long sample description to test line
-                                                    wrapping</span>
-                                                <textarea
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    rows="2">abc 1234 long sample description to test line wrapping</textarea>
-                                            </td>
-                                            <td class="px-4 py-3 text-center">
-                                                <div class="flex text-center space-x-2 justify-center">
-                                                    <button
-                                                        class="bg-green-600 h-10 hover:bg-green-700 text-white px-3 py-1 rounded text-sm"
-                                                        onclick="editServiceRow('serviceRow1')">
-                                                        Edit
-                                                    </button>
-                                                    <button
-                                                        class="bg-blue-600 h-10 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm hidden"
-                                                        onclick="saveServiceRow('serviceRow1')">
-                                                        Save
-                                                    </button>
-                                                    <button
-                                                        class="bg-gray-600 h-10 hover:bg-gray-700 text-white px-3 py-1 rounded text-sm">Download</button>
-                                                </div>
-                                            </td>
-                                        </tr>
+                                                </td>
+
+                                            </tr>
+                                        @endforeach
                                     </tbody>
                                 </table>
-                                <!-- Add Sample Modal -->
+                                <!-- Sample Details Modal -->
                                 <div id="viewDetailsSample"
                                     class="fixed inset-0 z-50 hidden bg-black bg-opacity-50 flex items-center justify-center py-5"
-                                    onclick="document.getElementById('viewDetailsSample').classList.add('hidden')">
+                                    onclick="this.classList.add('hidden')">
 
-                                    <!-- Modal box -->
                                     <div class="w-full max-w-[700px] bg-white dark:bg-gray-900 rounded-2xl shadow-2xl p-4 transform transition-all scale-95 max-h-[calc(100vh-10rem)] overflow-y-auto"
                                         onclick="event.stopPropagation()">
 
-                                        <div class="max-w-[600px] mx-auto p-8">
-                                            <h2
-                                                class="text-2xl font-semibold mb-8 text-blue-900 mt-4 dark:text-gray-100 text-center">
-                                                Order Number 001
+                                        <div class="max-w-[600px] mx-auto p-6">
+                                            <h2 id="modalOrderNo"
+                                                class="text-2xl font-semibold mb-6 text-blue-900 text-center">Order Number
                                             </h2>
-                                        </div>
 
+                                            <table class="w-full text-left border border-gray-300 text-sm">
+                                                <tbody>
+                                                    <tr>
+                                                        <th class="p-2 border">Item</th>
+                                                        <td class="p-2 border" id="modalItem"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="p-2 border">Item Description</th>
+                                                        <td class="p-2 border" id="modalDescription"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="p-2 border">Size</th>
+                                                        <td class="p-2 border" id="modalSize"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="p-2 border">QT Ref</th>
+                                                        <td class="p-2 border" id="modalQTRef"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="p-2 border">Color</th>
+                                                        <td class="p-2 border" id="modalColor"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="p-2 border">Style</th>
+                                                        <td class="p-2 border" id="modalStyle"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="p-2 border">Sample Qty</th>
+                                                        <td class="p-2 border" id="modalSampleQty"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="p-2 border">Shade</th>
+                                                        <td class="p-2 border" id="modalShade"></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+
+                                            <div class="text-center mt-6">
+                                                <button
+                                                    onclick="document.getElementById('viewDetailsSample').classList.add('hidden')"
+                                                    class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-md">
+                                                    Close
+                                                </button>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-
-                                <div class="py-6 flex justify-center">
-
-                                </div>
+                            </div>
+                            <div class="py-6 flex justify-center">
+                                {{-- Pagination --}}
+                                {{ $productions->links() }}
                             </div>
                         </div>
                     </div>
@@ -673,74 +832,6 @@
             </div>
         </div>
     </div>
-
-
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const clearFiltersBtn = document.getElementById('clearFiltersBtnProduction');
-            const filterForm = document.getElementById('filterForm3');
-
-            clearFiltersBtn.addEventListener('click', () => {
-                // Reset dropdown label and hidden sample input
-                document.getElementById('selectedSample').innerText = 'All Sample No';
-                document.getElementById('sampleInput').value = '';
-
-                // Reset date fields manually
-                document.getElementById('productionDeadlineFilter').value = '';
-                document.getElementById('oderCompleteDateFilter').value = '';
-
-                // Close dropdown
-                document.getElementById('sampleDropdownMenu').classList.add('hidden');
-                document.getElementById('sampleDropdown').setAttribute('aria-expanded', 'false');
-
-                // Prevent form submission and page reload
-                // filterForm.submit(); // Removed as per your request
-            });
-        });
-
-
-        function toggleSampleDropdown() {
-            const menu = document.getElementById('sampleDropdownMenu');
-            const btn = document.getElementById('sampleDropdown');
-            const expanded = btn.getAttribute('aria-expanded') === 'true';
-
-            menu.classList.toggle('hidden');
-            btn.setAttribute('aria-expanded', String(!expanded));
-
-            if (!menu.classList.contains('hidden')) {
-                document.getElementById('sampleSearchInput').value = '';
-                filterSamples();
-            }
-        }
-
-        function filterSamples() {
-            const filter = document.getElementById('sampleSearchInput').value.toLowerCase();
-            const options = document.querySelectorAll('#sampleDropdownMenu .sample-option');
-
-            options.forEach(option => {
-                const text = option.textContent.toLowerCase();
-                option.style.display = text.includes(filter) ? '' : 'none';
-            });
-        }
-
-        function selectSample(id, label) {
-            document.getElementById('selectedSample').innerText = label;
-            document.getElementById('sampleInput').value = id;
-            document.getElementById('sampleDropdownMenu').classList.add('hidden');
-            document.getElementById('sampleDropdown').setAttribute('aria-expanded', 'false');
-        }
-
-        // Close dropdown if clicking outside of it
-        document.addEventListener('click', function(e) {
-            const btn = document.getElementById('sampleDropdown');
-            const menu = document.getElementById('sampleDropdownMenu');
-
-            if (!btn.contains(e.target) && !menu.contains(e.target)) {
-                menu.classList.add('hidden');
-                btn.setAttribute('aria-expanded', 'false');
-            }
-        });
-    </script>
 
     <script>
         function editServiceRow(rowId) {
@@ -847,5 +938,215 @@
                 timestamp.textContent = '';
             }
         }
+    </script>
+
+    <script>
+        function toggleFilterForm() {
+            const form = document.getElementById('filterFormContainerTab3');
+            form.classList.toggle('hidden');
+        }
+    </script>
+
+    <script>
+        function selectDropdownOption(button, value, type) {
+            // Update the button text
+            const wrapper = button.closest('.relative');
+            const selectedSpan = wrapper.querySelector(`.selected-${type}`);
+            const hiddenInput = wrapper.querySelector(`.input-${type}`);
+            const dropdownMenu = wrapper.querySelector(`.dropdown-menu-${type}`);
+
+            selectedSpan.textContent = value;
+            hiddenInput.value = value;
+
+            // Hide the dropdown
+            dropdownMenu.classList.add('hidden');
+
+            // Submit the form
+            wrapper.closest('form').submit();
+        }
+
+        function filterDropdownOptions(inputElement) {
+            const searchValue = inputElement.value.toLowerCase();
+            const options = inputElement.closest('.dropdown-menu-operator, .dropdown-menu-supervisor')
+                .querySelectorAll('.dropdown-option');
+
+            options.forEach(option => {
+                const text = option.textContent.toLowerCase();
+                option.style.display = text.includes(searchValue) ? 'block' : 'none';
+            });
+        }
+
+        function toggleDropdown(button, type) {
+            const wrapper = button.closest('.relative');
+            const menu = wrapper.querySelector(`.dropdown-menu-${type}`);
+            document.querySelectorAll('.dropdown-menu-operator, .dropdown-menu-supervisor').forEach(d => {
+                if (d !== menu) d.classList.add('hidden');
+            });
+            menu.classList.toggle('hidden');
+        }
+
+        // Click outside to close dropdown
+        document.addEventListener('click', function(e) {
+            document.querySelectorAll('.dropdown-menu-operator, .dropdown-menu-supervisor').forEach(menu => {
+                if (!menu.closest('.relative').contains(e.target)) {
+                    menu.classList.add('hidden');
+                }
+            });
+        });
+    </script>
+
+    <script>
+        function openSampleModal(orderNo, item, description, size, qtRef, color, style, sampleQty, shade) {
+            document.getElementById('modalOrderNo').textContent = 'Order Number: ' + orderNo;
+            document.getElementById('modalItem').textContent = item;
+            document.getElementById('modalDescription').textContent = description;
+            document.getElementById('modalSize').textContent = size;
+            document.getElementById('modalQTRef').textContent = qtRef;
+            document.getElementById('modalColor').textContent = color;
+            document.getElementById('modalStyle').textContent = style;
+            document.getElementById('modalSampleQty').textContent = sampleQty;
+            document.getElementById('modalShade').textContent = shade;
+
+            document.getElementById('viewDetailsSample').classList.remove('hidden');
+        }
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // ======= ORDER NO DROPDOWN (Tab 3) =======
+            const orderDropdownBtn = document.getElementById("orderDropdownTab3");
+            const orderDropdownMenu = document.getElementById("orderDropdownMenuTab3");
+            const clearFiltersBtnTab3 = document.getElementById('clearFiltersBtnTab3');
+
+            // Prevent clicks inside dropdown menu from closing it
+            orderDropdownMenu.addEventListener("click", (event) => {
+                event.stopPropagation();
+            });
+
+            // Toggle Order No dropdown
+            window.toggleOrderDropdownTab3 = function(event) {
+                event.stopPropagation();
+                closeAllOrderDropdowns();
+                orderDropdownMenu.classList.toggle("hidden");
+                orderDropdownBtn.setAttribute("aria-expanded", !orderDropdownMenu.classList.contains("hidden"));
+            };
+
+            function closeAllOrderDropdowns() {
+                orderDropdownMenu.classList.add("hidden");
+                orderDropdownBtn.setAttribute("aria-expanded", "false");
+            }
+
+            // Close dropdown when clicking outside
+            document.addEventListener("click", () => {
+                closeAllOrderDropdowns();
+            });
+
+            // Select order from dropdown
+            window.selectOrderTab3 = function(value) {
+                document.getElementById("orderInputTab3").value = value;
+                document.getElementById("selectedOrderNoTab3").textContent = value || "Select Order No";
+                closeAllOrderDropdowns();
+            };
+
+            // Filter orders as user types
+            window.filterOrdersTab3 = function() {
+                const input = document.getElementById("orderSearchInputTab3");
+                const filter = input.value.toLowerCase();
+                const options = document.querySelectorAll(".order-option-tab3");
+
+                options.forEach(option => {
+                    option.style.display = option.textContent.toLowerCase().includes(filter) ? "block" :
+                        "none";
+                });
+            };
+
+            // ======= SAMPLE DROPDOWN =======
+            const sampleDropdownBtn = document.getElementById('sampleDropdown');
+            const sampleDropdownMenu = document.getElementById('sampleDropdownMenu');
+            const clearFiltersBtnProduction = document.getElementById('clearFiltersBtnProduction');
+
+            // Prevent clicks inside sample dropdown menu from closing it
+            sampleDropdownMenu.addEventListener('click', (e) => {
+                e.stopPropagation();
+            });
+
+            // Toggle sample dropdown
+            window.toggleSampleDropdown = function() {
+                const expanded = sampleDropdownBtn.getAttribute('aria-expanded') === 'true';
+
+                sampleDropdownMenu.classList.toggle('hidden');
+                sampleDropdownBtn.setAttribute('aria-expanded', String(!expanded));
+
+                if (!sampleDropdownMenu.classList.contains('hidden')) {
+                    document.getElementById('sampleSearchInput').value = '';
+                    filterSamples();
+                }
+            };
+
+            // Filter sample dropdown options
+            window.filterSamples = function() {
+                const filter = document.getElementById('sampleSearchInput').value.toLowerCase();
+                const options = document.querySelectorAll('#sampleDropdownMenu .sample-option');
+
+                options.forEach(option => {
+                    option.style.display = option.textContent.toLowerCase().includes(filter) ? '' :
+                        'none';
+                });
+            };
+
+            // Select sample from dropdown
+            window.selectSample = function(id, label) {
+                document.getElementById('selectedSample').innerText = label;
+                document.getElementById('sampleInput').value = id;
+                sampleDropdownMenu.classList.add('hidden');
+                sampleDropdownBtn.setAttribute('aria-expanded', 'false');
+            };
+
+            // Close sample dropdown when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!sampleDropdownBtn.contains(e.target) && !sampleDropdownMenu.contains(e.target)) {
+                    sampleDropdownMenu.classList.add('hidden');
+                    sampleDropdownBtn.setAttribute('aria-expanded', 'false');
+                }
+            });
+        });
+        // Clear filters button for Tab 3
+        document.getElementById('clearFiltersBtnTab3').addEventListener('click', function() {
+            window.location.href = window.location.pathname;
+        });
+    </script>
+
+    <script>
+        function toggleDropdownDispatch(button, type) {
+            const dropdownMenu = button.nextElementSibling;
+            document.querySelectorAll('.dropdown-menu-' + type).forEach(menu => {
+                if (menu !== dropdownMenu) menu.classList.add('hidden');
+            });
+            dropdownMenu.classList.toggle('hidden');
+        }
+
+        function selectDropdownOptionDispatch(button, selectedValue, type) {
+            const dropdown = button.closest('.relative');
+            dropdown.querySelector('.selected-' + type).innerText = selectedValue;
+            dropdown.querySelector('.input-' + type).value = selectedValue;
+            dropdown.querySelector('.dropdown-menu-' + type).classList.add('hidden');
+        }
+
+        function filterDropdownOptionsDispatch(input) {
+            const filter = input.value.toLowerCase();
+            const options = input.closest('[class^="dropdown-menu-"]').querySelectorAll('.dropdown-option');
+            options.forEach(option => {
+                const text = option.textContent.toLowerCase();
+                option.style.display = text.includes(filter) ? 'block' : 'none';
+            });
+        }
+
+        document.addEventListener('click', function(event) {
+            document.querySelectorAll('[class^="dropdown-menu-"]').forEach(menu => {
+                if (!menu.contains(event.target) && !menu.previousElementSibling.contains(event.target)) {
+                    menu.classList.add('hidden');
+                }
+            });
+        });
     </script>
 @endsection
