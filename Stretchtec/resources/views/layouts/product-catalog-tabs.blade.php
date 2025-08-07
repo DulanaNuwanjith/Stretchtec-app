@@ -23,7 +23,7 @@
                 </a>
                 <a href="{{ route('codeCatalog.index') }}"
                     class="pb-2 px-3 font-semibold {{ request()->routeIs('codeCatalog.*') ? 'border-b-2 border-blue-500 text-blue-600' : 'text-gray-600' }}">
-                    Code Catalog
+                    Cord Catalog
                 </a>
                 <a href="{{ route('tapeCatalog.index') }}"
                     class="pb-2 px-3 font-semibold {{ request()->routeIs('tapeCatalog.*') ? 'border-b-2 border-blue-500 text-blue-600' : 'text-gray-600' }}">

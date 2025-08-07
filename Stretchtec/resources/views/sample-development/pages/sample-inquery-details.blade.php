@@ -1090,7 +1090,7 @@
                                                                         onclick="selectDropdownOptionItemAdd(this, 'Elastic', 'item')">Elastic</button>
                                                                     <button type="button"
                                                                         class="dropdown-option w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
-                                                                        onclick="selectDropdownOptionItemAdd(this, 'Code', 'item')">Code</button>
+                                                                        onclick="selectDropdownOptionItemAdd(this, 'Code', 'item')">Cord</button>
                                                                     <button type="button"
                                                                         class="dropdown-option w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
                                                                         onclick="selectDropdownOptionItemAdd(this, 'Tape', 'item')">Tape</button>
