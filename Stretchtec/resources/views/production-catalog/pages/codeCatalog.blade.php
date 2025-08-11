@@ -264,7 +264,7 @@
                             </form>
 
                             <div class="flex justify-between items-center mb-6">
-                                <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Code Production Catalog
+                                <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Cord Production Catalog
                                 </h1>
                                 @if (in_array(Auth::user()->role, ['SAMPLEDEVELOPER', 'SUPERADMIN']))
                                     <button
@@ -519,7 +519,7 @@
                                     <div class="max-w-[600px] mx-auto p-8">
                                         <h2
                                             class="text-2xl font-semibold mb-8 text-blue-900 mt-4 dark:text-gray-100 text-center">
-                                            Add New Code Catalog Item
+                                            Add New Cord Catalog Item
                                         </h2>
                                         <form action="{{ route('codeCatalog.store') }}" method="POST"
                                             enctype="multipart/form-data">
