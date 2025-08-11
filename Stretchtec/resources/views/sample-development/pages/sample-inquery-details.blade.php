@@ -423,7 +423,7 @@
                             </div>
 
                             <div id="sampleInquiryRecordsScroll"
-                                class="overflow-x-auto max-h-[1100px] bg-white dark:bg-gray-900 shadow rounded-lg">
+                                class="overflow-x-auto max-h-[600px] bg-white dark:bg-gray-900 shadow rounded-lg">
                                 <table class="table-fixed w-full text-sm divide-y divide-gray-200 dark:divide-gray-700">
                                     <thead class="bg-gray-200 dark:bg-gray-700 text-left">
                                         <tr class="text-center">
