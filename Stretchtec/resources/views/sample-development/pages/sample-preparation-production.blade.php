@@ -135,7 +135,7 @@
 
                             <div id="filterFormContainerTab3" class="mt-4 hidden">
                                 <form id="filterForm3" method="GET"
-                                    action="{{ route('sample-preparation-production.index') }}" class="mb-6 sticky top-0 z-20 flex gap-6 items-center">
+                                    action="{{ route('sample-preparation-production.index') }}" class="mb-6 sticky top-0 z-40 flex gap-6 items-center">
                                     {{-- Keep the tab=3 in query to know which tab is active --}}
                                     <input type="hidden" name="tab" value="3">
 
@@ -207,54 +207,54 @@
                                 </h1>
                             </div>
 
-                            <div class="overflow-x-auto bg-white dark:bg-gray-900 shadow rounded-lg">
+                            <div class="overflow-x-auto max-h-[1200px] bg-white dark:bg-gray-900 shadow rounded-lg">
                                 <table class="table-fixed w-full text-sm divide-y divide-gray-200 dark:divide-gray-700">
                                     <thead class="bg-gray-100 dark:bg-gray-700 text-left">
                                         <tr class="text-center">
                                             <th
-                                                class="font-bold sticky left-0 z-10 bg-white px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold sticky left-0 top-0 z-30 bg-white px-4 py-3 w-32 box-border text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Order No
                                             </th>
                                             <th
-                                                class="font-bold px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Production Deadline
                                             </th>
                                             <th
-                                                class="font-bold px-4 py-3 w-48 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-48 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Order Received Date & Time
                                             </th>
                                             <th
-                                                class="font-bold px-4 py-3 w-48 text-center text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-48 text-center text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Order Start Date & Time
                                             </th>
                                             <th
-                                                class="font-bold px-4 py-3 w-52 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold sticky top-0 z-20 bg-gray-200 px-4 py-3 w-52 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Operator Name
                                             </th>
                                             <th
-                                                class="font-bold px-4 py-3 w-52 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold sticky top-0 z-20 bg-gray-200 px-4 py-3 w-52 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Supervisor Name
                                             </th>
                                             <th
-                                                class="font-bold px-4 py-3 w-48 text-center text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-48 text-center text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Order Complete Date & Time
                                             </th>
                                             <th
-                                                class="font-bold px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Production Output</th>
                                             <th
-                                                class="font-bold px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Damaged Output</th>
                                             <th
-                                                class="font-bold px-4 py-3 w-64 text-center text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold sticky top-0 z-20 bg-gray-200 px-4 py-3 w-64 text-center text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Dispatch to R&D
                                             </th>
                                             <th
-                                                class="font-bold px-4 py-3 w-72 text-center text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-72 text-center text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Note
                                             </th>
                                             <th
-                                                class="font-bold px-4 py-3 w-48 text-center text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-48 text-center text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Action
                                             </th>
                                         </tr>
@@ -266,7 +266,7 @@
                                                 class="odd:bg-white even:bg-gray-50 border-b border-gray-200  text-left">
                                                 {{-- Order No --}}
                                                 <td
-                                                    class="sticky left-0 z-10 bg-white px-4 py-3 bg-gray-100 whitespace-normal break-words border-r border-gray-300">
+                                                    class="sticky left-0 z-20 bg-white px-4 py-3 bg-gray-100 whitespace-normal break-words border-r border-gray-300">
                                                     <span
                                                         class="readonly font-bold hover:text-blue-600 hover:underline cursor-pointer"
                                                         onclick="openSampleModal(
