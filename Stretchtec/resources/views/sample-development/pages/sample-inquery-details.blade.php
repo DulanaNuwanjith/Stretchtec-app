@@ -133,7 +133,7 @@
                             <div id="filterFormContainer" class="hidden mt-4">
                                 <!-- Filter Form -->
                                 <form id="filterForm1" method="GET" action="{{ route('sample-inquery-details.index') }}"
-                                    class="mb-6 sticky top-0 z-20 flex gap-6 items-center">
+                                    class="mb-6 sticky top-0 z-40 flex gap-6 items-center">
                                     <div class="flex items-center gap-4 flex-wrap">
 
                                         <!-- CUSTOMER DROPDOWN -->
@@ -156,7 +156,7 @@
                                                 </button>
                                             </div>
                                             <div id="customerDropdownMenu"
-                                                class="hidden absolute z-10 mt-2 w-full rounded-md bg-white shadow-lg ring-1 ring-black/5 dark:bg-gray-700 max-h-48 overflow-y-auto">
+                                                class="hidden absolute z-40 mt-2 w-full rounded-md bg-white shadow-lg ring-1 ring-black/5 dark:bg-gray-700 max-h-48 overflow-y-auto">
                                                 <div class="p-2 sticky top-0 bg-white dark:bg-gray-700 z-10">
                                                     <input type="text" id="customerSearchInput"
                                                         placeholder="Search customers..."
@@ -200,7 +200,7 @@
                                                 </button>
                                             </div>
                                             <div id="merchandiserDropdownMenu"
-                                                class="hidden absolute z-10 mt-2 w-full rounded-md bg-white shadow-lg ring-1 ring-black/5 dark:bg-gray-700 max-h-48 overflow-y-auto">
+                                                class="hidden absolute z-40 mt-2 w-full rounded-md bg-white shadow-lg ring-1 ring-black/5 dark:bg-gray-700 max-h-48 overflow-y-auto">
                                                 <div class="p-2 sticky top-0 bg-white dark:bg-gray-700 z-10">
                                                     <input type="text" id="merchandiserSearchInput"
                                                         placeholder="Search merchandisers..."
@@ -244,7 +244,7 @@
                                                 </button>
                                             </div>
                                             <div id="itemDropdownMenu"
-                                                class="hidden absolute z-10 mt-2 w-full rounded-md bg-white shadow-lg ring-1 ring-black/5 dark:bg-gray-700 max-h-48 overflow-y-auto">
+                                                class="hidden absolute z-40 mt-2 w-full rounded-md bg-white shadow-lg ring-1 ring-black/5 dark:bg-gray-700 max-h-48 overflow-y-auto">
                                                 <div class="p-2 sticky top-0 bg-white dark:bg-gray-700 z-10">
                                                     <input type="text" id="itemSearchInput"
                                                         placeholder="Search items..."
@@ -295,7 +295,7 @@
 
                                             <!-- Dropdown Menu -->
                                             <div id="deliveryStatusDropdownMenu"
-                                                class="hidden absolute z-10 mt-2 w-full rounded-md bg-white shadow-lg ring-1 ring-black/5 dark:bg-gray-700 max-h-48 overflow-y-auto">
+                                                class="hidden absolute z-40 mt-2 w-full rounded-md bg-white shadow-lg ring-1 ring-black/5 dark:bg-gray-700 max-h-48 overflow-y-auto">
 
                                                 <!-- Search Input -->
                                                 <div class="p-2 sticky top-0 bg-white dark:bg-gray-700 z-10">
@@ -355,7 +355,7 @@
 
                                                 <!-- Dropdown Menu -->
                                                 <div id="customerDecisionDropdownMenu"
-                                                    class="hidden absolute z-10 mt-2 w-full rounded-md bg-white shadow-lg ring-1 ring-black/5 dark:bg-gray-700 max-h-48 overflow-y-auto">
+                                                    class="hidden absolute z-40 mt-2 w-full rounded-md bg-white shadow-lg ring-1 ring-black/5 dark:bg-gray-700 max-h-48 overflow-y-auto">
                                                     <div class="p-2 sticky top-0 bg-white dark:bg-gray-700 z-10">
                                                         <input type="text" id="customerDecisionSearchInput"
                                                             placeholder="Search decision..."
