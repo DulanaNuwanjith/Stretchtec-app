@@ -118,6 +118,7 @@ class SamplePreparationRnDController extends Controller
             'value'=> 'required|numeric',
             'shade' => 'required|string',
             'tkt' => 'required|string',
+            'yarnPrice' => 'required|string',
             'yarnSupplier' => 'required|string',
             'customSupplier' => 'nullable|string',
         ]);
@@ -132,6 +133,7 @@ class SamplePreparationRnDController extends Controller
         $rnd->yarnOrderedWeight = $request->value;
         $rnd->shade = $request->shade;
         $rnd->tkt = $request->tkt;
+        $rnd->yarnPrice = $request->yarnPrice;
         $rnd->yarnSupplier = $request->yarnSupplier;
         $rnd->is_po_locked = true; // Lock the PO field
         $rnd->is_shade_locked = true; // Lock the shade field

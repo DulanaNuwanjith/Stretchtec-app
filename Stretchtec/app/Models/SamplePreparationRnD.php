@@ -24,6 +24,7 @@ class SamplePreparationRnD extends Model
         'tkt',
         'is_tkt_locked',
         'yarnSupplier',
+        'yarnPrice',
         'is_supplier_locked',
         'yarnReceiveDate',
         'productionDeadline',

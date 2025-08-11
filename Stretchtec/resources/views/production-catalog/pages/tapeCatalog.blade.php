@@ -518,7 +518,7 @@
                                     <div class="max-w-[600px] mx-auto p-8">
                                         <h2
                                             class="text-2xl font-semibold mb-8 text-blue-900 mt-4 dark:text-gray-100 text-center">
-                                            Add New Code Catalog Item
+                                            Add New Tape Catalog Item
                                         </h2>
                                         <form action="{{ route('tapeCatalog.store') }}" method="POST"
                                             enctype="multipart/form-data">

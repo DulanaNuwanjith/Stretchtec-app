@@ -27,6 +27,7 @@ return new class extends Migration
             $table->string('shade')->nullable();
             $table->string('tkt')->nullable();
             $table->string('yarnSupplier')->nullable();
+            $table->string('yarnPrice')->nullable();
             $table->timestamp('yarnReceiveDate')->nullable();
             $table->date('productionDeadline')->nullable();
             $table->timestamp('sendOrderToProductionStatus')->nullable();
