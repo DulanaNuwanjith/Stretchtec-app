@@ -743,8 +743,9 @@
                                                             @endif
                                                         @endauth --}}
                                                         @if ($prod->order_file_url)
-                                                            <a href="{{ $prod->order_file_url }}" target="_blank"
-                                                                class="bg-gray-600 h-10 w-20 hover:bg-gray-700 text-white px-3 py-2 rounded text-sm flex items-center justify-center ml-2">
+                                                            <a href="{{ asset('storage/' . $prod->sampleInquiry->orderFile) }}"
+                                                               target="_blank"
+                                                               class="bg-gray-600 h-10 w-20 hover:bg-gray-700 text-white px-3 py-2 rounded text-sm flex items-center justify-center ml-2">
                                                                 View
                                                             </a>
                                                         @else
