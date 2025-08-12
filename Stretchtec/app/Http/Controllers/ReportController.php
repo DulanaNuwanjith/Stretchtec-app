@@ -9,6 +9,7 @@ use App\Models\SamplePreparationProduction;
 use App\Models\ColorMatchReject;
 use App\Models\ProductCatalog;
 use PDF;
+use Carbon\Carbon;
 
 class ReportController extends Controller
 {
@@ -77,6 +78,13 @@ class ReportController extends Controller
         $leftoverYarnQuantity = $rnd->yarnLeftoverWeight ?? null;
         $yarnPrice = $rnd->yarnPrice ?? null;
 
+        // Calculate days difference if both dates exist
+        $daysToDelivery = null;
+        if ($sampleInquiry->inquiryReceiveDate && $sampleInquiry->customerDeliveryDate) {
+            $daysToDelivery = Carbon::parse($sampleInquiry->inquiryReceiveDate)
+                                ->diffInDays(Carbon::parse($sampleInquiry->customerDeliveryDate));
+        }
+
         $reportData = [
             'sampleInquiry'        => $sampleInquiry,
             'rnd'                  => $rnd,
@@ -87,6 +95,7 @@ class ReportController extends Controller
             'yarnOrderedQuantity'  => $yarnOrderedQuantity,
             'leftoverYarnQuantity' => $leftoverYarnQuantity,
             'yarnPrice'            => $yarnPrice,
+            'daysToDelivery'       => $daysToDelivery,
         ];
 
         $pdf = PDF::loadView('reports.sampleOrder_report_pdf', $reportData);

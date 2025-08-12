@@ -1,5 +1,8 @@
 <!DOCTYPE html>
 <html>
+@php
+use Carbon\Carbon;
+@endphp
 
 <head>
     <title>Order Report - {{ $sampleInquiry->orderNo }}</title>
@@ -96,7 +99,7 @@
 
             /* Make full width */
             width: 100%;
-            margin-top: 40px; 
+            margin-top: 40px;
         }
 
         /* Nested grid for R&D + Yarn Order on right top */
@@ -143,8 +146,18 @@
                         {{ $sampleInquiry->merchandiseName ?? 'N/A' }}</li>
                     <li><strong style="width: 180px; display: inline-block;">Customer Coordinator Name:</strong>
                         {{ $sampleInquiry->coordinatorName ?? 'N/A' }}</li>
+                    <li><strong style="width: 180px; display: inline-block;">Customer Delivery Date:</strong>
+                        {{ $sampleInquiry->customerDeliveryDate->format('Y-m-d') ?? 'N/A' }}</li>
                     <li><strong style="width: 180px; display: inline-block;">Customer Decision:</strong>
                         {{ $customerDecision ?? 'N/A' }}</li>
+                    @if ($sampleInquiry->inquiryReceiveDate && $sampleInquiry->customerDeliveryDate)
+                        <li><strong style="width: 180px; display: inline-block;">Days to Delivery:</strong>
+                            {{ Carbon::parse($sampleInquiry->inquiryReceiveDate)->diffInDays(Carbon::parse($sampleInquiry->customerDeliveryDate)) }}
+                            days
+                        </li>
+                    @else
+                        <li><strong style="width: 180px; display: inline-block;">Days to Delivery:</strong> N/A</li>
+                    @endif
                 </ul>
 
                 <!-- Right side: order file image + download -->
