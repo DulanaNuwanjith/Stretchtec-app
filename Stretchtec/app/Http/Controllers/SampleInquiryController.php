@@ -38,6 +38,10 @@ class SampleInquiryController extends Controller
             $query->where('item', $request->item);
         }
 
+        if ($request->filled('coordinator')) {
+             $query->where('coordinatorName', $request->coordinator);
+         }
+
         // Filter by delivery status using customerDeliveryDate
         if ($request->filled('deliveryStatus')) {
             $validStatuses = ['Delivered', 'Pending'];
@@ -66,8 +70,9 @@ class SampleInquiryController extends Controller
         $customers = SampleInquiry::select('customerName')->distinct()->orderBy('customerName')->pluck('customerName');
         $merchandisers = SampleInquiry::select('merchandiseName')->distinct()->orderBy('merchandiseName')->pluck('merchandiseName');
         $items = SampleInquiry::select('item')->distinct()->orderBy('item')->pluck('item');
+        $coordinators = SampleInquiry::select('coordinatorName')->distinct()->orderBy('coordinatorName')->pluck('coordinatorName');
 
-        return view('sample-development.pages.sample-inquery-details', compact('inquiries', 'customers', 'merchandisers','items'));
+        return view('sample-development.pages.sample-inquery-details', compact('inquiries', 'customers', 'merchandisers','items','coordinators'));
     }
 
     public function updateNotes(Request $request, $id)
