@@ -45,7 +45,7 @@
                 <!-- All-time data -->
                 <div class="text-center w-full">
                     <h4 class="text-md font-semibold text-gray-700 dark:text-gray-300 mb-1">All Time</h4>
-                    <div class="text-3xl font-semibold text-green-600">{{ $acceptedOrders ?? 0 }}</div>
+                    <div class="text-3xl font-semibold text-green-600">{{ $acceptedSamples ?? 0 }}</div>
                     <div class="text-gray-500 dark:text-gray-400 text-sm">Samples</div>
                 </div>
 
@@ -54,7 +54,7 @@
                 <!-- Last 30 days data -->
                 <div class="text-center w-full">
                     <h4 class="text-md font-semibold text-gray-700 dark:text-gray-300 mb-1">Last 30 Days</h4>
-                    <div class="text-3xl font-semibold text-green-400">{{ $acceptedOrdersWithin30Days ?? 0 }}</div>
+                    <div class="text-3xl font-semibold text-green-400">{{ $acceptedSamplesWithin30Days ?? 0 }}</div>
                     <div class="text-gray-500 dark:text-gray-400 text-sm">Orders</div>
                 </div>
             </div>
@@ -69,7 +69,7 @@
                 <!-- All-time data -->
                 <div class="text-center w-full">
                     <h4 class="text-md font-semibold text-gray-700 dark:text-gray-300 mb-1">All Time</h4>
-                    <div class="text-3xl font-semibold text-red-600">{{ $rejectedOrders ?? 0 }}</div>
+                    <div class="text-3xl font-semibold text-red-600">{{ $rejectedSamples ?? 0 }}</div>
                     <div class="text-gray-500 dark:text-gray-400 text-sm">Samples</div>
                 </div>
 
@@ -78,7 +78,7 @@
                 <!-- Last 30 days data -->
                 <div class="text-center w-full">
                     <h4 class="text-md font-semibold text-gray-700 dark:text-gray-300 mb-1">Last 30 Days</h4>
-                    <div class="text-3xl font-semibold text-red-400">{{ $rejectedOrdersWithin30Days ?? 0 }}</div>
+                    <div class="text-3xl font-semibold text-red-400">{{ $rejectedSamplesWithin30Days ?? 0 }}</div>
                     <div class="text-gray-500 dark:text-gray-400 text-sm">Samples</div>
                 </div>
             </div>
@@ -93,7 +93,7 @@
                 <!-- All-time data -->
                 <div class="text-center w-full">
                     <h4 class="text-md font-semibold text-gray-700 dark:text-gray-300 mb-1">All Time</h4>
-                    <div class="text-3xl font-semibold text-yellow-600">{{ $ordersInProduction ?? 0 }}</div>
+                    <div class="text-3xl font-semibold text-yellow-600">{{ $inProductionSamples ?? 0 }}</div>
                     <div class="text-gray-500 dark:text-gray-400 text-sm">Samples</div>
                 </div>
 
@@ -102,7 +102,7 @@
                 <!-- Last 30 days data -->
                 <div class="text-center w-full">
                     <h4 class="text-md font-semibold text-gray-700 dark:text-gray-300 mb-1">Last 30 Days</h4>
-                    <div class="text-3xl font-semibold text-yellow-400">{{ $ordersInProductionWithin30Days ?? 0 }}</div>
+                    <div class="text-3xl font-semibold text-yellow-400">{{ $inProductionSamplesWithin30Days ?? 0 }}</div>
                     <div class="text-gray-500 dark:text-gray-400 text-sm">Samples</div>
                 </div>
             </div>
@@ -141,7 +141,7 @@
                 <!-- All-time data -->
                 <div class="text-center w-full">
                     <h4 class="text-md font-semibold text-gray-700 dark:text-gray-300 mb-1">All Time</h4>
-                    <div class="text-3xl font-semibold text-pink-600">{{ $yarnOrderedNotReceived ?? 0 }}</div>
+                    <div class="text-3xl font-semibold text-pink-600">{{ $yarnOrderedButNotReceived ?? 0 }}</div>
                     <div class="text-gray-500 dark:text-gray-400 text-sm">Samples</div>
                 </div>
 
@@ -150,7 +150,7 @@
                 <!-- Last 30 days data -->
                 <div class="text-center w-full">
                     <h4 class="text-md font-semibold text-gray-700 dark:text-gray-300 mb-1">Last 30 Days</h4>
-                    <div class="text-3xl font-semibold text-pink-400">{{ $yarnOrderedNotReceivedWithin30Days ?? 0 }}</div>
+                    <div class="text-3xl font-semibold text-pink-400">{{ $yarnOrderedButNotReceivedWithin30Days ?? 0 }}</div>
                     <div class="text-gray-500 dark:text-gray-400 text-sm">Samples</div>
                 </div>
             </div>

@@ -36,15 +36,15 @@ class DashboardController extends Controller
 
         $yarnOrderedButNotReceived = SamplePreparationRnD::whereNotNull('yarnOrderedDate')
             ->whereNull('yarnReceiveDate')
-            ->get();
+            ->count();
         $yarnOrderedButNotReceivedWithin30Days = SamplePreparationRnD::whereNotNull('yarnOrderedDate')
             ->whereNull('yarnReceiveDate')
             ->where('created_at', '>=', now()->subDays(30))
-            ->get();
+            ->count();
 
 
         // Get distinct customer coordinators
-        $coordinatorNames = User::where('role', 'customer_coordinator')
+        $coordinatorNames = User::where('role', 'CUSTOMERCOORDINATOR')
             ->distinct()
             ->pluck('name')
             ->toArray();
