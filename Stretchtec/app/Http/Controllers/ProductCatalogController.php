@@ -39,7 +39,7 @@ class ProductCatalogController extends Controller
     // Display a listing of the product catalog entries
     public function codeCatalog(Request $request)
     {
-        $query = ProductCatalog::where('item', 'Code');
+        $query = ProductCatalog::where('item', 'Cord');
 
         // Apply filters
         if ($request->filled('orderNo')) {
@@ -57,9 +57,9 @@ class ProductCatalogController extends Controller
         $catalogs = $query->latest()->paginate(15)->appends($request->query());
 
         // Pass dropdown values for filtering (unique list)
-        $orderNos = ProductCatalog::where('item', 'Code')->distinct()->pluck('order_no');
-        $merchandisers = ProductCatalog::where('item', 'Code')->distinct()->pluck('coordinator_name');
-        $referenceNos = ProductCatalog::where('item', 'Code')->distinct()->pluck('reference_no');
+        $orderNos = ProductCatalog::where('item', 'Cord')->distinct()->pluck('order_no');
+        $merchandisers = ProductCatalog::where('item', 'Cord')->distinct()->pluck('coordinator_name');
+        $referenceNos = ProductCatalog::where('item', 'Cord')->distinct()->pluck('reference_no');
 
         return view('production-catalog.pages.codeCatalog', compact('catalogs', 'orderNos', 'merchandisers', 'referenceNos'));
     }
@@ -154,7 +154,7 @@ class ProductCatalogController extends Controller
         ]);
 
         $data = $request->all();
-        $data['item'] = 'Code'; // force item
+        $data['item'] = 'Cord'; // force item
 
         ProductCatalog::create($data);
 
