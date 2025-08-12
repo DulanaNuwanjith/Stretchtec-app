@@ -9,10 +9,10 @@
         </div>
 
         <!-- Cards Section -->
-        <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-6 mb-12">
+        <div class="flex flex-wrap justify-center gap-6 mb-12">
 
-            <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6 flex flex-col items-center space-y-6">
-                <!-- Active Orders Card -->
+            <!-- All Sample Inquiries Card -->
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6 flex flex-col items-center space-y-6 w-[220px]">
                 <div class="mb-4">
                     <h3 class="text-lg font-bold text-gray-800 dark:text-white whitespace-nowrap overflow-hidden text-ellipsis">
                         All Sample Inquiries</h3>
@@ -36,7 +36,7 @@
             </div>
 
             <!-- Accepted Orders Card -->
-            <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6 flex flex-col items-center space-y-6">
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6 flex flex-col items-center space-y-6 w-[220px]">
                 <div class="mb-4">
                     <h3 class="text-lg font-bold text-gray-800 dark:text-white whitespace-nowrap overflow-hidden text-ellipsis">
                         Accepted Samples</h3>
@@ -60,7 +60,7 @@
             </div>
 
             <!-- Rejected Orders Card -->
-            <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6 flex flex-col items-center space-y-6">
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6 flex flex-col items-center space-y-6 w-[220px]">
                 <div class="mb-4">
                     <h3 class="text-lg font-bold text-gray-800 dark:text-white whitespace-nowrap overflow-hidden text-ellipsis">
                         Rejected Samples</h3>
@@ -84,7 +84,7 @@
             </div>
 
             <!-- Orders in Production Card -->
-            <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6 flex flex-col items-center space-y-6">
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6 flex flex-col items-center space-y-6 w-[220px]">
                 <div class="mb-4">
                     <h3 class="text-lg font-bold text-gray-800 dark:text-white whitespace-nowrap overflow-hidden text-ellipsis">
                         In Production</h3>
@@ -108,7 +108,7 @@
             </div>
 
             <!-- Production Complete Samples Card -->
-            <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6 flex flex-col items-center space-y-6">
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6 flex flex-col items-center space-y-6 w-[220px]">
                 <div class="mb-4">
                     <h3 class="text-lg font-bold text-gray-800 dark:text-white whitespace-nowrap overflow-hidden text-ellipsis">
                         Production Complete</h3>
@@ -132,7 +132,7 @@
             </div>
 
             <!-- Yarn Ordered but Not Received Card -->
-            <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6 flex flex-col items-center space-y-6">
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6 flex flex-col items-center space-y-6 w-[270px]">
                 <div class="mb-4">
                     <h3 class="text-lg font-bold text-gray-800 dark:text-white whitespace-nowrap overflow-hidden text-ellipsis">
                         Yarn Ordered (Not Received)</h3>
