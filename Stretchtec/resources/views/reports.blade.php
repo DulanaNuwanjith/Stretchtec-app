@@ -6,6 +6,13 @@
             <h2 class="text-3xl font-bold text-gray-800 dark:text-white">Reports Genarator</h2>
         </div>
 
+        <form action="{{ route('report.order') }}" method="GET">
+            @csrf
+            <label for="order_no">Enter Order Number:</label>
+            <input type="text" name="order_no" id="order_no" required>
+            <button type="submit">Generate Report</button>
+        </form>
+
 
     </div>
 </div>

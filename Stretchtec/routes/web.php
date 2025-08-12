@@ -8,6 +8,7 @@ use App\Http\Controllers\SamplePreparationProductionController;
 use App\Http\Controllers\SampleStockController;
 use App\Http\Controllers\UserMananagementController;
 use App\Http\Controllers\ProductCatalogController;
+use App\Http\Controllers\ReportController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -213,3 +214,5 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/userDetails/{id}', [UserMananagementController::class, 'destroy'])->name('userDetails.destroy');
     });
 });
+
+Route::get('/report/order', [ReportController::class, 'generateOrderReport'])->name('report.order');
