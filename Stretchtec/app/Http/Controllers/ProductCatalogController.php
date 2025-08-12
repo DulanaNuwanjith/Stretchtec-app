@@ -158,7 +158,7 @@ class ProductCatalogController extends Controller
 
         ProductCatalog::create($data);
 
-        return redirect()->route('codeCatalog.index')->with('success', 'Code catalog entry created.');
+        return redirect()->route('codeCatalog.index')->with('success', 'Cord catalog entry created.');
     }
 
     public function storeTape(Request $request)
