@@ -26,6 +26,10 @@ class SampleInquiryController extends Controller
         $query = SampleInquiry::query();
 
         // Apply filters
+        if ($request->filled('orderNo')) {
+            $query->where('orderNo', $request->orderNo);
+        }
+
         if ($request->filled('customer')) {
             $query->where('customerName', $request->customer);
         }
@@ -71,8 +75,9 @@ class SampleInquiryController extends Controller
         $merchandisers = SampleInquiry::select('merchandiseName')->distinct()->orderBy('merchandiseName')->pluck('merchandiseName');
         $items = SampleInquiry::select('item')->distinct()->orderBy('item')->pluck('item');
         $coordinators = SampleInquiry::select('coordinatorName')->distinct()->orderBy('coordinatorName')->pluck('coordinatorName');
+        $orderNos = SampleInquiry::select('orderNo')->distinct()->orderBy('orderNo')->pluck('orderNo');
 
-        return view('sample-development.pages.sample-inquery-details', compact('inquiries', 'customers', 'merchandisers','items','coordinators'));
+        return view('sample-development.pages.sample-inquery-details', compact('inquiries', 'customers', 'merchandisers','items','coordinators','orderNos'));
     }
 
     public function updateNotes(Request $request, $id)
