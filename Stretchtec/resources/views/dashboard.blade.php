@@ -21,7 +21,7 @@
                 $cards = [
                     ['title' => 'All Samples', 'allTime' => $allSamplesReceived ?? 0, 'last30' => $allSamplesReceivedWithin30Days ?? 0, 'color' => 'indigo'],
                     ['title' => 'Bulk Received', 'allTime' => $acceptedSamples ?? 0, 'last30' => $acceptedSamplesWithin30Days ?? 0, 'color' => 'green'],
-                    ['title' => 'Not Received Yet', 'allTime' => $yetNotReceivedSamples ?? 0, 'last30' => $yetNotReceivedSamplesWithin30Days ?? 0, 'color' => 'pink'],
+                    ['title' => 'Decision Pending', 'allTime' => $yetNotReceivedSamples ?? 0, 'last30' => $yetNotReceivedSamplesWithin30Days ?? 0, 'color' => 'pink'],
                     ['title' => 'Rejected', 'allTime' => $rejectedSamples ?? 0, 'last30' => $rejectedSamplesWithin30Days ?? 0, 'color' => 'red'],
                 ];
             @endphp

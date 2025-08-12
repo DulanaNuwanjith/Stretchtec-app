@@ -26,10 +26,12 @@ class DashboardController extends Controller
             ->where('created_at', '>=', now()->subDays(30))
             ->count();
 
-        $yetNotReceivedSamples = SampleInquiry::where('customerDecision', 'Order Not Received')->count();
-        $yetNotReceivedSamplesWithin30Days = SampleInquiry::where('customerDecision', 'Order Not Received')
+        $yetNotReceivedSamples = SampleInquiry::whereIn('customerDecision', ['Order Not Received', 'Pending'])->count();
+
+        $yetNotReceivedSamplesWithin30Days = SampleInquiry::whereIn('customerDecision', ['Order Not Received', 'Pending'])
             ->where('created_at', '>=', now()->subDays(30))
             ->count();
+
 
         // Get distinct Yarn Suppliers from Sample Preparation RnD table
         $yarnSuppliers = SamplePreparationRnD::distinct()
