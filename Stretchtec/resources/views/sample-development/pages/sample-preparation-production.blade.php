@@ -207,7 +207,7 @@
                                 </h1>
                             </div>
 
-                            <div class="overflow-x-auto max-h-[1200px] bg-white dark:bg-gray-900 shadow rounded-lg">
+                            <div id="SampleProductionRecordsScroll" class="overflow-x-auto max-h-[1200px] bg-white dark:bg-gray-900 shadow rounded-lg">
                                 <table class="table-fixed w-full text-sm divide-y divide-gray-200 dark:divide-gray-700">
                                     <thead class="bg-gray-100 dark:bg-gray-700 text-left">
                                         <tr class="text-center">
@@ -743,8 +743,9 @@
                                                             @endif
                                                         @endauth --}}
                                                         @if ($prod->order_file_url)
-                                                            <a href="{{ $prod->order_file_url }}" target="_blank"
-                                                                class="bg-gray-600 h-10 w-20 hover:bg-gray-700 text-white px-3 py-2 rounded text-sm flex items-center justify-center ml-2">
+                                                            <a href="{{ asset('storage/' . $prod->sampleInquiry->orderFile) }}"
+                                                               target="_blank"
+                                                               class="bg-gray-600 h-10 w-20 hover:bg-gray-700 text-white px-3 py-2 rounded text-sm flex items-center justify-center ml-2">
                                                                 View
                                                             </a>
                                                         @else
@@ -1147,6 +1148,46 @@
                     menu.classList.add('hidden');
                 }
             });
+        });
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            let container = document.getElementById("SampleProductionRecordsScroll");
+
+            // Restore table scroll immediately after DOM loaded
+            if (container) {
+                let scrollTop = localStorage.getItem("tableScrollTop");
+                let scrollLeft = localStorage.getItem("tableScrollLeft");
+                if (scrollTop !== null) container.scrollTop = parseInt(scrollTop);
+                if (scrollLeft !== null) container.scrollLeft = parseInt(scrollLeft);
+                // Optionally clear
+                localStorage.removeItem("tableScrollTop");
+                localStorage.removeItem("tableScrollLeft");
+            }
+
+            // Save table scroll on form submit
+            document.querySelectorAll("form").forEach(form => {
+                form.addEventListener("submit", function() {
+                    if (container) {
+                        localStorage.setItem("tableScrollTop", container.scrollTop);
+                        localStorage.setItem("tableScrollLeft", container.scrollLeft);
+                    }
+                });
+            });
+        });
+
+        // Restore page scroll after full load (including images etc)
+        window.onload = function() {
+            let pageScroll = localStorage.getItem("pageScrollY");
+            if (pageScroll !== null) {
+                window.scrollTo(0, parseInt(pageScroll));
+                localStorage.removeItem("pageScrollY");
+            }
+        };
+
+        // Save page scroll position before unload
+        window.addEventListener("beforeunload", function() {
+            localStorage.setItem("pageScrollY", window.scrollY);
         });
     </script>
 @endsection
