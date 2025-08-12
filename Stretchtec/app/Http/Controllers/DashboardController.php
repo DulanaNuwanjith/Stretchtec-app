@@ -7,7 +7,6 @@ use App\Models\SampleInquiry;
 use App\Models\SamplePreparationProduction;
 use App\Models\SamplePreparationRnD;
 use App\Models\User;
-use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
