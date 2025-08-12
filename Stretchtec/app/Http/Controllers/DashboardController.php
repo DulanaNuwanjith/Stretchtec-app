@@ -7,6 +7,7 @@ use App\Models\SampleInquiry;
 use App\Models\SamplePreparationProduction;
 use App\Models\SamplePreparationRnD;
 use App\Models\User;
+use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
@@ -47,16 +48,25 @@ class DashboardController extends Controller
             $yarnOrderedNotReceived[$supplier] = $orderedCount;
         }
 
-        $totalLeftOverYarn = LeftoverYarn::sum('available_stock');
+        // Sum of available_stock from LeftoverYarn for last 60 days
+        $totalLeftOverYarn = LeftoverYarn::where('created_at', '>=', Carbon::now()->subDays(60))
+            ->sum('available_stock');
         $totalLeftOverYarn = number_format($totalLeftOverYarn, 0);
 
-        $totalDamagedOutput = SamplePreparationProduction::sum('damaged_output');
+        // Sum of damaged_output from SamplePreparationProduction for last 60 days
+        $totalDamagedOutput = SamplePreparationProduction::where('created_at', '>=', Carbon::now()->subDays(60))
+            ->sum('damaged_output');
         $totalDamagedOutput = number_format($totalDamagedOutput, 0);
 
-        $prodOutput = SamplePreparationProduction::sum('production_output');
-        $damageOutput = SamplePreparationProduction::sum('damaged_output');
+        // Sum of production_output and damaged_output for last 60 days
+        $prodOutput = SamplePreparationProduction::where('created_at', '>=', Carbon::now()->subDays(60))
+            ->sum('production_output');
+
+        $damageOutput = SamplePreparationProduction::where('created_at', '>=', Carbon::now()->subDays(60))
+            ->sum('damaged_output');
 
         $totalProductionOutput = $prodOutput - $damageOutput;
+        $totalProductionOutput = number_format($totalProductionOutput, 0);
 
         // Get distinct customer coordinators
         $coordinatorNames = User::where('role', 'CUSTOMERCOORDINATOR')
