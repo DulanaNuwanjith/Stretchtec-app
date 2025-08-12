@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\SampleInquiry;
 use App\Models\SamplePreparationRnD;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -41,6 +42,53 @@ class DashboardController extends Controller
             ->where('created_at', '>=', now()->subDays(30))
             ->get();
 
+
+        // Get distinct customer coordinators
+        $coordinatorNames = User::where('role', 'customer_coordinator')
+            ->distinct()
+            ->pluck('name')
+            ->toArray();
+
+        // Initialize arrays to hold counts aligned with coordinatorNames
+        $acceptedSamplesCount = [];
+        $rejectedSamplesCount = [];
+
+        foreach ($coordinatorNames as $coordinator) {
+            $acceptedCount = SampleInquiry::where('coordinatorName', $coordinator)
+                ->where('customerDecision', 'Order Received')
+                ->count();
+            $rejectedCount = SampleInquiry::where('coordinatorName', $coordinator)
+                ->where('customerDecision', 'Order Rejected')
+                ->count();
+
+            $acceptedSamplesCount[] = $acceptedCount;
+            $rejectedSamplesCount[] = $rejectedCount;
+        }
+
+
+        // Get distinct customer names from SampleInquiry table
+        $customerNames = SampleInquiry::distinct()
+            ->pluck('customerName')
+            ->toArray();
+
+        // Initialize arrays to hold counts aligned with customerNames
+        $acceptedSamplesCount2 = [];
+        $rejectedSamplesCount2 = [];
+
+        foreach ($customerNames as $customer) {
+            $acceptedCount2 = SampleInquiry::where('customerName', $customer)
+                ->where('customerDecision', 'Order Received') // accepted condition
+                ->count();
+
+            $rejectedCount2 = SampleInquiry::where('customerName', $customer)
+                ->where('customerDecision', 'Order Rejected') // rejected condition
+                ->count();
+
+            $acceptedSamplesCount2[] = $acceptedCount2;
+            $rejectedSamplesCount2[] = $rejectedCount2;
+        }
+
+
         return view('dashboard', compact(
             'allSamplesReceived',
             'allSamplesReceivedWithin30Days',
@@ -53,7 +101,13 @@ class DashboardController extends Controller
             'productionCompleteSamples',
             'productionCompleteSamplesWithin30Days',
             'yarnOrderedButNotReceived',
-            'yarnOrderedButNotReceivedWithin30Days'
+            'yarnOrderedButNotReceivedWithin30Days',
+            'coordinatorNames',
+            'acceptedSamplesCount',
+            'rejectedSamplesCount',
+            'customerNames',
+            'acceptedSamplesCount2',
+            'rejectedSamplesCount2'
         ));
     }
 }

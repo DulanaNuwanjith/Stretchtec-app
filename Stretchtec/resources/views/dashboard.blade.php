@@ -156,20 +156,18 @@
             </div>
         </div>
 
-            <!-- Graphs Section -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <!-- Graph 1 Placeholder -->
             <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6 h-96">
-                <h3 class="text-xl font-semibold mb-4 text-gray-700 dark:text-gray-200">Orders Overview</h3>
+                <h3 class="text-xl font-semibold mb-4 text-gray-700 dark:text-gray-200">Sample Overview by Customer Coordinators</h3>
                 <canvas id="ordersChart" class="w-full h-80"></canvas>
             </div>
 
-            <!-- Graph 2 Placeholder -->
             <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6 h-96">
-                <h3 class="text-xl font-semibold mb-4 text-gray-700 dark:text-gray-200">Production & Yarn Status</h3>
-                <canvas id="productionChart" class="w-full h-80"></canvas>
+                <h3 class="text-xl font-semibold mb-4 text-gray-700 dark:text-gray-200">Sample Overview by Customers</h3>
+                <canvas id="customerSamplesChart" class="w-full h-80"></canvas>
             </div>
         </div>
+
     </div>
 </div>
 
@@ -178,4 +176,94 @@
     setTimeout(() => {
         window.location.reload();
     }, 30000);
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const ctx = document.getElementById('ordersChart').getContext('2d');
+
+        // These variables will be injected from the controller as JSON encoded data
+        const labels = @json($coordinatorNames);
+        const acceptedSamples = @json($acceptedSamplesCount);
+        const rejectedSamples = @json($rejectedSamplesCount);
+
+        const ordersChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'Accepted Samples',
+                        data: acceptedSamples,
+                        backgroundColor: 'rgba(34, 197, 94, 0.7)',  // greenish
+                    },
+                    {
+                        label: 'Rejected Samples',
+                        data: rejectedSamples,
+                        backgroundColor: 'rgba(239, 68, 68, 0.7)',  // reddish
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Number of Samples'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Customer Coordinator'
+                        }
+                    }
+                }
+            }
+        });
+
+        const ctx2 = document.getElementById('customerSamplesChart').getContext('2d');
+
+        const customerSamplesChart = new Chart(ctx2, {
+            type: 'bar',
+            data: {
+                labels: @json($customerNames), // e.g. ["Customer A", "Customer B", "Customer C"]
+                datasets: [
+                    {
+                        label: 'Accepted Samples',
+                        data: @json($acceptedSamplesCount2), // e.g. [10, 15, 7]
+                        backgroundColor: 'rgba(34, 197, 94, 0.7)', // green-ish
+                    },
+                    {
+                        label: 'Rejected Samples',
+                        data: @json($rejectedSamplesCount2), // e.g. [2, 3, 1]
+                        backgroundColor: 'rgba(239, 68, 68, 0.7)', // red-ish
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: {
+                        stacked: false,
+                        title: {
+                            display: true,
+                            text: 'Customers'
+                        }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Number of Samples'
+                        }
+                    }
+                }
+            }
+        });
+
+    });
 </script>
