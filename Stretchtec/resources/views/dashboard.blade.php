@@ -1,3 +1,6 @@
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+</head>
 <div class="flex h-full w-full font-sans">
     @include('layouts.side-bar')
     <div class="flex-1 overflow-y-auto p-8 bg-white dark:bg-gray-900">
@@ -156,15 +159,20 @@
             </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6 h-96">
-                <h3 class="text-xl font-semibold mb-4 text-gray-700 dark:text-gray-200">Sample Overview by Customer Coordinators</h3>
-                <canvas id="ordersChart" class="w-full h-80"></canvas>
+        <!-- Charts Section -->
+        <div class="w-full grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6 h-96 flex flex-col">
+                <h3 class="text-xl font-semibold mb-4 text-gray-700 dark:text-gray-200">
+                    Sample Overview by Customer Coordinators
+                </h3>
+                <canvas id="ordersChart" class="flex-grow w-full"></canvas>
             </div>
 
-            <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6 h-96">
-                <h3 class="text-xl font-semibold mb-4 text-gray-700 dark:text-gray-200">Sample Overview by Customers</h3>
-                <canvas id="customerSamplesChart" class="w-full h-80"></canvas>
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6 h-96 flex flex-col">
+                <h3 class="text-xl font-semibold mb-4 text-gray-700 dark:text-gray-200">
+                    Sample Overview by Customers
+                </h3>
+                <canvas id="customerSamplesChart" class="flex-grow w-full"></canvas>
             </div>
         </div>
 
