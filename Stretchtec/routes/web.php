@@ -215,6 +215,8 @@ Route::middleware(['auth'])->group(function () {
     });
 });
 
+Route::get('/reports', [ReportController::class, 'showReportPage'])->name('reports.index');
+Route::get('/reports/customer-decision', [ReportController::class, 'inquiryCustomerDecisionReport'])->name('reports.customerDecision');
 Route::get('/report/order', [ReportController::class, 'generateOrderReport'])->name('report.order');
 Route::get('/report/inquiry-range', [ReportController::class, 'inquiryRangeReport'])->name('report.inquiryRange');
 

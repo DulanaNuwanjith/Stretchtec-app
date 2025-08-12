@@ -12,6 +12,45 @@ use PDF;
 
 class ReportController extends Controller
 {
+    // Show report filter page with customers dropdown
+    public function showReportPage()
+    {
+        $customers = SampleInquiry::select('customerName')
+            ->distinct()
+            ->orderBy('customerName')
+            ->pluck('customerName');
+
+        return view('reports', compact('customers'));
+    }
+
+    // Generate PDF report filtered by date range and optional customer
+    public function inquiryCustomerDecisionReport(Request $request)
+    {
+        $request->validate([
+            'start_date' => 'required|date',
+            'end_date'   => 'required|date|after_or_equal:start_date',
+            'customer'   => 'nullable|string',
+        ]);
+
+        $query = SampleInquiry::whereBetween('inquiryReceiveDate', [$request->start_date, $request->end_date])
+                            ->whereNotNull('customerDeliveryDate'); // Only those with delivery date
+
+        if ($request->filled('customer')) {
+            $query->where('customerName', $request->customer);
+        }
+
+        $inquiries = $query->select('orderNo', 'customerName', 'customerDecision', 'inquiryReceiveDate', 'customerDeliveryDate')->get();
+
+        $pdf = PDF::loadView('reports.inquiry-customer-decision-pdf', [
+            'inquiries'  => $inquiries,
+            'start_date' => $request->start_date,
+            'end_date'   => $request->end_date,
+            'customer'   => $request->customer,
+        ]);
+
+        return $pdf->download("Inquiry_Customer_Decision_Report_{$request->start_date}_to_{$request->end_date}.pdf");
+    }
+
     public function generateOrderReport(Request $request)
     {
         $request->validate([
@@ -84,7 +123,5 @@ class ReportController extends Controller
 
         return $pdf->download("Inquiry_Report_{$request->start_date}_to_{$request->end_date}.pdf");
     }
-
-
 
 }
