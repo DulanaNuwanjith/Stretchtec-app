@@ -1,183 +1,120 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 </head>
-<div class="flex h-full w-full font-sans">
+<div class="flex h-full w-full font-sans bg-gray-50 dark:bg-gray-900">
     @include('layouts.side-bar')
-    <div class="flex-1 overflow-y-auto p-8 bg-white dark:bg-gray-900">
+
+    <div class="flex-1 overflow-y-auto p-6 md:p-10">
+
         <!-- Header -->
-        <div class="flex justify-between items-center mb-8">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10">
             <h2 class="text-3xl font-bold text-gray-800 dark:text-white">
                 Welcome, {{ Auth::user()->name }}!
             </h2>
         </div>
 
         <!-- Cards Section -->
-        <div class="flex flex-wrap justify-center gap-6 mb-12">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 gap-6 mb-12">
 
-            <!-- All Sample Inquiries Card -->
-            <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6 flex flex-col items-center space-y-6 w-[220px]">
-                <div class="mb-4">
-                    <h3 class="text-lg font-bold text-gray-800 dark:text-white whitespace-nowrap overflow-hidden text-ellipsis">
-                        All Sample Inquiries</h3>
+            <!-- Default Sample Inquiry Cards -->
+            @php
+                $cards = [
+                    ['title' => 'All Samples', 'allTime' => $allSamplesReceived ?? 0, 'last30' => $allSamplesReceivedWithin30Days ?? 0, 'color' => 'indigo'],
+                    ['title' => 'Bulk Received', 'allTime' => $acceptedSamples ?? 0, 'last30' => $acceptedSamplesWithin30Days ?? 0, 'color' => 'green'],
+                    ['title' => 'Not Received Yet', 'allTime' => $yetNotReceivedSamples ?? 0, 'last30' => $yetNotReceivedSamplesWithin30Days ?? 0, 'color' => 'pink'],
+                    ['title' => 'Rejected', 'allTime' => $rejectedSamples ?? 0, 'last30' => $rejectedSamplesWithin30Days ?? 0, 'color' => 'red'],
+                ];
+            @endphp
+
+            @foreach($cards as $card)
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow hover:shadow-lg transition-shadow duration-300 p-6 flex flex-col items-center space-y-6 border border-gray-100 dark:border-gray-700">
+                    <h3 class="text-lg font-semibold text-gray-800 dark:text-white text-center">
+                        {{ $card['title'] }}
+                    </h3>
+
+                    <!-- All-time data -->
+                    <div class="text-center w-full">
+                        <h4 class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">All Time</h4>
+                        <div class="text-3xl font-bold text-{{ $card['color'] }}-600">{{ $card['allTime'] }}</div>
+                        <div class="text-gray-400 text-xs">Samples</div>
+                    </div>
+
+                    <hr class="w-full border-gray-200 dark:border-gray-700" />
+
+                    <!-- Last 30 days data -->
+                    <div class="text-center w-full">
+                        <h4 class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Last 30 Days</h4>
+                        <div class="text-3xl font-bold text-{{ $card['color'] }}-400">{{ $card['last30'] }}</div>
+                        <div class="text-gray-400 text-xs">Samples</div>
+                    </div>
                 </div>
+            @endforeach
 
-                <!-- All-time data -->
-                <div class="text-center w-full">
-                    <h4 class="text-md font-semibold text-gray-700 dark:text-gray-300 mb-1">All Time</h4>
-                    <div class="text-3xl font-semibold text-indigo-600">{{ $allSamplesReceived ?? 0 }}</div>
-                    <div class="text-gray-500 dark:text-gray-400 text-sm">Samples</div>
-                </div>
+            <!-- Yarn Ordered but Not Received - Single Card with Supplier List -->
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow hover:shadow-lg transition-shadow duration-300 p-6 flex flex-col border border-gray-100 dark:border-gray-700">
+                <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-6 text-center">
+                    Yarn Ordered But Not Received
+                </h3>
 
-                <hr class="w-full border-gray-300 dark:border-gray-700" />
-
-                <!-- Last 30 days data -->
-                <div class="text-center w-full">
-                    <h4 class="text-md font-semibold text-gray-700 dark:text-gray-300 mb-1">Last 30 Days</h4>
-                    <div class="text-3xl font-semibold text-indigo-400">{{ $allSamplesReceivedWithin30Days ?? 0 }}</div>
-                    <div class="text-gray-500 dark:text-gray-400 text-sm">Samples</div>
-                </div>
+                @if(count($yarnOrderedNotReceived) === 0)
+                    <p class="text-center text-gray-500 dark:text-gray-400">No pending yarn orders found.</p>
+                @else
+                    <ul class="divide-y divide-gray-200 dark:divide-gray-700 max-h-60 overflow-y-auto">
+                        @foreach($yarnOrderedNotReceived as $supplier => $count)
+                            @if(!empty($supplier))
+                                <li class="flex justify-between py-2">
+                                    <span class="text-gray-700 dark:text-gray-300 font-medium text-sm">{{ ucwords($supplier) }}</span>
+                                    <span class="text-yellow-500 font-bold text-lg">{{ $count }}</span>
+                                </li>
+                            @endif
+                        @endforeach
+                    </ul>
+                @endif
             </div>
 
-            <!-- Accepted Orders Card -->
-            <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6 flex flex-col items-center space-y-6 w-[220px]">
-                <div class="mb-4">
-                    <h3 class="text-lg font-bold text-gray-800 dark:text-white whitespace-nowrap overflow-hidden text-ellipsis">
-                        Accepted Samples</h3>
-                </div>
-
-                <!-- All-time data -->
-                <div class="text-center w-full">
-                    <h4 class="text-md font-semibold text-gray-700 dark:text-gray-300 mb-1">All Time</h4>
-                    <div class="text-3xl font-semibold text-green-600">{{ $acceptedSamples ?? 0 }}</div>
-                    <div class="text-gray-500 dark:text-gray-400 text-sm">Samples</div>
-                </div>
-
-                <hr class="w-full border-gray-300 dark:border-gray-700" />
-
-                <!-- Last 30 days data -->
-                <div class="text-center w-full">
-                    <h4 class="text-md font-semibold text-gray-700 dark:text-gray-300 mb-1">Last 30 Days</h4>
-                    <div class="text-3xl font-semibold text-green-400">{{ $acceptedSamplesWithin30Days ?? 0 }}</div>
-                    <div class="text-gray-500 dark:text-gray-400 text-sm">Orders</div>
-                </div>
+            <!-- Other Information-->
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow hover:shadow-lg transition-shadow duration-300 p-6 flex flex-col border border-gray-100 dark:border-gray-700">
+                <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-6 text-center">
+                    Sample Production Details
+                </h3>
+                <ul class="divide-y divide-gray-200 dark:divide-gray-700 max-h-60 overflow-y-auto">
+                    <li class="flex justify-between py-2">
+                        <span class="text-gray-700 dark:text-gray-300 font-medium text-sm">Leftover yarn</span>
+                        <span class="text-indigo-500 font-bold text-lg">{{ $totalLeftOverYarn }}</span> <!-- Indigo -->
+                    </li>
+                    <li class="flex justify-between py-2">
+                        <span class="text-gray-700 dark:text-gray-300 font-medium text-sm">Damaged Output</span>
+                        <span class="text-red-500 font-bold text-lg">{{ $totalDamagedOutput }}</span> <!-- Red -->
+                    </li>
+                    <li class="flex justify-between py-2">
+                        <span class="text-gray-700 dark:text-gray-300 font-medium text-sm">Production Output</span>
+                        <span class="text-green-500 font-bold text-lg">{{ $totalProductionOutput }}</span> <!-- Green -->
+                    </li>
+                </ul>
             </div>
 
-            <!-- Rejected Orders Card -->
-            <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6 flex flex-col items-center space-y-6 w-[220px]">
-                <div class="mb-4">
-                    <h3 class="text-lg font-bold text-gray-800 dark:text-white whitespace-nowrap overflow-hidden text-ellipsis">
-                        Rejected Samples</h3>
-                </div>
-
-                <!-- All-time data -->
-                <div class="text-center w-full">
-                    <h4 class="text-md font-semibold text-gray-700 dark:text-gray-300 mb-1">All Time</h4>
-                    <div class="text-3xl font-semibold text-red-600">{{ $rejectedSamples ?? 0 }}</div>
-                    <div class="text-gray-500 dark:text-gray-400 text-sm">Samples</div>
-                </div>
-
-                <hr class="w-full border-gray-300 dark:border-gray-700" />
-
-                <!-- Last 30 days data -->
-                <div class="text-center w-full">
-                    <h4 class="text-md font-semibold text-gray-700 dark:text-gray-300 mb-1">Last 30 Days</h4>
-                    <div class="text-3xl font-semibold text-red-400">{{ $rejectedSamplesWithin30Days ?? 0 }}</div>
-                    <div class="text-gray-500 dark:text-gray-400 text-sm">Samples</div>
-                </div>
-            </div>
-
-            <!-- Orders in Production Card -->
-            <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6 flex flex-col items-center space-y-6 w-[220px]">
-                <div class="mb-4">
-                    <h3 class="text-lg font-bold text-gray-800 dark:text-white whitespace-nowrap overflow-hidden text-ellipsis">
-                        In Production</h3>
-                </div>
-
-                <!-- All-time data -->
-                <div class="text-center w-full">
-                    <h4 class="text-md font-semibold text-gray-700 dark:text-gray-300 mb-1">All Time</h4>
-                    <div class="text-3xl font-semibold text-yellow-600">{{ $inProductionSamples ?? 0 }}</div>
-                    <div class="text-gray-500 dark:text-gray-400 text-sm">Samples</div>
-                </div>
-
-                <hr class="w-full border-gray-300 dark:border-gray-700" />
-
-                <!-- Last 30 days data -->
-                <div class="text-center w-full">
-                    <h4 class="text-md font-semibold text-gray-700 dark:text-gray-300 mb-1">Last 30 Days</h4>
-                    <div class="text-3xl font-semibold text-yellow-400">{{ $inProductionSamplesWithin30Days ?? 0 }}</div>
-                    <div class="text-gray-500 dark:text-gray-400 text-sm">Samples</div>
-                </div>
-            </div>
-
-            <!-- Production Complete Samples Card -->
-            <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6 flex flex-col items-center space-y-6 w-[220px]">
-                <div class="mb-4">
-                    <h3 class="text-lg font-bold text-gray-800 dark:text-white whitespace-nowrap overflow-hidden text-ellipsis">
-                        Production Complete</h3>
-                </div>
-
-                <!-- All-time data -->
-                <div class="text-center w-full">
-                    <h4 class="text-md font-semibold text-gray-700 dark:text-gray-300 mb-1">All Time</h4>
-                    <div class="text-3xl font-semibold text-blue-600">{{ $productionCompleteSamples ?? 0 }}</div>
-                    <div class="text-gray-500 dark:text-gray-400 text-sm">Samples</div>
-                </div>
-
-                <hr class="w-full border-gray-300 dark:border-gray-700" />
-
-                <!-- Last 30 days data -->
-                <div class="text-center w-full">
-                    <h4 class="text-md font-semibold text-gray-700 dark:text-gray-300 mb-1">Last 30 Days</h4>
-                    <div class="text-3xl font-semibold text-blue-400">{{ $productionCompleteSamplesWithin30Days ?? 0 }}</div>
-                    <div class="text-gray-500 dark:text-gray-400 text-sm">Samples</div>
-                </div>
-            </div>
-
-            <!-- Yarn Ordered but Not Received Card -->
-            <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6 flex flex-col items-center space-y-6 w-[270px]">
-                <div class="mb-4">
-                    <h3 class="text-lg font-bold text-gray-800 dark:text-white whitespace-nowrap overflow-hidden text-ellipsis">
-                        Yarn Ordered (Not Received)</h3>
-                </div>
-
-                <!-- All-time data -->
-                <div class="text-center w-full">
-                    <h4 class="text-md font-semibold text-gray-700 dark:text-gray-300 mb-1">All Time</h4>
-                    <div class="text-3xl font-semibold text-pink-600">{{ $yarnOrderedButNotReceived ?? 0 }}</div>
-                    <div class="text-gray-500 dark:text-gray-400 text-sm">Samples</div>
-                </div>
-
-                <hr class="w-full border-gray-300 dark:border-gray-700" />
-
-                <!-- Last 30 days data -->
-                <div class="text-center w-full">
-                    <h4 class="text-md font-semibold text-gray-700 dark:text-gray-300 mb-1">Last 30 Days</h4>
-                    <div class="text-3xl font-semibold text-pink-400">{{ $yarnOrderedButNotReceivedWithin30Days ?? 0 }}</div>
-                    <div class="text-gray-500 dark:text-gray-400 text-sm">Samples</div>
-                </div>
-            </div>
         </div>
 
+
         <!-- Charts Section -->
-        <div class="w-full grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
-            <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6 h-96 flex flex-col">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 p-6 flex flex-col">
                 <h3 class="text-xl font-semibold mb-4 text-gray-700 dark:text-gray-200">
                     Sample Overview by Customer Coordinators
                 </h3>
                 <canvas id="ordersChart" class="flex-grow w-full"></canvas>
             </div>
 
-            <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6 h-96 flex flex-col">
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 p-6 flex flex-col">
                 <h3 class="text-xl font-semibold mb-4 text-gray-700 dark:text-gray-200">
                     Sample Overview by Customers
                 </h3>
                 <canvas id="customerSamplesChart" class="flex-grow w-full"></canvas>
             </div>
         </div>
-
     </div>
 </div>
+
 
 <script>
     // Auto-reload the dashboard every 60 seconds

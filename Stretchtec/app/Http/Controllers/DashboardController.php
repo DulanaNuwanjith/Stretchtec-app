@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\LeftoverYarn;
 use App\Models\SampleInquiry;
+use App\Models\SamplePreparationProduction;
 use App\Models\SamplePreparationRnD;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -24,24 +26,36 @@ class DashboardController extends Controller
             ->where('created_at', '>=', now()->subDays(30))
             ->count();
 
-        $inProductionSamples = SampleInquiry::where('productionStatus', 'In Production')->count();
-        $inProductionSamplesWithin30Days = SampleInquiry::where('productionStatus', 'In Production')
+        $yetNotReceivedSamples = SampleInquiry::where('customerDecision', 'Order Not Received')->count();
+        $yetNotReceivedSamplesWithin30Days = SampleInquiry::where('customerDecision', 'Order Not Received')
             ->where('created_at', '>=', now()->subDays(30))
             ->count();
 
-        $productionCompleteSamples = SampleInquiry::where('productionStatus', 'Production Complete')->count();
-        $productionCompleteSamplesWithin30Days = SampleInquiry::where('productionStatus', 'Production Complete')
-            ->where('created_at', '>=', now()->subDays(30))
-            ->count();
+        // Get distinct Yarn Suppliers from Sample Preparation RnD table
+        $yarnSuppliers = SamplePreparationRnD::distinct()
+            ->pluck('yarnSupplier')
+            ->toArray();
 
-        $yarnOrderedButNotReceived = SamplePreparationRnD::whereNotNull('yarnOrderedDate')
-            ->whereNull('yarnReceiveDate')
-            ->count();
-        $yarnOrderedButNotReceivedWithin30Days = SamplePreparationRnD::whereNotNull('yarnOrderedDate')
-            ->whereNull('yarnReceiveDate')
-            ->where('created_at', '>=', now()->subDays(30))
-            ->count();
+        // Get yarn ordered but not yet received for each supplier
+        $yarnOrderedNotReceived = [];
+        foreach ($yarnSuppliers as $supplier) {
+            $orderedCount = SamplePreparationRnD::where('yarnSupplier', $supplier)
+                ->whereNotNull('yarnOrderDate')
+                ->whereNull('yarnReceiveDate')
+                ->count();
+            $yarnOrderedNotReceived[$supplier] = $orderedCount;
+        }
 
+        $totalLeftOverYarn = LeftoverYarn::sum('available_stock');
+        $totalLeftOverYarn = number_format($totalLeftOverYarn, 0);
+
+        $totalDamagedOutput = SamplePreparationProduction::sum('damaged_output');
+        $totalDamagedOutput = number_format($totalDamagedOutput, 0);
+
+        $prodOutput = SamplePreparationProduction::sum('production_output');
+        $damageOutput = SamplePreparationProduction::sum('damaged_output');
+
+        $totalProductionOutput = $prodOutput - $damageOutput;
 
         // Get distinct customer coordinators
         $coordinatorNames = User::where('role', 'CUSTOMERCOORDINATOR')
@@ -96,12 +110,13 @@ class DashboardController extends Controller
             'acceptedSamplesWithin30Days',
             'rejectedSamples',
             'rejectedSamplesWithin30Days',
-            'inProductionSamples',
-            'inProductionSamplesWithin30Days',
-            'productionCompleteSamples',
-            'productionCompleteSamplesWithin30Days',
-            'yarnOrderedButNotReceived',
-            'yarnOrderedButNotReceivedWithin30Days',
+            'yetNotReceivedSamples',
+            'yetNotReceivedSamplesWithin30Days',
+            'totalLeftOverYarn',
+            'totalDamagedOutput',
+            'totalProductionOutput',
+            'yarnSuppliers',
+            'yarnOrderedNotReceived',
             'coordinatorNames',
             'acceptedSamplesCount',
             'rejectedSamplesCount',
