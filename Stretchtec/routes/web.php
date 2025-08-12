@@ -216,3 +216,5 @@ Route::middleware(['auth'])->group(function () {
 });
 
 Route::get('/report/order', [ReportController::class, 'generateOrderReport'])->name('report.order');
+Route::get('/report/inquiry-range', [ReportController::class, 'inquiryRangeReport'])->name('report.inquiryRange');
+
