@@ -21,7 +21,7 @@ class ReportController extends Controller
             ->orderBy('customerName')
             ->pluck('customerName');
 
-        return view('reports', compact('customers'));
+        return view('reports.sample-reports', compact('customers'));
     }
 
     // Generate PDF report filtered by date range and optional customer

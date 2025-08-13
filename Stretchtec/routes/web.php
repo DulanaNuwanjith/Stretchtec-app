@@ -56,11 +56,6 @@ Route::middleware([
         return view('store-management.storeManagement');
     })->name('storeManagement.index');
 
-    Route::get('reports', function () {
-        return view('reports');
-    })->name('reports.index');
-
-
     Route::get('elasticCatalog', [ProductCatalogController::class, 'elasticCatalog'])->name('elasticCatalog.index');
     Route::get('tapeCatalog', [ProductCatalogController::class, 'tapeCatalog'])->name('tapeCatalog.index');
     Route::get('codeCatalog', [ProductCatalogController::class, 'codeCatalog'])->name('codeCatalog.index');
@@ -215,8 +210,9 @@ Route::middleware(['auth'])->group(function () {
     });
 });
 
-Route::get('/reports', [ReportController::class, 'showReportPage'])->name('reports.index');
+Route::get('/reports/sample-reports', [ReportController::class, 'showReportPage'])->name('sample-reports.index');
 Route::get('/reports/customer-decision', [ReportController::class, 'inquiryCustomerDecisionReport'])->name('reports.customerDecision');
 Route::get('/report/order', [ReportController::class, 'generateOrderReport'])->name('report.order');
 Route::get('/report/inquiry-range', [ReportController::class, 'inquiryRangeReport'])->name('report.inquiryRange');
 
+Route::get('/reports/production-reports', function () {return view('reports.production-reports');})->name('production-reports.index');
