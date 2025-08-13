@@ -5,7 +5,7 @@ use Carbon\Carbon;
 @endphp
 
 <head>
-    <title>Order Report - {{ $sampleInquiry->orderNo }}</title>
+    <title>Sample Order Report - {{ $sampleInquiry->orderNo }}</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -125,7 +125,7 @@ use Carbon\Carbon;
 
 <body>
 
-    <h1>Order Report - {{ $sampleInquiry->orderNo }}</h1>
+    <h1>Sample Order Report - {{ $sampleInquiry->orderNo }}</h1>
 
     <div class="grid-container">
         <!-- Left top: Sample Inquiry Details -->

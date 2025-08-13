@@ -133,4 +133,77 @@ class ReportController extends Controller
         return $pdf->download("Inquiry_Report_{$request->start_date}_to_{$request->end_date}.pdf");
     }
 
+    public function yarnSupplierSpendingReport(Request $request)
+    {
+        $request->validate([
+            'start_date' => 'required|date',
+            'end_date'   => 'required|date|after_or_equal:start_date',
+        ]);
+
+        $suppliers = SamplePreparationRnD::whereBetween('yarnOrderedDate', [$request->start_date, $request->end_date])
+            ->selectRaw('yarnSupplier, SUM(yarnPrice) as total_spent')
+            ->groupBy('yarnSupplier')
+            ->orderBy('total_spent', 'desc')
+            ->get();
+
+        $pdf = \PDF::loadView('reports.yarn-supplier-spending-pdf', [
+            'suppliers'  => $suppliers,
+            'start_date' => $request->start_date,
+            'end_date'   => $request->end_date,
+        ]);
+
+        return $pdf->download("Yarn_Supplier_Spending_{$request->start_date}_to_{$request->end_date}.pdf");
+    }
+
+    public function coordinatorReportPdf(Request $request)
+    {
+        $request->validate([
+            'start_date' => 'required|date',
+            'end_date'   => 'required|date|after_or_equal:start_date',
+        ]);
+
+        $startDate = $request->start_date;
+        $endDate = $request->end_date;
+
+        $coordinators = SampleInquiry::query()
+            ->whereBetween('inquiryReceiveDate', [$startDate, $endDate])
+            ->select(
+                'coordinatorName',
+                'orderNo',
+                'inquiryReceiveDate',
+                'customerName',
+                'customerDeliveryDate',
+                'customerDecision'
+            )
+            ->orderBy('coordinatorName')
+            ->get()
+            ->groupBy('coordinatorName');
+
+        $report = [];
+
+        foreach ($coordinators as $coordinator => $orders) {
+            // Format inquiryReceiveDate to only show date
+            $orders->transform(function ($order) {
+                $order->inquiryReceiveDate = Carbon::parse($order->inquiryReceiveDate)->format('Y-m-d');
+                if ($order->customerDeliveryDate) {
+                    $order->customerDeliveryDate = Carbon::parse($order->customerDeliveryDate)->format('Y-m-d');
+                }
+                return $order;
+            });
+
+            $report[$coordinator] = [
+                'orders' => $orders,
+                'total_orders' => $orders->count(),
+                'rejected_count' => $orders->where('customerDecision', 'Order Rejected')->count(),
+                'received_count' => $orders->where('customerDecision', 'Order Received')->count(),
+                'not_received_count' => $orders->where('customerDecision', 'Order Not Received')->count(),
+                'pending_count' => $orders->where('customerDecision', 'Pending')->count(),
+            ];
+        }
+
+        $pdf = Pdf::loadView('reports.coordinator_report_pdf', compact('report', 'startDate', 'endDate'));
+
+        return $pdf->download("Coordinator_Report_{$startDate}_to_{$endDate}.pdf");
+    }
+
 }

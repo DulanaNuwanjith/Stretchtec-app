@@ -67,7 +67,7 @@ class ProductCatalogController extends Controller
     // Display a listing of the product catalog entries
     public function tapeCatalog(Request $request)
     {
-        $query = ProductCatalog::where('item', 'Tape');
+        $query = ProductCatalog::where('item', 'Twill Tape');
 
         // Apply filters
         if ($request->filled('orderNo')) {
@@ -85,9 +85,9 @@ class ProductCatalogController extends Controller
         $catalogs = $query->latest()->paginate(15)->appends($request->query());
 
         // Pass dropdown values for filtering (unique list)
-        $orderNos = ProductCatalog::where('item', 'Tape')->distinct()->pluck('order_no');
-        $merchandisers = ProductCatalog::where('item', 'Tape')->distinct()->pluck('coordinator_name');
-        $referenceNos = ProductCatalog::where('item', 'Tape')->distinct()->pluck('reference_no');
+        $orderNos = ProductCatalog::where('item', 'Twill Tape')->distinct()->pluck('order_no');
+        $merchandisers = ProductCatalog::where('item', 'Twill Tape')->distinct()->pluck('coordinator_name');
+        $referenceNos = ProductCatalog::where('item', 'Twill Tape')->distinct()->pluck('reference_no');
 
         return view('production-catalog.pages.tapeCatalog', compact('catalogs', 'orderNos', 'merchandisers', 'referenceNos'));
     }
@@ -175,7 +175,7 @@ class ProductCatalogController extends Controller
         ]);
 
         $data = $request->all();
-        $data['item'] = 'Tape'; // force item
+        $data['item'] = 'Twill Tape'; // force item
 
         ProductCatalog::create($data);
 

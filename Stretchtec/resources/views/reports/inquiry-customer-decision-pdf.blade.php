@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8" />
-    <title>Inquiry Customer Decision Report</title>
+    <title>Inquiry Sample Customer Decision Report</title>
     <style>
         body {
             font-family: DejaVu Sans, sans-serif;
@@ -36,7 +36,7 @@
 
 <body>
 
-    <h1>Inquiry Customer Decision Report</h1>
+    <h1>Inquiry Sample Customer Decision Report</h1>
     <p style="text-align:center;">
         Date Range: {{ $start_date }} to {{ $end_date }}<br>
         @if ($customer)

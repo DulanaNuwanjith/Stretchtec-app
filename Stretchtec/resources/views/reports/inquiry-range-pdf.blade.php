@@ -1,4 +1,4 @@
-<h2 style="text-align:center">Inquiry Report ({{ $start_date }} to {{ $end_date }})</h2>
+<h2 style="text-align:center">Sample Delivary Report ({{ $start_date }} to {{ $end_date }})</h2>
 
 <h3>Not Delivered Inquiries</h3>
 <table border="1" cellpadding="5" cellspacing="0" width="100%">
