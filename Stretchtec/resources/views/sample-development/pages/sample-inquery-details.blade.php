@@ -1265,7 +1265,7 @@
                                                             Quantity (yds or mtr)</label>
                                                         <input id="sampleQuantity" type="text" name="sample_quantity"
                                                             required
-                                                            class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm mb-4">
+                                                            class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm mb-4" placeholder="Eg. Meters 100M or Yards 100Y">
                                                     </div>
                                                 </div>
 
