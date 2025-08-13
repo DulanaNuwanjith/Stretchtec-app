@@ -335,7 +335,8 @@
                                 </div>
                             </div>
 
-                            <div id="ResearchAndDevelopmentRecordsScroll" class="overflow-x-auto max-h-[1200px] bg-white dark:bg-gray-900 shadow rounded-lg">
+                            <div id="ResearchAndDevelopmentRecordsScroll"
+                                class="overflow-x-auto max-h-[1200px] bg-white dark:bg-gray-900 shadow rounded-lg">
                                 <table class="table-fixed w-full text-sm divide-y divide-gray-200 dark:divide-gray-700">
                                     <thead class="bg-gray-100 dark:bg-gray-700 text-left">
                                         <tr class="text-center">
@@ -391,9 +392,6 @@
                                                 class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-36 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Production Status</th>
                                             <th
-                                                class="font-bold sticky top-0 z-20 bg-gray-200 px-4 py-3 w-56 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                                Reference No</th>
-                                            <th
                                                 class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Production Output</th>
                                             <th
@@ -402,6 +400,9 @@
                                             <th
                                                 class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Yarn Leftover Weight</th>
+                                            <th
+                                                class="font-bold sticky top-0 z-20 bg-gray-200 px-4 py-3 w-56 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                Reference No</th>
                                             <th
                                                 class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-72 text-xs text-center font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Note</th>
@@ -935,9 +936,9 @@
                                                                                         Yarn Price
                                                                                     </label>
                                                                                     <input type="text" name="yarnPrice"
-                                                                                           placeholder="Enter Yarn Price"
-                                                                                           class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                                                           required>
+                                                                                        placeholder="Enter Yarn Price"
+                                                                                        class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                                                        required>
                                                                                 </div>
 
                                                                                 {{-- Supplier --}}
@@ -1305,21 +1306,32 @@
                                                     @php
                                                         $status = $prep->productionStatus;
                                                         $badgeClass = match ($status) {
-                                                            'Pending' => 'bg-blue-100 text-blue-800 dark:bg-blue-700 dark:text-white',
-                                                            'In Production' => 'bg-yellow-100 text-yellow-800 dark:bg-yellow-700 dark:text-white',
-                                                            'Production Complete' => 'bg-green-100 text-green-800 dark:bg-green-700 dark:text-white',
-                                                            'Tape Match' => 'bg-purple-100 text-purple-800 dark:bg-purple-700 dark:text-white',
-                                                            'No Development' => 'bg-red-100 text-red-800 dark:bg-red-700 dark:text-white',
-                                                            'Yarn Ordered' => 'bg-orange-100 text-orange-800 dark:bg-orange-700 dark:text-white',
-                                                            'Yarn Received' => 'bg-indigo-100 text-indigo-800 dark:bg-indigo-700 dark:text-white',
-                                                            'Sent to Production' => 'bg-teal-100 text-teal-800 dark:bg-teal-700 dark:text-white',
-                                                            'Colour Match Sent' => 'bg-pink-100 text-pink-800 dark:bg-pink-700 dark:text-white',
-                                                            'Colour Match Received' => 'bg-emerald-100 text-emerald-800 dark:bg-emerald-700 dark:text-white',
-                                                            default => 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-white',
+                                                            'Pending'
+                                                                => 'bg-blue-100 text-blue-800 dark:bg-blue-700 dark:text-white',
+                                                            'In Production'
+                                                                => 'bg-yellow-100 text-yellow-800 dark:bg-yellow-700 dark:text-white',
+                                                            'Production Complete'
+                                                                => 'bg-green-100 text-green-800 dark:bg-green-700 dark:text-white',
+                                                            'Tape Match'
+                                                                => 'bg-purple-100 text-purple-800 dark:bg-purple-700 dark:text-white',
+                                                            'No Development'
+                                                                => 'bg-red-100 text-red-800 dark:bg-red-700 dark:text-white',
+                                                            'Yarn Ordered'
+                                                                => 'bg-orange-100 text-orange-800 dark:bg-orange-700 dark:text-white',
+                                                            'Yarn Received'
+                                                                => 'bg-indigo-100 text-indigo-800 dark:bg-indigo-700 dark:text-white',
+                                                            'Sent to Production'
+                                                                => 'bg-teal-100 text-teal-800 dark:bg-teal-700 dark:text-white',
+                                                            'Colour Match Sent'
+                                                                => 'bg-pink-100 text-pink-800 dark:bg-pink-700 dark:text-white',
+                                                            'Colour Match Received'
+                                                                => 'bg-emerald-100 text-emerald-800 dark:bg-emerald-700 dark:text-white',
+                                                            default
+                                                                => 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-white',
                                                         };
                                                     @endphp
 
-                                                        <!-- Read-only badge -->
+                                                    <!-- Read-only badge -->
                                                     <span
                                                         class="readonly inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold {{ $badgeClass }}">
                                                         {{ $status }}
@@ -1329,6 +1341,106 @@
                                                     <input type="text" name="productionStatus"
                                                         class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                         value="{{ $status }}" />
+                                                </td>
+
+                                                <td
+                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                                    @if ($prep->alreadyDeveloped == 'Need to Develop')
+                                                        @if ($prep->production && is_numeric($prep->production->production_output))
+                                                            <span class="readonly">
+                                                                {{ $prep->production->production_output }} g
+                                                            </span>
+                                                            <input
+                                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                                value="{{ $prep->production->production_output }} g" />
+                                                        @else
+                                                            <span class="text-gray-400 italic">Pending output</span>
+                                                        @endif
+                                                    @else
+                                                        <span class="text-gray-400 italic">—</span>
+                                                    @endif
+                                                </td>
+
+                                                <td
+                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                                    @if ($prep->alreadyDeveloped == 'Need to Develop')
+                                                        @if ($prep->production && is_numeric($prep->production->damaged_output))
+                                                            <span class="readonly">
+                                                                {{ $prep->production->damaged_output }} g
+                                                            </span>
+                                                            <input
+                                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                                value="{{ $prep->production->damaged_output }} g" />
+                                                        @else
+                                                            <span class="text-gray-400 italic">Pending output</span>
+                                                        @endif
+                                                    @else
+                                                        <span class="text-gray-400 italic">—</span>
+                                                    @endif
+                                                </td>
+
+                                                <!-- Yarn Leftover Weight -->
+                                                <td class="px-4 py-3 border-r border-gray-300 text-center">
+                                                    @if ($prep->alreadyDeveloped == 'Need to Develop')
+                                                        @if (Auth::user()->role === 'ADMIN')
+                                                            {{-- ADMIN: Read-only --}}
+                                                            @if ($prep->is_yarn_leftover_weight_locked)
+                                                                <span class="readonly">{{ $prep->yarnLeftoverWeight }}
+                                                                    g</span>
+                                                            @elseif ($prep->yarnLeftoverWeight)
+                                                                <span
+                                                                    class="inline-block bg-gray-200 dark:bg-gray-600 text-gray-500 dark:text-gray-400 text-sm font-medium px-3 py-1 rounded cursor-not-allowed"
+                                                                    title="Admin view only">
+                                                                    {{ $prep->yarnLeftoverWeight }} g
+                                                                </span>
+                                                            @else
+                                                                <span
+                                                                    class="inline-block bg-gray-200 dark:bg-gray-600 text-gray-500 dark:text-gray-400 text-sm font-medium px-3 py-1 rounded cursor-not-allowed"
+                                                                    title="Admin view only">
+                                                                    Not Provided
+                                                                </span>
+                                                            @endif
+                                                        @else
+                                                            {{-- Non-Admin Users --}}
+                                                            @php
+                                                                $canSave =
+                                                                    $prep->production &&
+                                                                    is_numeric($prep->production->production_output) &&
+                                                                    is_numeric($prep->production->damaged_output);
+                                                            @endphp
+
+                                                            @if (!$prep->is_yarn_leftover_weight_locked)
+                                                                {{-- Editable form --}}
+                                                                <form action="{{ route('rnd.updateYarnWeights') }}"
+                                                                    method="POST">
+                                                                    @csrf
+                                                                    <input type="hidden" name="id"
+                                                                        value="{{ $prep->id }}">
+                                                                    <input type="hidden" name="field"
+                                                                        value="yarnLeftoverWeight">
+                                                                    <input type="number" step="0.01" min="0"
+                                                                        name="value"
+                                                                        value="{{ $prep->yarnLeftoverWeight }}"
+                                                                        class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                                        required>
+
+                                                                    <button type="submit"
+                                                                        class="w-full mt-1 px-3 py-1 rounded text-sm transition-all duration-200
+                                                                            {{ $canSave ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-gray-300 text-gray-500 cursor-not-allowed' }}"
+                                                                        {{ $canSave ? '' : 'disabled' }}
+                                                                        title="{{ $canSave ? '' : 'Production Output and Damaged Output are required' }}">
+                                                                        Save
+                                                                    </button>
+                                                                </form>
+                                                            @else
+                                                                {{-- Locked - readonly --}}
+                                                                <span class="readonly">{{ $prep->yarnLeftoverWeight }}
+                                                                    g</span>
+                                                            @endif
+                                                        @endif
+                                                    @else
+                                                        <span class="text-gray-400 italic">—</span>
+                                                    @endif
                                                 </td>
 
                                                 <td class="px-4 py-3 border-r border-gray-300 text-center">
@@ -1438,106 +1550,6 @@
                                                                 Not Available Until Production is Completed
                                                             </span>
                                                         @endif
-                                                    @endif
-                                                </td>
-
-                                                <td
-                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
-                                                    @if ($prep->alreadyDeveloped == 'Need to Develop')
-                                                        @if ($prep->production && is_numeric($prep->production->production_output))
-                                                            <span class="readonly">
-                                                                {{ $prep->production->production_output }} g
-                                                            </span>
-                                                            <input
-                                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                                value="{{ $prep->production->production_output }} g" />
-                                                        @else
-                                                            <span class="text-gray-400 italic">Pending output</span>
-                                                        @endif
-                                                    @else
-                                                        <span class="text-gray-400 italic">—</span>
-                                                    @endif
-                                                </td>
-
-                                                <td
-                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
-                                                    @if ($prep->alreadyDeveloped == 'Need to Develop')
-                                                        @if ($prep->production && is_numeric($prep->production->damaged_output))
-                                                            <span class="readonly">
-                                                                {{ $prep->production->damaged_output }} g
-                                                            </span>
-                                                            <input
-                                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                                value="{{ $prep->production->damaged_output }} g" />
-                                                        @else
-                                                            <span class="text-gray-400 italic">Pending output</span>
-                                                        @endif
-                                                    @else
-                                                        <span class="text-gray-400 italic">—</span>
-                                                    @endif
-                                                </td>
-
-                                                <!-- Yarn Leftover Weight -->
-                                                <td class="px-4 py-3 border-r border-gray-300 text-center">
-                                                    @if ($prep->alreadyDeveloped == 'Need to Develop')
-                                                        @if (Auth::user()->role === 'ADMIN')
-                                                            {{-- ADMIN: Read-only --}}
-                                                            @if ($prep->is_yarn_leftover_weight_locked)
-                                                                <span class="readonly">{{ $prep->yarnLeftoverWeight }}
-                                                                    g</span>
-                                                            @elseif ($prep->yarnLeftoverWeight)
-                                                                <span
-                                                                    class="inline-block bg-gray-200 dark:bg-gray-600 text-gray-500 dark:text-gray-400 text-sm font-medium px-3 py-1 rounded cursor-not-allowed"
-                                                                    title="Admin view only">
-                                                                    {{ $prep->yarnLeftoverWeight }} g
-                                                                </span>
-                                                            @else
-                                                                <span
-                                                                    class="inline-block bg-gray-200 dark:bg-gray-600 text-gray-500 dark:text-gray-400 text-sm font-medium px-3 py-1 rounded cursor-not-allowed"
-                                                                    title="Admin view only">
-                                                                    Not Provided
-                                                                </span>
-                                                            @endif
-                                                        @else
-                                                            {{-- Non-Admin Users --}}
-                                                            @php
-                                                                $canSave =
-                                                                    $prep->production &&
-                                                                    is_numeric($prep->production->production_output) &&
-                                                                    is_numeric($prep->production->damaged_output);
-                                                            @endphp
-
-                                                            @if (!$prep->is_yarn_leftover_weight_locked)
-                                                                {{-- Editable form --}}
-                                                                <form action="{{ route('rnd.updateYarnWeights') }}"
-                                                                    method="POST">
-                                                                    @csrf
-                                                                    <input type="hidden" name="id"
-                                                                        value="{{ $prep->id }}">
-                                                                    <input type="hidden" name="field"
-                                                                        value="yarnLeftoverWeight">
-                                                                    <input type="number" step="0.01" min="0"
-                                                                        name="value"
-                                                                        value="{{ $prep->yarnLeftoverWeight }}"
-                                                                        class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                                        required>
-
-                                                                    <button type="submit"
-                                                                        class="w-full mt-1 px-3 py-1 rounded text-sm transition-all duration-200
-                                                                            {{ $canSave ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-gray-300 text-gray-500 cursor-not-allowed' }}"
-                                                                        {{ $canSave ? '' : 'disabled' }}
-                                                                        title="{{ $canSave ? '' : 'Production Output and Damaged Output are required' }}">
-                                                                        Save
-                                                                    </button>
-                                                                </form>
-                                                            @else
-                                                                {{-- Locked - readonly --}}
-                                                                <span class="readonly">{{ $prep->yarnLeftoverWeight }}
-                                                                    g</span>
-                                                            @endif
-                                                        @endif
-                                                    @else
-                                                        <span class="text-gray-400 italic">—</span>
                                                     @endif
                                                 </td>
 

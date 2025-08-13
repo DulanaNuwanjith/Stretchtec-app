@@ -1136,11 +1136,25 @@
                                                             required
                                                             class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                     </div>
-                                                    <div class="w-1/2">
+                                                    <div class="relative w-1/2">
                                                         <label for="customer"
-                                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer</label>
-                                                        <input id="customer" type="text" name="customer" required
-                                                            class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Customer</label>
+                                                        <input id="customer" type="text" name="customer"
+                                                            autocomplete="off" required
+                                                            class="w-full px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                            oninput="filterCustomerDropdown(this)"
+                                                            onclick="showCustomerDropdown()" />
+
+                                                        <div id="customer-dropdown"
+                                                            class="hidden absolute z-10 mt-1 w-full max-h-48 overflow-y-auto rounded-md bg-white dark:bg-gray-800 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                                                            @foreach ($customers as $customer)
+                                                                <button type="button"
+                                                                    class="customer-option w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                                                                    onclick="selectCustomer(this)">
+                                                                    {{ $customer }}
+                                                                </button>
+                                                            @endforeach
+                                                        </div>
                                                     </div>
                                                 </div>
 
@@ -1251,7 +1265,7 @@
                                                             Quantity (yds or mtr)</label>
                                                         <input id="sampleQuantity" type="text" name="sample_quantity"
                                                             required
-                                                            class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm mb-4">
+                                                            class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm mb-4" placeholder="Eg. Meters 100M or Yards 100Y">
                                                     </div>
                                                 </div>
 
@@ -1426,7 +1440,8 @@
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             const filters = ['customer', 'merchandiser', 'item', 'deliveryStatus', 'customerDecision',
-                'coordinator', 'orderNo'];
+                'coordinator', 'orderNo'
+            ];
 
             // Bind dropdown toggle
             filters.forEach(type => {
@@ -1792,6 +1807,36 @@
         // Save page scroll position before unload
         window.addEventListener("beforeunload", function() {
             localStorage.setItem("pageScrollY", window.scrollY);
+        });
+    </script>
+    <script>
+        const customerInput = document.getElementById('customer');
+        const dropdown = document.getElementById('customer-dropdown');
+
+        function showCustomerDropdown() {
+            dropdown.classList.remove('hidden');
+        }
+
+        function filterCustomerDropdown(input) {
+            const filter = input.value.toLowerCase().trim(); // Trim spaces here
+            const options = dropdown.querySelectorAll('.customer-option');
+            options.forEach(option => {
+                const text = option.textContent.toLowerCase().trim(); // Also trim option text
+                option.style.display = text.includes(filter) ? 'block' : 'none';
+            });
+            showCustomerDropdown();
+        }
+
+        function selectCustomer(button) {
+            customerInput.value = button.textContent.trim(); // Trim spaces here
+            dropdown.classList.add('hidden');
+        }
+
+        // Hide dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!dropdown.contains(e.target) && e.target !== customerInput) {
+                dropdown.classList.add('hidden');
+            }
         });
     </script>
 

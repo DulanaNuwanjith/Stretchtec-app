@@ -114,8 +114,8 @@
                     </li>
 
                     <li>
-                        <a href="{{ route('reports.index') }}"
-                            class="flex items-center px-4 py-2 rounded hover:bg-gray-200 {{ request()->routeIs('reports.*') ? 'bg-gray-200' : '' }}">
+                        <a href="{{ route('sample-reports.index') }}"
+                            class="flex items-center px-4 py-2 rounded hover:bg-gray-200 {{ request()->routeIs('sample-reports.*', 'production-reports.*') ? 'bg-gray-200' : '' }}">
                             <img src="{{ asset('icons/report.png') }}" alt="" class="w-6 h-6 mr-5" />
                             <span>Reports</span>
                         </a>

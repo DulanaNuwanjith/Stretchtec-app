@@ -21,9 +21,8 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
+
+    Route::get('/dashboard', [\App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
 
     Route::patch('/sample-preparation-production/update-operator/{id}', [SamplePreparationProductionController::class, 'updateOperator'])
         ->name('sample-preparation-production.update-operator');
@@ -55,11 +54,6 @@ Route::middleware([
     Route::get('storeManagement', function () {
         return view('store-management.storeManagement');
     })->name('storeManagement.index');
-
-    Route::get('reports', function () {
-        return view('reports');
-    })->name('reports.index');
-
 
     Route::get('elasticCatalog', [ProductCatalogController::class, 'elasticCatalog'])->name('elasticCatalog.index');
     Route::get('tapeCatalog', [ProductCatalogController::class, 'tapeCatalog'])->name('tapeCatalog.index');
@@ -215,6 +209,9 @@ Route::middleware(['auth'])->group(function () {
     });
 });
 
+Route::get('/reports/sample-reports', [ReportController::class, 'showReportPage'])->name('sample-reports.index');
+Route::get('/reports/customer-decision', [ReportController::class, 'inquiryCustomerDecisionReport'])->name('reports.customerDecision');
 Route::get('/report/order', [ReportController::class, 'generateOrderReport'])->name('report.order');
 Route::get('/report/inquiry-range', [ReportController::class, 'inquiryRangeReport'])->name('report.inquiryRange');
 
+Route::get('/reports/production-reports', function () {return view('reports.production-reports');})->name('production-reports.index');
