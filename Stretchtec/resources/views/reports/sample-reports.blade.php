@@ -18,9 +18,12 @@
 
                     <!-- Order Number Form -->
                     <form action="{{ route('report.order') }}" method="GET"
-                        class="flex-1 bg-white dark:bg-gray-800 p-6 rounded shadow space-y-6 max-w-md mx-auto">
+                        class="flex-1 bg-white dark:bg-gray-800 p-6 rounded shadow space-y-6 max-w-md mx-auto mb-1">
                         @csrf
                         <h3 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">Generate by Order Number
+                        </h3>
+                        <h3 class="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-4">Produce a complete, detailed
+                            report containing all relevant data associated with the specified order number.
                         </h3>
                         <div>
                             <label for="order_no" class="block font-medium mb-2 text-gray-700 dark:text-gray-300">Enter
@@ -30,8 +33,8 @@
                                 class="w-full border border-gray-300 rounded px-3 py-2 text-gray-900 dark:bg-gray-700 dark:text-white" />
                         </div>
                         <button type="submit"
-                            class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded transition">Generate
-                            Report</button>
+                            class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded transition">Download
+                            PDF</button>
                     </form>
 
                     <!-- Date Range Form -->
@@ -40,6 +43,10 @@
                         @csrf
                         <h3 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">Generate by Inquiry Date
                             Range
+                        </h3>
+                        <h3 class="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-4">
+                            Produce a complete, detailed report of all inquiries within the selected date range,
+                            showing both delivered and undelivered orders.
                         </h3>
                         <div>
                             <label for="start_date" class="block font-medium mb-2 text-gray-700 dark:text-gray-300">Start
@@ -64,7 +71,12 @@
                     <form action="{{ route('reports.customerDecision') }}" method="GET"
                         class="flex-1 bg-white dark:bg-gray-800 p-6 rounded shadow space-y-6 max-w-md mx-auto">
                         @csrf
-                        <h3 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">Date Range + Customer</h3>
+                        <h3 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">Generate by Inquiry Date
+                            Range & Customer Decision</h3>
+                        <h3 class="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-4">
+                            Produce a complete, detailed report of all inquiries within the selected date range,
+                            including the recorded customer decisions for each order.
+                        </h3>
                         <div>
                             <label for="start_date_cd" class="block font-medium mb-2 text-gray-700 dark:text-gray-300">Start
                                 Date</label>
