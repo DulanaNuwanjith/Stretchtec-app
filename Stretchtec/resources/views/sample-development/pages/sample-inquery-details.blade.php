@@ -1028,20 +1028,6 @@
                                                 <!-- Actions -->
                                                 <td class="px-4 py-3 whitespace-normal break-words text-center">
                                                     <div class="flex space-x-2 justify-center items-center">
-                                                        {{-- @if (Auth::user()->role === 'SUPERADMIN')
-                                                            <button
-                                                                class="edit-btn bg-green-600 h-10 hover:bg-green-700 text-white px-3 py-1 rounded text-sm"
-                                                                onclick="editRow('row{{ $inquiry->id }}')">
-                                                                Edit
-                                                            </button>
-                                                        @endif
-
-                                                        <button
-                                                            class="save-btn bg-blue-600 h-10 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm hidden"
-                                                            onclick="saveRow('row{{ $inquiry->id }}')">
-                                                            Save
-                                                        </button> --}}
-
                                                         @if ($inquiry->orderFile)
                                                             <a href="{{ asset('storage/' . $inquiry->orderFile) }}"
                                                                 target="_blank"
@@ -1055,6 +1041,7 @@
                                                                 No File
                                                             </button>
                                                         @endif
+
                                                         @if (Auth::user()->role === 'SUPERADMIN')
                                                             <form id="delete-form-{{ $inquiry->id }}"
                                                                 action="{{ route('sampleInquiry.destroy', $inquiry->id) }}"
@@ -1069,8 +1056,22 @@
                                                             </form>
                                                         @endif
                                                     </div>
+                                                    @if (!$inquiry->orderFile && in_array(Auth::user()->role, ['SUPERADMIN', 'CUSTOMERCOORDINATOR']))
+                                                        <form
+                                                            action="{{ route('sampleInquiry.uploadOrderFile', $inquiry->id) }}"
+                                                            method="POST" enctype="multipart/form-data"
+                                                            class="flex items-center justify-center mt-2">
+                                                            @csrf
+                                                            <label for="uploadFile{{ $inquiry->id }}"
+                                                                class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-2 rounded cursor-pointer text-sm">
+                                                                Upload Swatch
+                                                            </label>
+                                                            <input id="uploadFile{{ $inquiry->id }}" type="file"
+                                                                name="order_file" accept=".pdf,.jpg,.jpeg" class="hidden"
+                                                                onchange="this.form.submit()" />
+                                                        </form>
+                                                    @endif
                                                 </td>
-
                                             </tr>
                                         @endforeach
                                     </tbody>
@@ -1265,7 +1266,8 @@
                                                             Quantity (yds or mtr)</label>
                                                         <input id="sampleQuantity" type="text" name="sample_quantity"
                                                             required
-                                                            class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm mb-4" placeholder="Eg. Meters 100M or Yards 100Y">
+                                                            class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm mb-4"
+                                                            placeholder="Eg. Meters 100M or Yards 100Y">
                                                     </div>
                                                 </div>
 
