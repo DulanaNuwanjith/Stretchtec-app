@@ -42,7 +42,7 @@ class DashboardController extends Controller
         $yarnOrderedNotReceived = [];
         foreach ($yarnSuppliers as $supplier) {
             $orderedCount = SamplePreparationRnD::where('yarnSupplier', $supplier)
-                ->whereNotNull('yarnOrderDate')
+                ->whereNotNull('yarnOrderedDate')
                 ->whereNull('yarnReceiveDate')
                 ->count();
             $yarnOrderedNotReceived[$supplier] = $orderedCount;
