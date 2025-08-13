@@ -226,6 +226,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/report/inquiry-range', [ReportController::class, 'inquiryRangeReport'])->name('report.inquiryRange');
         Route::get('/reports/production-reports', function () {return view('reports.production-reports');})->name('production-reports.index');
         Route::get('/reports/yarn-supplier-spending', [ReportController::class, 'yarnSupplierSpendingReport'])->name('reports.yarnSupplierSpending');
+        Route::get('/reports/coordinator/pdf', [ReportController::class, 'coordinatorReportPdf'])->name('reports.coordinatorPdf');
 
     });
 });
