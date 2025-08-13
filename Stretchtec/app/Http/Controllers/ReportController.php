@@ -133,4 +133,27 @@ class ReportController extends Controller
         return $pdf->download("Inquiry_Report_{$request->start_date}_to_{$request->end_date}.pdf");
     }
 
+    public function yarnSupplierSpendingReport(Request $request)
+    {
+        $request->validate([
+            'start_date' => 'required|date',
+            'end_date'   => 'required|date|after_or_equal:start_date',
+        ]);
+
+        $suppliers = SamplePreparationRnD::whereBetween('yarnOrderedDate', [$request->start_date, $request->end_date])
+            ->selectRaw('yarnSupplier, SUM(yarnPrice) as total_spent')
+            ->groupBy('yarnSupplier')
+            ->orderBy('total_spent', 'desc')
+            ->get();
+
+        $pdf = \PDF::loadView('reports.yarn-supplier-spending-pdf', [
+            'suppliers'  => $suppliers,
+            'start_date' => $request->start_date,
+            'end_date'   => $request->end_date,
+        ]);
+
+        return $pdf->download("Yarn_Supplier_Spending_{$request->start_date}_to_{$request->end_date}.pdf");
+    }
+
+
 }

@@ -144,6 +144,37 @@
                             class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded transition">Download
                             PDF</button>
                     </form>
+
+                    <!-- NEW: Yarn Supplier Spending Report Form -->
+                    <form action="{{ route('reports.yarnSupplierSpending') }}" method="GET"
+                        class="flex flex-col flex-1 bg-white dark:bg-gray-800 p-6 rounded shadow max-w-md mx-auto">
+                        @csrf
+                        <div class="flex-grow space-y-6">
+                            <h3 class="text-xl font-semibold text-gray-900 dark:text-gray-100">
+                                Yarn Supplier Spending Report
+                            </h3>
+                            <h3 class="text-sm font-semibold text-gray-900 dark:text-gray-100">
+                                Generate a report showing total spending on yarn, grouped by supplier, for the selected date
+                                range.
+                            </h3>
+                            <div>
+                                <label for="start_date_ys"
+                                    class="block font-medium mb-2 text-gray-700 dark:text-gray-300">Start Date</label>
+                                <input type="date" id="start_date_ys" name="start_date" required
+                                    class="w-full border border-gray-300 rounded px-3 py-2 text-gray-900 dark:bg-gray-700 dark:text-white" />
+                            </div>
+                            <div>
+                                <label for="end_date_ys"
+                                    class="block font-medium mb-2 text-gray-700 dark:text-gray-300">End Date</label>
+                                <input type="date" id="end_date_ys" name="end_date" required
+                                    class="w-full border border-gray-300 rounded px-3 py-2 text-gray-900 dark:bg-gray-700 dark:text-white" />
+                            </div>
+                        </div>
+                        <button type="submit"
+                            class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded transition">
+                            Download PDF
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>
