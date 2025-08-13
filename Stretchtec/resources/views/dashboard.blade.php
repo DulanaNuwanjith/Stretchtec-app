@@ -1,16 +1,20 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 </head>
-<div class="flex h-full w-full font-sans bg-gray-50 dark:bg-gray-900">
+<div class="flex h-full w-full font-sans bg-white">
     @include('layouts.side-bar')
 
     <div class="flex-1 overflow-y-auto p-6 md:p-10">
-
-        <!-- Header -->
-        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10">
-            <h2 class="text-3xl font-bold text-gray-800 dark:text-white">
-                Welcome, {{ Auth::user()->name }}!
-            </h2>
+        <div class="flex justify-between items-start md:items-center mb-5">
+            <!-- Header -->
+            <div>
+                <h1 class="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-5">Sample Development Dashboard</h1>
+            </div>
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10">
+                <h2 class=" text-lg font-semibold text-blue-900 dark:text-white text-center">
+                    Welcome, {{ Auth::user()->name }}!
+                </h2>
+            </div>
         </div>
 
         <!-- Cards Section -->
@@ -19,15 +23,36 @@
             <!-- Default Sample Inquiry Cards -->
             @php
                 $cards = [
-                    ['title' => 'All Samples', 'allTime' => $allSamplesReceived ?? 0, 'last30' => $allSamplesReceivedWithin30Days ?? 0, 'color' => 'indigo'],
-                    ['title' => 'Bulk Received', 'allTime' => $acceptedSamples ?? 0, 'last30' => $acceptedSamplesWithin30Days ?? 0, 'color' => 'green'],
-                    ['title' => 'Decision Pending', 'allTime' => $yetNotReceivedSamples ?? 0, 'last30' => $yetNotReceivedSamplesWithin30Days ?? 0, 'color' => 'pink'],
-                    ['title' => 'Rejected', 'allTime' => $rejectedSamples ?? 0, 'last30' => $rejectedSamplesWithin30Days ?? 0, 'color' => 'red'],
+                    [
+                        'title' => 'All Samples',
+                        'allTime' => $allSamplesReceived ?? 0,
+                        'last30' => $allSamplesReceivedWithin30Days ?? 0,
+                        'color' => 'indigo',
+                    ],
+                    [
+                        'title' => 'Bulk Received',
+                        'allTime' => $acceptedSamples ?? 0,
+                        'last30' => $acceptedSamplesWithin30Days ?? 0,
+                        'color' => 'green',
+                    ],
+                    [
+                        'title' => 'Decision Pending',
+                        'allTime' => $yetNotReceivedSamples ?? 0,
+                        'last30' => $yetNotReceivedSamplesWithin30Days ?? 0,
+                        'color' => 'pink',
+                    ],
+                    [
+                        'title' => 'Rejected',
+                        'allTime' => $rejectedSamples ?? 0,
+                        'last30' => $rejectedSamplesWithin30Days ?? 0,
+                        'color' => 'red',
+                    ],
                 ];
             @endphp
 
-            @foreach($cards as $card)
-                <div class="bg-white dark:bg-gray-800 rounded-xl shadow hover:shadow-lg transition-shadow duration-300 p-6 flex flex-col items-center space-y-6 border border-gray-100 dark:border-gray-700">
+            @foreach ($cards as $card)
+                <div
+                    class="bg-white dark:bg-gray-800 rounded-xl shadow hover:shadow-lg transition-shadow duration-300 p-6 flex flex-col items-center space-y-6 border border-gray-100 dark:border-gray-700">
                     <h3 class="text-lg font-semibold text-gray-800 dark:text-white text-center">
                         {{ $card['title'] }}
                     </h3>
@@ -51,19 +76,21 @@
             @endforeach
 
             <!-- Yarn Ordered but Not Received - Single Card with Supplier List -->
-            <div class="bg-white dark:bg-gray-800 rounded-xl shadow hover:shadow-lg transition-shadow duration-300 p-6 flex flex-col border border-gray-100 dark:border-gray-700">
+            <div
+                class="bg-white dark:bg-gray-800 rounded-xl shadow hover:shadow-lg transition-shadow duration-300 p-6 flex flex-col border border-gray-100 dark:border-gray-700">
                 <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-6 text-center">
                     Yarn Ordered But Not Received
                 </h3>
 
-                @if(count($yarnOrderedNotReceived) === 0)
+                @if (count($yarnOrderedNotReceived) === 0)
                     <p class="text-center text-gray-500 dark:text-gray-400">No pending yarn orders found.</p>
                 @else
                     <ul class="divide-y divide-gray-200 dark:divide-gray-700 max-h-60 overflow-y-auto">
-                        @foreach($yarnOrderedNotReceived as $supplier => $count)
-                            @if(!empty($supplier))
+                        @foreach ($yarnOrderedNotReceived as $supplier => $count)
+                            @if (!empty($supplier))
                                 <li class="flex justify-between py-2">
-                                    <span class="text-gray-700 dark:text-gray-300 font-medium text-sm">{{ ucwords($supplier) }}</span>
+                                    <span
+                                        class="text-gray-700 dark:text-gray-300 font-medium text-sm">{{ ucwords($supplier) }}</span>
                                     <span class="text-yellow-500 font-bold text-lg">{{ $count }}</span>
                                 </li>
                             @endif
@@ -73,7 +100,8 @@
             </div>
 
             <!-- Other Information-->
-            <div class="bg-white dark:bg-gray-800 rounded-xl shadow hover:shadow-lg transition-shadow duration-300 p-6 flex flex-col border border-gray-100 dark:border-gray-700">
+            <div
+                class="bg-white dark:bg-gray-800 rounded-xl shadow hover:shadow-lg transition-shadow duration-300 p-6 flex flex-col border border-gray-100 dark:border-gray-700">
                 <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-6 text-center">
                     Sample Production Details
                 </h3>
@@ -88,7 +116,8 @@
                     </li>
                     <li class="flex justify-between py-2">
                         <span class="text-gray-700 dark:text-gray-300 font-medium text-sm">Production Output</span>
-                        <span class="text-green-500 font-bold text-lg">{{ $totalProductionOutput }}</span> <!-- Green -->
+                        <span class="text-green-500 font-bold text-lg">{{ $totalProductionOutput }}</span>
+                        <!-- Green -->
                     </li>
                 </ul>
             </div>
@@ -98,14 +127,16 @@
 
         <!-- Charts Section -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 p-6 flex flex-col">
+            <div
+                class="bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 p-6 flex flex-col">
                 <h3 class="text-xl font-semibold mb-4 text-gray-700 dark:text-gray-200">
                     Sample Overview by Customer Coordinators
                 </h3>
                 <canvas id="ordersChart" class="flex-grow w-full"></canvas>
             </div>
 
-            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 p-6 flex flex-col">
+            <div
+                class="bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 p-6 flex flex-col">
                 <h3 class="text-xl font-semibold mb-4 text-gray-700 dark:text-gray-200">
                     Sample Overview by Customers
                 </h3>
@@ -125,7 +156,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function() {
         const ctx = document.getElementById('ordersChart').getContext('2d');
 
         // These variables will be injected from the controller as JSON encoded data
@@ -137,16 +168,15 @@
             type: 'bar',
             data: {
                 labels: labels,
-                datasets: [
-                    {
+                datasets: [{
                         label: 'Accepted Samples',
                         data: acceptedSamples,
-                        backgroundColor: 'rgba(34, 197, 94, 0.7)',  // greenish
+                        backgroundColor: 'rgba(34, 197, 94, 0.7)', // greenish
                     },
                     {
                         label: 'Rejected Samples',
                         data: rejectedSamples,
-                        backgroundColor: 'rgba(239, 68, 68, 0.7)',  // reddish
+                        backgroundColor: 'rgba(239, 68, 68, 0.7)', // reddish
                     }
                 ]
             },
@@ -176,8 +206,7 @@
             type: 'bar',
             data: {
                 labels: @json($customerNames), // e.g. ["Customer A", "Customer B", "Customer C"]
-                datasets: [
-                    {
+                datasets: [{
                         label: 'Accepted Samples',
                         data: @json($acceptedSamplesCount2), // e.g. [10, 15, 7]
                         backgroundColor: 'rgba(34, 197, 94, 0.7)', // green-ish
