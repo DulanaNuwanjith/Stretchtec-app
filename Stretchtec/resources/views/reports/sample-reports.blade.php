@@ -18,7 +18,7 @@
 
                     <!-- Order Number Form -->
                     <form action="{{ route('report.order') }}" method="GET"
-                        class="flex flex-col flex-1 bg-white dark:bg-gray-800 p-6 rounded shadow max-w-md mx-auto">
+                        class="flex flex-col flex-1 bg-white dark:bg-gray-800 p-6 rounded shadow max-w-md mx-auto mb-1">
                         @csrf
                         <div class="flex-grow space-y-6">
                             <h3 class="text-xl font-semibold text-gray-900 dark:text-gray-100">Sample Order Report</h3>
