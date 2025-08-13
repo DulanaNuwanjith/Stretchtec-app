@@ -371,4 +371,36 @@ class SampleInquiryController extends Controller
 
         return redirect()->back()->with('success', 'Customer decision updated successfully.');
     }
+    
+    public function uploadOrderFile(Request $request, $id)
+    {
+        $request->validate([
+            'order_file' => 'required|file|mimes:pdf,jpg,jpeg|max:2048', // max 2MB
+        ]);
+
+        $inquiry = SampleInquiry::findOrFail($id);
+
+        $orderNo = $inquiry->order_no; // or whatever field represents the order number
+        $orderFilePath = null;
+
+        // Handle file upload
+        if ($request->hasFile('order_file')) {
+            $date = now()->format('Ymd'); // e.g. 20250713
+            $extension = $request->file('order_file')->getClientOriginalExtension();
+            $fileName = $orderNo . '_' . $date . '.' . $extension;
+
+            $orderFilePath = $request->file('order_file')->storeAs(
+                'order_files',
+                $fileName,
+                'public'
+            );
+
+            // Save file path in database
+            $inquiry->orderFile = $orderFilePath;
+            $inquiry->save();
+        }
+
+        return redirect()->back()->with('success', 'Swatch uploaded successfully!');
+    }
+
 }

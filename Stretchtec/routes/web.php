@@ -100,6 +100,7 @@ Route::middleware(['auth'])->group(function () {
         Route::patch('/sample-inquery-details/{id}/update-decision', [SampleInquiryController::class, 'updateDecision'])
             ->name('sample-inquery-details.update-decision');
         Route::post('/inquiry/mark-delivered', [SampleInquiryController::class, 'markCustomerDelivered'])->name('inquiry.markCustomerDelivered');
+        Route::post('/sample-inquiry/{id}/upload-order-file', [SampleInquiryController::class, 'uploadOrderFile'])->name('sampleInquiry.uploadOrderFile');
     });
 });
 
@@ -209,9 +210,23 @@ Route::middleware(['auth'])->group(function () {
     });
 });
 
-Route::get('/reports/sample-reports', [ReportController::class, 'showReportPage'])->name('sample-reports.index');
-Route::get('/reports/customer-decision', [ReportController::class, 'inquiryCustomerDecisionReport'])->name('reports.customerDecision');
-Route::get('/report/order', [ReportController::class, 'generateOrderReport'])->name('report.order');
-Route::get('/report/inquiry-range', [ReportController::class, 'inquiryRangeReport'])->name('report.inquiryRange');
+// REPORTS ROUTES
+Route::middleware(['auth'])->group(function () {
+    Route::group(['middleware' => function ($request, $next) {
+        $allowedRoles = ['ADMIN', 'SUPERADMIN'];
+        if (!Auth::check() || !in_array(Auth::user()->role, $allowedRoles)) {
+            abort(403, 'Unauthorized access.');
+        }
+        return $next($request);
+    }], function () {
 
-Route::get('/reports/production-reports', function () {return view('reports.production-reports');})->name('production-reports.index');
+        Route::get('/reports/sample-reports', [ReportController::class, 'showReportPage'])->name('sample-reports.index');
+        Route::get('/reports/customer-decision', [ReportController::class, 'inquiryCustomerDecisionReport'])->name('reports.customerDecision');
+        Route::get('/report/order', [ReportController::class, 'generateOrderReport'])->name('report.order');
+        Route::get('/report/inquiry-range', [ReportController::class, 'inquiryRangeReport'])->name('report.inquiryRange');
+        Route::get('/reports/production-reports', function () {return view('reports.production-reports');})->name('production-reports.index');
+
+    });
+});
+
+
