@@ -49,20 +49,20 @@ class DashboardController extends Controller
         }
 
         // Sum of available_stock from LeftoverYarn for last 60 days
-        $totalLeftOverYarn = LeftoverYarn::where('created_at', '>=', Carbon::now()->subDays(60))
+        $totalLeftOverYarn = LeftoverYarn::where('created_at', '>=', Carbon::now()->subDays(30))
             ->sum('available_stock');
         $totalLeftOverYarn = number_format($totalLeftOverYarn, 0);
 
         // Sum of damaged_output from SamplePreparationProduction for last 60 days
-        $totalDamagedOutput = SamplePreparationProduction::where('created_at', '>=', Carbon::now()->subDays(60))
+        $totalDamagedOutput = SamplePreparationProduction::where('created_at', '>=', Carbon::now()->subDays(30))
             ->sum('damaged_output');
         $totalDamagedOutput = number_format($totalDamagedOutput, 0);
 
         // Sum of production_output and damaged_output for last 60 days
-        $prodOutput = SamplePreparationProduction::where('created_at', '>=', Carbon::now()->subDays(60))
+        $prodOutput = SamplePreparationProduction::where('created_at', '>=', Carbon::now()->subDays(30))
             ->sum('production_output');
 
-        $damageOutput = SamplePreparationProduction::where('created_at', '>=', Carbon::now()->subDays(60))
+        $damageOutput = SamplePreparationProduction::where('created_at', '>=', Carbon::now()->subDays(30))
             ->sum('damaged_output');
 
         $totalProductionOutput = $prodOutput - $damageOutput;

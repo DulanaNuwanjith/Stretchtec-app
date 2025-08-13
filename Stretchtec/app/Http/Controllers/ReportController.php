@@ -8,7 +8,7 @@ use App\Models\SamplePreparationRnD;
 use App\Models\SamplePreparationProduction;
 use App\Models\ColorMatchReject;
 use App\Models\ProductCatalog;
-use PDF;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 
 class ReportController extends Controller
