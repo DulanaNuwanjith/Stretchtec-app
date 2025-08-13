@@ -48,11 +48,19 @@
                         'color' => 'red',
                     ],
                 ];
+                $shadowColors = [
+                    'indigo' => 'rgba(99, 102, 241, 0.5)', // indigo-500 with 50% opacity
+                    'green' => 'rgba(34, 197, 94, 0.5)', // green-500
+                    'pink' => 'rgba(236, 72, 153, 0.5)', // pink-500
+                    'red' => 'rgba(239, 68, 68, 0.5)', // red-500
+                ];
+                $yellowShadow = 'rgba(234, 179, 8, 0.5)'; // Tailwind yellow-500 with 50% opacity
+                $blueShadow = 'rgba(59, 130, 246, 0.5)'; // gray-400 at 30% opacity
             @endphp
 
             @foreach ($cards as $card)
-                <div
-                    class="bg-white dark:bg-gray-800 rounded-xl shadow hover:shadow-lg transition-shadow duration-300 p-6 flex flex-col items-center space-y-6 border border-gray-100 dark:border-gray-700">
+                <div class="bg-white dark:bg-gray-800 rounded-xl transition-shadow duration-300 p-6 flex flex-col items-center space-y-6 border border-gray-100 dark:border-gray-700"
+                    style="box-shadow: 0 4px 15px 0 {{ $shadowColors[$card['color']] ?? 'rgba(0,0,0,0.1)' }};">
                     <h3 class="text-lg font-semibold text-gray-800 dark:text-white text-center">
                         {{ $card['title'] }}
                     </h3>
@@ -76,8 +84,8 @@
             @endforeach
 
             <!-- Yarn Ordered but Not Received - Single Card with Supplier List -->
-            <div
-                class="bg-white dark:bg-gray-800 rounded-xl shadow hover:shadow-lg transition-shadow duration-300 p-6 flex flex-col border border-gray-100 dark:border-gray-700">
+            <div class="bg-white dark:bg-gray-800 rounded-xl transition-shadow duration-300 p-6 flex flex-col items-center space-y-6 border border-gray-100 dark:border-gray-700"
+                style="box-shadow: 0 4px 15px 0 {{ $yellowShadow }};">
                 <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-6 text-center">
                     Yarn Ordered But Not Received
                 </h3>
@@ -100,8 +108,8 @@
             </div>
 
             <!-- Other Information-->
-            <div
-                class="bg-white dark:bg-gray-800 rounded-xl shadow hover:shadow-lg transition-shadow duration-300 p-6 flex flex-col border border-gray-100 dark:border-gray-700">
+            <div class="bg-white dark:bg-gray-800 rounded-xl transition-shadow duration-300 p-6 flex flex-col items-center space-y-6 border border-gray-100 dark:border-gray-700"
+                style="box-shadow: 0 4px 15px 0 {{ $blueShadow }};">
                 <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-6 text-center">
                     Sample Production Details
                 </h3>
