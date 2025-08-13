@@ -98,7 +98,7 @@
                             @if (!empty($supplier))
                                 <li class="flex justify-between py-2">
                                     <span
-                                        class="text-gray-700 dark:text-gray-300 font-medium text-sm">{{ ucwords($supplier) }}</span>
+                                        class="text-gray-700 dark:text-gray-300 font-medium text-sm mr-10">{{ ucwords($supplier) }}</span>
                                     <span class="text-yellow-500 font-bold text-lg">{{ $count }}</span>
                                 </li>
                             @endif
@@ -115,15 +115,15 @@
                 </h3>
                 <ul class="divide-y divide-gray-200 dark:divide-gray-700 max-h-60 overflow-y-auto">
                     <li class="flex justify-between py-2">
-                        <span class="text-gray-700 dark:text-gray-300 font-medium text-sm">Leftover yarn</span>
+                        <span class="text-gray-700 dark:text-gray-300 font-medium text-sm mr-8">Leftover yarn</span>
                         <span class="text-indigo-500 font-bold text-lg">{{ $totalLeftOverYarn }}</span> <!-- Indigo -->
                     </li>
                     <li class="flex justify-between py-2">
-                        <span class="text-gray-700 dark:text-gray-300 font-medium text-sm">Damaged Output</span>
+                        <span class="text-gray-700 dark:text-gray-300 font-medium text-sm mr-8">Damaged Output</span>
                         <span class="text-red-500 font-bold text-lg">{{ $totalDamagedOutput }}</span> <!-- Red -->
                     </li>
                     <li class="flex justify-between py-2">
-                        <span class="text-gray-700 dark:text-gray-300 font-medium text-sm">Production Output</span>
+                        <span class="text-gray-700 dark:text-gray-300 font-medium text-sm mr-8">Production Output</span>
                         <span class="text-green-500 font-bold text-lg">{{ $totalProductionOutput }}</span>
                         <!-- Green -->
                     </li>
@@ -136,7 +136,7 @@
         <!-- Charts Section -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <div
-                class="bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 p-6 flex flex-col">
+                class="bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 p-6 flex flex-col" style="border-top: 3px solid #3b82f6;">
                 <h3 class="text-xl font-semibold mb-4 text-gray-700 dark:text-gray-200">
                     Sample Overview by Customer Coordinators
                 </h3>
@@ -144,7 +144,7 @@
             </div>
 
             <div
-                class="bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 p-6 flex flex-col">
+                class="bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 p-6 flex flex-col" style="border-bottom: 3px solid #3b82f6;">
                 <h3 class="text-xl font-semibold mb-4 text-gray-700 dark:text-gray-200">
                     Sample Overview by Customers
                 </h3>
