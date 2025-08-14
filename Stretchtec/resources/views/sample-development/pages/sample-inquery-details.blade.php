@@ -228,15 +228,18 @@
                                         </div>
 
                                         <!-- COORDINATOR DROPDOWN -->
-                                        <div class="relative inline-block text-left w-48">
+                                        <div class="relative inline-block text-left w-56">
                                             <label for="coordinatorDropdown"
-                                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Coordinator</label>
+                                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                                Coordinator
+                                            </label>
                                             <div>
                                                 <button type="button" id="coordinatorDropdown"
                                                     class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10 dark:bg-gray-700 dark:text-white"
                                                     aria-haspopup="listbox" aria-expanded="false">
-                                                    <span
-                                                        id="selectedCoordinator">{{ request('coordinator') ? request('coordinator') : 'Select Coordinator' }}</span>
+                                                    <span id="selectedCoordinator">
+                                                        {{ request('coordinator') ? implode(', ', (array) request('coordinator')) : 'Select Coordinator(s)' }}
+                                                    </span>
                                                     <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20"
                                                         fill="currentColor">
                                                         <path fill-rule="evenodd"
@@ -245,29 +248,30 @@
                                                     </svg>
                                                 </button>
                                             </div>
+
                                             <div id="coordinatorDropdownMenu"
                                                 class="hidden absolute z-40 mt-2 w-full rounded-md bg-white shadow-lg ring-1 ring-black/5 dark:bg-gray-700 max-h-48 overflow-y-auto">
+
                                                 <div class="p-2 sticky top-0 bg-white dark:bg-gray-700 z-10">
                                                     <input type="text" id="coordinatorSearchInput"
                                                         placeholder="Search coordinators..."
                                                         class="w-full px-2 py-1 text-sm border rounded-md dark:bg-gray-600 dark:text-white dark:placeholder-gray-300" />
                                                 </div>
-                                                <div class="py-1" role="listbox" tabindex="-1"
-                                                    aria-labelledby="coordinatorDropdown">
-                                                    <button type="button"
-                                                        class="coordinator-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                                                        onclick="selectOption('coordinator', '')">Select
-                                                        Coordinator</button>
 
+                                                <div class="py-1" id="coordinatorOptions" role="listbox"
+                                                    tabindex="-1" aria-labelledby="coordinatorDropdown">
                                                     @foreach ($coordinators as $coordinator)
-                                                        <button type="button"
-                                                            class="coordinator-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                                                            onclick="selectOption('coordinator', '{{ $coordinator }}')">{{ $coordinator }}</button>
+                                                        <label
+                                                            class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600">
+                                                            <input type="checkbox" name="coordinator[]"
+                                                                value="{{ $coordinator }}"
+                                                                {{ in_array($coordinator, (array) request('coordinator', [])) ? 'checked' : '' }}
+                                                                class="mr-2 coordinator-checkbox">
+                                                            {{ $coordinator }}
+                                                        </label>
                                                     @endforeach
                                                 </div>
                                             </div>
-                                            <input type="hidden" name="coordinator" id="coordinatorInput"
-                                                value="{{ request('coordinator') }}">
                                         </div>
 
                                         <!-- MERCHANDISER DROPDOWN -->
@@ -1441,81 +1445,120 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", () => {
-            const filters = ['customer', 'merchandiser', 'item', 'deliveryStatus', 'customerDecision',
-                'coordinator', 'orderNo'
-            ];
+            const filters = ['customer', 'merchandiser', 'item', 'deliveryStatus', 'customerDecision', 'orderNo'];
+            const multiSelectFilters = ['coordinator']; // Currently only coordinator is multi-select
 
-            // Bind dropdown toggle
-            filters.forEach(type => {
+            // ---------------------------
+            // Dropdown Toggle
+            // ---------------------------
+            [...filters, ...multiSelectFilters].forEach(type => {
                 const button = document.getElementById(`${type}Dropdown`);
                 const menu = document.getElementById(`${type}DropdownMenu`);
 
                 if (button && menu) {
                     button.addEventListener("click", (e) => {
-                        e.stopPropagation();
+                        e.stopPropagation(); // prevent the document click from closing immediately
+                        const isOpen = !menu.classList.contains("hidden");
                         closeAllDropdowns();
-                        menu.classList.toggle("hidden");
-                        button.setAttribute("aria-expanded", menu.classList.contains("hidden") ?
-                            "false" : "true");
+                        if (!isOpen) { // Only toggle open if it was closed
+                            menu.classList.remove("hidden");
+                            button.setAttribute("aria-expanded", "true");
+                        }
                     });
                 }
             });
 
-            // Bind option selection
+            // ---------------------------
+            // Single-select option selection
+            // ---------------------------
             filters.forEach(type => {
                 const options = document.querySelectorAll(`.${type}-option`);
                 options.forEach(option => {
                     option.addEventListener("click", () => {
                         const value = option.textContent.trim() ===
                             `Select ${capitalize(type)}` ? '' : option.textContent.trim();
-                        document.getElementById(`${type}Input`).value = value;
-                        document.getElementById(`selected${capitalize(type)}`).textContent =
-                            value || `Select ${capitalize(type)}`;
-                        document.getElementById(`${type}DropdownMenu`).classList.add(
-                            "hidden");
-                        document.getElementById(`${type}Dropdown`).setAttribute(
-                            "aria-expanded", "false");
+                        const input = document.getElementById(`${type}Input`);
+                        const selectedSpan = document.getElementById(
+                            `selected${capitalize(type)}`);
+                        const menu = document.getElementById(`${type}DropdownMenu`);
+                        const button = document.getElementById(`${type}Dropdown`);
+
+                        if (input) input.value = value;
+                        if (selectedSpan) selectedSpan.textContent = value ||
+                            `Select ${capitalize(type)}`;
+                        if (menu) menu.classList.add("hidden");
+                        if (button) button.setAttribute("aria-expanded", "false");
                     });
                 });
             });
 
-            // Bind search filter
-            filters.forEach(type => {
+            // ---------------------------
+            // Multi-select checkbox change
+            // ---------------------------
+            multiSelectFilters.forEach(type => {
+                const checkboxes = document.querySelectorAll(`#${type}DropdownMenu input[type="checkbox"]`);
+                const selectedSpan = document.getElementById(`selected${capitalize(type)}`);
+                const hiddenInput = document.getElementById(`${type}Input`);
+
+                function updateSelected() {
+                    const selectedValues = Array.from(checkboxes)
+                        .filter(cb => cb.checked)
+                        .map(cb => cb.value);
+
+                    if (selectedSpan) selectedSpan.textContent = selectedValues.length > 0 ? selectedValues
+                        .join(", ") : `Select ${capitalize(type)}(s)`;
+                    if (hiddenInput) hiddenInput.value = selectedValues.join(",");
+                }
+
+                checkboxes.forEach(cb => cb.addEventListener("change", updateSelected));
+                updateSelected(); // Run once on page load
+            });
+
+            // ---------------------------
+            // Search Filter for Dropdowns
+            // ---------------------------
+            [...filters, ...multiSelectFilters].forEach(type => {
                 const searchInput = document.getElementById(`${type}SearchInput`);
                 if (searchInput) {
                     searchInput.addEventListener("keyup", () => {
                         const query = searchInput.value.toLowerCase();
-                        const options = document.querySelectorAll(`.${type}-option`);
+                        const options = document.querySelectorAll(
+                            `#${type}DropdownMenu label, .${type}-option`);
                         options.forEach(option => {
                             const text = option.textContent.toLowerCase();
-                            option.style.display = text.includes(query) ? "block" : "none";
+                            option.style.display = text.includes(query) ? "" : "none";
                         });
                     });
                 }
             });
 
-            // Close all dropdowns if clicked outside
+            // ---------------------------
+            // Close dropdowns when clicking outside
+            // ---------------------------
             document.addEventListener("click", (e) => {
-                filters.forEach(type => {
+                [...filters, ...multiSelectFilters].forEach(type => {
                     const menu = document.getElementById(`${type}DropdownMenu`);
                     const button = document.getElementById(`${type}Dropdown`);
-                    if (!menu.contains(e.target) && !button.contains(e.target)) {
+                    if (menu && button && !menu.contains(e.target) && !button.contains(e.target)) {
                         menu.classList.add("hidden");
                         button.setAttribute("aria-expanded", "false");
                     }
                 });
             });
 
+            // ---------------------------
+            // Helper Functions
+            // ---------------------------
             function capitalize(str) {
                 return str.charAt(0).toUpperCase() + str.slice(1);
             }
 
             function closeAllDropdowns() {
-                filters.forEach(type => {
+                [...filters, ...multiSelectFilters].forEach(type => {
                     const menu = document.getElementById(`${type}DropdownMenu`);
                     const button = document.getElementById(`${type}Dropdown`);
-                    menu.classList.add("hidden");
-                    button.setAttribute("aria-expanded", "false");
+                    if (menu) menu.classList.add("hidden");
+                    if (button) button.setAttribute("aria-expanded", "false");
                 });
             }
         });

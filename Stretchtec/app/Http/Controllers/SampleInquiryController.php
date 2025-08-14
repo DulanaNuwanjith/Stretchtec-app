@@ -43,8 +43,8 @@ class SampleInquiryController extends Controller
         }
 
         if ($request->filled('coordinator')) {
-             $query->where('coordinatorName', $request->coordinator);
-         }
+            $query->whereIn('coordinatorName', (array)$request->coordinator);
+        }
 
         // Filter by delivery status using customerDeliveryDate
         if ($request->filled('deliveryStatus')) {
