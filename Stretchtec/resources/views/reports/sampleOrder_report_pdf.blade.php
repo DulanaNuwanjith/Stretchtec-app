@@ -146,8 +146,10 @@ use Carbon\Carbon;
                         {{ $sampleInquiry->merchandiseName ?? 'N/A' }}</li>
                     <li><strong style="width: 180px; display: inline-block;">Customer Coordinator Name:</strong>
                         {{ $sampleInquiry->coordinatorName ?? 'N/A' }}</li>
-                    <li><strong style="width: 180px; display: inline-block;">Customer Delivery Date:</strong>
-                        {{ $sampleInquiry->customerDeliveryDate->format('Y-m-d') ?? 'N/A' }}</li>
+                    <li>
+                        <strong style="width: 180px; display: inline-block;">Customer Delivery Date:</strong>
+                        {{ $sampleInquiry->customerDeliveryDate ? $sampleInquiry->customerDeliveryDate->format('Y-m-d') : 'N/A' }}
+                    </li>
                     <li><strong style="width: 180px; display: inline-block;">Customer Decision:</strong>
                         {{ $customerDecision ?? 'N/A' }}</li>
                     @if ($sampleInquiry->inquiryReceiveDate && $sampleInquiry->customerDeliveryDate)

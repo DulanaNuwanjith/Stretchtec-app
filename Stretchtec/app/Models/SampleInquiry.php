@@ -31,7 +31,8 @@ class SampleInquiry extends Model
         'customerDeliveryDate',
         'dNoteNumber',
         'customerDecision',
-        'notes'
+        'notes',
+        'deliveryQty'
     ];
 
     protected $casts = [
