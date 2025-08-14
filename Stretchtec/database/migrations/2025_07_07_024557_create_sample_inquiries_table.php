@@ -34,6 +34,7 @@ return new class extends Migration
             $table->string('referenceNo')->nullable();
             $table->dateTime('customerDeliveryDate')->nullable();
             $table->string('dNoteNumber')->nullable();
+            $table->integer('deliveryQty')->nullable();
             $table->string('customerDecision')->default('pending');
             $table->longText('notes')->nullable();
             $table->timestamps();

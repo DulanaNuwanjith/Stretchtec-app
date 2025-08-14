@@ -272,6 +272,7 @@ class SampleInquiryController extends Controller
         $deliveredQty = (int) $request->delivered_qty;
 
         $inquiry->customerDeliveryDate = now();
+        $inquiry->deliveryQty = $deliveredQty;
 
         try {
             // Generate next dispatch code
@@ -371,7 +372,7 @@ class SampleInquiryController extends Controller
 
         return redirect()->back()->with('success', 'Customer decision updated successfully.');
     }
-    
+
     public function uploadOrderFile(Request $request, $id)
     {
         $request->validate([
