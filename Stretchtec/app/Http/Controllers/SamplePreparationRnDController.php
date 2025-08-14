@@ -114,11 +114,11 @@ class SamplePreparationRnDController extends Controller
     {
         $request->validate([
             'id' => 'required|exists:sample_preparation_rnd,id',
-            'yarnOrderedPONumber' => 'required|string',
-            'value'=> 'required|numeric',
-            'shade' => 'required|string',
-            'tkt' => 'required|string',
-            'yarnPrice' => 'required|string',
+            'yarnOrderedPONumber' => 'nullable|string',
+            'value'=> 'nullable|numeric',
+            'shade' => 'nullable|string',
+            'tkt' => 'nullable|string',
+            'yarnPrice' => 'nullable|string',
             'yarnSupplier' => 'required|string',
             'customSupplier' => 'nullable|string',
         ]);

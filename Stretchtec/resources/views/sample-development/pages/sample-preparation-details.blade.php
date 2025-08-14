@@ -466,7 +466,7 @@
                                                 <td
                                                     class="text-center py-3 border-r border-gray-300 whitespace-normal break-words">
                                                     @if (is_null($prep->colourMatchSentDate))
-                                                        @if (Auth::user()->role === 'ADMIN')
+                                                        @if (Auth::user()->role === 'ADMIN' OR Auth::user()->role === 'PRODUCTIONOFFICER')
                                                             {{-- Read-only for ADMIN --}}
                                                             <button type="button"
                                                                 class="delivered-btn bg-gray-200 text-gray-500 px-2 py-1 mt-3 rounded cursor-not-allowed"
@@ -501,7 +501,7 @@
                                                 <td
                                                     class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
                                                     @if (is_null($prep->colourMatchReceiveDate))
-                                                        @if (Auth::user()->role === 'ADMIN')
+                                                        @if (Auth::user()->role === 'ADMIN' OR Auth::user()->role === 'PRODUCTIONOFFICER')
                                                             {{-- Read-only for ADMIN --}}
                                                             <button type="button"
                                                                 class="receive-btn px-2 py-1 mt-3 rounded bg-gray-200 text-gray-500 cursor-not-allowed"
@@ -536,7 +536,7 @@
                                                                 {{ \Carbon\Carbon::parse($prep->colourMatchReceiveDate)->format('H:i') }}
                                                             </button>
 
-                                                            @if (Auth::user()->role !== 'ADMIN')
+                                                            @if (Auth::user()->role !== 'ADMIN' OR Auth::user()->role === 'PRODUCTIONOFFICER')
                                                                 {{-- Reject button (hidden for Admin) --}}
                                                                 <form action="" method="POST">
                                                                     @csrf
@@ -593,7 +593,7 @@
                                                                     x-ref="formAlreadyDevelopedInput"
                                                                     value="Need to Develop">
 
-                                                                @if (Auth::user()->role === 'ADMIN')
+                                                                @if (Auth::user()->role === 'ADMIN' OR Auth::user()->role === 'PRODUCTIONOFFICER')
                                                                     {{-- Read-only for ADMIN --}}
                                                                     <div class="inline-flex justify-between w-48 rounded-md px-3 py-2 text-sm font-semibold
                                                                                  text-gray-500 bg-gray-200 shadow-sm h-10 cursor-not-allowed"
@@ -735,7 +735,7 @@
                                                 </td>
 
                                                 <td class="px-4 py-3 text-center border-r border-gray-300">
-                                                    @if (Auth::user()->role === 'ADMIN')
+                                                    @if (Auth::user()->role === 'ADMIN' OR Auth::user()->role === 'PRODUCTIONOFFICER')
                                                         {{-- Read-only for ADMIN --}}
                                                         @if ($prep->alreadyDeveloped == 'Need to Develop')
                                                             @if ($prep->developPlannedDate)
@@ -799,7 +799,7 @@
 
                                                 <td
                                                     class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
-                                                    @if (Auth::user()->role === 'ADMIN')
+                                                    @if (Auth::user()->role === 'ADMIN' OR Auth::user()->role === 'PRODUCTIONOFFICER')
                                                         {{-- ADMIN: Read-only --}}
                                                         @if ($prep->alreadyDeveloped == 'Need to Develop')
                                                             @if ($prep->yarnOrderedDate)
@@ -889,7 +889,7 @@
                                                                                         name="yarnOrderedPONumber"
                                                                                         placeholder="Enter PO Number"
                                                                                         class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                                                        required>
+                                                                                        >
                                                                                 </div>
 
                                                                                 {{-- Shade --}}
@@ -901,7 +901,7 @@
                                                                                     <input type="text" name="shade"
                                                                                         placeholder="Enter Shade"
                                                                                         class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                                                        required>
+                                                                                        >
                                                                                 </div>
 
                                                                                 {{-- Weight --}}
@@ -914,7 +914,7 @@
                                                                                         name="value"
                                                                                         placeholder="e.g. 150.50"
                                                                                         class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                                                        required>
+                                                                                        >
                                                                                 </div>
 
                                                                                 {{-- Ticket --}}
@@ -926,7 +926,7 @@
                                                                                     <input type="text" name="tkt"
                                                                                         placeholder="Enter Ticket Number"
                                                                                         class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                                                        required>
+                                                                                        >
                                                                                 </div>
 
                                                                                 {{-- Yarn Price --}}
@@ -938,7 +938,7 @@
                                                                                     <input type="text" name="yarnPrice"
                                                                                         placeholder="Enter Yarn Price"
                                                                                         class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                                                        required>
+                                                                                        >
                                                                                 </div>
 
                                                                                 {{-- Supplier --}}
@@ -960,6 +960,8 @@
                                                                                         <option value="A and E">A and E
                                                                                         </option>
                                                                                         <option value="A and E">Metro Lanka
+                                                                                        </option>
+                                                                                        <option value="Stretchtec Stock">Stretchtec Stock
                                                                                         </option>
                                                                                         <option value="Other">Other
                                                                                         </option>
@@ -1138,7 +1140,7 @@
                                                 {{-- Yarn Receive Date --}}
                                                 <td
                                                     class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
-                                                    @if (Auth::user()->role === 'ADMIN')
+                                                    @if (Auth::user()->role === 'ADMIN' OR Auth::user()->role === 'PRODUCTIONOFFICER')
                                                         {{-- ADMIN: Read-only --}}
                                                         @if ($prep->alreadyDeveloped == 'Need to Develop')
                                                             @if (is_null($prep->yarnReceiveDate))
@@ -1170,22 +1172,12 @@
                                                                         value="{{ $prep->id }}">
                                                                     <button type="submit"
                                                                         class="yarn-receive-btn px-2 py-1 mt-3 rounded transition-all duration-200
-                                                                                    {{ $prep->developPlannedDate &&
-                                                                                    $prep->yarnOrderedDate &&
-                                                                                    $prep->yarnSupplier &&
-                                                                                    $prep->tkt &&
-                                                                                    $prep->yarnOrderedWeight &&
-                                                                                    $prep->shade &&
-                                                                                    $prep->yarnOrderedPONumber
+                                                                                    {{
+                                                                                    $prep->yarnSupplier
                                                                                         ? 'bg-gray-300 text-black hover:bg-gray-400'
                                                                                         : 'bg-gray-200 text-gray-500 cursor-not-allowed' }}"
-                                                                        {{ $prep->developPlannedDate &&
-                                                                        $prep->yarnOrderedDate &&
-                                                                        $prep->yarnSupplier &&
-                                                                        $prep->tkt &&
-                                                                        $prep->yarnOrderedWeight &&
-                                                                        $prep->shade &&
-                                                                        $prep->yarnOrderedPONumber
+                                                                        {{
+                                                                        $prep->yarnSupplier
                                                                             ? ''
                                                                             : 'disabled' }}
                                                                         title="{{ $prep->developPlannedDate &&
@@ -1216,8 +1208,8 @@
                                                 </td>
 
                                                 <td class="px-4 py-3 border-r border-gray-300 text-center">
-                                                    @if (Auth::user()->role === 'ADMIN')
-                                                        {{-- ADMIN: Read-only --}}
+                                                    @if (Auth::user()->role === 'ADMIN' OR Auth::user()->role === 'PRODUCTIONOFFICER')
+                                                        {{-- ADMIN/PRODUCTION OFFICER: Read-only --}}
                                                         @if ($prep->alreadyDeveloped == 'Need to Develop')
                                                             @if (!$prep->is_deadline_locked)
                                                                 <span
@@ -1382,8 +1374,9 @@
                                                 <!-- Yarn Leftover Weight -->
                                                 <td class="px-4 py-3 border-r border-gray-300 text-center">
                                                     @if ($prep->alreadyDeveloped == 'Need to Develop')
-                                                        @if (Auth::user()->role === 'ADMIN')
-                                                            {{-- ADMIN: Read-only --}}
+                                                        @if (Auth::user()->role === 'ADMIN' OR Auth::user()->role === 'PRODUCTIONOFFICER')
+                                                            {{-- ADMIN/PRODUCTION OFFICER: Read-only --}}
+                                                            {{-- Check if yarn leftover weight is locked --}}
                                                             @if ($prep->is_yarn_leftover_weight_locked)
                                                                 <span class="readonly">{{ $prep->yarnLeftoverWeight }}
                                                                     g</span>
@@ -1462,7 +1455,7 @@
                                                         }
                                                     @endphp
 
-                                                    @if (Auth::user()->role === 'ADMIN')
+                                                    @if (Auth::user()->role === 'ADMIN' OR Auth::user()->role === 'PRODUCTIONOFFICER')
                                                         {{-- ADMIN: Read-only --}}
                                                         @if ($prep->is_reference_locked)
                                                             <span class="readonly">{{ $prep->referenceNo }}</span>
@@ -1556,7 +1549,7 @@
                                                 <!-- Notes -->
                                                 <td
                                                     class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
-                                                    @if (auth()->user()->role !== 'ADMIN')
+                                                    @if (auth()->user()->role !== 'ADMIN' OR Auth::user()->role === 'PRODUCTIONOFFICER')
                                                         <form
                                                             action="{{ route('sample-inquery-details.update-notes', $prep->sample_inquiry_id) }}"
                                                             method="POST" class="w-full">
