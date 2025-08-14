@@ -889,7 +889,7 @@
                                                                                         name="yarnOrderedPONumber"
                                                                                         placeholder="Enter PO Number"
                                                                                         class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                                                        required>
+                                                                                        >
                                                                                 </div>
 
                                                                                 {{-- Shade --}}
@@ -901,7 +901,7 @@
                                                                                     <input type="text" name="shade"
                                                                                         placeholder="Enter Shade"
                                                                                         class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                                                        required>
+                                                                                        >
                                                                                 </div>
 
                                                                                 {{-- Weight --}}
@@ -914,7 +914,7 @@
                                                                                         name="value"
                                                                                         placeholder="e.g. 150.50"
                                                                                         class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                                                        required>
+                                                                                        >
                                                                                 </div>
 
                                                                                 {{-- Ticket --}}
@@ -926,7 +926,7 @@
                                                                                     <input type="text" name="tkt"
                                                                                         placeholder="Enter Ticket Number"
                                                                                         class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                                                        required>
+                                                                                        >
                                                                                 </div>
 
                                                                                 {{-- Yarn Price --}}
@@ -938,7 +938,7 @@
                                                                                     <input type="text" name="yarnPrice"
                                                                                         placeholder="Enter Yarn Price"
                                                                                         class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                                                        required>
+                                                                                        >
                                                                                 </div>
 
                                                                                 {{-- Supplier --}}
@@ -960,6 +960,8 @@
                                                                                         <option value="A and E">A and E
                                                                                         </option>
                                                                                         <option value="A and E">Metro Lanka
+                                                                                        </option>
+                                                                                        <option value="Stretchtec Stock">Stretchtec Stock
                                                                                         </option>
                                                                                         <option value="Other">Other
                                                                                         </option>
@@ -1170,22 +1172,12 @@
                                                                         value="{{ $prep->id }}">
                                                                     <button type="submit"
                                                                         class="yarn-receive-btn px-2 py-1 mt-3 rounded transition-all duration-200
-                                                                                    {{ $prep->developPlannedDate &&
-                                                                                    $prep->yarnOrderedDate &&
-                                                                                    $prep->yarnSupplier &&
-                                                                                    $prep->tkt &&
-                                                                                    $prep->yarnOrderedWeight &&
-                                                                                    $prep->shade &&
-                                                                                    $prep->yarnOrderedPONumber
+                                                                                    {{
+                                                                                    $prep->yarnSupplier
                                                                                         ? 'bg-gray-300 text-black hover:bg-gray-400'
                                                                                         : 'bg-gray-200 text-gray-500 cursor-not-allowed' }}"
-                                                                        {{ $prep->developPlannedDate &&
-                                                                        $prep->yarnOrderedDate &&
-                                                                        $prep->yarnSupplier &&
-                                                                        $prep->tkt &&
-                                                                        $prep->yarnOrderedWeight &&
-                                                                        $prep->shade &&
-                                                                        $prep->yarnOrderedPONumber
+                                                                        {{
+                                                                        $prep->yarnSupplier
                                                                             ? ''
                                                                             : 'disabled' }}
                                                                         title="{{ $prep->developPlannedDate &&
