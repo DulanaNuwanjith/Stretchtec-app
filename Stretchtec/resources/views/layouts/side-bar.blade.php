@@ -18,24 +18,25 @@
 <aside :class="collapsed ? 'w-20' : 'w-64'"
        class="relative bg-gradient-to-b from-white to-blue-600 min-h-screen shadow-md flex flex-col transition-all duration-300">
 
-    <!-- Toggle Button in top-right corner -->
-    <button @click="collapsed = !collapsed"
-            class="absolute -right-3 top-4 bg-white border border-gray-300 rounded-full p-1 shadow hover:bg-gray-200 transition">
-        <svg x-show="!collapsed" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-blue-900" fill="none"
-             viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
-        </svg>
-        <svg x-show="collapsed" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-blue-900" fill="none"
-             viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
-        </svg>
-    </button>
-
-    <!-- Logo -->
-    <div class="flex items-center justify-center p-4 text-xl font-bold text-gray-700 border-b mt-4 mb-4">
+    <!-- Sidebar Header with Logo & Toggle -->
+    <div class="flex items-center justify-between p-4 border-b mt-4 mb-4">
+        <!-- Logo -->
         <a href="{{ route('dashboard') }}" :class="collapsed ? 'hidden' : ''">
-            <img src="{{ asset('images/logo.png') }}" alt="Logo" class="h-18 w-60 mr-2" />
+            <img src="{{ asset('images/logo.png') }}" alt="Logo" class="h-18 w-60" />
         </a>
+
+        <!-- Toggle Button -->
+        <button @click="collapsed = !collapsed"
+                class="bg-white border border-gray-300 rounded-full p-1 shadow hover:bg-gray-200 transition">
+            <svg x-show="!collapsed" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-blue-900" fill="none"
+                 viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+            </svg>
+            <svg x-show="collapsed" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-blue-900" fill="none"
+                 viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+            </svg>
+        </button>
     </div>
 
     <!-- Navigation -->
