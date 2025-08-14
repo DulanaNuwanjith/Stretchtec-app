@@ -942,43 +942,63 @@
                                                                                 </div>
 
                                                                                 {{-- Supplier --}}
-                                                                                <div class="mb-6"
-                                                                                    x-data="{ supplier: 'Pan Asia' }">
-                                                                                    <label
-                                                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 text-left">
+                                                                                <div class="mb-6">
+                                                                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 text-left">
                                                                                         Supplier
                                                                                     </label>
 
-                                                                                    <select name="yarnSupplier"
-                                                                                        x-model="supplier"
-                                                                                        class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                                                        required>
-                                                                                        <option value="Pan Asia">Pan Asia
-                                                                                        </option>
-                                                                                        <option value="Ocean Lanka">Ocean
-                                                                                            Lanka</option>
-                                                                                        <option value="A and E">A and E
-                                                                                        </option>
-                                                                                        <option value="A and E">Metro Lanka
-                                                                                        </option>
-                                                                                        <option value="Stretchtec Stock">Stretchtec Stock
-                                                                                        </option>
-                                                                                        <option value="Other">Other
-                                                                                        </option>
-                                                                                    </select>
+                                                                                    <div class="relative inline-block w-full" data-dropdown-root>
+                                                                                        <!-- Trigger -->
+                                                                                        <button type="button"
+                                                                                                onclick="toggleDropdownItemAdd(this, 'supplier')"
+                                                                                                class="w-full flex justify-between items-center px-4 py-2 border border-gray-300 rounded-md bg-white dark:bg-gray-700 text-sm text-gray-700 dark:text-white hover:bg-gray-50 focus:outline-none">
+                                                                                            <span class="selected-supplier">{{ old('yarnSupplier', 'Pan Asia') }}</span>
+                                                                                            <svg class="w-4 h-4 text-gray-500 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                                                                            </svg>
+                                                                                        </button>
 
-                                                                                    <div x-show="supplier === 'Other'"
-                                                                                        class="mt-4">
-                                                                                        <label
-                                                                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                                                                            Please specify
-                                                                                        </label>
-                                                                                        <input type="text"
-                                                                                            name="customSupplier"
-                                                                                            placeholder="Enter Supplier Name"
-                                                                                            class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                                                        <!-- Dropdown Menu -->
+                                                                                        <div class="dropdown-menu-supplier hidden absolute z-10 mt-2 w-full rounded-md bg-white dark:bg-gray-700 shadow-lg ring-1 ring-black/5 max-h-48 overflow-y-auto">
+                                                                                            <div class="py-1" role="listbox" tabindex="-1">
+                                                                                                <button type="button" class="dropdown-option w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
+                                                                                                        onclick="selectDropdownOptionItemAdd(this, 'Pan Asia', 'supplier')">Pan Asia</button>
+
+                                                                                                <button type="button" class="dropdown-option w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
+                                                                                                        onclick="selectDropdownOptionItemAdd(this, 'Ocean Lanka', 'supplier')">Ocean Lanka</button>
+
+                                                                                                <button type="button" class="dropdown-option w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
+                                                                                                        onclick="selectDropdownOptionItemAdd(this, 'A and E', 'supplier')">A and E</button>
+
+                                                                                                <button type="button" class="dropdown-option w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
+                                                                                                        onclick="selectDropdownOptionItemAdd(this, 'Metro Lanka', 'supplier')">Metro Lanka</button>
+
+                                                                                                <button type="button" class="dropdown-option w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
+                                                                                                        onclick="selectDropdownOptionItemAdd(this, 'Stretchtec Stock', 'supplier')">Stretchtec Stock</button>
+
+                                                                                                <button type="button" class="dropdown-option w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
+                                                                                                        onclick="selectDropdownOptionItemAdd(this, 'Other', 'supplier')">Other</button>
+                                                                                            </div>
+                                                                                        </div>
+
+                                                                                        <!-- Hidden input for form submission -->
+                                                                                        <input type="hidden" name="yarnSupplier" class="input-supplier" value="{{ old('yarnSupplier','Pan Asia') }}">
+
+                                                                                        <!-- "Other" input field -->
+                                                                                        <div class="mt-4 hidden other-supplier-field">
+                                                                                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                                                                                Please specify
+                                                                                            </label>
+                                                                                            <input type="text"
+                                                                                                   name="customSupplier"
+                                                                                                   placeholder="Enter Supplier Name"
+                                                                                                   class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm input-custom-supplier"
+                                                                                                   value="{{ old('customSupplier') }}"
+                                                                                                @disabled(true)>
+                                                                                        </div>
                                                                                     </div>
                                                                                 </div>
+
 
                                                                                 <div class="flex justify-end gap-3">
                                                                                     <button type="button"
@@ -1181,12 +1201,7 @@
                                                                             ? ''
                                                                             : 'disabled' }}
                                                                         title="{{ $prep->developPlannedDate &&
-                                                                        $prep->yarnOrderedDate &&
-                                                                        $prep->yarnSupplier &&
-                                                                        $prep->tkt &&
-                                                                        $prep->yarnOrderedWeight &&
-                                                                        $prep->shade &&
-                                                                        $prep->yarnOrderedPONumber
+                                                                        $prep->yarnOrderedDate
                                                                             ? ''
                                                                             : 'Please set Development Plan Date and Yarn Ordered Date first' }}">
                                                                         Pending
@@ -1726,6 +1741,58 @@
             </div>
         </div>
     </div>
+
+    <script>
+        function toggleDropdownItemAdd(button, type) {
+            const root = button.closest('[data-dropdown-root]');
+            const dropdownMenu = root.querySelector('.dropdown-menu-' + type);
+
+            // Close other open menus of the same type
+            document.querySelectorAll('.dropdown-menu-' + type).forEach(menu => {
+                if (menu !== dropdownMenu) menu.classList.add('hidden');
+            });
+
+            dropdownMenu.classList.toggle('hidden');
+        }
+
+        function selectDropdownOptionItemAdd(button, selectedValue, type) {
+            const root = button.closest('[data-dropdown-root]');
+            root.querySelector('.selected-' + type).innerText = selectedValue;
+            root.querySelector('.input-' + type).value = selectedValue;
+            root.querySelector('.dropdown-menu-' + type).classList.add('hidden');
+
+            const otherField = root.querySelector('.other-' + type + '-field');
+            const customInput = root.querySelector('.input-custom-' + type) || root.querySelector('.input-custom-supplier');
+
+            if (otherField) {
+                if (selectedValue === 'Other') {
+                    otherField.classList.remove('hidden');
+                    if (customInput) {
+                        customInput.removeAttribute('disabled');
+                        customInput.setAttribute('required', 'required');
+                        customInput.focus();
+                    }
+                } else {
+                    otherField.classList.add('hidden');
+                    if (customInput) {
+                        customInput.setAttribute('disabled', 'disabled');
+                        customInput.removeAttribute('required');
+                        customInput.value = '';
+                    }
+                }
+            }
+        }
+
+        // Click-outside handler: close any open menu when clicking outside its root
+        document.addEventListener('click', function(event) {
+            document.querySelectorAll('[class^="dropdown-menu-"]').forEach(menu => {
+                const root = menu.closest('[data-dropdown-root]');
+                if (root && !root.contains(event.target)) {
+                    menu.classList.add('hidden');
+                }
+            });
+        });
+    </script>
 
 
     <script>
