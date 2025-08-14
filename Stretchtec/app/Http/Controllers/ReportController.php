@@ -206,4 +206,36 @@ class ReportController extends Controller
         return $pdf->download("Coordinator_Report_{$startDate}_to_{$endDate}.pdf");
     }
 
+    public function referenceDeliveryReport(Request $request)
+    {
+        $request->validate([
+            'start_date' => 'required|date',
+            'end_date'   => 'required|date|after_or_equal:start_date'
+        ]);
+
+        $startDate = $request->start_date;
+        $endDate   = $request->end_date;
+
+        $inquiries = SampleInquiry::whereBetween('inquiryReceiveDate', [$startDate, $endDate])
+            ->select('referenceNo', 'inquiryReceiveDate', 'customerName', 'customerDeliveryDate', 'deliveryQty')
+            ->orderBy('inquiryReceiveDate')
+            ->get()
+            ->map(function ($inquiry) {
+                // Ensure only date is shown (no time)
+                $inquiry->inquiryReceiveDate = $inquiry->inquiryReceiveDate
+                    ? \Carbon\Carbon::parse($inquiry->inquiryReceiveDate)->format('Y-m-d')
+                    : null;
+                $inquiry->customerDeliveryDate = $inquiry->customerDeliveryDate
+                    ? \Carbon\Carbon::parse($inquiry->customerDeliveryDate)->format('Y-m-d')
+                    : null;
+                $inquiry->deliveryQty = $inquiry->deliveryQty ?? '-';
+                return $inquiry;
+            });
+
+        $pdf = \PDF::loadView('reports.reference_delivery_report_pdf', compact('inquiries', 'startDate', 'endDate'));
+
+        return $pdf->download("Reference_Delivery_Report_{$startDate}_to_{$endDate}.pdf");
+    }
+
+
 }
