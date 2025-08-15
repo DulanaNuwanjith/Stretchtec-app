@@ -40,7 +40,7 @@
     x-data="{ collapsed: window.__initialCollapsed, initialized: false }"
     x-init="initialized = true"
     :class="collapsed ? 'w-20' : 'w-72'"
-    class="relative bg-gradient-to-b from-white to-blue-600 min-h-screen shadow-md flex flex-col transition-all duration-300"
+    class="relative bg-gradient-to-b from-white to-blue-500 min-h-screen shadow-md flex flex-col transition-all duration-300"
     style="width: var(--sidebar-width);"
 >
 
