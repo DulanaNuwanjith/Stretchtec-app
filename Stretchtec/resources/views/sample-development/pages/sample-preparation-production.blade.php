@@ -838,7 +838,7 @@
                                         </div>
 
                                         <!-- Buttons -->
-                                        <div class="text-center mt-6 flex justify-center gap-4">
+                                        <div class="text-center mt-6 flex justify-center gap-4 mb-10">
                                             <button
                                                 onclick="document.getElementById('viewDetailsSample').classList.add('hidden')"
                                                 class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-md">
