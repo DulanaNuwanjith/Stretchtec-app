@@ -52,6 +52,19 @@ class SampleInquiry extends Model
         return $this->hasOne(ProductCatalog::class);
     }
 
+    public function samplePreparationProduction()
+    {
+        return $this->hasOneThrough(
+            SamplePreparationProduction::class,
+            SamplePreparationRnd::class,
+            'sample_inquiry_id',        // Foreign key on sample_preparation_rnd table
+            'sample_preparation_rnd_id',// Foreign key on sample_preparation_production table
+            'id',                       // Local key on inquiry table
+            'id'                        // Local key on sample_preparation_rnd table
+        );
+    }
+
+
     protected static function booted()
     {
         static::updated(function ($inquiry) {
