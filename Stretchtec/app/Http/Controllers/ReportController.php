@@ -141,7 +141,7 @@ class ReportController extends Controller
         ]);
 
         $suppliers = SamplePreparationRnD::whereBetween('yarnOrderedDate', [$request->start_date, $request->end_date])
-            ->selectRaw('yarnSupplier, SUM(yarnPrice) as total_spent')
+            ->selectRaw('yarnSupplier, SUM(yarnPrice) as total_spent, SUM(yarnOrderedWeight) as total_weight')
             ->groupBy('yarnSupplier')
             ->orderBy('total_spent', 'desc')
             ->get();

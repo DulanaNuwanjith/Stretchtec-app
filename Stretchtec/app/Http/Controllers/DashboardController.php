@@ -38,13 +38,17 @@ class DashboardController extends Controller
             ->pluck('yarnSupplier')
             ->toArray();
 
-        // Get yarn ordered but not yet received for each supplier
+        // Define only the suppliers you want
+        $selectedSuppliers = ['Pan Asia', 'Ocean Lanka', 'A and E', 'Metro Lanka'];
+
+        // Get yarn ordered but not yet received for each selected supplier
         $yarnOrderedNotReceived = [];
-        foreach ($yarnSuppliers as $supplier) {
+        foreach ($selectedSuppliers as $supplier) {
             $orderedCount = SamplePreparationRnD::where('yarnSupplier', $supplier)
                 ->whereNotNull('yarnOrderedDate')
                 ->whereNull('yarnReceiveDate')
                 ->count();
+
             $yarnOrderedNotReceived[$supplier] = $orderedCount;
         }
 
