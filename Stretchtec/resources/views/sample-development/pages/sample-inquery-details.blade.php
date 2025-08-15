@@ -128,6 +128,10 @@
                                     <img src="{{ asset('icons/filter.png') }}" class="w-6 h-6" alt="Filter Icon">
                                     Filters
                                 </button>
+                                <button onclick="toggleReportForm()"
+                                    class="bg-white border border-blue-500 text-blue-500 hover:text-blue-600 hover:border-blue-600 font-semibold py-1 px-3 rounded shadow flex items-center gap-2 mb-6 ml-2">
+                                    Generate Report
+                                </button>
                             </div>
 
                             <div id="filterFormContainer" class="hidden mt-4">
@@ -495,24 +499,115 @@
                                 </form>
                             </div>
 
-                            <div class="flex justify-between items-center mb-6">
-                                <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Sample Inquiry Records</h1>
-                                <div class="flex space-x-3">
-                                    {{-- Only show Add New Order if NOT ADMIN --}}
-                                    @if (Auth::user()->role !== 'ADMIN')
-                                        <button
-                                            onclick="document.getElementById('addSampleModal').classList.remove('hidden')"
-                                            class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded shadow">
-                                            + Add New Order
-                                        </button>
-                                    @endif
+                            <div class="flex-1">
+                                <div id="reportFormContainer" class="hidden mt-4">
+                                    <form action="{{ route('report.sampleInquiryReport') }}" method="POST"
+                                        class="flex space-x-3">
+                                        @csrf
 
-                                    <a href="{{ route('sampleStock.index') }}">
-                                        <button
-                                            class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded shadow">
-                                            Sample Stock Management
-                                        </button>
-                                    </a>
+                                        <!-- Start Date -->
+                                        <div>
+                                            <label
+                                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-">Start
+                                                Date</label>
+                                            <input type="date" name="start_date"
+                                                class="border rounded w-full p-2 mt-1" required>
+                                        </div>
+
+                                        <!-- End Date -->
+                                        <div>
+                                            <label
+                                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-">End
+                                                Date</label>
+                                            <input type="date" name="end_date" class="border rounded w-full p-2 mt-1"
+                                                required>
+                                        </div>
+
+                                        <!-- Coordinator Name (Multiple Select) -->
+                                        <div class="relative inline-block text-left w-56">
+                                            <label for="coordinatorDropdownReport"
+                                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                                Coordinator Name
+                                            </label>
+                                            <div>
+                                                <button type="button" id="coordinatorDropdownReport"
+                                                    class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10 dark:bg-gray-700 dark:text-white"
+                                                    aria-haspopup="listbox" aria-expanded="false">
+                                                    <span id="selectedCoordinatorsReport">
+                                                        {{ request('coordinatorName') ? implode(', ', (array) request('coordinatorName')) : 'Select Coordinator(s)' }}
+                                                    </span>
+                                                    <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20"
+                                                        fill="currentColor">
+                                                        <path fill-rule="evenodd"
+                                                            d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
+                                                            clip-rule="evenodd" />
+                                                    </svg>
+                                                </button>
+                                            </div>
+
+                                            <div id="coordinatorDropdownMenuReport"
+                                                class="hidden absolute z-40 mt-2 w-full rounded-md bg-white shadow-lg ring-1 ring-black/5 dark:bg-gray-700 max-h-48 overflow-y-auto">
+
+                                                <div class="p-2 sticky top-0 bg-white dark:bg-gray-700 z-10">
+                                                    <input type="text" id="coordinatorSearchInputReport"
+                                                        placeholder="Search coordinator..."
+                                                        class="w-full px-2 py-1 text-sm border rounded-md dark:bg-gray-600 dark:text-white dark:placeholder-gray-300" />
+                                                </div>
+
+                                                <div class="py-1" id="coordinatorOptionsReport" role="listbox"
+                                                    tabindex="-1" aria-labelledby="coordinatorDropdownReport">
+                                                    @php
+                                                        $coordinators = \App\Models\SampleInquiry::select(
+                                                            'coordinatorName',
+                                                        )
+                                                            ->distinct()
+                                                            ->pluck('coordinatorName');
+                                                    @endphp
+                                                    @foreach ($coordinators as $merch)
+                                                        <label
+                                                            class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600">
+                                                            <input type="checkbox" name="coordinatorName[]"
+                                                                value="{{ $merch }}"
+                                                                {{ in_array($merch, (array) request('coordinatorName', [])) ? 'checked' : '' }}
+                                                                class="mr-2 coordinator-checkboxReport">
+                                                            {{ $merch }}
+                                                        </label>
+                                                    @endforeach
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Submit Button -->
+                                        <div>
+                                            <button type="submit"
+                                                class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded shadow mt-6">
+                                                Generate PDF
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+
+                                <div class="flex justify-between items-center mb-6">
+                                    <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Sample Inquiry Records
+                                    </h1>
+
+                                    <div class="flex space-x-3">
+                                        {{-- Only show Add New Order if NOT ADMIN --}}
+                                        @if (Auth::user()->role !== 'ADMIN')
+                                            <button
+                                                onclick="document.getElementById('addSampleModal').classList.remove('hidden')"
+                                                class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded shadow">
+                                                + Add New Order
+                                            </button>
+                                        @endif
+
+                                        <a href="{{ route('sampleStock.index') }}">
+                                            <button
+                                                class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded shadow">
+                                                Sample Stock Management
+                                            </button>
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
 
@@ -1825,6 +1920,11 @@
             const form = document.getElementById('filterFormContainer');
             form.classList.toggle('hidden');
         }
+
+        function toggleReportForm() {
+            const form = document.getElementById('reportFormContainer');
+            form.classList.toggle('hidden');
+        }
     </script>
 
     <script>
@@ -1921,6 +2021,50 @@
             }
         });
     </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // Elements
+            const dropdownBtn = document.getElementById('coordinatorDropdownReport');
+            const dropdownMenu = document.getElementById('coordinatorDropdownMenuReport');
+            const checkboxes = document.querySelectorAll('.coordinator-checkboxReport');
+            const searchInput = document.getElementById('coordinatorSearchInputReport');
+            const selectedText = document.getElementById('selectedcoordinatorReport');
 
+            // Toggle dropdown open/close
+            dropdownBtn.addEventListener('click', () => {
+                dropdownMenu.classList.toggle('hidden');
+            });
+
+            // Close dropdown if clicked outside
+            document.addEventListener('click', (e) => {
+                if (!dropdownBtn.contains(e.target) && !dropdownMenu.contains(e.target)) {
+                    dropdownMenu.classList.add('hidden');
+                }
+            });
+
+            // Update button text when checkboxes change
+            checkboxes.forEach(cb => {
+                cb.addEventListener('change', () => {
+                    const selected = Array.from(checkboxes)
+                        .filter(c => c.checked)
+                        .map(c => c.value);
+                    selectedText.textContent = selected.length ? selected.join(', ') :
+                        'Select Coordinator(s)';
+                });
+            });
+
+            // Search filter
+            searchInput.addEventListener('input', () => {
+                const query = searchInput.value.toLowerCase();
+                const options = document.querySelectorAll(
+                '#coordinatorOptionsReport label'); // <-- updated ID
+                options.forEach(option => {
+                    const text = option.textContent.toLowerCase();
+                    option.style.display = text.includes(query) ? 'flex' : 'none';
+                });
+            });
+
+        });
+    </script>
 
 @endsection

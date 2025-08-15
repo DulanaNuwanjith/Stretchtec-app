@@ -229,6 +229,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/reports/yarn-supplier-spending', [ReportController::class, 'yarnSupplierSpendingReport'])->name('reports.yarnSupplierSpending');
         Route::get('/reports/coordinator/pdf', [ReportController::class, 'coordinatorReportPdf'])->name('reports.coordinatorPdf');
         Route::get('/reports/reference-delivery', [ReportController::class, 'referenceDeliveryReport'])->name('reports.reference_delivery');
+        Route::post('/report/sample-inquiry', [ReportController::class, 'generateSampleInquiryReport'])->name('report.sampleInquiryReport');
 
     });
 });
