@@ -22,6 +22,9 @@ Route::middleware([
     'verified',
 ])->group(function () {
 
+    Route::get('sample-preparation-details', [SamplePreparationRnDController::class, 'viewRnD'])
+        ->name('sample-preparation-details.index');
+
     Route::get('/dashboard', [\App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
 
     Route::patch('/sample-preparation-production/update-operator/{id}', [SamplePreparationProductionController::class, 'updateOperator'])
@@ -115,8 +118,6 @@ Route::middleware(['auth'])->group(function () {
         return $next($request);
     }], function () {
 
-        Route::get('sample-preparation-details', [SamplePreparationRnDController::class, 'viewRnD'])
-            ->name('sample-preparation-details.index');
         Route::post('/rnd/mark-colour-match-sent', [SamplePreparationRnDController::class, 'markColourMatchSent'])
             ->name('rnd.markColourMatchSent');
         Route::post('/rnd/mark-colour-match-receive', [SamplePreparationRnDController::class, 'markColourMatchReceive'])

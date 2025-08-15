@@ -422,6 +422,7 @@
                                                         class="readonly font-bold hover:text-blue-600 hover:underline cursor-pointer"
                                                         onclick="openRndSampleModal(
                                                                     '{{ addslashes($prep->orderNo) }}',
+                                                                    '{{ addslashes($prep->sampleInquiry->customerName ?? '-') }}',
                                                                     '{{ addslashes($prep->sampleInquiry->coordinatorName ?? '-') }}',
                                                                     '{{ addslashes($prep->sampleInquiry->item ?? '-') }}',
                                                                     '{{ addslashes($prep->sampleInquiry->ItemDiscription ?? '-') }}',
@@ -466,7 +467,7 @@
                                                 <td
                                                     class="text-center py-3 border-r border-gray-300 whitespace-normal break-words">
                                                     @if (is_null($prep->colourMatchSentDate))
-                                                        @if (Auth::user()->role === 'ADMIN')
+                                                        @if (Auth::user()->role === 'ADMIN' OR Auth::user()->role === 'PRODUCTIONOFFICER')
                                                             {{-- Read-only for ADMIN --}}
                                                             <button type="button"
                                                                 class="delivered-btn bg-gray-200 text-gray-500 px-2 py-1 mt-3 rounded cursor-not-allowed"
@@ -501,7 +502,7 @@
                                                 <td
                                                     class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
                                                     @if (is_null($prep->colourMatchReceiveDate))
-                                                        @if (Auth::user()->role === 'ADMIN')
+                                                        @if (Auth::user()->role === 'ADMIN' OR Auth::user()->role === 'PRODUCTIONOFFICER')
                                                             {{-- Read-only for ADMIN --}}
                                                             <button type="button"
                                                                 class="receive-btn px-2 py-1 mt-3 rounded bg-gray-200 text-gray-500 cursor-not-allowed"
@@ -536,7 +537,7 @@
                                                                 {{ \Carbon\Carbon::parse($prep->colourMatchReceiveDate)->format('H:i') }}
                                                             </button>
 
-                                                            @if (Auth::user()->role !== 'ADMIN')
+                                                            @if (Auth::user()->role !== 'ADMIN' OR Auth::user()->role === 'PRODUCTIONOFFICER')
                                                                 {{-- Reject button (hidden for Admin) --}}
                                                                 <form action="" method="POST">
                                                                     @csrf
@@ -593,7 +594,7 @@
                                                                     x-ref="formAlreadyDevelopedInput"
                                                                     value="Need to Develop">
 
-                                                                @if (Auth::user()->role === 'ADMIN')
+                                                                @if (Auth::user()->role === 'ADMIN' OR Auth::user()->role === 'PRODUCTIONOFFICER')
                                                                     {{-- Read-only for ADMIN --}}
                                                                     <div class="inline-flex justify-between w-48 rounded-md px-3 py-2 text-sm font-semibold
                                                                                  text-gray-500 bg-gray-200 shadow-sm h-10 cursor-not-allowed"
@@ -735,7 +736,7 @@
                                                 </td>
 
                                                 <td class="px-4 py-3 text-center border-r border-gray-300">
-                                                    @if (Auth::user()->role === 'ADMIN')
+                                                    @if (Auth::user()->role === 'ADMIN' OR Auth::user()->role === 'PRODUCTIONOFFICER')
                                                         {{-- Read-only for ADMIN --}}
                                                         @if ($prep->alreadyDeveloped == 'Need to Develop')
                                                             @if ($prep->developPlannedDate)
@@ -799,7 +800,7 @@
 
                                                 <td
                                                     class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
-                                                    @if (Auth::user()->role === 'ADMIN')
+                                                    @if (Auth::user()->role === 'ADMIN' OR Auth::user()->role === 'PRODUCTIONOFFICER')
                                                         {{-- ADMIN: Read-only --}}
                                                         @if ($prep->alreadyDeveloped == 'Need to Develop')
                                                             @if ($prep->yarnOrderedDate)
@@ -889,7 +890,7 @@
                                                                                         name="yarnOrderedPONumber"
                                                                                         placeholder="Enter PO Number"
                                                                                         class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                                                        required>
+                                                                                        >
                                                                                 </div>
 
                                                                                 {{-- Shade --}}
@@ -901,7 +902,7 @@
                                                                                     <input type="text" name="shade"
                                                                                         placeholder="Enter Shade"
                                                                                         class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                                                        required>
+                                                                                        >
                                                                                 </div>
 
                                                                                 {{-- Weight --}}
@@ -914,7 +915,7 @@
                                                                                         name="value"
                                                                                         placeholder="e.g. 150.50"
                                                                                         class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                                                        required>
+                                                                                        >
                                                                                 </div>
 
                                                                                 {{-- Ticket --}}
@@ -926,7 +927,7 @@
                                                                                     <input type="text" name="tkt"
                                                                                         placeholder="Enter Ticket Number"
                                                                                         class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                                                        required>
+                                                                                        >
                                                                                 </div>
 
                                                                                 {{-- Yarn Price --}}
@@ -938,45 +939,67 @@
                                                                                     <input type="text" name="yarnPrice"
                                                                                         placeholder="Enter Yarn Price"
                                                                                         class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                                                        required>
+                                                                                        >
                                                                                 </div>
 
                                                                                 {{-- Supplier --}}
-                                                                                <div class="mb-6"
-                                                                                    x-data="{ supplier: 'Pan Asia' }">
-                                                                                    <label
-                                                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 text-left">
+                                                                                <div class="mb-6">
+                                                                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 text-left">
                                                                                         Supplier
                                                                                     </label>
 
-                                                                                    <select name="yarnSupplier"
-                                                                                        x-model="supplier"
-                                                                                        class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                                                        required>
-                                                                                        <option value="Pan Asia">Pan Asia
-                                                                                        </option>
-                                                                                        <option value="Ocean Lanka">Ocean
-                                                                                            Lanka</option>
-                                                                                        <option value="A and E">A and E
-                                                                                        </option>
-                                                                                        <option value="A and E">Metro Lanka
-                                                                                        </option>
-                                                                                        <option value="Other">Other
-                                                                                        </option>
-                                                                                    </select>
+                                                                                    <div class="relative inline-block w-full" data-dropdown-root>
+                                                                                        <!-- Trigger -->
+                                                                                        <button type="button"
+                                                                                                onclick="toggleDropdownItemAdd(this, 'supplier')"
+                                                                                                class="w-full flex justify-between items-center px-4 py-2 border border-gray-300 rounded-md bg-white dark:bg-gray-700 text-sm text-gray-700 dark:text-white hover:bg-gray-50 focus:outline-none">
+                                                                                            <span class="selected-supplier">{{ old('yarnSupplier', 'Pan Asia') }}</span>
+                                                                                            <svg class="w-4 h-4 text-gray-500 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                                                                            </svg>
+                                                                                        </button>
 
-                                                                                    <div x-show="supplier === 'Other'"
-                                                                                        class="mt-4">
-                                                                                        <label
-                                                                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                                                                            Please specify
-                                                                                        </label>
-                                                                                        <input type="text"
-                                                                                            name="customSupplier"
-                                                                                            placeholder="Enter Supplier Name"
-                                                                                            class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                                                        <!-- Dropdown Menu -->
+                                                                                        <div class="dropdown-menu-supplier hidden absolute z-10 mt-2 w-full rounded-md bg-white dark:bg-gray-700 shadow-lg ring-1 ring-black/5 max-h-48 overflow-y-auto">
+                                                                                            <div class="py-1" role="listbox" tabindex="-1">
+                                                                                                <button type="button" class="dropdown-option w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
+                                                                                                        onclick="selectDropdownOptionItemAdd(this, 'Pan Asia', 'supplier')">Pan Asia</button>
+
+                                                                                                <button type="button" class="dropdown-option w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
+                                                                                                        onclick="selectDropdownOptionItemAdd(this, 'Ocean Lanka', 'supplier')">Ocean Lanka</button>
+
+                                                                                                <button type="button" class="dropdown-option w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
+                                                                                                        onclick="selectDropdownOptionItemAdd(this, 'A and E', 'supplier')">A and E</button>
+
+                                                                                                <button type="button" class="dropdown-option w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
+                                                                                                        onclick="selectDropdownOptionItemAdd(this, 'Metro Lanka', 'supplier')">Metro Lanka</button>
+
+                                                                                                <button type="button" class="dropdown-option w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
+                                                                                                        onclick="selectDropdownOptionItemAdd(this, 'Stretchtec Stock', 'supplier')">Stretchtec Stock</button>
+
+                                                                                                <button type="button" class="dropdown-option w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
+                                                                                                        onclick="selectDropdownOptionItemAdd(this, 'Other', 'supplier')">Other</button>
+                                                                                            </div>
+                                                                                        </div>
+
+                                                                                        <!-- Hidden input for form submission -->
+                                                                                        <input type="hidden" name="yarnSupplier" class="input-supplier" value="{{ old('yarnSupplier','Pan Asia') }}">
+
+                                                                                        <!-- "Other" input field -->
+                                                                                        <div class="mt-4 hidden other-supplier-field">
+                                                                                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                                                                                Please specify
+                                                                                            </label>
+                                                                                            <input type="text"
+                                                                                                   name="customSupplier"
+                                                                                                   placeholder="Enter Supplier Name"
+                                                                                                   class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm input-custom-supplier"
+                                                                                                   value="{{ old('customSupplier') }}"
+                                                                                                @disabled(true)>
+                                                                                        </div>
                                                                                     </div>
                                                                                 </div>
+
 
                                                                                 <div class="flex justify-end gap-3">
                                                                                     <button type="button"
@@ -1138,7 +1161,7 @@
                                                 {{-- Yarn Receive Date --}}
                                                 <td
                                                     class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
-                                                    @if (Auth::user()->role === 'ADMIN')
+                                                    @if (Auth::user()->role === 'ADMIN' OR Auth::user()->role === 'PRODUCTIONOFFICER')
                                                         {{-- ADMIN: Read-only --}}
                                                         @if ($prep->alreadyDeveloped == 'Need to Develop')
                                                             @if (is_null($prep->yarnReceiveDate))
@@ -1170,31 +1193,16 @@
                                                                         value="{{ $prep->id }}">
                                                                     <button type="submit"
                                                                         class="yarn-receive-btn px-2 py-1 mt-3 rounded transition-all duration-200
-                                                                                    {{ $prep->developPlannedDate &&
-                                                                                    $prep->yarnOrderedDate &&
-                                                                                    $prep->yarnSupplier &&
-                                                                                    $prep->tkt &&
-                                                                                    $prep->yarnOrderedWeight &&
-                                                                                    $prep->shade &&
-                                                                                    $prep->yarnOrderedPONumber
+                                                                                    {{
+                                                                                    $prep->yarnSupplier
                                                                                         ? 'bg-gray-300 text-black hover:bg-gray-400'
                                                                                         : 'bg-gray-200 text-gray-500 cursor-not-allowed' }}"
-                                                                        {{ $prep->developPlannedDate &&
-                                                                        $prep->yarnOrderedDate &&
-                                                                        $prep->yarnSupplier &&
-                                                                        $prep->tkt &&
-                                                                        $prep->yarnOrderedWeight &&
-                                                                        $prep->shade &&
-                                                                        $prep->yarnOrderedPONumber
+                                                                        {{
+                                                                        $prep->yarnSupplier
                                                                             ? ''
                                                                             : 'disabled' }}
                                                                         title="{{ $prep->developPlannedDate &&
-                                                                        $prep->yarnOrderedDate &&
-                                                                        $prep->yarnSupplier &&
-                                                                        $prep->tkt &&
-                                                                        $prep->yarnOrderedWeight &&
-                                                                        $prep->shade &&
-                                                                        $prep->yarnOrderedPONumber
+                                                                        $prep->yarnOrderedDate
                                                                             ? ''
                                                                             : 'Please set Development Plan Date and Yarn Ordered Date first' }}">
                                                                         Pending
@@ -1216,8 +1224,8 @@
                                                 </td>
 
                                                 <td class="px-4 py-3 border-r border-gray-300 text-center">
-                                                    @if (Auth::user()->role === 'ADMIN')
-                                                        {{-- ADMIN: Read-only --}}
+                                                    @if (Auth::user()->role === 'ADMIN' OR Auth::user()->role === 'PRODUCTIONOFFICER')
+                                                        {{-- ADMIN/PRODUCTION OFFICER: Read-only --}}
                                                         @if ($prep->alreadyDeveloped == 'Need to Develop')
                                                             @if (!$prep->is_deadline_locked)
                                                                 <span
@@ -1382,8 +1390,9 @@
                                                 <!-- Yarn Leftover Weight -->
                                                 <td class="px-4 py-3 border-r border-gray-300 text-center">
                                                     @if ($prep->alreadyDeveloped == 'Need to Develop')
-                                                        @if (Auth::user()->role === 'ADMIN')
-                                                            {{-- ADMIN: Read-only --}}
+                                                        @if (Auth::user()->role === 'ADMIN' OR Auth::user()->role === 'PRODUCTIONOFFICER')
+                                                            {{-- ADMIN/PRODUCTION OFFICER: Read-only --}}
+                                                            {{-- Check if yarn leftover weight is locked --}}
                                                             @if ($prep->is_yarn_leftover_weight_locked)
                                                                 <span class="readonly">{{ $prep->yarnLeftoverWeight }}
                                                                     g</span>
@@ -1462,7 +1471,7 @@
                                                         }
                                                     @endphp
 
-                                                    @if (Auth::user()->role === 'ADMIN')
+                                                    @if (Auth::user()->role === 'ADMIN' OR Auth::user()->role === 'PRODUCTIONOFFICER')
                                                         {{-- ADMIN: Read-only --}}
                                                         @if ($prep->is_reference_locked)
                                                             <span class="readonly">{{ $prep->referenceNo }}</span>
@@ -1556,7 +1565,7 @@
                                                 <!-- Notes -->
                                                 <td
                                                     class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
-                                                    @if (auth()->user()->role !== 'ADMIN')
+                                                    @if (auth()->user()->role !== 'ADMIN' OR Auth::user()->role === 'PRODUCTIONOFFICER')
                                                         <form
                                                             action="{{ route('sample-inquery-details.update-notes', $prep->sample_inquiry_id) }}"
                                                             method="POST" class="w-full">
@@ -1669,6 +1678,10 @@
                                             <table class="w-full text-left border border-gray-300 text-sm">
                                                 <tbody>
                                                     <tr>
+                                                        <th class="p-2 border">Customer</th>
+                                                        <td class="p-2 border" id="modalCustomerName"></td>
+                                                    </tr>
+                                                    <tr>
                                                         <th class="p-2 border">Coordinator Name</th>
                                                         <td class="p-2 border" id="modalCoordinatorName"></td>
                                                     </tr>
@@ -1733,6 +1746,58 @@
             </div>
         </div>
     </div>
+
+    <script>
+        function toggleDropdownItemAdd(button, type) {
+            const root = button.closest('[data-dropdown-root]');
+            const dropdownMenu = root.querySelector('.dropdown-menu-' + type);
+
+            // Close other open menus of the same type
+            document.querySelectorAll('.dropdown-menu-' + type).forEach(menu => {
+                if (menu !== dropdownMenu) menu.classList.add('hidden');
+            });
+
+            dropdownMenu.classList.toggle('hidden');
+        }
+
+        function selectDropdownOptionItemAdd(button, selectedValue, type) {
+            const root = button.closest('[data-dropdown-root]');
+            root.querySelector('.selected-' + type).innerText = selectedValue;
+            root.querySelector('.input-' + type).value = selectedValue;
+            root.querySelector('.dropdown-menu-' + type).classList.add('hidden');
+
+            const otherField = root.querySelector('.other-' + type + '-field');
+            const customInput = root.querySelector('.input-custom-' + type) || root.querySelector('.input-custom-supplier');
+
+            if (otherField) {
+                if (selectedValue === 'Other') {
+                    otherField.classList.remove('hidden');
+                    if (customInput) {
+                        customInput.removeAttribute('disabled');
+                        customInput.setAttribute('required', 'required');
+                        customInput.focus();
+                    }
+                } else {
+                    otherField.classList.add('hidden');
+                    if (customInput) {
+                        customInput.setAttribute('disabled', 'disabled');
+                        customInput.removeAttribute('required');
+                        customInput.value = '';
+                    }
+                }
+            }
+        }
+
+        // Click-outside handler: close any open menu when clicking outside its root
+        document.addEventListener('click', function(event) {
+            document.querySelectorAll('[class^="dropdown-menu-"]').forEach(menu => {
+                const root = menu.closest('[data-dropdown-root]');
+                if (root && !root.contains(event.target)) {
+                    menu.classList.add('hidden');
+                }
+            });
+        });
+    </script>
 
 
     <script>
@@ -2105,9 +2170,10 @@
         });
     </script>
     <script>
-        function openRndSampleModal(orderNo, coordinatorName, item, description, size, qtRef, color, style, sampleQty,
+        function openRndSampleModal(orderNo, customerName, coordinatorName, item, description, size, qtRef, color, style, sampleQty,
             specialComment, requestDate) {
             document.getElementById('modalRndOrderNo').textContent = 'Order Number ' + orderNo;
+            document.getElementById('modalCustomerName').textContent = customerName;
             document.getElementById('modalCoordinatorName').textContent = coordinatorName;
             document.getElementById('modalItem').textContent = item;
             document.getElementById('modalDescription').textContent = description;

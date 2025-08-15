@@ -43,8 +43,8 @@ class SampleInquiryController extends Controller
         }
 
         if ($request->filled('coordinator')) {
-             $query->where('coordinatorName', $request->coordinator);
-         }
+            $query->whereIn('coordinatorName', (array)$request->coordinator);
+        }
 
         // Filter by delivery status using customerDeliveryDate
         if ($request->filled('deliveryStatus')) {
@@ -376,7 +376,7 @@ class SampleInquiryController extends Controller
     public function uploadOrderFile(Request $request, $id)
     {
         $request->validate([
-            'order_file' => 'required|file|mimes:pdf,jpg,jpeg|max:2048', // max 2MB
+            'order_file' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048', // max 2MB
         ]);
 
         $inquiry = SampleInquiry::findOrFail($id);
