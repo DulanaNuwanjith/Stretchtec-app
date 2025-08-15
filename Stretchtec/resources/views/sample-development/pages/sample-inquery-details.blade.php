@@ -1448,9 +1448,6 @@
             const filters = ['customer', 'merchandiser', 'item', 'deliveryStatus', 'customerDecision', 'orderNo'];
             const multiSelectFilters = ['coordinator']; // Currently only coordinator is multi-select
 
-            // ---------------------------
-            // Dropdown Toggle
-            // ---------------------------
             [...filters, ...multiSelectFilters].forEach(type => {
                 const button = document.getElementById(`${type}Dropdown`);
                 const menu = document.getElementById(`${type}DropdownMenu`);
@@ -1468,9 +1465,6 @@
                 }
             });
 
-            // ---------------------------
-            // Single-select option selection
-            // ---------------------------
             filters.forEach(type => {
                 const options = document.querySelectorAll(`.${type}-option`);
                 options.forEach(option => {
@@ -1492,9 +1486,6 @@
                 });
             });
 
-            // ---------------------------
-            // Multi-select checkbox change
-            // ---------------------------
             multiSelectFilters.forEach(type => {
                 const checkboxes = document.querySelectorAll(`#${type}DropdownMenu input[type="checkbox"]`);
                 const selectedSpan = document.getElementById(`selected${capitalize(type)}`);
@@ -1514,9 +1505,6 @@
                 updateSelected(); // Run once on page load
             });
 
-            // ---------------------------
-            // Search Filter for Dropdowns
-            // ---------------------------
             [...filters, ...multiSelectFilters].forEach(type => {
                 const searchInput = document.getElementById(`${type}SearchInput`);
                 if (searchInput) {
@@ -1532,9 +1520,6 @@
                 }
             });
 
-            // ---------------------------
-            // Close dropdowns when clicking outside
-            // ---------------------------
             document.addEventListener("click", (e) => {
                 [...filters, ...multiSelectFilters].forEach(type => {
                     const menu = document.getElementById(`${type}DropdownMenu`);
@@ -1546,9 +1531,6 @@
                 });
             });
 
-            // ---------------------------
-            // Helper Functions
-            // ---------------------------
             function capitalize(str) {
                 return str.charAt(0).toUpperCase() + str.slice(1);
             }

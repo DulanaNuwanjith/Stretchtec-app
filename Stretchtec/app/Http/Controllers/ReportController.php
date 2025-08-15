@@ -217,11 +217,11 @@ class ReportController extends Controller
         $endDate   = $request->end_date;
 
         $inquiries = SampleInquiry::whereBetween('inquiryReceiveDate', [$startDate, $endDate])
+            ->whereNotNull('customerDeliveryDate') // ✅ Only after delivery
             ->select('referenceNo', 'inquiryReceiveDate', 'customerName', 'customerDeliveryDate', 'deliveryQty')
             ->orderBy('inquiryReceiveDate')
             ->get()
             ->map(function ($inquiry) {
-                // Ensure only date is shown (no time)
                 $inquiry->inquiryReceiveDate = $inquiry->inquiryReceiveDate
                     ? \Carbon\Carbon::parse($inquiry->inquiryReceiveDate)->format('Y-m-d')
                     : null;
@@ -236,6 +236,5 @@ class ReportController extends Controller
 
         return $pdf->download("Reference_Delivery_Report_{$startDate}_to_{$endDate}.pdf");
     }
-
 
 }
