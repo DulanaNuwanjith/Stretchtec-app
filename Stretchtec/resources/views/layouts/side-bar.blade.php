@@ -39,21 +39,21 @@
 <aside
     x-data="{ collapsed: window.__initialCollapsed, initialized: false }"
     x-init="initialized = true"
-    @click="if(collapsed) { collapsed = false; localStorage.setItem('sidebarCollapsed', JSON.stringify(collapsed)); document.documentElement.style.setProperty('--sidebar-width', '18rem'); }"
-    :class="collapsed ? 'w-20 cursor-pointer' : 'w-72'"
+    :class="collapsed ? 'w-20' : 'w-72'"
     class="relative bg-gradient-to-b from-white to-blue-600 min-h-screen shadow-md flex flex-col transition-all duration-300"
     style="width: var(--sidebar-width);"
 >
 
-    <!-- Toggle Button -->
-    <div class="flex justify-end p-4" x-show="!collapsed" x-cloak>
+    <!-- Toggle Button (always visible) -->
+    <div class="flex justify-end p-6">
         <button
-            @click.stop="collapsed = true; localStorage.setItem('sidebarCollapsed', JSON.stringify(collapsed)); document.documentElement.style.setProperty('--sidebar-width', '5rem');"
+            @click="collapsed = !collapsed; localStorage.setItem('sidebarCollapsed', JSON.stringify(collapsed)); document.documentElement.style.setProperty('--sidebar-width', collapsed ? '5rem' : '18rem');"
             class="bg-white border border-gray-300 rounded-full w-8 p-1 shadow hover:bg-gray-200 transition"
         >
             <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-blue-900" fill="none"
                  viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+                <path stroke-linecap="round" stroke-linejoin="round"
+                      :d="collapsed ? 'M9 5l7 7-7 7' : 'M15 19l-7-7 7-7'" />
             </svg>
         </button>
     </div>
