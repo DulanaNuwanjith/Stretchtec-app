@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 @php
-use Carbon\Carbon;
+    use Carbon\Carbon;
 @endphp
 
 <head>
@@ -153,8 +153,9 @@ use Carbon\Carbon;
                     <li><strong style="width: 180px; display: inline-block;">Customer Decision:</strong>
                         {{ $customerDecision ?? 'N/A' }}</li>
                     @if ($sampleInquiry->inquiryReceiveDate && $sampleInquiry->customerDeliveryDate)
-                        <li><strong style="width: 180px; display: inline-block;">Days to Delivery:</strong>
-                            {{ Carbon::parse($sampleInquiry->inquiryReceiveDate)->diffInDays(Carbon::parse($sampleInquiry->customerDeliveryDate)) }}
+                        <li>
+                            <strong style="width: 180px; display: inline-block;">Days to Delivery:</strong>
+                            {{ \Carbon\Carbon::parse($sampleInquiry->inquiryReceiveDate)->startOfDay()->diffInDays(\Carbon\Carbon::parse($sampleInquiry->customerDeliveryDate)->startOfDay()) }}
                             days
                         </li>
                     @else

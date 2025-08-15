@@ -80,10 +80,14 @@ class ReportController extends Controller
 
         // Calculate days difference if both dates exist
         $daysToDelivery = null;
+
         if ($sampleInquiry->inquiryReceiveDate && $sampleInquiry->customerDeliveryDate) {
-            $daysToDelivery = Carbon::parse($sampleInquiry->inquiryReceiveDate)
-                                ->diffInDays(Carbon::parse($sampleInquiry->customerDeliveryDate));
+            $start = Carbon::parse($sampleInquiry->inquiryReceiveDate)->startOfDay();
+            $end   = Carbon::parse($sampleInquiry->customerDeliveryDate)->startOfDay();
+
+            $daysToDelivery = $start->diffInDays($end); // Always integer
         }
+
 
         $reportData = [
             'sampleInquiry'        => $sampleInquiry,
