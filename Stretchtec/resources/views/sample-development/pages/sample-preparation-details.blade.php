@@ -422,6 +422,7 @@
                                                         class="readonly font-bold hover:text-blue-600 hover:underline cursor-pointer"
                                                         onclick="openRndSampleModal(
                                                                     '{{ addslashes($prep->orderNo) }}',
+                                                                    '{{ addslashes($prep->sampleInquiry->customerName ?? '-') }}',
                                                                     '{{ addslashes($prep->sampleInquiry->coordinatorName ?? '-') }}',
                                                                     '{{ addslashes($prep->sampleInquiry->item ?? '-') }}',
                                                                     '{{ addslashes($prep->sampleInquiry->ItemDiscription ?? '-') }}',
@@ -1677,6 +1678,10 @@
                                             <table class="w-full text-left border border-gray-300 text-sm">
                                                 <tbody>
                                                     <tr>
+                                                        <th class="p-2 border">Customer</th>
+                                                        <td class="p-2 border" id="modalCustomerName"></td>
+                                                    </tr>
+                                                    <tr>
                                                         <th class="p-2 border">Coordinator Name</th>
                                                         <td class="p-2 border" id="modalCoordinatorName"></td>
                                                     </tr>
@@ -2165,9 +2170,10 @@
         });
     </script>
     <script>
-        function openRndSampleModal(orderNo, coordinatorName, item, description, size, qtRef, color, style, sampleQty,
+        function openRndSampleModal(orderNo, customerName, coordinatorName, item, description, size, qtRef, color, style, sampleQty,
             specialComment, requestDate) {
             document.getElementById('modalRndOrderNo').textContent = 'Order Number ' + orderNo;
+            document.getElementById('modalCustomerName').textContent = customerName;
             document.getElementById('modalCoordinatorName').textContent = coordinatorName;
             document.getElementById('modalItem').textContent = item;
             document.getElementById('modalDescription').textContent = description;
