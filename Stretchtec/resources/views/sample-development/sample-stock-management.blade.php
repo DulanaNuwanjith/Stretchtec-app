@@ -114,6 +114,14 @@
 
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Sample Stock Records</h1>
+            <div class="flex space-x-3">
+                <a>
+                    <button onclick="document.getElementById('addItemSampleStock').classList.remove('hidden')"
+                        class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded shadow">
+                        + Add New Item
+                    </button>
+                </a>
+            </div>
         </div>
 
         <div class="mb-8">
@@ -241,6 +249,72 @@
 
         <div class="px-4 py-4">
             {{ $sampleStocks->links() }}
+        </div>
+
+        <!-- Add Sample Modal -->
+        <div id="addItemSampleStock"
+            class="fixed inset-0 z-50 hidden bg-black bg-opacity-50 flex items-center justify-center py-5">
+            <div class="w-full max-w-[700px] bg-white dark:bg-gray-900 rounded-2xl shadow-2xl p-4 transform transition-all scale-95 max-h-[calc(100vh-10rem)] overflow-y-auto"
+                onclick="event.stopPropagation()">
+                <div class="max-w-[600px] mx-auto p-8">
+                    <h2 class="text-2xl font-semibold mb-8 text-blue-900 mt-4 dark:text-gray-100 text-center">
+                        Add New Cord Catalog Item
+                    </h2>
+                    <form action="{{ route('codeCatalog.store') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <div class="space-y-4">
+                            <div class="flex gap-4">
+                                <div class="w-1/2">
+                                    <label for="reference_no"
+                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Reference
+                                        No</label>
+                                    <input id="reference_no" type="text" name="reference_no" required
+                                        class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                </div>
+                                <div class="w-1/2">
+                                </div>
+                            </div>
+
+                            <div class="flex gap-4">
+                                <div class="w-1/2">
+                                    <label for="reference_no"
+                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Shade</label>
+                                    <input id="reference_no" type="text" name="reference_no" required
+                                        class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                </div>
+                                <div class="w-1/2">
+                                    <label for="coordinator_name"
+                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Available Stock</label>
+                                    <input id="coordinator_name" type="text" name="coordinator_name" required
+                                        class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                </div>
+                            </div>
+
+                            <div class="flex gap-4">
+                                <div class="w-full">
+                                    <label for="size"
+                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Special note</label>
+                                    <input id="size" type="text" name="size" required
+                                        class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Buttons -->
+                        <div class="flex justify-end gap-3 mt-12">
+                            <button type="button"
+                                onclick="document.getElementById('addItemSampleStock').classList.add('hidden')"
+                                class="px-4 py-2 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 text-sm rounded hover:bg-gray-300">
+                                Cancel
+                            </button>
+                            <button type="submit"
+                                class="px-4 py-2 bg-blue-500 text-white text-sm rounded hover:bg-blue-600">
+                                Create Order
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
 
     </div>

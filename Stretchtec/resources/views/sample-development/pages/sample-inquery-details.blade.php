@@ -877,55 +877,85 @@
                                                 </td>
 
                                                 {{-- Production Status --}}
-                                                <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                                <td
+                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
                                                     @php
                                                         $status = $inquiry->productionStatus;
 
                                                         $statusDate = match ($status) {
                                                             'Tape Match' => null,
                                                             'No Development' => null,
-                                                            'In Production' => optional($inquiry->samplePreparationProduction)->order_start_at,
-                                                            'Production Complete' => optional($inquiry->samplePreparationProduction)->order_complete_at,
-                                                            'Yarn Ordered' => optional($inquiry->samplePreparationRnd)->yarnOrderedDate,
-                                                            'Yarn Received' => optional($inquiry->samplePreparationRnd)->yarnReceiveDate,
-                                                            'Sent to Production' => optional($inquiry->samplePreparationRnd)->sendOrderToProductionStatus,
-                                                            'Colour Match Sent' => optional($inquiry->samplePreparationRnd)->colourMatchSentDate,
-                                                            'Colour Match Received' => optional($inquiry->samplePreparationRnd)->colourMatchReceiveDate,
+                                                            'In Production' => optional(
+                                                                $inquiry->samplePreparationProduction,
+                                                            )->order_start_at,
+                                                            'Production Complete' => optional(
+                                                                $inquiry->samplePreparationProduction,
+                                                            )->order_complete_at,
+                                                            'Yarn Ordered' => optional($inquiry->samplePreparationRnd)
+                                                                ->yarnOrderedDate,
+                                                            'Yarn Received' => optional($inquiry->samplePreparationRnd)
+                                                                ->yarnReceiveDate,
+                                                            'Sent to Production' => optional(
+                                                                $inquiry->samplePreparationRnd,
+                                                            )->sendOrderToProductionStatus,
+                                                            'Colour Match Sent' => optional(
+                                                                $inquiry->samplePreparationRnd,
+                                                            )->colourMatchSentDate,
+                                                            'Colour Match Received' => optional(
+                                                                $inquiry->samplePreparationRnd,
+                                                            )->colourMatchReceiveDate,
                                                             default => null,
                                                         };
 
                                                         $badgeClass = match ($status) {
-                                                            'Pending' => 'bg-blue-50 text-blue-700 dark:bg-blue-900 dark:text-blue-200',
-                                                            'In Production' => 'bg-yellow-50 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-200',
-                                                            'Production Complete' => 'bg-green-50 text-green-700 dark:bg-green-900 dark:text-green-200',
-                                                            'Tape Match' => 'bg-purple-50 text-purple-700 dark:bg-purple-900 dark:text-purple-200',
-                                                            'No Development' => 'bg-red-50 text-red-700 dark:bg-red-900 dark:text-red-200',
-                                                            'Yarn Ordered' => 'bg-orange-50 text-orange-700 dark:bg-orange-900 dark:text-orange-200',
-                                                            'Yarn Received' => 'bg-indigo-50 text-indigo-700 dark:bg-indigo-900 dark:text-indigo-200',
-                                                            'Sent to Production' => 'bg-teal-50 text-teal-700 dark:bg-teal-900 dark:text-teal-200',
-                                                            'Colour Match Sent' => 'bg-pink-50 text-pink-700 dark:bg-pink-900 dark:text-pink-200',
-                                                            'Colour Match Received' => 'bg-emerald-50 text-emerald-700 dark:bg-emerald-900 dark:text-emerald-200',
-                                                            default => 'bg-gray-50 text-gray-700 dark:bg-gray-900 dark:text-gray-200',
+                                                            'Pending'
+                                                                => 'bg-blue-50 text-blue-700 dark:bg-blue-900 dark:text-blue-200',
+                                                            'In Production'
+                                                                => 'bg-yellow-50 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-200',
+                                                            'Production Complete'
+                                                                => 'bg-green-50 text-green-700 dark:bg-green-900 dark:text-green-200',
+                                                            'Tape Match'
+                                                                => 'bg-purple-50 text-purple-700 dark:bg-purple-900 dark:text-purple-200',
+                                                            'No Development'
+                                                                => 'bg-red-50 text-red-700 dark:bg-red-900 dark:text-red-200',
+                                                            'Yarn Ordered'
+                                                                => 'bg-orange-50 text-orange-700 dark:bg-orange-900 dark:text-orange-200',
+                                                            'Yarn Received'
+                                                                => 'bg-indigo-50 text-indigo-700 dark:bg-indigo-900 dark:text-indigo-200',
+                                                            'Sent to Production'
+                                                                => 'bg-teal-50 text-teal-700 dark:bg-teal-900 dark:text-teal-200',
+                                                            'Colour Match Sent'
+                                                                => 'bg-pink-50 text-pink-700 dark:bg-pink-900 dark:text-pink-200',
+                                                            'Colour Match Received'
+                                                                => 'bg-emerald-50 text-emerald-700 dark:bg-emerald-900 dark:text-emerald-200',
+                                                            default
+                                                                => 'bg-gray-50 text-gray-700 dark:bg-gray-900 dark:text-gray-200',
                                                         };
                                                     @endphp
 
-                                                        <!-- Read-only badge with date -->
-                                                    <div class="readonly inline-flex flex-col items-center px-3 py-1 rounded-full text-xs font-semibold {{ $badgeClass }}">
-                                                <span class="flex items-center gap-1">
-                                                    {{-- Optional icon based on status --}}
-                                                    @if($status == 'In Production') <i class="fas fa-spinner animate-spin text-[10px]"></i> @endif
-                                                    @if($status == 'Production Complete') <i class="fas fa-check-circle text-[10px]"></i> @endif
-                                                    {{ $status }}
-                                                </span>
-                                                        @if($statusDate)
-                                                            <span class="text-[10px] mt-0.5 text-gray-500 dark:text-gray-300">{{ \Carbon\Carbon::parse($statusDate)->format('Y-m-d') }}</span>
+                                                    <!-- Read-only badge with date -->
+                                                    <div
+                                                        class="readonly inline-flex flex-col items-center px-3 py-1 rounded-full text-xs font-semibold {{ $badgeClass }}">
+                                                        <span class="flex items-center gap-1">
+                                                            {{-- Optional icon based on status --}}
+                                                            @if ($status == 'In Production')
+                                                                <i class="fas fa-spinner animate-spin text-[10px]"></i>
+                                                            @endif
+                                                            @if ($status == 'Production Complete')
+                                                                <i class="fas fa-check-circle text-[10px]"></i>
+                                                            @endif
+                                                            {{ $status }}
+                                                        </span>
+                                                        @if ($statusDate)
+                                                            <span
+                                                                class="text-[10px] mt-0.5 text-gray-500 dark:text-gray-300">{{ \Carbon\Carbon::parse($statusDate)->format('Y-m-d') }}</span>
                                                         @endif
                                                     </div>
 
                                                     <!-- Editable input field (hidden by default) -->
                                                     <input type="text" name="productionStatus"
-                                                           class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                           value="{{ $status }}" />
+                                                        class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                        value="{{ $status }}" />
                                                 </td>
 
                                                 <!-- Reference No -->
@@ -2066,7 +2096,7 @@
             searchInput.addEventListener('input', () => {
                 const query = searchInput.value.toLowerCase();
                 const options = document.querySelectorAll(
-                '#coordinatorOptionsReport label'); // <-- updated ID
+                    '#coordinatorOptionsReport label'); // <-- updated ID
                 options.forEach(option => {
                     const text = option.textContent.toLowerCase();
                     option.style.display = text.includes(query) ? 'flex' : 'none';
