@@ -67,6 +67,16 @@ Route::middleware([
     Route::post('catalog/{catalog}/upload-image', [ProductCatalogController::class, 'uploadOrderImage'])->name('catalog.uploadImage');
     Route::patch('product-catalog/{productCatalog}/approval', [ProductCatalogController::class, 'updateApproval'])->name('product-catalog.updateApproval');
 
+    //Sample inquiry routes
+    Route::resource('sampleInquiry', 'App\Http\Controllers\SampleInquiryController')->names([
+        'index' => 'sample-inquery-details.index',
+        'store' => 'sampleInquiry.store',
+        'destroy' => 'sampleInquiry.destroy',
+    ]);
+    Route::post('/sampleInquiry/mark-customer-delivered', [SampleInquiryController::class, 'markCustomerDelivered'])
+        ->name('inquiry.markCustomerDelivered');
+    Route::post('/inquiry/mark-delivered', [SampleInquiryController::class, 'markCustomerDelivered'])->name('inquiry.markCustomerDelivered');
+
     Route::get('production-inquery-details', function () {
         return view('production.pages.production-inquery-details');
     })->name('production-inquery-details.index');
@@ -87,20 +97,10 @@ Route::middleware(['auth'])->group(function () {
         }
         return $next($request);
     }], function () {
-
-        //Sample inquiry routes
-        Route::resource('sampleInquiry', 'App\Http\Controllers\SampleInquiryController')->names([
-            'index' => 'sample-inquery-details.index',
-            'store' => 'sampleInquiry.store',
-            'destroy' => 'sampleInquiry.destroy',
-        ]);
         Route::post('/sampleInquiry/mark-sent-to-sample-dev', [SampleInquiryController::class, 'markSentToSampleDevelopment'])
             ->name('inquiry.markSentToSampleDev');
-        Route::post('/sampleInquiry/mark-customer-delivered', [SampleInquiryController::class, 'markCustomerDelivered'])
-            ->name('inquiry.markCustomerDelivered');
         Route::patch('/sample-inquery-details/{id}/update-decision', [SampleInquiryController::class, 'updateDecision'])
             ->name('sample-inquery-details.update-decision');
-        Route::post('/inquiry/mark-delivered', [SampleInquiryController::class, 'markCustomerDelivered'])->name('inquiry.markCustomerDelivered');
         Route::post('/sample-inquiry/{id}/upload-order-file', [SampleInquiryController::class, 'uploadOrderFile'])->name('sampleInquiry.uploadOrderFile');
     });
 });
