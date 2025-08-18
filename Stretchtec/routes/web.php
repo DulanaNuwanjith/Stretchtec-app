@@ -54,9 +54,7 @@ Route::middleware([
         return view('production-catalog.productCatalog');
     })->name('productCatalog.index');
 
-    Route::get('storeManagement', function () {
-        return view('store-management.storeManagement');
-    })->name('storeManagement.index');
+    Route::get('storeManagement', [\App\Http\Controllers\StoresController::class, 'index'])->name('storeManagement.index');
 
     Route::get('elasticCatalog', [ProductCatalogController::class, 'elasticCatalog'])->name('elasticCatalog.index');
     Route::get('tapeCatalog', [ProductCatalogController::class, 'tapeCatalog'])->name('tapeCatalog.index');
