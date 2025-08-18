@@ -386,9 +386,9 @@ class SampleInquiryController extends Controller
 
         // Handle file upload
         if ($request->hasFile('order_file')) {
-            $date = now()->format('Ymd'); // e.g. 20250713
+            $date = now()->format('YmdHis'); // e.g. 20250818113045
             $extension = $request->file('order_file')->getClientOriginalExtension();
-            $fileName = $orderNo . '_' . $date . '.' . $extension;
+            $fileName = $orderNo . '_' . $date . '_' . uniqid() . '.' . $extension;
 
             $orderFilePath = $request->file('order_file')->storeAs(
                 'order_files',

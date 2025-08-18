@@ -1164,7 +1164,7 @@
                                                             </form>
                                                         @endif
                                                     </div>
-                                                    @if (!$inquiry->orderFile && in_array(Auth::user()->role, ['SUPERADMIN', 'CUSTOMERCOORDINATOR']))
+                                                    @if (in_array(Auth::user()->role, ['SUPERADMIN', 'CUSTOMERCOORDINATOR']))
                                                         <form
                                                             action="{{ route('sampleInquiry.uploadOrderFile', $inquiry->id) }}"
                                                             method="POST" enctype="multipart/form-data"
