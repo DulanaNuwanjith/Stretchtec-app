@@ -243,6 +243,35 @@
                                             </div>
                                         </div>
 
+                                        {{-- Coordinator Name Dropdown --}}
+                                        <div class="relative inline-block text-left w-48"> <label
+                                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Coordinator</label>
+                                            <input type="hidden" name="coordinator_name" id="coordinatorInput"
+                                                value="{{ request('coordinator_name') }}"> <button type="button"
+                                                onclick="toggleCoordinatorDropdown()" id="coordinatorDropdown"
+                                                class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10 dark:bg-gray-700 dark:text-white"
+                                                aria-expanded="false"> <span
+                                                    id="selectedCoordinator">{{ request('coordinator_name') ?? 'Select Coordinator' }}</span>
+                                                <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20"
+                                                    fill="currentColor">
+                                                    <path fill-rule="evenodd"
+                                                        d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.25 8.29a.75.75 0 01-.02-1.08z"
+                                                        clip-rule="evenodd" />
+                                                </svg> </button>
+                                            <div id="coordinatorDropdownMenu"
+                                                class="absolute z-40 mt-1 w-full bg-white border rounded-lg shadow-lg hidden max-h-48 overflow-y-auto p-2">
+                                                <input type="text" id="coordinatorSearchInput"
+                                                    onkeyup="filterCoordinators()" placeholder="Search..."
+                                                    class="w-full px-2 py-1 text-sm border rounded-md dark:bg-gray-600 dark:text-white dark:placeholder-gray-300"
+                                                    autocomplete="off">
+                                                @foreach ($coordinators as $coordinator)
+                                                    <div onclick="selectCoordinator('{{ $coordinator }}')"
+                                                        class="coordinator-option px-4 py-2 hover:bg-gray-100 cursor-pointer text-sm">
+                                                        {{ $coordinator }}</div>
+                                                @endforeach
+                                            </div>
+                                        </div>
+
                                         {{-- Reference No Dropdown --}}
                                         <div class="relative inline-block text-left w-48">
                                             <label for="customerDropdown"
@@ -467,7 +496,7 @@
                                                 <td
                                                     class="text-center py-3 border-r border-gray-300 whitespace-normal break-words">
                                                     @if (is_null($prep->colourMatchSentDate))
-                                                        @if (Auth::user()->role === 'ADMIN' OR Auth::user()->role === 'PRODUCTIONOFFICER')
+                                                        @if (Auth::user()->role === 'ADMIN' or Auth::user()->role === 'PRODUCTIONOFFICER')
                                                             {{-- Read-only for ADMIN --}}
                                                             <button type="button"
                                                                 class="delivered-btn bg-gray-200 text-gray-500 px-2 py-1 mt-3 rounded cursor-not-allowed"
@@ -502,7 +531,7 @@
                                                 <td
                                                     class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
                                                     @if (is_null($prep->colourMatchReceiveDate))
-                                                        @if (Auth::user()->role === 'ADMIN' OR Auth::user()->role === 'PRODUCTIONOFFICER')
+                                                        @if (Auth::user()->role === 'ADMIN' or Auth::user()->role === 'PRODUCTIONOFFICER')
                                                             {{-- Read-only for ADMIN --}}
                                                             <button type="button"
                                                                 class="receive-btn px-2 py-1 mt-3 rounded bg-gray-200 text-gray-500 cursor-not-allowed"
@@ -537,7 +566,7 @@
                                                                 {{ \Carbon\Carbon::parse($prep->colourMatchReceiveDate)->format('H:i') }}
                                                             </button>
 
-                                                            @if (Auth::user()->role !== 'ADMIN' OR Auth::user()->role === 'PRODUCTIONOFFICER')
+                                                            @if (Auth::user()->role !== 'ADMIN' or Auth::user()->role === 'PRODUCTIONOFFICER')
                                                                 {{-- Reject button (hidden for Admin) --}}
                                                                 <form action="" method="POST">
                                                                     @csrf
@@ -594,7 +623,7 @@
                                                                     x-ref="formAlreadyDevelopedInput"
                                                                     value="Need to Develop">
 
-                                                                @if (Auth::user()->role === 'ADMIN' OR Auth::user()->role === 'PRODUCTIONOFFICER')
+                                                                @if (Auth::user()->role === 'ADMIN' or Auth::user()->role === 'PRODUCTIONOFFICER')
                                                                     {{-- Read-only for ADMIN --}}
                                                                     <div class="inline-flex justify-between w-48 rounded-md px-3 py-2 text-sm font-semibold
                                                                                  text-gray-500 bg-gray-200 shadow-sm h-10 cursor-not-allowed"
@@ -736,7 +765,7 @@
                                                 </td>
 
                                                 <td class="px-4 py-3 text-center border-r border-gray-300">
-                                                    @if (Auth::user()->role === 'ADMIN' OR Auth::user()->role === 'PRODUCTIONOFFICER')
+                                                    @if (Auth::user()->role === 'ADMIN' or Auth::user()->role === 'PRODUCTIONOFFICER')
                                                         {{-- Read-only for ADMIN --}}
                                                         @if ($prep->alreadyDeveloped == 'Need to Develop')
                                                             @if ($prep->developPlannedDate)
@@ -800,7 +829,7 @@
 
                                                 <td
                                                     class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
-                                                    @if (Auth::user()->role === 'ADMIN' OR Auth::user()->role === 'PRODUCTIONOFFICER')
+                                                    @if (Auth::user()->role === 'ADMIN' or Auth::user()->role === 'PRODUCTIONOFFICER')
                                                         {{-- ADMIN: Read-only --}}
                                                         @if ($prep->alreadyDeveloped == 'Need to Develop')
                                                             @if ($prep->yarnOrderedDate)
@@ -889,8 +918,7 @@
                                                                                     <input type="text"
                                                                                         name="yarnOrderedPONumber"
                                                                                         placeholder="Enter PO Number"
-                                                                                        class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                                                        >
+                                                                                        class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                                                 </div>
 
                                                                                 {{-- Shade --}}
@@ -901,8 +929,7 @@
                                                                                     </label>
                                                                                     <input type="text" name="shade"
                                                                                         placeholder="Enter Shade"
-                                                                                        class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                                                        >
+                                                                                        class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                                                 </div>
 
                                                                                 {{-- Weight --}}
@@ -914,8 +941,7 @@
                                                                                     <input type="number" step="0.01"
                                                                                         name="value"
                                                                                         placeholder="e.g. 150.50"
-                                                                                        class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                                                        >
+                                                                                        class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                                                 </div>
 
                                                                                 {{-- Ticket --}}
@@ -926,8 +952,7 @@
                                                                                     </label>
                                                                                     <input type="text" name="tkt"
                                                                                         placeholder="Enter Ticket Number"
-                                                                                        class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                                                        >
+                                                                                        class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                                                 </div>
 
                                                                                 {{-- Yarn Price --}}
@@ -938,63 +963,91 @@
                                                                                     </label>
                                                                                     <input type="text" name="yarnPrice"
                                                                                         placeholder="Enter Yarn Price"
-                                                                                        class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                                                        >
+                                                                                        class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                                                 </div>
 
                                                                                 {{-- Supplier --}}
                                                                                 <div class="mb-6">
-                                                                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 text-left">
+                                                                                    <label
+                                                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 text-left">
                                                                                         Supplier
                                                                                     </label>
 
-                                                                                    <div class="relative inline-block w-full" data-dropdown-root>
+                                                                                    <div class="relative inline-block w-full"
+                                                                                        data-dropdown-root>
                                                                                         <!-- Trigger -->
                                                                                         <button type="button"
-                                                                                                onclick="toggleDropdownItemAdd(this, 'supplier')"
-                                                                                                class="w-full flex justify-between items-center px-4 py-2 border border-gray-300 rounded-md bg-white dark:bg-gray-700 text-sm text-gray-700 dark:text-white hover:bg-gray-50 focus:outline-none">
-                                                                                            <span class="selected-supplier">{{ old('yarnSupplier', 'Pan Asia') }}</span>
-                                                                                            <svg class="w-4 h-4 text-gray-500 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                                                                            onclick="toggleDropdownItemAdd(this, 'supplier')"
+                                                                                            class="w-full flex justify-between items-center px-4 py-2 border border-gray-300 rounded-md bg-white dark:bg-gray-700 text-sm text-gray-700 dark:text-white hover:bg-gray-50 focus:outline-none">
+                                                                                            <span
+                                                                                                class="selected-supplier">{{ old('yarnSupplier', 'Pan Asia') }}</span>
+                                                                                            <svg class="w-4 h-4 text-gray-500 dark:text-gray-300"
+                                                                                                fill="none"
+                                                                                                stroke="currentColor"
+                                                                                                viewBox="0 0 24 24">
+                                                                                                <path
+                                                                                                    stroke-linecap="round"
+                                                                                                    stroke-linejoin="round"
+                                                                                                    stroke-width="2"
+                                                                                                    d="M19 9l-7 7-7-7" />
                                                                                             </svg>
                                                                                         </button>
 
                                                                                         <!-- Dropdown Menu -->
-                                                                                        <div class="dropdown-menu-supplier hidden absolute z-10 mt-2 w-full rounded-md bg-white dark:bg-gray-700 shadow-lg ring-1 ring-black/5 max-h-48 overflow-y-auto">
-                                                                                            <div class="py-1" role="listbox" tabindex="-1">
-                                                                                                <button type="button" class="dropdown-option w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
-                                                                                                        onclick="selectDropdownOptionItemAdd(this, 'Pan Asia', 'supplier')">Pan Asia</button>
+                                                                                        <div
+                                                                                            class="dropdown-menu-supplier hidden absolute z-10 mt-2 w-full rounded-md bg-white dark:bg-gray-700 shadow-lg ring-1 ring-black/5 max-h-48 overflow-y-auto">
+                                                                                            <div class="py-1"
+                                                                                                role="listbox"
+                                                                                                tabindex="-1">
+                                                                                                <button type="button"
+                                                                                                    class="dropdown-option w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
+                                                                                                    onclick="selectDropdownOptionItemAdd(this, 'Pan Asia', 'supplier')">Pan
+                                                                                                    Asia</button>
 
-                                                                                                <button type="button" class="dropdown-option w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
-                                                                                                        onclick="selectDropdownOptionItemAdd(this, 'Ocean Lanka', 'supplier')">Ocean Lanka</button>
+                                                                                                <button type="button"
+                                                                                                    class="dropdown-option w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
+                                                                                                    onclick="selectDropdownOptionItemAdd(this, 'Ocean Lanka', 'supplier')">Ocean
+                                                                                                    Lanka</button>
 
-                                                                                                <button type="button" class="dropdown-option w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
-                                                                                                        onclick="selectDropdownOptionItemAdd(this, 'A and E', 'supplier')">A and E</button>
+                                                                                                <button type="button"
+                                                                                                    class="dropdown-option w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
+                                                                                                    onclick="selectDropdownOptionItemAdd(this, 'A and E', 'supplier')">A
+                                                                                                    and E</button>
 
-                                                                                                <button type="button" class="dropdown-option w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
-                                                                                                        onclick="selectDropdownOptionItemAdd(this, 'Metro Lanka', 'supplier')">Metro Lanka</button>
+                                                                                                <button type="button"
+                                                                                                    class="dropdown-option w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
+                                                                                                    onclick="selectDropdownOptionItemAdd(this, 'Metro Lanka', 'supplier')">Metro
+                                                                                                    Lanka</button>
 
-                                                                                                <button type="button" class="dropdown-option w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
-                                                                                                        onclick="selectDropdownOptionItemAdd(this, 'Stretchtec Stock', 'supplier')">Stretchtec Stock</button>
+                                                                                                <button type="button"
+                                                                                                    class="dropdown-option w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
+                                                                                                    onclick="selectDropdownOptionItemAdd(this, 'Stretchtec Stock', 'supplier')">Stretchtec
+                                                                                                    Stock</button>
 
-                                                                                                <button type="button" class="dropdown-option w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
-                                                                                                        onclick="selectDropdownOptionItemAdd(this, 'Other', 'supplier')">Other</button>
+                                                                                                <button type="button"
+                                                                                                    class="dropdown-option w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
+                                                                                                    onclick="selectDropdownOptionItemAdd(this, 'Other', 'supplier')">Other</button>
                                                                                             </div>
                                                                                         </div>
 
                                                                                         <!-- Hidden input for form submission -->
-                                                                                        <input type="hidden" name="yarnSupplier" class="input-supplier" value="{{ old('yarnSupplier','Pan Asia') }}">
+                                                                                        <input type="hidden"
+                                                                                            name="yarnSupplier"
+                                                                                            class="input-supplier"
+                                                                                            value="{{ old('yarnSupplier', 'Pan Asia') }}">
 
                                                                                         <!-- "Other" input field -->
-                                                                                        <div class="mt-4 hidden other-supplier-field">
-                                                                                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                                                                        <div
+                                                                                            class="mt-4 hidden other-supplier-field">
+                                                                                            <label
+                                                                                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                                                                                                 Please specify
                                                                                             </label>
                                                                                             <input type="text"
-                                                                                                   name="customSupplier"
-                                                                                                   placeholder="Enter Supplier Name"
-                                                                                                   class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm input-custom-supplier"
-                                                                                                   value="{{ old('customSupplier') }}"
+                                                                                                name="customSupplier"
+                                                                                                placeholder="Enter Supplier Name"
+                                                                                                class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm input-custom-supplier"
+                                                                                                value="{{ old('customSupplier') }}"
                                                                                                 @disabled(true)>
                                                                                         </div>
                                                                                     </div>
@@ -1008,7 +1061,7 @@
                                                                                         Cancel
                                                                                     </button>
                                                                                     <button type="submit"
-                                                                                        class="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition">
+                                                                                        class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
                                                                                         Save
                                                                                     </button>
                                                                                 </div>
@@ -1121,7 +1174,6 @@
                                                     @endif
                                                 </td>
 
-
                                                 <td class="px-4 py-3 border-r border-gray-300 text-center">
                                                     @if (!empty($prep->yarnSupplier))
                                                         {{-- Show saved Supplier --}}
@@ -1161,7 +1213,7 @@
                                                 {{-- Yarn Receive Date --}}
                                                 <td
                                                     class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
-                                                    @if (Auth::user()->role === 'ADMIN' OR Auth::user()->role === 'PRODUCTIONOFFICER')
+                                                    @if (Auth::user()->role === 'ADMIN' or Auth::user()->role === 'PRODUCTIONOFFICER')
                                                         {{-- ADMIN: Read-only --}}
                                                         @if ($prep->alreadyDeveloped == 'Need to Develop')
                                                             @if (is_null($prep->yarnReceiveDate))
@@ -1177,6 +1229,10 @@
                                                                     {{ \Carbon\Carbon::parse($prep->yarnReceiveDate)->format('Y-m-d') }}
                                                                     at
                                                                     {{ \Carbon\Carbon::parse($prep->yarnReceiveDate)->format('H:i') }}
+                                                                    @if ($prep->pst_no)
+                                                                        <br><span class="block text-xs text-gray-600">PST
+                                                                            No: {{ $prep->pst_no }}</span>
+                                                                    @endif
                                                                 </span>
                                                             @endif
                                                         @else
@@ -1186,28 +1242,92 @@
                                                         {{-- Other Roles: Editable --}}
                                                         @if ($prep->alreadyDeveloped == 'Need to Develop')
                                                             @if (is_null($prep->yarnReceiveDate))
-                                                                <form action="{{ route('rnd.markYarnReceived') }}"
-                                                                    method="POST">
-                                                                    @csrf
-                                                                    <input type="hidden" name="id"
-                                                                        value="{{ $prep->id }}">
-                                                                    <button type="submit"
-                                                                        class="yarn-receive-btn px-2 py-1 mt-3 rounded transition-all duration-200
-                                                                                    {{
-                                                                                    $prep->yarnSupplier
-                                                                                        ? 'bg-gray-300 text-black hover:bg-gray-400'
-                                                                                        : 'bg-gray-200 text-gray-500 cursor-not-allowed' }}"
-                                                                        {{
-                                                                        $prep->yarnSupplier
-                                                                            ? ''
-                                                                            : 'disabled' }}
-                                                                        title="{{ $prep->developPlannedDate &&
-                                                                        $prep->yarnOrderedDate
-                                                                            ? ''
-                                                                            : 'Please set Development Plan Date and Yarn Ordered Date first' }}">
-                                                                        Pending
-                                                                    </button>
-                                                                </form>
+                                                                @if ($prep->yarnSupplier === 'Pan Asia')
+                                                                    {{-- Wrap button + modal inside Alpine component --}}
+                                                                    <div x-data="{ open: false }" class="relative">
+                                                                        {{-- Trigger Button --}}
+                                                                        <button type="button"
+                                                                            class="yarn-receive-btn px-2 py-1 mt-3 rounded transition-all duration-200
+                                {{ $prep->developPlannedDate && $prep->yarnOrderedDate ? 'bg-gray-300 text-black hover:bg-gray-400' : 'bg-gray-200 text-gray-500 cursor-not-allowed' }}"
+                                                                            @if ($prep->developPlannedDate && $prep->yarnOrderedDate) @click="open = true" @else disabled title="Please set Development Plan Date and Yarn Ordered Date first" @endif>
+                                                                            Pending
+                                                                        </button>
+
+                                                                        {{-- Modal --}}
+                                                                        <div x-show="open" x-transition
+                                                                            class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+                                                                            style="display: none;">
+                                                                            <div
+                                                                                class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 w-full max-w-md relative">
+                                                                                {{-- Close button (X) --}}
+                                                                                <button @click="open = false"
+                                                                                    class="absolute top-2 right-2 text-gray-600 hover:text-gray-900">
+                                                                                    ✕
+                                                                                </button>
+
+                                                                                {{-- Title --}}
+                                                                                <h2
+                                                                                    class="text-lg font-semibold text-gray-800 dark:text-white mb-2 text-left">
+                                                                                    Mark Yarn Received
+                                                                                </h2>
+                                                                                <p
+                                                                                    class="mb-5 text-sm text-gray-600 dark:text-gray-300 text-left">
+                                                                                    Please provide the PST No. to confirm
+                                                                                    yarn receipt.
+                                                                                </p>
+
+                                                                                {{-- Form --}}
+                                                                                <form
+                                                                                    action="{{ route('rnd.markYarnReceived') }}"
+                                                                                    method="POST">
+                                                                                    @csrf
+                                                                                    <input type="hidden" name="id"
+                                                                                        value="{{ $prep->id }}">
+
+                                                                                    {{-- PST No --}}
+                                                                                    <div class="mb-6">
+                                                                                        <label
+                                                                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 text-left">
+                                                                                            PA / ST No
+                                                                                        </label>
+                                                                                        <input type="number"
+                                                                                            name="pst_no"
+                                                                                            placeholder="Enter PA / ST No"
+                                                                                            class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                                                            required>
+                                                                                    </div>
+
+                                                                                    <div class="flex justify-end gap-3">
+                                                                                        <button type="button"
+                                                                                            @click="open = false"
+                                                                                            class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400 transition">
+                                                                                            Cancel
+                                                                                        </button>
+                                                                                        <button type="submit"
+                                                                                            class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
+                                                                                            Save
+                                                                                        </button>
+                                                                                    </div>
+                                                                                </form>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                @else
+                                                                    {{-- Default form if not Pan Asia --}}
+                                                                    <form action="{{ route('rnd.markYarnReceived') }}"
+                                                                        method="POST">
+                                                                        @csrf
+                                                                        <input type="hidden" name="id"
+                                                                            value="{{ $prep->id }}">
+                                                                        <button type="submit"
+                                                                            class="yarn-receive-btn px-2 py-1 mt-3 rounded transition-all duration-200
+                                {{ $prep->yarnSupplier ? 'bg-gray-300 text-black hover:bg-gray-400' : 'bg-gray-200 text-gray-500 cursor-not-allowed' }}"
+                                                                            {{ $prep->yarnSupplier ? '' : 'disabled' }}
+                                                                            title="{{ $prep->developPlannedDate && $prep->yarnOrderedDate ? '' : 'Please set Development Plan Date and Yarn Ordered Date first' }}">
+                                                                            Pending
+                                                                        </button>
+                                                                    </form>
+                                                                @endif
                                                             @else
                                                                 <span
                                                                     class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-pink-200 dark:bg-gray-800 px-3 py-1 rounded">
@@ -1215,6 +1335,10 @@
                                                                     {{ \Carbon\Carbon::parse($prep->yarnReceiveDate)->format('Y-m-d') }}
                                                                     at
                                                                     {{ \Carbon\Carbon::parse($prep->yarnReceiveDate)->format('H:i') }}
+                                                                    @if ($prep->pst_no)
+                                                                        <br><span class="block text-xs text-gray-600">PST
+                                                                            No: {{ $prep->pst_no }}</span>
+                                                                    @endif
                                                                 </span>
                                                             @endif
                                                         @else
@@ -1224,7 +1348,7 @@
                                                 </td>
 
                                                 <td class="px-4 py-3 border-r border-gray-300 text-center">
-                                                    @if (Auth::user()->role === 'ADMIN' OR Auth::user()->role === 'PRODUCTIONOFFICER')
+                                                    @if (Auth::user()->role === 'ADMIN' or Auth::user()->role === 'PRODUCTIONOFFICER')
                                                         {{-- ADMIN/PRODUCTION OFFICER: Read-only --}}
                                                         @if ($prep->alreadyDeveloped == 'Need to Develop')
                                                             @if (!$prep->is_deadline_locked)
@@ -1320,6 +1444,8 @@
                                                                 => 'bg-yellow-100 text-yellow-800 dark:bg-yellow-700 dark:text-white',
                                                             'Production Complete'
                                                                 => 'bg-green-100 text-green-800 dark:bg-green-700 dark:text-white',
+                                                            'Order Delivered'
+                                                                => 'bg-green-500 text-white dark:bg-green-700 dark:text-white',
                                                             'Tape Match'
                                                                 => 'bg-purple-100 text-purple-800 dark:bg-purple-700 dark:text-white',
                                                             'No Development'
@@ -1390,7 +1516,7 @@
                                                 <!-- Yarn Leftover Weight -->
                                                 <td class="px-4 py-3 border-r border-gray-300 text-center">
                                                     @if ($prep->alreadyDeveloped == 'Need to Develop')
-                                                        @if (Auth::user()->role === 'ADMIN' OR Auth::user()->role === 'PRODUCTIONOFFICER')
+                                                        @if (Auth::user()->role === 'ADMIN' or Auth::user()->role === 'PRODUCTIONOFFICER')
                                                             {{-- ADMIN/PRODUCTION OFFICER: Read-only --}}
                                                             {{-- Check if yarn leftover weight is locked --}}
                                                             @if ($prep->is_yarn_leftover_weight_locked)
@@ -1471,7 +1597,7 @@
                                                         }
                                                     @endphp
 
-                                                    @if (Auth::user()->role === 'ADMIN' OR Auth::user()->role === 'PRODUCTIONOFFICER')
+                                                    @if (Auth::user()->role === 'ADMIN' or Auth::user()->role === 'PRODUCTIONOFFICER')
                                                         {{-- ADMIN: Read-only --}}
                                                         @if ($prep->is_reference_locked)
                                                             <span class="readonly">{{ $prep->referenceNo }}</span>
@@ -1565,7 +1691,7 @@
                                                 <!-- Notes -->
                                                 <td
                                                     class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
-                                                    @if (auth()->user()->role !== 'ADMIN' OR Auth::user()->role === 'PRODUCTIONOFFICER')
+                                                    @if (auth()->user()->role !== 'ADMIN' or Auth::user()->role === 'PRODUCTIONOFFICER')
                                                         <form
                                                             action="{{ route('sample-inquery-details.update-notes', $prep->sample_inquiry_id) }}"
                                                             method="POST" class="w-full">
@@ -1803,101 +1929,90 @@
     <script>
         // ===== ORDER dropdown =====
         function toggleOrderDropdown() {
-            const menu = document.getElementById('orderDropdownMenu');
-            const btn = document.getElementById('orderDropdown');
-            const expanded = btn.getAttribute('aria-expanded') === 'true';
-
-            menu.classList.toggle('hidden');
-            btn.setAttribute('aria-expanded', !expanded);
+            toggleDropdown('orderDropdown', 'orderDropdownMenu');
         }
 
         function selectOrder(orderNo) {
-            document.getElementById('selectedOrderNo').innerText = orderNo || 'Select Order No';
-            document.getElementById('orderInput').value = orderNo;
-            closeDropdown('orderDropdown', 'orderDropdownMenu');
+            selectDropdownValue('orderDropdown', 'orderDropdownMenu', 'selectedOrderNo', 'orderInput', orderNo,
+                'Select Order No');
         }
 
         function filterOrders() {
-            const input = document.getElementById('orderSearchInput').value.toLowerCase();
-            const items = document.querySelectorAll('.order-option');
-
-            items.forEach(item => {
-                const text = item.textContent.toLowerCase();
-                item.style.display = text.includes(input) ? 'block' : 'none';
-            });
+            filterDropdown('.order-option', 'orderSearchInput');
         }
 
         // ===== PO dropdown =====
         function togglePODropdown() {
-            const menu = document.getElementById('poDropdownMenu');
-            const btn = document.getElementById('poDropdown');
-            const expanded = btn.getAttribute('aria-expanded') === 'true';
-
-            menu.classList.toggle('hidden');
-            btn.setAttribute('aria-expanded', !expanded);
+            toggleDropdown('poDropdown', 'poDropdownMenu');
         }
 
         function selectPO(poNo) {
-            document.getElementById('selectedPONo').innerText = poNo || 'Select PO No';
-            document.getElementById('poInput').value = poNo;
-            closeDropdown('poDropdown', 'poDropdownMenu');
+            selectDropdownValue('poDropdown', 'poDropdownMenu', 'selectedPONo', 'poInput', poNo, 'Select PO No');
         }
 
         function filterPOs() {
-            const input = document.getElementById('poSearchInput').value.toLowerCase();
-            const items = document.querySelectorAll('.po-option');
-
-            items.forEach(item => {
-                const text = item.textContent.toLowerCase();
-                item.style.display = text.includes(input) ? 'block' : 'none';
-            });
+            filterDropdown('.po-option', 'poSearchInput');
         }
 
         // ===== SHADE dropdown =====
         function toggleShadeDropdown() {
-            const menu = document.getElementById('shadeDropdownMenu');
-            const btn = document.getElementById('shadeDropdown');
-            const expanded = btn.getAttribute('aria-expanded') === 'true';
-
-            menu.classList.toggle('hidden');
-            btn.setAttribute('aria-expanded', !expanded);
+            toggleDropdown('shadeDropdown', 'shadeDropdownMenu');
         }
 
         function selectShade(shade) {
-            document.getElementById('selectedShade').innerText = shade || 'Select Shade';
-            document.getElementById('shadeInput').value = shade;
-            closeDropdown('shadeDropdown', 'shadeDropdownMenu');
+            selectDropdownValue('shadeDropdown', 'shadeDropdownMenu', 'selectedShade', 'shadeInput', shade, 'Select Shade');
         }
 
         function filterShades() {
-            const input = document.getElementById('shadeSearchInput').value.toLowerCase();
-            const items = document.querySelectorAll('.shade-option');
-
-            items.forEach(item => {
-                const text = item.textContent.toLowerCase();
-                item.style.display = text.includes(input) ? 'block' : 'none';
-            });
+            filterDropdown('.shade-option', 'shadeSearchInput');
         }
 
         // ===== REFERENCE NO dropdown =====
         function toggleRefDropdown() {
-            const menu = document.getElementById('refDropdownMenu');
-            const btn = document.getElementById('refDropdown');
+            toggleDropdown('refDropdown', 'refDropdownMenu');
+        }
+
+        function selectRef(ref) {
+            selectDropdownValue('refDropdown', 'refDropdownMenu', 'selectedRef', 'refInput', ref, 'Select Reference No');
+        }
+
+        function filterRefs() {
+            filterDropdown('.ref-option', 'refSearchInput');
+        }
+
+        // ===== COORDINATOR dropdown (NEW) =====
+        function toggleCoordinatorDropdown() {
+            toggleDropdown('coordinatorDropdown', 'coordinatorDropdownMenu');
+        }
+
+        function selectCoordinator(coordinator) {
+            selectDropdownValue('coordinatorDropdown', 'coordinatorDropdownMenu', 'selectedCoordinator', 'coordinatorInput',
+                coordinator, 'Select Coordinator');
+        }
+
+        function filterCoordinators() {
+            filterDropdown('.coordinator-option', 'coordinatorSearchInput');
+        }
+
+        // ===== Helper functions =====
+        function toggleDropdown(btnId, menuId) {
+            const btn = document.getElementById(btnId);
+            const menu = document.getElementById(menuId);
             const expanded = btn.getAttribute('aria-expanded') === 'true';
 
             menu.classList.toggle('hidden');
             btn.setAttribute('aria-expanded', !expanded);
         }
 
-        function selectRef(ref) {
-            document.getElementById('selectedRef').innerText = ref || 'Select Reference No';
-            document.getElementById('refInput').value = ref;
-            closeDropdown('refDropdown', 'refDropdownMenu');
+        function selectDropdownValue(btnId, menuId, selectedId, inputId, value, defaultText) {
+            document.getElementById(selectedId).innerText = value || defaultText;
+            document.getElementById(inputId).value = value;
+            closeDropdown(btnId, menuId);
         }
 
-        function filterRefs() {
-            const input = document.getElementById('refSearchInput').value.toLowerCase();
-            const items = document.querySelectorAll('.ref-option');
+        function filterDropdown(optionClass, inputId) {
+            const input = document.getElementById(inputId).value.toLowerCase();
+            const items = document.querySelectorAll(optionClass);
 
             items.forEach(item => {
                 const text = item.textContent.toLowerCase();
@@ -1905,76 +2020,94 @@
             });
         }
 
-        // ===== Helper to close dropdown =====
         function closeDropdown(btnId, menuId) {
             const btn = document.getElementById(btnId);
             const menu = document.getElementById(menuId);
-
             menu.classList.add('hidden');
             btn.setAttribute('aria-expanded', false);
         }
 
+        // ===== Clear all filters =====
         function clearFilters() {
-            // Order
-            document.getElementById('selectedOrderNo').innerText = 'Select Order No';
-            document.getElementById('orderInput').value = '';
-            document.getElementById('orderSearchInput').value = '';
-            filterOrders();
+            const dropdowns = [{
+                    selected: 'selectedOrderNo',
+                    input: 'orderInput',
+                    search: 'orderSearchInput',
+                    default: 'Select Order No',
+                    filterFunc: filterOrders
+                },
+                {
+                    selected: 'selectedPONo',
+                    input: 'poInput',
+                    search: 'poSearchInput',
+                    default: 'Select PO No',
+                    filterFunc: filterPOs
+                },
+                {
+                    selected: 'selectedShade',
+                    input: 'shadeInput',
+                    search: 'shadeSearchInput',
+                    default: 'Select Shade',
+                    filterFunc: filterShades
+                },
+                {
+                    selected: 'selectedRef',
+                    input: 'refInput',
+                    search: 'refSearchInput',
+                    default: 'Select Reference No',
+                    filterFunc: filterRefs
+                },
+                {
+                    selected: 'selectedCoordinator',
+                    input: 'coordinatorInput',
+                    search: 'coordinatorSearchInput',
+                    default: 'Select Coordinator',
+                    filterFunc: filterCoordinators
+                },
+            ];
 
-            // PO
-            document.getElementById('selectedPONo').innerText = 'Select PO No';
-            document.getElementById('poInput').value = '';
-            document.getElementById('poSearchInput').value = '';
-            filterPOs();
+            dropdowns.forEach(d => {
+                document.getElementById(d.selected).innerText = d.default;
+                document.getElementById(d.input).value = '';
+                document.getElementById(d.search).value = '';
+                d.filterFunc();
+            });
 
-            // Shade
-            document.getElementById('selectedShade').innerText = 'Select Shade';
-            document.getElementById('shadeInput').value = '';
-            document.getElementById('shadeSearchInput').value = '';
-            filterShades();
-
-            // Reference No
-            document.getElementById('selectedRef').innerText = 'Select Reference No';
-            document.getElementById('refInput').value = '';
-            document.getElementById('refSearchInput').value = '';
-            filterRefs();
-
-            // Dates
+            // Clear dates
             document.getElementById('customerRequestedDate').value = '';
             document.getElementById('developmentPlanDate').value = '';
         }
 
-
         // ===== Close dropdowns if click outside =====
         document.addEventListener('click', function(e) {
-            // List of dropdowns to check
             const dropdowns = [{
-                    btnId: 'orderDropdown',
-                    menuId: 'orderDropdownMenu'
+                    btn: 'orderDropdown',
+                    menu: 'orderDropdownMenu'
                 },
                 {
-                    btnId: 'poDropdown',
-                    menuId: 'poDropdownMenu'
+                    btn: 'poDropdown',
+                    menu: 'poDropdownMenu'
                 },
                 {
-                    btnId: 'shadeDropdown',
-                    menuId: 'shadeDropdownMenu'
+                    btn: 'shadeDropdown',
+                    menu: 'shadeDropdownMenu'
                 },
                 {
-                    btnId: 'refDropdown',
-                    menuId: 'refDropdownMenu'
-                }
+                    btn: 'refDropdown',
+                    menu: 'refDropdownMenu'
+                },
+                {
+                    btn: 'coordinatorDropdown',
+                    menu: 'coordinatorDropdownMenu'
+                }, // new
             ];
 
-            dropdowns.forEach(({
-                btnId,
-                menuId
-            }) => {
-                const btn = document.getElementById(btnId);
-                const menu = document.getElementById(menuId);
+            dropdowns.forEach(d => {
+                const btn = document.getElementById(d.btn);
+                const menu = document.getElementById(d.menu);
 
                 if (!btn.contains(e.target) && !menu.contains(e.target)) {
-                    closeDropdown(btnId, menuId);
+                    closeDropdown(d.btn, d.menu);
                 }
             });
         });
@@ -2170,7 +2303,8 @@
         });
     </script>
     <script>
-        function openRndSampleModal(orderNo, customerName, coordinatorName, item, description, size, qtRef, color, style, sampleQty,
+        function openRndSampleModal(orderNo, customerName, coordinatorName, item, description, size, qtRef, color, style,
+            sampleQty,
             specialComment, requestDate) {
             document.getElementById('modalRndOrderNo').textContent = 'Order Number ' + orderNo;
             document.getElementById('modalCustomerName').textContent = customerName;

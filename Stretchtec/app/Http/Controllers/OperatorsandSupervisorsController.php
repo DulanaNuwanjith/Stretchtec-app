@@ -15,7 +15,8 @@ class OperatorsandSupervisorsController extends Controller
     public function index()
     {
         try {
-            $operatorsAndSupervisors = OperatorsandSupervisors::paginate(10);
+            // Order by 'empID' ascending before pagination
+            $operatorsAndSupervisors = OperatorsandSupervisors::orderBy('empID', 'asc')->paginate(10);
 
             // Return Blade view with data
             return view('user-management.pages.addResponsiblePerson', compact('operatorsAndSupervisors'));

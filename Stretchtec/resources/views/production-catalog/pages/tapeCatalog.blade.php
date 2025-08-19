@@ -303,6 +303,9 @@
                                             <th
                                                 class="font-bold px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 TKT</th>
+                                            <th
+                                                class="font-bold px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                Supplier</th>
                                             <th colspan="2"
                                                 class="font-bold px-4 py-3 w-[14rem] text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Approved By
@@ -428,6 +431,19 @@
                                                         class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                         value="{{ $catalog->tkt }}" />
                                                 </td>
+                                                <td class="px-4 py-3 w-32 whitespace-normal break-words border-r border-gray-300">
+                                                <span class="readonly">
+                                                    {{ $catalog->supplier }}
+                                                    @if($catalog->supplier === 'Pan Asia')
+                                                        <br>
+                                                        <small class="text-gray-600 dark:text-gray-300">PST No: {{ $catalog->pst_no }}</small>
+                                                    @endif
+                                                </span>
+                                                    <input
+                                                        class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                        value="{{ $catalog->supplier }}" />
+                                                </td>
+
                                                 <!-- Approval Section -->
                                                 <td colspan="2" class="px-4 py-3 border-r border-gray-300 text-left">
                                                     @if (in_array($userRole, ['SUPERADMIN', 'SAMPLEDEVELOPER', 'CUSTOMERCOORDINATOR']))
@@ -587,6 +603,21 @@
                                                             class="block text-sm font-medium text-gray-700 dark:text-gray-300">TKT</label>
                                                         <input id="tkt" type="text" name="tkt" required
                                                             class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                    </div>
+                                                </div>
+
+                                                <div class="flex gap-4">
+                                                    <div class="w-1/2">
+                                                        <label for="supplier"
+                                                               class="block text-sm font-medium text-gray-700 dark:text-gray-300">Supplier</label>
+                                                        <input id="supplier" type="text" name="supplier" required
+                                                               class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                    </div>
+                                                    <div class="w-1/2">
+                                                        <label for="tkt"
+                                                               class="block text-sm font-medium text-gray-700 dark:text-gray-300">PST No</label>
+                                                        <input id="pst_no" type="text" name="pst_no"
+                                                               class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                     </div>
                                                 </div>
                                             </div>

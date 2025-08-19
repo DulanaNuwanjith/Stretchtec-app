@@ -28,7 +28,7 @@
                     <option value="">-- Select Role --</option>
                     <option value="ADMIN">Admin</option>
                     <option value="SUPERADMIN">Super Admin</option>
-                    <option value="MERCHANDISER">Merchandiser</option>
+                    <option value="STOREOFFICER">Store Officer</option>
                     <option value="CUSTOMERCOORDINATOR">Customer Coordinator</option>
                     <option value="SAMPLEDEVELOPER">Sample Developers</option>
                     <option value="PRODUCTIONOFFICER">Production Officer</option>

@@ -20,7 +20,7 @@
     @php
         $role = auth()->user()->role;
         $userRole = Auth::user()->role;
-        if (in_array($userRole, ['SUPERADMIN', 'ADMIN', 'CUSTOMERCOORDINATOR'])) {
+        if (in_array($userRole, ['SUPERADMIN', 'ADMIN', 'CUSTOMERCOORDINATOR', 'SAMPLEDEVELOPER'])) {
             $sampleRoute = route('sample-inquery-details.index');
         } elseif ($userRole === 'SAMPLEDEVELOPER') {
             $sampleRoute = route('sample-preparation-details.index');
@@ -74,35 +74,39 @@
 
                 <li>
                     <a href="{{ route('dashboard') }}"
-                        class="flex items-center px-4 py-2 rounded hover:bg-gray-200 {{ request()->routeIs('dashboard') ? 'bg-gray-200' : '' }}">
+                       class="flex items-center px-4 py-2 rounded hover:bg-gray-200 {{ request()->routeIs('dashboard') ? 'bg-gray-200' : '' }}">
                         <img src="{{ asset('icons/statisctics.png') }}" alt="Dashboard" class="w-6 h-6 mr-5" />
                         <span x-show="initialized && !collapsed">Dashboard</span>
                     </a>
                 </li>
 
-                <li>
-                    <a href="{{ $sampleRoute }}"
-                        class="flex items-center px-4 py-2 rounded hover:bg-gray-200
-                          {{ request()->routeIs('sample-inquery-details.*', 'sample-preparation-details.*', 'sample-preparation-production.*', 'sampleStock.*', 'leftoverYarn.*') ? 'bg-gray-200' : '' }}">
-                        <img src="{{ asset('icons/research.png') }}" alt="" class="w-6 h-6 mr-5" />
-                        <span x-show="initialized && !collapsed">Sample Development</span>
-                    </a>
-                </li>
+                {{-- Hide these from STOREOFFICER --}}
+                @if ($role !== 'STOREOFFICER')
+                    <li>
+                        <a href="{{ $sampleRoute }}"
+                           class="flex items-center px-4 py-2 rounded hover:bg-gray-200
+                      {{ request()->routeIs('sample-inquery-details.*', 'sample-preparation-details.*', 'sample-preparation-production.*', 'sampleStock.*', 'leftoverYarn.*') ? 'bg-gray-200' : '' }}">
+                            <img src="{{ asset('icons/research.png') }}" alt="" class="w-6 h-6 mr-5" />
+                            <span x-show="initialized && !collapsed">Sample Development</span>
+                        </a>
+                    </li>
 
-                <li>
-                    <a href="{{ route('elasticCatalog.index') }}"
-                        class="flex items-center px-4 py-2 rounded hover:bg-gray-200
-                          {{ request()->routeIs('elasticCatalog.*', 'codeCatalog.*', 'tapeCatalog.*') ? 'bg-gray-200' : '' }}">
-                        <img src="{{ asset('icons/catalog.png') }}" alt="" class="w-6 h-6 mr-5" />
-                        <span x-show="initialized && !collapsed">Product Catalog</span>
-                    </a>
-                </li>
+                    <li>
+                        <a href="{{ route('elasticCatalog.index') }}"
+                           class="flex items-center px-4 py-2 rounded hover:bg-gray-200
+                      {{ request()->routeIs('elasticCatalog.*', 'codeCatalog.*', 'tapeCatalog.*') ? 'bg-gray-200' : '' }}">
+                            <img src="{{ asset('icons/catalog.png') }}" alt="" class="w-6 h-6 mr-5" />
+                            <span x-show="initialized && !collapsed">Product Catalog</span>
+                        </a>
+                    </li>
+                @endif
 
+                {{-- For ADMIN and SUPERADMIN --}}
                 @if (in_array($role, ['ADMIN', 'SUPERADMIN']))
                     <li>
                         <a href="{{ route('production-inquery-details.index') }}"
-                            class="flex items-center px-4 py-2 rounded hover:bg-gray-200
-                              {{ request()->routeIs('production-inquery-details.*', 'production-order-preparation.*') ? 'bg-gray-200' : '' }}">
+                           class="flex items-center px-4 py-2 rounded hover:bg-gray-200
+                      {{ request()->routeIs('production-inquery-details.*', 'production-order-preparation.*') ? 'bg-gray-200' : '' }}">
                             <img src="{{ asset('icons/factory.png') }}" alt="" class="w-6 h-6 mr-5" />
                             <span x-show="initialized && !collapsed">Production</span>
                         </a>
@@ -110,8 +114,8 @@
 
                     <li>
                         <a href="{{ route('storeManagement.index') }}"
-                            class="flex items-center px-4 py-2 rounded hover:bg-gray-200
-                              {{ request()->routeIs('storeManagement.*') ? 'bg-gray-200' : '' }}">
+                           class="flex items-center px-4 py-2 rounded hover:bg-gray-200
+                      {{ request()->routeIs('storeManagement.*') ? 'bg-gray-200' : '' }}">
                             <img src="{{ asset('icons/inventory.png') }}" alt="" class="w-6 h-6 mr-5" />
                             <span x-show="initialized && !collapsed">Store Management</span>
                         </a>
@@ -119,8 +123,8 @@
 
                     <li>
                         <a href="{{ route('sample-reports.index') }}"
-                            class="flex items-center px-4 py-2 rounded hover:bg-gray-200
-                              {{ request()->routeIs('sample-reports.*', 'production-reports.*') ? 'bg-gray-200' : '' }}">
+                           class="flex items-center px-4 py-2 rounded hover:bg-gray-200
+                      {{ request()->routeIs('sample-reports.*', 'production-reports.*') ? 'bg-gray-200' : '' }}">
                             <img src="{{ asset('icons/report.png') }}" alt="" class="w-6 h-6 mr-5" />
                             <span x-show="initialized && !collapsed">Reports</span>
                         </a>
@@ -128,10 +132,22 @@
 
                     <li>
                         <a href="{{ route('operatorsandSupervisors.index') }}"
-                            class="flex items-center px-4 py-2 rounded hover:bg-gray-200
-                              {{ request()->routeIs('operatorsandSupervisors.*', 'userDetails.*') ? 'bg-gray-200' : '' }}">
+                           class="flex items-center px-4 py-2 rounded hover:bg-gray-200
+                      {{ request()->routeIs('operatorsandSupervisors.*', 'userDetails.*') ? 'bg-gray-200' : '' }}">
                             <img src="{{ asset('icons/man.png') }}" alt="" class="w-6 h-6 mr-5" />
                             <span x-show="initialized && !collapsed">Add Users</span>
+                        </a>
+                    </li>
+                @endif
+
+                {{-- For STOREOFFICER only --}}
+                @if ($role === 'STOREOFFICER')
+                    <li>
+                        <a href="{{ route('storeManagement.index') }}"
+                           class="flex items-center px-4 py-2 rounded hover:bg-gray-200
+                      {{ request()->routeIs('storeManagement.*') ? 'bg-gray-200' : '' }}">
+                            <img src="{{ asset('icons/inventory.png') }}" alt="" class="w-6 h-6 mr-5" />
+                            <span x-show="initialized && !collapsed">Store Management</span>
                         </a>
                     </li>
                 @endif
@@ -142,7 +158,7 @@
             <ul class="space-y-2 border-t pt-4 mt-4">
                 <li>
                     <a href="{{ route('profile.show') }}"
-                        class="flex items-center px-4 py-2 rounded hover:bg-gray-200">
+                       class="flex items-center px-4 py-2 rounded hover:bg-gray-200">
                         <img src="{{ asset('icons/employee.png') }}" alt="Profile Icon" class="w-6 h-6 mr-5" />
                         <span x-show="initialized && !collapsed">Profile</span>
                     </a>
@@ -152,7 +168,7 @@
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
                         <button type="submit"
-                            class="w-full flex items-center px-4 py-2 rounded hover:bg-gray-200 text-left text-blue-900">
+                                class="w-full flex items-center px-4 py-2 rounded hover:bg-gray-200 text-left text-blue-900">
                             <img src="{{ asset('icons/close.png') }}" alt="Logout Icon" class="w-6 h-6 mr-5" />
                             <span x-show="initialized && !collapsed">Logout</span>
                         </button>
@@ -160,6 +176,7 @@
                 </li>
             </ul>
         </nav>
+
     </aside>
 
 </body>

@@ -274,6 +274,10 @@ class SampleInquiryController extends Controller
         $inquiry->customerDeliveryDate = now();
         $inquiry->deliveryQty = $deliveredQty;
 
+        $samplernd = SamplePreparationRnD::where('sample_inquiry_id', $inquiry->id)->first();
+        $samplernd->productionStatus = 'Order Delivered';
+        $samplernd->save();
+
         try {
             // Generate next dispatch code
             $lastInquiryWithCode = SampleInquiry::whereNotNull('dNoteNumber')->orderByDesc('id')->first();
@@ -386,9 +390,9 @@ class SampleInquiryController extends Controller
 
         // Handle file upload
         if ($request->hasFile('order_file')) {
-            $date = now()->format('Ymd'); // e.g. 20250713
+            $date = now()->format('YmdHis'); // e.g. 20250818113045
             $extension = $request->file('order_file')->getClientOriginalExtension();
-            $fileName = $orderNo . '_' . $date . '.' . $extension;
+            $fileName = $orderNo . '_' . $date . '_' . uniqid() . '.' . $extension;
 
             $orderFilePath = $request->file('order_file')->storeAs(
                 'order_files',

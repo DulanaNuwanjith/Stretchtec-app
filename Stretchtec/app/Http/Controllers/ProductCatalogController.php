@@ -111,6 +111,8 @@ class ProductCatalogController extends Controller
             'colour' => 'nullable|string|max:255',
             'shade' => 'nullable|string|max:255',
             'tkt' => 'nullable|string|max:255',
+            'supplier' => 'nullable|string|max:255',
+            'pst_no' => 'nullable|string|max:255',
         ]);
 
         ProductCatalog::create($request->all());
@@ -130,6 +132,8 @@ class ProductCatalogController extends Controller
             'colour' => 'nullable|string|max:255',
             'shade' => 'nullable|string|max:255',
             'tkt' => 'nullable|string|max:255',
+            'supplier' => 'nullable|string|max:255',
+            'pst_no' => 'nullable|string|max:255',
         ]);
 
         $data = $request->all();
@@ -151,6 +155,8 @@ class ProductCatalogController extends Controller
             'colour' => 'nullable|string|max:255',
             'shade' => 'nullable|string|max:255',
             'tkt' => 'nullable|string|max:255',
+            'supplier' => 'nullable|string|max:255',
+            'pst_no' => 'nullable|string|max:255',
         ]);
 
         $data = $request->all();
@@ -172,6 +178,8 @@ class ProductCatalogController extends Controller
             'colour' => 'nullable|string|max:255',
             'shade' => 'nullable|string|max:255',
             'tkt' => 'nullable|string|max:255',
+            'supplier' => 'nullable|string|max:255',
+            'pst_no' => 'nullable|string|max:255',
         ]);
 
         $data = $request->all();

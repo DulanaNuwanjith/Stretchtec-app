@@ -54,9 +54,7 @@ Route::middleware([
         return view('production-catalog.productCatalog');
     })->name('productCatalog.index');
 
-    Route::get('storeManagement', function () {
-        return view('store-management.storeManagement');
-    })->name('storeManagement.index');
+    Route::get('storeManagement', [\App\Http\Controllers\StoresController::class, 'index'])->name('storeManagement.index');
 
     Route::get('elasticCatalog', [ProductCatalogController::class, 'elasticCatalog'])->name('elasticCatalog.index');
     Route::get('tapeCatalog', [ProductCatalogController::class, 'tapeCatalog'])->name('tapeCatalog.index');
@@ -68,6 +66,16 @@ Route::middleware([
     Route::post('tapeCatalog/store', [ProductCatalogController::class, 'storeTape'])->name('tapeCatalog.store');
     Route::post('catalog/{catalog}/upload-image', [ProductCatalogController::class, 'uploadOrderImage'])->name('catalog.uploadImage');
     Route::patch('product-catalog/{productCatalog}/approval', [ProductCatalogController::class, 'updateApproval'])->name('product-catalog.updateApproval');
+
+    //Sample inquiry routes
+    Route::resource('sampleInquiry', 'App\Http\Controllers\SampleInquiryController')->names([
+        'index' => 'sample-inquery-details.index',
+        'store' => 'sampleInquiry.store',
+        'destroy' => 'sampleInquiry.destroy',
+    ]);
+    Route::post('/sampleInquiry/mark-customer-delivered', [SampleInquiryController::class, 'markCustomerDelivered'])
+        ->name('inquiry.markCustomerDelivered');
+    Route::post('/inquiry/mark-delivered', [SampleInquiryController::class, 'markCustomerDelivered'])->name('inquiry.markCustomerDelivered');
 
     Route::get('production-inquery-details', function () {
         return view('production.pages.production-inquery-details');
@@ -89,20 +97,10 @@ Route::middleware(['auth'])->group(function () {
         }
         return $next($request);
     }], function () {
-
-        //Sample inquiry routes
-        Route::resource('sampleInquiry', 'App\Http\Controllers\SampleInquiryController')->names([
-            'index' => 'sample-inquery-details.index',
-            'store' => 'sampleInquiry.store',
-            'destroy' => 'sampleInquiry.destroy',
-        ]);
         Route::post('/sampleInquiry/mark-sent-to-sample-dev', [SampleInquiryController::class, 'markSentToSampleDevelopment'])
             ->name('inquiry.markSentToSampleDev');
-        Route::post('/sampleInquiry/mark-customer-delivered', [SampleInquiryController::class, 'markCustomerDelivered'])
-            ->name('inquiry.markCustomerDelivered');
         Route::patch('/sample-inquery-details/{id}/update-decision', [SampleInquiryController::class, 'updateDecision'])
             ->name('sample-inquery-details.update-decision');
-        Route::post('/inquiry/mark-delivered', [SampleInquiryController::class, 'markCustomerDelivered'])->name('inquiry.markCustomerDelivered');
         Route::post('/sample-inquiry/{id}/upload-order-file', [SampleInquiryController::class, 'uploadOrderFile'])->name('sampleInquiry.uploadOrderFile');
     });
 });
@@ -229,6 +227,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/reports/yarn-supplier-spending', [ReportController::class, 'yarnSupplierSpendingReport'])->name('reports.yarnSupplierSpending');
         Route::get('/reports/coordinator/pdf', [ReportController::class, 'coordinatorReportPdf'])->name('reports.coordinatorPdf');
         Route::get('/reports/reference-delivery', [ReportController::class, 'referenceDeliveryReport'])->name('reports.reference_delivery');
+        Route::post('/report/sample-inquiry', [ReportController::class, 'generateSampleInquiryReport'])->name('report.sampleInquiryReport');
 
     });
 });

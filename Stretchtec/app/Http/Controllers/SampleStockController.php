@@ -48,7 +48,25 @@ class SampleStockController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try{
+            $request->validate([
+                'reference_no' => 'required|string|max:255|unique:sample_stocks',
+                'shade' => 'required|string|max:255',
+                'available_stock' => 'required|integer|min:0',
+                'special_note' => 'nullable|string|max:1000',
+            ]);
+
+            SampleStock::create([
+                'reference_no' => $request->reference_no,
+                'shade' => $request->shade,
+                'available_stock' => $request->available_stock,
+                'special_note' => $request->special_note,
+            ]);
+
+            return redirect()->back()->with('success', 'Sample stock created successfully.');
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors(['error' => 'Failed to create sample stock: ' . $e->getMessage()]);
+        }
     }
 
     /**
@@ -116,5 +134,5 @@ class SampleStockController extends Controller
             return redirect()->back()->with('success', 'Stock borrowed successfully.');
         }
     }
-    
+
 }
