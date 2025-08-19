@@ -467,7 +467,7 @@
                                                 <td
                                                     class="text-center py-3 border-r border-gray-300 whitespace-normal break-words">
                                                     @if (is_null($prep->colourMatchSentDate))
-                                                        @if (Auth::user()->role === 'ADMIN' OR Auth::user()->role === 'PRODUCTIONOFFICER')
+                                                        @if (Auth::user()->role === 'ADMIN' or Auth::user()->role === 'PRODUCTIONOFFICER')
                                                             {{-- Read-only for ADMIN --}}
                                                             <button type="button"
                                                                 class="delivered-btn bg-gray-200 text-gray-500 px-2 py-1 mt-3 rounded cursor-not-allowed"
@@ -502,7 +502,7 @@
                                                 <td
                                                     class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
                                                     @if (is_null($prep->colourMatchReceiveDate))
-                                                        @if (Auth::user()->role === 'ADMIN' OR Auth::user()->role === 'PRODUCTIONOFFICER')
+                                                        @if (Auth::user()->role === 'ADMIN' or Auth::user()->role === 'PRODUCTIONOFFICER')
                                                             {{-- Read-only for ADMIN --}}
                                                             <button type="button"
                                                                 class="receive-btn px-2 py-1 mt-3 rounded bg-gray-200 text-gray-500 cursor-not-allowed"
@@ -537,7 +537,7 @@
                                                                 {{ \Carbon\Carbon::parse($prep->colourMatchReceiveDate)->format('H:i') }}
                                                             </button>
 
-                                                            @if (Auth::user()->role !== 'ADMIN' OR Auth::user()->role === 'PRODUCTIONOFFICER')
+                                                            @if (Auth::user()->role !== 'ADMIN' or Auth::user()->role === 'PRODUCTIONOFFICER')
                                                                 {{-- Reject button (hidden for Admin) --}}
                                                                 <form action="" method="POST">
                                                                     @csrf
@@ -594,7 +594,7 @@
                                                                     x-ref="formAlreadyDevelopedInput"
                                                                     value="Need to Develop">
 
-                                                                @if (Auth::user()->role === 'ADMIN' OR Auth::user()->role === 'PRODUCTIONOFFICER')
+                                                                @if (Auth::user()->role === 'ADMIN' or Auth::user()->role === 'PRODUCTIONOFFICER')
                                                                     {{-- Read-only for ADMIN --}}
                                                                     <div class="inline-flex justify-between w-48 rounded-md px-3 py-2 text-sm font-semibold
                                                                                  text-gray-500 bg-gray-200 shadow-sm h-10 cursor-not-allowed"
@@ -736,7 +736,7 @@
                                                 </td>
 
                                                 <td class="px-4 py-3 text-center border-r border-gray-300">
-                                                    @if (Auth::user()->role === 'ADMIN' OR Auth::user()->role === 'PRODUCTIONOFFICER')
+                                                    @if (Auth::user()->role === 'ADMIN' or Auth::user()->role === 'PRODUCTIONOFFICER')
                                                         {{-- Read-only for ADMIN --}}
                                                         @if ($prep->alreadyDeveloped == 'Need to Develop')
                                                             @if ($prep->developPlannedDate)
@@ -800,7 +800,7 @@
 
                                                 <td
                                                     class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
-                                                    @if (Auth::user()->role === 'ADMIN' OR Auth::user()->role === 'PRODUCTIONOFFICER')
+                                                    @if (Auth::user()->role === 'ADMIN' or Auth::user()->role === 'PRODUCTIONOFFICER')
                                                         {{-- ADMIN: Read-only --}}
                                                         @if ($prep->alreadyDeveloped == 'Need to Develop')
                                                             @if ($prep->yarnOrderedDate)
@@ -889,8 +889,7 @@
                                                                                     <input type="text"
                                                                                         name="yarnOrderedPONumber"
                                                                                         placeholder="Enter PO Number"
-                                                                                        class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                                                        >
+                                                                                        class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                                                 </div>
 
                                                                                 {{-- Shade --}}
@@ -901,8 +900,7 @@
                                                                                     </label>
                                                                                     <input type="text" name="shade"
                                                                                         placeholder="Enter Shade"
-                                                                                        class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                                                        >
+                                                                                        class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                                                 </div>
 
                                                                                 {{-- Weight --}}
@@ -914,8 +912,7 @@
                                                                                     <input type="number" step="0.01"
                                                                                         name="value"
                                                                                         placeholder="e.g. 150.50"
-                                                                                        class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                                                        >
+                                                                                        class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                                                 </div>
 
                                                                                 {{-- Ticket --}}
@@ -926,8 +923,7 @@
                                                                                     </label>
                                                                                     <input type="text" name="tkt"
                                                                                         placeholder="Enter Ticket Number"
-                                                                                        class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                                                        >
+                                                                                        class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                                                 </div>
 
                                                                                 {{-- Yarn Price --}}
@@ -938,63 +934,91 @@
                                                                                     </label>
                                                                                     <input type="text" name="yarnPrice"
                                                                                         placeholder="Enter Yarn Price"
-                                                                                        class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                                                        >
+                                                                                        class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                                                 </div>
 
                                                                                 {{-- Supplier --}}
                                                                                 <div class="mb-6">
-                                                                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 text-left">
+                                                                                    <label
+                                                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 text-left">
                                                                                         Supplier
                                                                                     </label>
 
-                                                                                    <div class="relative inline-block w-full" data-dropdown-root>
+                                                                                    <div class="relative inline-block w-full"
+                                                                                        data-dropdown-root>
                                                                                         <!-- Trigger -->
                                                                                         <button type="button"
-                                                                                                onclick="toggleDropdownItemAdd(this, 'supplier')"
-                                                                                                class="w-full flex justify-between items-center px-4 py-2 border border-gray-300 rounded-md bg-white dark:bg-gray-700 text-sm text-gray-700 dark:text-white hover:bg-gray-50 focus:outline-none">
-                                                                                            <span class="selected-supplier">{{ old('yarnSupplier', 'Pan Asia') }}</span>
-                                                                                            <svg class="w-4 h-4 text-gray-500 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                                                                            onclick="toggleDropdownItemAdd(this, 'supplier')"
+                                                                                            class="w-full flex justify-between items-center px-4 py-2 border border-gray-300 rounded-md bg-white dark:bg-gray-700 text-sm text-gray-700 dark:text-white hover:bg-gray-50 focus:outline-none">
+                                                                                            <span
+                                                                                                class="selected-supplier">{{ old('yarnSupplier', 'Pan Asia') }}</span>
+                                                                                            <svg class="w-4 h-4 text-gray-500 dark:text-gray-300"
+                                                                                                fill="none"
+                                                                                                stroke="currentColor"
+                                                                                                viewBox="0 0 24 24">
+                                                                                                <path
+                                                                                                    stroke-linecap="round"
+                                                                                                    stroke-linejoin="round"
+                                                                                                    stroke-width="2"
+                                                                                                    d="M19 9l-7 7-7-7" />
                                                                                             </svg>
                                                                                         </button>
 
                                                                                         <!-- Dropdown Menu -->
-                                                                                        <div class="dropdown-menu-supplier hidden absolute z-10 mt-2 w-full rounded-md bg-white dark:bg-gray-700 shadow-lg ring-1 ring-black/5 max-h-48 overflow-y-auto">
-                                                                                            <div class="py-1" role="listbox" tabindex="-1">
-                                                                                                <button type="button" class="dropdown-option w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
-                                                                                                        onclick="selectDropdownOptionItemAdd(this, 'Pan Asia', 'supplier')">Pan Asia</button>
+                                                                                        <div
+                                                                                            class="dropdown-menu-supplier hidden absolute z-10 mt-2 w-full rounded-md bg-white dark:bg-gray-700 shadow-lg ring-1 ring-black/5 max-h-48 overflow-y-auto">
+                                                                                            <div class="py-1"
+                                                                                                role="listbox"
+                                                                                                tabindex="-1">
+                                                                                                <button type="button"
+                                                                                                    class="dropdown-option w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
+                                                                                                    onclick="selectDropdownOptionItemAdd(this, 'Pan Asia', 'supplier')">Pan
+                                                                                                    Asia</button>
 
-                                                                                                <button type="button" class="dropdown-option w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
-                                                                                                        onclick="selectDropdownOptionItemAdd(this, 'Ocean Lanka', 'supplier')">Ocean Lanka</button>
+                                                                                                <button type="button"
+                                                                                                    class="dropdown-option w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
+                                                                                                    onclick="selectDropdownOptionItemAdd(this, 'Ocean Lanka', 'supplier')">Ocean
+                                                                                                    Lanka</button>
 
-                                                                                                <button type="button" class="dropdown-option w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
-                                                                                                        onclick="selectDropdownOptionItemAdd(this, 'A and E', 'supplier')">A and E</button>
+                                                                                                <button type="button"
+                                                                                                    class="dropdown-option w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
+                                                                                                    onclick="selectDropdownOptionItemAdd(this, 'A and E', 'supplier')">A
+                                                                                                    and E</button>
 
-                                                                                                <button type="button" class="dropdown-option w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
-                                                                                                        onclick="selectDropdownOptionItemAdd(this, 'Metro Lanka', 'supplier')">Metro Lanka</button>
+                                                                                                <button type="button"
+                                                                                                    class="dropdown-option w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
+                                                                                                    onclick="selectDropdownOptionItemAdd(this, 'Metro Lanka', 'supplier')">Metro
+                                                                                                    Lanka</button>
 
-                                                                                                <button type="button" class="dropdown-option w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
-                                                                                                        onclick="selectDropdownOptionItemAdd(this, 'Stretchtec Stock', 'supplier')">Stretchtec Stock</button>
+                                                                                                <button type="button"
+                                                                                                    class="dropdown-option w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
+                                                                                                    onclick="selectDropdownOptionItemAdd(this, 'Stretchtec Stock', 'supplier')">Stretchtec
+                                                                                                    Stock</button>
 
-                                                                                                <button type="button" class="dropdown-option w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
-                                                                                                        onclick="selectDropdownOptionItemAdd(this, 'Other', 'supplier')">Other</button>
+                                                                                                <button type="button"
+                                                                                                    class="dropdown-option w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
+                                                                                                    onclick="selectDropdownOptionItemAdd(this, 'Other', 'supplier')">Other</button>
                                                                                             </div>
                                                                                         </div>
 
                                                                                         <!-- Hidden input for form submission -->
-                                                                                        <input type="hidden" name="yarnSupplier" class="input-supplier" value="{{ old('yarnSupplier','Pan Asia') }}">
+                                                                                        <input type="hidden"
+                                                                                            name="yarnSupplier"
+                                                                                            class="input-supplier"
+                                                                                            value="{{ old('yarnSupplier', 'Pan Asia') }}">
 
                                                                                         <!-- "Other" input field -->
-                                                                                        <div class="mt-4 hidden other-supplier-field">
-                                                                                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                                                                        <div
+                                                                                            class="mt-4 hidden other-supplier-field">
+                                                                                            <label
+                                                                                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                                                                                                 Please specify
                                                                                             </label>
                                                                                             <input type="text"
-                                                                                                   name="customSupplier"
-                                                                                                   placeholder="Enter Supplier Name"
-                                                                                                   class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm input-custom-supplier"
-                                                                                                   value="{{ old('customSupplier') }}"
+                                                                                                name="customSupplier"
+                                                                                                placeholder="Enter Supplier Name"
+                                                                                                class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm input-custom-supplier"
+                                                                                                value="{{ old('customSupplier') }}"
                                                                                                 @disabled(true)>
                                                                                         </div>
                                                                                     </div>
@@ -1008,7 +1032,7 @@
                                                                                         Cancel
                                                                                     </button>
                                                                                     <button type="submit"
-                                                                                        class="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition">
+                                                                                        class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
                                                                                         Save
                                                                                     </button>
                                                                                 </div>
@@ -1121,7 +1145,6 @@
                                                     @endif
                                                 </td>
 
-
                                                 <td class="px-4 py-3 border-r border-gray-300 text-center">
                                                     @if (!empty($prep->yarnSupplier))
                                                         {{-- Show saved Supplier --}}
@@ -1161,7 +1184,7 @@
                                                 {{-- Yarn Receive Date --}}
                                                 <td
                                                     class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
-                                                    @if (Auth::user()->role === 'ADMIN' OR Auth::user()->role === 'PRODUCTIONOFFICER')
+                                                    @if (Auth::user()->role === 'ADMIN' or Auth::user()->role === 'PRODUCTIONOFFICER')
                                                         {{-- ADMIN: Read-only --}}
                                                         @if ($prep->alreadyDeveloped == 'Need to Develop')
                                                             @if (is_null($prep->yarnReceiveDate))
@@ -1177,6 +1200,10 @@
                                                                     {{ \Carbon\Carbon::parse($prep->yarnReceiveDate)->format('Y-m-d') }}
                                                                     at
                                                                     {{ \Carbon\Carbon::parse($prep->yarnReceiveDate)->format('H:i') }}
+                                                                    @if ($prep->pst_no)
+                                                                        <br><span class="block text-xs text-gray-600">PST
+                                                                            No: {{ $prep->pst_no }}</span>
+                                                                    @endif
                                                                 </span>
                                                             @endif
                                                         @else
@@ -1186,28 +1213,92 @@
                                                         {{-- Other Roles: Editable --}}
                                                         @if ($prep->alreadyDeveloped == 'Need to Develop')
                                                             @if (is_null($prep->yarnReceiveDate))
-                                                                <form action="{{ route('rnd.markYarnReceived') }}"
-                                                                    method="POST">
-                                                                    @csrf
-                                                                    <input type="hidden" name="id"
-                                                                        value="{{ $prep->id }}">
-                                                                    <button type="submit"
-                                                                        class="yarn-receive-btn px-2 py-1 mt-3 rounded transition-all duration-200
-                                                                                    {{
-                                                                                    $prep->yarnSupplier
-                                                                                        ? 'bg-gray-300 text-black hover:bg-gray-400'
-                                                                                        : 'bg-gray-200 text-gray-500 cursor-not-allowed' }}"
-                                                                        {{
-                                                                        $prep->yarnSupplier
-                                                                            ? ''
-                                                                            : 'disabled' }}
-                                                                        title="{{ $prep->developPlannedDate &&
-                                                                        $prep->yarnOrderedDate
-                                                                            ? ''
-                                                                            : 'Please set Development Plan Date and Yarn Ordered Date first' }}">
-                                                                        Pending
-                                                                    </button>
-                                                                </form>
+                                                                @if ($prep->yarnSupplier === 'Pan Asia')
+                                                                    {{-- Wrap button + modal inside Alpine component --}}
+                                                                    <div x-data="{ open: false }" class="relative">
+                                                                        {{-- Trigger Button --}}
+                                                                        <button type="button"
+                                                                            class="yarn-receive-btn px-2 py-1 mt-3 rounded transition-all duration-200
+                                {{ $prep->developPlannedDate && $prep->yarnOrderedDate ? 'bg-gray-300 text-black hover:bg-gray-400' : 'bg-gray-200 text-gray-500 cursor-not-allowed' }}"
+                                                                            @if ($prep->developPlannedDate && $prep->yarnOrderedDate) @click="open = true" @else disabled title="Please set Development Plan Date and Yarn Ordered Date first" @endif>
+                                                                            Pending
+                                                                        </button>
+
+                                                                        {{-- Modal --}}
+                                                                        <div x-show="open" x-transition
+                                                                            class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+                                                                            style="display: none;">
+                                                                            <div
+                                                                                class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 w-full max-w-md relative">
+                                                                                {{-- Close button (X) --}}
+                                                                                <button @click="open = false"
+                                                                                    class="absolute top-2 right-2 text-gray-600 hover:text-gray-900">
+                                                                                    ✕
+                                                                                </button>
+
+                                                                                {{-- Title --}}
+                                                                                <h2
+                                                                                    class="text-lg font-semibold text-gray-800 dark:text-white mb-2 text-left">
+                                                                                    Mark Yarn Received
+                                                                                </h2>
+                                                                                <p
+                                                                                    class="mb-5 text-sm text-gray-600 dark:text-gray-300 text-left">
+                                                                                    Please provide the PST No. to confirm
+                                                                                    yarn receipt.
+                                                                                </p>
+
+                                                                                {{-- Form --}}
+                                                                                <form
+                                                                                    action="{{ route('rnd.markYarnReceived') }}"
+                                                                                    method="POST">
+                                                                                    @csrf
+                                                                                    <input type="hidden" name="id"
+                                                                                        value="{{ $prep->id }}">
+
+                                                                                    {{-- PST No --}}
+                                                                                    <div class="mb-6">
+                                                                                        <label
+                                                                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 text-left">
+                                                                                            PA / ST No
+                                                                                        </label>
+                                                                                        <input type="number"
+                                                                                            name="pst_no"
+                                                                                            placeholder="Enter PA / ST No"
+                                                                                            class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                                                            required>
+                                                                                    </div>
+
+                                                                                    <div class="flex justify-end gap-3">
+                                                                                        <button type="button"
+                                                                                            @click="open = false"
+                                                                                            class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400 transition">
+                                                                                            Cancel
+                                                                                        </button>
+                                                                                        <button type="submit"
+                                                                                            class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
+                                                                                            Save
+                                                                                        </button>
+                                                                                    </div>
+                                                                                </form>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                @else
+                                                                    {{-- Default form if not Pan Asia --}}
+                                                                    <form action="{{ route('rnd.markYarnReceived') }}"
+                                                                        method="POST">
+                                                                        @csrf
+                                                                        <input type="hidden" name="id"
+                                                                            value="{{ $prep->id }}">
+                                                                        <button type="submit"
+                                                                            class="yarn-receive-btn px-2 py-1 mt-3 rounded transition-all duration-200
+                                {{ $prep->yarnSupplier ? 'bg-gray-300 text-black hover:bg-gray-400' : 'bg-gray-200 text-gray-500 cursor-not-allowed' }}"
+                                                                            {{ $prep->yarnSupplier ? '' : 'disabled' }}
+                                                                            title="{{ $prep->developPlannedDate && $prep->yarnOrderedDate ? '' : 'Please set Development Plan Date and Yarn Ordered Date first' }}">
+                                                                            Pending
+                                                                        </button>
+                                                                    </form>
+                                                                @endif
                                                             @else
                                                                 <span
                                                                     class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-pink-200 dark:bg-gray-800 px-3 py-1 rounded">
@@ -1215,6 +1306,10 @@
                                                                     {{ \Carbon\Carbon::parse($prep->yarnReceiveDate)->format('Y-m-d') }}
                                                                     at
                                                                     {{ \Carbon\Carbon::parse($prep->yarnReceiveDate)->format('H:i') }}
+                                                                    @if ($prep->pst_no)
+                                                                        <br><span class="block text-xs text-gray-600">PST
+                                                                            No: {{ $prep->pst_no }}</span>
+                                                                    @endif
                                                                 </span>
                                                             @endif
                                                         @else
@@ -1224,7 +1319,7 @@
                                                 </td>
 
                                                 <td class="px-4 py-3 border-r border-gray-300 text-center">
-                                                    @if (Auth::user()->role === 'ADMIN' OR Auth::user()->role === 'PRODUCTIONOFFICER')
+                                                    @if (Auth::user()->role === 'ADMIN' or Auth::user()->role === 'PRODUCTIONOFFICER')
                                                         {{-- ADMIN/PRODUCTION OFFICER: Read-only --}}
                                                         @if ($prep->alreadyDeveloped == 'Need to Develop')
                                                             @if (!$prep->is_deadline_locked)
@@ -1390,7 +1485,7 @@
                                                 <!-- Yarn Leftover Weight -->
                                                 <td class="px-4 py-3 border-r border-gray-300 text-center">
                                                     @if ($prep->alreadyDeveloped == 'Need to Develop')
-                                                        @if (Auth::user()->role === 'ADMIN' OR Auth::user()->role === 'PRODUCTIONOFFICER')
+                                                        @if (Auth::user()->role === 'ADMIN' or Auth::user()->role === 'PRODUCTIONOFFICER')
                                                             {{-- ADMIN/PRODUCTION OFFICER: Read-only --}}
                                                             {{-- Check if yarn leftover weight is locked --}}
                                                             @if ($prep->is_yarn_leftover_weight_locked)
@@ -1471,7 +1566,7 @@
                                                         }
                                                     @endphp
 
-                                                    @if (Auth::user()->role === 'ADMIN' OR Auth::user()->role === 'PRODUCTIONOFFICER')
+                                                    @if (Auth::user()->role === 'ADMIN' or Auth::user()->role === 'PRODUCTIONOFFICER')
                                                         {{-- ADMIN: Read-only --}}
                                                         @if ($prep->is_reference_locked)
                                                             <span class="readonly">{{ $prep->referenceNo }}</span>
@@ -1565,7 +1660,7 @@
                                                 <!-- Notes -->
                                                 <td
                                                     class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
-                                                    @if (auth()->user()->role !== 'ADMIN' OR Auth::user()->role === 'PRODUCTIONOFFICER')
+                                                    @if (auth()->user()->role !== 'ADMIN' or Auth::user()->role === 'PRODUCTIONOFFICER')
                                                         <form
                                                             action="{{ route('sample-inquery-details.update-notes', $prep->sample_inquiry_id) }}"
                                                             method="POST" class="w-full">
@@ -2170,7 +2265,8 @@
         });
     </script>
     <script>
-        function openRndSampleModal(orderNo, customerName, coordinatorName, item, description, size, qtRef, color, style, sampleQty,
+        function openRndSampleModal(orderNo, customerName, coordinatorName, item, description, size, qtRef, color, style,
+            sampleQty,
             specialComment, requestDate) {
             document.getElementById('modalRndOrderNo').textContent = 'Order Number ' + orderNo;
             document.getElementById('modalCustomerName').textContent = customerName;

@@ -155,21 +155,34 @@ class SamplePreparationRnDController extends Controller
     {
         $request->validate([
             'id' => 'required|exists:sample_preparation_rnd,id',
+            'pst_no' => 'nullable|string'
         ]);
 
         $rnd = SamplePreparationRnD::findOrFail($request->id);
+
+        // Format pst_no to "PA/ST-xxxxx"
+        if ($request->pst_no) {
+            // Ensure only numbers are used, strip non-digits
+            $number = preg_replace('/\D/', '', $request->pst_no);
+            // Pad to 5 digits
+            $formattedPst = 'PA/ST-' . str_pad($number, 5, '0', STR_PAD_LEFT);
+            $rnd->pst_no = $formattedPst;
+        }
+
         $rnd->yarnReceiveDate = Carbon::now();
-        $rnd->productionStatus = 'Yarn Received'; // Update production status
+        $rnd->productionStatus = 'Yarn Received';
         $rnd->save();
 
+        // Update SampleInquiry
         $sampleInquiry = SampleInquiry::where('orderNo', $rnd->orderNo)->first();
         if ($sampleInquiry) {
-            $sampleInquiry->productionStatus = 'Yarn Received'; // Update production status in SampleInquiry
+            $sampleInquiry->productionStatus = 'Yarn Received';
             $sampleInquiry->save();
         }
 
-        return back()->with('success', 'Yarn Receive Date marked.');
+        return back()->with('success', 'Yarn Receive Date marked with PST No.');
     }
+
 
     public function markSendToProduction(Request $request)
     {
