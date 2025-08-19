@@ -958,15 +958,6 @@
                                                         value="{{ $status }}" />
                                                 </td>
 
-                                                <!-- Reference No -->
-                                                <td
-                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center ">
-                                                    <span class="readonly">{{ $inquiry->referenceNo ?? 'N/D' }}</span>
-                                                    <input type="text"
-                                                        class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                        value="{{ $inquiry->referenceNo ?? 'N/D' }}" />
-                                                </td>
-
                                                 <td class="px-4 py-3 border-r border-gray-300 text-center">
                                                     <div class="delivery-item inline-block">
                                                         @if (is_null($inquiry->customerDeliveryDate))
@@ -977,33 +968,32 @@
                                                                         Delivery Not Editable
                                                                     </div>
                                                                     <button type="button"
-                                                                        class="w-full px-3 py-1 mt-2 rounded text-sm bg-green-600 text-white cursor-not-allowed"
-                                                                        disabled>
+                                                                            class="w-full px-3 py-1 mt-2 rounded text-sm bg-green-600 text-white cursor-not-allowed"
+                                                                            disabled>
                                                                         Delivered
                                                                     </button>
                                                                 @else
-                                                                    <form
-                                                                        action="{{ route('inquiry.markCustomerDelivered') }}"
-                                                                        method="POST" class="inline-block text-left">
+                                                                    <form action="{{ route('inquiry.markCustomerDelivered') }}" method="POST"
+                                                                          class="inline-block text-left">
                                                                         @csrf
-                                                                        <input type="hidden" name="id"
-                                                                            value="{{ $inquiry->id }}">
+                                                                        <input type="hidden" name="id" value="{{ $inquiry->id }}">
 
-                                                                        <input type="number" name="delivered_qty"
-                                                                            min="1"
-                                                                            max="{{ optional($inquiry->referenceNo ? \App\Models\SampleStock::where('reference_no', $inquiry->referenceNo)->first() : null)?->available_stock ?? 1 }}"
-                                                                            placeholder="Delivered Qty"
-                                                                            class="px-3 py-2 mb-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm w-40">
+                                                                        @if ($inquiry->productionStatus !== 'Tape Match')
+                                                                            <!-- Show Qty input only if NOT Tape Match -->
+                                                                            <input type="number" name="delivered_qty" min="1"
+                                                                                   max="{{ optional($inquiry->referenceNo ? \App\Models\SampleStock::where('reference_no', $inquiry->referenceNo)->first() : null)?->available_stock ?? 1 }}"
+                                                                                   placeholder="Delivered Qty"
+                                                                                   class="px-3 py-2 mb-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm w-40">
+                                                                        @endif
 
                                                                         <button type="submit"
-                                                                            class="w-full px-3 py-1 rounded text-sm transition-all duration-200 bg-green-600 hover:bg-green-700 text-white">
+                                                                                class="w-full px-3 py-1 rounded text-sm transition-all duration-200 bg-green-600 hover:bg-green-700 text-white">
                                                                             Delivered
                                                                         </button>
                                                                     </form>
                                                                 @endif
                                                             @else
-                                                                <div
-                                                                    class="timestamp mt-1 text-xs text-red-500 dark:text-red-400">
+                                                                <div class="timestamp mt-1 text-xs text-red-500 dark:text-red-400">
                                                                     Reference No is required before marking delivery.
                                                                 </div>
                                                             @endif
@@ -1018,9 +1008,8 @@
 
                                                             @if ($inquiry->dNoteNumber)
                                                                 <div class="flex justify-center">
-                                                                    <a href="{{ asset('storage/dispatches/' . $inquiry->dNoteNumber) }}"
-                                                                        target="_blank"
-                                                                        class="inline-block text-sm font-semibold text-gray-700 bg-gray-300 p-2 rounded hover:bg-gray-400 transition duration-200">
+                                                                    <a href="{{ asset('storage/dispatches/' . $inquiry->dNoteNumber) }}" target="_blank"
+                                                                       class="inline-block text-sm font-semibold text-gray-700 bg-gray-300 p-2 rounded hover:bg-gray-400 transition duration-200">
                                                                         Dispatch Note
                                                                     </a>
                                                                 </div>
@@ -1028,6 +1017,7 @@
                                                         @endif
                                                     </div>
                                                 </td>
+
 
                                                 <!-- Customer Decision -->
                                                 <td class="px-4 whitespace-normal break-words border-r border-gray-300">
