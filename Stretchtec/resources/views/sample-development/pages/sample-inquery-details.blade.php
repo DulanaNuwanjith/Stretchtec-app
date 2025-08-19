@@ -958,6 +958,15 @@
                                                         value="{{ $status }}" />
                                                 </td>
 
+                                                <!-- Reference No -->
+                                                <td
+                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center ">
+                                                    <span class="readonly">{{ $inquiry->referenceNo ?? 'N/D' }}</span>
+                                                    <input type="text"
+                                                        class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                        value="{{ $inquiry->referenceNo ?? 'N/D' }}" />
+                                                </td>
+
                                                 <td class="px-4 py-3 border-r border-gray-300 text-center">
                                                     <div class="delivery-item inline-block">
                                                         @if (is_null($inquiry->customerDeliveryDate))
@@ -1017,7 +1026,6 @@
                                                         @endif
                                                     </div>
                                                 </td>
-
 
                                                 <!-- Customer Decision -->
                                                 <td class="px-4 whitespace-normal break-words border-r border-gray-300">
