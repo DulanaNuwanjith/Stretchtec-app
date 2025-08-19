@@ -8,6 +8,7 @@ use App\Http\Controllers\SamplePreparationProductionController;
 use App\Http\Controllers\SampleStockController;
 use App\Http\Controllers\UserMananagementController;
 use App\Http\Controllers\ProductCatalogController;
+use App\Http\Controllers\ReportController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -20,9 +21,11 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
+
+    Route::get('sample-preparation-details', [SamplePreparationRnDController::class, 'viewRnD'])
+        ->name('sample-preparation-details.index');
+
+    Route::get('/dashboard', [\App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
 
     Route::patch('/sample-preparation-production/update-operator/{id}', [SamplePreparationProductionController::class, 'updateOperator'])
         ->name('sample-preparation-production.update-operator');
@@ -51,14 +54,7 @@ Route::middleware([
         return view('production-catalog.productCatalog');
     })->name('productCatalog.index');
 
-    Route::get('storeManagement', function () {
-        return view('store-management.storeManagement');
-    })->name('storeManagement.index');
-
-    Route::get('reports', function () {
-        return view('reports');
-    })->name('reports.index');
-
+    Route::get('storeManagement', [\App\Http\Controllers\StoresController::class, 'index'])->name('storeManagement.index');
 
     Route::get('elasticCatalog', [ProductCatalogController::class, 'elasticCatalog'])->name('elasticCatalog.index');
     Route::get('tapeCatalog', [ProductCatalogController::class, 'tapeCatalog'])->name('tapeCatalog.index');
@@ -70,6 +66,16 @@ Route::middleware([
     Route::post('tapeCatalog/store', [ProductCatalogController::class, 'storeTape'])->name('tapeCatalog.store');
     Route::post('catalog/{catalog}/upload-image', [ProductCatalogController::class, 'uploadOrderImage'])->name('catalog.uploadImage');
     Route::patch('product-catalog/{productCatalog}/approval', [ProductCatalogController::class, 'updateApproval'])->name('product-catalog.updateApproval');
+
+    //Sample inquiry routes
+    Route::resource('sampleInquiry', 'App\Http\Controllers\SampleInquiryController')->names([
+        'index' => 'sample-inquery-details.index',
+        'store' => 'sampleInquiry.store',
+        'destroy' => 'sampleInquiry.destroy',
+    ]);
+    Route::post('/sampleInquiry/mark-customer-delivered', [SampleInquiryController::class, 'markCustomerDelivered'])
+        ->name('inquiry.markCustomerDelivered');
+    Route::post('/inquiry/mark-delivered', [SampleInquiryController::class, 'markCustomerDelivered'])->name('inquiry.markCustomerDelivered');
 
     Route::get('production-inquery-details', function () {
         return view('production.pages.production-inquery-details');
@@ -91,20 +97,11 @@ Route::middleware(['auth'])->group(function () {
         }
         return $next($request);
     }], function () {
-
-        //Sample inquiry routes
-        Route::resource('sampleInquiry', 'App\Http\Controllers\SampleInquiryController')->names([
-            'index' => 'sample-inquery-details.index',
-            'store' => 'sampleInquiry.store',
-            'destroy' => 'sampleInquiry.destroy',
-        ]);
         Route::post('/sampleInquiry/mark-sent-to-sample-dev', [SampleInquiryController::class, 'markSentToSampleDevelopment'])
             ->name('inquiry.markSentToSampleDev');
-        Route::post('/sampleInquiry/mark-customer-delivered', [SampleInquiryController::class, 'markCustomerDelivered'])
-            ->name('inquiry.markCustomerDelivered');
         Route::patch('/sample-inquery-details/{id}/update-decision', [SampleInquiryController::class, 'updateDecision'])
             ->name('sample-inquery-details.update-decision');
-        Route::post('/inquiry/mark-delivered', [SampleInquiryController::class, 'markCustomerDelivered'])->name('inquiry.markCustomerDelivered');
+        Route::post('/sample-inquiry/{id}/upload-order-file', [SampleInquiryController::class, 'uploadOrderFile'])->name('sampleInquiry.uploadOrderFile');
     });
 });
 
@@ -119,8 +116,6 @@ Route::middleware(['auth'])->group(function () {
         return $next($request);
     }], function () {
 
-        Route::get('sample-preparation-details', [SamplePreparationRnDController::class, 'viewRnD'])
-            ->name('sample-preparation-details.index');
         Route::post('/rnd/mark-colour-match-sent', [SamplePreparationRnDController::class, 'markColourMatchSent'])
             ->name('rnd.markColourMatchSent');
         Route::post('/rnd/mark-colour-match-receive', [SamplePreparationRnDController::class, 'markColourMatchReceive'])
@@ -213,3 +208,28 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/userDetails/{id}', [UserMananagementController::class, 'destroy'])->name('userDetails.destroy');
     });
 });
+
+// REPORTS ROUTES
+Route::middleware(['auth'])->group(function () {
+    Route::group(['middleware' => function ($request, $next) {
+        $allowedRoles = ['ADMIN', 'SUPERADMIN'];
+        if (!Auth::check() || !in_array(Auth::user()->role, $allowedRoles)) {
+            abort(403, 'Unauthorized access.');
+        }
+        return $next($request);
+    }], function () {
+
+        Route::get('/reports/sample-reports', [ReportController::class, 'showReportPage'])->name('sample-reports.index');
+        Route::get('/reports/customer-decision', [ReportController::class, 'inquiryCustomerDecisionReport'])->name('reports.customerDecision');
+        Route::get('/report/order', [ReportController::class, 'generateOrderReport'])->name('report.order');
+        Route::get('/report/inquiry-range', [ReportController::class, 'inquiryRangeReport'])->name('report.inquiryRange');
+        Route::get('/reports/production-reports', function () {return view('reports.production-reports');})->name('production-reports.index');
+        Route::get('/reports/yarn-supplier-spending', [ReportController::class, 'yarnSupplierSpendingReport'])->name('reports.yarnSupplierSpending');
+        Route::get('/reports/coordinator/pdf', [ReportController::class, 'coordinatorReportPdf'])->name('reports.coordinatorPdf');
+        Route::get('/reports/reference-delivery', [ReportController::class, 'referenceDeliveryReport'])->name('reports.reference_delivery');
+        Route::post('/report/sample-inquiry', [ReportController::class, 'generateSampleInquiryReport'])->name('report.sampleInquiryReport');
+
+    });
+});
+
+

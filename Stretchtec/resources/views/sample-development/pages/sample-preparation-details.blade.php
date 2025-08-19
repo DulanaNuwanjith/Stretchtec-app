@@ -243,6 +243,35 @@
                                             </div>
                                         </div>
 
+                                        {{-- Coordinator Name Dropdown --}}
+                                        <div class="relative inline-block text-left w-48"> <label
+                                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Coordinator</label>
+                                            <input type="hidden" name="coordinator_name" id="coordinatorInput"
+                                                value="{{ request('coordinator_name') }}"> <button type="button"
+                                                onclick="toggleCoordinatorDropdown()" id="coordinatorDropdown"
+                                                class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10 dark:bg-gray-700 dark:text-white"
+                                                aria-expanded="false"> <span
+                                                    id="selectedCoordinator">{{ request('coordinator_name') ?? 'Select Coordinator' }}</span>
+                                                <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20"
+                                                    fill="currentColor">
+                                                    <path fill-rule="evenodd"
+                                                        d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.25 8.29a.75.75 0 01-.02-1.08z"
+                                                        clip-rule="evenodd" />
+                                                </svg> </button>
+                                            <div id="coordinatorDropdownMenu"
+                                                class="absolute z-40 mt-1 w-full bg-white border rounded-lg shadow-lg hidden max-h-48 overflow-y-auto p-2">
+                                                <input type="text" id="coordinatorSearchInput"
+                                                    onkeyup="filterCoordinators()" placeholder="Search..."
+                                                    class="w-full px-2 py-1 text-sm border rounded-md dark:bg-gray-600 dark:text-white dark:placeholder-gray-300"
+                                                    autocomplete="off">
+                                                @foreach ($coordinators as $coordinator)
+                                                    <div onclick="selectCoordinator('{{ $coordinator }}')"
+                                                        class="coordinator-option px-4 py-2 hover:bg-gray-100 cursor-pointer text-sm">
+                                                        {{ $coordinator }}</div>
+                                                @endforeach
+                                            </div>
+                                        </div>
+
                                         {{-- Reference No Dropdown --}}
                                         <div class="relative inline-block text-left w-48">
                                             <label for="customerDropdown"
@@ -335,7 +364,8 @@
                                 </div>
                             </div>
 
-                            <div class="overflow-x-auto max-h-[1200px] bg-white dark:bg-gray-900 shadow rounded-lg">
+                            <div id="ResearchAndDevelopmentRecordsScroll"
+                                class="overflow-x-auto max-h-[1200px] bg-white dark:bg-gray-900 shadow rounded-lg">
                                 <table class="table-fixed w-full text-sm divide-y divide-gray-200 dark:divide-gray-700">
                                     <thead class="bg-gray-100 dark:bg-gray-700 text-left">
                                         <tr class="text-center">
@@ -391,9 +421,6 @@
                                                 class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-36 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Production Status</th>
                                             <th
-                                                class="font-bold sticky top-0 z-20 bg-gray-200 px-4 py-3 w-56 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                                Reference No</th>
-                                            <th
                                                 class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Production Output</th>
                                             <th
@@ -402,6 +429,9 @@
                                             <th
                                                 class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Yarn Leftover Weight</th>
+                                            <th
+                                                class="font-bold sticky top-0 z-20 bg-gray-200 px-4 py-3 w-56 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                Reference No</th>
                                             <th
                                                 class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-72 text-xs text-center font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Note</th>
@@ -421,6 +451,7 @@
                                                         class="readonly font-bold hover:text-blue-600 hover:underline cursor-pointer"
                                                         onclick="openRndSampleModal(
                                                                     '{{ addslashes($prep->orderNo) }}',
+                                                                    '{{ addslashes($prep->sampleInquiry->customerName ?? '-') }}',
                                                                     '{{ addslashes($prep->sampleInquiry->coordinatorName ?? '-') }}',
                                                                     '{{ addslashes($prep->sampleInquiry->item ?? '-') }}',
                                                                     '{{ addslashes($prep->sampleInquiry->ItemDiscription ?? '-') }}',
@@ -465,7 +496,7 @@
                                                 <td
                                                     class="text-center py-3 border-r border-gray-300 whitespace-normal break-words">
                                                     @if (is_null($prep->colourMatchSentDate))
-                                                        @if (Auth::user()->role === 'ADMIN')
+                                                        @if (Auth::user()->role === 'ADMIN' or Auth::user()->role === 'PRODUCTIONOFFICER')
                                                             {{-- Read-only for ADMIN --}}
                                                             <button type="button"
                                                                 class="delivered-btn bg-gray-200 text-gray-500 px-2 py-1 mt-3 rounded cursor-not-allowed"
@@ -500,7 +531,7 @@
                                                 <td
                                                     class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
                                                     @if (is_null($prep->colourMatchReceiveDate))
-                                                        @if (Auth::user()->role === 'ADMIN')
+                                                        @if (Auth::user()->role === 'ADMIN' or Auth::user()->role === 'PRODUCTIONOFFICER')
                                                             {{-- Read-only for ADMIN --}}
                                                             <button type="button"
                                                                 class="receive-btn px-2 py-1 mt-3 rounded bg-gray-200 text-gray-500 cursor-not-allowed"
@@ -535,7 +566,7 @@
                                                                 {{ \Carbon\Carbon::parse($prep->colourMatchReceiveDate)->format('H:i') }}
                                                             </button>
 
-                                                            @if (Auth::user()->role !== 'ADMIN')
+                                                            @if (Auth::user()->role !== 'ADMIN' or Auth::user()->role === 'PRODUCTIONOFFICER')
                                                                 {{-- Reject button (hidden for Admin) --}}
                                                                 <form action="" method="POST">
                                                                     @csrf
@@ -592,7 +623,7 @@
                                                                     x-ref="formAlreadyDevelopedInput"
                                                                     value="Need to Develop">
 
-                                                                @if (Auth::user()->role === 'ADMIN')
+                                                                @if (Auth::user()->role === 'ADMIN' or Auth::user()->role === 'PRODUCTIONOFFICER')
                                                                     {{-- Read-only for ADMIN --}}
                                                                     <div class="inline-flex justify-between w-48 rounded-md px-3 py-2 text-sm font-semibold
                                                                                  text-gray-500 bg-gray-200 shadow-sm h-10 cursor-not-allowed"
@@ -734,7 +765,7 @@
                                                 </td>
 
                                                 <td class="px-4 py-3 text-center border-r border-gray-300">
-                                                    @if (Auth::user()->role === 'ADMIN')
+                                                    @if (Auth::user()->role === 'ADMIN' or Auth::user()->role === 'PRODUCTIONOFFICER')
                                                         {{-- Read-only for ADMIN --}}
                                                         @if ($prep->alreadyDeveloped == 'Need to Develop')
                                                             @if ($prep->developPlannedDate)
@@ -798,7 +829,7 @@
 
                                                 <td
                                                     class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
-                                                    @if (Auth::user()->role === 'ADMIN')
+                                                    @if (Auth::user()->role === 'ADMIN' or Auth::user()->role === 'PRODUCTIONOFFICER')
                                                         {{-- ADMIN: Read-only --}}
                                                         @if ($prep->alreadyDeveloped == 'Need to Develop')
                                                             @if ($prep->yarnOrderedDate)
@@ -887,8 +918,7 @@
                                                                                     <input type="text"
                                                                                         name="yarnOrderedPONumber"
                                                                                         placeholder="Enter PO Number"
-                                                                                        class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                                                        required>
+                                                                                        class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                                                 </div>
 
                                                                                 {{-- Shade --}}
@@ -899,8 +929,7 @@
                                                                                     </label>
                                                                                     <input type="text" name="shade"
                                                                                         placeholder="Enter Shade"
-                                                                                        class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                                                        required>
+                                                                                        class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                                                 </div>
 
                                                                                 {{-- Weight --}}
@@ -912,8 +941,7 @@
                                                                                     <input type="number" step="0.01"
                                                                                         name="value"
                                                                                         placeholder="e.g. 150.50"
-                                                                                        class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                                                        required>
+                                                                                        class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                                                 </div>
 
                                                                                 {{-- Ticket --}}
@@ -924,8 +952,7 @@
                                                                                     </label>
                                                                                     <input type="text" name="tkt"
                                                                                         placeholder="Enter Ticket Number"
-                                                                                        class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                                                        required>
+                                                                                        class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                                                 </div>
 
                                                                                 {{-- Yarn Price --}}
@@ -935,47 +962,97 @@
                                                                                         Yarn Price
                                                                                     </label>
                                                                                     <input type="text" name="yarnPrice"
-                                                                                           placeholder="Enter Yarn Price"
-                                                                                           class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                                                           required>
+                                                                                        placeholder="Enter Yarn Price"
+                                                                                        class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                                                 </div>
 
                                                                                 {{-- Supplier --}}
-                                                                                <div class="mb-6"
-                                                                                    x-data="{ supplier: 'Pan Asia' }">
+                                                                                <div class="mb-6">
                                                                                     <label
                                                                                         class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 text-left">
                                                                                         Supplier
                                                                                     </label>
 
-                                                                                    <select name="yarnSupplier"
-                                                                                        x-model="supplier"
-                                                                                        class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                                                        required>
-                                                                                        <option value="Pan Asia">Pan Asia
-                                                                                        </option>
-                                                                                        <option value="Ocean Lanka">Ocean
-                                                                                            Lanka</option>
-                                                                                        <option value="A and E">A and E
-                                                                                        </option>
-                                                                                        <option value="A and E">Metro Lanka
-                                                                                        </option>
-                                                                                        <option value="Other">Other
-                                                                                        </option>
-                                                                                    </select>
+                                                                                    <div class="relative inline-block w-full"
+                                                                                        data-dropdown-root>
+                                                                                        <!-- Trigger -->
+                                                                                        <button type="button"
+                                                                                            onclick="toggleDropdownItemAdd(this, 'supplier')"
+                                                                                            class="w-full flex justify-between items-center px-4 py-2 border border-gray-300 rounded-md bg-white dark:bg-gray-700 text-sm text-gray-700 dark:text-white hover:bg-gray-50 focus:outline-none">
+                                                                                            <span
+                                                                                                class="selected-supplier">{{ old('yarnSupplier', 'Pan Asia') }}</span>
+                                                                                            <svg class="w-4 h-4 text-gray-500 dark:text-gray-300"
+                                                                                                fill="none"
+                                                                                                stroke="currentColor"
+                                                                                                viewBox="0 0 24 24">
+                                                                                                <path
+                                                                                                    stroke-linecap="round"
+                                                                                                    stroke-linejoin="round"
+                                                                                                    stroke-width="2"
+                                                                                                    d="M19 9l-7 7-7-7" />
+                                                                                            </svg>
+                                                                                        </button>
 
-                                                                                    <div x-show="supplier === 'Other'"
-                                                                                        class="mt-4">
-                                                                                        <label
-                                                                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                                                                            Please specify
-                                                                                        </label>
-                                                                                        <input type="text"
-                                                                                            name="customSupplier"
-                                                                                            placeholder="Enter Supplier Name"
-                                                                                            class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                                                        <!-- Dropdown Menu -->
+                                                                                        <div
+                                                                                            class="dropdown-menu-supplier hidden absolute z-10 mt-2 w-full rounded-md bg-white dark:bg-gray-700 shadow-lg ring-1 ring-black/5 max-h-48 overflow-y-auto">
+                                                                                            <div class="py-1"
+                                                                                                role="listbox"
+                                                                                                tabindex="-1">
+                                                                                                <button type="button"
+                                                                                                    class="dropdown-option w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
+                                                                                                    onclick="selectDropdownOptionItemAdd(this, 'Pan Asia', 'supplier')">Pan
+                                                                                                    Asia</button>
+
+                                                                                                <button type="button"
+                                                                                                    class="dropdown-option w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
+                                                                                                    onclick="selectDropdownOptionItemAdd(this, 'Ocean Lanka', 'supplier')">Ocean
+                                                                                                    Lanka</button>
+
+                                                                                                <button type="button"
+                                                                                                    class="dropdown-option w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
+                                                                                                    onclick="selectDropdownOptionItemAdd(this, 'A and E', 'supplier')">A
+                                                                                                    and E</button>
+
+                                                                                                <button type="button"
+                                                                                                    class="dropdown-option w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
+                                                                                                    onclick="selectDropdownOptionItemAdd(this, 'Metro Lanka', 'supplier')">Metro
+                                                                                                    Lanka</button>
+
+                                                                                                <button type="button"
+                                                                                                    class="dropdown-option w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
+                                                                                                    onclick="selectDropdownOptionItemAdd(this, 'Stretchtec Stock', 'supplier')">Stretchtec
+                                                                                                    Stock</button>
+
+                                                                                                <button type="button"
+                                                                                                    class="dropdown-option w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
+                                                                                                    onclick="selectDropdownOptionItemAdd(this, 'Other', 'supplier')">Other</button>
+                                                                                            </div>
+                                                                                        </div>
+
+                                                                                        <!-- Hidden input for form submission -->
+                                                                                        <input type="hidden"
+                                                                                            name="yarnSupplier"
+                                                                                            class="input-supplier"
+                                                                                            value="{{ old('yarnSupplier', 'Pan Asia') }}">
+
+                                                                                        <!-- "Other" input field -->
+                                                                                        <div
+                                                                                            class="mt-4 hidden other-supplier-field">
+                                                                                            <label
+                                                                                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                                                                                Please specify
+                                                                                            </label>
+                                                                                            <input type="text"
+                                                                                                name="customSupplier"
+                                                                                                placeholder="Enter Supplier Name"
+                                                                                                class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm input-custom-supplier"
+                                                                                                value="{{ old('customSupplier') }}"
+                                                                                                @disabled(true)>
+                                                                                        </div>
                                                                                     </div>
                                                                                 </div>
+
 
                                                                                 <div class="flex justify-end gap-3">
                                                                                     <button type="button"
@@ -984,7 +1061,7 @@
                                                                                         Cancel
                                                                                     </button>
                                                                                     <button type="submit"
-                                                                                        class="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition">
+                                                                                        class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
                                                                                         Save
                                                                                     </button>
                                                                                 </div>
@@ -1097,7 +1174,6 @@
                                                     @endif
                                                 </td>
 
-
                                                 <td class="px-4 py-3 border-r border-gray-300 text-center">
                                                     @if (!empty($prep->yarnSupplier))
                                                         {{-- Show saved Supplier --}}
@@ -1137,7 +1213,7 @@
                                                 {{-- Yarn Receive Date --}}
                                                 <td
                                                     class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
-                                                    @if (Auth::user()->role === 'ADMIN')
+                                                    @if (Auth::user()->role === 'ADMIN' or Auth::user()->role === 'PRODUCTIONOFFICER')
                                                         {{-- ADMIN: Read-only --}}
                                                         @if ($prep->alreadyDeveloped == 'Need to Develop')
                                                             @if (is_null($prep->yarnReceiveDate))
@@ -1153,6 +1229,10 @@
                                                                     {{ \Carbon\Carbon::parse($prep->yarnReceiveDate)->format('Y-m-d') }}
                                                                     at
                                                                     {{ \Carbon\Carbon::parse($prep->yarnReceiveDate)->format('H:i') }}
+                                                                    @if ($prep->pst_no)
+                                                                        <br><span class="block text-xs text-gray-600">PST
+                                                                            No: {{ $prep->pst_no }}</span>
+                                                                    @endif
                                                                 </span>
                                                             @endif
                                                         @else
@@ -1162,43 +1242,92 @@
                                                         {{-- Other Roles: Editable --}}
                                                         @if ($prep->alreadyDeveloped == 'Need to Develop')
                                                             @if (is_null($prep->yarnReceiveDate))
-                                                                <form action="{{ route('rnd.markYarnReceived') }}"
-                                                                    method="POST">
-                                                                    @csrf
-                                                                    <input type="hidden" name="id"
-                                                                        value="{{ $prep->id }}">
-                                                                    <button type="submit"
-                                                                        class="yarn-receive-btn px-2 py-1 mt-3 rounded transition-all duration-200
-                                                                                    {{ $prep->developPlannedDate &&
-                                                                                    $prep->yarnOrderedDate &&
-                                                                                    $prep->yarnSupplier &&
-                                                                                    $prep->tkt &&
-                                                                                    $prep->yarnOrderedWeight &&
-                                                                                    $prep->shade &&
-                                                                                    $prep->yarnOrderedPONumber
-                                                                                        ? 'bg-gray-300 text-black hover:bg-gray-400'
-                                                                                        : 'bg-gray-200 text-gray-500 cursor-not-allowed' }}"
-                                                                        {{ $prep->developPlannedDate &&
-                                                                        $prep->yarnOrderedDate &&
-                                                                        $prep->yarnSupplier &&
-                                                                        $prep->tkt &&
-                                                                        $prep->yarnOrderedWeight &&
-                                                                        $prep->shade &&
-                                                                        $prep->yarnOrderedPONumber
-                                                                            ? ''
-                                                                            : 'disabled' }}
-                                                                        title="{{ $prep->developPlannedDate &&
-                                                                        $prep->yarnOrderedDate &&
-                                                                        $prep->yarnSupplier &&
-                                                                        $prep->tkt &&
-                                                                        $prep->yarnOrderedWeight &&
-                                                                        $prep->shade &&
-                                                                        $prep->yarnOrderedPONumber
-                                                                            ? ''
-                                                                            : 'Please set Development Plan Date and Yarn Ordered Date first' }}">
-                                                                        Pending
-                                                                    </button>
-                                                                </form>
+                                                                @if ($prep->yarnSupplier === 'Pan Asia')
+                                                                    {{-- Wrap button + modal inside Alpine component --}}
+                                                                    <div x-data="{ open: false }" class="relative">
+                                                                        {{-- Trigger Button --}}
+                                                                        <button type="button"
+                                                                            class="yarn-receive-btn px-2 py-1 mt-3 rounded transition-all duration-200
+                                {{ $prep->developPlannedDate && $prep->yarnOrderedDate ? 'bg-gray-300 text-black hover:bg-gray-400' : 'bg-gray-200 text-gray-500 cursor-not-allowed' }}"
+                                                                            @if ($prep->developPlannedDate && $prep->yarnOrderedDate) @click="open = true" @else disabled title="Please set Development Plan Date and Yarn Ordered Date first" @endif>
+                                                                            Pending
+                                                                        </button>
+
+                                                                        {{-- Modal --}}
+                                                                        <div x-show="open" x-transition
+                                                                            class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+                                                                            style="display: none;">
+                                                                            <div
+                                                                                class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 w-full max-w-md relative">
+                                                                                {{-- Close button (X) --}}
+                                                                                <button @click="open = false"
+                                                                                    class="absolute top-2 right-2 text-gray-600 hover:text-gray-900">
+                                                                                    ✕
+                                                                                </button>
+
+                                                                                {{-- Title --}}
+                                                                                <h2
+                                                                                    class="text-lg font-semibold text-gray-800 dark:text-white mb-2 text-left">
+                                                                                    Mark Yarn Received
+                                                                                </h2>
+                                                                                <p
+                                                                                    class="mb-5 text-sm text-gray-600 dark:text-gray-300 text-left">
+                                                                                    Please provide the PST No. to confirm
+                                                                                    yarn receipt.
+                                                                                </p>
+
+                                                                                {{-- Form --}}
+                                                                                <form
+                                                                                    action="{{ route('rnd.markYarnReceived') }}"
+                                                                                    method="POST">
+                                                                                    @csrf
+                                                                                    <input type="hidden" name="id"
+                                                                                        value="{{ $prep->id }}">
+
+                                                                                    {{-- PST No --}}
+                                                                                    <div class="mb-6">
+                                                                                        <label
+                                                                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 text-left">
+                                                                                            PA / ST No
+                                                                                        </label>
+                                                                                        <input type="number"
+                                                                                            name="pst_no"
+                                                                                            placeholder="Enter PA / ST No"
+                                                                                            class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                                                            required>
+                                                                                    </div>
+
+                                                                                    <div class="flex justify-end gap-3">
+                                                                                        <button type="button"
+                                                                                            @click="open = false"
+                                                                                            class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400 transition">
+                                                                                            Cancel
+                                                                                        </button>
+                                                                                        <button type="submit"
+                                                                                            class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
+                                                                                            Save
+                                                                                        </button>
+                                                                                    </div>
+                                                                                </form>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                @else
+                                                                    {{-- Default form if not Pan Asia --}}
+                                                                    <form action="{{ route('rnd.markYarnReceived') }}"
+                                                                        method="POST">
+                                                                        @csrf
+                                                                        <input type="hidden" name="id"
+                                                                            value="{{ $prep->id }}">
+                                                                        <button type="submit"
+                                                                            class="yarn-receive-btn px-2 py-1 mt-3 rounded transition-all duration-200
+                                {{ $prep->yarnSupplier ? 'bg-gray-300 text-black hover:bg-gray-400' : 'bg-gray-200 text-gray-500 cursor-not-allowed' }}"
+                                                                            {{ $prep->yarnSupplier ? '' : 'disabled' }}
+                                                                            title="{{ $prep->developPlannedDate && $prep->yarnOrderedDate ? '' : 'Please set Development Plan Date and Yarn Ordered Date first' }}">
+                                                                            Pending
+                                                                        </button>
+                                                                    </form>
+                                                                @endif
                                                             @else
                                                                 <span
                                                                     class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-pink-200 dark:bg-gray-800 px-3 py-1 rounded">
@@ -1206,6 +1335,10 @@
                                                                     {{ \Carbon\Carbon::parse($prep->yarnReceiveDate)->format('Y-m-d') }}
                                                                     at
                                                                     {{ \Carbon\Carbon::parse($prep->yarnReceiveDate)->format('H:i') }}
+                                                                    @if ($prep->pst_no)
+                                                                        <br><span class="block text-xs text-gray-600">PST
+                                                                            No: {{ $prep->pst_no }}</span>
+                                                                    @endif
                                                                 </span>
                                                             @endif
                                                         @else
@@ -1215,8 +1348,8 @@
                                                 </td>
 
                                                 <td class="px-4 py-3 border-r border-gray-300 text-center">
-                                                    @if (Auth::user()->role === 'ADMIN')
-                                                        {{-- ADMIN: Read-only --}}
+                                                    @if (Auth::user()->role === 'ADMIN' or Auth::user()->role === 'PRODUCTIONOFFICER')
+                                                        {{-- ADMIN/PRODUCTION OFFICER: Read-only --}}
                                                         @if ($prep->alreadyDeveloped == 'Need to Develop')
                                                             @if (!$prep->is_deadline_locked)
                                                                 <span
@@ -1305,21 +1438,34 @@
                                                     @php
                                                         $status = $prep->productionStatus;
                                                         $badgeClass = match ($status) {
-                                                            'Pending' => 'bg-blue-100 text-blue-800 dark:bg-blue-700 dark:text-white',
-                                                            'In Production' => 'bg-yellow-100 text-yellow-800 dark:bg-yellow-700 dark:text-white',
-                                                            'Production Complete' => 'bg-green-100 text-green-800 dark:bg-green-700 dark:text-white',
-                                                            'Tape Match' => 'bg-purple-100 text-purple-800 dark:bg-purple-700 dark:text-white',
-                                                            'No Development' => 'bg-red-100 text-red-800 dark:bg-red-700 dark:text-white',
-                                                            'Yarn Ordered' => 'bg-orange-100 text-orange-800 dark:bg-orange-700 dark:text-white',
-                                                            'Yarn Received' => 'bg-indigo-100 text-indigo-800 dark:bg-indigo-700 dark:text-white',
-                                                            'Sent to Production' => 'bg-teal-100 text-teal-800 dark:bg-teal-700 dark:text-white',
-                                                            'Colour Match Sent' => 'bg-pink-100 text-pink-800 dark:bg-pink-700 dark:text-white',
-                                                            'Colour Match Received' => 'bg-emerald-100 text-emerald-800 dark:bg-emerald-700 dark:text-white',
-                                                            default => 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-white',
+                                                            'Pending'
+                                                                => 'bg-blue-100 text-blue-800 dark:bg-blue-700 dark:text-white',
+                                                            'In Production'
+                                                                => 'bg-yellow-100 text-yellow-800 dark:bg-yellow-700 dark:text-white',
+                                                            'Production Complete'
+                                                                => 'bg-green-100 text-green-800 dark:bg-green-700 dark:text-white',
+                                                            'Order Delivered'
+                                                                => 'bg-green-500 text-white dark:bg-green-700 dark:text-white',
+                                                            'Tape Match'
+                                                                => 'bg-purple-100 text-purple-800 dark:bg-purple-700 dark:text-white',
+                                                            'No Development'
+                                                                => 'bg-red-100 text-red-800 dark:bg-red-700 dark:text-white',
+                                                            'Yarn Ordered'
+                                                                => 'bg-orange-100 text-orange-800 dark:bg-orange-700 dark:text-white',
+                                                            'Yarn Received'
+                                                                => 'bg-indigo-100 text-indigo-800 dark:bg-indigo-700 dark:text-white',
+                                                            'Sent to Production'
+                                                                => 'bg-teal-100 text-teal-800 dark:bg-teal-700 dark:text-white',
+                                                            'Colour Match Sent'
+                                                                => 'bg-pink-100 text-pink-800 dark:bg-pink-700 dark:text-white',
+                                                            'Colour Match Received'
+                                                                => 'bg-emerald-100 text-emerald-800 dark:bg-emerald-700 dark:text-white',
+                                                            default
+                                                                => 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-white',
                                                         };
                                                     @endphp
 
-                                                        <!-- Read-only badge -->
+                                                    <!-- Read-only badge -->
                                                     <span
                                                         class="readonly inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold {{ $badgeClass }}">
                                                         {{ $status }}
@@ -1329,6 +1475,107 @@
                                                     <input type="text" name="productionStatus"
                                                         class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                         value="{{ $status }}" />
+                                                </td>
+
+                                                <td
+                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                                    @if ($prep->alreadyDeveloped == 'Need to Develop')
+                                                        @if ($prep->production && is_numeric($prep->production->production_output))
+                                                            <span class="readonly">
+                                                                {{ $prep->production->production_output }} g
+                                                            </span>
+                                                            <input
+                                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                                value="{{ $prep->production->production_output }} g" />
+                                                        @else
+                                                            <span class="text-gray-400 italic">Pending output</span>
+                                                        @endif
+                                                    @else
+                                                        <span class="text-gray-400 italic">—</span>
+                                                    @endif
+                                                </td>
+
+                                                <td
+                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                                    @if ($prep->alreadyDeveloped == 'Need to Develop')
+                                                        @if ($prep->production && is_numeric($prep->production->damaged_output))
+                                                            <span class="readonly">
+                                                                {{ $prep->production->damaged_output }} g
+                                                            </span>
+                                                            <input
+                                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                                value="{{ $prep->production->damaged_output }} g" />
+                                                        @else
+                                                            <span class="text-gray-400 italic">Pending output</span>
+                                                        @endif
+                                                    @else
+                                                        <span class="text-gray-400 italic">—</span>
+                                                    @endif
+                                                </td>
+
+                                                <!-- Yarn Leftover Weight -->
+                                                <td class="px-4 py-3 border-r border-gray-300 text-center">
+                                                    @if ($prep->alreadyDeveloped == 'Need to Develop')
+                                                        @if (Auth::user()->role === 'ADMIN' or Auth::user()->role === 'PRODUCTIONOFFICER')
+                                                            {{-- ADMIN/PRODUCTION OFFICER: Read-only --}}
+                                                            {{-- Check if yarn leftover weight is locked --}}
+                                                            @if ($prep->is_yarn_leftover_weight_locked)
+                                                                <span class="readonly">{{ $prep->yarnLeftoverWeight }}
+                                                                    g</span>
+                                                            @elseif ($prep->yarnLeftoverWeight)
+                                                                <span
+                                                                    class="inline-block bg-gray-200 dark:bg-gray-600 text-gray-500 dark:text-gray-400 text-sm font-medium px-3 py-1 rounded cursor-not-allowed"
+                                                                    title="Admin view only">
+                                                                    {{ $prep->yarnLeftoverWeight }} g
+                                                                </span>
+                                                            @else
+                                                                <span
+                                                                    class="inline-block bg-gray-200 dark:bg-gray-600 text-gray-500 dark:text-gray-400 text-sm font-medium px-3 py-1 rounded cursor-not-allowed"
+                                                                    title="Admin view only">
+                                                                    Not Provided
+                                                                </span>
+                                                            @endif
+                                                        @else
+                                                            {{-- Non-Admin Users --}}
+                                                            @php
+                                                                $canSave =
+                                                                    $prep->production &&
+                                                                    is_numeric($prep->production->production_output) &&
+                                                                    is_numeric($prep->production->damaged_output);
+                                                            @endphp
+
+                                                            @if (!$prep->is_yarn_leftover_weight_locked)
+                                                                {{-- Editable form --}}
+                                                                <form action="{{ route('rnd.updateYarnWeights') }}"
+                                                                    method="POST">
+                                                                    @csrf
+                                                                    <input type="hidden" name="id"
+                                                                        value="{{ $prep->id }}">
+                                                                    <input type="hidden" name="field"
+                                                                        value="yarnLeftoverWeight">
+                                                                    <input type="number" step="0.01" min="0"
+                                                                        name="value"
+                                                                        value="{{ $prep->yarnLeftoverWeight }}"
+                                                                        class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                                        required>
+
+                                                                    <button type="submit"
+                                                                        class="w-full mt-1 px-3 py-1 rounded text-sm transition-all duration-200
+                                                                            {{ $canSave ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-gray-300 text-gray-500 cursor-not-allowed' }}"
+                                                                        {{ $canSave ? '' : 'disabled' }}
+                                                                        title="{{ $canSave ? '' : 'Production Output and Damaged Output are required' }}">
+                                                                        Save
+                                                                    </button>
+                                                                </form>
+                                                            @else
+                                                                {{-- Locked - readonly --}}
+                                                                <span class="readonly">{{ $prep->yarnLeftoverWeight }}
+                                                                    g</span>
+                                                            @endif
+                                                        @endif
+                                                    @else
+                                                        <span class="text-gray-400 italic">—</span>
+                                                    @endif
                                                 </td>
 
                                                 <td class="px-4 py-3 border-r border-gray-300 text-center">
@@ -1350,7 +1597,7 @@
                                                         }
                                                     @endphp
 
-                                                    @if (Auth::user()->role === 'ADMIN')
+                                                    @if (Auth::user()->role === 'ADMIN' or Auth::user()->role === 'PRODUCTIONOFFICER')
                                                         {{-- ADMIN: Read-only --}}
                                                         @if ($prep->is_reference_locked)
                                                             <span class="readonly">{{ $prep->referenceNo }}</span>
@@ -1441,110 +1688,10 @@
                                                     @endif
                                                 </td>
 
-                                                <td
-                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
-                                                    @if ($prep->alreadyDeveloped == 'Need to Develop')
-                                                        @if ($prep->production && is_numeric($prep->production->production_output))
-                                                            <span class="readonly">
-                                                                {{ $prep->production->production_output }} g
-                                                            </span>
-                                                            <input
-                                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                                value="{{ $prep->production->production_output }} g" />
-                                                        @else
-                                                            <span class="text-gray-400 italic">Pending output</span>
-                                                        @endif
-                                                    @else
-                                                        <span class="text-gray-400 italic">—</span>
-                                                    @endif
-                                                </td>
-
-                                                <td
-                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
-                                                    @if ($prep->alreadyDeveloped == 'Need to Develop')
-                                                        @if ($prep->production && is_numeric($prep->production->damaged_output))
-                                                            <span class="readonly">
-                                                                {{ $prep->production->damaged_output }} g
-                                                            </span>
-                                                            <input
-                                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                                value="{{ $prep->production->damaged_output }} g" />
-                                                        @else
-                                                            <span class="text-gray-400 italic">Pending output</span>
-                                                        @endif
-                                                    @else
-                                                        <span class="text-gray-400 italic">—</span>
-                                                    @endif
-                                                </td>
-
-                                                <!-- Yarn Leftover Weight -->
-                                                <td class="px-4 py-3 border-r border-gray-300 text-center">
-                                                    @if ($prep->alreadyDeveloped == 'Need to Develop')
-                                                        @if (Auth::user()->role === 'ADMIN')
-                                                            {{-- ADMIN: Read-only --}}
-                                                            @if ($prep->is_yarn_leftover_weight_locked)
-                                                                <span class="readonly">{{ $prep->yarnLeftoverWeight }}
-                                                                    g</span>
-                                                            @elseif ($prep->yarnLeftoverWeight)
-                                                                <span
-                                                                    class="inline-block bg-gray-200 dark:bg-gray-600 text-gray-500 dark:text-gray-400 text-sm font-medium px-3 py-1 rounded cursor-not-allowed"
-                                                                    title="Admin view only">
-                                                                    {{ $prep->yarnLeftoverWeight }} g
-                                                                </span>
-                                                            @else
-                                                                <span
-                                                                    class="inline-block bg-gray-200 dark:bg-gray-600 text-gray-500 dark:text-gray-400 text-sm font-medium px-3 py-1 rounded cursor-not-allowed"
-                                                                    title="Admin view only">
-                                                                    Not Provided
-                                                                </span>
-                                                            @endif
-                                                        @else
-                                                            {{-- Non-Admin Users --}}
-                                                            @php
-                                                                $canSave =
-                                                                    $prep->production &&
-                                                                    is_numeric($prep->production->production_output) &&
-                                                                    is_numeric($prep->production->damaged_output);
-                                                            @endphp
-
-                                                            @if (!$prep->is_yarn_leftover_weight_locked)
-                                                                {{-- Editable form --}}
-                                                                <form action="{{ route('rnd.updateYarnWeights') }}"
-                                                                    method="POST">
-                                                                    @csrf
-                                                                    <input type="hidden" name="id"
-                                                                        value="{{ $prep->id }}">
-                                                                    <input type="hidden" name="field"
-                                                                        value="yarnLeftoverWeight">
-                                                                    <input type="number" step="0.01" min="0"
-                                                                        name="value"
-                                                                        value="{{ $prep->yarnLeftoverWeight }}"
-                                                                        class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                                        required>
-
-                                                                    <button type="submit"
-                                                                        class="w-full mt-1 px-3 py-1 rounded text-sm transition-all duration-200
-                                                                            {{ $canSave ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-gray-300 text-gray-500 cursor-not-allowed' }}"
-                                                                        {{ $canSave ? '' : 'disabled' }}
-                                                                        title="{{ $canSave ? '' : 'Production Output and Damaged Output are required' }}">
-                                                                        Save
-                                                                    </button>
-                                                                </form>
-                                                            @else
-                                                                {{-- Locked - readonly --}}
-                                                                <span class="readonly">{{ $prep->yarnLeftoverWeight }}
-                                                                    g</span>
-                                                            @endif
-                                                        @endif
-                                                    @else
-                                                        <span class="text-gray-400 italic">—</span>
-                                                    @endif
-                                                </td>
-
                                                 <!-- Notes -->
                                                 <td
                                                     class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
-                                                    @if (auth()->user()->role !== 'ADMIN')
+                                                    @if (auth()->user()->role !== 'ADMIN' or Auth::user()->role === 'PRODUCTIONOFFICER')
                                                         <form
                                                             action="{{ route('sample-inquery-details.update-notes', $prep->sample_inquiry_id) }}"
                                                             method="POST" class="w-full">
@@ -1657,6 +1804,10 @@
                                             <table class="w-full text-left border border-gray-300 text-sm">
                                                 <tbody>
                                                     <tr>
+                                                        <th class="p-2 border">Customer</th>
+                                                        <td class="p-2 border" id="modalCustomerName"></td>
+                                                    </tr>
+                                                    <tr>
                                                         <th class="p-2 border">Coordinator Name</th>
                                                         <td class="p-2 border" id="modalCoordinatorName"></td>
                                                     </tr>
@@ -1722,105 +1873,146 @@
         </div>
     </div>
 
+    <script>
+        function toggleDropdownItemAdd(button, type) {
+            const root = button.closest('[data-dropdown-root]');
+            const dropdownMenu = root.querySelector('.dropdown-menu-' + type);
+
+            // Close other open menus of the same type
+            document.querySelectorAll('.dropdown-menu-' + type).forEach(menu => {
+                if (menu !== dropdownMenu) menu.classList.add('hidden');
+            });
+
+            dropdownMenu.classList.toggle('hidden');
+        }
+
+        function selectDropdownOptionItemAdd(button, selectedValue, type) {
+            const root = button.closest('[data-dropdown-root]');
+            root.querySelector('.selected-' + type).innerText = selectedValue;
+            root.querySelector('.input-' + type).value = selectedValue;
+            root.querySelector('.dropdown-menu-' + type).classList.add('hidden');
+
+            const otherField = root.querySelector('.other-' + type + '-field');
+            const customInput = root.querySelector('.input-custom-' + type) || root.querySelector('.input-custom-supplier');
+
+            if (otherField) {
+                if (selectedValue === 'Other') {
+                    otherField.classList.remove('hidden');
+                    if (customInput) {
+                        customInput.removeAttribute('disabled');
+                        customInput.setAttribute('required', 'required');
+                        customInput.focus();
+                    }
+                } else {
+                    otherField.classList.add('hidden');
+                    if (customInput) {
+                        customInput.setAttribute('disabled', 'disabled');
+                        customInput.removeAttribute('required');
+                        customInput.value = '';
+                    }
+                }
+            }
+        }
+
+        // Click-outside handler: close any open menu when clicking outside its root
+        document.addEventListener('click', function(event) {
+            document.querySelectorAll('[class^="dropdown-menu-"]').forEach(menu => {
+                const root = menu.closest('[data-dropdown-root]');
+                if (root && !root.contains(event.target)) {
+                    menu.classList.add('hidden');
+                }
+            });
+        });
+    </script>
+
 
     <script>
         // ===== ORDER dropdown =====
         function toggleOrderDropdown() {
-            const menu = document.getElementById('orderDropdownMenu');
-            const btn = document.getElementById('orderDropdown');
-            const expanded = btn.getAttribute('aria-expanded') === 'true';
-
-            menu.classList.toggle('hidden');
-            btn.setAttribute('aria-expanded', !expanded);
+            toggleDropdown('orderDropdown', 'orderDropdownMenu');
         }
 
         function selectOrder(orderNo) {
-            document.getElementById('selectedOrderNo').innerText = orderNo || 'Select Order No';
-            document.getElementById('orderInput').value = orderNo;
-            closeDropdown('orderDropdown', 'orderDropdownMenu');
+            selectDropdownValue('orderDropdown', 'orderDropdownMenu', 'selectedOrderNo', 'orderInput', orderNo,
+                'Select Order No');
         }
 
         function filterOrders() {
-            const input = document.getElementById('orderSearchInput').value.toLowerCase();
-            const items = document.querySelectorAll('.order-option');
-
-            items.forEach(item => {
-                const text = item.textContent.toLowerCase();
-                item.style.display = text.includes(input) ? 'block' : 'none';
-            });
+            filterDropdown('.order-option', 'orderSearchInput');
         }
 
         // ===== PO dropdown =====
         function togglePODropdown() {
-            const menu = document.getElementById('poDropdownMenu');
-            const btn = document.getElementById('poDropdown');
-            const expanded = btn.getAttribute('aria-expanded') === 'true';
-
-            menu.classList.toggle('hidden');
-            btn.setAttribute('aria-expanded', !expanded);
+            toggleDropdown('poDropdown', 'poDropdownMenu');
         }
 
         function selectPO(poNo) {
-            document.getElementById('selectedPONo').innerText = poNo || 'Select PO No';
-            document.getElementById('poInput').value = poNo;
-            closeDropdown('poDropdown', 'poDropdownMenu');
+            selectDropdownValue('poDropdown', 'poDropdownMenu', 'selectedPONo', 'poInput', poNo, 'Select PO No');
         }
 
         function filterPOs() {
-            const input = document.getElementById('poSearchInput').value.toLowerCase();
-            const items = document.querySelectorAll('.po-option');
-
-            items.forEach(item => {
-                const text = item.textContent.toLowerCase();
-                item.style.display = text.includes(input) ? 'block' : 'none';
-            });
+            filterDropdown('.po-option', 'poSearchInput');
         }
 
         // ===== SHADE dropdown =====
         function toggleShadeDropdown() {
-            const menu = document.getElementById('shadeDropdownMenu');
-            const btn = document.getElementById('shadeDropdown');
-            const expanded = btn.getAttribute('aria-expanded') === 'true';
-
-            menu.classList.toggle('hidden');
-            btn.setAttribute('aria-expanded', !expanded);
+            toggleDropdown('shadeDropdown', 'shadeDropdownMenu');
         }
 
         function selectShade(shade) {
-            document.getElementById('selectedShade').innerText = shade || 'Select Shade';
-            document.getElementById('shadeInput').value = shade;
-            closeDropdown('shadeDropdown', 'shadeDropdownMenu');
+            selectDropdownValue('shadeDropdown', 'shadeDropdownMenu', 'selectedShade', 'shadeInput', shade, 'Select Shade');
         }
 
         function filterShades() {
-            const input = document.getElementById('shadeSearchInput').value.toLowerCase();
-            const items = document.querySelectorAll('.shade-option');
-
-            items.forEach(item => {
-                const text = item.textContent.toLowerCase();
-                item.style.display = text.includes(input) ? 'block' : 'none';
-            });
+            filterDropdown('.shade-option', 'shadeSearchInput');
         }
 
         // ===== REFERENCE NO dropdown =====
         function toggleRefDropdown() {
-            const menu = document.getElementById('refDropdownMenu');
-            const btn = document.getElementById('refDropdown');
+            toggleDropdown('refDropdown', 'refDropdownMenu');
+        }
+
+        function selectRef(ref) {
+            selectDropdownValue('refDropdown', 'refDropdownMenu', 'selectedRef', 'refInput', ref, 'Select Reference No');
+        }
+
+        function filterRefs() {
+            filterDropdown('.ref-option', 'refSearchInput');
+        }
+
+        // ===== COORDINATOR dropdown (NEW) =====
+        function toggleCoordinatorDropdown() {
+            toggleDropdown('coordinatorDropdown', 'coordinatorDropdownMenu');
+        }
+
+        function selectCoordinator(coordinator) {
+            selectDropdownValue('coordinatorDropdown', 'coordinatorDropdownMenu', 'selectedCoordinator', 'coordinatorInput',
+                coordinator, 'Select Coordinator');
+        }
+
+        function filterCoordinators() {
+            filterDropdown('.coordinator-option', 'coordinatorSearchInput');
+        }
+
+        // ===== Helper functions =====
+        function toggleDropdown(btnId, menuId) {
+            const btn = document.getElementById(btnId);
+            const menu = document.getElementById(menuId);
             const expanded = btn.getAttribute('aria-expanded') === 'true';
 
             menu.classList.toggle('hidden');
             btn.setAttribute('aria-expanded', !expanded);
         }
 
-        function selectRef(ref) {
-            document.getElementById('selectedRef').innerText = ref || 'Select Reference No';
-            document.getElementById('refInput').value = ref;
-            closeDropdown('refDropdown', 'refDropdownMenu');
+        function selectDropdownValue(btnId, menuId, selectedId, inputId, value, defaultText) {
+            document.getElementById(selectedId).innerText = value || defaultText;
+            document.getElementById(inputId).value = value;
+            closeDropdown(btnId, menuId);
         }
 
-        function filterRefs() {
-            const input = document.getElementById('refSearchInput').value.toLowerCase();
-            const items = document.querySelectorAll('.ref-option');
+        function filterDropdown(optionClass, inputId) {
+            const input = document.getElementById(inputId).value.toLowerCase();
+            const items = document.querySelectorAll(optionClass);
 
             items.forEach(item => {
                 const text = item.textContent.toLowerCase();
@@ -1828,76 +2020,94 @@
             });
         }
 
-        // ===== Helper to close dropdown =====
         function closeDropdown(btnId, menuId) {
             const btn = document.getElementById(btnId);
             const menu = document.getElementById(menuId);
-
             menu.classList.add('hidden');
             btn.setAttribute('aria-expanded', false);
         }
 
+        // ===== Clear all filters =====
         function clearFilters() {
-            // Order
-            document.getElementById('selectedOrderNo').innerText = 'Select Order No';
-            document.getElementById('orderInput').value = '';
-            document.getElementById('orderSearchInput').value = '';
-            filterOrders();
+            const dropdowns = [{
+                    selected: 'selectedOrderNo',
+                    input: 'orderInput',
+                    search: 'orderSearchInput',
+                    default: 'Select Order No',
+                    filterFunc: filterOrders
+                },
+                {
+                    selected: 'selectedPONo',
+                    input: 'poInput',
+                    search: 'poSearchInput',
+                    default: 'Select PO No',
+                    filterFunc: filterPOs
+                },
+                {
+                    selected: 'selectedShade',
+                    input: 'shadeInput',
+                    search: 'shadeSearchInput',
+                    default: 'Select Shade',
+                    filterFunc: filterShades
+                },
+                {
+                    selected: 'selectedRef',
+                    input: 'refInput',
+                    search: 'refSearchInput',
+                    default: 'Select Reference No',
+                    filterFunc: filterRefs
+                },
+                {
+                    selected: 'selectedCoordinator',
+                    input: 'coordinatorInput',
+                    search: 'coordinatorSearchInput',
+                    default: 'Select Coordinator',
+                    filterFunc: filterCoordinators
+                },
+            ];
 
-            // PO
-            document.getElementById('selectedPONo').innerText = 'Select PO No';
-            document.getElementById('poInput').value = '';
-            document.getElementById('poSearchInput').value = '';
-            filterPOs();
+            dropdowns.forEach(d => {
+                document.getElementById(d.selected).innerText = d.default;
+                document.getElementById(d.input).value = '';
+                document.getElementById(d.search).value = '';
+                d.filterFunc();
+            });
 
-            // Shade
-            document.getElementById('selectedShade').innerText = 'Select Shade';
-            document.getElementById('shadeInput').value = '';
-            document.getElementById('shadeSearchInput').value = '';
-            filterShades();
-
-            // Reference No
-            document.getElementById('selectedRef').innerText = 'Select Reference No';
-            document.getElementById('refInput').value = '';
-            document.getElementById('refSearchInput').value = '';
-            filterRefs();
-
-            // Dates
+            // Clear dates
             document.getElementById('customerRequestedDate').value = '';
             document.getElementById('developmentPlanDate').value = '';
         }
 
-
         // ===== Close dropdowns if click outside =====
         document.addEventListener('click', function(e) {
-            // List of dropdowns to check
             const dropdowns = [{
-                    btnId: 'orderDropdown',
-                    menuId: 'orderDropdownMenu'
+                    btn: 'orderDropdown',
+                    menu: 'orderDropdownMenu'
                 },
                 {
-                    btnId: 'poDropdown',
-                    menuId: 'poDropdownMenu'
+                    btn: 'poDropdown',
+                    menu: 'poDropdownMenu'
                 },
                 {
-                    btnId: 'shadeDropdown',
-                    menuId: 'shadeDropdownMenu'
+                    btn: 'shadeDropdown',
+                    menu: 'shadeDropdownMenu'
                 },
                 {
-                    btnId: 'refDropdown',
-                    menuId: 'refDropdownMenu'
-                }
+                    btn: 'refDropdown',
+                    menu: 'refDropdownMenu'
+                },
+                {
+                    btn: 'coordinatorDropdown',
+                    menu: 'coordinatorDropdownMenu'
+                }, // new
             ];
 
-            dropdowns.forEach(({
-                btnId,
-                menuId
-            }) => {
-                const btn = document.getElementById(btnId);
-                const menu = document.getElementById(menuId);
+            dropdowns.forEach(d => {
+                const btn = document.getElementById(d.btn);
+                const menu = document.getElementById(d.menu);
 
                 if (!btn.contains(e.target) && !menu.contains(e.target)) {
-                    closeDropdown(btnId, menuId);
+                    closeDropdown(d.btn, d.menu);
                 }
             });
         });
@@ -2093,9 +2303,11 @@
         });
     </script>
     <script>
-        function openRndSampleModal(orderNo, coordinatorName, item, description, size, qtRef, color, style, sampleQty,
+        function openRndSampleModal(orderNo, customerName, coordinatorName, item, description, size, qtRef, color, style,
+            sampleQty,
             specialComment, requestDate) {
             document.getElementById('modalRndOrderNo').textContent = 'Order Number ' + orderNo;
+            document.getElementById('modalCustomerName').textContent = customerName;
             document.getElementById('modalCoordinatorName').textContent = coordinatorName;
             document.getElementById('modalItem').textContent = item;
             document.getElementById('modalDescription').textContent = description;
@@ -2353,6 +2565,46 @@
                     menu.classList.add('hidden');
                 }
             });
+        });
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            let container = document.getElementById("ResearchAndDevelopmentRecordsScroll");
+
+            // Restore table scroll immediately after DOM loaded
+            if (container) {
+                let scrollTop = localStorage.getItem("tableScrollTop");
+                let scrollLeft = localStorage.getItem("tableScrollLeft");
+                if (scrollTop !== null) container.scrollTop = parseInt(scrollTop);
+                if (scrollLeft !== null) container.scrollLeft = parseInt(scrollLeft);
+                // Optionally clear
+                localStorage.removeItem("tableScrollTop");
+                localStorage.removeItem("tableScrollLeft");
+            }
+
+            // Save table scroll on form submit
+            document.querySelectorAll("form").forEach(form => {
+                form.addEventListener("submit", function() {
+                    if (container) {
+                        localStorage.setItem("tableScrollTop", container.scrollTop);
+                        localStorage.setItem("tableScrollLeft", container.scrollLeft);
+                    }
+                });
+            });
+        });
+
+        // Restore page scroll after full load (including images etc)
+        window.onload = function() {
+            let pageScroll = localStorage.getItem("pageScrollY");
+            if (pageScroll !== null) {
+                window.scrollTo(0, parseInt(pageScroll));
+                localStorage.removeItem("pageScrollY");
+            }
+        };
+
+        // Save page scroll position before unload
+        window.addEventListener("beforeunload", function() {
+            localStorage.setItem("pageScrollY", window.scrollY);
         });
     </script>
 @endsection

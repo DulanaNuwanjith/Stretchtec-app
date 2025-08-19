@@ -39,7 +39,7 @@ class ProductCatalogController extends Controller
     // Display a listing of the product catalog entries
     public function codeCatalog(Request $request)
     {
-        $query = ProductCatalog::where('item', 'Code');
+        $query = ProductCatalog::where('item', 'Cord');
 
         // Apply filters
         if ($request->filled('orderNo')) {
@@ -57,9 +57,9 @@ class ProductCatalogController extends Controller
         $catalogs = $query->latest()->paginate(15)->appends($request->query());
 
         // Pass dropdown values for filtering (unique list)
-        $orderNos = ProductCatalog::where('item', 'Code')->distinct()->pluck('order_no');
-        $merchandisers = ProductCatalog::where('item', 'Code')->distinct()->pluck('coordinator_name');
-        $referenceNos = ProductCatalog::where('item', 'Code')->distinct()->pluck('reference_no');
+        $orderNos = ProductCatalog::where('item', 'Cord')->distinct()->pluck('order_no');
+        $merchandisers = ProductCatalog::where('item', 'Cord')->distinct()->pluck('coordinator_name');
+        $referenceNos = ProductCatalog::where('item', 'Cord')->distinct()->pluck('reference_no');
 
         return view('production-catalog.pages.codeCatalog', compact('catalogs', 'orderNos', 'merchandisers', 'referenceNos'));
     }
@@ -67,7 +67,7 @@ class ProductCatalogController extends Controller
     // Display a listing of the product catalog entries
     public function tapeCatalog(Request $request)
     {
-        $query = ProductCatalog::where('item', 'Tape');
+        $query = ProductCatalog::where('item', 'Twill Tape');
 
         // Apply filters
         if ($request->filled('orderNo')) {
@@ -85,9 +85,9 @@ class ProductCatalogController extends Controller
         $catalogs = $query->latest()->paginate(15)->appends($request->query());
 
         // Pass dropdown values for filtering (unique list)
-        $orderNos = ProductCatalog::where('item', 'Tape')->distinct()->pluck('order_no');
-        $merchandisers = ProductCatalog::where('item', 'Tape')->distinct()->pluck('coordinator_name');
-        $referenceNos = ProductCatalog::where('item', 'Tape')->distinct()->pluck('reference_no');
+        $orderNos = ProductCatalog::where('item', 'Twill Tape')->distinct()->pluck('order_no');
+        $merchandisers = ProductCatalog::where('item', 'Twill Tape')->distinct()->pluck('coordinator_name');
+        $referenceNos = ProductCatalog::where('item', 'Twill Tape')->distinct()->pluck('reference_no');
 
         return view('production-catalog.pages.tapeCatalog', compact('catalogs', 'orderNos', 'merchandisers', 'referenceNos'));
     }
@@ -111,6 +111,8 @@ class ProductCatalogController extends Controller
             'colour' => 'nullable|string|max:255',
             'shade' => 'nullable|string|max:255',
             'tkt' => 'nullable|string|max:255',
+            'supplier' => 'nullable|string|max:255',
+            'pst_no' => 'nullable|string|max:255',
         ]);
 
         ProductCatalog::create($request->all());
@@ -130,6 +132,8 @@ class ProductCatalogController extends Controller
             'colour' => 'nullable|string|max:255',
             'shade' => 'nullable|string|max:255',
             'tkt' => 'nullable|string|max:255',
+            'supplier' => 'nullable|string|max:255',
+            'pst_no' => 'nullable|string|max:255',
         ]);
 
         $data = $request->all();
@@ -151,14 +155,16 @@ class ProductCatalogController extends Controller
             'colour' => 'nullable|string|max:255',
             'shade' => 'nullable|string|max:255',
             'tkt' => 'nullable|string|max:255',
+            'supplier' => 'nullable|string|max:255',
+            'pst_no' => 'nullable|string|max:255',
         ]);
 
         $data = $request->all();
-        $data['item'] = 'Code'; // force item
+        $data['item'] = 'Cord'; // force item
 
         ProductCatalog::create($data);
 
-        return redirect()->route('codeCatalog.index')->with('success', 'Code catalog entry created.');
+        return redirect()->route('codeCatalog.index')->with('success', 'Cord catalog entry created.');
     }
 
     public function storeTape(Request $request)
@@ -172,10 +178,12 @@ class ProductCatalogController extends Controller
             'colour' => 'nullable|string|max:255',
             'shade' => 'nullable|string|max:255',
             'tkt' => 'nullable|string|max:255',
+            'supplier' => 'nullable|string|max:255',
+            'pst_no' => 'nullable|string|max:255',
         ]);
 
         $data = $request->all();
-        $data['item'] = 'Tape'; // force item
+        $data['item'] = 'Twill Tape'; // force item
 
         ProductCatalog::create($data);
 

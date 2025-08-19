@@ -119,10 +119,6 @@
                         <div class="flex justify-between items-center mb-6">
                             <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">User Details
                             </h1>
-                            {{-- <button onclick="document.getElementById('addNewUserModal').classList.remove('hidden')"
-                                class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded shadow">
-                                + Add New User
-                            </button> --}}
                         </div>
 
                         <div class="overflow-x-auto bg-white dark:bg-gray-900 shadow rounded-lg">
@@ -182,16 +178,6 @@
                                             </td>
                                             <td class="px-4 py-3 w-48 text-center whitespace-normal break-words">
                                                 <div class="flex space-x-2 justify-center">
-                                                    {{-- <button class="bg-green-600 h-10 hover:bg-green-700 text-white px-3 py-1 rounded text-sm"
-                                                        onclick="editRow('{{ $rowId }}')">Edit</button>
-                                                <button class="bg-blue-600 h-10 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm hidden"
-                                                        onclick="saveRow('{{ $rowId }}')">Save</button>
-                                                <form action="{{route('userDetails.destroy', $user->id)}} " method="POST"
-                                                      onsubmit="return confirm('Are you sure you want to delete this user?');">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button class="bg-red-600 h-10 hover:bg-red-700 text-white px-3 py-1 rounded text-sm">Delete</button>
-                                                </form> --}}
                                                     <form id="delete-form-{{ $user->id }}"
                                                         action="{{ route('userDetails.destroy', $user->id) }}"
                                                         method="POST" class="inline-block">
@@ -220,104 +206,10 @@
                         <div class="py-6 flex justify-center">
                             {{ $users->links() }}
                         </div>
-                        <!-- Add Product Modal -->
-                        {{-- <div id="addNewUserModal"
-                            class="fixed inset-0 z-50 hidden bg-black bg-opacity-50 flex items-center justify-center py-5">
-                            <div class="w-full max-w-[700px] bg-white dark:bg-gray-900 rounded-2xl shadow-2xl p-4 transform transition-all scale-95 max-h-[calc(100vh-10rem)] overflow-y-auto"
-                                onclick="event.stopPropagation()">
-                                <div class="max-w-[600px] mx-auto p-6">
-                                    <h2
-                                        class="text-2xl font-semibold mb-8 text-blue-900 mt-4 dark:text-gray-100 text-center">
-                                        Add New User
-                                    </h2>
-                                    <x-validation-errors class="mb-10" />
-
-                                    <form method="POST" action="{{ route('register') }}">
-                                        @csrf
-
-                                        <div>
-                                            <x-label for="name" value="{{ __('Name') }}" />
-                                            <x-input id="name" class="block mt-1 w-full h-10 p-4" type="text"
-                                                name="name" :value="old('name')" required autofocus autocomplete="name" />
-                                        </div>
-
-                                        <div class="mt-4">
-                                            <x-label for="email" value="{{ __('Email') }}" />
-                                            <x-input id="email" class="block mt-1 w-full h-10 p-4" type="email"
-                                                name="email" :value="old('email')" required autocomplete="username" />
-                                        </div>
-
-                                        <div class="mt-4">
-                                            <x-label for="password" value="{{ __('Password') }}" />
-                                            <div class="relative mb-2">
-                                                <input id="password" type="password" name="password" required
-                                                    autocomplete="new-password"
-                                                    class="block mt-1 w-full h-10 p-4 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" />
-                                                <button type="button" onclick="togglePassword()"
-                                                    class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-600 hover:text-blue-600">
-                                                    <svg id="eyeIcon" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                        viewBox="0 0 24 24" stroke="currentColor" class="w-5 h-5">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            stroke-width="2"
-                                                            d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7a9.955 9.955 0 012.188-3.368M6.72 6.72A9.964 9.964 0 0112 5c4.477 0 8.267 2.943 9.541 7a9.966 9.966 0 01-4.292 5.222M15 12a3 3 0 00-4.243-2.828M9.878 9.878a3 3 0 004.243 4.243M3 3l18 18" />
-                                                    </svg>
-                                                </button>
-                                            </div>
-                                        </div>
-
-                                        <div class="mt-4">
-                                            <x-label for="password_confirmation" value="{{ __('Confirm Password') }}" />
-                                            <x-input id="password_confirmation" class="block mt-1 w-full h-10 p-4"
-                                                type="password" name="password_confirmation" required
-                                                autocomplete="new-password" />
-                                        </div>
-
-                                        @if (Laravel\Jetstream\Jetstream::hasTermsAndPrivacyPolicyFeature())
-                                            <div class="mt-4">
-                                                <x-label for="terms">
-                                                    <div class="flex items-center">
-                                                        <x-checkbox name="terms" id="terms" required />
-
-                                                        <div class="ms-2">
-                                                            {!! __('I agree to the :terms_of_service and :privacy_policy', [
-                                                                'terms_of_service' =>
-                                                                    '<a target="_blank" href="' .
-                                                                    route('terms.show') .
-                                                                    '" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">' .
-                                                                    __('Terms of Service') .
-                                                                    '</a>',
-                                                                'privacy_policy' =>
-                                                                    '<a target="_blank" href="' .
-                                                                    route('policy.show') .
-                                                                    '" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">' .
-                                                                    __('Privacy Policy') .
-                                                                    '</a>',
-                                                            ]) !!}
-                                                        </div>
-                                                    </div>
-                                                </x-label>
-                                            </div>
-                                        @endif
-
-                                        <div class="flex items-center justify-end mt-10">
-                                            <button type="button"
-                                                onclick="document.getElementById('addNewUserModal').classList.add('hidden')"
-                                                class="px-4 py-2 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 text-sm rounded hover:bg-gray-300">
-                                                Cancel
-                                            </button>
-                                            <x-button class="ms-4">
-                                                {{ __('Register') }}
-                                            </x-button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div> --}}
                     </div>
                 </div>
             </div>
         </div>
-    </div>
     </div>
 
 

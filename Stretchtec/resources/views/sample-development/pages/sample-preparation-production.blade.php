@@ -207,7 +207,7 @@
                                 </h1>
                             </div>
 
-                            <div class="overflow-x-auto max-h-[1200px] bg-white dark:bg-gray-900 shadow rounded-lg">
+                            <div id="SampleProductionRecordsScroll" class="overflow-x-auto max-h-[1200px] bg-white dark:bg-gray-900 shadow rounded-lg">
                                 <table class="table-fixed w-full text-sm divide-y divide-gray-200 dark:divide-gray-700">
                                     <thead class="bg-gray-100 dark:bg-gray-700 text-left">
                                         <tr class="text-center">
@@ -278,7 +278,9 @@
             '{{ addslashes($prod->sampleInquiry->color ?? '-') }}',
             '{{ addslashes($prod->sampleInquiry->style ?? '-') }}',
             '{{ addslashes($prod->sampleInquiry->sampleQty ?? '-') }}',
-            '{{ addslashes($prod->samplePreparationRnd->shade ?? '-') }}'
+            '{{ addslashes($prod->samplePreparationRnd->shade ?? '-') }}',
+            '{{ addslashes($prod->operator_name ?? '-') }}',
+            '{{ addslashes($prod->supervisor_name ?? '-') }}',
         )">
                                                         {{ $prod->order_no }}
                                                     </span>
@@ -743,8 +745,9 @@
                                                             @endif
                                                         @endauth --}}
                                                         @if ($prod->order_file_url)
-                                                            <a href="{{ $prod->order_file_url }}" target="_blank"
-                                                                class="bg-gray-600 h-10 w-20 hover:bg-gray-700 text-white px-3 py-2 rounded text-sm flex items-center justify-center ml-2">
+                                                            <a href="{{ asset('storage/' . $prod->sampleInquiry->orderFile) }}"
+                                                               target="_blank"
+                                                               class="bg-gray-600 h-10 w-20 hover:bg-gray-700 text-white px-3 py-2 rounded text-sm flex items-center justify-center ml-2">
                                                                 View
                                                             </a>
                                                         @else
@@ -761,63 +764,92 @@
                                         @endforeach
                                     </tbody>
                                 </table>
+
                                 <!-- Sample Details Modal -->
                                 <div id="viewDetailsSample"
-                                    class="fixed inset-0 z-50 hidden bg-black bg-opacity-50 flex items-center justify-center py-5"
-                                    onclick="this.classList.add('hidden')">
+                                     class="fixed inset-0 z-50 hidden bg-black bg-opacity-50 flex items-center justify-center py-5"
+                                     onclick="this.classList.add('hidden')">
 
                                     <div class="w-full max-w-[700px] bg-white dark:bg-gray-900 rounded-2xl shadow-2xl p-4 transform transition-all scale-95 max-h-[calc(100vh-10rem)] overflow-y-auto"
-                                        onclick="event.stopPropagation()">
+                                         onclick="event.stopPropagation()">
 
-                                        <div class="max-w-[600px] mx-auto p-6">
+                                        <div class="max-w-[600px] mx-auto p-6" id="printAreaSample">
                                             <h2 id="modalOrderNo"
                                                 class="text-2xl font-semibold mb-6 text-blue-900 text-center">Order Number
                                             </h2>
 
                                             <table class="w-full text-left border border-gray-300 text-sm">
                                                 <tbody>
-                                                    <tr>
-                                                        <th class="p-2 border">Item</th>
-                                                        <td class="p-2 border" id="modalItem"></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th class="p-2 border">Item Description</th>
-                                                        <td class="p-2 border" id="modalDescription"></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th class="p-2 border">Size</th>
-                                                        <td class="p-2 border" id="modalSize"></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th class="p-2 border">QT Ref</th>
-                                                        <td class="p-2 border" id="modalQTRef"></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th class="p-2 border">Color</th>
-                                                        <td class="p-2 border" id="modalColor"></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th class="p-2 border">Style</th>
-                                                        <td class="p-2 border" id="modalStyle"></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th class="p-2 border">Sample Qty</th>
-                                                        <td class="p-2 border" id="modalSampleQty"></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th class="p-2 border">Shade</th>
-                                                        <td class="p-2 border" id="modalShade"></td>
-                                                    </tr>
+                                                <tr>
+                                                    <th class="p-2 border">Item</th>
+                                                    <td class="p-2 border" id="modalItem"></td>
+                                                </tr>
+                                                <tr>
+                                                    <th class="p-2 border">Item Description</th>
+                                                    <td class="p-2 border" id="modalDescription"></td>
+                                                </tr>
+                                                <tr>
+                                                    <th class="p-2 border">Size</th>
+                                                    <td class="p-2 border" id="modalSize"></td>
+                                                </tr>
+                                                <tr>
+                                                    <th class="p-2 border">QT Ref</th>
+                                                    <td class="p-2 border" id="modalQTRef"></td>
+                                                </tr>
+                                                <tr>
+                                                    <th class="p-2 border">Color</th>
+                                                    <td class="p-2 border" id="modalColor"></td>
+                                                </tr>
+                                                <tr>
+                                                    <th class="p-2 border">Style</th>
+                                                    <td class="p-2 border" id="modalStyle"></td>
+                                                </tr>
+                                                <tr>
+                                                    <th class="p-2 border">Sample Qty</th>
+                                                    <td class="p-2 border" id="modalSampleQty"></td>
+                                                </tr>
+                                                <tr>
+                                                    <th class="p-2 border">Shade</th>
+                                                    <td class="p-2 border" id="modalShade"></td>
+                                                </tr>
+                                                <tr>
+                                                    <th class="p-2 border">Operator Name</th>
+                                                    <td class="p-2 border" id="modalOperator"></td>
+                                                </tr>
+                                                <tr>
+                                                    <th class="p-2 border">Supervisor Name</th>
+                                                    <td class="p-2 border" id="modalSupervisor"></td>
+                                                </tr>
                                                 </tbody>
                                             </table>
 
-                                            <div class="text-center mt-6">
-                                                <button
-                                                    onclick="document.getElementById('viewDetailsSample').classList.add('hidden')"
-                                                    class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-md">
-                                                    Close
-                                                </button>
+                                            <!-- Signature spaces (only visible in print) -->
+                                            <div class="hidden print:flex justify-between mt-20">
+                                                <div class="w-1/3 text-center">
+                                                    <div class="border-t border-black mt-16"></div>
+                                                    <span class="text-sm">Prepared By</span>
+                                                </div>
+                                                <div class="w-1/3 text-center">
+                                                    <div class="border-t border-black mt-16"></div>
+                                                    <span class="text-sm">Approved By</span>
+                                                </div>
                                             </div>
+
+                                        </div>
+
+                                        <!-- Buttons -->
+                                        <div class="text-center mt-6 flex justify-center gap-4 mb-10">
+                                            <button
+                                                onclick="document.getElementById('viewDetailsSample').classList.add('hidden')"
+                                                class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-md">
+                                                Close
+                                            </button>
+
+                                            <button
+                                                onclick="printSampleDetails()"
+                                                class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-md">
+                                                Print
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -832,6 +864,23 @@
             </div>
         </div>
     </div>
+
+    <script>
+        function printSampleDetails() {
+            const printContent = document.getElementById('printAreaSample').innerHTML;
+            const originalContent = document.body.innerHTML;
+
+            document.body.innerHTML = `
+            <div style="max-width: 700px; margin: auto;">
+                ${printContent}
+            </div>
+        `;
+
+            window.print();
+            document.body.innerHTML = originalContent;
+            location.reload(); // reload to restore JS event listeners
+        }
+    </script>
 
     <script>
         function editServiceRow(rowId) {
@@ -996,7 +1045,7 @@
     </script>
 
     <script>
-        function openSampleModal(orderNo, item, description, size, qtRef, color, style, sampleQty, shade) {
+        function openSampleModal(orderNo, item, description, size, qtRef, color, style, sampleQty, shade, operator, supervisor) {
             document.getElementById('modalOrderNo').textContent = 'Order Number: ' + orderNo;
             document.getElementById('modalItem').textContent = item;
             document.getElementById('modalDescription').textContent = description;
@@ -1006,6 +1055,8 @@
             document.getElementById('modalStyle').textContent = style;
             document.getElementById('modalSampleQty').textContent = sampleQty;
             document.getElementById('modalShade').textContent = shade;
+            document.getElementById('modalOperator').textContent = operator;
+            document.getElementById('modalSupervisor').textContent = supervisor;
 
             document.getElementById('viewDetailsSample').classList.remove('hidden');
         }
@@ -1147,6 +1198,46 @@
                     menu.classList.add('hidden');
                 }
             });
+        });
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            let container = document.getElementById("SampleProductionRecordsScroll");
+
+            // Restore table scroll immediately after DOM loaded
+            if (container) {
+                let scrollTop = localStorage.getItem("tableScrollTop");
+                let scrollLeft = localStorage.getItem("tableScrollLeft");
+                if (scrollTop !== null) container.scrollTop = parseInt(scrollTop);
+                if (scrollLeft !== null) container.scrollLeft = parseInt(scrollLeft);
+                // Optionally clear
+                localStorage.removeItem("tableScrollTop");
+                localStorage.removeItem("tableScrollLeft");
+            }
+
+            // Save table scroll on form submit
+            document.querySelectorAll("form").forEach(form => {
+                form.addEventListener("submit", function() {
+                    if (container) {
+                        localStorage.setItem("tableScrollTop", container.scrollTop);
+                        localStorage.setItem("tableScrollLeft", container.scrollLeft);
+                    }
+                });
+            });
+        });
+
+        // Restore page scroll after full load (including images etc)
+        window.onload = function() {
+            let pageScroll = localStorage.getItem("pageScrollY");
+            if (pageScroll !== null) {
+                window.scrollTo(0, parseInt(pageScroll));
+                localStorage.removeItem("pageScrollY");
+            }
+        };
+
+        // Save page scroll position before unload
+        window.addEventListener("beforeunload", function() {
+            localStorage.setItem("pageScrollY", window.scrollY);
         });
     </script>
 @endsection

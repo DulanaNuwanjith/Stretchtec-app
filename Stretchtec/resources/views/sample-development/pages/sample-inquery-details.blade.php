@@ -128,6 +128,10 @@
                                     <img src="{{ asset('icons/filter.png') }}" class="w-6 h-6" alt="Filter Icon">
                                     Filters
                                 </button>
+                                <button onclick="toggleReportForm()"
+                                    class="bg-white border border-blue-500 text-blue-500 hover:text-blue-600 hover:border-blue-600 font-semibold py-1 px-3 rounded shadow flex items-center gap-2 mb-6 ml-2">
+                                    Generate Report
+                                </button>
                             </div>
 
                             <div id="filterFormContainer" class="hidden mt-4">
@@ -135,6 +139,53 @@
                                 <form id="filterForm1" method="GET" action="{{ route('sample-inquery-details.index') }}"
                                     class="mb-6 sticky top-0 z-40 flex gap-6 items-center">
                                     <div class="flex items-center gap-4 flex-wrap">
+
+                                        <!-- ORDER NO DROPDOWN -->
+                                        <div class="relative inline-block text-left w-48">
+                                            <label for="orderNoDropdown"
+                                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Order
+                                                No</label>
+                                            <div>
+                                                <button type="button" id="orderNoDropdown"
+                                                    class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10 dark:bg-gray-700 dark:text-white"
+                                                    onclick="toggleDropdown('orderNo')" aria-haspopup="listbox"
+                                                    aria-expanded="false">
+                                                    <span
+                                                        id="selectedOrderNo">{{ request('orderNo') ? request('orderNo') : 'Select Order No' }}</span>
+                                                    <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20"
+                                                        fill="currentColor">
+                                                        <path fill-rule="evenodd"
+                                                            d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
+                                                            clip-rule="evenodd" />
+                                                    </svg>
+                                                </button>
+                                            </div>
+
+                                            <div id="orderNoDropdownMenu"
+                                                class="hidden absolute z-40 mt-2 w-full rounded-md bg-white shadow-lg ring-1 ring-black/5 dark:bg-gray-700 max-h-48 overflow-y-auto">
+                                                <div class="p-2 sticky top-0 bg-white dark:bg-gray-700 z-10">
+                                                    <input type="text" id="orderNoSearchInput"
+                                                        placeholder="Search order numbers..."
+                                                        class="w-full px-2 py-1 text-sm border rounded-md dark:bg-gray-600 dark:text-white dark:placeholder-gray-300"
+                                                        onkeyup="filterOptions('orderNo')" />
+                                                </div>
+                                                <div class="py-1" role="listbox" tabindex="-1"
+                                                    aria-labelledby="orderNoDropdown">
+                                                    <button type="button"
+                                                        class="orderNo-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
+                                                        onclick="selectOption('orderNo', '')">Select Order No</button>
+
+                                                    @foreach ($orderNos as $orderNo)
+                                                        <button type="button"
+                                                            class="orderNo-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
+                                                            onclick="selectOption('orderNo', '{{ $orderNo }}')">{{ $orderNo }}</button>
+                                                    @endforeach
+                                                </div>
+                                            </div>
+
+                                            <input type="hidden" name="orderNo" id="orderNoInput"
+                                                value="{{ request('orderNo') }}">
+                                        </div>
 
                                         <!-- CUSTOMER DROPDOWN -->
                                         <div class="relative inline-block text-left w-48">
@@ -178,6 +229,53 @@
                                             </div>
                                             <input type="hidden" name="customer" id="customerInput"
                                                 value="{{ request('customer') }}">
+                                        </div>
+
+                                        <!-- COORDINATOR DROPDOWN -->
+                                        <div class="relative inline-block text-left w-56">
+                                            <label for="coordinatorDropdown"
+                                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                                Coordinator
+                                            </label>
+                                            <div>
+                                                <button type="button" id="coordinatorDropdown"
+                                                    class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10 dark:bg-gray-700 dark:text-white"
+                                                    aria-haspopup="listbox" aria-expanded="false">
+                                                    <span id="selectedCoordinator">
+                                                        {{ request('coordinator') ? implode(', ', (array) request('coordinator')) : 'Select Coordinator(s)' }}
+                                                    </span>
+                                                    <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20"
+                                                        fill="currentColor">
+                                                        <path fill-rule="evenodd"
+                                                            d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
+                                                            clip-rule="evenodd" />
+                                                    </svg>
+                                                </button>
+                                            </div>
+
+                                            <div id="coordinatorDropdownMenu"
+                                                class="hidden absolute z-40 mt-2 w-full rounded-md bg-white shadow-lg ring-1 ring-black/5 dark:bg-gray-700 max-h-48 overflow-y-auto">
+
+                                                <div class="p-2 sticky top-0 bg-white dark:bg-gray-700 z-10">
+                                                    <input type="text" id="coordinatorSearchInput"
+                                                        placeholder="Search coordinators..."
+                                                        class="w-full px-2 py-1 text-sm border rounded-md dark:bg-gray-600 dark:text-white dark:placeholder-gray-300" />
+                                                </div>
+
+                                                <div class="py-1" id="coordinatorOptions" role="listbox"
+                                                    tabindex="-1" aria-labelledby="coordinatorDropdown">
+                                                    @foreach ($coordinators as $coordinator)
+                                                        <label
+                                                            class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600">
+                                                            <input type="checkbox" name="coordinator[]"
+                                                                value="{{ $coordinator }}"
+                                                                {{ in_array($coordinator, (array) request('coordinator', [])) ? 'checked' : '' }}
+                                                                class="mr-2 coordinator-checkbox">
+                                                            {{ $coordinator }}
+                                                        </label>
+                                                    @endforeach
+                                                </div>
+                                            </div>
                                         </div>
 
                                         <!-- MERCHANDISER DROPDOWN -->
@@ -401,24 +499,115 @@
                                 </form>
                             </div>
 
-                            <div class="flex justify-between items-center mb-6">
-                                <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Sample Inquiry Records</h1>
-                                <div class="flex space-x-3">
-                                    {{-- Only show Add New Order if NOT ADMIN --}}
-                                    @if (Auth::user()->role !== 'ADMIN')
-                                        <button
-                                            onclick="document.getElementById('addSampleModal').classList.remove('hidden')"
-                                            class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded shadow">
-                                            + Add New Order
-                                        </button>
-                                    @endif
+                            <div class="flex-1">
+                                <div id="reportFormContainer" class="hidden mt-4">
+                                    <form action="{{ route('report.sampleInquiryReport') }}" method="POST"
+                                        class="flex space-x-3">
+                                        @csrf
 
-                                    <a href="{{ route('sampleStock.index') }}">
-                                        <button
-                                            class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded shadow">
-                                            Sample Stock Management
-                                        </button>
-                                    </a>
+                                        <!-- Start Date -->
+                                        <div>
+                                            <label
+                                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-">Start
+                                                Date</label>
+                                            <input type="date" name="start_date"
+                                                class="border rounded w-full p-2 mt-1" required>
+                                        </div>
+
+                                        <!-- End Date -->
+                                        <div>
+                                            <label
+                                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-">End
+                                                Date</label>
+                                            <input type="date" name="end_date" class="border rounded w-full p-2 mt-1"
+                                                required>
+                                        </div>
+
+                                        <!-- Coordinator Name (Multiple Select) -->
+                                        <div class="relative inline-block text-left w-56">
+                                            <label for="coordinatorDropdownReport"
+                                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                                Coordinator Name
+                                            </label>
+                                            <div>
+                                                <button type="button" id="coordinatorDropdownReport"
+                                                    class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10 dark:bg-gray-700 dark:text-white"
+                                                    aria-haspopup="listbox" aria-expanded="false">
+                                                    <span id="selectedCoordinatorsReport">
+                                                        {{ request('coordinatorName') ? implode(', ', (array) request('coordinatorName')) : 'Select Coordinator(s)' }}
+                                                    </span>
+                                                    <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20"
+                                                        fill="currentColor">
+                                                        <path fill-rule="evenodd"
+                                                            d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
+                                                            clip-rule="evenodd" />
+                                                    </svg>
+                                                </button>
+                                            </div>
+
+                                            <div id="coordinatorDropdownMenuReport"
+                                                class="hidden absolute z-40 mt-2 w-full rounded-md bg-white shadow-lg ring-1 ring-black/5 dark:bg-gray-700 max-h-48 overflow-y-auto">
+
+                                                <div class="p-2 sticky top-0 bg-white dark:bg-gray-700 z-10">
+                                                    <input type="text" id="coordinatorSearchInputReport"
+                                                        placeholder="Search coordinator..."
+                                                        class="w-full px-2 py-1 text-sm border rounded-md dark:bg-gray-600 dark:text-white dark:placeholder-gray-300" />
+                                                </div>
+
+                                                <div class="py-1" id="coordinatorOptionsReport" role="listbox"
+                                                    tabindex="-1" aria-labelledby="coordinatorDropdownReport">
+                                                    @php
+                                                        $coordinators = \App\Models\SampleInquiry::select(
+                                                            'coordinatorName',
+                                                        )
+                                                            ->distinct()
+                                                            ->pluck('coordinatorName');
+                                                    @endphp
+                                                    @foreach ($coordinators as $merch)
+                                                        <label
+                                                            class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600">
+                                                            <input type="checkbox" name="coordinatorName[]"
+                                                                value="{{ $merch }}"
+                                                                {{ in_array($merch, (array) request('coordinatorName', [])) ? 'checked' : '' }}
+                                                                class="mr-2 coordinator-checkboxReport">
+                                                            {{ $merch }}
+                                                        </label>
+                                                    @endforeach
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Submit Button -->
+                                        <div>
+                                            <button type="submit"
+                                                class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded shadow mt-6">
+                                                Generate PDF
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+
+                                <div class="flex justify-between items-center mb-6">
+                                    <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Sample Inquiry Records
+                                    </h1>
+
+                                    <div class="flex space-x-3">
+                                        {{-- Only show Add New Order if NOT ADMIN --}}
+                                        @if (Auth::user()->role !== 'ADMIN')
+                                            <button
+                                                onclick="document.getElementById('addSampleModal').classList.remove('hidden')"
+                                                class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded shadow">
+                                                + Add New Order
+                                            </button>
+                                        @endif
+
+                                        <a href="{{ route('sampleStock.index') }}">
+                                            <button
+                                                class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded shadow">
+                                                Sample Stock Management
+                                            </button>
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
 
@@ -485,7 +674,7 @@
                                                 class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-52 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Customer Delivery Status</th>
                                             <th
-                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-56 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold sticky top-0 z-30 bg-gray-200 px-4 py-3 w-56 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Customer Decision</th>
                                             <th
                                                 class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-72 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
@@ -692,39 +881,78 @@
                                                     class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
                                                     @php
                                                         $status = $inquiry->productionStatus;
+
+                                                        $statusDate = match ($status) {
+                                                            'Tape Match' => null,
+                                                            'No Development' => null,
+                                                            'In Production' => optional(
+                                                                $inquiry->samplePreparationProduction,
+                                                            )->order_start_at,
+                                                            'Production Complete' => optional(
+                                                                $inquiry->samplePreparationProduction,
+                                                            )->order_complete_at,
+                                                            'Yarn Ordered' => optional($inquiry->samplePreparationRnd)
+                                                                ->yarnOrderedDate,
+                                                            'Yarn Received' => optional($inquiry->samplePreparationRnd)
+                                                                ->yarnReceiveDate,
+                                                            'Sent to Production' => optional(
+                                                                $inquiry->samplePreparationRnd,
+                                                            )->sendOrderToProductionStatus,
+                                                            'Colour Match Sent' => optional(
+                                                                $inquiry->samplePreparationRnd,
+                                                            )->colourMatchSentDate,
+                                                            'Colour Match Received' => optional(
+                                                                $inquiry->samplePreparationRnd,
+                                                            )->colourMatchReceiveDate,
+                                                            default => null,
+                                                        };
+
                                                         $badgeClass = match ($status) {
                                                             'Pending'
-                                                                => 'bg-blue-100 text-blue-800 dark:bg-blue-700 dark:text-white',
+                                                                => 'bg-blue-50 text-blue-700 dark:bg-blue-900 dark:text-blue-200',
                                                             'In Production'
-                                                                => 'bg-yellow-100 text-yellow-800 dark:bg-yellow-700 dark:text-white',
+                                                                => 'bg-yellow-50 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-200',
                                                             'Production Complete'
-                                                                => 'bg-green-100 text-green-800 dark:bg-green-700 dark:text-white',
+                                                                => 'bg-green-50 text-green-700 dark:bg-green-900 dark:text-green-200',
                                                             'Tape Match'
-                                                                => 'bg-purple-100 text-purple-800 dark:bg-purple-700 dark:text-white',
+                                                                => 'bg-purple-50 text-purple-700 dark:bg-purple-900 dark:text-purple-200',
                                                             'No Development'
-                                                                => 'bg-red-100 text-red-800 dark:bg-red-700 dark:text-white',
+                                                                => 'bg-red-50 text-red-700 dark:bg-red-900 dark:text-red-200',
                                                             'Yarn Ordered'
-                                                                => 'bg-orange-100 text-orange-800 dark:bg-orange-700 dark:text-white',
+                                                                => 'bg-orange-50 text-orange-700 dark:bg-orange-900 dark:text-orange-200',
                                                             'Yarn Received'
-                                                                => 'bg-indigo-100 text-indigo-800 dark:bg-indigo-700 dark:text-white',
+                                                                => 'bg-indigo-50 text-indigo-700 dark:bg-indigo-900 dark:text-indigo-200',
                                                             'Sent to Production'
-                                                                => 'bg-teal-100 text-teal-800 dark:bg-teal-700 dark:text-white',
+                                                                => 'bg-teal-50 text-teal-700 dark:bg-teal-900 dark:text-teal-200',
                                                             'Colour Match Sent'
-                                                                => 'bg-pink-100 text-pink-800 dark:bg-pink-700 dark:text-white',
+                                                                => 'bg-pink-50 text-pink-700 dark:bg-pink-900 dark:text-pink-200',
                                                             'Colour Match Received'
-                                                                => 'bg-emerald-100 text-emerald-800 dark:bg-emerald-700 dark:text-white',
+                                                                => 'bg-emerald-50 text-emerald-700 dark:bg-emerald-900 dark:text-emerald-200',
                                                             default
-                                                                => 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-white',
+                                                                => 'bg-gray-50 text-gray-700 dark:bg-gray-900 dark:text-gray-200',
                                                         };
                                                     @endphp
 
-                                                    <!-- Read-only badge -->
-                                                    <span
-                                                        class="readonly inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold {{ $badgeClass }}">
-                                                        {{ $status }}
-                                                    </span>
+                                                    <!-- Read-only badge with date -->
+                                                    <div
+                                                        class="readonly inline-flex flex-col items-center px-3 py-1 rounded-full text-xs font-semibold {{ $badgeClass }}">
+                                                        <span class="flex items-center gap-1">
+                                                            {{-- Optional icon based on status --}}
+                                                            @if ($status == 'In Production')
+                                                                <i class="fas fa-spinner animate-spin text-[10px]"></i>
+                                                            @endif
+                                                            @if ($status == 'Production Complete')
+                                                                <i class="fas fa-check-circle text-[10px]"></i>
+                                                            @endif
+                                                            {{ $status }}
+                                                        </span>
+                                                        @if ($statusDate)
+                                                            <span
+                                                                class="text-[10px] mt-0.5 text-gray-500 dark:text-gray-300">{{ \Carbon\Carbon::parse($statusDate)->format('Y-m-d') }}</span>
+                                                        @endif
+                                                    </div>
 
-                                                    <!-- Editable input field (hidden by default, shown in edit mode) -->
+                                                    <!-- Editable input field (hidden by default) -->
                                                     <input type="text" name="productionStatus"
                                                         class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                         value="{{ $status }}" />
@@ -749,33 +977,32 @@
                                                                         Delivery Not Editable
                                                                     </div>
                                                                     <button type="button"
-                                                                        class="w-full px-3 py-1 mt-2 rounded text-sm bg-green-600 text-white cursor-not-allowed"
-                                                                        disabled>
+                                                                            class="w-full px-3 py-1 mt-2 rounded text-sm bg-green-600 text-white cursor-not-allowed"
+                                                                            disabled>
                                                                         Delivered
                                                                     </button>
                                                                 @else
-                                                                    <form
-                                                                        action="{{ route('inquiry.markCustomerDelivered') }}"
-                                                                        method="POST" class="inline-block text-left">
+                                                                    <form action="{{ route('inquiry.markCustomerDelivered') }}" method="POST"
+                                                                          class="inline-block text-left">
                                                                         @csrf
-                                                                        <input type="hidden" name="id"
-                                                                            value="{{ $inquiry->id }}">
+                                                                        <input type="hidden" name="id" value="{{ $inquiry->id }}">
 
-                                                                        <input type="number" name="delivered_qty"
-                                                                            min="1"
-                                                                            max="{{ optional($inquiry->referenceNo ? \App\Models\SampleStock::where('reference_no', $inquiry->referenceNo)->first() : null)?->available_stock ?? 1 }}"
-                                                                            placeholder="Delivered Qty"
-                                                                            class="px-3 py-2 mb-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm w-40">
+                                                                        @if ($inquiry->productionStatus !== 'Tape Match')
+                                                                            <!-- Show Qty input only if NOT Tape Match -->
+                                                                            <input type="number" name="delivered_qty" min="1"
+                                                                                   max="{{ optional($inquiry->referenceNo ? \App\Models\SampleStock::where('reference_no', $inquiry->referenceNo)->first() : null)?->available_stock ?? 1 }}"
+                                                                                   placeholder="Delivered Qty"
+                                                                                   class="px-3 py-2 mb-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm w-40">
+                                                                        @endif
 
                                                                         <button type="submit"
-                                                                            class="w-full px-3 py-1 rounded text-sm transition-all duration-200 bg-green-600 hover:bg-green-700 text-white">
+                                                                                class="w-full px-3 py-1 rounded text-sm transition-all duration-200 bg-green-600 hover:bg-green-700 text-white">
                                                                             Delivered
                                                                         </button>
                                                                     </form>
                                                                 @endif
                                                             @else
-                                                                <div
-                                                                    class="timestamp mt-1 text-xs text-red-500 dark:text-red-400">
+                                                                <div class="timestamp mt-1 text-xs text-red-500 dark:text-red-400">
                                                                     Reference No is required before marking delivery.
                                                                 </div>
                                                             @endif
@@ -790,9 +1017,8 @@
 
                                                             @if ($inquiry->dNoteNumber)
                                                                 <div class="flex justify-center">
-                                                                    <a href="{{ asset('storage/dispatches/' . $inquiry->dNoteNumber) }}"
-                                                                        target="_blank"
-                                                                        class="inline-block text-sm font-semibold text-gray-700 bg-gray-300 p-2 rounded hover:bg-gray-400 transition duration-200">
+                                                                    <a href="{{ asset('storage/dispatches/' . $inquiry->dNoteNumber) }}" target="_blank"
+                                                                       class="inline-block text-sm font-semibold text-gray-700 bg-gray-300 p-2 rounded hover:bg-gray-400 transition duration-200">
                                                                         Dispatch Note
                                                                     </a>
                                                                 </div>
@@ -938,20 +1164,6 @@
                                                 <!-- Actions -->
                                                 <td class="px-4 py-3 whitespace-normal break-words text-center">
                                                     <div class="flex space-x-2 justify-center items-center">
-                                                        {{-- @if (Auth::user()->role === 'SUPERADMIN')
-                                                            <button
-                                                                class="edit-btn bg-green-600 h-10 hover:bg-green-700 text-white px-3 py-1 rounded text-sm"
-                                                                onclick="editRow('row{{ $inquiry->id }}')">
-                                                                Edit
-                                                            </button>
-                                                        @endif
-
-                                                        <button
-                                                            class="save-btn bg-blue-600 h-10 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm hidden"
-                                                            onclick="saveRow('row{{ $inquiry->id }}')">
-                                                            Save
-                                                        </button> --}}
-
                                                         @if ($inquiry->orderFile)
                                                             <a href="{{ asset('storage/' . $inquiry->orderFile) }}"
                                                                 target="_blank"
@@ -965,6 +1177,7 @@
                                                                 No File
                                                             </button>
                                                         @endif
+
                                                         @if (Auth::user()->role === 'SUPERADMIN')
                                                             <form id="delete-form-{{ $inquiry->id }}"
                                                                 action="{{ route('sampleInquiry.destroy', $inquiry->id) }}"
@@ -979,8 +1192,22 @@
                                                             </form>
                                                         @endif
                                                     </div>
+                                                    @if (in_array(Auth::user()->role, ['SUPERADMIN', 'CUSTOMERCOORDINATOR']))
+                                                        <form
+                                                            action="{{ route('sampleInquiry.uploadOrderFile', $inquiry->id) }}"
+                                                            method="POST" enctype="multipart/form-data"
+                                                            class="flex items-center justify-center mt-2">
+                                                            @csrf
+                                                            <label for="uploadFile{{ $inquiry->id }}"
+                                                                class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-2 rounded cursor-pointer text-sm">
+                                                                Upload Swatch
+                                                            </label>
+                                                            <input id="uploadFile{{ $inquiry->id }}" type="file"
+                                                                name="order_file" accept=".pdf,.jpg,.jpeg" class="hidden"
+                                                                onchange="this.form.submit()" />
+                                                        </form>
+                                                    @endif
                                                 </td>
-
                                             </tr>
                                         @endforeach
                                     </tbody>
@@ -1046,23 +1273,50 @@
                                                             required
                                                             class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                     </div>
-                                                    <div class="w-1/2">
+                                                    <div class="relative w-1/2">
                                                         <label for="customer"
-                                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer</label>
-                                                        <input id="customer" type="text" name="customer" required
-                                                            class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Customer</label>
+                                                        <input id="customer" type="text" name="customer"
+                                                            autocomplete="off" required
+                                                            class="w-full px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                            oninput="filterCustomerDropdown(this)"
+                                                            onclick="showCustomerDropdown()" />
+
+                                                        <div id="customer-dropdown"
+                                                            class="hidden absolute z-10 mt-1 w-full max-h-48 overflow-y-auto rounded-md bg-white dark:bg-gray-800 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                                                            @foreach ($customers as $customer)
+                                                                <button type="button"
+                                                                    class="customer-option w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                                                                    onclick="selectCustomer(this)">
+                                                                    {{ $customer }}
+                                                                </button>
+                                                            @endforeach
+                                                        </div>
                                                     </div>
                                                 </div>
 
                                                 <!-- Merchandiser & Item -->
                                                 <div class="flex gap-4">
-                                                    <div class="w-1/2">
+                                                    <div class="relative w-1/2">
                                                         <label for="merchandiser"
-                                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer
+                                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Customer
                                                             Merchandiser</label>
                                                         <input id="merchandiser" type="text" name="merchandiser"
-                                                            required
-                                                            class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                            autocomplete="off" required
+                                                            class="w-full px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                            oninput="filterMerchandiserDropdown(this)"
+                                                            onclick="showMerchandiserDropdown()" />
+
+                                                        <div id="merchandiser-dropdown"
+                                                            class="hidden absolute z-10 mt-1 w-full max-h-48 overflow-y-auto rounded-md bg-white dark:bg-gray-800 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                                                            @foreach ($merchandisers as $merchandiser)
+                                                                <button type="button"
+                                                                    class="merchandiser-option w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                                                                    onclick="selectMerchandiser(this)">
+                                                                    {{ $merchandiser }}
+                                                                </button>
+                                                            @endforeach
+                                                        </div>
                                                     </div>
                                                     <div class="w-1/2">
                                                         <label for="coordinator"
@@ -1105,7 +1359,7 @@
                                                                         onclick="selectDropdownOptionItemAdd(this, 'Cord', 'item')">Cord</button>
                                                                     <button type="button"
                                                                         class="dropdown-option w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
-                                                                        onclick="selectDropdownOptionItemAdd(this, 'Tape', 'item')">Twill
+                                                                        onclick="selectDropdownOptionItemAdd(this, 'Twill Tape', 'item')">Twill
                                                                         Tape</button>
                                                                 </div>
                                                             </div>
@@ -1161,7 +1415,8 @@
                                                             Quantity (yds or mtr)</label>
                                                         <input id="sampleQuantity" type="text" name="sample_quantity"
                                                             required
-                                                            class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm mb-4">
+                                                            class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm mb-4"
+                                                            placeholder="Eg. Meters 100M or Yards 100Y">
                                                     </div>
                                                 </div>
 
@@ -1335,63 +1590,96 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", () => {
-            const filters = ['customer', 'merchandiser', 'item', 'deliveryStatus', 'customerDecision'];
+            const filters = ['customer', 'merchandiser', 'item', 'deliveryStatus', 'customerDecision', 'orderNo'];
+            const multiSelectFilters = ['coordinator']; // Currently only coordinator is multi-select
 
-            // Bind dropdown toggle
-            filters.forEach(type => {
+            [...filters, ...multiSelectFilters].forEach(type => {
                 const button = document.getElementById(`${type}Dropdown`);
                 const menu = document.getElementById(`${type}DropdownMenu`);
 
                 if (button && menu) {
                     button.addEventListener("click", (e) => {
-                        e.stopPropagation();
+                        e.stopPropagation(); // prevent the document click from closing immediately
+                        const isOpen = !menu.classList.contains("hidden");
                         closeAllDropdowns();
-                        menu.classList.toggle("hidden");
-                        button.setAttribute("aria-expanded", menu.classList.contains("hidden") ?
-                            "false" : "true");
+                        if (!isOpen) { // Only toggle open if it was closed
+                            menu.classList.remove("hidden");
+                            button.setAttribute("aria-expanded", "true");
+                        }
                     });
                 }
             });
 
-            // Bind option selection
             filters.forEach(type => {
                 const options = document.querySelectorAll(`.${type}-option`);
                 options.forEach(option => {
                     option.addEventListener("click", () => {
                         const value = option.textContent.trim() ===
                             `Select ${capitalize(type)}` ? '' : option.textContent.trim();
-                        document.getElementById(`${type}Input`).value = value;
-                        document.getElementById(`selected${capitalize(type)}`).textContent =
-                            value || `Select ${capitalize(type)}`;
-                        document.getElementById(`${type}DropdownMenu`).classList.add(
-                            "hidden");
-                        document.getElementById(`${type}Dropdown`).setAttribute(
-                            "aria-expanded", "false");
+                        const input = document.getElementById(`${type}Input`);
+                        const selectedSpan = document.getElementById(
+                            `selected${capitalize(type)}`);
+                        const menu = document.getElementById(`${type}DropdownMenu`);
+                        const button = document.getElementById(`${type}Dropdown`);
+
+                        if (input) input.value = value;
+                        if (selectedSpan) selectedSpan.textContent = value ||
+                            `Select ${capitalize(type)}`;
+                        if (menu) menu.classList.add("hidden");
+                        if (button) button.setAttribute("aria-expanded", "false");
                     });
                 });
             });
 
-            // Bind search filter
-            filters.forEach(type => {
+            multiSelectFilters.forEach(type => {
+                const checkboxes = document.querySelectorAll(`#${type}DropdownMenu input[type="checkbox"]`);
+                const selectedSpan = document.getElementById(`selected${capitalize(type)}`);
+                const hiddenInput = document.getElementById(`${type}Input`);
+
+                function updateSelected() {
+                    const selectedValues = Array.from(checkboxes)
+                        .filter(cb => cb.checked)
+                        .map(cb => cb.value);
+
+                    // Display only the first selected value + "..." if more than 1 selected
+                    let displayText = '';
+                    if (selectedValues.length === 0) {
+                        displayText = `Select ${capitalize(type)}(s)`;
+                    } else if (selectedValues.length === 1) {
+                        displayText = selectedValues[0];
+                    } else {
+                        displayText = selectedValues[0] + '   ...';
+                    }
+
+                    if (selectedSpan) selectedSpan.textContent = displayText;
+                    if (hiddenInput) hiddenInput.value = selectedValues.join(",");
+                }
+
+                checkboxes.forEach(cb => cb.addEventListener("change", updateSelected));
+                updateSelected(); // Run once on page load
+            });
+
+
+            [...filters, ...multiSelectFilters].forEach(type => {
                 const searchInput = document.getElementById(`${type}SearchInput`);
                 if (searchInput) {
                     searchInput.addEventListener("keyup", () => {
                         const query = searchInput.value.toLowerCase();
-                        const options = document.querySelectorAll(`.${type}-option`);
+                        const options = document.querySelectorAll(
+                            `#${type}DropdownMenu label, .${type}-option`);
                         options.forEach(option => {
                             const text = option.textContent.toLowerCase();
-                            option.style.display = text.includes(query) ? "block" : "none";
+                            option.style.display = text.includes(query) ? "" : "none";
                         });
                     });
                 }
             });
 
-            // Close all dropdowns if clicked outside
             document.addEventListener("click", (e) => {
-                filters.forEach(type => {
+                [...filters, ...multiSelectFilters].forEach(type => {
                     const menu = document.getElementById(`${type}DropdownMenu`);
                     const button = document.getElementById(`${type}Dropdown`);
-                    if (!menu.contains(e.target) && !button.contains(e.target)) {
+                    if (menu && button && !menu.contains(e.target) && !button.contains(e.target)) {
                         menu.classList.add("hidden");
                         button.setAttribute("aria-expanded", "false");
                     }
@@ -1403,15 +1691,47 @@
             }
 
             function closeAllDropdowns() {
-                filters.forEach(type => {
+                [...filters, ...multiSelectFilters].forEach(type => {
                     const menu = document.getElementById(`${type}DropdownMenu`);
                     const button = document.getElementById(`${type}Dropdown`);
-                    menu.classList.add("hidden");
-                    button.setAttribute("aria-expanded", "false");
+                    if (menu) menu.classList.add("hidden");
+                    if (button) button.setAttribute("aria-expanded", "false");
                 });
             }
         });
     </script>
+
+    <script>
+        const merchandiserInput = document.getElementById('merchandiser');
+        const merchandiserDropdown = document.getElementById('merchandiser-dropdown');
+
+        function showMerchandiserDropdown() {
+            merchandiserDropdown.classList.remove('hidden');
+        }
+
+        function filterMerchandiserDropdown(input) {
+            const filter = input.value.toLowerCase().trim();
+            const options = merchandiserDropdown.querySelectorAll('.merchandiser-option');
+            options.forEach(option => {
+                const text = option.textContent.toLowerCase().trim();
+                option.style.display = text.includes(filter) ? 'block' : 'none';
+            });
+            showMerchandiserDropdown();
+        }
+
+        function selectMerchandiser(button) {
+            merchandiserInput.value = button.textContent.trim();
+            merchandiserDropdown.classList.add('hidden');
+        }
+
+        // Hide dropdown when clicking outside using mousedown and closest
+        document.addEventListener('mousedown', (e) => {
+            if (!e.target.closest('#merchandiser-dropdown') && e.target !== merchandiserInput) {
+                merchandiserDropdown.classList.add('hidden');
+            }
+        });
+    </script>
+
 
     <script>
         function editRow(rowId) {
@@ -1637,6 +1957,11 @@
             const form = document.getElementById('filterFormContainer');
             form.classList.toggle('hidden');
         }
+
+        function toggleReportForm() {
+            const form = document.getElementById('reportFormContainer');
+            form.classList.toggle('hidden');
+        }
     </script>
 
     <script>
@@ -1663,19 +1988,22 @@
             });
         });
     </script>
-    {{-- <script>
+    <script>
         document.addEventListener("DOMContentLoaded", function() {
             let container = document.getElementById("sampleInquiryRecordsScroll");
 
-            // Restore scroll
+            // Restore table scroll immediately after DOM loaded
             if (container) {
                 let scrollTop = localStorage.getItem("tableScrollTop");
                 let scrollLeft = localStorage.getItem("tableScrollLeft");
                 if (scrollTop !== null) container.scrollTop = parseInt(scrollTop);
                 if (scrollLeft !== null) container.scrollLeft = parseInt(scrollLeft);
+                // Optionally clear
+                localStorage.removeItem("tableScrollTop");
+                localStorage.removeItem("tableScrollLeft");
             }
 
-            // Save scroll when form submits
+            // Save table scroll on form submit
             document.querySelectorAll("form").forEach(form => {
                 form.addEventListener("submit", function() {
                     if (container) {
@@ -1685,6 +2013,95 @@
                 });
             });
         });
-    </script> --}}
+
+        // Restore page scroll after full load (including images etc)
+        window.onload = function() {
+            let pageScroll = localStorage.getItem("pageScrollY");
+            if (pageScroll !== null) {
+                window.scrollTo(0, parseInt(pageScroll));
+                localStorage.removeItem("pageScrollY");
+            }
+        };
+
+        // Save page scroll position before unload
+        window.addEventListener("beforeunload", function() {
+            localStorage.setItem("pageScrollY", window.scrollY);
+        });
+    </script>
+    <script>
+        const customerInput = document.getElementById('customer');
+        const dropdown = document.getElementById('customer-dropdown');
+
+        function showCustomerDropdown() {
+            dropdown.classList.remove('hidden');
+        }
+
+        function filterCustomerDropdown(input) {
+            const filter = input.value.toLowerCase().trim();
+            const options = dropdown.querySelectorAll('.customer-option');
+            options.forEach(option => {
+                const text = option.textContent.toLowerCase().trim();
+                option.style.display = text.includes(filter) ? 'block' : 'none';
+            });
+            showCustomerDropdown();
+        }
+
+        function selectCustomer(button) {
+            customerInput.value = button.textContent.trim();
+            dropdown.classList.add('hidden');
+        }
+
+        // Hide dropdown when clicking outside using mousedown and closest
+        document.addEventListener('mousedown', (e) => {
+            if (!e.target.closest('#customer-dropdown') && e.target !== customerInput) {
+                dropdown.classList.add('hidden');
+            }
+        });
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // Elements
+            const dropdownBtn = document.getElementById('coordinatorDropdownReport');
+            const dropdownMenu = document.getElementById('coordinatorDropdownMenuReport');
+            const checkboxes = document.querySelectorAll('.coordinator-checkboxReport');
+            const searchInput = document.getElementById('coordinatorSearchInputReport');
+            const selectedText = document.getElementById('selectedcoordinatorReport');
+
+            // Toggle dropdown open/close
+            dropdownBtn.addEventListener('click', () => {
+                dropdownMenu.classList.toggle('hidden');
+            });
+
+            // Close dropdown if clicked outside
+            document.addEventListener('click', (e) => {
+                if (!dropdownBtn.contains(e.target) && !dropdownMenu.contains(e.target)) {
+                    dropdownMenu.classList.add('hidden');
+                }
+            });
+
+            // Update button text when checkboxes change
+            checkboxes.forEach(cb => {
+                cb.addEventListener('change', () => {
+                    const selected = Array.from(checkboxes)
+                        .filter(c => c.checked)
+                        .map(c => c.value);
+                    selectedText.textContent = selected.length ? selected.join(', ') :
+                        'Select Coordinator(s)';
+                });
+            });
+
+            // Search filter
+            searchInput.addEventListener('input', () => {
+                const query = searchInput.value.toLowerCase();
+                const options = document.querySelectorAll(
+                    '#coordinatorOptionsReport label'); // <-- updated ID
+                options.forEach(option => {
+                    const text = option.textContent.toLowerCase();
+                    option.style.display = text.includes(query) ? 'flex' : 'none';
+                });
+            });
+
+        });
+    </script>
 
 @endsection

@@ -26,6 +26,8 @@ class ProductCatalog extends Model
         'approval_card',
         'is_approved_by_locked',
         'is_approval_card_locked',
+        'supplier',
+        'pst_no',
     ];
 
     protected $casts = [

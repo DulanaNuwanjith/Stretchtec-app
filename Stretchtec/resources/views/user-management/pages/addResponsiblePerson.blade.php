@@ -189,12 +189,6 @@
                                             </td>
                                             <td class="px-4 py-3 w-48 text-center whitespace-normal break-words">
                                                 <div class="flex space-x-2 justify-center">
-                                                    {{-- <button
-                                                        class="bg-green-600 h-10 hover:bg-green-700 text-white px-3 py-1 rounded text-sm"
-                                                        onclick="editRow('{{ $rowId }}')">Edit</button>
-                                                    <button
-                                                        class="bg-blue-600 h-10 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm hidden"
-                                                        onclick="saveRow('{{ $rowId }}')">Save</button> --}}
                                                     <form id="delete-form-{{ $operator->id }}"
                                                         action="{{ route('operatorsandSupervisors.destroy', $operator->id) }}"
                                                         method="POST" class="inline-block">
@@ -259,20 +253,39 @@
                                                         title="Enter a 10-digit phone number"
                                                         class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                 </div>
-                                                <div class="w-1/2">
-                                                    <label for="role"
-                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Responsible
-                                                        Role</label>
-                                                    <select id="role" name="role" required
-                                                        class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                                        <option value="">-- Select Role --</option>
-                                                        <option value="OPERATOR">Operator</option>
-                                                        <option value="SUPERVISOR">Supervisor</option>
-                                                    </select>
+
+                                                <div class="w-1/2 relative" data-dropdown-root>
+                                                    <label for="role" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                                        Responsible Role
+                                                    </label>
+
+                                                    <input type="hidden" name="role" required>
+
+                                                    <button type="button"
+                                                            onclick="toggleDropdownItemAdd(this)"
+                                                            class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm flex justify-between items-center">
+                                                        <span class="selected-item text-gray-700 dark:text-white">-- Select Role --</span>
+                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-500" fill="none"
+                                                             viewBox="0 0 24 24" stroke="currentColor">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                                  d="M19 9l-7 7-7-7" />
+                                                        </svg>
+                                                    </button>
+
+                                                    <div class="dropdown-menu-item hidden absolute left-0 top-full mt-1 w-full rounded-md bg-white dark:bg-gray-700 shadow-lg ring-1 ring-black/5 max-h-48 overflow-y-auto z-10">
+                                                        <div class="py-1" role="listbox" tabindex="-1">
+                                                            <button type="button"
+                                                                    class="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
+                                                                    onclick="selectDropdownOptionItemAdd(this, 'OPERATOR')">Operator</button>
+                                                            <button type="button"
+                                                                    class="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
+                                                                    onclick="selectDropdownOptionItemAdd(this, 'SUPERVISOR')">Supervisor</button>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
 
-                                            <div>
+                                                <div>
                                                 <label for="address"
                                                     class="block text-sm font-medium text-gray-700 dark:text-gray-300">Address</label>
                                                 <input id="address" type="text" name="address" required
@@ -394,4 +407,45 @@
             row.querySelector('button.bg-blue-600').classList.add('hidden'); // Hide Save button
         }
     </script>
+
+    <script>
+        function toggleDropdownItemAdd(button) {
+            const root = button.closest('[data-dropdown-root]');
+            const dropdownMenu = root.querySelector('.dropdown-menu-item');
+
+            // Close all other open dropdowns
+            document.querySelectorAll('.dropdown-menu-item').forEach(menu => {
+                if (menu !== dropdownMenu) menu.classList.add('hidden');
+            });
+
+            dropdownMenu.classList.toggle('hidden');
+        }
+
+        function selectDropdownOptionItemAdd(button, selectedValue) {
+            const root = button.closest('[data-dropdown-root]');
+
+            // Update visible text
+            const displaySpan = root.querySelector('.selected-item');
+            displaySpan.innerText = selectedValue;
+
+            // Update hidden input for backend submission
+            const hiddenInput = root.querySelector('input[type="hidden"]');
+            hiddenInput.value = selectedValue;
+
+            // Close dropdown
+            const dropdownMenu = root.querySelector('.dropdown-menu-item');
+            dropdownMenu.classList.add('hidden');
+        }
+
+        // Click outside closes dropdown
+        document.addEventListener('click', function(event) {
+            document.querySelectorAll('.dropdown-menu-item').forEach(menu => {
+                const root = menu.closest('[data-dropdown-root]');
+                if (!root.contains(event.target)) {
+                    menu.classList.add('hidden');
+                }
+            });
+        });
+    </script>
+
 @endsection

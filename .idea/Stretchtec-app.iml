@@ -8,7 +8,6 @@
       <sourceFolder url="file://$MODULE_DIR$/Stretchtec/tests" isTestSource="true" packagePrefix="Tests\" />
       <sourceFolder url="file://$MODULE_DIR$/Stretchtec/tests/Feature" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/Stretchtec/tests/Unit" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/Stretchtec/spec" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/spec" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/tests" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/bacon/bacon-qr-code" />
@@ -141,6 +140,14 @@
       <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/staabm/side-effects-detector" />
       <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/symfony/yaml" />
       <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/theseer/tokenizer" />
+      <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/barryvdh/laravel-dompdf" />
+      <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/dompdf/dompdf" />
+      <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/dompdf/php-font-lib" />
+      <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/dompdf/php-svg-lib" />
+      <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/masterminds/html5" />
+      <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/sabberworm/php-css-parser" />
+      <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/symfony/polyfill-php84" />
+      <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/symfony/polyfill-php85" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

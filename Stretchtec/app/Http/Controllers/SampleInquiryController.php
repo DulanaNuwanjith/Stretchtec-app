@@ -26,6 +26,10 @@ class SampleInquiryController extends Controller
         $query = SampleInquiry::query();
 
         // Apply filters
+        if ($request->filled('orderNo')) {
+            $query->where('orderNo', $request->orderNo);
+        }
+
         if ($request->filled('customer')) {
             $query->where('customerName', $request->customer);
         }
@@ -36,6 +40,10 @@ class SampleInquiryController extends Controller
 
         if ($request->filled('item')) {
             $query->where('item', $request->item);
+        }
+
+        if ($request->filled('coordinator')) {
+            $query->whereIn('coordinatorName', (array)$request->coordinator);
         }
 
         // Filter by delivery status using customerDeliveryDate
@@ -66,8 +74,10 @@ class SampleInquiryController extends Controller
         $customers = SampleInquiry::select('customerName')->distinct()->orderBy('customerName')->pluck('customerName');
         $merchandisers = SampleInquiry::select('merchandiseName')->distinct()->orderBy('merchandiseName')->pluck('merchandiseName');
         $items = SampleInquiry::select('item')->distinct()->orderBy('item')->pluck('item');
+        $coordinators = SampleInquiry::select('coordinatorName')->distinct()->orderBy('coordinatorName')->pluck('coordinatorName');
+        $orderNos = SampleInquiry::select('orderNo')->distinct()->orderBy('orderNo')->pluck('orderNo');
 
-        return view('sample-development.pages.sample-inquery-details', compact('inquiries', 'customers', 'merchandisers','items'));
+        return view('sample-development.pages.sample-inquery-details', compact('inquiries', 'customers', 'merchandisers','items','coordinators','orderNos'));
     }
 
     public function updateNotes(Request $request, $id)
@@ -262,6 +272,11 @@ class SampleInquiryController extends Controller
         $deliveredQty = (int) $request->delivered_qty;
 
         $inquiry->customerDeliveryDate = now();
+        $inquiry->deliveryQty = $deliveredQty;
+
+        $samplernd = SamplePreparationRnD::where('sample_inquiry_id', $inquiry->id)->first();
+        $samplernd->productionStatus = 'Order Delivered';
+        $samplernd->save();
 
         try {
             // Generate next dispatch code
@@ -361,4 +376,36 @@ class SampleInquiryController extends Controller
 
         return redirect()->back()->with('success', 'Customer decision updated successfully.');
     }
+
+    public function uploadOrderFile(Request $request, $id)
+    {
+        $request->validate([
+            'order_file' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048', // max 2MB
+        ]);
+
+        $inquiry = SampleInquiry::findOrFail($id);
+
+        $orderNo = $inquiry->order_no; // or whatever field represents the order number
+        $orderFilePath = null;
+
+        // Handle file upload
+        if ($request->hasFile('order_file')) {
+            $date = now()->format('YmdHis'); // e.g. 20250818113045
+            $extension = $request->file('order_file')->getClientOriginalExtension();
+            $fileName = $orderNo . '_' . $date . '_' . uniqid() . '.' . $extension;
+
+            $orderFilePath = $request->file('order_file')->storeAs(
+                'order_files',
+                $fileName,
+                'public'
+            );
+
+            // Save file path in database
+            $inquiry->orderFile = $orderFilePath;
+            $inquiry->save();
+        }
+
+        return redirect()->back()->with('success', 'Swatch uploaded successfully!');
+    }
+
 }
