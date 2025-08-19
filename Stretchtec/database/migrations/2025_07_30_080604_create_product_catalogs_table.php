@@ -28,6 +28,8 @@ return new class extends Migration
             $table->string('colour')->nullable(); // from Inquiry or R&D
             $table->string('shade')->nullable(); // from R&D
             $table->string('tkt')->nullable(); // from R&D
+            $table->string('supplier')->nullable(); // from R&D
+            $table->string('pst_no')->nullable(); // from R&D
 
             $table->timestamps();
 
