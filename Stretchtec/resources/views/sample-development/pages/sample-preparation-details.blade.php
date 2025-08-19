@@ -1415,6 +1415,8 @@
                                                                 => 'bg-yellow-100 text-yellow-800 dark:bg-yellow-700 dark:text-white',
                                                             'Production Complete'
                                                                 => 'bg-green-100 text-green-800 dark:bg-green-700 dark:text-white',
+                                                            'Order Delivered'
+                                                                => 'bg-green-500 text-white dark:bg-green-700 dark:text-white',
                                                             'Tape Match'
                                                                 => 'bg-purple-100 text-purple-800 dark:bg-purple-700 dark:text-white',
                                                             'No Development'

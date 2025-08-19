@@ -274,6 +274,10 @@ class SampleInquiryController extends Controller
         $inquiry->customerDeliveryDate = now();
         $inquiry->deliveryQty = $deliveredQty;
 
+        $samplernd = SamplePreparationRnD::where('sample_inquiry_id', $inquiry->id)->first();
+        $samplernd->productionStatus = 'Order Delivered';
+        $samplernd->save();
+
         try {
             // Generate next dispatch code
             $lastInquiryWithCode = SampleInquiry::whereNotNull('dNoteNumber')->orderByDesc('id')->first();
