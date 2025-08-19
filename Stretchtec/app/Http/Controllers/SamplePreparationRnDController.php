@@ -35,7 +35,6 @@ class SamplePreparationRnDController extends Controller
             $query->where('referenceNo', $request->reference_no);
         }
 
-        // FILTER DATE FIELDS USING snake_case input names AND camelCase columns
         if ($request->filled('customer_requested_date')) {
             $query->whereDate('customerRequestDate', $request->customer_requested_date);
         }
@@ -44,20 +43,24 @@ class SamplePreparationRnDController extends Controller
             $query->whereDate('developPlannedDate', $request->development_plan_date);
         }
 
-        // Pagination or just all?
+        if ($request->filled('coordinator_name')) {
+            $query->whereHas('sampleInquiry', function($q) use ($request) {
+                $q->where('coordinatorName', $request->coordinator_name);
+            });
+        }
+
         $samplePreparations = $query
-            ->orderByRaw('CASE WHEN referenceNo IS NULL THEN 0 ELSE 1 END ASC')  // NULL referenceNo first
-            ->orderBy('customerRequestDate', 'asc')                            // nearest upcoming date first
-            ->orderByDesc('id')                                                 // fallback to latest entries
+            ->orderByRaw('CASE WHEN referenceNo IS NULL THEN 0 ELSE 1 END ASC')
+            ->orderBy('customerRequestDate', 'asc')
+            ->orderByDesc('id')
             ->paginate(10);
 
-        // Dynamic values for dropdowns
+        // Dropdown dynamic values
         $orderNos = SamplePreparationRnD::whereNotNull('orderNo')->where('orderNo', '!=', '')->distinct()->orderBy('orderNo')->pluck('orderNo');
         $poNos = SamplePreparationRnD::whereNotNull('yarnOrderedPONumber')->where('yarnOrderedPONumber', '!=', '')->distinct()->orderBy('yarnOrderedPONumber')->pluck('yarnOrderedPONumber');
         $shades = SamplePreparationRnD::whereNotNull('shade')->where('shade', '!=', '')->distinct()->orderBy('shade')->pluck('shade');
         $references = SamplePreparationRnD::whereNotNull('referenceNo')->where('referenceNo', '!=', '')->distinct()->orderBy('referenceNo')->pluck('referenceNo');
-
-        // ✅ Add this to pass SampleStock reference list
+        $coordinators = SampleInquiry::whereNotNull('coordinatorName')->where('coordinatorName', '!=', '')->distinct()->orderBy('coordinatorName')->pluck('coordinatorName');
         $sampleStockReferences = SampleStock::pluck('reference_no')->unique();
 
         return view('sample-development.pages.sample-preparation-details', compact(
@@ -66,9 +69,11 @@ class SamplePreparationRnDController extends Controller
             'poNos',
             'shades',
             'references',
-            'sampleStockReferences'
+            'sampleStockReferences',
+            'coordinators'
         ));
     }
+
 
     public function markColourMatchSent(Request $request)
     {

@@ -243,6 +243,35 @@
                                             </div>
                                         </div>
 
+                                        {{-- Coordinator Name Dropdown --}}
+                                        <div class="relative inline-block text-left w-48"> <label
+                                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Coordinator</label>
+                                            <input type="hidden" name="coordinator_name" id="coordinatorInput"
+                                                value="{{ request('coordinator_name') }}"> <button type="button"
+                                                onclick="toggleCoordinatorDropdown()" id="coordinatorDropdown"
+                                                class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10 dark:bg-gray-700 dark:text-white"
+                                                aria-expanded="false"> <span
+                                                    id="selectedCoordinator">{{ request('coordinator_name') ?? 'Select Coordinator' }}</span>
+                                                <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20"
+                                                    fill="currentColor">
+                                                    <path fill-rule="evenodd"
+                                                        d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.25 8.29a.75.75 0 01-.02-1.08z"
+                                                        clip-rule="evenodd" />
+                                                </svg> </button>
+                                            <div id="coordinatorDropdownMenu"
+                                                class="absolute z-40 mt-1 w-full bg-white border rounded-lg shadow-lg hidden max-h-48 overflow-y-auto p-2">
+                                                <input type="text" id="coordinatorSearchInput"
+                                                    onkeyup="filterCoordinators()" placeholder="Search..."
+                                                    class="w-full px-2 py-1 text-sm border rounded-md dark:bg-gray-600 dark:text-white dark:placeholder-gray-300"
+                                                    autocomplete="off">
+                                                @foreach ($coordinators as $coordinator)
+                                                    <div onclick="selectCoordinator('{{ $coordinator }}')"
+                                                        class="coordinator-option px-4 py-2 hover:bg-gray-100 cursor-pointer text-sm">
+                                                        {{ $coordinator }}</div>
+                                                @endforeach
+                                            </div>
+                                        </div>
+
                                         {{-- Reference No Dropdown --}}
                                         <div class="relative inline-block text-left w-48">
                                             <label for="customerDropdown"
@@ -1900,101 +1929,90 @@
     <script>
         // ===== ORDER dropdown =====
         function toggleOrderDropdown() {
-            const menu = document.getElementById('orderDropdownMenu');
-            const btn = document.getElementById('orderDropdown');
-            const expanded = btn.getAttribute('aria-expanded') === 'true';
-
-            menu.classList.toggle('hidden');
-            btn.setAttribute('aria-expanded', !expanded);
+            toggleDropdown('orderDropdown', 'orderDropdownMenu');
         }
 
         function selectOrder(orderNo) {
-            document.getElementById('selectedOrderNo').innerText = orderNo || 'Select Order No';
-            document.getElementById('orderInput').value = orderNo;
-            closeDropdown('orderDropdown', 'orderDropdownMenu');
+            selectDropdownValue('orderDropdown', 'orderDropdownMenu', 'selectedOrderNo', 'orderInput', orderNo,
+                'Select Order No');
         }
 
         function filterOrders() {
-            const input = document.getElementById('orderSearchInput').value.toLowerCase();
-            const items = document.querySelectorAll('.order-option');
-
-            items.forEach(item => {
-                const text = item.textContent.toLowerCase();
-                item.style.display = text.includes(input) ? 'block' : 'none';
-            });
+            filterDropdown('.order-option', 'orderSearchInput');
         }
 
         // ===== PO dropdown =====
         function togglePODropdown() {
-            const menu = document.getElementById('poDropdownMenu');
-            const btn = document.getElementById('poDropdown');
-            const expanded = btn.getAttribute('aria-expanded') === 'true';
-
-            menu.classList.toggle('hidden');
-            btn.setAttribute('aria-expanded', !expanded);
+            toggleDropdown('poDropdown', 'poDropdownMenu');
         }
 
         function selectPO(poNo) {
-            document.getElementById('selectedPONo').innerText = poNo || 'Select PO No';
-            document.getElementById('poInput').value = poNo;
-            closeDropdown('poDropdown', 'poDropdownMenu');
+            selectDropdownValue('poDropdown', 'poDropdownMenu', 'selectedPONo', 'poInput', poNo, 'Select PO No');
         }
 
         function filterPOs() {
-            const input = document.getElementById('poSearchInput').value.toLowerCase();
-            const items = document.querySelectorAll('.po-option');
-
-            items.forEach(item => {
-                const text = item.textContent.toLowerCase();
-                item.style.display = text.includes(input) ? 'block' : 'none';
-            });
+            filterDropdown('.po-option', 'poSearchInput');
         }
 
         // ===== SHADE dropdown =====
         function toggleShadeDropdown() {
-            const menu = document.getElementById('shadeDropdownMenu');
-            const btn = document.getElementById('shadeDropdown');
-            const expanded = btn.getAttribute('aria-expanded') === 'true';
-
-            menu.classList.toggle('hidden');
-            btn.setAttribute('aria-expanded', !expanded);
+            toggleDropdown('shadeDropdown', 'shadeDropdownMenu');
         }
 
         function selectShade(shade) {
-            document.getElementById('selectedShade').innerText = shade || 'Select Shade';
-            document.getElementById('shadeInput').value = shade;
-            closeDropdown('shadeDropdown', 'shadeDropdownMenu');
+            selectDropdownValue('shadeDropdown', 'shadeDropdownMenu', 'selectedShade', 'shadeInput', shade, 'Select Shade');
         }
 
         function filterShades() {
-            const input = document.getElementById('shadeSearchInput').value.toLowerCase();
-            const items = document.querySelectorAll('.shade-option');
-
-            items.forEach(item => {
-                const text = item.textContent.toLowerCase();
-                item.style.display = text.includes(input) ? 'block' : 'none';
-            });
+            filterDropdown('.shade-option', 'shadeSearchInput');
         }
 
         // ===== REFERENCE NO dropdown =====
         function toggleRefDropdown() {
-            const menu = document.getElementById('refDropdownMenu');
-            const btn = document.getElementById('refDropdown');
+            toggleDropdown('refDropdown', 'refDropdownMenu');
+        }
+
+        function selectRef(ref) {
+            selectDropdownValue('refDropdown', 'refDropdownMenu', 'selectedRef', 'refInput', ref, 'Select Reference No');
+        }
+
+        function filterRefs() {
+            filterDropdown('.ref-option', 'refSearchInput');
+        }
+
+        // ===== COORDINATOR dropdown (NEW) =====
+        function toggleCoordinatorDropdown() {
+            toggleDropdown('coordinatorDropdown', 'coordinatorDropdownMenu');
+        }
+
+        function selectCoordinator(coordinator) {
+            selectDropdownValue('coordinatorDropdown', 'coordinatorDropdownMenu', 'selectedCoordinator', 'coordinatorInput',
+                coordinator, 'Select Coordinator');
+        }
+
+        function filterCoordinators() {
+            filterDropdown('.coordinator-option', 'coordinatorSearchInput');
+        }
+
+        // ===== Helper functions =====
+        function toggleDropdown(btnId, menuId) {
+            const btn = document.getElementById(btnId);
+            const menu = document.getElementById(menuId);
             const expanded = btn.getAttribute('aria-expanded') === 'true';
 
             menu.classList.toggle('hidden');
             btn.setAttribute('aria-expanded', !expanded);
         }
 
-        function selectRef(ref) {
-            document.getElementById('selectedRef').innerText = ref || 'Select Reference No';
-            document.getElementById('refInput').value = ref;
-            closeDropdown('refDropdown', 'refDropdownMenu');
+        function selectDropdownValue(btnId, menuId, selectedId, inputId, value, defaultText) {
+            document.getElementById(selectedId).innerText = value || defaultText;
+            document.getElementById(inputId).value = value;
+            closeDropdown(btnId, menuId);
         }
 
-        function filterRefs() {
-            const input = document.getElementById('refSearchInput').value.toLowerCase();
-            const items = document.querySelectorAll('.ref-option');
+        function filterDropdown(optionClass, inputId) {
+            const input = document.getElementById(inputId).value.toLowerCase();
+            const items = document.querySelectorAll(optionClass);
 
             items.forEach(item => {
                 const text = item.textContent.toLowerCase();
@@ -2002,76 +2020,94 @@
             });
         }
 
-        // ===== Helper to close dropdown =====
         function closeDropdown(btnId, menuId) {
             const btn = document.getElementById(btnId);
             const menu = document.getElementById(menuId);
-
             menu.classList.add('hidden');
             btn.setAttribute('aria-expanded', false);
         }
 
+        // ===== Clear all filters =====
         function clearFilters() {
-            // Order
-            document.getElementById('selectedOrderNo').innerText = 'Select Order No';
-            document.getElementById('orderInput').value = '';
-            document.getElementById('orderSearchInput').value = '';
-            filterOrders();
+            const dropdowns = [{
+                    selected: 'selectedOrderNo',
+                    input: 'orderInput',
+                    search: 'orderSearchInput',
+                    default: 'Select Order No',
+                    filterFunc: filterOrders
+                },
+                {
+                    selected: 'selectedPONo',
+                    input: 'poInput',
+                    search: 'poSearchInput',
+                    default: 'Select PO No',
+                    filterFunc: filterPOs
+                },
+                {
+                    selected: 'selectedShade',
+                    input: 'shadeInput',
+                    search: 'shadeSearchInput',
+                    default: 'Select Shade',
+                    filterFunc: filterShades
+                },
+                {
+                    selected: 'selectedRef',
+                    input: 'refInput',
+                    search: 'refSearchInput',
+                    default: 'Select Reference No',
+                    filterFunc: filterRefs
+                },
+                {
+                    selected: 'selectedCoordinator',
+                    input: 'coordinatorInput',
+                    search: 'coordinatorSearchInput',
+                    default: 'Select Coordinator',
+                    filterFunc: filterCoordinators
+                },
+            ];
 
-            // PO
-            document.getElementById('selectedPONo').innerText = 'Select PO No';
-            document.getElementById('poInput').value = '';
-            document.getElementById('poSearchInput').value = '';
-            filterPOs();
+            dropdowns.forEach(d => {
+                document.getElementById(d.selected).innerText = d.default;
+                document.getElementById(d.input).value = '';
+                document.getElementById(d.search).value = '';
+                d.filterFunc();
+            });
 
-            // Shade
-            document.getElementById('selectedShade').innerText = 'Select Shade';
-            document.getElementById('shadeInput').value = '';
-            document.getElementById('shadeSearchInput').value = '';
-            filterShades();
-
-            // Reference No
-            document.getElementById('selectedRef').innerText = 'Select Reference No';
-            document.getElementById('refInput').value = '';
-            document.getElementById('refSearchInput').value = '';
-            filterRefs();
-
-            // Dates
+            // Clear dates
             document.getElementById('customerRequestedDate').value = '';
             document.getElementById('developmentPlanDate').value = '';
         }
 
-
         // ===== Close dropdowns if click outside =====
         document.addEventListener('click', function(e) {
-            // List of dropdowns to check
             const dropdowns = [{
-                    btnId: 'orderDropdown',
-                    menuId: 'orderDropdownMenu'
+                    btn: 'orderDropdown',
+                    menu: 'orderDropdownMenu'
                 },
                 {
-                    btnId: 'poDropdown',
-                    menuId: 'poDropdownMenu'
+                    btn: 'poDropdown',
+                    menu: 'poDropdownMenu'
                 },
                 {
-                    btnId: 'shadeDropdown',
-                    menuId: 'shadeDropdownMenu'
+                    btn: 'shadeDropdown',
+                    menu: 'shadeDropdownMenu'
                 },
                 {
-                    btnId: 'refDropdown',
-                    menuId: 'refDropdownMenu'
-                }
+                    btn: 'refDropdown',
+                    menu: 'refDropdownMenu'
+                },
+                {
+                    btn: 'coordinatorDropdown',
+                    menu: 'coordinatorDropdownMenu'
+                }, // new
             ];
 
-            dropdowns.forEach(({
-                btnId,
-                menuId
-            }) => {
-                const btn = document.getElementById(btnId);
-                const menu = document.getElementById(menuId);
+            dropdowns.forEach(d => {
+                const btn = document.getElementById(d.btn);
+                const menu = document.getElementById(d.menu);
 
                 if (!btn.contains(e.target) && !menu.contains(e.target)) {
-                    closeDropdown(btnId, menuId);
+                    closeDropdown(d.btn, d.menu);
                 }
             });
         });
