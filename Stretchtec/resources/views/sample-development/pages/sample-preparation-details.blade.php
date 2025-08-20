@@ -448,28 +448,29 @@
                                                 <td
                                                     class="sticky left-0 z-20 bg-white px-4 py-3 bg-gray-100 whitespace-normal break-words border-r border-gray-300">
                                                     <span
-                                                        class="readonly font-bold hover:text-blue-600 hover:underline cursor-pointer"
+                                                        class="readonly font-bold hover:text-blue-600 hover:underline cursor-pointer {{ $prep->productionStatus == 'Order Delivered' ? 'text-red-600' : 'text-black' }}"
                                                         onclick="openRndSampleModal(
-                                                                    '{{ addslashes($prep->orderNo) }}',
-                                                                    '{{ addslashes($prep->sampleInquiry->customerName ?? '-') }}',
-                                                                    '{{ addslashes($prep->sampleInquiry->coordinatorName ?? '-') }}',
-                                                                    '{{ addslashes($prep->sampleInquiry->item ?? '-') }}',
-                                                                    '{{ addslashes($prep->sampleInquiry->ItemDiscription ?? '-') }}',
-                                                                    '{{ addslashes($prep->sampleInquiry->size ?? '-') }}',
-                                                                    '{{ addslashes($prep->sampleInquiry->qtRef ?? '-') }}',
-                                                                    '{{ addslashes($prep->sampleInquiry->color ?? '-') }}',
-                                                                    '{{ addslashes($prep->sampleInquiry->style ?? '-') }}',
-                                                                    '{{ addslashes($prep->sampleInquiry->sampleQty ?? '-') }}',
-                                                                    '{{ addslashes($prep->sampleInquiry->customerSpecialComment ?? '-') }}',
-                                                                    '{{ addslashes(optional($prep->sampleInquiry->customerRequestDate)->format('Y-m-d') ?? '-') }}'
-                                                                )">
+                                                            '{{ addslashes($prep->orderNo) }}',
+                                                            '{{ addslashes($prep->sampleInquiry->customerName ?? '-') }}',
+                                                            '{{ addslashes($prep->sampleInquiry->coordinatorName ?? '-') }}',
+                                                            '{{ addslashes($prep->sampleInquiry->item ?? '-') }}',
+                                                            '{{ addslashes($prep->sampleInquiry->ItemDiscription ?? '-') }}',
+                                                            '{{ addslashes($prep->sampleInquiry->size ?? '-') }}',
+                                                            '{{ addslashes($prep->sampleInquiry->qtRef ?? '-') }}',
+                                                            '{{ addslashes($prep->sampleInquiry->color ?? '-') }}',
+                                                            '{{ addslashes($prep->sampleInquiry->style ?? '-') }}',
+                                                            '{{ addslashes($prep->sampleInquiry->sampleQty ?? '-') }}',
+                                                            '{{ addslashes($prep->sampleInquiry->customerSpecialComment ?? '-') }}',
+                                                            '{{ addslashes(optional($prep->sampleInquiry->customerRequestDate)->format('Y-m-d') ?? '-') }}'
+                                                        )">
                                                         {{ $prep->orderNo }}
                                                     </span>
 
                                                     <input type="text" name="orderNo"
-                                                        class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                        value="{{ $prep->orderNo }}" />
+                                                           class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                           value="{{ $prep->orderNo }}" />
                                                 </td>
+
 
                                                 <td
                                                     class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
