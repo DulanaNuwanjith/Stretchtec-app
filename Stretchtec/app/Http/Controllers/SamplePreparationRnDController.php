@@ -50,8 +50,7 @@ class SamplePreparationRnDController extends Controller
         }
 
         $samplePreparations = $query
-            ->orderByRaw('CASE WHEN referenceNo IS NULL THEN 0 ELSE 1 END ASC')
-            ->orderBy('customerRequestDate', 'asc')
+            ->orderByRaw("CASE WHEN productionStatus = 'Order Delivered' THEN 1 ELSE 0 END ASC")
             ->orderByDesc('id')
             ->paginate(10);
 
