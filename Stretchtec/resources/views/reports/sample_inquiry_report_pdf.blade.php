@@ -3,32 +3,32 @@
 <head>
     <title>Sample Inquiry Report</title>
     <style>
-        body { 
-            font-family: Arial, sans-serif; 
-            font-size: 12px; 
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 12px;
             margin: 20px;
         }
-        h2, p { 
-            margin: 0; 
-            padding: 0; 
+        h2, p {
+            margin: 0;
+            padding: 0;
         }
         h2 { margin-bottom: 5px; }
         p { margin-bottom: 10px; }
-        table { 
-            width: 100%; 
-            border-collapse: collapse; 
-            margin-top: 10px; 
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
             page-break-inside: auto;
         }
-        th, td { 
-            border: 1px solid #000; 
-            padding: 5px; 
-            text-align: left; 
+        th, td {
+            border: 1px solid #000;
+            padding: 5px;
+            text-align: left;
             vertical-align: top;
             font-size: 11px;
         }
-        th { 
-            background-color: #f2f2f2; 
+        th {
+            background-color: #f2f2f2;
         }
         tr { page-break-inside: avoid; page-break-after: auto; }
         .page-break { page-break-after: always; }
@@ -47,7 +47,10 @@
                 <th>Order No</th>
                 <th>Reference No</th>
                 <th>Coordinator</th>
+                <th>Merchandiser Name</th>
                 <th>Inquiry Date</th>
+                <th>Customer Requested Date</th>
+                <th>Develop Planned Date</th>
                 <th>Item</th>
                 <th>Item Description</th>
                 <th>Size</th>
@@ -68,7 +71,10 @@
                     <td>{{ $inq->orderNo }}</td>
                     <td>{{ $inq->referenceNo ?? '-' }}</td>
                     <td>{{ $inq->coordinatorName ?? '-' }}</td>
+                    <td>{{ $inq->merchandiseName ?? '-' }}</td>
                     <td>{{ $inq->inquiryReceiveDate ? $inq->inquiryReceiveDate->format('Y-m-d') : '-' }}</td>
+                    <td>{{ $inq->customerRequestDate ? $inq->customerRequestDate->format('Y-m-d') : '-' }}</td>
+                    <td>{{ $inq->developPlannedDate ? $inq->developPlannedDate->format('Y-m-d') : '-' }}</td>
                     <td>{{ $inq->item ?? '-' }}</td>
                     <td>{{ $inq->ItemDiscription ?? '-' }}</td>
                     <td>{{ $inq->size ?? '-' }}</td>
