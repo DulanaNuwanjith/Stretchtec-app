@@ -1,11 +1,15 @@
 <head>
+
+    {{-- Tailwind CSS and Sweet Alert Imports --}}
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <title>StretchTec</title>
 </head>
 
 <div class="flex h-full w-full bg-white">
 
+    {{-- Top Bar extending from layouts --}}
     @extends('layouts.sample-tabs')
 
     @section('content')
@@ -15,6 +19,7 @@
                     <div class="bg-white dark:bg-gray-800 overflow-hidden">
                         <div class="p-4 text-gray-900 dark:text-gray-100">
 
+                            {{-- Style for Sweet Alert --}}
                             <style>
                                 .swal2-toast {
                                     font-size: 0.875rem;
@@ -51,6 +56,7 @@
                                 }
                             </style>
 
+                            {{-- Script for Sweet Alert --}}
                             <script>
                                 document.addEventListener('DOMContentLoaded', () => {
                                     @if (session('success'))
@@ -124,10 +130,11 @@
                                 }
                             </script>
 
+                            {{-- Filters --}}
                             <div class="flex justify-start">
                                 <button onclick="toggleFilterForm()"
                                     class="bg-white border border-blue-500 text-blue-500 hover:text-blue-600 hover:border-blue-600 font-semibold py-1 px-3 rounded shadow flex items-center gap-2 mb-6">
-                                    <img src="{{ asset('icons/filter.png') }}" alt="" class="w-6 h-6"
+                                    <img src="{{ asset('icons/filter.png') }}" class="w-6 h-6"
                                         alt="Filter Icon">
                                     Filters
                                 </button>
@@ -137,12 +144,11 @@
                                 <form id="filterForm3" method="GET"
                                     action="{{ route('sample-preparation-production.index') }}"
                                     class="mb-6 sticky top-0 z-40 flex gap-6 items-center">
-                                    {{-- Keep the tab=3 in query to know which tab is active --}}
                                     <input type="hidden" name="tab" value="3">
 
                                     <div class="flex items-center gap-4 flex-wrap">
 
-                                        {{-- Order No Dropdown --}}
+                                        {{-- Filter - Order No Dropdown --}}
                                         <div class="relative inline-block text-left w-48">
                                             <label for="orderDropdownTab3"
                                                 class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Order
@@ -179,7 +185,7 @@
                                             </div>
                                         </div>
 
-                                        {{-- Development Plan Date --}}
+                                        {{-- Filter - Development Plan Date --}}
                                         <div class="inline-block text-left w-48">
                                             <label for="developmentPlanDateTab3"
                                                 class="block text-sm font-medium text-gray-700">Production Deadline</label>
@@ -188,7 +194,7 @@
                                                 class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 text-sm">
                                         </div>
 
-                                        {{-- Buttons --}}
+                                        {{-- Filter - Buttons --}}
                                         <div class="flex items-end space-x-2 mt-2">
                                             <button type="submit"
                                                 class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Apply
@@ -208,55 +214,56 @@
                                 </h1>
                             </div>
 
+                            {{-- Main Table --}}
                             <div id="SampleProductionRecordsScroll"
                                 class="overflow-x-auto max-h-[1200px] bg-white dark:bg-gray-900 shadow rounded-lg">
                                 <table class="table-fixed w-full text-sm divide-y divide-gray-200 dark:divide-gray-700">
                                     <thead class="bg-gray-100 dark:bg-gray-700 text-left">
                                         <tr class="text-center">
                                             <th
-                                                class="font-bold sticky left-0 top-0 z-30 bg-white px-4 py-3 w-32 box-border text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold sticky left-0 top-0 z-30 bg-white px-4 py-3 w-32 box-border text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Order No
                                             </th>
                                             <th
-                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Production Deadline
                                             </th>
                                             <th
-                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-48 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-48 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Order Received Date & Time
                                             </th>
                                             <th
-                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-48 text-center text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-48 text-center text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Order Start Date & Time
                                             </th>
                                             <th
-                                                class="font-bold sticky top-0 z-20 bg-gray-200 px-4 py-3 w-52 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold sticky top-0 z-20 bg-gray-200 px-4 py-3 w-52 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Operator Name
                                             </th>
                                             <th
-                                                class="font-bold sticky top-0 z-20 bg-gray-200 px-4 py-3 w-52 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold sticky top-0 z-20 bg-gray-200 px-4 py-3 w-52 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Supervisor Name
                                             </th>
                                             <th
-                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-48 text-center text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-48 text-center text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Order Complete Date & Time
                                             </th>
                                             <th
-                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Production Output</th>
                                             <th
-                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Damaged Output</th>
                                             <th
-                                                class="font-bold sticky top-0 z-20 bg-gray-200 px-4 py-3 w-64 text-center text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold sticky top-0 z-20 bg-gray-200 px-4 py-3 w-64 text-center text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Dispatch to R&D
                                             </th>
                                             <th
-                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-72 text-center text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-72 text-center text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Note
                                             </th>
                                             <th
-                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-48 text-center text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-48 text-center text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Action
                                             </th>
                                         </tr>
@@ -268,23 +275,23 @@
                                                 class="odd:bg-white even:bg-gray-50 border-b border-gray-200  text-left">
                                                 {{-- Order No --}}
                                                 <td
-                                                    class="sticky left-0 z-20 bg-white px-4 py-3 bg-gray-100 whitespace-normal break-words border-r border-gray-300">
+                                                    class="sticky left-0 z-20 px-4 py-3 bg-gray-100 whitespace-normal break-words border-r border-gray-300">
                                                     <span
                                                         class="readonly font-bold hover:text-blue-600 hover:underline cursor-pointer"
                                                         onclick="openSampleModal(
-            '{{ addslashes($prod->order_no) }}',
-            '{{ addslashes($prod->sampleInquiry->customerName ?? '-') }}',
-            '{{ addslashes($prod->sampleInquiry->item ?? '-') }}',
-            '{{ addslashes($prod->sampleInquiry->ItemDiscription ?? '-') }}',
-            '{{ addslashes($prod->sampleInquiry->size ?? '-') }}',
-            '{{ addslashes($prod->sampleInquiry->qtRef ?? '-') }}',
-            '{{ addslashes($prod->sampleInquiry->color ?? '-') }}',
-            '{{ addslashes($prod->sampleInquiry->style ?? '-') }}',
-            '{{ addslashes($prod->sampleInquiry->sampleQty ?? '-') }}',
-            '{{ addslashes($prod->samplePreparationRnd->shade ?? '-') }}',
-            '{{ addslashes($prod->operator_name ?? '-') }}',
-            '{{ addslashes($prod->supervisor_name ?? '-') }}',
-        )">
+                                                            '{{ addslashes($prod->order_no) }}',
+                                                            '{{ addslashes($prod->sampleInquiry->customerName ?? '-') }}',
+                                                            '{{ addslashes($prod->sampleInquiry->item ?? '-') }}',
+                                                            '{{ addslashes($prod->sampleInquiry->ItemDiscription ?? '-') }}',
+                                                            '{{ addslashes($prod->sampleInquiry->size ?? '-') }}',
+                                                            '{{ addslashes($prod->sampleInquiry->qtRef ?? '-') }}',
+                                                            '{{ addslashes($prod->sampleInquiry->color ?? '-') }}',
+                                                            '{{ addslashes($prod->sampleInquiry->style ?? '-') }}',
+                                                            '{{ addslashes($prod->sampleInquiry->sampleQty ?? '-') }}',
+                                                            '{{ addslashes($prod->samplePreparationRnd->shade ?? '-') }}',
+                                                            '{{ addslashes($prod->operator_name ?? '-') }}',
+                                                            '{{ addslashes($prod->supervisor_name ?? '-') }}',
+                                                        )">
                                                         {{ $prod->order_no }}
                                                     </span>
 
@@ -686,7 +693,7 @@
 
                                                                     <button type="submit"
                                                                         class="sample-dispatch-btn mt-1 px-2 py-1 rounded transition-all duration-200 w-full
-                        {{ $disableDispatch ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : 'bg-gray-300 text-black hover:bg-gray-400' }}"
+                                                                        {{ $disableDispatch ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : 'bg-gray-300 text-black hover:bg-gray-400' }}"
                                                                         {{ $disableDispatch ? 'disabled title=Please enter Production and Damaged Output first' : '' }}>
                                                                         Dispatch
                                                                     </button>
@@ -739,20 +746,6 @@
                                                 {{-- Action Buttons --}}
                                                 <td class="px-4 py-3 whitespace-normal break-words text-center">
                                                     <div class="flex space-x-2 justify-center">
-                                                        {{-- @auth
-                                                            @if (auth()->user()->role === 'SUPERADMIN')
-                                                                <button type="button"
-                                                                    class="bg-green-600 h-10 hover:bg-green-700 text-white px-3 py-1 rounded text-sm"
-                                                                    onclick="editServiceRow('serviceRow{{ $prod->id }}')">
-                                                                    Edit
-                                                                </button>
-                                                                <button type="button"
-                                                                    class="bg-blue-600 h-10 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm hidden"
-                                                                    onclick="saveServiceRow('serviceRow{{ $prod->id }}')">
-                                                                    Save
-                                                                </button>
-                                                            @endif
-                                                        @endauth --}}
                                                         @if ($prod->order_file_url)
                                                             <a href="{{ asset('storage/' . $prod->sampleInquiry->orderFile) }}"
                                                                 target="_blank"
@@ -774,7 +767,7 @@
                                     </tbody>
                                 </table>
 
-                                <!-- Sample Details Modal -->
+                                {{-- Sample Details Modal --}}
                                 <div id="viewDetailsSample"
                                     class="fixed inset-0 z-50 hidden bg-black bg-opacity-50 flex items-center justify-center py-5"
                                     onclick="this.classList.add('hidden')">
@@ -850,7 +843,7 @@
 
                                         </div>
 
-                                        <!-- Buttons -->
+                                        {{-- Buttons --}}
                                         <div class="text-center mt-6 flex justify-center gap-4 mb-10">
                                             <button
                                                 onclick="document.getElementById('viewDetailsSample').classList.add('hidden')"
@@ -877,6 +870,7 @@
         </div>
     </div>
 
+    {{-- Printing Sample Details --}}
     <script>
         function printSampleDetails() {
             const printContent = document.getElementById('printAreaSample').innerHTML;
@@ -1081,7 +1075,6 @@
             // ======= ORDER NO DROPDOWN (Tab 3) =======
             const orderDropdownBtn = document.getElementById("orderDropdownTab3");
             const orderDropdownMenu = document.getElementById("orderDropdownMenuTab3");
-            const clearFiltersBtnTab3 = document.getElementById('clearFiltersBtnTab3');
 
             // Prevent clicks inside dropdown menu from closing it
             orderDropdownMenu.addEventListener("click", (event) => {
@@ -1128,7 +1121,6 @@
             // ======= SAMPLE DROPDOWN =======
             const sampleDropdownBtn = document.getElementById('sampleDropdown');
             const sampleDropdownMenu = document.getElementById('sampleDropdownMenu');
-            const clearFiltersBtnProduction = document.getElementById('clearFiltersBtnProduction');
 
             // Prevent clicks inside sample dropdown menu from closing it
             if (sampleDropdownMenu) {
@@ -1250,7 +1242,7 @@
             });
         });
 
-        // Restore page scroll after full load (including images etc)
+        // Restore page scroll after full load (including images)
         window.onload = function() {
             let pageScroll = localStorage.getItem("pageScrollY");
             if (pageScroll !== null) {
