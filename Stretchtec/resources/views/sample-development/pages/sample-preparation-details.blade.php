@@ -1090,9 +1090,23 @@
                                                                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                                                     @php
                                                                         $letters = range('A', 'Z');
+
+                                                                        // Define status-to-color mapping
+                                                                        $statusColors = [
+                                                                            'In Production' => 'bg-yellow-100 text-yellow-800 dark:bg-yellow-700 dark:text-yellow-200',
+                                                                            'Sent to Production' => 'bg-emerald-100 text-emerald-800 dark:bg-emerald-700 dark:text-emerald-200',
+                                                                            'Yarn Received' => 'bg-pink-100 text-pink-800 dark:bg-pink-700 dark:text-pink-200',
+                                                                            'Pending' => 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200',
+                                                                            'Order Delivered' => 'bg-blue-100 text-blue-800 dark:bg-blue-700 dark:text-blue-200',
+                                                                        ];
                                                                     @endphp
+
                                                                     @foreach($prep->shadeOrders as $index => $shade)
-                                                                        <div class="border rounded-md p-4 bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200">
+                                                                        @php
+                                                                            $colorClass = $statusColors[$shade->status] ?? 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200';
+                                                                        @endphp
+
+                                                                        <div class="border rounded-md p-4 {{ $colorClass }}">
                                                                             <div class="font-semibold mb-1">
                                                                                 Option {{ $letters[$index] ?? $index + 1 }}
                                                                             </div>
@@ -1103,6 +1117,7 @@
                                                                         </div>
                                                                     @endforeach
                                                                 </div>
+
                                                             </div>
                                                         </div>
                                                     @elseif(in_array($prep->alreadyDeveloped, ['No Need to Develop']))
