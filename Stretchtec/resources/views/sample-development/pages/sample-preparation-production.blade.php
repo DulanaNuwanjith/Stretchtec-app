@@ -135,7 +135,8 @@
 
                             <div id="filterFormContainerTab3" class="mt-4 hidden">
                                 <form id="filterForm3" method="GET"
-                                    action="{{ route('sample-preparation-production.index') }}" class="mb-6 sticky top-0 z-40 flex gap-6 items-center">
+                                    action="{{ route('sample-preparation-production.index') }}"
+                                    class="mb-6 sticky top-0 z-40 flex gap-6 items-center">
                                     {{-- Keep the tab=3 in query to know which tab is active --}}
                                     <input type="hidden" name="tab" value="3">
 
@@ -207,7 +208,8 @@
                                 </h1>
                             </div>
 
-                            <div id="SampleProductionRecordsScroll" class="overflow-x-auto max-h-[1200px] bg-white dark:bg-gray-900 shadow rounded-lg">
+                            <div id="SampleProductionRecordsScroll"
+                                class="overflow-x-auto max-h-[1200px] bg-white dark:bg-gray-900 shadow rounded-lg">
                                 <table class="table-fixed w-full text-sm divide-y divide-gray-200 dark:divide-gray-700">
                                     <thead class="bg-gray-100 dark:bg-gray-700 text-left">
                                         <tr class="text-center">
@@ -271,6 +273,7 @@
                                                         class="readonly font-bold hover:text-blue-600 hover:underline cursor-pointer"
                                                         onclick="openSampleModal(
             '{{ addslashes($prod->order_no) }}',
+            '{{ addslashes($prod->sampleInquiry->customerName ?? '-') }}',
             '{{ addslashes($prod->sampleInquiry->item ?? '-') }}',
             '{{ addslashes($prod->sampleInquiry->ItemDiscription ?? '-') }}',
             '{{ addslashes($prod->sampleInquiry->size ?? '-') }}',
@@ -537,7 +540,8 @@
                                                 </td>
 
                                                 {{-- Production Output --}}
-                                                <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                                <td
+                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
                                                     @auth
                                                         @if (auth()->user()->role === 'ADMIN')
                                                             <span class="readonly">
@@ -545,18 +549,20 @@
                                                             </span>
                                                         @else
                                                             @if (!$prod->is_output_locked)
-                                                                <form action="{{ route('production.updateOutput') }}" method="POST" class="inline-block w-full">
+                                                                <form action="{{ route('production.updateOutput') }}"
+                                                                    method="POST" class="inline-block w-full">
                                                                     @csrf
-                                                                    <input type="hidden" name="id" value="{{ $prod->id }}">
+                                                                    <input type="hidden" name="id"
+                                                                        value="{{ $prod->id }}">
 
                                                                     <input type="number" min="0" step="any"
-                                                                           name="production_output"
-                                                                           value="{{ old('production_output', $prod->production_output) }}"
-                                                                           class="w-full px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                                           required>
+                                                                        name="production_output"
+                                                                        value="{{ old('production_output', $prod->production_output) }}"
+                                                                        class="w-full px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                                        required>
 
                                                                     <button type="submit"
-                                                                            class="mt-1 px-3 py-1 rounded text-sm transition-all duration-200 bg-blue-600 hover:bg-blue-700 text-white">
+                                                                        class="mt-1 px-3 py-1 rounded text-sm transition-all duration-200 bg-blue-600 hover:bg-blue-700 text-white">
                                                                         Save
                                                                     </button>
                                                                 </form>
@@ -570,7 +576,8 @@
                                                 </td>
 
                                                 {{-- Damaged Output --}}
-                                                <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                                <td
+                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
                                                     @auth
                                                         @if (auth()->user()->role === 'ADMIN')
                                                             <span class="readonly">
@@ -578,20 +585,22 @@
                                                             </span>
                                                         @else
                                                             @if (!$prod->is_damagedOutput_locked)
-                                                                <form action="{{ route('production.updateDamagedOutput') }}" method="POST" class="inline-block w-full">
+                                                                <form action="{{ route('production.updateDamagedOutput') }}"
+                                                                    method="POST" class="inline-block w-full">
                                                                     @csrf
-                                                                    <input type="hidden" name="id" value="{{ $prod->id }}">
+                                                                    <input type="hidden" name="id"
+                                                                        value="{{ $prod->id }}">
 
                                                                     <input type="number" min="0"
-                                                                           max="{{ $prod->production_output ?? 0 }}" {{-- ✅ ensure it can't exceed production_output --}}
-                                                                           step="any"
-                                                                           name="damaged_output"
-                                                                           value="{{ old('damaged_output', $prod->damaged_output) }}"
-                                                                           class="w-full px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                                           required>
+                                                                        max="{{ $prod->production_output ?? 0 }}"
+                                                                        {{-- ✅ ensure it can't exceed production_output --}} step="any"
+                                                                        name="damaged_output"
+                                                                        value="{{ old('damaged_output', $prod->damaged_output) }}"
+                                                                        class="w-full px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                                        required>
 
                                                                     <button type="submit"
-                                                                            class="mt-1 px-3 py-1 rounded text-sm transition-all duration-200 bg-blue-600 hover:bg-blue-700 text-white">
+                                                                        class="mt-1 px-3 py-1 rounded text-sm transition-all duration-200 bg-blue-600 hover:bg-blue-700 text-white">
                                                                         Save
                                                                     </button>
                                                                 </form>
@@ -746,8 +755,8 @@
                                                         @endauth --}}
                                                         @if ($prod->order_file_url)
                                                             <a href="{{ asset('storage/' . $prod->sampleInquiry->orderFile) }}"
-                                                               target="_blank"
-                                                               class="bg-gray-600 h-10 w-20 hover:bg-gray-700 text-white px-3 py-2 rounded text-sm flex items-center justify-center ml-2">
+                                                                target="_blank"
+                                                                class="bg-gray-600 h-10 w-20 hover:bg-gray-700 text-white px-3 py-2 rounded text-sm flex items-center justify-center ml-2">
                                                                 View
                                                             </a>
                                                         @else
@@ -767,11 +776,11 @@
 
                                 <!-- Sample Details Modal -->
                                 <div id="viewDetailsSample"
-                                     class="fixed inset-0 z-50 hidden bg-black bg-opacity-50 flex items-center justify-center py-5"
-                                     onclick="this.classList.add('hidden')">
+                                    class="fixed inset-0 z-50 hidden bg-black bg-opacity-50 flex items-center justify-center py-5"
+                                    onclick="this.classList.add('hidden')">
 
                                     <div class="w-full max-w-[700px] bg-white dark:bg-gray-900 rounded-2xl shadow-2xl p-4 transform transition-all scale-95 max-h-[calc(100vh-10rem)] overflow-y-auto"
-                                         onclick="event.stopPropagation()">
+                                        onclick="event.stopPropagation()">
 
                                         <div class="max-w-[600px] mx-auto p-6" id="printAreaSample">
                                             <h2 id="modalOrderNo"
@@ -780,46 +789,50 @@
 
                                             <table class="w-full text-left border border-gray-300 text-sm">
                                                 <tbody>
-                                                <tr>
-                                                    <th class="p-2 border">Item</th>
-                                                    <td class="p-2 border" id="modalItem"></td>
-                                                </tr>
-                                                <tr>
-                                                    <th class="p-2 border">Item Description</th>
-                                                    <td class="p-2 border" id="modalDescription"></td>
-                                                </tr>
-                                                <tr>
-                                                    <th class="p-2 border">Size</th>
-                                                    <td class="p-2 border" id="modalSize"></td>
-                                                </tr>
-                                                <tr>
-                                                    <th class="p-2 border">QT Ref</th>
-                                                    <td class="p-2 border" id="modalQTRef"></td>
-                                                </tr>
-                                                <tr>
-                                                    <th class="p-2 border">Color</th>
-                                                    <td class="p-2 border" id="modalColor"></td>
-                                                </tr>
-                                                <tr>
-                                                    <th class="p-2 border">Style</th>
-                                                    <td class="p-2 border" id="modalStyle"></td>
-                                                </tr>
-                                                <tr>
-                                                    <th class="p-2 border">Sample Qty</th>
-                                                    <td class="p-2 border" id="modalSampleQty"></td>
-                                                </tr>
-                                                <tr>
-                                                    <th class="p-2 border">Shade</th>
-                                                    <td class="p-2 border" id="modalShade"></td>
-                                                </tr>
-                                                <tr>
-                                                    <th class="p-2 border">Operator Name</th>
-                                                    <td class="p-2 border" id="modalOperator"></td>
-                                                </tr>
-                                                <tr>
-                                                    <th class="p-2 border">Supervisor Name</th>
-                                                    <td class="p-2 border" id="modalSupervisor"></td>
-                                                </tr>
+                                                    <tr>
+                                                        <th class="p-2 border">Customer Name</th>
+                                                        <td class="p-2 border" id="modalCustomerName"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="p-2 border">Item</th>
+                                                        <td class="p-2 border" id="modalItem"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="p-2 border">Item Description</th>
+                                                        <td class="p-2 border" id="modalDescription"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="p-2 border">Size</th>
+                                                        <td class="p-2 border" id="modalSize"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="p-2 border">QT Ref</th>
+                                                        <td class="p-2 border" id="modalQTRef"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="p-2 border">Color</th>
+                                                        <td class="p-2 border" id="modalColor"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="p-2 border">Style</th>
+                                                        <td class="p-2 border" id="modalStyle"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="p-2 border">Sample Qty</th>
+                                                        <td class="p-2 border" id="modalSampleQty"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="p-2 border">Shade</th>
+                                                        <td class="p-2 border" id="modalShade"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="p-2 border">Operator Name</th>
+                                                        <td class="p-2 border" id="modalOperator"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="p-2 border">Supervisor Name</th>
+                                                        <td class="p-2 border" id="modalSupervisor"></td>
+                                                    </tr>
                                                 </tbody>
                                             </table>
 
@@ -845,8 +858,7 @@
                                                 Close
                                             </button>
 
-                                            <button
-                                                onclick="printSampleDetails()"
+                                            <button onclick="printSampleDetails()"
                                                 class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-md">
                                                 Print
                                             </button>
@@ -1045,8 +1057,10 @@
     </script>
 
     <script>
-        function openSampleModal(orderNo, item, description, size, qtRef, color, style, sampleQty, shade, operator, supervisor) {
+        function openSampleModal(orderNo, customerName, item, description, size, qtRef, color, style, sampleQty, shade, operator,
+            supervisor) {
             document.getElementById('modalOrderNo').textContent = 'Order Number: ' + orderNo;
+            document.getElementById('modalCustomerName').textContent = customerName;
             document.getElementById('modalItem').textContent = item;
             document.getElementById('modalDescription').textContent = description;
             document.getElementById('modalSize').textContent = size;
