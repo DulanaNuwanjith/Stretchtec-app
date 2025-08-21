@@ -1257,7 +1257,7 @@
                                                                         {{-- Trigger Button --}}
                                                                         <button type="button"
                                                                             class="yarn-receive-btn px-2 py-1 mt-3 rounded transition-all duration-200
-                                {{ $prep->developPlannedDate && $prep->yarnOrderedDate ? 'bg-gray-300 text-black hover:bg-gray-400' : 'bg-gray-200 text-gray-500 cursor-not-allowed' }}"
+                                                                            {{ $prep->developPlannedDate && $prep->yarnOrderedDate ? 'bg-gray-300 text-black hover:bg-gray-400' : 'bg-gray-200 text-gray-500 cursor-not-allowed' }}"
                                                                             @if ($prep->developPlannedDate && $prep->yarnOrderedDate) @click="open = true" @else disabled title="Please set Development Plan Date and Yarn Ordered Date first" @endif>
                                                                             Pending
                                                                         </button>
@@ -1589,24 +1589,18 @@
 
                                                 <td class="px-4 py-3 border-r border-gray-300 text-center">
                                                     @php
+                                                        $dispatchRecord = $dispatchCheck->firstWhere('sample_preparation_rnd_id', $prep->id);
                                                         $canEditReference = false;
 
-                                                        if (
-                                                            in_array($prep->alreadyDeveloped, [
-                                                                'No Need to Develop',
-                                                                'Tape Match Pan Asia',
-                                                            ])
-                                                        ) {
+                                                        if (in_array($prep->alreadyDeveloped, ['No Need to Develop', 'Tape Match Pan Asia'])) {
                                                             $canEditReference = true;
-                                                        } elseif (
-                                                            $prep->alreadyDeveloped === 'Need to Develop' &&
-                                                            $prep->productionStatus === 'Production Complete'
-                                                        ) {
+                                                        } elseif ($prep->alreadyDeveloped === 'Need to Develop' &&
+                                                                  (($dispatchRecord?->dispatch_to_rnd_at ?? null) != null)) {
                                                             $canEditReference = true;
                                                         }
                                                     @endphp
 
-                                                    @if (Auth::user()->role === 'ADMIN' or Auth::user()->role === 'PRODUCTIONOFFICER')
+                                                @if (Auth::user()->role === 'ADMIN' or Auth::user()->role === 'PRODUCTIONOFFICER')
                                                         {{-- ADMIN: Read-only --}}
                                                         @if ($prep->is_reference_locked)
                                                             <span class="readonly">{{ $prep->referenceNo }}</span>

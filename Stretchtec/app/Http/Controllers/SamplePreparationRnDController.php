@@ -62,6 +62,9 @@ class SamplePreparationRnDController extends Controller
         $coordinators = SampleInquiry::whereNotNull('coordinatorName')->where('coordinatorName', '!=', '')->distinct()->orderBy('coordinatorName')->pluck('coordinatorName');
         $sampleStockReferences = SampleStock::pluck('reference_no')->unique();
 
+        //Production dispatch check
+        $dispatchCheck = SamplePreparationProduction::all();
+
         return view('sample-development.pages.sample-preparation-details', compact(
             'samplePreparations',
             'orderNos',
@@ -69,7 +72,8 @@ class SamplePreparationRnDController extends Controller
             'shades',
             'references',
             'sampleStockReferences',
-            'coordinators'
+            'coordinators',
+            'dispatchCheck'
         ));
     }
 
