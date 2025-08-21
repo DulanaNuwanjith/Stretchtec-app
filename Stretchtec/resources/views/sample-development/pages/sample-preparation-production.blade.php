@@ -1131,9 +1131,11 @@
             const clearFiltersBtnProduction = document.getElementById('clearFiltersBtnProduction');
 
             // Prevent clicks inside sample dropdown menu from closing it
-            sampleDropdownMenu.addEventListener('click', (e) => {
-                e.stopPropagation();
-            });
+            if (sampleDropdownMenu) {
+                sampleDropdownMenu.addEventListener("click", (e) => {
+                    e.stopPropagation();
+                });
+            }
 
             // Toggle sample dropdown
             window.toggleSampleDropdown = function() {
@@ -1168,12 +1170,20 @@
             };
 
             // Close sample dropdown when clicking outside
-            document.addEventListener('click', function(e) {
-                if (!sampleDropdownBtn.contains(e.target) && !sampleDropdownMenu.contains(e.target)) {
-                    sampleDropdownMenu.classList.add('hidden');
-                    sampleDropdownBtn.setAttribute('aria-expanded', 'false');
+            document.addEventListener('DOMContentLoaded', () => {
+                const sampleDropdownBtn = document.getElementById('sampleDropdownBtn');
+                const sampleDropdownMenu = document.getElementById('sampleDropdownMenu');
+
+                if (sampleDropdownBtn && sampleDropdownMenu) {
+                    document.addEventListener('click', function(e) {
+                        if (!sampleDropdownBtn.contains(e.target) && !sampleDropdownMenu.contains(e.target)) {
+                            sampleDropdownMenu.classList.add('hidden');
+                            sampleDropdownBtn.setAttribute('aria-expanded', 'false');
+                        }
+                    });
                 }
             });
+
         });
         // Clear filters button for Tab 3
         document.getElementById('clearFiltersBtnTab3').addEventListener('click', function() {
