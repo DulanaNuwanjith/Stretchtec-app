@@ -692,12 +692,16 @@
                                                 class="odd:bg-white even:bg-gray-50 border-b border-gray-200  text-left">
                                                 <!-- Order No -->
                                                 <td
-                                                    class="sticky left-0 z-10 bg-white px-4 py-3 bg-gray-100 whitespace-normal break-words border-r border-gray-300">
-                                                    <span class="readonly font-bold">{{ $inquiry->orderNo }}</span>
+                                                    class="sticky left-0 z-10 px-4 py-3 bg-gray-100 whitespace-normal break-words border-r border-gray-300">
+                                                    <span
+                                                        class="readonly font-bold {{ $inquiry->customerDeliveryDate ? 'text-red-600' : '' }}">
+                                                        {{ $inquiry->orderNo }}
+                                                    </span>
                                                     <input type="text"
-                                                        class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                        value="{{ $inquiry->orderNo }}" />
+                                                           class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                           value="{{ $inquiry->orderNo }}" />
                                                 </td>
+
 
                                                 <!-- Inquiry Receive Date -->
                                                 <td
