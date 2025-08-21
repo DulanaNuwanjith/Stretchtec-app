@@ -54,7 +54,6 @@
                 <th>Item</th>
                 <th>Item Description</th>
                 <th>Size</th>
-                <th>Qty Ref</th>
                 <th>Color</th>
                 <th>Shade</th>
                 <th>TKT</th>
@@ -78,7 +77,6 @@
                     <td>{{ $inq->item ?? '-' }}</td>
                     <td>{{ $inq->ItemDiscription ?? '-' }}</td>
                     <td>{{ $inq->size ?? '-' }}</td>
-                    <td>{{ $inq->qtRef ?? '-' }}</td>
                     <td>{{ $inq->color ?? '-' }}</td>
                     <td>{{ $inq->samplePreparationRnD->shade ?? '-' }}</td>
                     <td>{{ $inq->samplePreparationRnD->tkt ?? '-' }}</td>
