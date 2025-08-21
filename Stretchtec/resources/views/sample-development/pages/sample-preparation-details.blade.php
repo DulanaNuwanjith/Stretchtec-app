@@ -501,7 +501,6 @@
                                                     @endif
                                                 </td>
 
-
                                                 {{-- Colour Match Sent Date --}}
                                                 <td
                                                     class="text-center py-3 border-r border-gray-300 whitespace-normal break-words">
@@ -774,7 +773,7 @@
                                                     </div>
                                                 </td>
 
-                                                <td class="px-4 py-3 text-center border-r border-gray-300">
+                                                <td class="px-4 py-3 text-center border-r border-gray-300 break-words">
                                                     @if (Auth::user()->role === 'ADMIN' or Auth::user()->role === 'PRODUCTIONOFFICER')
                                                         {{-- Read-only for ADMIN --}}
                                                         @if ($prep->alreadyDeveloped == 'Need to Develop')
@@ -1102,7 +1101,7 @@
                                                 </td>
 
 
-                                                <td class="px-4 py-3 border-r border-gray-300 text-center">
+                                                <td class="px-4 py-3 border-r border-gray-300 text-center break-words">
                                                     @if ($prep->alreadyDeveloped == 'Need to Develop')
                                                         @if (!empty($prep->yarnOrderedPONumber))
                                                             {{-- Show saved PO Number --}}
@@ -1129,7 +1128,7 @@
                                                     @endif
                                                 </td>
 
-                                                <td class="px-4 py-3 border-r border-gray-300 text-center">
+                                                <td class="px-4 py-3 border-r border-gray-300 text-center break-words">
                                                     @if (!empty($prep->shade))
                                                         {{-- Show saved Shade --}}
                                                         <span class="text-sm font-medium text-gray-800 dark:text-gray-200">
@@ -1148,7 +1147,7 @@
                                                 </td>
 
                                                 <!-- Yarn Ordered Weight -->
-                                                <td class="px-4 py-3 border-r border-gray-300 text-center">
+                                                <td class="px-4 py-3 border-r border-gray-300 text-center break-words">
                                                     @if (in_array($prep->alreadyDeveloped, ['Tape Match Pan Asia', 'No Need to Develop']))
                                                         {{-- Not available for these statuses --}}
                                                         <span class="text-gray-400 italic">—</span>
@@ -1166,7 +1165,7 @@
                                                     @endif
                                                 </td>
 
-                                                <td class="px-4 py-3 border-r border-gray-300 text-center">
+                                                <td class="px-4 py-3 border-r border-gray-300 text-center break-words">
                                                     @if (!empty($prep->tkt))
                                                         {{-- Show saved TKT --}}
                                                         <span class="text-sm font-medium text-gray-800 dark:text-gray-200">
@@ -1184,7 +1183,7 @@
                                                     @endif
                                                 </td>
 
-                                                <td class="px-4 py-3 border-r border-gray-300 text-center">
+                                                <td class="px-4 py-3 border-r border-gray-300 text-center break-words">
                                                     @if (!empty($prep->yarnSupplier))
                                                         {{-- Show saved Supplier --}}
                                                         <span class="text-sm font-medium text-gray-800 dark:text-gray-200">
@@ -1202,7 +1201,7 @@
                                                     @endif
                                                 </td>
 
-                                                <td class="px-4 py-3 border-r border-gray-300 text-center">
+                                                <td class="px-4 py-3 border-r border-gray-300 text-center break-words">
                                                     @if (!empty($prep->yarnPrice))
                                                         {{-- Show saved Supplier --}}
                                                         <span class="text-sm font-medium text-gray-800 dark:text-gray-200">
@@ -1357,7 +1356,7 @@
                                                     @endif
                                                 </td>
 
-                                                <td class="px-4 py-3 border-r border-gray-300 text-center">
+                                                <td class="px-4 py-3 border-r border-gray-300 text-center break-words">
                                                     @if (Auth::user()->role === 'ADMIN' or Auth::user()->role === 'PRODUCTIONOFFICER')
                                                         {{-- ADMIN/PRODUCTION OFFICER: Read-only --}}
                                                         @if ($prep->alreadyDeveloped == 'Need to Develop')
