@@ -1,7 +1,10 @@
 <head>
+
+    <!-- Include Tailwind CSS -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <!-- Include SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <title>StretchTec</title>
 </head>
 
@@ -14,6 +17,8 @@
                 <div class="w-full px-6 lg:px-2">
                     <div class="bg-white dark:bg-gray-800 overflow-hidden">
                         <div class="p-4 text-gray-900 dark:text-gray-100">
+
+                            {{-- Sweet Alert Styles --}}
                             <style>
                                 .swal2-toast {
                                     font-size: 0.875rem;
@@ -50,6 +55,7 @@
                                 }
                             </style>
 
+                            {{-- Sweet Alert Script --}}
                             <script>
                                 document.addEventListener('DOMContentLoaded', () => {
                                     @if (session('success'))
@@ -123,10 +129,11 @@
                                 }
                             </script>
 
+                            {{-- Filters --}}
                             <div class="flex justify-start">
                                 <button onclick="toggleFilterForm()"
                                     class="bg-white border border-blue-500 text-blue-500 hover:text-blue-600 hover:border-blue-600 font-semibold py-1 px-3 rounded shadow flex items-center gap-2 mb-6">
-                                    <img src="{{ asset('icons/filter.png') }}" alt="" class="w-6 h-6"
+                                    <img src="{{ asset('icons/filter.png') }}" class="w-6 h-6"
                                         alt="Filter Icon">
                                     Filters
                                 </button>
@@ -138,7 +145,7 @@
                                     action="{{ route('sample-preparation-details.index') }}" class="mb-6">
                                     <div class="flex items-center gap-4 flex-wrap">
 
-                                        {{-- Order No Dropdown --}}
+                                        {{-- Filters - Order No Dropdown --}}
                                         <div class="relative inline-block text-left w-48">
                                             <label for="customerDropdown"
                                                 class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Order
@@ -174,7 +181,7 @@
                                             </div>
                                         </div>
 
-                                        {{-- PO No Dropdown --}}
+                                        {{-- Filters - PO No Dropdown --}}
                                         <div class="relative inline-block text-left w-48">
                                             <label for="customerDropdown"
                                                 class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">PO
@@ -209,7 +216,7 @@
                                             </div>
                                         </div>
 
-                                        {{-- Shade Dropdown --}}
+                                        {{-- Filters - Shade Dropdown --}}
                                         <div class="relative inline-block text-left w-48">
                                             <label for="customerDropdown"
                                                 class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Shade</label>
@@ -243,7 +250,7 @@
                                             </div>
                                         </div>
 
-                                        {{-- Coordinator Name Dropdown --}}
+                                        {{-- Filters - Coordinator Name Dropdown --}}
                                         <div class="relative inline-block text-left w-48"> <label
                                                 class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Coordinator</label>
                                             <input type="hidden" name="coordinator_name" id="coordinatorInput"
@@ -272,7 +279,7 @@
                                             </div>
                                         </div>
 
-                                        {{-- Reference No Dropdown --}}
+                                        {{-- Filters - Reference No Dropdown --}}
                                         <div class="relative inline-block text-left w-48">
                                             <label for="customerDropdown"
                                                 class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Reference
@@ -309,7 +316,7 @@
                                         </div>
                                         <div class="flex gap-6 items-end">
 
-                                            {{-- Date: Customer Requested --}}
+                                            {{-- Filters - Date: Customer Requested --}}
                                             <div class="inline-block text-left w-48">
                                                 <label for="customer_requested_date"
                                                     class="block text-sm font-medium text-gray-700">Customer Requested
@@ -320,7 +327,7 @@
                                                     class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 text-sm">
                                             </div>
 
-                                            {{-- Date: Development Plan --}}
+                                            {{-- Filters - Date: Development Plan --}}
                                             <div class="inline-block text-left w-48">
                                                 <label for="development_plan_date"
                                                     class="block text-sm font-medium text-gray-700">Development Plan
@@ -331,7 +338,7 @@
                                                     class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 text-sm">
                                             </div>
 
-                                            {{-- Buttons --}}
+                                            {{-- Filters - Buttons --}}
                                             <div class="flex items-end space-x-2 mt-2">
                                                 <button type="submit"
                                                     class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Apply
@@ -348,6 +355,8 @@
                                 <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Sample Preparation R & D
                                     Records
                                 </h1>
+
+                                {{-- Other Tabs Buttons --}}
                                 <div class="flex space-x-3">
                                     <a href="{{ route('sampleStock.index') }}">
                                         <button
@@ -364,79 +373,80 @@
                                 </div>
                             </div>
 
+                            {{-- Main Table --}}
                             <div id="ResearchAndDevelopmentRecordsScroll"
                                 class="overflow-x-auto max-h-[1200px] bg-white dark:bg-gray-900 shadow rounded-lg">
                                 <table class="table-fixed w-full text-sm divide-y divide-gray-200 dark:divide-gray-700">
                                     <thead class="bg-gray-100 dark:bg-gray-700 text-left">
                                         <tr class="text-center">
                                             <th
-                                                class="font-bold sticky left-0 top-0 z-30 bg-white px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold sticky left-0 top-0 z-30 bg-white px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Order No</th>
                                             <th
-                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Customer Requested Date</th>
                                             <th
-                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-48 text-center text-xs font-medium uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">
+                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-48 text-center text-xs uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">
                                                 Colour Match Sent Date</th>
                                             <th
-                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-72 text-center text-xs font-medium uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">
+                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-72 text-center text-xs uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">
                                                 Colour Match Receive Date</th>
                                             <th
-                                                class="font-bold sticky top-0 z-20 bg-gray-200 px-4 py-3 w-56 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold sticky top-0 z-20 bg-gray-200 px-4 py-3 w-56 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Already Developed & In Sample Stock</th>
                                             <th
-                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-44 text-xs font-medium uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">
+                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-44 text-xs uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">
                                                 Development Plan Date</th>
                                             <th
-                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-48 text-center text-xs font-medium uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">
+                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-48 text-center text-xs uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">
                                                 Yarn Ordered Date</th>
                                             <th
-                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-40 text-xs font-medium uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">
+                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-40 text-xs uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">
                                                 Yarn Ordered PO Number</th>
                                             <th
-                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-40 text-xs font-medium uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">
+                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-40 text-xs uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">
                                                 Shade</th>
                                             <th
-                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-40 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-40 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Yarn Ordered Weight</th>
                                             <th
-                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-40 text-xs font-medium uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">
+                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-40 text-xs uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">
                                                 Tkt</th>
                                             <th
-                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-40 text-xs font-medium uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">
+                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-40 text-xs uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">
                                                 Yarn Supplier</th>
                                             <th
-                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-40 text-xs font-medium uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">
+                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-40 text-xs uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">
                                                 Yarn Price</th>
                                             <th
-                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-48 text-center text-xs font-medium uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">
+                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-48 text-center text-xs uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">
                                                 Yarn Receive Date</th>
                                             <th
-                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-40 text-xs font-medium uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">
+                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-40 text-xs uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">
                                                 Production Deadline</th>
                                             <th
-                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-48 text-center text-xs font-medium uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">
+                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-48 text-center text-xs uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">
                                                 Send Order To Production Status</th>
                                             <th
-                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-36 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-36 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Production Status</th>
                                             <th
-                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Production Output</th>
                                             <th
-                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Damaged Output</th>
                                             <th
-                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Yarn Leftover Weight</th>
                                             <th
-                                                class="font-bold sticky top-0 z-20 bg-gray-200 px-4 py-3 w-56 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold sticky top-0 z-20 bg-gray-200 px-4 py-3 w-56 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Reference No</th>
                                             <th
-                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-72 text-xs text-center font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-72 text-xs text-center text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Note</th>
                                             <th
-                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-48 text-xs font-medium uppercase text-gray-600 dark:text-gray-300 text-center whitespace-normal break-words">
+                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-48 text-xs uppercase text-gray-600 dark:text-gray-300 text-center whitespace-normal break-words">
                                                 Action</th>
                                         </tr>
                                     </thead>
@@ -446,7 +456,7 @@
                                             <tr id="prodRow{{ $prep->id }}"
                                                 class="odd:bg-white even:bg-gray-50 border-b border-gray-200  text-left">
                                                 <td
-                                                    class="sticky left-0 z-20 bg-white px-4 py-3 bg-gray-100 whitespace-normal break-words border-r border-gray-300">
+                                                    class="sticky left-0 z-20 px-4 py-3 bg-gray-100 whitespace-normal break-words border-r border-gray-300">
                                                     <span
                                                         class="readonly font-bold hover:text-blue-600 hover:underline cursor-pointer {{ $prep->productionStatus == 'Order Delivered' ? 'text-red-600' : 'text-black' }}"
                                                         onclick="openRndSampleModal(
@@ -470,7 +480,6 @@
                                                         class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                         value="{{ $prep->orderNo }}" />
                                                 </td>
-
 
                                                 <td
                                                     class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
@@ -575,7 +584,7 @@
                                                                         value="{{ $prep->id }}">
                                                                     <button type="button"
                                                                         class="reject-btn mt-3 px-3 py-1 text-white bg-red-500 hover:bg-red-600 rounded text-sm
-        {{ $prep->alreadyDeveloped ? 'cursor-not-allowed bg-red-300 hover:bg-red-300' : '' }}"
+                                                                        {{ $prep->alreadyDeveloped ? 'cursor-not-allowed bg-red-300 hover:bg-red-300' : '' }}"
                                                                         @if ($prep->alreadyDeveloped) disabled @endif
                                                                         title="{{ $prep->alreadyDeveloped ? 'You cannot reject after development selection' : '' }}"
                                                                         onclick="openRejectModal({{ $prep->id }})">
@@ -636,8 +645,8 @@
                                                                     <!-- Dropdown Button -->
                                                                     <button type="button"
                                                                         class="inline-flex justify-between w-48 rounded-md px-3 py-2 text-sm font-semibold
-        h-10 transition-all duration-200
-        {{ is_null($prep->colourMatchReceiveDate) ? 'bg-gray-200 text-gray-500 cursor-not-allowed' : 'bg-white text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50' }}"
+                                                                        h-10 transition-all duration-200
+                                                                        {{ is_null($prep->colourMatchReceiveDate) ? 'bg-gray-200 text-gray-500 cursor-not-allowed' : 'bg-white text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50' }}"
                                                                         @click="!{{ is_null($prep->colourMatchReceiveDate) ? 'true' : 'false' }} && toggleDropdown()"
                                                                         :disabled="{{ is_null($prep->colourMatchReceiveDate) ? 'true' : 'false' }}"
                                                                         title="{{ is_null($prep->colourMatchReceiveDate) ? 'Complete Colour Match Receive first' : '' }}">
@@ -1322,7 +1331,7 @@
                                                                             value="{{ $prep->id }}">
                                                                         <button type="submit"
                                                                             class="yarn-receive-btn px-2 py-1 mt-3 rounded transition-all duration-200
-                                {{ $prep->yarnSupplier ? 'bg-gray-300 text-black hover:bg-gray-400' : 'bg-gray-200 text-gray-500 cursor-not-allowed' }}"
+                                                                            {{ $prep->yarnSupplier ? 'bg-gray-300 text-black hover:bg-gray-400' : 'bg-gray-200 text-gray-500 cursor-not-allowed' }}"
                                                                             {{ $prep->yarnSupplier ? '' : 'disabled' }}
                                                                             title="{{ $prep->developPlannedDate && $prep->yarnOrderedDate ? '' : 'Please set Development Plan Date and Yarn Ordered Date first' }}">
                                                                             Pending
@@ -2575,7 +2584,7 @@
             });
         });
 
-        // Restore page scroll after full load (including images etc)
+        // Restore page scroll after full load (including images etc.)
         window.onload = function() {
             let pageScroll = localStorage.getItem("pageScrollY");
             if (pageScroll !== null) {

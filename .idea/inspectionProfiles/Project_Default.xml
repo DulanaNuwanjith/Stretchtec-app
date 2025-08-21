@@ -4,12 +4,18 @@
     <inspection_tool class="HtmlUnknownAttribute" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="myValues">
         <value>
-          <list size="5">
+          <list size="11">
             <item index="0" class="java.lang.String" itemvalue="x-data" />
             <item index="1" class="java.lang.String" itemvalue=":class" />
             <item index="2" class="java.lang.String" itemvalue="@click" />
             <item index="3" class="java.lang.String" itemvalue="x-show" />
             <item index="4" class="java.lang.String" itemvalue="x-init" />
+            <item index="5" class="java.lang.String" itemvalue="x-transition" />
+            <item index="6" class="java.lang.String" itemvalue=":disabled" />
+            <item index="7" class="java.lang.String" itemvalue="x-ref" />
+            <item index="8" class="java.lang.String" itemvalue="@click.away" />
+            <item index="9" class="java.lang.String" itemvalue="x-text" />
+            <item index="10" class="java.lang.String" itemvalue="@click.prevent" />
           </list>
         </value>
       </option>
