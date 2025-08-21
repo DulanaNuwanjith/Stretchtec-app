@@ -1225,9 +1225,9 @@
                                                                                     </label>
 
                                                                                     {{-- PST input only for Pan Asia --}}
-                                                                                    @if($shade->supplier === 'Pan Asia')
+                                                                                    @if($prep->yarnSupplier === 'Pan Asia')
                                                                                         <input type="text" name="pst_no[{{ $shade->id }}]"
-                                                                                               placeholder="Enter PA/ST No (comma separated)"
+                                                                                               placeholder="Enter PA/ST No"
                                                                                                class="mt-2 w-full px-2 py-1 border rounded text-sm dark:bg-gray-700 dark:text-white">
                                                                                     @endif
                                                                                 </div>

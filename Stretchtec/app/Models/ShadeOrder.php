@@ -11,6 +11,7 @@ class ShadeOrder extends Model
         'shade',
         'status',
         'yarn_receive_date',
+        'pst_no'
     ];
 
     // App\Models\ShadeOrder.php

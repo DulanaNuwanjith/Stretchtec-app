@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('shade');
             $table->string('status')->default('Pending'); // default status
             $table->DateTime('yarn_receive_date')->nullable();
+            $table->string('pst_no')->nullable(); // PST number
             $table->timestamps();
         });
     }

@@ -198,19 +198,29 @@ class SamplePreparationRnDController extends Controller
 
         $rnd = SamplePreparationRnD::findOrFail($request->rnd_id);
 
+        $newPstNumbers = []; // For RnD aggregated column
+
         foreach ($request->shade_ids as $shadeId) {
             $shade = ShadeOrder::findOrFail($shadeId);
 
-            // PST No logic (only for Pan Asia)
-            $pstNoInput = $request->pst_no[$shadeId] ?? null;
-            if ($shade->supplier === 'Pan Asia' && $pstNoInput) {
-                // Multiple comma-separated values allowed
-                $pstNumbers = array_map(function($num) {
-                    $num = preg_replace('/\D/', '', $num); // keep only digits
-                    return 'PA/ST-' . str_pad($num, 5, '0', STR_PAD_LEFT);
-                }, explode(',', $pstNoInput));
+            // Only process PST if RnD supplier is Pan Asia
+            if (trim(strtolower($rnd->yarnSupplier)) === 'pan asia') {
+                $pstNoInput = $request->pst_no[$shadeId] ?? null;
 
-                $shade->pst_no = implode(',', $pstNumbers);
+                if ($pstNoInput) {
+                    // Clean input, multiple comma-separated values allowed
+                    $pstNumbers = array_map(function($num) {
+                        $num = preg_replace('/\D/', '', $num); // keep only digits
+                        return 'PA/ST-' . str_pad($num, 5, '0', STR_PAD_LEFT);
+                    }, explode(',', $pstNoInput));
+
+                    // Append to RnD aggregated column
+                    $newPstNumbers = array_merge($newPstNumbers, $pstNumbers);
+
+                    // Save to shade_orders table (per shade)
+                    $existingShadePst = $shade->pst_no ? explode(',', $shade->pst_no) : [];
+                    $shade->pst_no = implode(',', array_merge($existingShadePst, $pstNumbers));
+                }
             }
 
             $shade->status = 'Yarn Received';
@@ -218,7 +228,13 @@ class SamplePreparationRnDController extends Controller
             $shade->save();
         }
 
-        // Check statuses of all shades
+        // Append aggregated PST to RnD column
+        if (!empty($newPstNumbers)) {
+            $existingPst = $rnd->pst_no ? explode(',', $rnd->pst_no) : [];
+            $rnd->pst_no = implode(',', array_merge($existingPst, $newPstNumbers));
+        }
+
+        // Update production status
         $totalShades = $rnd->shadeOrders()->count();
         $receivedCount = $rnd->shadeOrders()->where('status', 'Yarn Received')->count();
 
@@ -227,6 +243,7 @@ class SamplePreparationRnDController extends Controller
         } elseif ($receivedCount > 0) {
             $rnd->productionStatus = 'Yarn Received*'; // partial
         }
+
         $rnd->yarnReceiveDate = now();
         $rnd->save();
 
@@ -237,7 +254,7 @@ class SamplePreparationRnDController extends Controller
             $sampleInquiry->save();
         }
 
-        return back()->with('success', 'Yarn receipt updated successfully.');
+        return back()->with('success', 'Yarn receipt and PST numbers updated successfully.');
     }
 
     public function markSendToProduction(Request $request)
