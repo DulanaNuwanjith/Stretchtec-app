@@ -33,6 +33,7 @@ return new class extends Migration
             $table->string('productionStatus')->default('Pending');
             $table->string('referenceNo')->nullable();
             $table->dateTime('customerDeliveryDate')->nullable();
+            $table->string('rejectNO')->nullable();
             $table->string('dNoteNumber')->nullable();
             $table->integer('deliveryQty')->nullable();
             $table->string('customerDecision')->default('pending');

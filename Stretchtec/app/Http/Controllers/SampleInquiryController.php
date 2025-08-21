@@ -77,7 +77,13 @@ class SampleInquiryController extends Controller
         $coordinators = SampleInquiry::select('coordinatorName')->distinct()->orderBy('coordinatorName')->pluck('coordinatorName');
         $orderNos = SampleInquiry::select('orderNo')->distinct()->orderBy('orderNo')->pluck('orderNo');
 
-        return view('sample-development.pages.sample-inquery-details', compact('inquiries', 'customers', 'merchandisers','items','coordinators','orderNos'));
+        $distinctRejectNumbers = SampleInquiry::select('rejectNO')
+            ->whereNotNull('rejectNO')
+            ->distinct()
+            ->orderBy('rejectNO')
+            ->pluck('rejectNO');
+
+        return view('sample-development.pages.sample-inquery-details', compact('inquiries', 'customers', 'merchandisers','items','coordinators','orderNos', 'distinctRejectNumbers'));
     }
 
     public function updateNotes(Request $request, $id)
@@ -124,6 +130,7 @@ class SampleInquiryController extends Controller
                 'sample_quantity' => 'required|string|max:255',
                 'customer_comments' => 'nullable|string',
                 'customer_requested_date' => 'nullable|date',
+                'rejectNO' => 'nullable|string|max:255',
             ]);
 
             // 🔢 Generate next unique order number safely
@@ -168,6 +175,7 @@ class SampleInquiryController extends Controller
                 'alreadyDeveloped' => false,
                 'productionStatus' => 'Pending',
                 'customerDecision' => 'Pending',
+                'rejectNO' => $validated['rejectNO'] ?? null,
             ]);
 
             return redirect()->back()->with('success', 'Sample Inquiry Created Successfully!');
@@ -368,14 +376,22 @@ class SampleInquiryController extends Controller
     {
         $request->validate([
             'customerDecision' => 'required|string|in:Pending,Order Received,Order Not Received,Order Rejected',
+            'orderRejectNumber' => 'nullable|string|required_if:customerDecision,Order Rejected',
         ]);
 
         $sampleInquiry = SampleInquiry::findOrFail($id);
         $sampleInquiry->customerDecision = $request->input('customerDecision');
+
+        // Store orderRejectNumber only if customerDecision is 'Order Rejected'
+        if ($request->input('customerDecision') === 'Order Rejected') {
+            $sampleInquiry->rejectNO = $request->input('orderRejectNumber');
+        }
+
         $sampleInquiry->save();
 
         return redirect()->back()->with('success', 'Customer decision updated successfully.');
     }
+
 
     public function uploadOrderFile(Request $request, $id)
     {

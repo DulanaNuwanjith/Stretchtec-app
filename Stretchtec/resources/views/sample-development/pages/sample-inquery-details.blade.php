@@ -1040,114 +1040,124 @@
                                                     </div>
                                                 </td>
 
-                                                <!-- Customer Decision -->
-                                                <td class="px-4 whitespace-normal break-words border-r border-gray-300">
-                                                    @if ($inquiry->customerDeliveryDate)
-                                                        @if (Auth::user()->role === 'ADMIN')
-                                                            {{-- Read-only for ADMIN --}}
-                                                            @php
-                                                                $status = $inquiry->customerDecision;
-                                                                $colorClass = match ($status) {
-                                                                    'Order Rejected'
-                                                                        => 'bg-red-100 text-red-800 dark:bg-red-700 dark:text-white',
-                                                                    'Order Received'
-                                                                        => 'bg-green-100 text-green-800 dark:bg-green-700 dark:text-white',
-                                                                    'Order Not Received'
-                                                                        => 'bg-yellow-100 text-yellow-800 dark:bg-yellow-700 dark:text-white',
-                                                                    'Pending'
-                                                                        => 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-white',
-                                                                    default
-                                                                        => 'bg-white text-gray-900 dark:bg-gray-700 dark:text-white',
-                                                                };
-                                                            @endphp
+                                                <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300">
+                                                    <div x-data="{
+                                                                openDropdown: false,
+                                                                openModal: false,
+                                                                selectedDecision: '{{ $inquiry->customerDecision ?? 'Select Decision' }}',
+                                                                selectedColor: '{{ $inquiry->customerDecision ?? '' }}', // for dynamic color
+                                                                id: {{ $inquiry->id }},
+                                                                isDisabled: {{ is_null($inquiry->customerDeliveryDate) ? 'true' : 'false' }},
+                                                                decisionColors: {
+                                                                    'Pending': 'bg-gray-200 text-gray-700',
+                                                                    'Order Received': 'bg-green-100 text-green-700',
+                                                                    'Order Not Received': 'bg-yellow-100 text-yellow-700',
+                                                                    'Order Rejected': 'bg-red-100 text-red-700'
+                                                                },
+                                                                setDecision(decision) {
+                                                                    this.selectedDecision = decision;
+                                                                    this.selectedColor = decision;
 
-                                                            <div class="inline-flex justify-between items-center w-48 rounded-md px-3 py-2 text-sm font-semibold shadow-sm h-10 {{ $colorClass }} cursor-not-allowed"
-                                                                title="Admins cannot change customer decision">
-                                                                <span>{{ $status }}</span>
-                                                            </div>
-                                                        @else
-                                                            {{-- Editable dropdown for non-admins --}}
-                                                            <form
-                                                                action="{{ route('sample-inquery-details.update-decision', $inquiry->id) }}"
-                                                                method="POST"
-                                                                class="relative inline-block text-left w-48">
-                                                                @csrf
-                                                                @method('PATCH')
+                                                                    if (decision === 'Order Rejected') {
+                                                                        this.openModal = true;
+                                                                        this.openDropdown = false;
+                                                                    } else {
+                                                                        this.$refs.decisionInput.value = decision;
+                                                                        this.$refs.form.submit();
+                                                                    }
+                                                                },
+                                                                toggleDropdown() {
+                                                                    if (!this.isDisabled) this.openDropdown = !this.openDropdown;
+                                                                }
+                                                            }" class="relative inline-block text-left"
+                                                         @click.away="openDropdown = false; openModal = false">
 
-                                                                @php
-                                                                    $status = $inquiry->customerDecision;
-                                                                    $colorClass = match ($status) {
-                                                                        'Order Rejected'
-                                                                            => 'bg-red-100 text-red-800 dark:bg-red-700 dark:text-white',
-                                                                        'Order Received'
-                                                                            => 'bg-green-100 text-green-800 dark:bg-green-700 dark:text-white',
-                                                                        'Order Not Received'
-                                                                            => 'bg-yellow-100 text-yellow-800 dark:bg-yellow-700 dark:text-white',
-                                                                        'Pending'
-                                                                            => 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-white',
-                                                                        default
-                                                                            => 'bg-white text-gray-900 dark:bg-gray-700 dark:text-white',
-                                                                    };
-                                                                @endphp
+                                                        {{-- Form for normal decisions --}}
+                                                        <form method="POST" action="{{ route('sample-inquery-details.update-decision', $inquiry->id) }}" x-ref="form">
+                                                            @csrf
+                                                            @method('PATCH')
+                                                            <input type="hidden" name="customerDecision" x-ref="decisionInput">
 
-                                                                <!-- Dropdown Button -->
-                                                                <button type="button"
-                                                                    id="customerDecisionDropdownTable-{{ $inquiry->id }}"
-                                                                    class="inline-flex justify-between w-48 rounded-md px-3 py-2 text-sm font-semibold shadow-sm ring-1 h-10 transition-all duration-200 {{ $colorClass }}"
-                                                                    onclick="toggleCustomerDecisionDropdownTable(event, '{{ $inquiry->id }}')">
-                                                                    <span
-                                                                        id="selectedCustomerDecisionTable-{{ $inquiry->id }}">{{ $status }}</span>
-                                                                    <svg class="ml-2 h-5 w-5 text-gray-400"
-                                                                        viewBox="0 0 20 20" fill="currentColor">
-                                                                        <path fill-rule="evenodd"
-                                                                            d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
-                                                                            clip-rule="evenodd" />
-                                                                    </svg>
-                                                                </button>
+                                                            {{-- Dropdown Button --}}
+                                                            <button type="button"
+                                                                    :disabled="isDisabled"
+                                                                    :class="isDisabled ? 'bg-gray-200 text-gray-500 cursor-not-allowed' : decisionColors[selectedColor] + ' shadow-sm ring-1 ring-gray-300'"
+                                                                    class="inline-flex justify-between w-48 rounded-md px-3 py-2 text-sm font-semibold h-10 transition-all duration-200"
+                                                                    @click="toggleDropdown()"
+                                                                    :title="isDisabled ? 'Customer Delivery Date not set yet' : ''">
+                                                                <span x-text="selectedDecision"></span>
+                                                                <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                                                    <path fill-rule="evenodd"
+                                                                          d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
+                                                                          clip-rule="evenodd" />
+                                                                </svg>
+                                                            </button>
 
-                                                                <!-- Dropdown Menu -->
-                                                                <div id="customerDecisionDropdownMenuTable-{{ $inquiry->id }}"
-                                                                    class="hidden absolute z-10 mt-2 w-48 rounded-md bg-white shadow-lg ring-1 ring-black/5 dark:bg-gray-700">
-                                                                    <div class="py-1" role="listbox" tabindex="-1"
-                                                                        aria-labelledby="customerDecisionDropdownTable-{{ $inquiry->id }}">
-                                                                        @php
-                                                                            $options = [
-                                                                                'Pending',
-                                                                                'Order Received',
-                                                                                'Order Not Received',
-                                                                                'Order Rejected',
-                                                                            ];
-                                                                            $colors = [
-                                                                                'Pending' =>
-                                                                                    'hover:bg-gray-100 text-gray-700 dark:text-white dark:hover:bg-gray-600',
-                                                                                'Order Received' =>
-                                                                                    'hover:bg-green-100 text-green-700 dark:text-white dark:hover:bg-green-600',
-                                                                                'Order Not Received' =>
-                                                                                    'hover:bg-yellow-100 text-yellow-700 dark:text-white dark:hover:bg-yellow-600',
-                                                                                'Order Rejected' =>
-                                                                                    'hover:bg-red-100 text-red-700 dark:text-white dark:hover:bg-red-600',
-                                                                            ];
-                                                                        @endphp
+                                                            {{-- Dropdown Menu --}}
+                                                            <div x-show="openDropdown" x-transition
+                                                                 class="absolute mt-2 w-48 rounded-md bg-white shadow-lg ring-1 ring-black/5 z-10"
+                                                                 style="display: none;">
+                                                                <div class="py-1">
+                                                                    @php
+                                                                        $options = ['Pending', 'Order Received', 'Order Not Received', 'Order Rejected'];
+                                                                        $colors = [
+                                                                            'Pending' => 'hover:bg-gray-100 text-gray-700',
+                                                                            'Order Received' => 'hover:bg-green-100 text-green-700',
+                                                                            'Order Not Received' => 'hover:bg-yellow-100 text-yellow-700',
+                                                                            'Order Rejected' => 'hover:bg-red-100 text-red-700',
+                                                                        ];
+                                                                    @endphp
 
-                                                                        @foreach ($options as $option)
-                                                                            <button type="submit" name="customerDecision"
-                                                                                value="{{ $option }}"
-                                                                                class="decision-option w-full text-left px-4 py-2 text-sm {{ $colors[$option] }}"
-                                                                                onclick="selectCustomerDecisionTable('{{ $option }}', '{{ $inquiry->id }}')">
-                                                                                {{ $option }}
-                                                                            </button>
-                                                                        @endforeach
-                                                                    </div>
+                                                                    @foreach ($options as $option)
+                                                                        <button type="button"
+                                                                                @click.prevent="setDecision('{{ $option }}')"
+                                                                                class="w-full text-left px-4 py-2 text-sm {{ $colors[$option] }}">
+                                                                            {{ $option }}
+                                                                        </button>
+                                                                    @endforeach
                                                                 </div>
-                                                            </form>
-                                                        @endif
-                                                    @else
-                                                        <!-- Disabled style before delivery -->
-                                                        <div class="inline-flex items-center w-48 h-10 px-3 py-2 text-sm rounded-md bg-gray-200 text-gray-500 cursor-not-allowed"
-                                                            title="Customer Decision available after delivery only">
-                                                            Awaiting Delivery
+                                                            </div>
+                                                        </form>
+
+                                                        {{-- Modal for Order Rejected --}}
+                                                        <div x-show="openModal" x-transition
+                                                             class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+                                                             style="display: none;">
+                                                            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 w-full max-w-md relative">
+                                                                <button @click="openModal = false"
+                                                                        class="absolute top-2 right-2 text-gray-600 hover:text-gray-900">✕</button>
+
+                                                                <h2 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">
+                                                                    Order Rejection
+                                                                </h2>
+
+                                                                <form method="POST" action="{{ route('sample-inquery-details.update-decision', $inquiry->id) }}">
+                                                                    @csrf
+                                                                    @method('PATCH')
+                                                                    <input type="hidden" name="customerDecision" value="Order Rejected">
+
+                                                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                                                        Order Reject Number
+                                                                    </label>
+                                                                    <input type="text" name="orderRejectNumber" required
+                                                                           class="mt-1 w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-base py-3 px-3 dark:bg-gray-700 dark:text-white dark:border-gray-600"
+                                                                           placeholder="Enter reject number here...">
+
+                                                                    <div class="mt-6 flex justify-end space-x-2">
+                                                                        <button type="button" @click="openModal = false"
+                                                                                class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400">
+                                                                            Cancel
+                                                                        </button>
+                                                                        <button type="submit"
+                                                                                class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700">
+                                                                            Confirm Reject
+                                                                        </button>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
                                                         </div>
-                                                    @endif
+
+                                                    </div>
                                                 </td>
 
                                                 <!-- Notes -->
@@ -1455,6 +1465,46 @@
                                                             class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                     </div>
                                                 </div>
+
+                                                <!-- Reject Number Dropdown with Search -->
+                                                <div class="w-full">
+                                                    <label for="rejectNO" class="block text-sm mb-1 font-medium text-gray-700 dark:text-gray-300">Reject Number</label>
+
+                                                    <div class="relative inline-block w-full text-left">
+                                                        <button type="button"
+                                                                class="dropdown-btn inline-flex justify-between w-full rounded-md bg-white dark:bg-gray-700 px-3 py-2 text-sm font-semibold text-gray-900 dark:text-white shadow-sm ring-1 ring-gray-300 hover:bg-gray-50"
+                                                                onclick="toggleDropdownReject(this)">
+                                                            <span class="selected-reject">Select Reject Number</span>
+                                                            <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                                                                <path fill-rule="evenodd"
+                                                                      d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
+                                                                      clip-rule="evenodd" />
+                                                            </svg>
+                                                        </button>
+
+                                                        <div class="dropdown-menu-reject hidden absolute z-10 mt-2 w-full rounded-md bg-white dark:bg-gray-700 shadow-lg ring-1 ring-black/5 max-h-48 overflow-y-auto">
+                                                            <!-- Search Box -->
+                                                            <input type="text" class="search-reject w-full px-4 py-2 border-b border-gray-300 dark:border-gray-600 focus:outline-none text-sm dark:bg-gray-700 dark:text-white"
+                                                                   placeholder="Search..." onkeyup="filterRejectOptions(this)">
+
+                                                            <div class="py-1 options-container" role="listbox" tabindex="-1">
+                                                                <!-- Default Null Option -->
+                                                                <button type="button"
+                                                                        class="dropdown-option w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
+                                                                        onclick="selectDropdownReject(this, '')">None</button>
+
+                                                                @foreach($distinctRejectNumbers as $rejectNumber)
+                                                                    <button type="button"
+                                                                            class="dropdown-option w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
+                                                                            onclick="selectDropdownReject(this, '{{ $rejectNumber }}')">{{ $rejectNumber }}</button>
+                                                                @endforeach
+                                                            </div>
+                                                        </div>
+
+                                                        <input type="hidden" name="rejectNO" class="input-reject" value="">
+                                                    </div>
+                                                </div>
+
 
                                             </div>
 
@@ -2114,6 +2164,57 @@
             });
 
         });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Store original options for each dropdown
+            document.querySelectorAll('.dropdown-menu-reject .options-container').forEach(container => {
+                container.dataset.original = JSON.stringify(Array.from(container.children).map(opt => opt.outerHTML));
+            });
+        });
+
+        function toggleDropdownReject(button) {
+            const dropdownMenu = button.nextElementSibling;
+            document.querySelectorAll('.dropdown-menu-reject').forEach(menu => {
+                if (menu !== dropdownMenu) menu.classList.add('hidden');
+            });
+            dropdownMenu.classList.toggle('hidden');
+        }
+
+        function selectDropdownReject(button, selectedValue) {
+            const dropdown = button.closest('.relative');
+            dropdown.querySelector('.selected-reject').innerText = selectedValue || 'None';
+            dropdown.querySelector('.input-reject').value = selectedValue;
+            dropdown.querySelector('.dropdown-menu-reject').classList.add('hidden');
+        }
+
+        document.addEventListener('click', function(event) {
+            document.querySelectorAll('.dropdown-menu-reject').forEach(menu => {
+                if (!menu.contains(event.target) && !menu.previousElementSibling.contains(event.target)) {
+                    menu.classList.add('hidden');
+                }
+            });
+        });
+
+        function filterRejectOptions(input) {
+            const filter = input.value.toLowerCase();
+            const container = input.nextElementSibling;
+
+            // Restore all original options first
+            const originalOptions = JSON.parse(container.dataset.original);
+            container.innerHTML = '';
+            originalOptions.forEach(html => container.insertAdjacentHTML('beforeend', html));
+
+            // Filter visible options
+            Array.from(container.querySelectorAll('.dropdown-option')).forEach(option => {
+                if (!option.innerText.toLowerCase().includes(filter)) {
+                    option.style.display = 'none';
+                } else {
+                    option.style.display = '';
+                }
+            });
+        }
     </script>
 
 @endsection
