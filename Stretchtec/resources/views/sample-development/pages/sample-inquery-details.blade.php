@@ -1,8 +1,12 @@
 <head>
+
+    <!-- Import Tailwind CSS -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- SweetAlert2 CDN -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <title> Stretchtec </title>
 </head>
 <div class="flex h-full w-full bg-white">
     @extends('layouts.sample-tabs')
@@ -13,6 +17,8 @@
                 <div class="w-full px-6 lg:px-2">
                     <div class="bg-white dark:bg-gray-800 overflow-hidden">
                         <div class="p-4 text-gray-900 dark:text-gray-100">
+
+                            {{-- Style for Sweet Alert --}}
                             <style>
                                 .swal2-toast {
                                     font-size: 0.875rem;
@@ -122,6 +128,7 @@
                                 }
                             </script>
 
+                            {{-- Filters --}}
                             <div class="flex justify-start">
                                 <button onclick="toggleFilterForm()"
                                     class="bg-white border border-blue-500 text-blue-500 hover:text-blue-600 hover:border-blue-600 font-semibold py-1 px-3 rounded shadow flex items-center gap-2 mb-6">
@@ -140,7 +147,7 @@
                                     class="mb-6 sticky top-0 z-40 flex gap-6 items-center">
                                     <div class="flex items-center gap-4 flex-wrap">
 
-                                        <!-- ORDER NO DROPDOWN -->
+                                        <!-- Filters - ORDER NO DROPDOWN -->
                                         <div class="relative inline-block text-left w-48">
                                             <label for="orderNoDropdown"
                                                 class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Order
@@ -187,7 +194,7 @@
                                                 value="{{ request('orderNo') }}">
                                         </div>
 
-                                        <!-- CUSTOMER DROPDOWN -->
+                                        <!-- Filters - CUSTOMER DROPDOWN -->
                                         <div class="relative inline-block text-left w-48">
                                             <label for="customerDropdown"
                                                 class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Customer</label>
@@ -231,7 +238,7 @@
                                                 value="{{ request('customer') }}">
                                         </div>
 
-                                        <!-- COORDINATOR DROPDOWN -->
+                                        <!-- Filters - COORDINATOR DROPDOWN -->
                                         <div class="relative inline-block text-left w-56">
                                             <label for="coordinatorDropdown"
                                                 class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
@@ -278,7 +285,7 @@
                                             </div>
                                         </div>
 
-                                        <!-- MERCHANDISER DROPDOWN -->
+                                        <!-- Filters - MERCHANDISER DROPDOWN -->
                                         <div class="relative inline-block text-left w-48">
                                             <label for="merchandiserDropdown"
                                                 class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Merchandiser</label>
@@ -323,7 +330,7 @@
                                                 value="{{ request('merchandiser') }}">
                                         </div>
 
-                                        <!-- ITEM DROPDOWN -->
+                                        <!-- Filters - ITEM DROPDOWN -->
                                         <div class="relative inline-block text-left w-48">
                                             <label for="itemDropdown"
                                                 class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Item</label>
@@ -366,14 +373,14 @@
                                                 value="{{ request('item') }}">
                                         </div>
 
-                                        <!-- CUSTOMER DELIVERY STATUS DROPDOWN -->
+                                        <!-- Filters - CUSTOMER DELIVERY STATUS DROPDOWN -->
                                         <div class="relative inline-block text-left w-48">
                                             <label for="deliveryStatusDropdown"
                                                 class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                                                 Customer Delivery Status
                                             </label>
 
-                                            <!-- Dropdown Toggle Button -->
+                                            <!-- Filters - Dropdown Toggle Button -->
                                             <div>
                                                 <button type="button" id="deliveryStatusDropdown"
                                                     class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10 dark:bg-gray-700 dark:text-white"
@@ -391,11 +398,11 @@
                                                 </button>
                                             </div>
 
-                                            <!-- Dropdown Menu -->
+                                            <!-- Filters - Dropdown Menu -->
                                             <div id="deliveryStatusDropdownMenu"
                                                 class="hidden absolute z-40 mt-2 w-full rounded-md bg-white shadow-lg ring-1 ring-black/5 dark:bg-gray-700 max-h-48 overflow-y-auto">
 
-                                                <!-- Search Input -->
+                                                <!-- Filters - Search Input -->
                                                 <div class="p-2 sticky top-0 bg-white dark:bg-gray-700 z-10">
                                                     <input type="text" id="deliveryStatusSearchInput"
                                                         placeholder="Search status..."
@@ -403,7 +410,7 @@
                                                         onkeyup="filterOptions('deliveryStatus')" />
                                                 </div>
 
-                                                <!-- Option Buttons -->
+                                                <!-- Filters - Option Buttons -->
                                                 <div class="py-1" role="listbox" tabindex="-1"
                                                     aria-labelledby="deliveryStatusDropdown">
                                                     @php
@@ -419,21 +426,21 @@
                                                 </div>
                                             </div>
 
-                                            <!-- Hidden Input for Form Submission -->
+                                            <!-- Filters - Hidden Input for Form Submission -->
                                             <input type="hidden" name="deliveryStatus" id="deliveryStatusInput"
                                                 value="{{ request('deliveryStatus') }}">
                                         </div>
 
 
                                         <div class="flex gap-6 items-end">
-                                            <!-- CUSTOMER DECISION DROPDOWN -->
+                                            <!-- Filters - CUSTOMER DECISION DROPDOWN -->
                                             <div class="relative inline-block text-left w-48">
                                                 <label for="customerDecisionDropdown"
                                                     class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                                                     Customer Decision
                                                 </label>
 
-                                                <!-- Dropdown Toggle -->
+                                                <!-- Filters - Dropdown Toggle -->
                                                 <div>
                                                     <button type="button" id="customerDecisionDropdown"
                                                         class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10 dark:bg-gray-700 dark:text-white"
@@ -451,7 +458,7 @@
                                                     </button>
                                                 </div>
 
-                                                <!-- Dropdown Menu -->
+                                                <!-- Filters - Dropdown Menu -->
                                                 <div id="customerDecisionDropdownMenu"
                                                     class="hidden absolute z-40 mt-2 w-full rounded-md bg-white shadow-lg ring-1 ring-black/5 dark:bg-gray-700 max-h-48 overflow-y-auto">
                                                     <div class="p-2 sticky top-0 bg-white dark:bg-gray-700 z-10">
@@ -499,6 +506,7 @@
                                 </form>
                             </div>
 
+                            {{-- Generate Reports for Customer Coordinator --}}
                             <div class="flex-1">
                                 <div id="reportFormContainer" class="hidden mt-4">
                                     <form action="{{ route('report.sampleInquiryReport') }}" method="POST"
@@ -611,76 +619,77 @@
                                 </div>
                             </div>
 
+                            {{-- Main Table --}}
                             <div id="sampleInquiryRecordsScroll"
                                 class="overflow-x-auto max-h-[1200px] bg-white dark:bg-gray-900 shadow rounded-lg">
                                 <table class="table-fixed w-full text-sm divide-y divide-gray-200 dark:divide-gray-700">
                                     <thead class="bg-gray-200 dark:bg-gray-700 text-left">
                                         <tr class="text-center">
                                             <th
-                                                class="font-bold sticky left-0 top-0 z-20 bg-white px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold sticky left-0 top-0 z-20 bg-white px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Order No</th>
                                             <th
-                                                class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Inquiry Receive Date</th>
                                             <th
-                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Customer</th>
                                             <th
-                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-36 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-36 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Customer Merchandiser</th>
                                             <th
-                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-36 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-36 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Customer Coordinator</th>
                                             <th
-                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Item</th>
                                             <th
-                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Quality Reference</th>
                                             <th
-                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-40 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-40 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Item Description</th>
                                             <th
-                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-20 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-20 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Size</th>
                                             <th
-                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Colour</th>
                                             <th
-                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Style</th>
                                             <th
-                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-40 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-40 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Customer Requested Sample Quantity</th>
                                             <th
-                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Customer Special Comments</th>
                                             <th
-                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Customer Requested Dates</th>
                                             <th
-                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-48 text-xs font-medium uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">
+                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-48 text-xs uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">
                                                 Sent order to sample development</th>
                                             <th
-                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Development Plan Date</th>
                                             <th
-                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-36 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-36 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Production Status</th>
                                             <th
-                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-48 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-48 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Reference No</th>
                                             <th
-                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-52 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-52 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Customer Delivery Status</th>
                                             <th
-                                                class="font-bold sticky top-0 z-30 bg-gray-200 px-4 py-3 w-56 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold sticky top-0 z-30 bg-gray-200 px-4 py-3 w-56 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Customer Decision</th>
                                             <th
-                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-72 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-72 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Note</th>
                                             <th
-                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-64 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-64 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Action</th>
                                         </tr>
                                     </thead>
@@ -1240,7 +1249,7 @@
                                                 <div class="flex flex-col items-center justify-center w-full">
                                                     <label for="sampleFile" id="uploadLabel"
                                                         class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50
-                  dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600 transition duration-200 overflow-hidden">
+                                                        dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600 transition duration-200 overflow-hidden">
                                                         <div id="uploadContent"
                                                             class="flex flex-col items-center justify-center pt-5 pb-6 text-center w-full h-full">
                                                             <svg class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"
@@ -1945,8 +1954,7 @@
     </script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            const today = new Date().toISOString().split('T')[0];
-            document.getElementById("inquiryDate").value = today;
+            document.getElementById("inquiryDate").value = new Date().toISOString().split('T')[0];
         });
     </script>
     <script>
@@ -2018,7 +2026,7 @@
             });
         });
 
-        // Restore page scroll after full load (including images etc)
+        // Restore page scroll after full load (including images etc.)
         window.onload = function() {
             let pageScroll = localStorage.getItem("pageScrollY");
             if (pageScroll !== null) {
