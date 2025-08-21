@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\SamplePreparationProduction;
+use App\Models\ShadeOrder;
 use Exception;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
@@ -15,10 +16,13 @@ class SamplePreparationProductionController extends Controller
         $operators = \App\Models\OperatorsandSupervisors::where('role', 'OPERATOR')->get();
         $supervisors = \App\Models\OperatorsandSupervisors::where('role', 'SUPERVISOR')->get();
 
-        $productionsQuery = SamplePreparationProduction::with('samplePreparationRnD.sampleInquiry')
+        $productionsQuery = SamplePreparationProduction::with([
+            'samplePreparationRnD.sampleInquiry',
+            'samplePreparationRnD.shadeOrders' // eager load related shade_orders
+        ])
             ->orderByRaw('dispatch_to_rnd_at IS NULL DESC') // dispatched rows first
-            ->orderBy('production_deadline', 'asc')             // nearest upcoming deadline first
-            ->latest();                                         // fallback to newest created
+            ->orderBy('production_deadline', 'asc')         // nearest upcoming deadline first
+            ->latest();                                     // fallback to newest created
 
         // Tab 3 Filters
         if ($request->filled('tab') && $request->tab == '3') {
@@ -70,38 +74,52 @@ class SamplePreparationProductionController extends Controller
     public function markOrderStart(Request $request)
     {
         $request->validate([
-            'id' => 'required|exists:sample_preparation_production,id'
+            'production_id' => 'required|exists:sample_preparation_production,id',
+            'shade_ids' => 'required|array|min:1',
+            'shade_ids.*' => 'exists:shade_orders,id',
         ]);
 
         try {
-            $production = SamplePreparationProduction::findOrFail($request->id);
-            $production->order_start_at = Carbon::now();
-            $production->save();
+            $production = SamplePreparationProduction::findOrFail($request->production_id);
+            $rnd = $production->samplePreparationRnD;
 
-            // Fetch related SamplePreparationRnd record via Eloquent relationship
-            $rnd = $production->samplePreparationRnd;
+            if (!$rnd) {
+                return back()->with('error', 'No related RnD record found.');
+            }
 
-            if ($rnd) {
-                // Update the productionStatus in sample_preparation_rnd table
+            // Update selected shades to In Production
+            ShadeOrder::whereIn('id', $request->shade_ids)->update([
+                'status' => 'In Production',
+            ]);
+
+            // Set start time if not already set
+            if (!$production->order_start_at) {
+                $production->order_start_at = now();
+                $production->save();
+            }
+
+            // Check if all related shades are In Production
+            $remaining = $rnd->shadeOrders()->where('status', 'Sent to Production')->count();
+
+            if ($remaining === 0) {
+                // All shades are in production, update main statuses
                 $rnd->productionStatus = 'In Production';
                 $rnd->save();
 
-                // Fetch related SampleInquiry record
                 $inquiry = $rnd->sampleInquiry;
-
                 if ($inquiry) {
                     $inquiry->productionStatus = 'In Production';
                     $inquiry->save();
                 }
             }
 
-            return redirect()->back()->with('success', 'Order start date/time marked and production statuses updated.');
+            return back()->with('success', 'Selected shades marked as In Production.');
         } catch (Exception $e) {
             Log::error('Error in markOrderStart: ' . $e->getMessage());
-
-            return redirect()->back()->with('error', 'Failed to mark order start date/time. Please try again.');
+            return back()->with('error', 'Failed to mark order start. Please try again.');
         }
     }
+
 
     public function markOrderComplete(Request $request)
     {

@@ -327,46 +327,93 @@
                                                 </td>
 
                                                 {{-- Order Start Date & Time --}}
-                                                <td
-                                                    class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                                <td class="py-3 whitespace-normal break-words border-r border-gray-300 text-center"
+                                                    x-data="{ open: false }">
+
+                                                    @php
+                                                        $sentShades = $prod->samplePreparationRnD->shadeOrders->where('status', 'Sent to Production');
+                                                        $inProdShades = $prod->samplePreparationRnD->shadeOrders->where('status', 'In Production');
+                                                    @endphp
+
                                                     @auth
                                                         @if (auth()->user()->role === 'ADMIN')
-                                                            @if (!$prod->order_start_at)
-                                                                <span
-                                                                    class="inline-block mt-3 text-sm font-semibold text-gray-700 dark:text-white bg-gray-200 dark:bg-gray-800 px-3 py-1 rounded">
+                                                            {{-- Just show status for admin --}}
+                                                            @if ($inProdShades->isEmpty())
+                                                                <span class="inline-block mt-3 text-sm font-semibold text-gray-700 dark:text-white
+                                                                            bg-gray-200 dark:bg-gray-800 px-3 py-1 rounded">
                                                                     Pending
                                                                 </span>
                                                             @else
-                                                                <span
-                                                                    class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-pink-200 dark:bg-gray-800 px-3 py-1 rounded">
+                                                                <span class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white
+                                                                    bg-pink-200 dark:bg-gray-800 px-3 py-1 rounded">
                                                                     Started on <br>
-                                                                    {{ $prod->order_start_at->format('Y-m-d') }} at
-                                                                    {{ $prod->order_start_at->format('H:i') }}
+                                                                    {{ $prod->order_start_at?->format('Y-m-d') }} at {{ $prod->order_start_at?->format('H:i') }}
                                                                 </span>
                                                             @endif
                                                         @else
-                                                            @if (!$prod->order_start_at)
-                                                                <form action="{{ route('production.markStart') }}"
-                                                                    method="POST">
-                                                                    @csrf
-                                                                    <input type="hidden" name="id"
-                                                                        value="{{ $prod->id }}">
-                                                                    <button type="submit"
-                                                                        class="order-start-btn px-2 py-1 mt-3 rounded transition-all duration-200 bg-gray-300 text-black hover:bg-gray-400">
-                                                                        Pending
-                                                                    </button>
-                                                                </form>
+                                                            {{-- Operator View --}}
+                                                            @if ($sentShades->isNotEmpty())
+                                                                {{-- Button to trigger modal --}}
+                                                                <button type="button" @click="open = true"
+                                                                        class="order-start-btn px-2 py-1 mt-3 rounded transition-all duration-200
+                                                                        bg-gray-300 text-black hover:bg-gray-400">
+                                                                    Pending ({{ $sentShades->count() }})
+                                                                </button>
+
+                                                                {{-- Modal --}}
+                                                                <div x-show="open" x-transition class="fixed inset-0 flex items-center justify-center
+                                                                bg-black bg-opacity-50 z-50" style="display:none;">
+                                                                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 w-full max-w-lg relative max-h-[80vh] overflow-y-auto">
+
+                                                                        <button @click="open = false"
+                                                                                class="absolute top-2 right-2 text-gray-600 hover:text-gray-900">✕</button>
+
+                                                                        <h2 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">
+                                                                            Start Production for Shades
+                                                                        </h2>
+
+                                                                        <form action="{{ route('production.markStart') }}" method="POST">
+                                                                            @csrf
+                                                                            <input type="hidden" name="production_id" value="{{ $prod->id }}">
+
+                                                                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                                                                @foreach($sentShades as $shade)
+                                                                                    <div class="p-4 border rounded bg-gray-100 dark:bg-gray-700">
+                                                                                        <label class="flex items-start gap-2">
+                                                                                            <input type="checkbox" name="shade_ids[]" value="{{ $shade->id }}" class="mt-1">
+                                                                                            <div>
+                                                                                                <div class="font-semibold">Shade: {{ $shade->shade }}</div>
+                                                                                                <div class="text-sm text-gray-600 dark:text-gray-300">Status: {{ $shade->status }}</div>
+                                                                                            </div>
+                                                                                        </label>
+                                                                                    </div>
+                                                                                @endforeach
+                                                                            </div>
+
+                                                                            <div class="mt-4 flex justify-end gap-2">
+                                                                                <button type="button" @click="open = false"
+                                                                                        class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400">
+                                                                                    Cancel
+                                                                                </button>
+                                                                                <button type="submit"
+                                                                                        class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+                                                                                    Start Selected
+                                                                                </button>
+                                                                            </div>
+                                                                        </form>
+                                                                    </div>
+                                                                </div>
                                                             @else
-                                                                <span
-                                                                    class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-pink-200 dark:bg-gray-800 px-3 py-1 rounded">
+                                                                <span class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white
+                                                                            bg-pink-200 dark:bg-gray-800 px-3 py-1 rounded">
                                                                     Started on <br>
-                                                                    {{ $prod->order_start_at->format('Y-m-d') }} at
-                                                                    {{ $prod->order_start_at->format('H:i') }}
+                                                                    {{ $prod->order_start_at?->format('Y-m-d') }} at {{ $prod->order_start_at?->format('H:i') }}
                                                                 </span>
                                                             @endif
                                                         @endif
                                                     @endauth
                                                 </td>
+
 
                                                 {{-- Operator Name --}}
                                                 <td
@@ -495,56 +542,63 @@
                                                 </td>
 
                                                 {{-- Order Complete Date & Time --}}
-                                                <td
-                                                    class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                                <td class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
                                                     @auth
+                                                        @php
+                                                            $allShadesInProd = $prod->samplePreparationRnD->shadeOrders->isNotEmpty() &&
+                                                                $prod->samplePreparationRnD->shadeOrders->every(fn($s) => $s->status === 'In Production');
+                                                        @endphp
+
                                                         @if (auth()->user()->role === 'ADMIN')
+                                                            {{-- Admin just sees the status --}}
                                                             @if (!$prod->order_complete_at)
                                                                 <span
-                                                                    class="inline-block mt-3 text-sm font-semibold text-gray-700 dark:text-white bg-gray-200 dark:bg-gray-800 px-3 py-1 rounded">
+                                                                    class="inline-block mt-3 text-sm font-semibold text-gray-700 dark:text-white
+                                                                           bg-gray-200 dark:bg-gray-800 px-3 py-1 rounded">
                                                                     Pending
                                                                 </span>
                                                             @else
                                                                 <span
-                                                                    class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-green-100 dark:bg-gray-800 px-3 py-1 rounded">
+                                                                    class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white
+                                                                           bg-green-100 dark:bg-gray-800 px-3 py-1 rounded">
                                                                     Completed on <br>
-                                                                    {{ $prod->order_complete_at->format('Y-m-d') }} at
-                                                                    {{ $prod->order_complete_at->format('H:i') }}
+                                                                    {{ $prod->order_complete_at->format('Y-m-d') }} at {{ $prod->order_complete_at->format('H:i') }}
                                                                 </span>
                                                             @endif
                                                         @else
+                                                            {{-- Operator view --}}
                                                             @if (!$prod->order_complete_at)
                                                                 @php
                                                                     $canComplete =
                                                                         $prod->order_start_at &&
                                                                         $prod->operator_name &&
-                                                                        $prod->supervisor_name;
+                                                                        $prod->supervisor_name &&
+                                                                        $allShadesInProd;
                                                                 @endphp
 
-                                                                <form action="{{ route('production.markComplete') }}"
-                                                                    method="POST">
+                                                                <form action="{{ route('production.markComplete') }}" method="POST">
                                                                     @csrf
-                                                                    <input type="hidden" name="id"
-                                                                        value="{{ $prod->id }}">
+                                                                    <input type="hidden" name="id" value="{{ $prod->id }}">
                                                                     <button type="submit"
-                                                                        class="order-complete-btn px-2 py-1 mt-3 rounded transition-all duration-200
-                                                                        {{ $canComplete ? 'bg-green-600 hover:bg-green-700 text-white' : 'bg-gray-300 text-black cursor-not-allowed' }}"
-                                                                        {{ $canComplete ? '' : 'disabled' }}
-                                                                        title="{{ $canComplete ? '' : 'Start time, Operator, and Supervisor are required' }}">
+                                                                            class="order-complete-btn px-2 py-1 mt-3 rounded transition-all duration-200
+                                                                            {{ $canComplete ? 'bg-green-600 hover:bg-green-700 text-white' : 'bg-gray-300 text-black cursor-not-allowed' }}"
+                                                                            {{ $canComplete ? '' : 'disabled' }}
+                                                                            title="{{ $canComplete ? '' : 'Start time, Operator, Supervisor, and all shades must be In Production' }}">
                                                                         Pending
                                                                     </button>
                                                                 </form>
                                                             @else
                                                                 <span
-                                                                    class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-green-100 dark:bg-gray-800 px-3 py-1 rounded">
+                                                                    class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white
+                                                                           bg-green-100 dark:bg-gray-800 px-3 py-1 rounded">
                                                                     Completed on <br>
-                                                                    {{ $prod->order_complete_at->format('Y-m-d') }} at
-                                                                    {{ $prod->order_complete_at->format('H:i') }}
+                                                                    {{ $prod->order_complete_at->format('Y-m-d') }} at {{ $prod->order_complete_at->format('H:i') }}
                                                                 </span>
                                                             @endif
                                                         @endif
                                                     @endauth
                                                 </td>
+
 
                                                 {{-- Production Output --}}
                                                 <td

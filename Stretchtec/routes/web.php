@@ -22,6 +22,9 @@ Route::middleware([
     'verified',
 ])->group(function () {
 
+    Route::patch('/product-catalog/{catalog}/update-shade', [ProductCatalogController::class, 'updateShade'])
+        ->name('productCatalog.updateShade');
+
     Route::get('sample-preparation-details', [SamplePreparationRnDController::class, 'viewRnD'])
         ->name('sample-preparation-details.index');
 
