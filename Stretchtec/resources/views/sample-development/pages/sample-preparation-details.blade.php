@@ -467,8 +467,8 @@
                                                     </span>
 
                                                     <input type="text" name="orderNo"
-                                                           class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                           value="{{ $prep->orderNo }}" />
+                                                        class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                        value="{{ $prep->orderNo }}" />
                                                 </td>
 
 
@@ -2329,14 +2329,8 @@
 
             // Toggle dropdowns
             tab2Filters.forEach(type => {
-                const button = document.getElementById(⁠$ {
-                        type
-                    }
-                    Dropdown⁠);
-                const menu = document.getElementById(⁠$ {
-                        type
-                    }
-                    DropdownMenu⁠);
+                const button = document.getElementById(`${type}Dropdown`);
+                const menu = document.getElementById(`${type}DropdownMenu`);
 
                 if (button && menu) {
                     button.addEventListener("click", (e) => {
@@ -2351,14 +2345,8 @@
             // Close dropdowns on outside click
             document.addEventListener("click", (e) => {
                 tab2Filters.forEach(type => {
-                    const menu = document.getElementById(⁠$ {
-                            type
-                        }
-                        DropdownMenu⁠);
-                    const button = document.getElementById(⁠$ {
-                            type
-                        }
-                        Dropdown⁠);
+                    const menu = document.getElementById(`${type}DropdownMenu`);
+                    const button = document.getElementById(`${type}Dropdown`);
                     if (menu && button && !menu.contains(e.target) && !button.contains(e.target)) {
                         menu.classList.add("hidden");
                         button.setAttribute("aria-expanded", "false");
@@ -2368,14 +2356,8 @@
 
             function closeAllDropdownsTab2() {
                 tab2Filters.forEach(type => {
-                    const menu = document.getElementById(⁠$ {
-                            type
-                        }
-                        DropdownMenu⁠);
-                    const button = document.getElementById(⁠$ {
-                            type
-                        }
-                        Dropdown⁠);
+                    const menu = document.getElementById(`${type}DropdownMenu`);
+                    const button = document.getElementById(`${type}Dropdown`);
                     if (menu && button) {
                         menu.classList.add("hidden");
                         button.setAttribute("aria-expanded", "false");
@@ -2429,9 +2411,7 @@
         function filterOptions(inputId, optionClass) {
             const input = document.getElementById(inputId);
             const query = input.value.toLowerCase();
-            const options = document.querySelectorAll(⁠.$ {
-                optionClass
-            }⁠);
+            const options = document.querySelectorAll(`.${optionClass}`);
             options.forEach(option => {
                 option.style.display = option.textContent.toLowerCase().includes(query) ? "block" : "none";
             });
@@ -2461,6 +2441,7 @@
             document.getElementById("filterForm2").submit();
         }
     </script>
+
     <script>
         document.getElementById('clearFiltersBtn').addEventListener('click', function() {
             // Reload the page to clear all filters and reset state
