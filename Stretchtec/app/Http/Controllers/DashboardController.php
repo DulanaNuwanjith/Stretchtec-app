@@ -32,6 +32,13 @@ class DashboardController extends Controller
             ->where('created_at', '>=', now()->subDays(30))
             ->count();
 
+        //Get sample delivered by checking null in delivery date
+        $ordersDelivered = SampleInquiry::whereNotNull('customerDeliveryDate')->count();
+
+        //Get sample delivered by checking null in delivery date within 30 days
+        $ordersDeliveredWithin30Days = SampleInquiry::whereNotNull('customerDeliveryDate')
+            ->where('created_at', '>=', now()->subDays(30))
+            ->count();
 
         // Get distinct Yarn Suppliers from Sample Preparation RnD table
         $yarnSuppliers = SamplePreparationRnD::distinct()
@@ -137,7 +144,9 @@ class DashboardController extends Controller
             'rejectedSamplesCount',
             'customerNames',
             'acceptedSamplesCount2',
-            'rejectedSamplesCount2'
+            'rejectedSamplesCount2',
+            'ordersDelivered',
+            'ordersDeliveredWithin30Days'
         ));
     }
 }
