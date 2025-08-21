@@ -1,5 +1,8 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="UTF-8" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>Stretchtec Dashboard</title>
 </head>
 <div class="flex h-full w-full font-sans bg-white">
     @include('layouts.side-bar')
@@ -23,42 +26,44 @@
             <!-- Default Sample Inquiry Cards -->
             @php
                 $cards = [
-                    [
-                        'title' => 'All Samples',
-                        'allTime' => $allSamplesReceived ?? 0,
-                        'last30' => $allSamplesReceivedWithin30Days ?? 0,
-                        'color' => 'indigo',
-                    ],
-                    [
-                        'title' => 'Bulk Received',
-                        'allTime' => $acceptedSamples ?? 0,
-                        'last30' => $acceptedSamplesWithin30Days ?? 0,
-                        'color' => 'green',
-                    ],
-                    [
-                        'title' => 'Decision Pending',
-                        'allTime' => $yetNotReceivedSamples ?? 0,
-                        'last30' => $yetNotReceivedSamplesWithin30Days ?? 0,
-                        'color' => 'pink',
-                    ],
-                    [
-                        'title' => 'Rejected',
-                        'allTime' => $rejectedSamples ?? 0,
-                        'last30' => $rejectedSamplesWithin30Days ?? 0,
-                        'color' => 'red',
-                    ],
-                ];
-                $shadowColors = [
-                    'indigo' => 'rgba(99, 102, 241, 0.5)', // indigo-500 with 50% opacity
-                    'green' => 'rgba(34, 197, 94, 0.5)', // green-500
-                    'pink' => 'rgba(236, 72, 153, 0.5)', // pink-500
-                    'red' => 'rgba(239, 68, 68, 0.5)', // red-500
-                ];
-                $yellowShadow = 'rgba(234, 179, 8, 0.5)'; // Tailwind yellow-500 with 50% opacity
-                $blueShadow = 'rgba(59, 130, 246, 0.5)'; // gray-400 at 30% opacity
+                     [
+                         'title' => 'All Samples',
+                         'allTime' => $allSamplesReceived ?? 0,
+                         'last30' => $allSamplesReceivedWithin30Days ?? 0,
+                         'color' => 'indigo', // Neutral overview
+                     ],
+                     [
+                         'title' => 'Bulk Received',
+                         'allTime' => $acceptedSamples ?? 0,
+                         'last30' => $acceptedSamplesWithin30Days ?? 0,
+                         'color' => 'green', // Positive
+                     ],
+                     [
+                         'title' => 'Orders Delivered',
+                         'allTime' => $ordersDelivered ?? 0,
+                         'last30' => $ordersDeliveredWithin30Days ?? 0,
+                         'color' => 'emerald', // Completion/Success
+                     ],
+                     [
+                         'title' => 'Rejected',
+                         'allTime' => $rejectedSamples ?? 0,
+                         'last30' => $rejectedSamplesWithin30Days ?? 0,
+                         'color' => 'red', // Negative
+                     ],
+                 ];
+
+                 $shadowColors = [
+                     'indigo'  => 'rgba(99, 102, 241, 0.5)',   // indigo-500
+                     'green'   => 'rgba(34, 197, 94, 0.5)',    // green-500
+                     'emerald' => 'rgba(16, 185, 129, 0.5)',   // emerald-500
+                     'red'     => 'rgba(239, 68, 68, 0.5)',    // red-500
+                 ];
+
+                 $yellowShadow = 'rgba(234, 179, 8, 0.5)'; // yellow-500
+                 $blueShadow   = 'rgba(59, 130, 246, 0.5)'; // blue-500
             @endphp
 
-            @foreach ($cards as $card)
+        @foreach ($cards as $card)
                 <div class="bg-white dark:bg-gray-800 rounded-xl transition-shadow duration-300 p-6 flex flex-col items-center space-y-6 border border-gray-100 dark:border-gray-700"
                     style="box-shadow: 0 4px 15px 0 {{ $shadowColors[$card['color']] ?? 'rgba(0,0,0,0.1)' }};">
                     <h3 class="text-lg font-semibold text-gray-800 dark:text-white text-center">

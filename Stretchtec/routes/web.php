@@ -102,6 +102,7 @@ Route::middleware(['auth'])->group(function () {
         Route::patch('/sample-inquery-details/{id}/update-decision', [SampleInquiryController::class, 'updateDecision'])
             ->name('sample-inquery-details.update-decision');
         Route::post('/sample-inquiry/{id}/upload-order-file', [SampleInquiryController::class, 'uploadOrderFile'])->name('sampleInquiry.uploadOrderFile');
+        Route::post('/report/sample-inquiry', [ReportController::class, 'generateSampleInquiryReport'])->name('report.sampleInquiryReport');
     });
 });
 
@@ -227,8 +228,6 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/reports/yarn-supplier-spending', [ReportController::class, 'yarnSupplierSpendingReport'])->name('reports.yarnSupplierSpending');
         Route::get('/reports/coordinator/pdf', [ReportController::class, 'coordinatorReportPdf'])->name('reports.coordinatorPdf');
         Route::get('/reports/reference-delivery', [ReportController::class, 'referenceDeliveryReport'])->name('reports.reference_delivery');
-        Route::post('/report/sample-inquiry', [ReportController::class, 'generateSampleInquiryReport'])->name('report.sampleInquiryReport');
-
     });
 });
 

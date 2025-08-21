@@ -252,6 +252,7 @@ class ReportController extends Controller
         $inquiries = SampleInquiry::with('samplePreparationRnD')
             ->whereBetween('inquiryReceiveDate', [$request->start_date, $request->end_date])
             ->whereIn('coordinatorName', $request->coordinatorName)
+            ->orderBy('id', 'desc')
             ->get();
 
         // Generate PDF in landscape orientation
