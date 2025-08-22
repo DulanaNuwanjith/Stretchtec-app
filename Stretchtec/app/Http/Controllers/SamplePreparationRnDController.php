@@ -8,6 +8,7 @@ use App\Models\SampleInquiry;
 use App\Models\SamplePreparationRnD;
 use App\Models\SamplePreparationProduction;
 use App\Models\SampleStock;
+use App\Models\ShadeOrder;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
@@ -16,7 +17,8 @@ class SamplePreparationRnDController extends Controller
 {
     public function viewRnD(Request $request)
     {
-        $query = SamplePreparationRnD::with('sampleInquiry');
+        // Eager load sampleInquiry and shadeOrders
+        $query = SamplePreparationRnD::with(['sampleInquiry', 'shadeOrders']);
 
         // Filters
         if ($request->filled('order_no')) {
@@ -28,7 +30,10 @@ class SamplePreparationRnDController extends Controller
         }
 
         if ($request->filled('shade')) {
-            $query->where('shade', $request->shade);
+            // Filter by shade_orders table if needed
+            $query->whereHas('shadeOrders', function($q) use ($request) {
+                $q->where('shade', $request->shade);
+            });
         }
 
         if ($request->filled('reference_no')) {
@@ -62,6 +67,9 @@ class SamplePreparationRnDController extends Controller
         $coordinators = SampleInquiry::whereNotNull('coordinatorName')->where('coordinatorName', '!=', '')->distinct()->orderBy('coordinatorName')->pluck('coordinatorName');
         $sampleStockReferences = SampleStock::pluck('reference_no')->unique();
 
+        // Production dispatch check
+        $dispatchCheck = SamplePreparationProduction::all();
+
         return view('sample-development.pages.sample-preparation-details', compact(
             'samplePreparations',
             'orderNos',
@@ -69,9 +77,11 @@ class SamplePreparationRnDController extends Controller
             'shades',
             'references',
             'sampleStockReferences',
-            'coordinators'
+            'coordinators',
+            'dispatchCheck'
         ));
     }
+
 
 
     public function markColourMatchSent(Request $request)
@@ -116,109 +126,190 @@ class SamplePreparationRnDController extends Controller
 
     public function markYarnOrdered(Request $request)
     {
+        // Validate the request
         $request->validate([
             'id' => 'required|exists:sample_preparation_rnd,id',
             'yarnOrderedPONumber' => 'nullable|string',
-            'value'=> 'nullable|numeric',
-            'shade' => 'nullable|string',
+            'value' => 'nullable|numeric',
+            'shades' => 'nullable|array', // Accept array of shades
+            'shades.*' => 'nullable|string', // Each shade as string
             'tkt' => 'nullable|string',
             'yarnPrice' => 'nullable|string',
             'yarnSupplier' => 'required|string',
             'customSupplier' => 'nullable|string',
         ]);
 
-        if ($request->customSupplier) {
-            $request->yarnSupplier = $request->customSupplier;
-        }
+        // Determine supplier
+        $yarnSupplier = $request->customSupplier ?: $request->yarnSupplier;
 
+        // Find the RnD record
         $rnd = SamplePreparationRnD::findOrFail($request->id);
         $rnd->yarnOrderedDate = Carbon::now();
         $rnd->yarnOrderedPONumber = $request->yarnOrderedPONumber;
         $rnd->yarnOrderedWeight = $request->value;
-        $rnd->shade = $request->shade;
         $rnd->tkt = $request->tkt;
         $rnd->yarnPrice = $request->yarnPrice;
-        $rnd->yarnSupplier = $request->yarnSupplier;
-        $rnd->is_po_locked = true; // Lock the PO field
-        $rnd->is_shade_locked = true; // Lock the shade field
-        $rnd->is_tkt_locked = true; // Lock the TKT field
-        $rnd->is_supplier_locked = true; // Lock the supplier field
+        $rnd->yarnSupplier = $yarnSupplier;
+
+        // Lock fields after submission
+        $rnd->is_po_locked = true;
+        $rnd->is_shade_locked = true;
+        $rnd->is_tkt_locked = true;
+        $rnd->is_supplier_locked = true;
+
         $rnd->productionStatus = 'Yarn Ordered';
         $rnd->save();
 
+        // Handle shades
+        if ($request->shades && count($request->shades) > 0) {
+            // Delete old shade records if any
+            $rnd->shadeOrders()->delete();
+
+            // Insert new shade records into shade_orders table
+            foreach ($request->shades as $shade) {
+                $rnd->shadeOrders()->create([
+                    'shade' => $shade,
+                    'status' => 'Pending',
+                ]);
+            }
+
+            // Update RnD shade column with comma-separated values
+            $rnd->shade = implode(', ', $request->shades);
+            $rnd->save();
+        }
+
+        // Update SampleInquiry status if exists
         $sampleInquiry = SampleInquiry::where('orderNo', $rnd->orderNo)->first();
         if ($sampleInquiry) {
-            $sampleInquiry->productionStatus = 'Yarn Ordered'; // Update production status in SampleInquiry
+            $sampleInquiry->productionStatus = 'Yarn Ordered';
             $sampleInquiry->save();
         }
 
-        return back()->with('success', 'Yarn Ordered Date marked.');
+        return back()->with('success', 'Yarn Ordered Date and shades marked successfully.');
     }
 
     public function markYarnReceived(Request $request)
     {
         $request->validate([
-            'id' => 'required|exists:sample_preparation_rnd,id',
-            'pst_no' => 'nullable|string'
+            'rnd_id' => 'required|exists:sample_preparation_rnd,id',
+            'shade_ids' => 'required|array|min:1',
+            'shade_ids.*' => 'exists:shade_orders,id',
         ]);
 
-        $rnd = SamplePreparationRnD::findOrFail($request->id);
+        $rnd = SamplePreparationRnD::findOrFail($request->rnd_id);
 
-        // Format pst_no to "PA/ST-xxxxx"
-        if ($request->pst_no) {
-            // Ensure only numbers are used, strip non-digits
-            $number = preg_replace('/\D/', '', $request->pst_no);
-            // Pad to 5 digits
-            $formattedPst = 'PA/ST-' . str_pad($number, 5, '0', STR_PAD_LEFT);
-            $rnd->pst_no = $formattedPst;
+        $newPstNumbers = []; // For RnD aggregated column
+
+        foreach ($request->shade_ids as $shadeId) {
+            $shade = ShadeOrder::findOrFail($shadeId);
+
+            // Only process PST if RnD supplier is Pan Asia
+            if (trim(strtolower($rnd->yarnSupplier)) === 'pan asia') {
+                $pstNoInput = $request->pst_no[$shadeId] ?? null;
+
+                if ($pstNoInput) {
+                    // Clean input, multiple comma-separated values allowed
+                    $pstNumbers = array_map(function($num) {
+                        $num = preg_replace('/\D/', '', $num); // keep only digits
+                        return 'PA/ST-' . str_pad($num, 5, '0', STR_PAD_LEFT);
+                    }, explode(',', $pstNoInput));
+
+                    // Append to RnD aggregated column
+                    $newPstNumbers = array_merge($newPstNumbers, $pstNumbers);
+
+                    // Save to shade_orders table (per shade)
+                    $existingShadePst = $shade->pst_no ? explode(',', $shade->pst_no) : [];
+                    $shade->pst_no = implode(',', array_merge($existingShadePst, $pstNumbers));
+                }
+            }
+
+            $shade->status = 'Yarn Received';
+            $shade->yarn_receive_date = now();
+            $shade->save();
         }
 
-        $rnd->yarnReceiveDate = Carbon::now();
-        $rnd->productionStatus = 'Yarn Received';
+        // Append aggregated PST to RnD column
+        if (!empty($newPstNumbers)) {
+            $existingPst = $rnd->pst_no ? explode(',', $rnd->pst_no) : [];
+            $rnd->pst_no = implode(',', array_merge($existingPst, $newPstNumbers));
+        }
+
+        // Update production status
+        $totalShades = $rnd->shadeOrders()->count();
+        $receivedCount = $rnd->shadeOrders()->where('status', 'Yarn Received')->count();
+
+        if ($receivedCount === $totalShades) {
+            $rnd->productionStatus = 'Yarn Received';
+        } elseif ($receivedCount > 0) {
+            $rnd->productionStatus = 'Yarn Received*'; // partial
+        }
+
+        $rnd->yarnReceiveDate = now();
         $rnd->save();
 
-        // Update SampleInquiry
+        // Sync with SampleInquiry
         $sampleInquiry = SampleInquiry::where('orderNo', $rnd->orderNo)->first();
         if ($sampleInquiry) {
-            $sampleInquiry->productionStatus = 'Yarn Received';
+            $sampleInquiry->productionStatus = $rnd->productionStatus;
             $sampleInquiry->save();
         }
 
-        return back()->with('success', 'Yarn Receive Date marked with PST No.');
+        return back()->with('success', 'Yarn receipt and PST numbers updated successfully.');
     }
-
 
     public function markSendToProduction(Request $request)
     {
-        $rnd = SamplePreparationRnD::findOrFail($request->id);
-
-        // Optional: Check if already sent
-        if ($rnd->sendOrderToProductionStatus) {
-            return redirect()->back()->with('info', 'Already sent to production.');
-        }
-
-        // Update sendOrderToProductionStatus
-        $rnd->sendOrderToProductionStatus = now();
-        $rnd->productionStatus = 'Sent to Production'; // Update production status
-        $rnd->save();
-
-        $sampleInquiry = SampleInquiry::where('orderNo', $rnd->orderNo)->first();
-        if ($sampleInquiry) {
-            $sampleInquiry->productionStatus = 'Sent to Production'; // Update production status in SampleInquiry
-            $sampleInquiry->save();
-        }
-
-        // Create production record
-        SamplePreparationProduction::create([
-            'sample_preparation_rnd_id' => $rnd->id,
-            'order_no' => $rnd->orderNo,
-            'production_deadline' => $rnd->productionDeadline,
-            'order_received_at' => now(),
+        $request->validate([
+            'rnd_id' => 'required|exists:sample_preparation_rnd,id',
+            'shade_ids' => 'required|array|min:1',
+            'shade_ids.*' => 'exists:shade_orders,id',
         ]);
 
-        return back()->with('success', 'Sent to production successfully.');
-    }
+        $rnd = SamplePreparationRnD::findOrFail($request->rnd_id);
 
+        // Update selected shades to "Sent to Production"
+        ShadeOrder::whereIn('id', $request->shade_ids)->update([
+            'status' => 'Sent to Production',
+        ]);
+
+        // 🔹 Ensure only ONE production record per order_no
+        $production = SamplePreparationProduction::firstOrNew([
+            'sample_preparation_rnd_id' => $rnd->id,
+            'order_no' => $rnd->orderNo,
+        ]);
+
+        // If it's a new record, set initial fields
+        if (!$production->exists) {
+            $production->production_deadline = $rnd->productionDeadline;
+            $production->order_received_at = now();
+        }
+
+        // Save or update existing record
+        $production->save();
+
+        // Check if all shades are sent
+        $pendingCount = $rnd->shadeOrders()->where('status', 'Pending')->count();
+
+        if ($pendingCount === 0) {
+            // Fully sent
+            $rnd->productionStatus = 'Sent to Production';
+            $rnd->sendOrderToProductionStatus = now();
+            $rnd->save();
+
+            // Update SampleInquiry
+            $sampleInquiry = SampleInquiry::where('orderNo', $rnd->orderNo)->first();
+            if ($sampleInquiry) {
+                $sampleInquiry->productionStatus = 'Sent to Production';
+                $sampleInquiry->save();
+            }
+        } else {
+            // Partially sent
+            $rnd->productionStatus = 'Sent to Production*'; // distinguish partial
+            $rnd->save();
+        }
+
+        return back()->with('success', 'Selected shades sent to production successfully.');
+    }
 
     public function setDevelopPlanDate(Request $request)
     {

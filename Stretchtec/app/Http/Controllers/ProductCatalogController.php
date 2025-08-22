@@ -11,7 +11,9 @@ class ProductCatalogController extends Controller
     // Display a listing of the product catalog entries
     public function elasticCatalog(Request $request)
     {
-        $query = ProductCatalog::where('item', 'Elastic');
+        // Eager load shade orders using sample_preparation_rnd_id
+        $query = ProductCatalog::with('shadeOrders')
+            ->where('item', 'Elastic');
 
         // Apply filters
         if ($request->filled('orderNo')) {
@@ -28,18 +30,23 @@ class ProductCatalogController extends Controller
 
         $catalogs = $query->latest()->paginate(15)->appends($request->query());
 
-        // Pass dropdown values for filtering (unique list)
+        // Dropdown values for filtering (unique list)
         $orderNos = ProductCatalog::where('item', 'Elastic')->distinct()->pluck('order_no');
         $merchandisers = ProductCatalog::where('item', 'Elastic')->distinct()->pluck('coordinator_name');
         $referenceNos = ProductCatalog::where('item', 'Elastic')->distinct()->pluck('reference_no');
 
-        return view('production-catalog.pages.elasticCatalog', compact('catalogs', 'orderNos', 'merchandisers', 'referenceNos'));
+        return view('production-catalog.pages.elasticCatalog', compact(
+            'catalogs', 'orderNos', 'merchandisers', 'referenceNos'
+        ));
     }
+
 
     // Display a listing of the product catalog entries
     public function codeCatalog(Request $request)
     {
-        $query = ProductCatalog::where('item', 'Cord');
+        // Eager load shade orders using sample_preparation_rnd_id
+        $query = ProductCatalog::with('shadeOrders')
+            ->where('item', 'Cord');
 
         // Apply filters
         if ($request->filled('orderNo')) {
@@ -56,18 +63,22 @@ class ProductCatalogController extends Controller
 
         $catalogs = $query->latest()->paginate(15)->appends($request->query());
 
-        // Pass dropdown values for filtering (unique list)
+        // Dropdown values for filtering (unique list)
         $orderNos = ProductCatalog::where('item', 'Cord')->distinct()->pluck('order_no');
         $merchandisers = ProductCatalog::where('item', 'Cord')->distinct()->pluck('coordinator_name');
         $referenceNos = ProductCatalog::where('item', 'Cord')->distinct()->pluck('reference_no');
 
-        return view('production-catalog.pages.codeCatalog', compact('catalogs', 'orderNos', 'merchandisers', 'referenceNos'));
+        return view('production-catalog.pages.codeCatalog', compact(
+            'catalogs', 'orderNos', 'merchandisers', 'referenceNos'
+        ));
     }
 
     // Display a listing of the product catalog entries
     public function tapeCatalog(Request $request)
     {
-        $query = ProductCatalog::where('item', 'Twill Tape');
+        // Eager-load shade orders via sample_preparation_rnd_id
+        $query = ProductCatalog::with('shadeOrders')
+            ->where('item', 'Twill Tape');
 
         // Apply filters
         if ($request->filled('orderNo')) {
@@ -84,12 +95,14 @@ class ProductCatalogController extends Controller
 
         $catalogs = $query->latest()->paginate(15)->appends($request->query());
 
-        // Pass dropdown values for filtering (unique list)
+        // Dropdown values for filtering (unique list)
         $orderNos = ProductCatalog::where('item', 'Twill Tape')->distinct()->pluck('order_no');
         $merchandisers = ProductCatalog::where('item', 'Twill Tape')->distinct()->pluck('coordinator_name');
         $referenceNos = ProductCatalog::where('item', 'Twill Tape')->distinct()->pluck('reference_no');
 
-        return view('production-catalog.pages.tapeCatalog', compact('catalogs', 'orderNos', 'merchandisers', 'referenceNos'));
+        return view('production-catalog.pages.tapeCatalog', compact(
+            'catalogs', 'orderNos', 'merchandisers', 'referenceNos'
+        ));
     }
 
     // Show the form for creating a new product catalog entry (optional)
@@ -283,4 +296,21 @@ class ProductCatalogController extends Controller
 
         return redirect()->route('product-catalog.index')->with('success', 'Catalog entry deleted.');
     }
+
+    public function updateShade(Request $request, ProductCatalog $catalog)
+    {
+        $request->validate([
+            'selected_shade' => 'required|string',
+        ]);
+
+        try {
+            $catalog->shade = $request->selected_shade;
+            $catalog->save();
+
+            return redirect()->back()->with('success', 'Shade updated successfully.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Failed to update shade. Please try again.');
+        }
+    }
+
 }

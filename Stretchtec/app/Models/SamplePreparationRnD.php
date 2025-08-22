@@ -93,4 +93,10 @@ class SamplePreparationRnD extends Model
     {
         return $this->hasOne(SamplePreparationProduction::class, 'sample_preparation_rnd_id');
     }
+
+    public function shadeOrders()
+    {
+        return $this->hasMany(ShadeOrder::class, 'sample_preparation_rnd_id');
+    }
+
 }

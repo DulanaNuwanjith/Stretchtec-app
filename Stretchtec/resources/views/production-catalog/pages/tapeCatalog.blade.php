@@ -417,13 +417,52 @@
                                                         class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                         value="{{ $catalog->colour }}" />
                                                 </td>
-                                                <td
-                                                    class="px-4 py-3 w-32 whitespace-normal break-words border-r border-gray-300">
-                                                    <span class="readonly">{{ $catalog->shade }}</span>
-                                                    <input
-                                                        class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                        value="{{ $catalog->shade }}" />
+                                                <td class="px-4 py-3 w-32 whitespace-normal break-words border-r border-gray-300" x-data="{ open: false, selectedShade: '{{ $catalog->shade }}' }">
+                                                    @php
+                                                        $shadeList = explode(',', $catalog->shade);
+                                                    @endphp
+
+                                                    @if(count($shadeList) > 1)
+                                                        {{-- Multiple shades: show button --}}
+                                                        <button type="button" @click="open = true"
+                                                                class="px-2 py-1 rounded bg-gray-300 text-black hover:bg-gray-400 text-sm">
+                                                            Select Shade
+                                                        </button>
+
+                                                        {{-- Modal --}}
+                                                        <div x-show="open" x-transition class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50" style="display: none;">
+                                                            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 w-full max-w-sm relative">
+                                                                {{-- Close button --}}
+                                                                <button @click="open = false" class="absolute top-2 right-2 text-gray-600 hover:text-gray-900">✕</button>
+
+                                                                <h2 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">Select Shade</h2>
+
+                                                                <form action="{{ route('productCatalog.updateShade', $catalog->id) }}" method="POST">
+                                                                    @csrf
+                                                                    @method('PATCH')
+
+                                                                    <div class="space-y-2">
+                                                                        @foreach($shadeList as $shadeOption)
+                                                                            <label class="flex items-center gap-2">
+                                                                                <input type="radio" name="selected_shade" value="{{ trim($shadeOption) }}" :checked="selectedShade === '{{ trim($shadeOption) }}'">
+                                                                                <span>{{ trim($shadeOption) }}</span>
+                                                                            </label>
+                                                                        @endforeach
+                                                                    </div>
+
+                                                                    <div class="mt-4 flex justify-end gap-2">
+                                                                        <button type="button" @click="open = false" class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400">Cancel</button>
+                                                                        <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Save</button>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    @else
+                                                        {{-- Single shade: show as readonly --}}
+                                                        <span class="readonly">{{ $catalog->shade }}</span>
+                                                    @endif
                                                 </td>
+
                                                 <td
                                                     class="px-4 py-3 w-32 whitespace-normal break-words border-r border-gray-300">
                                                     <span class="readonly">{{ $catalog->tkt }}</span>

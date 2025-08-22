@@ -46,4 +46,11 @@ class ProductCatalog extends Model
     {
         return $this->belongsTo(SampleInquiry::class);
     }
+
+    // App\Models\ProductCatalog.php
+    public function shadeOrders()
+    {
+        return $this->hasMany(ShadeOrder::class, 'sample_preparation_rnd_id', 'sample_preparation_rnd_id');
+    }
+
 }

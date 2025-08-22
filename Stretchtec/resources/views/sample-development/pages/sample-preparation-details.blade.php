@@ -1,7 +1,10 @@
 <head>
+
+    <!-- Include Tailwind CSS -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <!-- Include SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <title>StretchTec</title>
 </head>
 
@@ -14,6 +17,8 @@
                 <div class="w-full px-6 lg:px-2">
                     <div class="bg-white dark:bg-gray-800 overflow-hidden">
                         <div class="p-4 text-gray-900 dark:text-gray-100">
+
+                            {{-- Sweet Alert Styles --}}
                             <style>
                                 .swal2-toast {
                                     font-size: 0.875rem;
@@ -50,6 +55,7 @@
                                 }
                             </style>
 
+                            {{-- Sweet Alert Script --}}
                             <script>
                                 document.addEventListener('DOMContentLoaded', () => {
                                     @if (session('success'))
@@ -123,10 +129,11 @@
                                 }
                             </script>
 
+                            {{-- Filters --}}
                             <div class="flex justify-start">
                                 <button onclick="toggleFilterForm()"
                                     class="bg-white border border-blue-500 text-blue-500 hover:text-blue-600 hover:border-blue-600 font-semibold py-1 px-3 rounded shadow flex items-center gap-2 mb-6">
-                                    <img src="{{ asset('icons/filter.png') }}" alt="" class="w-6 h-6"
+                                    <img src="{{ asset('icons/filter.png') }}" class="w-6 h-6"
                                         alt="Filter Icon">
                                     Filters
                                 </button>
@@ -138,7 +145,7 @@
                                     action="{{ route('sample-preparation-details.index') }}" class="mb-6">
                                     <div class="flex items-center gap-4 flex-wrap">
 
-                                        {{-- Order No Dropdown --}}
+                                        {{-- Filters - Order No Dropdown --}}
                                         <div class="relative inline-block text-left w-48">
                                             <label for="customerDropdown"
                                                 class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Order
@@ -174,7 +181,7 @@
                                             </div>
                                         </div>
 
-                                        {{-- PO No Dropdown --}}
+                                        {{-- Filters - PO No Dropdown --}}
                                         <div class="relative inline-block text-left w-48">
                                             <label for="customerDropdown"
                                                 class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">PO
@@ -209,7 +216,7 @@
                                             </div>
                                         </div>
 
-                                        {{-- Shade Dropdown --}}
+                                        {{-- Filters - Shade Dropdown --}}
                                         <div class="relative inline-block text-left w-48">
                                             <label for="customerDropdown"
                                                 class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Shade</label>
@@ -243,7 +250,7 @@
                                             </div>
                                         </div>
 
-                                        {{-- Coordinator Name Dropdown --}}
+                                        {{-- Filters - Coordinator Name Dropdown --}}
                                         <div class="relative inline-block text-left w-48"> <label
                                                 class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Coordinator</label>
                                             <input type="hidden" name="coordinator_name" id="coordinatorInput"
@@ -272,7 +279,7 @@
                                             </div>
                                         </div>
 
-                                        {{-- Reference No Dropdown --}}
+                                        {{-- Filters - Reference No Dropdown --}}
                                         <div class="relative inline-block text-left w-48">
                                             <label for="customerDropdown"
                                                 class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Reference
@@ -309,7 +316,7 @@
                                         </div>
                                         <div class="flex gap-6 items-end">
 
-                                            {{-- Date: Customer Requested --}}
+                                            {{-- Filters - Date: Customer Requested --}}
                                             <div class="inline-block text-left w-48">
                                                 <label for="customer_requested_date"
                                                     class="block text-sm font-medium text-gray-700">Customer Requested
@@ -320,7 +327,7 @@
                                                     class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 text-sm">
                                             </div>
 
-                                            {{-- Date: Development Plan --}}
+                                            {{-- Filters - Date: Development Plan --}}
                                             <div class="inline-block text-left w-48">
                                                 <label for="development_plan_date"
                                                     class="block text-sm font-medium text-gray-700">Development Plan
@@ -331,7 +338,7 @@
                                                     class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 text-sm">
                                             </div>
 
-                                            {{-- Buttons --}}
+                                            {{-- Filters - Buttons --}}
                                             <div class="flex items-end space-x-2 mt-2">
                                                 <button type="submit"
                                                     class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Apply
@@ -348,6 +355,8 @@
                                 <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Sample Preparation R & D
                                     Records
                                 </h1>
+
+                                {{-- Other Tabs Buttons --}}
                                 <div class="flex space-x-3">
                                     <a href="{{ route('sampleStock.index') }}">
                                         <button
@@ -364,79 +373,80 @@
                                 </div>
                             </div>
 
+                            {{-- Main Table --}}
                             <div id="ResearchAndDevelopmentRecordsScroll"
                                 class="overflow-x-auto max-h-[1200px] bg-white dark:bg-gray-900 shadow rounded-lg">
                                 <table class="table-fixed w-full text-sm divide-y divide-gray-200 dark:divide-gray-700">
                                     <thead class="bg-gray-100 dark:bg-gray-700 text-left">
                                         <tr class="text-center">
                                             <th
-                                                class="font-bold sticky left-0 top-0 z-30 bg-white px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold sticky left-0 top-0 z-30 bg-white px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Order No</th>
                                             <th
-                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Customer Requested Date</th>
                                             <th
-                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-48 text-center text-xs font-medium uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">
+                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-48 text-center text-xs uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">
                                                 Colour Match Sent Date</th>
                                             <th
-                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-72 text-center text-xs font-medium uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">
+                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-72 text-center text-xs uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">
                                                 Colour Match Receive Date</th>
                                             <th
-                                                class="font-bold sticky top-0 z-20 bg-gray-200 px-4 py-3 w-56 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold sticky top-0 z-20 bg-gray-200 px-4 py-3 w-56 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Already Developed & In Sample Stock</th>
                                             <th
-                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-44 text-xs font-medium uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">
+                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-44 text-xs uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">
                                                 Development Plan Date</th>
                                             <th
-                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-48 text-center text-xs font-medium uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">
+                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-48 text-center text-xs uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">
                                                 Yarn Ordered Date</th>
                                             <th
-                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-40 text-xs font-medium uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">
+                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-40 text-xs uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">
                                                 Yarn Ordered PO Number</th>
                                             <th
-                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-40 text-xs font-medium uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">
+                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-40 text-xs uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">
                                                 Shade</th>
                                             <th
-                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-40 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-40 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Yarn Ordered Weight</th>
                                             <th
-                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-40 text-xs font-medium uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">
+                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-40 text-xs uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">
                                                 Tkt</th>
                                             <th
-                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-40 text-xs font-medium uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">
+                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-40 text-xs uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">
                                                 Yarn Supplier</th>
                                             <th
-                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-40 text-xs font-medium uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">
+                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-40 text-xs uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">
                                                 Yarn Price</th>
                                             <th
-                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-48 text-center text-xs font-medium uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">
+                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-48 text-center text-xs uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">
                                                 Yarn Receive Date</th>
                                             <th
-                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-40 text-xs font-medium uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">
+                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-40 text-xs uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">
                                                 Production Deadline</th>
                                             <th
-                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-48 text-center text-xs font-medium uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">
+                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-48 text-center text-xs uppercase text-gray-600 dark:text-gray-300 whitespace-normal break-words">
                                                 Send Order To Production Status</th>
                                             <th
-                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-36 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-36 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Production Status</th>
                                             <th
-                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Production Output</th>
                                             <th
-                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Damaged Output</th>
                                             <th
-                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Yarn Leftover Weight</th>
                                             <th
-                                                class="font-bold sticky top-0 z-20 bg-gray-200 px-4 py-3 w-56 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold sticky top-0 z-20 bg-gray-200 px-4 py-3 w-56 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Reference No</th>
                                             <th
-                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-72 text-xs text-center font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-72 text-xs text-center text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Note</th>
                                             <th
-                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-48 text-xs font-medium uppercase text-gray-600 dark:text-gray-300 text-center whitespace-normal break-words">
+                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-48 text-xs uppercase text-gray-600 dark:text-gray-300 text-center whitespace-normal break-words">
                                                 Action</th>
                                         </tr>
                                     </thead>
@@ -446,7 +456,7 @@
                                             <tr id="prodRow{{ $prep->id }}"
                                                 class="odd:bg-white even:bg-gray-50 border-b border-gray-200  text-left">
                                                 <td
-                                                    class="sticky left-0 z-20 bg-white px-4 py-3 bg-gray-100 whitespace-normal break-words border-r border-gray-300">
+                                                    class="sticky left-0 z-20 px-4 py-3 bg-gray-100 whitespace-normal break-words border-r border-gray-300">
                                                     <span
                                                         class="readonly font-bold hover:text-blue-600 hover:underline cursor-pointer {{ $prep->productionStatus == 'Order Delivered' ? 'text-red-600' : 'text-black' }}"
                                                         onclick="openRndSampleModal(
@@ -471,7 +481,6 @@
                                                         value="{{ $prep->orderNo }}" />
                                                 </td>
 
-
                                                 <td
                                                     class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
                                                     @if ($prep->customerRequestDate)
@@ -491,7 +500,6 @@
                                                             value="" />
                                                     @endif
                                                 </td>
-
 
                                                 {{-- Colour Match Sent Date --}}
                                                 <td
@@ -575,7 +583,7 @@
                                                                         value="{{ $prep->id }}">
                                                                     <button type="button"
                                                                         class="reject-btn mt-3 px-3 py-1 text-white bg-red-500 hover:bg-red-600 rounded text-sm
-        {{ $prep->alreadyDeveloped ? 'cursor-not-allowed bg-red-300 hover:bg-red-300' : '' }}"
+                                                                        {{ $prep->alreadyDeveloped ? 'cursor-not-allowed bg-red-300 hover:bg-red-300' : '' }}"
                                                                         @if ($prep->alreadyDeveloped) disabled @endif
                                                                         title="{{ $prep->alreadyDeveloped ? 'You cannot reject after development selection' : '' }}"
                                                                         onclick="openRejectModal({{ $prep->id }})">
@@ -636,8 +644,8 @@
                                                                     <!-- Dropdown Button -->
                                                                     <button type="button"
                                                                         class="inline-flex justify-between w-48 rounded-md px-3 py-2 text-sm font-semibold
-        h-10 transition-all duration-200
-        {{ is_null($prep->colourMatchReceiveDate) ? 'bg-gray-200 text-gray-500 cursor-not-allowed' : 'bg-white text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50' }}"
+                                                                        h-10 transition-all duration-200
+                                                                        {{ is_null($prep->colourMatchReceiveDate) ? 'bg-gray-200 text-gray-500 cursor-not-allowed' : 'bg-white text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50' }}"
                                                                         @click="!{{ is_null($prep->colourMatchReceiveDate) ? 'true' : 'false' }} && toggleDropdown()"
                                                                         :disabled="{{ is_null($prep->colourMatchReceiveDate) ? 'true' : 'false' }}"
                                                                         title="{{ is_null($prep->colourMatchReceiveDate) ? 'Complete Colour Match Receive first' : '' }}">
@@ -765,7 +773,7 @@
                                                     </div>
                                                 </td>
 
-                                                <td class="px-4 py-3 text-center border-r border-gray-300">
+                                                <td class="px-4 py-3 text-center border-r border-gray-300 break-words">
                                                     @if (Auth::user()->role === 'ADMIN' or Auth::user()->role === 'PRODUCTIONOFFICER')
                                                         {{-- Read-only for ADMIN --}}
                                                         @if ($prep->alreadyDeveloped == 'Need to Develop')
@@ -828,30 +836,25 @@
                                                     @endif
                                                 </td>
 
-                                                <td
-                                                    class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
-                                                    @if (Auth::user()->role === 'ADMIN' or Auth::user()->role === 'PRODUCTIONOFFICER')
+                                                <td class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                                    @if (Auth::user()->role === 'ADMIN' || Auth::user()->role === 'PRODUCTIONOFFICER')
                                                         {{-- ADMIN: Read-only --}}
                                                         @if ($prep->alreadyDeveloped == 'Need to Develop')
                                                             @if ($prep->yarnOrderedDate)
-                                                                <span
-                                                                    class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-purple-200 dark:bg-gray-800 px-3 py-1 rounded">
+                                                                <span class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-purple-200 dark:bg-gray-800 px-3 py-1 rounded">
                                                                     Ordered on <br>
-                                                                    {{ \Carbon\Carbon::parse($prep->yarnOrderedDate)->format('Y-m-d') }}
-                                                                    at
+                                                                    {{ \Carbon\Carbon::parse($prep->yarnOrderedDate)->format('Y-m-d') }} at
                                                                     {{ \Carbon\Carbon::parse($prep->yarnOrderedDate)->format('H:i') }}
                                                                 </span>
                                                             @else
-                                                                <span
-                                                                    class="inline-block px-3 py-1 text-xs font-semibold text-gray-600 bg-gray-200 rounded">
+                                                                <span class="inline-block px-3 py-1 text-xs font-semibold text-gray-600 bg-gray-200 rounded">
                                                                     Not Ordered
                                                                 </span>
                                                             @endif
                                                         @elseif(in_array($prep->alreadyDeveloped, ['No Need to Develop', 'Tape Match Pan Asia']))
                                                             <span class="text-gray-400 italic">—</span>
                                                         @else
-                                                            <span
-                                                                class="inline-block px-3 py-1 text-xs font-semibold text-gray-600 bg-gray-200 rounded">
+                                                            <span class="inline-block px-3 py-1 text-xs font-semibold text-gray-600 bg-gray-200 rounded">
                                                                 Not Set
                                                             </span>
                                                         @endif
@@ -860,209 +863,155 @@
                                                         @if ($prep->alreadyDeveloped == 'Need to Develop')
                                                             @if (is_null($prep->yarnOrderedDate))
                                                                 @php
-                                                                    $canOrder =
-                                                                        $prep->alreadyDeveloped ==
-                                                                            'Tape Match Pan Asia' ||
-                                                                        ($prep->alreadyDeveloped == 'Need to Develop' &&
-                                                                            $prep->developPlannedDate);
+                                                                    $canOrder = $prep->alreadyDeveloped == 'Tape Match Pan Asia' || ($prep->alreadyDeveloped == 'Need to Develop' && $prep->developPlannedDate);
                                                                 @endphp
 
-                                                                {{-- Wrap button + modal inside Alpine component --}}
+                                                                {{-- Alpine component --}}
                                                                 <div x-data="{ open: false }" class="relative">
                                                                     {{-- Trigger Button --}}
                                                                     <button type="button"
-                                                                        class="yarn-ordered-btn px-2 py-1 mt-3 rounded transition-all duration-200
+                                                                            class="yarn-ordered-btn px-2 py-1 mt-3 rounded transition-all duration-200
                                                                             {{ $canOrder ? 'bg-gray-300 text-black hover:bg-gray-400' : 'bg-gray-200 text-gray-500 cursor-not-allowed' }}"
-                                                                        @if ($canOrder) @click="open = true" @else disabled title="Please set Development Plan Date first" @endif>
+                                                                            @if($canOrder) @click="open = true" @else disabled title="Please set Development Plan Date first" @endif>
                                                                         Pending
                                                                     </button>
 
-                                                                    {{-- Modal for Marking Yarn Ordered --}}
+                                                                    {{-- Modal --}}
                                                                     <div x-show="open" x-transition
-                                                                        class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
-                                                                        style="display: none;">
-                                                                        <div
-                                                                            class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-12 w-full max-w-md relative">
+                                                                         class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+                                                                         style="display: none;">
 
-                                                                            {{-- Close button (X) --}}
+                                                                        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg w-full max-w-md relative max-h-[90vh] overflow-y-auto p-8">
+                                                                            {{-- Close button --}}
                                                                             <button @click="open = false"
-                                                                                class="absolute top-2 right-2 text-gray-600 hover:text-gray-900">
-                                                                                ✕
-                                                                            </button>
+                                                                                    class="absolute top-2 right-2 text-gray-600 hover:text-gray-900">✕</button>
 
                                                                             {{-- Title --}}
-                                                                            <h2
-                                                                                class="text-lg font-semibold text-gray-800 dark:text-white mb-2 text-left">
+                                                                            <h2 class="text-lg font-semibold text-gray-800 dark:text-white mb-2 text-left">
                                                                                 Mark Yarn Ordered
                                                                             </h2>
 
-                                                                            <p
-                                                                                class="mb-5 text-sm text-gray-600 dark:text-gray-300 text-left">
-                                                                                Please provide the required details for the
-                                                                                yarn order. All fields are mandatory.
+                                                                            <p class="mb-5 text-sm text-gray-600 dark:text-gray-300 text-left">
+                                                                                Please provide the required details for the yarn order. All fields are mandatory.
                                                                             </p>
 
                                                                             {{-- Form --}}
-                                                                            <form
-                                                                                action="{{ route('rnd.markYarnOrdered') }}"
-                                                                                method="POST">
+                                                                            <form action="{{ route('rnd.markYarnOrdered') }}" method="POST">
                                                                                 @csrf
-                                                                                <input type="hidden" name="id"
-                                                                                    value="{{ $prep->id }}">
+                                                                                <input type="hidden" name="id" value="{{ $prep->id }}">
 
                                                                                 {{-- PO Number --}}
                                                                                 <div class="mb-4">
-                                                                                    <label
-                                                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 text-left">
+                                                                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 text-left">
                                                                                         PO Number
                                                                                     </label>
-                                                                                    <input type="text"
-                                                                                        name="yarnOrderedPONumber"
-                                                                                        placeholder="Enter PO Number"
-                                                                                        class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                                                    <input type="text" name="yarnOrderedPONumber" placeholder="Enter PO Number"
+                                                                                           class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                                                 </div>
 
-                                                                                {{-- Shade --}}
+                                                                                {{-- Number of Options --}}
                                                                                 <div class="mb-4">
-                                                                                    <label
-                                                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 text-left">
-                                                                                        Shade
+                                                                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 text-left">
+                                                                                        Number of Options
                                                                                     </label>
-                                                                                    <input type="text" name="shade"
-                                                                                        placeholder="Enter Shade"
-                                                                                        class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
+
+                                                                                    <div id="optionsWrapper" class="space-y-2">
+                                                                                        <div class="flex items-center space-x-2">
+                                                                                            <input type="text"
+                                                                                                   name="shades[]"
+                                                                                                   placeholder="Enter Shade"
+                                                                                                   class="flex-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                                                                   required>
+                                                                                            <button type="button"
+                                                                                                    onclick="removeOptionInput(this)"
+                                                                                                    class="text-red-500 hover:text-red-700 text-lg font-bold">
+                                                                                                ✖
+                                                                                            </button>
+                                                                                        </div>
+                                                                                    </div>
+
+                                                                                    <button type="button"
+                                                                                            onclick="addOptionInput()"
+                                                                                            class="mt-2 px-3 py-1 bg-blue-500 text-white rounded-md text-sm">
+                                                                                        + Add Option
+                                                                                    </button>
                                                                                 </div>
+
 
                                                                                 {{-- Weight --}}
                                                                                 <div class="mb-4">
-                                                                                    <label
-                                                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 text-left">
+                                                                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 text-left">
                                                                                         Weight (in grams)
                                                                                     </label>
-                                                                                    <input type="number" step="0.01"
-                                                                                        name="value"
-                                                                                        placeholder="e.g. 150.50"
-                                                                                        class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                                                    <input type="number" step="0.01" name="value" placeholder="e.g. 150.50"
+                                                                                           class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                                                 </div>
 
                                                                                 {{-- Ticket --}}
                                                                                 <div class="mb-4">
-                                                                                    <label
-                                                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 text-left">
+                                                                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 text-left">
                                                                                         Ticket Number
                                                                                     </label>
-                                                                                    <input type="text" name="tkt"
-                                                                                        placeholder="Enter Ticket Number"
-                                                                                        class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                                                    <input type="text" name="tkt" placeholder="Enter Ticket Number"
+                                                                                           class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                                                 </div>
 
                                                                                 {{-- Yarn Price --}}
                                                                                 <div class="mb-4">
-                                                                                    <label
-                                                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 text-left">
+                                                                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 text-left">
                                                                                         Yarn Price
                                                                                     </label>
-                                                                                    <input type="text" name="yarnPrice"
-                                                                                        placeholder="Enter Yarn Price"
-                                                                                        class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                                                    <input type="text" name="yarnPrice" placeholder="Enter Yarn Price"
+                                                                                           class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                                                 </div>
 
                                                                                 {{-- Supplier --}}
                                                                                 <div class="mb-6">
-                                                                                    <label
-                                                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 text-left">
+                                                                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 text-left">
                                                                                         Supplier
                                                                                     </label>
-
-                                                                                    <div class="relative inline-block w-full"
-                                                                                        data-dropdown-root>
+                                                                                    <div class="relative inline-block w-full" data-dropdown-root>
                                                                                         <!-- Trigger -->
                                                                                         <button type="button"
-                                                                                            onclick="toggleDropdownItemAdd(this, 'supplier')"
-                                                                                            class="w-full flex justify-between items-center px-4 py-2 border border-gray-300 rounded-md bg-white dark:bg-gray-700 text-sm text-gray-700 dark:text-white hover:bg-gray-50 focus:outline-none">
-                                                                                            <span
-                                                                                                class="selected-supplier">{{ old('yarnSupplier', 'Pan Asia') }}</span>
-                                                                                            <svg class="w-4 h-4 text-gray-500 dark:text-gray-300"
-                                                                                                fill="none"
-                                                                                                stroke="currentColor"
-                                                                                                viewBox="0 0 24 24">
-                                                                                                <path
-                                                                                                    stroke-linecap="round"
-                                                                                                    stroke-linejoin="round"
-                                                                                                    stroke-width="2"
-                                                                                                    d="M19 9l-7 7-7-7" />
+                                                                                                onclick="toggleDropdownItemAdd(this, 'supplier')"
+                                                                                                class="w-full flex justify-between items-center px-4 py-2 border border-gray-300 rounded-md bg-white dark:bg-gray-700 text-sm text-gray-700 dark:text-white hover:bg-gray-50 focus:outline-none">
+                                                                                            <span class="selected-supplier">{{ old('yarnSupplier', 'Pan Asia') }}</span>
+                                                                                            <svg class="w-4 h-4 text-gray-500 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                                                                                             </svg>
                                                                                         </button>
 
                                                                                         <!-- Dropdown Menu -->
-                                                                                        <div
-                                                                                            class="dropdown-menu-supplier hidden absolute z-10 mt-2 w-full rounded-md bg-white dark:bg-gray-700 shadow-lg ring-1 ring-black/5 max-h-48 overflow-y-auto">
-                                                                                            <div class="py-1"
-                                                                                                role="listbox"
-                                                                                                tabindex="-1">
-                                                                                                <button type="button"
-                                                                                                    class="dropdown-option w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
-                                                                                                    onclick="selectDropdownOptionItemAdd(this, 'Pan Asia', 'supplier')">Pan
-                                                                                                    Asia</button>
-
-                                                                                                <button type="button"
-                                                                                                    class="dropdown-option w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
-                                                                                                    onclick="selectDropdownOptionItemAdd(this, 'Ocean Lanka', 'supplier')">Ocean
-                                                                                                    Lanka</button>
-
-                                                                                                <button type="button"
-                                                                                                    class="dropdown-option w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
-                                                                                                    onclick="selectDropdownOptionItemAdd(this, 'A and E', 'supplier')">A
-                                                                                                    and E</button>
-
-                                                                                                <button type="button"
-                                                                                                    class="dropdown-option w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
-                                                                                                    onclick="selectDropdownOptionItemAdd(this, 'Metro Lanka', 'supplier')">Metro
-                                                                                                    Lanka</button>
-
-                                                                                                <button type="button"
-                                                                                                    class="dropdown-option w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
-                                                                                                    onclick="selectDropdownOptionItemAdd(this, 'Stretchtec Stock', 'supplier')">Stretchtec
-                                                                                                    Stock</button>
-
-                                                                                                <button type="button"
-                                                                                                    class="dropdown-option w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
-                                                                                                    onclick="selectDropdownOptionItemAdd(this, 'Other', 'supplier')">Other</button>
+                                                                                        <div class="dropdown-menu-supplier hidden absolute z-10 mt-2 w-full rounded-md bg-white dark:bg-gray-700 shadow-lg ring-1 ring-black/5 max-h-48 overflow-y-auto">
+                                                                                            <div class="py-1" role="listbox" tabindex="-1">
+                                                                                                @foreach(['Pan Asia', 'Ocean Lanka', 'A and E', 'Metro Lanka', 'Stretchtec Stock', 'Other'] as $supplier)
+                                                                                                    <button type="button" class="dropdown-option w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
+                                                                                                            onclick="selectDropdownOptionItemAdd(this, '{{ $supplier }}', 'supplier')">{{ $supplier }}</button>
+                                                                                                @endforeach
                                                                                             </div>
                                                                                         </div>
 
-                                                                                        <!-- Hidden input for form submission -->
-                                                                                        <input type="hidden"
-                                                                                            name="yarnSupplier"
-                                                                                            class="input-supplier"
-                                                                                            value="{{ old('yarnSupplier', 'Pan Asia') }}">
+                                                                                        <!-- Hidden input -->
+                                                                                        <input type="hidden" name="yarnSupplier" class="input-supplier" value="{{ old('yarnSupplier', 'Pan Asia') }}">
 
                                                                                         <!-- "Other" input field -->
-                                                                                        <div
-                                                                                            class="mt-4 hidden other-supplier-field">
-                                                                                            <label
-                                                                                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                                                                        <div class="mt-4 hidden other-supplier-field">
+                                                                                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                                                                                                 Please specify
                                                                                             </label>
-                                                                                            <input type="text"
-                                                                                                name="customSupplier"
-                                                                                                placeholder="Enter Supplier Name"
-                                                                                                class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm input-custom-supplier"
-                                                                                                value="{{ old('customSupplier') }}"
-                                                                                                @disabled(true)>
+                                                                                            <input type="text" name="customSupplier" placeholder="Enter Supplier Name"
+                                                                                                   class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm input-custom-supplier" value="{{ old('customSupplier') }}" @disabled(true)>
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
 
-
+                                                                                {{-- Form Buttons --}}
                                                                                 <div class="flex justify-end gap-3">
-                                                                                    <button type="button"
-                                                                                        @click="open = false"
-                                                                                        class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400 transition">
+                                                                                    <button type="button" @click="open = false"
+                                                                                            class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400 transition">
                                                                                         Cancel
                                                                                     </button>
-                                                                                    <button type="submit"
-                                                                                        class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
+                                                                                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
                                                                                         Save
                                                                                     </button>
                                                                                 </div>
@@ -1072,20 +1021,17 @@
                                                                 </div>
                                                             @else
                                                                 {{-- Already Ordered --}}
-                                                                <span
-                                                                    class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-purple-200 dark:bg-gray-800 px-3 py-1 rounded">
+                                                                <span class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-purple-200 dark:bg-gray-800 px-3 py-1 rounded">
                                                                     Ordered on <br>
-                                                                    {{ \Carbon\Carbon::parse($prep->yarnOrderedDate)->format('Y-m-d') }}
-                                                                    at
+                                                                    {{ \Carbon\Carbon::parse($prep->yarnOrderedDate)->format('Y-m-d') }} at
                                                                     {{ \Carbon\Carbon::parse($prep->yarnOrderedDate)->format('H:i') }}
                                                                 </span>
                                                             @endif
                                                         @elseif(in_array($prep->alreadyDeveloped, ['No Need to Develop', 'Tape Match Pan Asia']))
                                                             <span class="text-gray-400 italic">—</span>
                                                         @else
-                                                            <button type="button"
-                                                                class="yarn-ordered-btn px-2 py-1 mt-3 rounded bg-gray-200 text-gray-500 cursor-not-allowed"
-                                                                disabled title="Not applicable for this type">
+                                                            <button type="button" class="yarn-ordered-btn px-2 py-1 mt-3 rounded bg-gray-200 text-gray-500 cursor-not-allowed"
+                                                                    disabled title="Not applicable for this type">
                                                                 Pending
                                                             </button>
                                                         @endif
@@ -1093,7 +1039,8 @@
                                                 </td>
 
 
-                                                <td class="px-4 py-3 border-r border-gray-300 text-center">
+
+                                                <td class="px-4 py-3 border-r border-gray-300 text-center break-words">
                                                     @if ($prep->alreadyDeveloped == 'Need to Develop')
                                                         @if (!empty($prep->yarnOrderedPONumber))
                                                             {{-- Show saved PO Number --}}
@@ -1120,26 +1067,75 @@
                                                     @endif
                                                 </td>
 
-                                                <td class="px-4 py-3 border-r border-gray-300 text-center">
-                                                    @if (!empty($prep->shade))
-                                                        {{-- Show saved Shade --}}
-                                                        <span class="text-sm font-medium text-gray-800 dark:text-gray-200">
-                                                            {{ $prep->shade }}
-                                                        </span>
+                                                <td class="px-4 py-3 border-r border-gray-300 text-center break-words" x-data="{ open: false }">
+                                                    @if ($prep->shadeOrders->isNotEmpty())
+                                                        {{-- Trigger button --}}
+                                                        <button type="button"
+                                                                @click="open = true"
+                                                                class="px-3 py-1 text-sm font-medium bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded hover:bg-gray-200 dark:hover:bg-gray-600 transition">
+                                                            View Shades ({{ $prep->shadeOrders->count() }})
+                                                        </button>
+
+                                                        {{-- Modal --}}
+                                                        <div x-show="open" x-transition
+                                                             class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+                                                             style="display: none;">
+                                                            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 w-full max-w-lg relative max-h-[80vh] overflow-y-auto">
+
+                                                                {{-- Close button --}}
+                                                                <button @click="open = false"
+                                                                        class="absolute top-2 right-2 text-gray-600 hover:text-gray-900">✕</button>
+
+                                                                {{-- Title --}}
+                                                                <h2 class="text-lg font-semibold text-blue-900 dark:text-white mb-4">
+                                                                    Shades for Order #{{ $prep->orderNo }}
+                                                                </h2>
+
+                                                                {{-- Option cards --}}
+                                                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                                                    @php
+                                                                        $letters = range('A', 'Z');
+
+                                                                        // Define status-to-color mapping
+                                                                        $statusColors = [
+                                                                            'In Production' => 'bg-yellow-100 text-yellow-800 dark:bg-yellow-700 dark:text-yellow-200',
+                                                                            'Sent to Production' => 'bg-emerald-100 text-emerald-800 dark:bg-emerald-700 dark:text-emerald-200',
+                                                                            'Yarn Received' => 'bg-pink-100 text-pink-800 dark:bg-pink-700 dark:text-pink-200',
+                                                                            'Pending' => 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200',
+                                                                            'Order Delivered' => 'bg-blue-100 text-blue-800 dark:bg-blue-700 dark:text-blue-200',
+                                                                        ];
+                                                                    @endphp
+
+                                                                    @foreach($prep->shadeOrders as $index => $shade)
+                                                                        @php
+                                                                            $colorClass = $statusColors[$shade->status] ?? 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200';
+                                                                        @endphp
+
+                                                                        <div class="border rounded-md p-4 {{ $colorClass }}">
+                                                                            <div class="font-semibold mb-1">
+                                                                                Option {{ $letters[$index] ?? $index + 1 }}
+                                                                            </div>
+                                                                            <div class="text-sm">
+                                                                                <span class="block mb-1"><strong>Shade:</strong> {{ $shade->shade }}</span>
+                                                                                <span class="block"><strong>Status:</strong> {{ $shade->status }}</span>
+                                                                            </div>
+                                                                        </div>
+                                                                    @endforeach
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
                                                     @elseif(in_array($prep->alreadyDeveloped, ['No Need to Develop']))
-                                                        {{-- Not available for these statuses --}}
                                                         <span class="text-gray-400 italic">—</span>
                                                     @else
-                                                        {{-- Not yet added --}}
-                                                        <span
-                                                            class="inline-block bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 text-sm font-medium px-3 py-1 rounded">
+                                                        <span class="inline-block bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 text-sm font-medium px-3 py-1 rounded">
                                                             Not Added
                                                         </span>
                                                     @endif
                                                 </td>
 
                                                 <!-- Yarn Ordered Weight -->
-                                                <td class="px-4 py-3 border-r border-gray-300 text-center">
+                                                <td class="px-4 py-3 border-r border-gray-300 text-center break-words">
                                                     @if (in_array($prep->alreadyDeveloped, ['Tape Match Pan Asia', 'No Need to Develop']))
                                                         {{-- Not available for these statuses --}}
                                                         <span class="text-gray-400 italic">—</span>
@@ -1157,7 +1153,7 @@
                                                     @endif
                                                 </td>
 
-                                                <td class="px-4 py-3 border-r border-gray-300 text-center">
+                                                <td class="px-4 py-3 border-r border-gray-300 text-center break-words">
                                                     @if (!empty($prep->tkt))
                                                         {{-- Show saved TKT --}}
                                                         <span class="text-sm font-medium text-gray-800 dark:text-gray-200">
@@ -1175,7 +1171,7 @@
                                                     @endif
                                                 </td>
 
-                                                <td class="px-4 py-3 border-r border-gray-300 text-center">
+                                                <td class="px-4 py-3 border-r border-gray-300 text-center break-words">
                                                     @if (!empty($prep->yarnSupplier))
                                                         {{-- Show saved Supplier --}}
                                                         <span class="text-sm font-medium text-gray-800 dark:text-gray-200">
@@ -1193,7 +1189,7 @@
                                                     @endif
                                                 </td>
 
-                                                <td class="px-4 py-3 border-r border-gray-300 text-center">
+                                                <td class="px-4 py-3 border-r border-gray-300 text-center break-words">
                                                     @if (!empty($prep->yarnPrice))
                                                         {{-- Show saved Supplier --}}
                                                         <span class="text-sm font-medium text-gray-800 dark:text-gray-200">
@@ -1212,143 +1208,79 @@
                                                 </td>
 
                                                 {{-- Yarn Receive Date --}}
-                                                <td
-                                                    class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
-                                                    @if (Auth::user()->role === 'ADMIN' or Auth::user()->role === 'PRODUCTIONOFFICER')
-                                                        {{-- ADMIN: Read-only --}}
-                                                        @if ($prep->alreadyDeveloped == 'Need to Develop')
-                                                            @if (is_null($prep->yarnReceiveDate))
-                                                                <span
-                                                                    class="inline-block bg-gray-200 dark:bg-gray-600 text-gray-500 dark:text-gray-400 text-sm font-medium px-3 py-1 rounded cursor-not-allowed"
-                                                                    title="Admin view only">
-                                                                    Pending
-                                                                </span>
-                                                            @else
-                                                                <span
-                                                                    class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-pink-200 dark:bg-gray-800 px-3 py-1 rounded">
-                                                                    Received on <br>
-                                                                    {{ \Carbon\Carbon::parse($prep->yarnReceiveDate)->format('Y-m-d') }}
-                                                                    at
-                                                                    {{ \Carbon\Carbon::parse($prep->yarnReceiveDate)->format('H:i') }}
-                                                                    @if ($prep->pst_no)
-                                                                        <br><span class="block text-xs text-gray-600">PST
-                                                                            No: {{ $prep->pst_no }}</span>
-                                                                    @endif
-                                                                </span>
-                                                            @endif
+                                                <td class="py-3 whitespace-normal break-words border-r border-gray-300 text-center" x-data="{ open: false }">
+                                                    @php
+                                                        $pendingYarns = $prep->shadeOrders->where('status', 'Pending');
+                                                        $receivedYarns = $prep->shadeOrders->where('status', 'Yarn Received');
+                                                    @endphp
+
+                                                    @if ($prep->alreadyDeveloped == 'Need to Develop')
+                                                        @if ($pendingYarns->isNotEmpty())
+                                                            <button type="button"
+                                                                    @click="open = true"
+                                                                    class="px-2 py-1 mt-3 rounded transition-all duration-200 bg-gray-300 text-black hover:bg-gray-400">
+                                                                Pending ({{ $pendingYarns->count() }})
+                                                            </button>
+
+                                                            {{-- Modal --}}
+                                                            <div x-show="open" x-transition
+                                                                 class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+                                                                 style="display:none;">
+                                                                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 w-full max-w-lg relative max-h-[80vh] overflow-y-auto">
+                                                                    <button @click="open = false" class="absolute top-2 right-2 text-gray-600 hover:text-gray-900">✕</button>
+
+                                                                    <h2 class="text-lg font-semibold text-blue-900 dark:text-white mb-4">Mark Yarn Received</h2>
+                                                                    <form action="{{ route('rnd.markYarnReceived') }}" method="POST">
+                                                                        @csrf
+                                                                        <input type="hidden" name="rnd_id" value="{{ $prep->id }}">
+
+                                                                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                                                            @foreach($pendingYarns as $shade)
+                                                                                <div class="p-4 border rounded bg-gray-100 dark:bg-gray-700">
+                                                                                    <label class="flex items-start gap-2">
+                                                                                        <input type="checkbox" name="shade_ids[]" value="{{ $shade->id }}" class="mt-1">
+                                                                                        <div>
+                                                                                            <div class="font-semibold">Shade: {{ $shade->shade }}</div>
+                                                                                        </div>
+                                                                                    </label>
+
+                                                                                    {{-- PST input only for Pan Asia --}}
+                                                                                    @if($prep->yarnSupplier === 'Pan Asia')
+                                                                                        <input type="text" name="pst_no[{{ $shade->id }}]"
+                                                                                               placeholder="Enter PA/ST No"
+                                                                                               class="mt-2 w-full px-2 py-1 border rounded text-sm dark:bg-gray-700 dark:text-white">
+                                                                                    @endif
+                                                                                </div>
+                                                                            @endforeach
+                                                                        </div>
+
+                                                                        <div class="mt-4 flex justify-end gap-2">
+                                                                            <button type="button" @click="open = false"
+                                                                                    class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400">
+                                                                                Cancel
+                                                                            </button>
+                                                                            <button type="submit"
+                                                                                    class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+                                                                                Save
+                                                                            </button>
+                                                                        </div>
+                                                                    </form>
+                                                                </div>
+                                                            </div>
                                                         @else
-                                                            <span class="text-gray-400 italic">—</span>
+                                                            {{-- All shades received: show date & time --}}
+                                                            <span class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-pink-200 dark:bg-gray-800 px-3 py-1 rounded">
+                                                                Received on <br>
+                                                                {{ \Carbon\Carbon::parse($prep->yarnReceiveDate)->format('Y-m-d') }}
+                                                                at {{ \Carbon\Carbon::parse($prep->yarnReceiveDate)->format('H:i') }}
+                                                            </span>
                                                         @endif
                                                     @else
-                                                        {{-- Other Roles: Editable --}}
-                                                        @if ($prep->alreadyDeveloped == 'Need to Develop')
-                                                            @if (is_null($prep->yarnReceiveDate))
-                                                                @if ($prep->yarnSupplier === 'Pan Asia')
-                                                                    {{-- Wrap button + modal inside Alpine component --}}
-                                                                    <div x-data="{ open: false }" class="relative">
-                                                                        {{-- Trigger Button --}}
-                                                                        <button type="button"
-                                                                            class="yarn-receive-btn px-2 py-1 mt-3 rounded transition-all duration-200
-                                {{ $prep->developPlannedDate && $prep->yarnOrderedDate ? 'bg-gray-300 text-black hover:bg-gray-400' : 'bg-gray-200 text-gray-500 cursor-not-allowed' }}"
-                                                                            @if ($prep->developPlannedDate && $prep->yarnOrderedDate) @click="open = true" @else disabled title="Please set Development Plan Date and Yarn Ordered Date first" @endif>
-                                                                            Pending
-                                                                        </button>
-
-                                                                        {{-- Modal --}}
-                                                                        <div x-show="open" x-transition
-                                                                            class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
-                                                                            style="display: none;">
-                                                                            <div
-                                                                                class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 w-full max-w-md relative">
-                                                                                {{-- Close button (X) --}}
-                                                                                <button @click="open = false"
-                                                                                    class="absolute top-2 right-2 text-gray-600 hover:text-gray-900">
-                                                                                    ✕
-                                                                                </button>
-
-                                                                                {{-- Title --}}
-                                                                                <h2
-                                                                                    class="text-lg font-semibold text-gray-800 dark:text-white mb-2 text-left">
-                                                                                    Mark Yarn Received
-                                                                                </h2>
-                                                                                <p
-                                                                                    class="mb-5 text-sm text-gray-600 dark:text-gray-300 text-left">
-                                                                                    Please provide the PST No. to confirm
-                                                                                    yarn receipt.
-                                                                                </p>
-
-                                                                                {{-- Form --}}
-                                                                                <form
-                                                                                    action="{{ route('rnd.markYarnReceived') }}"
-                                                                                    method="POST">
-                                                                                    @csrf
-                                                                                    <input type="hidden" name="id"
-                                                                                        value="{{ $prep->id }}">
-
-                                                                                    {{-- PST No --}}
-                                                                                    <div class="mb-6">
-                                                                                        <label
-                                                                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 text-left">
-                                                                                            PA / ST No
-                                                                                        </label>
-                                                                                        <input type="number"
-                                                                                            name="pst_no"
-                                                                                            placeholder="Enter PA / ST No"
-                                                                                            class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                                                            required>
-                                                                                    </div>
-
-                                                                                    <div class="flex justify-end gap-3">
-                                                                                        <button type="button"
-                                                                                            @click="open = false"
-                                                                                            class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400 transition">
-                                                                                            Cancel
-                                                                                        </button>
-                                                                                        <button type="submit"
-                                                                                            class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
-                                                                                            Save
-                                                                                        </button>
-                                                                                    </div>
-                                                                                </form>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                @else
-                                                                    {{-- Default form if not Pan Asia --}}
-                                                                    <form action="{{ route('rnd.markYarnReceived') }}"
-                                                                        method="POST">
-                                                                        @csrf
-                                                                        <input type="hidden" name="id"
-                                                                            value="{{ $prep->id }}">
-                                                                        <button type="submit"
-                                                                            class="yarn-receive-btn px-2 py-1 mt-3 rounded transition-all duration-200
-                                {{ $prep->yarnSupplier ? 'bg-gray-300 text-black hover:bg-gray-400' : 'bg-gray-200 text-gray-500 cursor-not-allowed' }}"
-                                                                            {{ $prep->yarnSupplier ? '' : 'disabled' }}
-                                                                            title="{{ $prep->developPlannedDate && $prep->yarnOrderedDate ? '' : 'Please set Development Plan Date and Yarn Ordered Date first' }}">
-                                                                            Pending
-                                                                        </button>
-                                                                    </form>
-                                                                @endif
-                                                            @else
-                                                                <span
-                                                                    class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-pink-200 dark:bg-gray-800 px-3 py-1 rounded">
-                                                                    Received on <br>
-                                                                    {{ \Carbon\Carbon::parse($prep->yarnReceiveDate)->format('Y-m-d') }}
-                                                                    at
-                                                                    {{ \Carbon\Carbon::parse($prep->yarnReceiveDate)->format('H:i') }}
-                                                                    @if ($prep->pst_no)
-                                                                        <br><span class="block text-xs text-gray-600">PST
-                                                                            No: {{ $prep->pst_no }}</span>
-                                                                    @endif
-                                                                </span>
-                                                            @endif
-                                                        @else
-                                                            <span class="text-gray-400 italic">—</span>
-                                                        @endif
+                                                        <span class="text-gray-400 italic">—</span>
                                                     @endif
                                                 </td>
 
-                                                <td class="px-4 py-3 border-r border-gray-300 text-center">
+                                                <td class="px-4 py-3 border-r border-gray-300 text-center break-words">
                                                     @if (Auth::user()->role === 'ADMIN' or Auth::user()->role === 'PRODUCTIONOFFICER')
                                                         {{-- ADMIN/PRODUCTION OFFICER: Read-only --}}
                                                         @if ($prep->alreadyDeveloped == 'Need to Develop')
@@ -1401,30 +1333,69 @@
                                                     @endif
                                                 </td>
 
-                                                {{-- Send Order To Production Status --}}
-                                                <td
-                                                    class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                                <td class="py-3 whitespace-normal break-words border-r border-gray-300 text-center" x-data="{ open: false, selectedShades: [] }">
+                                                    @php
+                                                        $pendingShades = $prep->shadeOrders->where('status', 'Yarn Received');
+                                                    @endphp
+
                                                     @if ($prep->alreadyDeveloped == 'Need to Develop')
-                                                        @if (is_null($prep->sendOrderToProductionStatus))
-                                                            <form action="{{ route('rnd.markSendToProduction') }}"
-                                                                method="POST">
-                                                                @csrf
-                                                                <input type="hidden" name="id"
-                                                                    value="{{ $prep->id }}">
-                                                                <button type="submit"
+                                                        @if ($pendingShades->isNotEmpty())
+                                                            <button type="button"
+                                                                    @click="open = true; selectedShades = []"
                                                                     class="send-production-btn px-2 py-1 mt-3 rounded transition-all duration-200
                                                                     {{ $prep->developPlannedDate && $prep->productionDeadline ? 'bg-gray-300 text-black hover:bg-gray-400' : 'bg-gray-200 text-gray-500 cursor-not-allowed' }}"
                                                                     {{ $prep->developPlannedDate && $prep->productionDeadline ? '' : 'disabled' }}
                                                                     title="{{ $prep->developPlannedDate && $prep->productionDeadline ? '' : 'Please set Development Plan & Production Deadline Date first' }}">
-                                                                    Pending
-                                                                </button>
-                                                            </form>
+                                                                Pending ({{ $pendingShades->count() }})
+                                                            </button>
+
+                                                            {{-- Modal --}}
+                                                            <div x-show="open" x-transition class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50" style="display:none;">
+                                                                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 w-full max-w-lg relative max-h-[80vh] overflow-y-auto">
+
+                                                                    {{-- Close --}}
+                                                                    <button @click="open = false" class="absolute top-2 right-2 text-gray-600 hover:text-gray-900">✕</button>
+
+                                                                    <h2 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">
+                                                                        Select Shades to Send to Production
+                                                                    </h2>
+
+                                                                    {{-- Shades --}}
+                                                                    <form action="{{ route('rnd.markSendToProduction') }}" method="POST" @submit.prevent="$el.submit()">
+                                                                        @csrf
+                                                                        <input type="hidden" name="rnd_id" value="{{ $prep->id }}">
+                                                                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                                                            @php $letters = range('A', 'Z'); @endphp
+                                                                            @foreach($pendingShades as $index => $shade)
+                                                                                <label class="border rounded-md p-4 bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 cursor-pointer flex flex-col">
+                                                                                    <div class="font-semibold mb-1">Option {{ $letters[$index] ?? $index+1 }}</div>
+                                                                                    <div class="text-sm mb-2">
+                                                                                        <span class="block mb-1"><strong>Shade:</strong> {{ $shade->shade }}</span>
+                                                                                        <span class="block"><strong>Status:</strong> {{ $shade->status }}</span>
+                                                                                    </div>
+                                                                                    <input type="checkbox" name="shade_ids[]" value="{{ $shade->id }}" x-model="selectedShades">
+                                                                                </label>
+                                                                            @endforeach
+                                                                        </div>
+
+                                                                        <div class="mt-4 flex justify-end gap-2">
+                                                                            <button type="button" @click="open = false" class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400 transition">Cancel</button>
+
+                                                                            <button type="submit"
+                                                                                    :disabled="selectedShades.length == 0"
+                                                                                    class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+                                                                                    x-text="selectedShades.length > 1 ? 'Send Selected' : 'Send to Production'">
+                                                                                Send
+                                                                            </button>
+                                                                        </div>
+                                                                    </form>
+                                                                </div>
+                                                            </div>
+
                                                         @else
-                                                            <span
-                                                                class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-orange-200 dark:bg-gray-800 px-3 py-1 rounded">
+                                                            <span class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-orange-200 dark:bg-gray-800 px-3 py-1 rounded">
                                                                 Sent on <br>
-                                                                {{ \Carbon\Carbon::parse($prep->sendOrderToProductionStatus)->format('Y-m-d') }}
-                                                                at
+                                                                {{ \Carbon\Carbon::parse($prep->sendOrderToProductionStatus)->format('Y-m-d') }} at
                                                                 {{ \Carbon\Carbon::parse($prep->sendOrderToProductionStatus)->format('H:i') }}
                                                             </span>
                                                         @endif
@@ -1432,6 +1403,7 @@
                                                         <span class="text-gray-400 italic">—</span>
                                                     @endif
                                                 </td>
+
 
                                                 {{-- Production Status --}}
                                                 <td
@@ -1581,24 +1553,18 @@
 
                                                 <td class="px-4 py-3 border-r border-gray-300 text-center">
                                                     @php
+                                                        $dispatchRecord = $dispatchCheck->firstWhere('sample_preparation_rnd_id', $prep->id);
                                                         $canEditReference = false;
 
-                                                        if (
-                                                            in_array($prep->alreadyDeveloped, [
-                                                                'No Need to Develop',
-                                                                'Tape Match Pan Asia',
-                                                            ])
-                                                        ) {
+                                                        if (in_array($prep->alreadyDeveloped, ['No Need to Develop', 'Tape Match Pan Asia'])) {
                                                             $canEditReference = true;
-                                                        } elseif (
-                                                            $prep->alreadyDeveloped === 'Need to Develop' &&
-                                                            $prep->productionStatus === 'Production Complete'
-                                                        ) {
+                                                        } elseif ($prep->alreadyDeveloped === 'Need to Develop' &&
+                                                                  (($dispatchRecord?->dispatch_to_rnd_at ?? null) != null)) {
                                                             $canEditReference = true;
                                                         }
                                                     @endphp
 
-                                                    @if (Auth::user()->role === 'ADMIN' or Auth::user()->role === 'PRODUCTIONOFFICER')
+                                                @if (Auth::user()->role === 'ADMIN' or Auth::user()->role === 'PRODUCTIONOFFICER')
                                                         {{-- ADMIN: Read-only --}}
                                                         @if ($prep->is_reference_locked)
                                                             <span class="readonly">{{ $prep->referenceNo }}</span>
@@ -2575,7 +2541,7 @@
             });
         });
 
-        // Restore page scroll after full load (including images etc)
+        // Restore page scroll after full load (including images etc.)
         window.onload = function() {
             let pageScroll = localStorage.getItem("pageScrollY");
             if (pageScroll !== null) {
@@ -2589,4 +2555,43 @@
             localStorage.setItem("pageScrollY", window.scrollY);
         });
     </script>
+
+    <script>
+        function addOptionInput() {
+            const wrapper = document.getElementById('optionsWrapper');
+
+            // create container div
+            const div = document.createElement('div');
+            div.className = "flex items-center space-x-2";
+
+            // create input
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.name = 'shades[]';
+            input.placeholder = 'Enter Shade';
+            input.className = 'flex-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm';
+            input.required = true;
+
+            // create delete button
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.innerHTML = '✖';
+            btn.className = 'text-red-500 hover:text-red-700 text-lg font-bold';
+            btn.onclick = function () {
+                removeOptionInput(btn);
+            };
+
+            // append input and button to div
+            div.appendChild(input);
+            div.appendChild(btn);
+
+            // append div to wrapper
+            wrapper.appendChild(div);
+        }
+
+        function removeOptionInput(button) {
+            button.parentElement.remove();
+        }
+    </script>
+
 @endsection
