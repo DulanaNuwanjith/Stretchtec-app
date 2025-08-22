@@ -972,72 +972,118 @@
 
                                                 <!-- Reference No -->
                                                 <td
-                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center ">
-                                                    <span class="readonly">{{ $inquiry->referenceNo ?? 'N/D' }}</span>
-                                                    <input type="text"
+                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                                    <span class="readonly">{{ $inquiry->referenceNo ?? '-' }}</span>
+                                                    <input type="text" name="referenceNo"
                                                         class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                        value="{{ $inquiry->referenceNo ?? 'N/D' }}" />
+                                                        value="{{ $inquiry->referenceNo ?? '-'}}" />
                                                 </td>
 
+                                                <!-- Customer Delivery Status -->
                                                 <td class="px-4 py-3 border-r border-gray-300 text-center">
-                                                    <div class="delivery-item inline-block">
-                                                        @if (is_null($inquiry->customerDeliveryDate))
-                                                            @if (!empty(trim($inquiry->referenceNo)))
-                                                                @if (Auth::user()->role === 'ADMIN')
-                                                                    <div
-                                                                        class="bg-gray-200 text-gray-500 px-3 py-2 rounded-md text-sm w-40 cursor-not-allowed">
-                                                                        Delivery Not Editable
+                                                    @php
+                                                        $prepRnd = $inquiry->samplePreparationRnD;
+                                                        $delivered = $inquiry->customerDeliveryDate ? true : false;
+                                                        $canDeliver = in_array($prepRnd?->alreadyDeveloped, ['Need to Develop', 'No Need to Develop', 'Tape Match Pan Asia']);
+
+                                                        $shadeOrders = $prepRnd?->shadeOrders ?? collect();
+
+                                                        // Only shades for this prep with status exactly 'Dispatched to RnD'
+                                                        $dispatchedShades = $shadeOrders->filter(fn($s) => trim($s->status) === 'Dispatched to RnD');
+
+                                                        $allDelivered = $shadeOrders->isNotEmpty() && $shadeOrders->every(fn($s) => trim($s->status) === 'Delivered');
+                                                    @endphp
+
+                                                    {{-- Deliver Button / Modal --}}
+                                                    @if(!$delivered && $canDeliver)
+                                                        @if($prepRnd?->alreadyDeveloped === 'Need to Develop' && $dispatchedShades->isNotEmpty())
+                                                            <div x-data="{ open: false }">
+                                                                <button type="button" @click="open = true"
+                                                                        class="px-3 py-1 rounded text-white bg-green-600 hover:bg-green-700 transition duration-200">
+                                                                    Deliver
+                                                                </button>
+
+                                                                {{-- Modal --}}
+                                                                <div x-show="open" x-transition
+                                                                     class="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm z-50"
+                                                                     style="display:none;">
+                                                                    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 w-full max-w-3xl relative max-h-[80vh] overflow-y-auto">
+                                                                        <button @click="open = false"
+                                                                                class="absolute top-3 right-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">✕</button>
+
+                                                                        <h2 class="text-xl font-semibold mb-4 text-gray-900 dark:text-white">Select Shades to Deliver</h2>
+
+                                                                        <form action="{{ route('inquiry.markCustomerDelivered') }}" method="POST" class="space-y-4">
+                                                                            @csrf
+                                                                            <input type="hidden" name="id" value="{{ $inquiry->id }}">
+
+                                                                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[400px] overflow-y-auto pr-1">
+                                                                                @foreach($dispatchedShades as $shade)
+                                                                                    <div class="p-4 border rounded-lg bg-gray-50 dark:bg-gray-700/50 hover:shadow-md transition">
+                                                                                        <label class="flex items-center gap-2">
+                                                                                            <input type="checkbox" name="shades[{{ $shade->id }}][selected]" value="1"
+                                                                                                   class="rounded text-green-600 focus:ring-green-500">
+                                                                                            <span class="font-medium text-gray-900 dark:text-gray-100">
+                                                {{ $shade->shade }}
+                                            </span>
+                                                                                        </label>
+
+                                                                                        <input type="number" min="1"
+                                                                                               name="shades[{{ $shade->id }}][quantity]"
+                                                                                               max="{{ \App\Models\SampleStock::where('reference_no', $inquiry->referenceNo)->where('shade', $shade->shade)->first()?->available_stock ?? 1 }}"
+                                                                                               placeholder="Quantity"
+                                                                                               class="mt-2 w-full px-2 py-1 border rounded text-sm dark:bg-gray-800 dark:text-white">
+                                                                                    </div>
+                                                                                @endforeach
+                                                                            </div>
+
+                                                                            <div class="flex justify-end gap-3 pt-4 border-t">
+                                                                                <button type="button" @click="open = false"
+                                                                                        class="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-700">
+                                                                                    Cancel
+                                                                                </button>
+                                                                                <button type="submit"
+                                                                                        class="px-4 py-2 rounded-lg bg-green-600 text-white hover:bg-green-700 shadow-sm">
+                                                                                    Deliver & Generate Dispatch Note
+                                                                                </button>
+                                                                            </div>
+                                                                        </form>
                                                                     </div>
-                                                                    <button type="button"
-                                                                            class="w-full px-3 py-1 mt-2 rounded text-sm bg-green-600 text-white cursor-not-allowed"
-                                                                            disabled>
-                                                                        Delivered
-                                                                    </button>
-                                                                @else
-                                                                    <form action="{{ route('inquiry.markCustomerDelivered') }}" method="POST"
-                                                                          class="inline-block text-left">
-                                                                        @csrf
-                                                                        <input type="hidden" name="id" value="{{ $inquiry->id }}">
-
-                                                                        @if ($inquiry->productionStatus !== 'Tape Match')
-                                                                            <!-- Show Qty input only if NOT Tape Match -->
-                                                                            <input type="number" name="delivered_qty" min="1"
-                                                                                   max="{{ optional($inquiry->referenceNo ? \App\Models\SampleStock::where('reference_no', $inquiry->referenceNo)->first() : null)?->available_stock ?? 1 }}"
-                                                                                   placeholder="Delivered Qty"
-                                                                                   class="px-3 py-2 mb-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm w-full">
-                                                                        @endif
-
-                                                                        <button type="submit"
-                                                                                class="w-full px-3 py-1 rounded text-sm transition-all duration-200 bg-green-600 hover:bg-green-700 text-white">
-                                                                            Delivered
-                                                                        </button>
-                                                                    </form>
-                                                                @endif
-                                                            @else
-                                                                <div class="timestamp mt-1 text-xs text-red-500 dark:text-red-400">
-                                                                    Reference No is required before marking delivery.
                                                                 </div>
-                                                            @endif
+                                                            </div>
                                                         @else
-                                                            <span
-                                                                class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-green-100 dark:bg-gray-800 px-3 py-1 rounded">
-                                                                Delivered on <br>
-                                                                {{ \Carbon\Carbon::parse($inquiry->customerDeliveryDate)->format('Y-m-d') }}
-                                                                at
-                                                                {{ \Carbon\Carbon::parse($inquiry->customerDeliveryDate)->format('H:i') }}
-                                                            </span>
-
-                                                            @if ($inquiry->dNoteNumber)
-                                                                <div class="flex justify-center">
-                                                                    <a href="{{ asset('storage/dispatches/' . $inquiry->dNoteNumber) }}" target="_blank"
-                                                                       class="inline-block text-sm font-semibold text-gray-700 bg-gray-300 p-2 rounded hover:bg-gray-400 transition duration-200">
-                                                                        Dispatch Note
-                                                                    </a>
-                                                                </div>
-                                                            @endif
+                                                            {{-- Simple Deliver Button for Tape Match & No Need to Develop --}}
+                                                            <form action="{{ route('inquiry.markCustomerDelivered') }}" method="POST">
+                                                                @csrf
+                                                                <input type="hidden" name="id" value="{{ $inquiry->id }}">
+                                                                <button type="submit"
+                                                                        class="px-3 py-1 rounded text-white bg-green-600 hover:bg-green-700 transition duration-200">
+                                                                    Deliver
+                                                                </button>
+                                                            </form>
                                                         @endif
-                                                    </div>
+                                                    @endif
+
+                                                    {{-- Delivered Banner / Dispatch Note --}}
+                                                    @if($delivered)
+                                                        <div class="flex flex-col items-center space-y-1 mt-2">
+            <span class="inline-block text-sm font-semibold text-gray-700 dark:text-white bg-green-100 dark:bg-gray-800 px-3 py-1 rounded text-center">
+                Delivered on <br>
+                {{ \Carbon\Carbon::parse($inquiry->customerDeliveryDate)->format('Y-m-d H:i') }}
+            </span>
+
+                                                            @if($inquiry->dNoteNumber)
+                                                                <a href="{{ asset('storage/dispatches/' . $inquiry->dNoteNumber) }}" target="_blank"
+                                                                   class="px-3 py-1 rounded text-sm bg-blue-600 text-white hover:bg-blue-700 transition">
+                                                                    Dispatch Note
+                                                                </a>
+                                                            @endif
+                                                        </div>
+                                                    @elseif(!$delivered)
+                                                        <span class="text-gray-400 italic">-</span>
+                                                    @endif
                                                 </td>
+
 
                                                 <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300">
                                                     <div x-data="{

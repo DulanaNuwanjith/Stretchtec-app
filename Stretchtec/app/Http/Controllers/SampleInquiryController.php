@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\SampleInquiry;
 use App\Models\SamplePreparationProduction;
+use App\Models\SampleStock;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
@@ -273,45 +274,75 @@ class SampleInquiryController extends Controller
     {
         $request->validate([
             'id' => 'required|exists:sample_inquiries,id',
-            'delivered_qty' => 'nullable|integer|min:1',
         ]);
 
         $inquiry = SampleInquiry::findOrFail($request->id);
+        $prepRnd = $inquiry->samplePreparationRnD;
 
-        $samplernd = SamplePreparationRnD::where('sample_inquiry_id', $inquiry->id)->first();
-
-        // If productionStatus is not Tape Match, enforce delivered_qty rules
-        $requireQty = $samplernd->productionStatus !== 'Tape Match';
-        $deliveredQty = (int) ($request->delivered_qty ?? 0);
-
-        if ($requireQty && !$request->filled('delivered_qty')) {
-            return redirect()->back()->with('error', 'The delivered quantity field is required.');
+        if (!$prepRnd) {
+            return back()->with('error', 'No R&D preparation found for this inquiry.');
         }
 
-        $inquiry->customerDeliveryDate = now();
-        $inquiry->deliveryQty = $requireQty ? $deliveredQty : null;
+        $deliveredShades = [];
 
-        $samplernd->productionStatus = 'Order Delivered';
-        $samplernd->save();
+        // Handle Need to Develop (existing behavior)
+        if ($prepRnd->alreadyDeveloped === 'Need to Develop') {
+            $request->validate(['shades' => 'required|array']);
+            $dispatchedShades = $prepRnd->shadeOrders->where('status', 'Dispatched to RnD');
+            $totalDelivered = 0;
 
-        try {
-            // Generate next dispatch code
-            $lastInquiryWithCode = SampleInquiry::whereNotNull('dNoteNumber')->orderByDesc('id')->first();
-            $lastCode = 0;
+            foreach ($request->shades as $shadeId => $shadeData) {
+                if (!isset($shadeData['selected'])) continue;
+                $shade = $dispatchedShades->where('id', $shadeId)->first();
+                if (!$shade) continue;
 
-            if ($lastInquiryWithCode && preg_match('/DISP-(\d+)/', $lastInquiryWithCode->dNoteNumber, $matches)) {
-                $lastCode = (int) $matches[1];
+                $quantity = (int) $shadeData['quantity'];
+                $stock = SampleStock::where('reference_no', $inquiry->referenceNo)
+                    ->where('shade', $shade->shade)
+                    ->first();
+
+                if ($stock && $quantity <= $stock->available_stock) {
+                    $stock->available_stock -= $quantity;
+                    $stock->available_stock <= 0 ? $stock->delete() : $stock->save();
+
+                    $shade->status = 'Delivered';
+                    $shade->save();
+
+                    $totalDelivered += $quantity;
+
+                    $deliveredShades[] = [
+                        'shade' => $shade->shade,
+                        'quantity' => $quantity
+                    ];
+                } else {
+                    return back()->with('error', "Quantity for shade {$shade->shade} exceeds available stock.");
+                }
             }
 
-            $nextCode = $lastCode + 1;
-            $dispatchCode = 'DISP-' . str_pad($nextCode, 5, '0', STR_PAD_LEFT);
+            $inquiry->deliveryQty = $totalDelivered;
 
+        } else {
+            // For Tape Match & No Need to Develop: just mark delivered without shades
+            $deliveredShades[] = [
+                'shade' => $inquiry->referenceNo ?? '-',
+                'quantity' => 1
+            ];
+        }
+
+        // Update delivery info
+        $inquiry->customerDeliveryDate = now();
+        $prepRnd->productionStatus = 'Order Delivered';
+        $prepRnd->save();
+        $inquiry->save();
+
+        // Generate Dispatch Note (same as before)
+        try {
+            $dispatchCode = 'DISP-' . now()->timestamp;
             $now = now();
             $templatePath = storage_path('app/public/templates/DISPATCH NOTICES.xlsx');
             $spreadsheet = IOFactory::load($templatePath);
             $sheet = $spreadsheet->getActiveSheet();
 
-            // Fill dispatch note (first copy)
             $sheet->setCellValue('D5', $now->format('Y-m-d H:i:s'));
             $sheet->setCellValue('D6', $dispatchCode);
             $sheet->setCellValue('B8', $inquiry->customerName);
@@ -320,61 +351,31 @@ class SampleInquiryController extends Controller
             $sheet->setCellValue('B12', $inquiry->item . ' / ' . $inquiry->size);
             $sheet->setCellValue('B13', $inquiry->referenceNo ?? '-');
             $sheet->setCellValue('F12', $inquiry->color);
-            if ($requireQty) $sheet->setCellValue('H12', $deliveredQty);
             $sheet->setCellValue('B16', Auth::user()->name);
 
-            // Fill dispatch note (second copy)
-            $sheet->setCellValue('D24', $now->format('Y-m-d H:i:s'));
-            $sheet->setCellValue('D25', $dispatchCode);
-            $sheet->setCellValue('B27', $inquiry->customerName);
-            $sheet->setCellValue('F27', $inquiry->merchandiseName);
-            $sheet->setCellValue('A31', $inquiry->orderNo);
-            $sheet->setCellValue('B31', $inquiry->item . ' / ' . $inquiry->size);
-            $sheet->setCellValue('B32', $inquiry->referenceNo ?? '-');
-            $sheet->setCellValue('F31', $inquiry->color);
-            if ($requireQty) $sheet->setCellValue('H31', $deliveredQty);
-            $sheet->setCellValue('B35', Auth::user()->name);
-
-            // Save file
-            $fileName = 'dispatch_note_' . $dispatchCode . '.xlsx';
-            $savePath = storage_path('app/public/dispatches/' . $fileName);
-            $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
-            $writer->save($savePath);
-
-            // Save dispatch note filename
-            $inquiry->dNoteNumber = $fileName;
-
-        } catch (\Exception $e) {
-            \Log::error('Dispatch Note Generation Failed: ' . $e->getMessage());
-            $inquiry->save();
-            return redirect()->back()->with('error', 'Delivery marked, but dispatch note generation failed.');
-        }
-
-        // Check if sample stock is required (skip quantity validation if Tape Match)
-        if ($requireQty && $inquiry->referenceNo) {
-            $stock = \App\Models\SampleStock::where('reference_no', $inquiry->referenceNo)->first();
-
-            if ($stock) {
-                if ($deliveredQty > $stock->available_stock) {
-                    return redirect()->back()->with('error', 'Delivered quantity exceeds available stock.');
-                }
-
-                // Deduct stock
-                $stock->available_stock -= $deliveredQty;
-
-                if ($stock->available_stock <= 0) {
-                    $stock->delete();
-                } else {
-                    $stock->save();
+            $startRows = [12, 31];
+            foreach ($startRows as $startRow) {
+                $row = $startRow;
+                foreach ($deliveredShades as $shadeData) {
+                    $sheet->setCellValue('A' . $row, $shadeData['shade']);
+                    $sheet->setCellValue('H' . $row, $shadeData['quantity']);
+                    $row++;
                 }
             }
+
+            $fileName = 'dispatch_note_' . $dispatchCode . '.xlsx';
+            $savePath = storage_path('app/public/dispatches/' . $fileName);
+            IOFactory::createWriter($spreadsheet, 'Xlsx')->save($savePath);
+
+            $inquiry->dNoteNumber = $fileName;
+            $inquiry->save();
+        } catch (\Exception $e) {
+            \Log::error('Dispatch Note Generation Failed: ' . $e->getMessage());
+            return back()->with('error', 'Delivery marked, but dispatch note generation failed.');
         }
 
-        $inquiry->save();
-
-        return redirect()->back()->with('success', 'Delivered successfully. Dispatch note created.');
+        return back()->with('success', 'Delivered successfully. Latest dispatch note generated.');
     }
-
 
     public function updateDecision(Request $request, $id)
     {

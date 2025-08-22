@@ -139,6 +139,12 @@ class SamplePreparationProductionController extends Controller
                 $rnd->productionStatus = 'Production Complete';
                 $rnd->save();
 
+                $sampleInquiry = $rnd->sampleInquiry;
+                if ($sampleInquiry) {
+                    $sampleInquiry->productionStatus = 'Production Complete';
+                    $sampleInquiry->save();
+                }
+
                 // Update production
                 $production = $rnd->production;
                 if ($production) {
@@ -180,9 +186,17 @@ class SamplePreparationProductionController extends Controller
         ]);
 
         $production = SamplePreparationProduction::findOrFail($request->production_id);
+        $samplePreparationRnD = $production->samplePreparationRnD;
+        $sampleInquiry = $samplePreparationRnD->sampleInquiry;
 
         $totalProduction = $production->production_output ?? 0;
         $totalDamaged = $production->damaged_output ?? 0;
+
+        $sampleInquiry->productionStatus = 'Dispatched to RnD';
+        $sampleInquiry->save();
+
+        $samplePreparationRnD->productionStatus = 'Dispatched to RnD';
+        $samplePreparationRnD->save();
 
         foreach ($request->shades as $shadeId => $shadeData) {
             if (!isset($shadeData['selected'])) continue;
