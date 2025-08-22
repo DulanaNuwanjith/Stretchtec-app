@@ -1617,64 +1617,66 @@
                                                     @endif
                                                 </td>
 
-                                                <!-- Yarn Leftover Weight -->
+                                                {{-- Yarn Leftover Weight --}}
                                                 <td class="px-4 py-3 border-r border-gray-300 text-center">
                                                     @if ($prep->alreadyDeveloped == 'Need to Develop')
                                                         @if (Auth::user()->role === 'ADMIN' or Auth::user()->role === 'PRODUCTIONOFFICER')
-                                                            {{-- ADMIN/PRODUCTION OFFICER: Read-only --}}
-                                                            {{-- Check if yarn leftover weight is locked --}}
+                                                            {{-- ADMIN/PRODUCTION OFFICER --}}
                                                             @if ($prep->is_yarn_leftover_weight_locked)
-                                                                <span class="readonly">{{ $prep->yarnLeftoverWeight }}
-                                                                    g</span>
+                                                                <span class="readonly">{{ $prep->yarnLeftoverWeight }} g</span>
                                                             @elseif ($prep->yarnLeftoverWeight)
-                                                                <span
-                                                                    class="inline-block bg-gray-200 dark:bg-gray-600 text-gray-500 dark:text-gray-400 text-sm font-medium px-3 py-1 rounded cursor-not-allowed"
-                                                                    title="Admin view only">
-                                                                    {{ $prep->yarnLeftoverWeight }} g
+                                                                <span class="inline-block bg-gray-200 dark:bg-gray-600 text-gray-500 dark:text-gray-400 text-sm font-medium px-3 py-1 rounded cursor-not-allowed"
+                                                                      title="Admin view only">
+                                                                      {{ $prep->yarnLeftoverWeight }} g
                                                                 </span>
                                                             @else
-                                                                <span
-                                                                    class="inline-block bg-gray-200 dark:bg-gray-600 text-gray-500 dark:text-gray-400 text-sm font-medium px-3 py-1 rounded cursor-not-allowed"
-                                                                    title="Admin view only">
-                                                                    Not Provided
+                                                                <span class="inline-block bg-gray-200 dark:bg-gray-600 text-gray-500 dark:text-gray-400 text-sm font-medium px-3 py-1 rounded cursor-not-allowed"
+                                                                      title="Admin view only">
+                                                                      Not Provided
                                                                 </span>
                                                             @endif
                                                         @else
                                                             {{-- Non-Admin Users --}}
                                                             @php
-                                                                $canSave =
-                                                                    $prep->production &&
-                                                                    is_numeric($prep->production->production_output) &&
-                                                                    is_numeric($prep->production->damaged_output);
+                                                                $canSave = $prep->production &&
+                                                                           is_numeric($prep->production->production_output) &&
+                                                                           is_numeric($prep->production->damaged_output);
+
+                                                                $shades = array_map('trim', explode(',', $prep->shade));
+                                                                $weights = $prep->yarnLeftoverWeight ? explode(',', $prep->yarnLeftoverWeight) : [];
                                                             @endphp
 
                                                             @if (!$prep->is_yarn_leftover_weight_locked)
                                                                 {{-- Editable form --}}
-                                                                <form action="{{ route('rnd.updateYarnWeights') }}"
-                                                                    method="POST">
+                                                                <form action="{{ route('rnd.updateYarnWeights') }}" method="POST">
                                                                     @csrf
-                                                                    <input type="hidden" name="id"
-                                                                        value="{{ $prep->id }}">
-                                                                    <input type="hidden" name="field"
-                                                                        value="yarnLeftoverWeight">
-                                                                    <input type="number" step="0.01" min="0"
-                                                                        name="value"
-                                                                        value="{{ $prep->yarnLeftoverWeight }}"
-                                                                        class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                                        required>
+                                                                    <input type="hidden" name="id" value="{{ $prep->id }}">
+                                                                    <input type="hidden" name="field" value="yarnLeftoverWeight">
+
+                                                                    @foreach ($shades as $index => $shade)
+                                                                        <div class="mb-2">
+                                                                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                                                                Shade: {{ $shade }}
+                                                                            </label>
+                                                                            <input type="number" step="0.01" min="0"
+                                                                                   name="value[]"
+                                                                                   value="{{ $weights[$index] ?? '' }}"
+                                                                                   class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                                                   required>
+                                                                        </div>
+                                                                    @endforeach
 
                                                                     <button type="submit"
-                                                                        class="w-full mt-1 px-3 py-1 rounded text-sm transition-all duration-200
+                                                                            class="w-full mt-1 px-3 py-1 rounded text-sm transition-all duration-200
                                                                             {{ $canSave ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-gray-300 text-gray-500 cursor-not-allowed' }}"
-                                                                        {{ $canSave ? '' : 'disabled' }}
-                                                                        title="{{ $canSave ? '' : 'Production Output and Damaged Output are required' }}">
+                                                                            {{ $canSave ? '' : 'disabled' }}
+                                                                            title="{{ $canSave ? '' : 'Production Output and Damaged Output are required' }}">
                                                                         Save
                                                                     </button>
                                                                 </form>
                                                             @else
                                                                 {{-- Locked - readonly --}}
-                                                                <span class="readonly">{{ $prep->yarnLeftoverWeight }}
-                                                                    g</span>
+                                                                <span class="readonly">{{ $prep->yarnLeftoverWeight }} g</span>
                                                             @endif
                                                         @endif
                                                     @else
