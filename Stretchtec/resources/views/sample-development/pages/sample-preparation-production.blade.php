@@ -289,8 +289,8 @@
                                                             '{{ addslashes($prod->sampleInquiry->style ?? '-') }}',
                                                             '{{ addslashes($prod->sampleInquiry->sampleQty ?? '-') }}',
                                                             '{{ addslashes($prod->samplePreparationRnd->shade ?? '-') }}',
-                                                            '{{ addslashes($prod->operator_name ?? '-') }}',
-                                                            '{{ addslashes($prod->supervisor_name ?? '-') }}',
+                                                            // '{{ addslashes($prod->operator_name ?? '-') }}',
+                                                            // '{{ addslashes($prod->supervisor_name ?? '-') }}',
                                                         )">
                                                         {{ $prod->order_no }}
                                                     </span>
@@ -872,25 +872,37 @@
                                                         <th class="p-2 border">Shade</th>
                                                         <td class="p-2 border" id="modalShade"></td>
                                                     </tr>
-                                                    <tr>
+                                                    {{-- <tr>
                                                         <th class="p-2 border">Operator Name</th>
                                                         <td class="p-2 border" id="modalOperator"></td>
                                                     </tr>
                                                     <tr>
                                                         <th class="p-2 border">Supervisor Name</th>
                                                         <td class="p-2 border" id="modalSupervisor"></td>
-                                                    </tr>
+                                                    </tr> --}}
                                                 </tbody>
                                             </table>
 
                                             <!-- Signature spaces (only visible in print) -->
                                             <div class="hidden print:flex justify-between mt-20">
                                                 <div class="w-1/3 text-center">
-                                                    <div class="border-t border-black mt-16"></div>
+                                                    <div class="border-b border-black mt-16">&nbsp;</div>
+                                                    <span class="text-sm">Operator Name</span>
+                                                </div>
+                                                <div class="w-1/3 text-center">
+                                                    <div class="border-b border-black mt-16">&nbsp;</div>
+                                                    <span class="text-sm">Supervisor Name</span>
+                                                </div>
+                                            </div>
+
+                                            <!-- Signature spaces (only visible in print) -->
+                                            <div class="hidden print:flex justify-between mt-10">
+                                                <div class="w-1/3 text-center">
+                                                    <div class="border-b border-black mt-10">{{ Auth::user()->name }}</div>
                                                     <span class="text-sm">Prepared By</span>
                                                 </div>
                                                 <div class="w-1/3 text-center">
-                                                    <div class="border-t border-black mt-16"></div>
+                                                    <div class="border-b border-black mt-10">&nbsp;</div>
                                                     <span class="text-sm">Approved By</span>
                                                 </div>
                                             </div>
@@ -905,10 +917,10 @@
                                                 Close
                                             </button>
 
-                                            <button onclick="printSampleDetails()"
+                                            {{-- <button onclick="printSampleDetails()"
                                                 class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-md">
                                                 Print
-                                            </button>
+                                            </button> --}}
                                         </div>
                                     </div>
                                 </div>
@@ -1117,8 +1129,8 @@
             document.getElementById('modalStyle').textContent = style;
             document.getElementById('modalSampleQty').textContent = sampleQty;
             document.getElementById('modalShade').textContent = shade;
-            document.getElementById('modalOperator').textContent = operator;
-            document.getElementById('modalSupervisor').textContent = supervisor;
+            // document.getElementById('modalOperator').textContent = operator;
+            // document.getElementById('modalSupervisor').textContent = supervisor;
 
             document.getElementById('viewDetailsSample').classList.remove('hidden');
         }

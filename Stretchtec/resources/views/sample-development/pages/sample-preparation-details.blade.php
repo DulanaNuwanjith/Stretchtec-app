@@ -467,6 +467,7 @@
                                                             '{{ addslashes($prep->sampleInquiry->size ?? '-') }}',
                                                             '{{ addslashes($prep->sampleInquiry->qtRef ?? '-') }}',
                                                             '{{ addslashes($prep->sampleInquiry->color ?? '-') }}',
+                                                            '{{ addslashes($prep->shade ?? '-') }}',
                                                             '{{ addslashes($prep->sampleInquiry->style ?? '-') }}',
                                                             '{{ addslashes($prep->sampleInquiry->sampleQty ?? '-') }}',
                                                             '{{ addslashes($prep->sampleInquiry->customerSpecialComment ?? '-') }}',
@@ -956,8 +957,8 @@
                                                                                                         stroke-linecap="round"
                                                                                                         stroke-linejoin="round"
                                                                                                         d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0
-                                   01-1.995-1.858L5 7m5 4v6m4-6v6M9 7V4a1 1 0
-                                   011-1h4a1 1 0 011 1v3m-9 0h10" />
+                                       01-1.995-1.858L5 7m5 4v6m4-6v6M9 7V4a1 1 0
+                                       011-1h4a1 1 0 011 1v3m-9 0h10" />
                                                                                                 </svg>
                                                                                             </button>
                                                                                         </div>
@@ -1993,7 +1994,7 @@
                                     <div class="w-full max-w-[700px] bg-white dark:bg-gray-900 rounded-2xl shadow-2xl p-4 transform transition-all scale-95 max-h-[calc(100vh-10rem)] overflow-y-auto"
                                         onclick="event.stopPropagation()">
 
-                                        <div class="max-w-[600px] mx-auto p-6">
+                                        <div class="max-w-[600px] mx-auto p-6" id="printAreaSample">
                                             <h2 id="modalRndOrderNo"
                                                 class="text-2xl font-semibold mb-6 text-blue-900 text-center">Order Number
                                             </h2>
@@ -2029,6 +2030,10 @@
                                                         <td class="p-2 border" id="modalColor"></td>
                                                     </tr>
                                                     <tr>
+                                                        <th class="p-2 border">Shade</th>
+                                                        <td class="p-2 border" id="modalShade"></td>
+                                                    </tr>
+                                                    <tr>
                                                         <th class="p-2 border">Style</th>
                                                         <td class="p-2 border" id="modalStyle"></td>
                                                     </tr>
@@ -2036,22 +2041,52 @@
                                                         <th class="p-2 border">Sample Qty</th>
                                                         <td class="p-2 border" id="modalSampleQty"></td>
                                                     </tr>
-                                                    <tr>
+                                                    <tr class="print:hidden">
                                                         <th class="p-2 border">Customer Special Comment</th>
                                                         <td class="p-2 border" id="modalSpecialComment"></td>
                                                     </tr>
-                                                    <tr>
+                                                    <tr class="print:hidden">
                                                         <th class="p-2 border">Customer Request Date</th>
                                                         <td class="p-2 border" id="modalRequestDate"></td>
                                                     </tr>
                                                 </tbody>
                                             </table>
 
-                                            <div class="text-center mt-6">
+                                            <!-- Signature spaces (only visible in print) -->
+                                            <div class="hidden print:flex justify-between mt-20">
+                                                <div class="w-1/3 text-center">
+                                                    <div class="border-b border-black mt-16">&nbsp;</div>
+                                                    <span class="text-sm">Operator Name</span>
+                                                </div>
+                                                <div class="w-1/3 text-center">
+                                                    <div class="border-b border-black mt-16">&nbsp;</div>
+                                                    <span class="text-sm">Supervisor Name</span>
+                                                </div>
+                                            </div>
+
+                                            <!-- Signature spaces (only visible in print) -->
+                                            <div class="hidden print:flex justify-between mt-10">
+                                                <div class="w-1/3 text-center">
+                                                    <div class="border-b border-black mt-10">{{ Auth::user()->name }}</div>
+                                                    <span class="text-sm">Prepared By</span>
+                                                </div>
+                                                <div class="w-1/3 text-center">
+                                                    <div class="border-b border-black mt-10">&nbsp;</div>
+                                                    <span class="text-sm">Approved By</span>
+                                                </div>
+                                            </div>
+
+                                            {{-- Buttons --}}
+                                            <div class="text-center mt-6 flex justify-center gap-4 mb-10 print:hidden">
                                                 <button
                                                     onclick="document.getElementById('openRndSampleModal').classList.add('hidden')"
                                                     class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-md">
                                                     Close
+                                                </button>
+
+                                                <button onclick="printSampleDetails()"
+                                                    class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-md">
+                                                    Print
                                                 </button>
                                             </div>
                                         </div>
@@ -2500,7 +2535,8 @@
         });
     </script>
     <script>
-        function openRndSampleModal(orderNo, customerName, coordinatorName, item, description, size, qtRef, color, style,
+        function openRndSampleModal(orderNo, customerName, coordinatorName, item, description, size, qtRef, color, shade,
+            style,
             sampleQty,
             specialComment, requestDate) {
             document.getElementById('modalRndOrderNo').textContent = 'Order Number ' + orderNo;
@@ -2511,6 +2547,7 @@
             document.getElementById('modalSize').textContent = size;
             document.getElementById('modalQTRef').textContent = qtRef;
             document.getElementById('modalColor').textContent = color;
+            document.getElementById('modalShade').textContent = shade;
             document.getElementById('modalStyle').textContent = style;
             document.getElementById('modalSampleQty').textContent = sampleQty;
             document.getElementById('modalSpecialComment').textContent = specialComment;
@@ -2850,4 +2887,21 @@
         }
     </script>
 
+    {{-- Printing Sample Details --}}
+    <script>
+        function printSampleDetails() {
+            const printContent = document.getElementById('printAreaSample').innerHTML;
+            const originalContent = document.body.innerHTML;
+
+            document.body.innerHTML = `
+            <div style="max-width: 700px; margin: auto;">
+                ${printContent}
+            </div>
+        `;
+
+            window.print();
+            document.body.innerHTML = originalContent;
+            location.reload(); // reload to restore JS event listeners
+        }
+    </script>
 @endsection
