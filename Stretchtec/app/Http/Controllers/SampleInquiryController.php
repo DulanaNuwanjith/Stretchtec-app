@@ -277,12 +277,20 @@ class SampleInquiryController extends Controller
         ]);
 
         $inquiry = SampleInquiry::findOrFail($request->id);
-        $deliveredQty = (int) $request->delivered_qty;
-
-        $inquiry->customerDeliveryDate = now();
-        $inquiry->deliveryQty = $deliveredQty;
 
         $samplernd = SamplePreparationRnD::where('sample_inquiry_id', $inquiry->id)->first();
+
+        // If productionStatus is not Tape Match, enforce delivered_qty rules
+        $requireQty = $samplernd->productionStatus !== 'Tape Match';
+        $deliveredQty = (int) ($request->delivered_qty ?? 0);
+
+        if ($requireQty && !$request->filled('delivered_qty')) {
+            return redirect()->back()->with('error', 'The delivered quantity field is required.');
+        }
+
+        $inquiry->customerDeliveryDate = now();
+        $inquiry->deliveryQty = $requireQty ? $deliveredQty : null;
+
         $samplernd->productionStatus = 'Order Delivered';
         $samplernd->save();
 
@@ -312,7 +320,7 @@ class SampleInquiryController extends Controller
             $sheet->setCellValue('B12', $inquiry->item . ' / ' . $inquiry->size);
             $sheet->setCellValue('B13', $inquiry->referenceNo ?? '-');
             $sheet->setCellValue('F12', $inquiry->color);
-            $sheet->setCellValue('H12', $deliveredQty);
+            if ($requireQty) $sheet->setCellValue('H12', $deliveredQty);
             $sheet->setCellValue('B16', Auth::user()->name);
 
             // Fill dispatch note (second copy)
@@ -324,7 +332,7 @@ class SampleInquiryController extends Controller
             $sheet->setCellValue('B31', $inquiry->item . ' / ' . $inquiry->size);
             $sheet->setCellValue('B32', $inquiry->referenceNo ?? '-');
             $sheet->setCellValue('F31', $inquiry->color);
-            $sheet->setCellValue('H31', $deliveredQty);
+            if ($requireQty) $sheet->setCellValue('H31', $deliveredQty);
             $sheet->setCellValue('B35', Auth::user()->name);
 
             // Save file
@@ -342,16 +350,11 @@ class SampleInquiryController extends Controller
             return redirect()->back()->with('error', 'Delivery marked, but dispatch note generation failed.');
         }
 
-        // Check if sample stock is required
-        if ($inquiry->referenceNo) {
+        // Check if sample stock is required (skip quantity validation if Tape Match)
+        if ($requireQty && $inquiry->referenceNo) {
             $stock = \App\Models\SampleStock::where('reference_no', $inquiry->referenceNo)->first();
 
-            // If stock exists, delivered_qty is required
             if ($stock) {
-                if (!$request->filled('delivered_qty')) {
-                    return redirect()->back()->with('error', 'The delivered quantity field is required.');
-                }
-
                 if ($deliveredQty > $stock->available_stock) {
                     return redirect()->back()->with('error', 'Delivered quantity exceeds available stock.');
                 }
@@ -360,7 +363,7 @@ class SampleInquiryController extends Controller
                 $stock->available_stock -= $deliveredQty;
 
                 if ($stock->available_stock <= 0) {
-                    $stock->delete(); // delete if stock is now 0
+                    $stock->delete();
                 } else {
                     $stock->save();
                 }
@@ -371,6 +374,7 @@ class SampleInquiryController extends Controller
 
         return redirect()->back()->with('success', 'Delivered successfully. Dispatch note created.');
     }
+
 
     public function updateDecision(Request $request, $id)
     {
