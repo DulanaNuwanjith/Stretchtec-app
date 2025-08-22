@@ -133,8 +133,7 @@
                             <div class="flex justify-start">
                                 <button onclick="toggleFilterForm()"
                                     class="bg-white border border-blue-500 text-blue-500 hover:text-blue-600 hover:border-blue-600 font-semibold py-1 px-3 rounded shadow flex items-center gap-2 mb-6">
-                                    <img src="{{ asset('icons/filter.png') }}" class="w-6 h-6"
-                                        alt="Filter Icon">
+                                    <img src="{{ asset('icons/filter.png') }}" class="w-6 h-6" alt="Filter Icon">
                                     Filters
                                 </button>
                             </div>
@@ -836,25 +835,30 @@
                                                     @endif
                                                 </td>
 
-                                                <td class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                                <td
+                                                    class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
                                                     @if (Auth::user()->role === 'ADMIN' || Auth::user()->role === 'PRODUCTIONOFFICER')
                                                         {{-- ADMIN: Read-only --}}
                                                         @if ($prep->alreadyDeveloped == 'Need to Develop')
                                                             @if ($prep->yarnOrderedDate)
-                                                                <span class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-purple-200 dark:bg-gray-800 px-3 py-1 rounded">
+                                                                <span
+                                                                    class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-purple-200 dark:bg-gray-800 px-3 py-1 rounded">
                                                                     Ordered on <br>
-                                                                    {{ \Carbon\Carbon::parse($prep->yarnOrderedDate)->format('Y-m-d') }} at
+                                                                    {{ \Carbon\Carbon::parse($prep->yarnOrderedDate)->format('Y-m-d') }}
+                                                                    at
                                                                     {{ \Carbon\Carbon::parse($prep->yarnOrderedDate)->format('H:i') }}
                                                                 </span>
                                                             @else
-                                                                <span class="inline-block px-3 py-1 text-xs font-semibold text-gray-600 bg-gray-200 rounded">
+                                                                <span
+                                                                    class="inline-block px-3 py-1 text-xs font-semibold text-gray-600 bg-gray-200 rounded">
                                                                     Not Ordered
                                                                 </span>
                                                             @endif
                                                         @elseif(in_array($prep->alreadyDeveloped, ['No Need to Develop', 'Tape Match Pan Asia']))
                                                             <span class="text-gray-400 italic">—</span>
                                                         @else
-                                                            <span class="inline-block px-3 py-1 text-xs font-semibold text-gray-600 bg-gray-200 rounded">
+                                                            <span
+                                                                class="inline-block px-3 py-1 text-xs font-semibold text-gray-600 bg-gray-200 rounded">
                                                                 Not Set
                                                             </span>
                                                         @endif
@@ -863,76 +867,106 @@
                                                         @if ($prep->alreadyDeveloped == 'Need to Develop')
                                                             @if (is_null($prep->yarnOrderedDate))
                                                                 @php
-                                                                    $canOrder = $prep->alreadyDeveloped == 'Tape Match Pan Asia' || ($prep->alreadyDeveloped == 'Need to Develop' && $prep->developPlannedDate);
+                                                                    $canOrder =
+                                                                        $prep->alreadyDeveloped ==
+                                                                            'Tape Match Pan Asia' ||
+                                                                        ($prep->alreadyDeveloped == 'Need to Develop' &&
+                                                                            $prep->developPlannedDate);
                                                                 @endphp
 
                                                                 {{-- Alpine component --}}
                                                                 <div x-data="{ open: false }" class="relative">
                                                                     {{-- Trigger Button --}}
                                                                     <button type="button"
-                                                                            class="yarn-ordered-btn px-2 py-1 mt-3 rounded transition-all duration-200
+                                                                        class="yarn-ordered-btn px-2 py-1 mt-3 rounded transition-all duration-200
                                                                             {{ $canOrder ? 'bg-gray-300 text-black hover:bg-gray-400' : 'bg-gray-200 text-gray-500 cursor-not-allowed' }}"
-                                                                            @if($canOrder) @click="open = true" @else disabled title="Please set Development Plan Date first" @endif>
+                                                                        @if ($canOrder) @click="open = true" @else disabled title="Please set Development Plan Date first" @endif>
                                                                         Pending
                                                                     </button>
 
                                                                     {{-- Modal --}}
                                                                     <div x-show="open" x-transition
-                                                                         class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
-                                                                         style="display: none;">
+                                                                        class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+                                                                        style="display: none;">
 
-                                                                        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg w-full max-w-md relative max-h-[90vh] overflow-y-auto p-8">
+                                                                        <div
+                                                                            class="bg-white dark:bg-gray-800 rounded-lg shadow-lg w-full max-w-md relative max-h-[90vh] overflow-y-auto p-8">
                                                                             {{-- Close button --}}
                                                                             <button @click="open = false"
-                                                                                    class="absolute top-2 right-2 text-gray-600 hover:text-gray-900">✕</button>
+                                                                                class="absolute top-2 right-2 text-gray-600 hover:text-gray-900">✕</button>
 
                                                                             {{-- Title --}}
-                                                                            <h2 class="text-lg font-semibold text-gray-800 dark:text-white mb-2 text-left">
+                                                                            <h2
+                                                                                class="text-lg font-semibold text-gray-800 dark:text-white mb-2 text-left">
                                                                                 Mark Yarn Ordered
                                                                             </h2>
 
-                                                                            <p class="mb-5 text-sm text-gray-600 dark:text-gray-300 text-left">
-                                                                                Please provide the required details for the yarn order. All fields are mandatory.
+                                                                            <p
+                                                                                class="mb-5 text-sm text-gray-600 dark:text-gray-300 text-left">
+                                                                                Please provide the required details for the
+                                                                                yarn order. All fields are mandatory.
                                                                             </p>
 
                                                                             {{-- Form --}}
-                                                                            <form action="{{ route('rnd.markYarnOrdered') }}" method="POST">
+                                                                            <form
+                                                                                action="{{ route('rnd.markYarnOrdered') }}"
+                                                                                method="POST">
                                                                                 @csrf
-                                                                                <input type="hidden" name="id" value="{{ $prep->id }}">
+                                                                                <input type="hidden" name="id"
+                                                                                    value="{{ $prep->id }}">
 
                                                                                 {{-- PO Number --}}
                                                                                 <div class="mb-4">
-                                                                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 text-left">
+                                                                                    <label
+                                                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 text-left">
                                                                                         PO Number
                                                                                     </label>
-                                                                                    <input type="text" name="yarnOrderedPONumber" placeholder="Enter PO Number"
-                                                                                           class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                                                    <input type="text"
+                                                                                        name="yarnOrderedPONumber"
+                                                                                        placeholder="Enter PO Number"
+                                                                                        class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                                                 </div>
 
                                                                                 {{-- Number of Options --}}
                                                                                 <div class="mb-4">
-                                                                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 text-left">
+                                                                                    <label
+                                                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 text-left">
                                                                                         Number of Options
                                                                                     </label>
 
-                                                                                    <div id="optionsWrapper" class="space-y-2">
-                                                                                        <div class="flex items-center space-x-2">
+                                                                                    <div id="optionsWrapper"
+                                                                                        class="space-y-2">
+                                                                                        <div
+                                                                                            class="flex items-center space-x-2">
                                                                                             <input type="text"
-                                                                                                   name="shades[]"
-                                                                                                   placeholder="Enter Shade"
-                                                                                                   class="flex-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                                                                   required>
+                                                                                                name="shades[]"
+                                                                                                placeholder="Enter Shade"
+                                                                                                class="flex-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                                                                required>
                                                                                             <button type="button"
-                                                                                                    onclick="removeOptionInput(this)"
-                                                                                                    class="text-red-500 hover:text-red-700 text-lg font-bold">
-                                                                                                ✖
+                                                                                                onclick="removeOptionInput(this)"
+                                                                                                class="text-blue-500 hover:text-blue-700">
+                                                                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                                                                    fill="none"
+                                                                                                    viewBox="0 0 24 24"
+                                                                                                    stroke-width="2"
+                                                                                                    stroke="currentColor"
+                                                                                                    class="w-5 h-5">
+                                                                                                    <path
+                                                                                                        stroke-linecap="round"
+                                                                                                        stroke-linejoin="round"
+                                                                                                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0
+                         01-1.995-1.858L5 7m5 4v6m4-6v6M9 7V4a1 1 0
+                         011-1h4a1 1 0 011 1v3m-9 0h10" />
+                                                                                                </svg>
                                                                                             </button>
+
                                                                                         </div>
                                                                                     </div>
 
                                                                                     <button type="button"
-                                                                                            onclick="addOptionInput()"
-                                                                                            class="mt-2 px-3 py-1 bg-blue-500 text-white rounded-md text-sm">
+                                                                                        onclick="addOptionInput()"
+                                                                                        class="mt-2 px-3 py-1 bg-blue-500 text-white rounded-md text-sm">
                                                                                         + Add Option
                                                                                     </button>
                                                                                 </div>
@@ -940,78 +974,110 @@
 
                                                                                 {{-- Weight --}}
                                                                                 <div class="mb-4">
-                                                                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 text-left">
+                                                                                    <label
+                                                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 text-left">
                                                                                         Weight (in grams)
                                                                                     </label>
-                                                                                    <input type="number" step="0.01" name="value" placeholder="e.g. 150.50"
-                                                                                           class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                                                    <input type="number" step="0.01"
+                                                                                        name="value"
+                                                                                        placeholder="e.g. 150.50"
+                                                                                        class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                                                 </div>
 
                                                                                 {{-- Ticket --}}
                                                                                 <div class="mb-4">
-                                                                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 text-left">
+                                                                                    <label
+                                                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 text-left">
                                                                                         Ticket Number
                                                                                     </label>
-                                                                                    <input type="text" name="tkt" placeholder="Enter Ticket Number"
-                                                                                           class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                                                    <input type="text" name="tkt"
+                                                                                        placeholder="Enter Ticket Number"
+                                                                                        class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                                                 </div>
 
                                                                                 {{-- Yarn Price --}}
                                                                                 <div class="mb-4">
-                                                                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 text-left">
+                                                                                    <label
+                                                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 text-left">
                                                                                         Yarn Price
                                                                                     </label>
-                                                                                    <input type="text" name="yarnPrice" placeholder="Enter Yarn Price"
-                                                                                           class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                                                    <input type="text" name="yarnPrice"
+                                                                                        placeholder="Enter Yarn Price"
+                                                                                        class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                                                 </div>
 
                                                                                 {{-- Supplier --}}
                                                                                 <div class="mb-6">
-                                                                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 text-left">
+                                                                                    <label
+                                                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 text-left">
                                                                                         Supplier
                                                                                     </label>
-                                                                                    <div class="relative inline-block w-full" data-dropdown-root>
+                                                                                    <div class="relative inline-block w-full"
+                                                                                        data-dropdown-root>
                                                                                         <!-- Trigger -->
                                                                                         <button type="button"
-                                                                                                onclick="toggleDropdownItemAdd(this, 'supplier')"
-                                                                                                class="w-full flex justify-between items-center px-4 py-2 border border-gray-300 rounded-md bg-white dark:bg-gray-700 text-sm text-gray-700 dark:text-white hover:bg-gray-50 focus:outline-none">
-                                                                                            <span class="selected-supplier">{{ old('yarnSupplier', 'Pan Asia') }}</span>
-                                                                                            <svg class="w-4 h-4 text-gray-500 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                                                                            onclick="toggleDropdownItemAdd(this, 'supplier')"
+                                                                                            class="w-full flex justify-between items-center px-4 py-2 border border-gray-300 rounded-md bg-white dark:bg-gray-700 text-sm text-gray-700 dark:text-white hover:bg-gray-50 focus:outline-none">
+                                                                                            <span
+                                                                                                class="selected-supplier">{{ old('yarnSupplier', 'Pan Asia') }}</span>
+                                                                                            <svg class="w-4 h-4 text-gray-500 dark:text-gray-300"
+                                                                                                fill="none"
+                                                                                                stroke="currentColor"
+                                                                                                viewBox="0 0 24 24">
+                                                                                                <path
+                                                                                                    stroke-linecap="round"
+                                                                                                    stroke-linejoin="round"
+                                                                                                    stroke-width="2"
+                                                                                                    d="M19 9l-7 7-7-7" />
                                                                                             </svg>
                                                                                         </button>
 
                                                                                         <!-- Dropdown Menu -->
-                                                                                        <div class="dropdown-menu-supplier hidden absolute z-10 mt-2 w-full rounded-md bg-white dark:bg-gray-700 shadow-lg ring-1 ring-black/5 max-h-48 overflow-y-auto">
-                                                                                            <div class="py-1" role="listbox" tabindex="-1">
-                                                                                                @foreach(['Pan Asia', 'Ocean Lanka', 'A and E', 'Metro Lanka', 'Stretchtec Stock', 'Other'] as $supplier)
-                                                                                                    <button type="button" class="dropdown-option w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
-                                                                                                            onclick="selectDropdownOptionItemAdd(this, '{{ $supplier }}', 'supplier')">{{ $supplier }}</button>
+                                                                                        <div
+                                                                                            class="dropdown-menu-supplier hidden absolute z-10 mt-2 w-full rounded-md bg-white dark:bg-gray-700 shadow-lg ring-1 ring-black/5 max-h-48 overflow-y-auto">
+                                                                                            <div class="py-1"
+                                                                                                role="listbox"
+                                                                                                tabindex="-1">
+                                                                                                @foreach (['Pan Asia', 'Ocean Lanka', 'A and E', 'Metro Lanka', 'Stretchtec Stock', 'Other'] as $supplier)
+                                                                                                    <button type="button"
+                                                                                                        class="dropdown-option w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
+                                                                                                        onclick="selectDropdownOptionItemAdd(this, '{{ $supplier }}', 'supplier')">{{ $supplier }}</button>
                                                                                                 @endforeach
                                                                                             </div>
                                                                                         </div>
 
                                                                                         <!-- Hidden input -->
-                                                                                        <input type="hidden" name="yarnSupplier" class="input-supplier" value="{{ old('yarnSupplier', 'Pan Asia') }}">
+                                                                                        <input type="hidden"
+                                                                                            name="yarnSupplier"
+                                                                                            class="input-supplier"
+                                                                                            value="{{ old('yarnSupplier', 'Pan Asia') }}">
 
                                                                                         <!-- "Other" input field -->
-                                                                                        <div class="mt-4 hidden other-supplier-field">
-                                                                                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                                                                        <div
+                                                                                            class="mt-4 hidden other-supplier-field">
+                                                                                            <label
+                                                                                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                                                                                                 Please specify
                                                                                             </label>
-                                                                                            <input type="text" name="customSupplier" placeholder="Enter Supplier Name"
-                                                                                                   class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm input-custom-supplier" value="{{ old('customSupplier') }}" @disabled(true)>
+                                                                                            <input type="text"
+                                                                                                name="customSupplier"
+                                                                                                placeholder="Enter Supplier Name"
+                                                                                                class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm input-custom-supplier"
+                                                                                                value="{{ old('customSupplier') }}"
+                                                                                                @disabled(true)>
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
 
                                                                                 {{-- Form Buttons --}}
                                                                                 <div class="flex justify-end gap-3">
-                                                                                    <button type="button" @click="open = false"
-                                                                                            class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400 transition">
+                                                                                    <button type="button"
+                                                                                        @click="open = false"
+                                                                                        class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400 transition">
                                                                                         Cancel
                                                                                     </button>
-                                                                                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
+                                                                                    <button type="submit"
+                                                                                        class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
                                                                                         Save
                                                                                     </button>
                                                                                 </div>
@@ -1021,17 +1087,20 @@
                                                                 </div>
                                                             @else
                                                                 {{-- Already Ordered --}}
-                                                                <span class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-purple-200 dark:bg-gray-800 px-3 py-1 rounded">
+                                                                <span
+                                                                    class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-purple-200 dark:bg-gray-800 px-3 py-1 rounded">
                                                                     Ordered on <br>
-                                                                    {{ \Carbon\Carbon::parse($prep->yarnOrderedDate)->format('Y-m-d') }} at
+                                                                    {{ \Carbon\Carbon::parse($prep->yarnOrderedDate)->format('Y-m-d') }}
+                                                                    at
                                                                     {{ \Carbon\Carbon::parse($prep->yarnOrderedDate)->format('H:i') }}
                                                                 </span>
                                                             @endif
                                                         @elseif(in_array($prep->alreadyDeveloped, ['No Need to Develop', 'Tape Match Pan Asia']))
                                                             <span class="text-gray-400 italic">—</span>
                                                         @else
-                                                            <button type="button" class="yarn-ordered-btn px-2 py-1 mt-3 rounded bg-gray-200 text-gray-500 cursor-not-allowed"
-                                                                    disabled title="Not applicable for this type">
+                                                            <button type="button"
+                                                                class="yarn-ordered-btn px-2 py-1 mt-3 rounded bg-gray-200 text-gray-500 cursor-not-allowed"
+                                                                disabled title="Not applicable for this type">
                                                                 Pending
                                                             </button>
                                                         @endif
@@ -1067,27 +1136,29 @@
                                                     @endif
                                                 </td>
 
-                                                <td class="px-4 py-3 border-r border-gray-300 text-center break-words" x-data="{ open: false }">
+                                                <td class="px-4 py-3 border-r border-gray-300 text-center break-words"
+                                                    x-data="{ open: false }">
                                                     @if ($prep->shadeOrders->isNotEmpty())
                                                         {{-- Trigger button --}}
-                                                        <button type="button"
-                                                                @click="open = true"
-                                                                class="px-3 py-1 text-sm font-medium bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded hover:bg-gray-200 dark:hover:bg-gray-600 transition">
+                                                        <button type="button" @click="open = true"
+                                                            class="px-3 py-1 text-sm font-medium bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded hover:bg-gray-200 dark:hover:bg-gray-600 transition">
                                                             View Shades ({{ $prep->shadeOrders->count() }})
                                                         </button>
 
                                                         {{-- Modal --}}
                                                         <div x-show="open" x-transition
-                                                             class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
-                                                             style="display: none;">
-                                                            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 w-full max-w-lg relative max-h-[80vh] overflow-y-auto">
+                                                            class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+                                                            style="display: none;">
+                                                            <div
+                                                                class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 w-full max-w-lg relative max-h-[80vh] overflow-y-auto">
 
                                                                 {{-- Close button --}}
                                                                 <button @click="open = false"
-                                                                        class="absolute top-2 right-2 text-gray-600 hover:text-gray-900">✕</button>
+                                                                    class="absolute top-2 right-2 text-gray-600 hover:text-gray-900">✕</button>
 
                                                                 {{-- Title --}}
-                                                                <h2 class="text-lg font-semibold text-blue-900 dark:text-white mb-4">
+                                                                <h2
+                                                                    class="text-lg font-semibold text-blue-900 dark:text-white mb-4">
                                                                     Shades for Order #{{ $prep->orderNo }}
                                                                 </h2>
 
@@ -1098,26 +1169,38 @@
 
                                                                         // Define status-to-color mapping
                                                                         $statusColors = [
-                                                                            'In Production' => 'bg-yellow-100 text-yellow-800 dark:bg-yellow-700 dark:text-yellow-200',
-                                                                            'Sent to Production' => 'bg-emerald-100 text-emerald-800 dark:bg-emerald-700 dark:text-emerald-200',
-                                                                            'Yarn Received' => 'bg-pink-100 text-pink-800 dark:bg-pink-700 dark:text-pink-200',
-                                                                            'Pending' => 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200',
-                                                                            'Order Delivered' => 'bg-blue-100 text-blue-800 dark:bg-blue-700 dark:text-blue-200',
+                                                                            'In Production' =>
+                                                                                'bg-yellow-100 text-yellow-800 dark:bg-yellow-700 dark:text-yellow-200',
+                                                                            'Sent to Production' =>
+                                                                                'bg-emerald-100 text-emerald-800 dark:bg-emerald-700 dark:text-emerald-200',
+                                                                            'Yarn Received' =>
+                                                                                'bg-pink-100 text-pink-800 dark:bg-pink-700 dark:text-pink-200',
+                                                                            'Pending' =>
+                                                                                'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200',
+                                                                            'Order Delivered' =>
+                                                                                'bg-blue-100 text-blue-800 dark:bg-blue-700 dark:text-blue-200',
                                                                         ];
                                                                     @endphp
 
-                                                                    @foreach($prep->shadeOrders as $index => $shade)
+                                                                    @foreach ($prep->shadeOrders as $index => $shade)
                                                                         @php
-                                                                            $colorClass = $statusColors[$shade->status] ?? 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200';
+                                                                            $colorClass =
+                                                                                $statusColors[$shade->status] ??
+                                                                                'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200';
                                                                         @endphp
 
-                                                                        <div class="border rounded-md p-4 {{ $colorClass }}">
+                                                                        <div
+                                                                            class="border rounded-md p-4 {{ $colorClass }}">
                                                                             <div class="font-semibold mb-1">
                                                                                 Option {{ $letters[$index] ?? $index + 1 }}
                                                                             </div>
                                                                             <div class="text-sm">
-                                                                                <span class="block mb-1"><strong>Shade:</strong> {{ $shade->shade }}</span>
-                                                                                <span class="block"><strong>Status:</strong> {{ $shade->status }}</span>
+                                                                                <span
+                                                                                    class="block mb-1"><strong>Shade:</strong>
+                                                                                    {{ $shade->shade }}</span>
+                                                                                <span
+                                                                                    class="block"><strong>Status:</strong>
+                                                                                    {{ $shade->status }}</span>
                                                                             </div>
                                                                         </div>
                                                                     @endforeach
@@ -1128,7 +1211,8 @@
                                                     @elseif(in_array($prep->alreadyDeveloped, ['No Need to Develop']))
                                                         <span class="text-gray-400 italic">—</span>
                                                     @else
-                                                        <span class="inline-block bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 text-sm font-medium px-3 py-1 rounded">
+                                                        <span
+                                                            class="inline-block bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 text-sm font-medium px-3 py-1 rounded">
                                                             Not Added
                                                         </span>
                                                     @endif
@@ -1208,47 +1292,63 @@
                                                 </td>
 
                                                 {{-- Yarn Receive Date --}}
-                                                <td class="py-3 whitespace-normal break-words border-r border-gray-300 text-center" x-data="{ open: false }">
+                                                <td class="py-3 whitespace-normal break-words border-r border-gray-300 text-center"
+                                                    x-data="{ open: false }">
                                                     @php
                                                         $pendingYarns = $prep->shadeOrders->where('status', 'Pending');
-                                                        $receivedYarns = $prep->shadeOrders->where('status', 'Yarn Received');
+                                                        $receivedYarns = $prep->shadeOrders->where(
+                                                            'status',
+                                                            'Yarn Received',
+                                                        );
                                                     @endphp
 
                                                     @if ($prep->alreadyDeveloped == 'Need to Develop')
                                                         @if ($pendingYarns->isNotEmpty())
-                                                            <button type="button"
-                                                                    @click="open = true"
-                                                                    class="px-2 py-1 mt-3 rounded transition-all duration-200 bg-gray-300 text-black hover:bg-gray-400">
+                                                            <button type="button" @click="open = true"
+                                                                class="px-2 py-1 mt-3 rounded transition-all duration-200 bg-gray-300 text-black hover:bg-gray-400">
                                                                 Pending ({{ $pendingYarns->count() }})
                                                             </button>
 
                                                             {{-- Modal --}}
                                                             <div x-show="open" x-transition
-                                                                 class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
-                                                                 style="display:none;">
-                                                                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 w-full max-w-lg relative max-h-[80vh] overflow-y-auto">
-                                                                    <button @click="open = false" class="absolute top-2 right-2 text-gray-600 hover:text-gray-900">✕</button>
+                                                                class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+                                                                style="display:none;">
+                                                                <div
+                                                                    class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 w-full max-w-lg relative max-h-[80vh] overflow-y-auto">
+                                                                    <button @click="open = false"
+                                                                        class="absolute top-2 right-2 text-gray-600 hover:text-gray-900">✕</button>
 
-                                                                    <h2 class="text-lg font-semibold text-blue-900 dark:text-white mb-4">Mark Yarn Received</h2>
-                                                                    <form action="{{ route('rnd.markYarnReceived') }}" method="POST">
+                                                                    <h2
+                                                                        class="text-lg font-semibold text-blue-900 dark:text-white mb-4">
+                                                                        Mark Yarn Received</h2>
+                                                                    <form action="{{ route('rnd.markYarnReceived') }}"
+                                                                        method="POST">
                                                                         @csrf
-                                                                        <input type="hidden" name="rnd_id" value="{{ $prep->id }}">
+                                                                        <input type="hidden" name="rnd_id"
+                                                                            value="{{ $prep->id }}">
 
                                                                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                                                            @foreach($pendingYarns as $shade)
-                                                                                <div class="p-4 border rounded bg-gray-100 dark:bg-gray-700">
+                                                                            @foreach ($pendingYarns as $shade)
+                                                                                <div
+                                                                                    class="p-4 border rounded bg-gray-100 dark:bg-gray-700">
                                                                                     <label class="flex items-start gap-2">
-                                                                                        <input type="checkbox" name="shade_ids[]" value="{{ $shade->id }}" class="mt-1">
+                                                                                        <input type="checkbox"
+                                                                                            name="shade_ids[]"
+                                                                                            value="{{ $shade->id }}"
+                                                                                            class="mt-1">
                                                                                         <div>
-                                                                                            <div class="font-semibold">Shade: {{ $shade->shade }}</div>
+                                                                                            <div class="font-semibold">
+                                                                                                Shade: {{ $shade->shade }}
+                                                                                            </div>
                                                                                         </div>
                                                                                     </label>
 
                                                                                     {{-- PST input only for Pan Asia --}}
-                                                                                    @if($prep->yarnSupplier === 'Pan Asia')
-                                                                                        <input type="text" name="pst_no[{{ $shade->id }}]"
-                                                                                               placeholder="Enter PA/ST No"
-                                                                                               class="mt-2 w-full px-2 py-1 border rounded text-sm dark:bg-gray-700 dark:text-white">
+                                                                                    @if ($prep->yarnSupplier === 'Pan Asia')
+                                                                                        <input type="text"
+                                                                                            name="pst_no[{{ $shade->id }}]"
+                                                                                            placeholder="Enter PA/ST No"
+                                                                                            class="mt-2 w-full px-2 py-1 border rounded text-sm dark:bg-gray-700 dark:text-white">
                                                                                     @endif
                                                                                 </div>
                                                                             @endforeach
@@ -1256,11 +1356,11 @@
 
                                                                         <div class="mt-4 flex justify-end gap-2">
                                                                             <button type="button" @click="open = false"
-                                                                                    class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400">
+                                                                                class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400">
                                                                                 Cancel
                                                                             </button>
                                                                             <button type="submit"
-                                                                                    class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+                                                                                class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
                                                                                 Save
                                                                             </button>
                                                                         </div>
@@ -1269,10 +1369,12 @@
                                                             </div>
                                                         @else
                                                             {{-- All shades received: show date & time --}}
-                                                            <span class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-pink-200 dark:bg-gray-800 px-3 py-1 rounded">
+                                                            <span
+                                                                class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-pink-200 dark:bg-gray-800 px-3 py-1 rounded">
                                                                 Received on <br>
                                                                 {{ \Carbon\Carbon::parse($prep->yarnReceiveDate)->format('Y-m-d') }}
-                                                                at {{ \Carbon\Carbon::parse($prep->yarnReceiveDate)->format('H:i') }}
+                                                                at
+                                                                {{ \Carbon\Carbon::parse($prep->yarnReceiveDate)->format('H:i') }}
                                                             </span>
                                                         @endif
                                                     @else
@@ -1333,69 +1435,93 @@
                                                     @endif
                                                 </td>
 
-                                                <td class="py-3 whitespace-normal break-words border-r border-gray-300 text-center" x-data="{ open: false, selectedShades: [] }">
+                                                <td class="py-3 whitespace-normal break-words border-r border-gray-300 text-center"
+                                                    x-data="{ open: false, selectedShades: [] }">
                                                     @php
-                                                        $pendingShades = $prep->shadeOrders->where('status', 'Yarn Received');
+                                                        $pendingShades = $prep->shadeOrders->where(
+                                                            'status',
+                                                            'Yarn Received',
+                                                        );
                                                     @endphp
 
                                                     @if ($prep->alreadyDeveloped == 'Need to Develop')
                                                         @if ($pendingShades->isNotEmpty())
                                                             <button type="button"
-                                                                    @click="open = true; selectedShades = []"
-                                                                    class="send-production-btn px-2 py-1 mt-3 rounded transition-all duration-200
+                                                                @click="open = true; selectedShades = []"
+                                                                class="send-production-btn px-2 py-1 mt-3 rounded transition-all duration-200
                                                                     {{ $prep->developPlannedDate && $prep->productionDeadline ? 'bg-gray-300 text-black hover:bg-gray-400' : 'bg-gray-200 text-gray-500 cursor-not-allowed' }}"
-                                                                    {{ $prep->developPlannedDate && $prep->productionDeadline ? '' : 'disabled' }}
-                                                                    title="{{ $prep->developPlannedDate && $prep->productionDeadline ? '' : 'Please set Development Plan & Production Deadline Date first' }}">
+                                                                {{ $prep->developPlannedDate && $prep->productionDeadline ? '' : 'disabled' }}
+                                                                title="{{ $prep->developPlannedDate && $prep->productionDeadline ? '' : 'Please set Development Plan & Production Deadline Date first' }}">
                                                                 Pending ({{ $pendingShades->count() }})
                                                             </button>
 
                                                             {{-- Modal --}}
-                                                            <div x-show="open" x-transition class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50" style="display:none;">
-                                                                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 w-full max-w-lg relative max-h-[80vh] overflow-y-auto">
+                                                            <div x-show="open" x-transition
+                                                                class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+                                                                style="display:none;">
+                                                                <div
+                                                                    class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 w-full max-w-lg relative max-h-[80vh] overflow-y-auto">
 
                                                                     {{-- Close --}}
-                                                                    <button @click="open = false" class="absolute top-2 right-2 text-gray-600 hover:text-gray-900">✕</button>
+                                                                    <button @click="open = false"
+                                                                        class="absolute top-2 right-2 text-gray-600 hover:text-gray-900">✕</button>
 
-                                                                    <h2 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">
+                                                                    <h2
+                                                                        class="text-lg font-semibold text-gray-800 dark:text-white mb-4">
                                                                         Select Shades to Send to Production
                                                                     </h2>
 
                                                                     {{-- Shades --}}
-                                                                    <form action="{{ route('rnd.markSendToProduction') }}" method="POST" @submit.prevent="$el.submit()">
+                                                                    <form
+                                                                        action="{{ route('rnd.markSendToProduction') }}"
+                                                                        method="POST" @submit.prevent="$el.submit()">
                                                                         @csrf
-                                                                        <input type="hidden" name="rnd_id" value="{{ $prep->id }}">
+                                                                        <input type="hidden" name="rnd_id"
+                                                                            value="{{ $prep->id }}">
                                                                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                                                             @php $letters = range('A', 'Z'); @endphp
-                                                                            @foreach($pendingShades as $index => $shade)
-                                                                                <label class="border rounded-md p-4 bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 cursor-pointer flex flex-col">
-                                                                                    <div class="font-semibold mb-1">Option {{ $letters[$index] ?? $index+1 }}</div>
-                                                                                    <div class="text-sm mb-2">
-                                                                                        <span class="block mb-1"><strong>Shade:</strong> {{ $shade->shade }}</span>
-                                                                                        <span class="block"><strong>Status:</strong> {{ $shade->status }}</span>
+                                                                            @foreach ($pendingShades as $index => $shade)
+                                                                                <label
+                                                                                    class="border rounded-md p-4 bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 cursor-pointer flex flex-col">
+                                                                                    <div class="font-semibold mb-1">Option
+                                                                                        {{ $letters[$index] ?? $index + 1 }}
                                                                                     </div>
-                                                                                    <input type="checkbox" name="shade_ids[]" value="{{ $shade->id }}" x-model="selectedShades">
+                                                                                    <div class="text-sm mb-2">
+                                                                                        <span
+                                                                                            class="block mb-1"><strong>Shade:</strong>
+                                                                                            {{ $shade->shade }}</span>
+                                                                                        <span
+                                                                                            class="block"><strong>Status:</strong>
+                                                                                            {{ $shade->status }}</span>
+                                                                                    </div>
+                                                                                    <input type="checkbox"
+                                                                                        name="shade_ids[]"
+                                                                                        value="{{ $shade->id }}"
+                                                                                        x-model="selectedShades">
                                                                                 </label>
                                                                             @endforeach
                                                                         </div>
 
                                                                         <div class="mt-4 flex justify-end gap-2">
-                                                                            <button type="button" @click="open = false" class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400 transition">Cancel</button>
+                                                                            <button type="button" @click="open = false"
+                                                                                class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400 transition">Cancel</button>
 
                                                                             <button type="submit"
-                                                                                    :disabled="selectedShades.length == 0"
-                                                                                    class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
-                                                                                    x-text="selectedShades.length > 1 ? 'Send Selected' : 'Send to Production'">
+                                                                                :disabled="selectedShades.length == 0"
+                                                                                class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+                                                                                x-text="selectedShades.length > 1 ? 'Send Selected' : 'Send to Production'">
                                                                                 Send
                                                                             </button>
                                                                         </div>
                                                                     </form>
                                                                 </div>
                                                             </div>
-
                                                         @else
-                                                            <span class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-orange-200 dark:bg-gray-800 px-3 py-1 rounded">
+                                                            <span
+                                                                class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-orange-200 dark:bg-gray-800 px-3 py-1 rounded">
                                                                 Sent on <br>
-                                                                {{ \Carbon\Carbon::parse($prep->sendOrderToProductionStatus)->format('Y-m-d') }} at
+                                                                {{ \Carbon\Carbon::parse($prep->sendOrderToProductionStatus)->format('Y-m-d') }}
+                                                                at
                                                                 {{ \Carbon\Carbon::parse($prep->sendOrderToProductionStatus)->format('H:i') }}
                                                             </span>
                                                         @endif
@@ -1553,18 +1679,28 @@
 
                                                 <td class="px-4 py-3 border-r border-gray-300 text-center">
                                                     @php
-                                                        $dispatchRecord = $dispatchCheck->firstWhere('sample_preparation_rnd_id', $prep->id);
+                                                        $dispatchRecord = $dispatchCheck->firstWhere(
+                                                            'sample_preparation_rnd_id',
+                                                            $prep->id,
+                                                        );
                                                         $canEditReference = false;
 
-                                                        if (in_array($prep->alreadyDeveloped, ['No Need to Develop', 'Tape Match Pan Asia'])) {
+                                                        if (
+                                                            in_array($prep->alreadyDeveloped, [
+                                                                'No Need to Develop',
+                                                                'Tape Match Pan Asia',
+                                                            ])
+                                                        ) {
                                                             $canEditReference = true;
-                                                        } elseif ($prep->alreadyDeveloped === 'Need to Develop' &&
-                                                                  (($dispatchRecord?->dispatch_to_rnd_at ?? null) != null)) {
+                                                        } elseif (
+                                                            $prep->alreadyDeveloped === 'Need to Develop' &&
+                                                            ($dispatchRecord?->dispatch_to_rnd_at ?? null) != null
+                                                        ) {
                                                             $canEditReference = true;
                                                         }
                                                     @endphp
 
-                                                @if (Auth::user()->role === 'ADMIN' or Auth::user()->role === 'PRODUCTIONOFFICER')
+                                                    @if (Auth::user()->role === 'ADMIN' or Auth::user()->role === 'PRODUCTIONOFFICER')
                                                         {{-- ADMIN: Read-only --}}
                                                         @if ($prep->is_reference_locked)
                                                             <span class="readonly">{{ $prep->referenceNo }}</span>
@@ -2571,13 +2707,25 @@
             input.placeholder = 'Enter Shade';
             input.className = 'flex-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm';
             input.required = true;
-
-            // create delete button
+            
+            // create delete button with SVG icon
             const btn = document.createElement('button');
             btn.type = 'button';
-            btn.innerHTML = '✖';
-            btn.className = 'text-red-500 hover:text-red-700 text-lg font-bold';
-            btn.onclick = function () {
+            btn.className = 'text-blue-500 hover:text-blue-700';
+            btn.innerHTML = `
+        <svg xmlns="http://www.w3.org/2000/svg"
+             fill="none"
+             viewBox="0 0 24 24"
+             stroke-width="2"
+             stroke="currentColor"
+             class="w-5 h-5">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 
+                     01-1.995-1.858L5 7m5 4v6m4-6v6M9 7V4a1 1 0 
+                     011-1h4a1 1 0 011 1v3m-9 0h10" />
+        </svg>
+    `;
+            btn.onclick = function() {
                 removeOptionInput(btn);
             };
 
