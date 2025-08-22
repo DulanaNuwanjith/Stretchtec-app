@@ -368,7 +368,7 @@
                                                                         <button @click="open = false"
                                                                                 class="absolute top-2 right-2 text-gray-600 hover:text-gray-900">✕</button>
 
-                                                                        <h2 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">
+                                                                        <h2 class="text-lg font-semibold text-blue-900 dark:text-white mb-4">
                                                                             Start Production for Shades
                                                                         </h2>
 

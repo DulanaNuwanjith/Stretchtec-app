@@ -910,28 +910,33 @@
                                                                                 </div>
 
                                                                                 {{-- Number of Options --}}
-                                                                                <div x-data="{ numOptions: 1 }" class="mb-4">
+                                                                                <div class="mb-4">
                                                                                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 text-left">
                                                                                         Number of Options
                                                                                     </label>
-                                                                                    <select x-model.number="numOptions"
-                                                                                            class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                                                                        <template x-for="i in 10" :key="i">
-                                                                                            <option :value="i" x-text="i"></option>
-                                                                                        </template>
-                                                                                    </select>
 
-                                                                                    {{-- Dynamic Shade Inputs --}}
-                                                                                    <div class="mt-2 space-y-2">
-                                                                                        <template x-for="i in numOptions" :key="i">
+                                                                                    <div id="optionsWrapper" class="space-y-2">
+                                                                                        <div class="flex items-center space-x-2">
                                                                                             <input type="text"
-                                                                                                   :name="'shades[' + (i-1) + ']'"
+                                                                                                   name="shades[]"
                                                                                                    placeholder="Enter Shade"
-                                                                                                   class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                                                                   class="flex-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                                                                    required>
-                                                                                        </template>
+                                                                                            <button type="button"
+                                                                                                    onclick="removeOptionInput(this)"
+                                                                                                    class="text-red-500 hover:text-red-700 text-lg font-bold">
+                                                                                                ✖
+                                                                                            </button>
+                                                                                        </div>
                                                                                     </div>
+
+                                                                                    <button type="button"
+                                                                                            onclick="addOptionInput()"
+                                                                                            class="mt-2 px-3 py-1 bg-blue-500 text-white rounded-md text-sm">
+                                                                                        + Add Option
+                                                                                    </button>
                                                                                 </div>
+
 
                                                                                 {{-- Weight --}}
                                                                                 <div class="mb-4">
@@ -1082,7 +1087,7 @@
                                                                         class="absolute top-2 right-2 text-gray-600 hover:text-gray-900">✕</button>
 
                                                                 {{-- Title --}}
-                                                                <h2 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">
+                                                                <h2 class="text-lg font-semibold text-blue-900 dark:text-white mb-4">
                                                                     Shades for Order #{{ $prep->orderNo }}
                                                                 </h2>
 
@@ -1224,7 +1229,7 @@
                                                                 <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 w-full max-w-lg relative max-h-[80vh] overflow-y-auto">
                                                                     <button @click="open = false" class="absolute top-2 right-2 text-gray-600 hover:text-gray-900">✕</button>
 
-                                                                    <h2 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">Mark Yarn Received</h2>
+                                                                    <h2 class="text-lg font-semibold text-blue-900 dark:text-white mb-4">Mark Yarn Received</h2>
                                                                     <form action="{{ route('rnd.markYarnReceived') }}" method="POST">
                                                                         @csrf
                                                                         <input type="hidden" name="rnd_id" value="{{ $prep->id }}">
@@ -2550,4 +2555,43 @@
             localStorage.setItem("pageScrollY", window.scrollY);
         });
     </script>
+
+    <script>
+        function addOptionInput() {
+            const wrapper = document.getElementById('optionsWrapper');
+
+            // create container div
+            const div = document.createElement('div');
+            div.className = "flex items-center space-x-2";
+
+            // create input
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.name = 'shades[]';
+            input.placeholder = 'Enter Shade';
+            input.className = 'flex-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm';
+            input.required = true;
+
+            // create delete button
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.innerHTML = '✖';
+            btn.className = 'text-red-500 hover:text-red-700 text-lg font-bold';
+            btn.onclick = function () {
+                removeOptionInput(btn);
+            };
+
+            // append input and button to div
+            div.appendChild(input);
+            div.appendChild(btn);
+
+            // append div to wrapper
+            wrapper.appendChild(div);
+        }
+
+        function removeOptionInput(button) {
+            button.parentElement.remove();
+        }
+    </script>
+
 @endsection
