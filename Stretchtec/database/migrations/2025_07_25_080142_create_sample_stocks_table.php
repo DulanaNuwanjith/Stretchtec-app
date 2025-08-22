@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('sample_stocks', function (Blueprint $table) {
             $table->id();
-            $table->string('reference_no', 100)->unique();
+            $table->string('reference_no', 100);
             $table->string('shade', 100);
             $table->integer('available_stock')->default(0);
             $table->text('special_note')->nullable();

@@ -426,7 +426,7 @@ class SamplePreparationRnDController extends Controller
 
         $prep = SamplePreparationRnD::findOrFail($request->id);
 
-        // ✅ Skip duplicate check if alreadyDeveloped === 'No Need to Develop'
+        // Skip duplicate check if alreadyDeveloped === 'No Need to Develop'
         if ($prep->alreadyDeveloped !== 'No Need to Develop') {
             if (SampleStock::where('reference_no', $request->referenceNo)->exists()) {
                 return back()
@@ -440,23 +440,32 @@ class SamplePreparationRnDController extends Controller
             $prep->is_reference_locked = true;
             $prep->save();
 
-            // ✅ Fetch production details safely
-            $production = $prep->production;
-            $productionOutput = (int)($production->production_output ?? 0);
-            $damagedOutput = (int)($production->damaged_output ?? 0);
-            $availableStock = max($productionOutput - $damagedOutput, 0);
+            // Fetch shades that are dispatched to RnD
+            $dispatchedShades = $prep->shadeOrders->where('status', 'Dispatched to RnD');
 
-            // ✅ Only create SampleStock if availableStock > 0
-            if ($availableStock > 0) {
-                SampleStock::create([
-                    'reference_no' => $request->referenceNo,
-                    'shade' => $prep->shade ?? $prep->sampleInquiry?->shade ?? 'N/A',
-                    'available_stock' => $availableStock,
-                    'special_note' => null,
-                ]);
+            foreach ($dispatchedShades as $shadeOrder) {
+                $productionOutput = (int)($shadeOrder->production_output ?? 0);
+                $damagedOutput = (int)($shadeOrder->damaged_output ?? 0);
+                $availableStock = max($productionOutput - $damagedOutput, 0);
+
+                if ($availableStock > 0) {
+                    // Skip if the same reference+shade already exists
+                    $exists = SampleStock::where('reference_no', $request->referenceNo)
+                        ->where('shade', $shadeOrder->shade)
+                        ->exists();
+
+                    if (!$exists) {
+                        SampleStock::create([
+                            'reference_no' => $request->referenceNo,
+                            'shade' => $shadeOrder->shade,
+                            'available_stock' => $availableStock,
+                            'special_note' => null,
+                        ]);
+                    }
+                }
             }
 
-            // ✅ Sync with SampleInquiry
+            // Sync with SampleInquiry
             $inquiry = $prep->sampleInquiry;
             if ($inquiry) {
                 $inquiry->referenceNo = $prep->referenceNo;
@@ -464,7 +473,7 @@ class SamplePreparationRnDController extends Controller
             }
         }
 
-        return back()->with('success', 'Reference No saved and Sample Stock created.');
+        return back()->with('success', 'Reference No saved and Sample Stock(s) created for dispatched shades.');
     }
 
     public function updateDevelopedStatus(Request $request)

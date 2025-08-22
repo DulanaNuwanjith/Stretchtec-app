@@ -541,231 +541,271 @@
                                                     @endauth
                                                 </td>
 
-                                                {{-- Order Complete Date & Time --}}
-                                                <td class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                                {{-- Order Complete / Production Complete --}}
+                                                <td class="py-3 whitespace-normal break-words border-r border-gray-300 text-center" x-data="{ open: false }">
                                                     @auth
-                                                        @php
-                                                            $allShadesInProd = $prod->samplePreparationRnD->shadeOrders->isNotEmpty() &&
-                                                                $prod->samplePreparationRnD->shadeOrders->every(fn($s) => $s->status === 'In Production');
-                                                        @endphp
+                                                        @if (auth()->user()->role !== 'ADMIN')
+                                                            @php
+                                                                $shadeOrders = $prod->samplePreparationRnD?->shadeOrders ?? collect();
+                                                                $totalShades = $shadeOrders->count();
+                                                                $dispatchedCount = $shadeOrders->where('status', 'Dispatched to RnD')->count();
+                                                                $allDispatched = $totalShades > 0 && $dispatchedCount === $totalShades;
+                                                            @endphp
 
-                                                        @if (auth()->user()->role === 'ADMIN')
-                                                            {{-- Admin just sees the status --}}
-                                                            @if (!$prod->order_complete_at)
-                                                                <span
-                                                                    class="inline-block mt-3 text-sm font-semibold text-gray-700 dark:text-white
-                                                                           bg-gray-200 dark:bg-gray-800 px-3 py-1 rounded">
-                                                                    Pending
+                                                            @if ($allDispatched)
+                                                                {{-- ✅ Show banner if all shades dispatched --}}
+                                                                @php
+                                                                    $lastDispatched = $shadeOrders
+                                                                        ->where('status', 'Dispatched to RnD')
+                                                                        ->sortByDesc('updated_at')
+                                                                        ->first();
+                                                                @endphp
+                                                                <span class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white
+                                                                             bg-green-100 dark:bg-green-800 px-3 py-1 rounded">
+                                                                    Production Complete<br>
+                                                                    on {{ $lastDispatched->updated_at->format('Y-m-d') }} at {{ $lastDispatched->updated_at->format('H:i') }}
                                                                 </span>
+                                                            @elseif (!$prod->order_complete_at)
+                                                                @php
+                                                                    $hasInProduction = $shadeOrders->contains('status', 'In Production');
+                                                                    $canComplete = $hasInProduction && $prod->operator_name && $prod->supervisor_name;
+                                                                @endphp
+
+                                                                {{-- Button to open modal --}}
+                                                                <button type="button"
+                                                                        @click="open = true"
+                                                                        class="px-2 py-1 mt-3 rounded transition
+                                                                    {{ $canComplete ? 'bg-green-600 hover:bg-green-700 text-white' : 'bg-gray-300 text-black cursor-not-allowed' }}"
+                                                                    {{ $canComplete ? '' : 'disabled' }}>
+                                                                    Production Complete
+                                                                </button>
+
+                                                                {{-- Modal --}}
+                                                                <div x-show="open" x-transition
+                                                                     class="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm z-50"
+                                                                     style="display:none;">
+                                                                    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 w-full max-w-lg relative">
+                                                                        <button @click="open = false"
+                                                                                class="absolute top-3 right-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">✕</button>
+                                                                        <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100 border-b pb-3 mb-4">
+                                                                            ✅ Mark Shades as Production Complete
+                                                                        </h2>
+
+                                                                        {{-- Shades List --}}
+                                                                        <div class="space-y-4 max-h-[420px] overflow-y-auto pr-1">
+                                                                            @foreach ($shadeOrders->where('status', 'In Production') as $shade)
+                                                                                <form action="{{ route('production.markComplete') }}" method="POST"
+                                                                                      class="flex justify-between items-center p-4 border rounded-lg bg-gray-50 dark:bg-gray-700/50 hover:shadow-md transition">
+                                                                                    @csrf
+                                                                                    <input type="hidden" name="shade_id" value="{{ $shade->id }}">
+                                                                                    <span class="font-medium text-gray-900 dark:text-gray-100">🎨 {{ $shade->shade }}</span>
+                                                                                    <button type="submit"
+                                                                                            class="px-4 py-2 bg-green-600 text-white text-sm rounded-lg shadow-sm hover:bg-green-700 focus:ring-2 focus:ring-green-400">
+                                                                                        Mark Complete
+                                                                                    </button>
+                                                                                </form>
+                                                                            @endforeach
+                                                                        </div>
+
+                                                                        {{-- Footer --}}
+                                                                        <div class="flex justify-end mt-5 border-t pt-4">
+                                                                            <button @click="open = false"
+                                                                                    class="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-700">
+                                                                                Close
+                                                                            </button>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
                                                             @else
-                                                                <span
-                                                                    class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white
-                                                                           bg-green-100 dark:bg-gray-800 px-3 py-1 rounded">
+                                                                {{-- Already completed manually --}}
+                                                                <span class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white
+                                                                             bg-green-100 dark:bg-gray-800 px-3 py-1 rounded">
                                                                     Completed on <br>
                                                                     {{ $prod->order_complete_at->format('Y-m-d') }} at {{ $prod->order_complete_at->format('H:i') }}
                                                                 </span>
                                                             @endif
                                                         @else
-                                                            {{-- Operator view --}}
-                                                            @if (!$prod->order_complete_at)
-                                                                @php
-                                                                    $canComplete =
-                                                                        $prod->order_start_at &&
-                                                                        $prod->operator_name &&
-                                                                        $prod->supervisor_name &&
-                                                                        $allShadesInProd;
-                                                                @endphp
-
-                                                                <form action="{{ route('production.markComplete') }}" method="POST">
-                                                                    @csrf
-                                                                    <input type="hidden" name="id" value="{{ $prod->id }}">
-                                                                    <button type="submit"
-                                                                            class="order-complete-btn px-2 py-1 mt-3 rounded transition-all duration-200
-                                                                            {{ $canComplete ? 'bg-green-600 hover:bg-green-700 text-white' : 'bg-gray-300 text-black cursor-not-allowed' }}"
-                                                                            {{ $canComplete ? '' : 'disabled' }}
-                                                                            title="{{ $canComplete ? '' : 'Start time, Operator, Supervisor, and all shades must be In Production' }}">
-                                                                        Pending
-                                                                    </button>
-                                                                </form>
-                                                            @else
-                                                                <span
-                                                                    class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white
-                                                                           bg-green-100 dark:bg-gray-800 px-3 py-1 rounded">
+                                                            {{-- Admin view only --}}
+                                                            @if ($prod->order_complete_at)
+                                                                <span class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white
+                                                                             bg-green-100 dark:bg-gray-800 px-3 py-1 rounded">
                                                                     Completed on <br>
                                                                     {{ $prod->order_complete_at->format('Y-m-d') }} at {{ $prod->order_complete_at->format('H:i') }}
+                                                                </span>
+                                                            @else
+                                                                <span class="inline-block mt-3 text-sm font-semibold text-gray-700 dark:text-white
+                                                                             bg-gray-200 dark:bg-gray-800 px-3 py-1 rounded">
+                                                                    Pending
                                                                 </span>
                                                             @endif
                                                         @endif
                                                     @endauth
                                                 </td>
 
-
                                                 {{-- Production Output --}}
-                                                <td
-                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
-                                                    @auth
-                                                        @if (auth()->user()->role === 'ADMIN')
-                                                            <span class="readonly">
-                                                                {{ is_numeric($prod->production_output) ? $prod->production_output . ' g' : '-' }}
-                                                            </span>
-                                                        @else
-                                                            @if (!$prod->is_output_locked)
-                                                                <form action="{{ route('production.updateOutput') }}"
-                                                                    method="POST" class="inline-block w-full">
-                                                                    @csrf
-                                                                    <input type="hidden" name="id"
-                                                                        value="{{ $prod->id }}">
-
-                                                                    <input type="number" min="0" step="any"
-                                                                        name="production_output"
-                                                                        value="{{ old('production_output', $prod->production_output) }}"
-                                                                        class="w-full px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                                        required>
-
-                                                                    <button type="submit"
-                                                                        class="mt-1 px-3 py-1 rounded text-sm transition-all duration-200 bg-blue-600 hover:bg-blue-700 text-white">
-                                                                        Save
-                                                                    </button>
-                                                                </form>
-                                                            @else
-                                                                <span class="readonly">
-                                                                    {{ is_numeric($prod->production_output) ? $prod->production_output . ' g' : '-' }}
-                                                                </span>
-                                                            @endif
-                                                        @endif
-                                                    @endauth
+                                                <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                                <span class="readonly">
+                                                    {{ is_numeric($prod->production_output) ? $prod->production_output . ' g' : '-' }}
+                                                </span>
                                                 </td>
 
                                                 {{-- Damaged Output --}}
-                                                <td
-                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
-                                                    @auth
-                                                        @if (auth()->user()->role === 'ADMIN')
-                                                            <span class="readonly">
-                                                                {{ is_numeric($prod->damaged_output) ? $prod->damaged_output . ' g' : '-' }}
-                                                            </span>
-                                                        @else
-                                                            @if (!$prod->is_damagedOutput_locked)
-                                                                <form action="{{ route('production.updateDamagedOutput') }}"
-                                                                    method="POST" class="inline-block w-full">
-                                                                    @csrf
-                                                                    <input type="hidden" name="id"
-                                                                        value="{{ $prod->id }}">
-
-                                                                    <input type="number" min="0"
-                                                                        max="{{ $prod->production_output ?? 0 }}"
-                                                                        {{-- ✅ ensure it can't exceed production_output --}} step="any"
-                                                                        name="damaged_output"
-                                                                        value="{{ old('damaged_output', $prod->damaged_output) }}"
-                                                                        class="w-full px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                                        required>
-
-                                                                    <button type="submit"
-                                                                        class="mt-1 px-3 py-1 rounded text-sm transition-all duration-200 bg-blue-600 hover:bg-blue-700 text-white">
-                                                                        Save
-                                                                    </button>
-                                                                </form>
-                                                            @else
-                                                                <span class="readonly">
-                                                                    {{ is_numeric($prod->damaged_output) ? $prod->damaged_output . ' g' : '-' }}
-                                                                </span>
-                                                            @endif
-                                                        @endif
-                                                    @endauth
+                                                <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                                <span class="readonly">
+                                                    {{ is_numeric($prod->damaged_output) ? $prod->damaged_output . ' g' : '-' }}
+                                                </span>
                                                 </td>
 
                                                 {{-- Dispatch to R&D --}}
-                                                <td
-                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                                <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
                                                     @auth
                                                         @if (auth()->user()->role === 'ADMIN')
                                                             <div class="text-sm text-gray-800 dark:text-white font-medium">
                                                                 {{ $prod->dispatched_by ?? '-' }}
                                                             </div>
-                                                            <div
-                                                                class="sample-dispatch-timestamp text-xs text-gray-500 dark:text-gray-400">
+                                                            <div class="sample-dispatch-timestamp text-xs text-gray-500 dark:text-gray-400">
                                                                 {{ $prod->dispatch_to_rnd_at ? $prod->dispatch_to_rnd_at->format('Y-m-d H:i') : '-' }}
                                                             </div>
                                                         @else
                                                             @php
-                                                                $dispatchNames = [
-                                                                    'Kanchana Madushani',
-                                                                    'Imashi Prasangika',
-                                                                    'Tenuli Dihansa',
-                                                                    'Sanduni Indeewari',
-                                                                    'Kanchana Dharmadasa',
-                                                                ];
-                                                                $disableDispatch =
-                                                                    is_null($prod->production_output) ||
-                                                                    is_null($prod->damaged_output);
+                                                                $shadeOrders = $prod->samplePreparationRnD?->shadeOrders ?? collect();
+                                                                $totalShades = $shadeOrders->count();
+                                                                $dispatchedCount = $shadeOrders->where('status', 'Dispatched to RnD')->count();
+                                                                $allDispatched = $totalShades > 0 && $dispatchedCount === $totalShades;
+
+                                                                // get last dispatched record (if exists)
+                                                                $lastDispatched = $shadeOrders
+                                                                    ->where('status', 'Dispatched to RnD')
+                                                                    ->sortByDesc('updated_at')
+                                                                    ->first();
                                                             @endphp
 
-                                                            @if (!$prod->dispatch_to_rnd_at)
-                                                                <form action="{{ route('production.dispatchToRnd') }}"
-                                                                    method="POST">
-                                                                    @csrf
-                                                                    <input type="hidden" name="id"
-                                                                        value="{{ $prod->id }}">
+                                                            @if ($allDispatched && $lastDispatched)
+                                                                {{-- ✅ Show banner once all shades dispatched --}}
+                                                                <div class="p-3 rounded-lg bg-green-100 dark:bg-green-700 text-green-900 dark:text-green-100 text-sm font-medium">
+                                                                    ✅ Dispatched to <span class="font-semibold">{{ $lastDispatched->dispatched_by ?? 'Unknown' }}</span> <br>
+                                                                    on {{ $lastDispatched->updated_at->format('Y-m-d') }}
+                                                                    at {{ $lastDispatched->updated_at->format('H:i') }}
+                                                                </div>
+                                                            @else
+                                                                @php
+                                                                    $hasProductionComplete = $shadeOrders->where('status', 'Production Complete')->count() > 0;
+                                                                    $dispatchNames = [
+                                                                        'Kanchana Madushani',
+                                                                        'Imashi Prasangika',
+                                                                        'Tenuli Dihansa',
+                                                                        'Sanduni Indeewari',
+                                                                        'Kanchana Dharmadasa',
+                                                                    ];
+                                                                @endphp
 
-                                                                    <div class="relative inline-block text-left w-56">
-                                                                        <button type="button"
-                                                                            class="dropdown-btn inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50"
-                                                                            onclick="toggleDropdownDispatch(this, 'dispatch')">
-                                                                            <span class="selected-dispatch">Select Name</span>
-                                                                            <svg class="ml-2 h-5 w-5 text-gray-400"
-                                                                                viewBox="0 0 20 20" fill="currentColor">
-                                                                                <path fill-rule="evenodd"
-                                                                                    d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
-                                                                                    clip-rule="evenodd" />
-                                                                            </svg>
-                                                                        </button>
+                                                                <button type="button"
+                                                                        class="px-3 py-1 rounded text-white transition
+                                                                         {{ $hasProductionComplete ? 'bg-blue-500 hover:bg-blue-600' : 'bg-gray-300 cursor-not-allowed' }}"
+                                                                        onclick="{{ $hasProductionComplete ? "openDispatchModal($prod->id)" : '' }}"
+                                                                    {{ $hasProductionComplete ? '' : 'disabled' }}>
+                                                                    Dispatch
+                                                                </button>
 
-                                                                        <div
-                                                                            class="dropdown-menu-dispatch hidden absolute z-10 mt-2 w-full rounded-md bg-white shadow-lg ring-1 ring-black/5 max-h-48 overflow-y-auto">
-                                                                            <div class="p-2 sticky top-0 bg-white z-10">
-                                                                                <input type="text"
-                                                                                    placeholder="Search name..."
-                                                                                    class="w-full px-2 py-1 text-sm border rounded-md"
-                                                                                    oninput="filterDropdownOptionsDispatch(this)" />
-                                                                            </div>
+                                                                {{-- Modal --}}
+                                                                <div id="dispatch-modal-{{ $prod->id }}"
+                                                                     class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+                                                                    <div
+                                                                        class="relative p-6 bg-white dark:bg-gray-800 w-11/12 max-w-3xl rounded-2xl shadow-xl">
 
-                                                                            <div class="py-1" role="listbox"
-                                                                                tabindex="-1">
-                                                                                @foreach ($dispatchNames as $name)
-                                                                                    <button type="button"
-                                                                                        class="dropdown-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                                                                        onclick="selectDropdownOptionDispatch(this, '{{ $name }}', 'dispatch')">
-                                                                                        {{ $name }}
-                                                                                    </button>
-                                                                                @endforeach
-                                                                            </div>
+                                                                        {{-- Header --}}
+                                                                        <div class="flex justify-between items-center border-b pb-3">
+                                                                            <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100">🚚 Dispatch Shades</h2>
+                                                                            <button type="button" onclick="closeDispatchModal({{ $prod->id }})"
+                                                                                    class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
+                                                                                ✕
+                                                                            </button>
                                                                         </div>
 
-                                                                        <input type="hidden" name="dispatched_by"
-                                                                            class="input-dispatch">
-                                                                    </div>
+                                                                        {{-- Form --}}
+                                                                        <form action="{{ route('production.dispatchToRnd') }}" method="POST" class="mt-4 space-y-4"
+                                                                              onsubmit="return validateDispatchForm(this)">
+                                                                            @csrf
+                                                                            <input type="hidden" name="production_id" value="{{ $prod->id }}">
 
-                                                                    <button type="submit"
-                                                                        class="sample-dispatch-btn mt-1 px-2 py-1 rounded transition-all duration-200 w-full
-                                                                        {{ $disableDispatch ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : 'bg-gray-300 text-black hover:bg-gray-400' }}"
-                                                                        {{ $disableDispatch ? 'disabled title=Please enter Production and Damaged Output first' : '' }}>
-                                                                        Dispatch
-                                                                    </button>
-                                                                </form>
-                                                            @else
-                                                                <span
-                                                                    class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-blue-100 dark:bg-gray-800 px-3 py-1 rounded">
-                                                                    <div
-                                                                        class="text-sm text-gray-800 dark:text-white font-medium">
-                                                                        Dispatch to {{ $prod->dispatched_by ?? '-' }}
+                                                                            {{-- Shades List --}}
+                                                                            <div class="space-y-4 max-h-[420px] overflow-y-auto pr-1">
+                                                                                @foreach($shadeOrders->where('status', 'Production Complete') as $shade)
+                                                                                    <div
+                                                                                        class="p-4 border rounded-lg bg-gray-50 dark:bg-gray-700/50 hover:shadow-md transition">
+
+                                                                                        {{-- Shade Header --}}
+                                                                                        <label class="flex items-center gap-2">
+                                                                                            <input type="checkbox" name="shades[{{ $shade->id }}][selected]" value="1"
+                                                                                                   class="shade-checkbox rounded text-blue-600 focus:ring-blue-500"
+                                                                                                   data-shade="{{ $shade->id }}">
+                                                                                            <span class="font-medium text-gray-900 dark:text-gray-100">
+                                                                                                {{ $shade->shade }}
+                                                                                            </span>
+                                                                                        </label>
+
+                                                                                        {{-- Inputs --}}
+                                                                                        <div class="mt-3 grid grid-cols-1 md:grid-cols-3 gap-3">
+                                                                                            <input type="number" min="0"
+                                                                                                   name="shades[{{ $shade->id }}][production_output]"
+                                                                                                   placeholder="Production Output"
+                                                                                                   class="shade-input-{{ $shade->id }} border rounded-lg px-3 py-2 w-full text-sm dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100 focus:ring-blue-500 focus:border-blue-500">
+
+                                                                                            <input type="number" min="0"
+                                                                                                   name="shades[{{ $shade->id }}][damaged_output]"
+                                                                                                   placeholder="Damaged Output"
+                                                                                                   class="shade-input-{{ $shade->id }} border rounded-lg px-3 py-2 w-full text-sm dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100 focus:ring-blue-500 focus:border-blue-500">
+
+                                                                                            {{-- Dropdown --}}
+                                                                                            <div class="relative inline-block w-full">
+                                                                                                <button type="button"
+                                                                                                        class="dropdown-btn inline-flex w-full justify-between rounded-lg bg-white dark:bg-gray-800 px-3 py-2 text-sm font-medium text-gray-900 dark:text-gray-100 shadow-sm ring-1 ring-gray-300 dark:ring-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700"
+                                                                                                        onclick="toggleDropdownDispatch(this, 'dispatch-{{ $prod->id }}-{{ $shade->id }}')">
+                                                                                                    <span class="selected-dispatch-{{ $prod->id }}-{{ $shade->id }}">Select Name</span>
+                                                                                                    <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                                                                                                        <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z" clip-rule="evenodd" />
+                                                                                                    </svg>
+                                                                                                </button>
+
+                                                                                                <div class="dropdown-menu-dispatch-{{ $prod->id }}-{{ $shade->id }} hidden absolute z-10 mt-2 w-full rounded-lg bg-white dark:bg-gray-800 shadow-lg ring-1 ring-black/10 max-h-48 overflow-y-auto">
+                                                                                                    <div class="p-2 sticky top-0 bg-white dark:bg-gray-800 z-10">
+                                                                                                        <input type="text" placeholder="Search name..."
+                                                                                                               class="w-full px-2 py-1 text-sm border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"
+                                                                                                               oninput="filterDropdownOptionsDispatch(this)" />
+                                                                                                    </div>
+                                                                                                    <div class="py-1" role="listbox" tabindex="-1">
+                                                                                                        @foreach ($dispatchNames as $name)
+                                                                                                            <button type="button"
+                                                                                                                    class="dropdown-option w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600"
+                                                                                                                    onclick="selectDropdownOptionDispatch(this, '{{ $name }}', 'dispatch-{{ $prod->id }}-{{ $shade->id }}')">
+                                                                                                                {{ $name }}
+                                                                                                            </button>
+                                                                                                        @endforeach
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                                <input type="hidden"
+                                                                                                       name="shades[{{ $shade->id }}][dispatched_by]"
+                                                                                                       class="input-dispatch-{{ $prod->id }}-{{ $shade->id }}">
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                @endforeach
+                                                                            </div>
+
+                                                                            {{-- Footer --}}
+                                                                            <div class="flex justify-end gap-3 pt-4 border-t">
+                                                                                <button type="button" onclick="closeDispatchModal({{ $prod->id }})"
+                                                                                        class="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-700">
+                                                                                    Cancel
+                                                                                </button>
+                                                                                <button type="submit"
+                                                                                        class="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 shadow-sm">
+                                                                                    Submit
+                                                                                </button>
+                                                                            </div>
+                                                                        </form>
                                                                     </div>
-                                                                    <div
-                                                                        class="sample-dispatch-timestamp text-xs text-gray-500 dark:text-gray-400">
-                                                                        Dispatch on
-                                                                        {{ $prod->dispatch_to_rnd_at->format('Y-m-d') }}<br>
-                                                                        at {{ $prod->dispatch_to_rnd_at->format('H:i') }}
-                                                                    </div>
-                                                                </span>
+                                                                </div>
                                                             @endif
                                                         @endif
                                                     @endauth
@@ -1322,4 +1362,58 @@
             localStorage.setItem("pageScrollY", window.scrollY);
         });
     </script>
+
+    <script>
+        function openDispatchModal(id) {
+            document.getElementById('dispatch-modal-' + id).classList.remove('hidden');
+        }
+
+        function closeDispatchModal(id) {
+            document.getElementById('dispatch-modal-' + id).classList.add('hidden');
+        }
+        function validateDispatchForm(form) {
+            const checkboxes = form.querySelectorAll('.shade-checkbox');
+            let atLeastOneSelected = false;
+            let valid = true;
+            let messages = [];
+
+            checkboxes.forEach(checkbox => {
+                if (checkbox.checked) {
+                    atLeastOneSelected = true;
+                    const shadeId = checkbox.getAttribute('data-shade');
+
+                    const productionOutput = form.querySelector(`.shade-input-${shadeId}[name*="[production_output]"]`);
+                    const damagedOutput = form.querySelector(`.shade-input-${shadeId}[name*="[damaged_output]"]`);
+                    const dispatchInput = form.querySelector(`.input-dispatch-${form.querySelector('input[name=production_id]').value}-${shadeId}`);
+
+                    if (!productionOutput.value.trim()) {
+                        valid = false;
+                        messages.push(`Production output required for shade ${shadeId}`);
+                    }
+                    if (!damagedOutput.value.trim()) {
+                        valid = false;
+                        messages.push(`Damaged output required for shade ${shadeId}`);
+                    }
+                    if (!dispatchInput.value.trim()) {
+                        valid = false;
+                        messages.push(`Dispatch name required for shade ${shadeId}`);
+                    }
+                }
+            });
+
+            if (!atLeastOneSelected) {
+                alert("Please select at least one shade.");
+                return false;
+            }
+
+            if (!valid) {
+                alert(messages.join("\n"));
+                return false;
+            }
+
+            return true;
+        }
+
+    </script>
+
 @endsection

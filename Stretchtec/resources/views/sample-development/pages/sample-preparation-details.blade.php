@@ -431,10 +431,7 @@
                                                 Production Status</th>
                                             <th
                                                 class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                                Production Output</th>
-                                            <th
-                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                                Damaged Output</th>
+                                                Output</th>
                                             <th
                                                 class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Yarn Leftover Weight</th>
@@ -1585,37 +1582,71 @@
                                                         value="{{ $status }}" />
                                                 </td>
 
-                                                <td
-                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
-                                                    @if ($prep->alreadyDeveloped == 'Need to Develop')
-                                                        @if ($prep->production && is_numeric($prep->production->production_output))
-                                                            <span class="readonly">
-                                                                {{ $prep->production->production_output }} g
-                                                            </span>
-                                                            <input
-                                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                                value="{{ $prep->production->production_output }} g" />
-                                                        @else
-                                                            <span class="text-gray-400 italic">Pending output</span>
-                                                        @endif
-                                                    @else
-                                                        <span class="text-gray-400 italic">—</span>
-                                                    @endif
-                                                </td>
+                                                <td class="py-3 whitespace-normal break-words border-r border-gray-300 text-center"
+                                                    x-data="{ open: false }">
+                                                    @php
+                                                        $dispatchedShades = $prep->shadeOrders->where('status', 'Dispatched to RnD');
+                                                    @endphp
 
-                                                <td
-                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
-                                                    @if ($prep->alreadyDeveloped == 'Need to Develop')
-                                                        @if ($prep->production && is_numeric($prep->production->damaged_output))
-                                                            <span class="readonly">
-                                                                {{ $prep->production->damaged_output }} g
-                                                            </span>
-                                                            <input
-                                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                                value="{{ $prep->production->damaged_output }} g" />
-                                                        @else
-                                                            <span class="text-gray-400 italic">Pending output</span>
-                                                        @endif
+                                                    @if ($prep->alreadyDeveloped == 'Need to Develop' && $dispatchedShades->isNotEmpty())
+                                                        {{-- Neutral Button --}}
+                                                        <button type="button" @click="open = true"
+                                                                class="px-3 py-1.5 mt-2 rounded-lg text-sm font-medium bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600 transition">
+                                                            Dispatched <span class="ml-1 text-xs font-semibold text-gray-500 dark:text-gray-400">
+                                                                            ({{ $dispatchedShades->count() }})
+                                                                        </span>
+                                                        </button>
+
+                                                        {{-- Modal --}}
+                                                        <div x-show="open" x-transition
+                                                             class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50"
+                                                             style="display:none;">
+                                                            <div
+                                                                class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 w-full max-w-lg relative max-h-[80vh] overflow-y-auto border border-gray-200 dark:border-gray-700">
+
+                                                                {{-- Close --}}
+                                                                <button @click="open = false"
+                                                                        class="absolute top-3 right-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition">
+                                                                    ✕
+                                                                </button>
+
+                                                                <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                                                                    Dispatched to R&D – Shade Outputs
+                                                                </h2>
+
+                                                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                                                    @foreach ($dispatchedShades as $shade)
+                                                                        <div
+                                                                            class="p-4 border rounded-xl bg-gray-50 dark:bg-gray-700/50 border-gray-200 dark:border-gray-600">
+                                                                            <div class="font-semibold text-gray-900 dark:text-gray-100 mb-1">
+                                                                                Shade: {{ $shade->shade }}
+                                                                            </div>
+                                                                            <p class="text-sm text-gray-700 dark:text-gray-300">
+                                                                                Production Output:
+                                                                                <span class="font-medium">
+                                                                                    {{ is_numeric($shade->production_output) ? $shade->production_output . ' g' : '-' }}
+                                                                                </span>
+                                                                            </p>
+                                                                            <p class="text-sm text-gray-700 dark:text-gray-300">
+                                                                                Damaged Output:
+                                                                                <span class="font-medium">
+                                                                                    {{ is_numeric($shade->damaged_output) ? $shade->damaged_output . ' g' : '-' }}
+                                                                                </span>
+                                                                            </p>
+                                                                        </div>
+                                                                    @endforeach
+                                                                </div>
+
+                                                                <div class="mt-5 flex justify-end">
+                                                                    <button type="button" @click="open = false"
+                                                                            class="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 bg-white hover:bg-gray-100 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-600 transition">
+                                                                        Close
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    @elseif($prep->alreadyDeveloped == 'Need to Develop')
+                                                        <span class="text-gray-400 italic">No dispatched shades</span>
                                                     @else
                                                         <span class="text-gray-400 italic">—</span>
                                                     @endif

@@ -20,6 +20,9 @@ return new class extends Migration
             $table->string('status')->default('Pending'); // default status
             $table->DateTime('yarn_receive_date')->nullable();
             $table->string('pst_no')->nullable(); // PST number
+            $table->integer('production_output')->nullable(); // production output
+            $table->integer('damaged_output')->nullable(); // damaged output
+            $table->string('dispatched_by')->nullable(); // dispatched by
             $table->timestamps();
         });
     }
