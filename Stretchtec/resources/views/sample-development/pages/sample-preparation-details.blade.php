@@ -1446,12 +1446,13 @@
 
                                                     @if ($prep->alreadyDeveloped == 'Need to Develop')
                                                         @if ($pendingShades->isNotEmpty())
+                                                            {{-- Show Pending Button --}}
                                                             <button type="button"
-                                                                @click="open = true; selectedShades = []"
-                                                                class="send-production-btn px-2 py-1 mt-3 rounded transition-all duration-200
+                                                                    @click="open = true; selectedShades = []"
+                                                                    class="send-production-btn px-2 py-1 mt-3 rounded transition-all duration-200
                                                                     {{ $prep->developPlannedDate && $prep->productionDeadline ? 'bg-gray-300 text-black hover:bg-gray-400' : 'bg-gray-200 text-gray-500 cursor-not-allowed' }}"
-                                                                {{ $prep->developPlannedDate && $prep->productionDeadline ? '' : 'disabled' }}
-                                                                title="{{ $prep->developPlannedDate && $prep->productionDeadline ? '' : 'Please set Development Plan & Production Deadline Date first' }}">
+                                                                    {{ $prep->developPlannedDate && $prep->productionDeadline ? '' : 'disabled' }}
+                                                                    title="{{ $prep->developPlannedDate && $prep->productionDeadline ? '' : 'Please set Development Plan & Production Deadline Date first' }}">
                                                                 Pending ({{ $pendingShades->count() }})
                                                             </button>
 
@@ -1516,7 +1517,8 @@
                                                                     </form>
                                                                 </div>
                                                             </div>
-                                                        @else
+                                                        @elseif ($prep->sendOrderToProductionStatus)
+                                                            {{-- Show Sent Only If Status is Actually Set --}}
                                                             <span
                                                                 class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-orange-200 dark:bg-gray-800 px-3 py-1 rounded">
                                                                 Sent on <br>
@@ -1524,6 +1526,9 @@
                                                                 at
                                                                 {{ \Carbon\Carbon::parse($prep->sendOrderToProductionStatus)->format('H:i') }}
                                                             </span>
+                                                        @else
+                                                            {{-- No Pending + Not Sent = Show Placeholder --}}
+                                                            <span class="text-gray-400 italic">—</span>
                                                         @endif
                                                     @else
                                                         <span class="text-gray-400 italic">—</span>
@@ -2707,7 +2712,7 @@
             input.placeholder = 'Enter Shade';
             input.className = 'flex-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm';
             input.required = true;
-            
+
             // create delete button with SVG icon
             const btn = document.createElement('button');
             btn.type = 'button';
@@ -2720,8 +2725,8 @@
              stroke="currentColor"
              class="w-5 h-5">
             <path stroke-linecap="round" stroke-linejoin="round"
-                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 
-                     01-1.995-1.858L5 7m5 4v6m4-6v6M9 7V4a1 1 0 
+                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0
+                     01-1.995-1.858L5 7m5 4v6m4-6v6M9 7V4a1 1 0
                      011-1h4a1 1 0 011 1v3m-9 0h10" />
         </svg>
     `;
