@@ -531,30 +531,56 @@ class SamplePreparationRnDController extends Controller
         $request->validate([
             'id' => 'required|exists:sample_preparation_rnd,id',
             'field' => 'required|in:yarnOrderedWeight,yarnLeftoverWeight',
-            'value' => 'required|numeric|min:0',
+            'value' => 'required',
         ]);
 
         $prep = SamplePreparationRnD::findOrFail($request->id);
         $field = $request->field;
         $lockField = 'is_' . Str::snake($field) . '_locked';
 
-        $prep->$field = $request->value;
+        // If yarnLeftoverWeight and multiple shades -> array values expected
+        if ($field === 'yarnLeftoverWeight' && str_contains($prep->shade, ',')) {
+            $shadeList = array_map('trim', explode(',', $prep->shade));
+
+            // Ensure $values is always an array
+            $values = is_array($request->value) ? $request->value : explode(',', (string) $request->value);
+
+            foreach ($shadeList as $index => $shade) {
+                $weight = isset($values[$index]) ? (float)$values[$index] : 0;
+
+                LeftoverYarn::create([
+                    'shade'              => $shade,
+                    'po_number'          => $prep->yarnOrderedPONumber,
+                    'yarn_received_date' => \Carbon\Carbon::parse($prep->yarnReceiveDate)->format('Y-m-d'),
+                    'tkt'                => $prep->tkt,
+                    'yarn_supplier'      => $prep->yarnSupplier,
+                    'available_stock'    => $weight, // always numeric
+                ]);
+            }
+
+            // Store as comma-separated for reference
+            $prep->$field = implode(',', $values);
+        } else {
+            // Single shade scenario: enforce numeric value
+            $weight = is_array($request->value) ? (float)($request->value[0] ?? 0) : (float)$request->value;
+            $prep->$field = $weight;
+
+            if ($field === 'yarnLeftoverWeight') {
+                LeftoverYarn::create([
+                    'shade'              => $prep->shade,
+                    'po_number'          => $prep->yarnOrderedPONumber,
+                    'yarn_received_date' => \Carbon\Carbon::parse($prep->yarnReceiveDate)->format('Y-m-d'),
+                    'tkt'                => $prep->tkt,
+                    'yarn_supplier'      => $prep->yarnSupplier,
+                    'available_stock'    => $weight, // always numeric
+                ]);
+            }
+        }
+
         $prep->$lockField = true;
         $prep->save();
 
-        // ✅ Insert into leftover_yarns if yarnLeftoverWeight is updated
-        if ($field === 'yarnLeftoverWeight') {
-            LeftoverYarn::create([
-                'shade'              => $prep->shade,
-                'po_number'          => $prep->yarnOrderedPONumber,
-                'yarn_received_date' => \Carbon\Carbon::parse($prep->yarnReceiveDate)->format('Y-m-d'),
-                'tkt'                => $prep->tkt,
-                'yarn_supplier'      => $prep->yarnSupplier,
-                'available_stock'    => $request->value, // using yarnLeftoverWeight as available_stock
-            ]);
-        }
-
-        return back()->with('success', 'Weight updated and leftover recorded.');
+        return back()->with('success', 'Yarn weights updated successfully.');
     }
 
     public function borrow(Request $request, $id)

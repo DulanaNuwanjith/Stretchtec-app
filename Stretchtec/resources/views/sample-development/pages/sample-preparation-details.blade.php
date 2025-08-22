@@ -956,8 +956,8 @@
                                                                                                         stroke-linecap="round"
                                                                                                         stroke-linejoin="round"
                                                                                                         d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0
-                         01-1.995-1.858L5 7m5 4v6m4-6v6M9 7V4a1 1 0
-                         011-1h4a1 1 0 011 1v3m-9 0h10" />
+                                         01-1.995-1.858L5 7m5 4v6m4-6v6M9 7V4a1 1 0
+                                         011-1h4a1 1 0 011 1v3m-9 0h10" />
                                                                                                 </svg>
                                                                                             </button>
 
@@ -1446,6 +1446,7 @@
 
                                                     @if ($prep->alreadyDeveloped == 'Need to Develop')
                                                         @if ($pendingShades->isNotEmpty())
+                                                            {{-- Show Pending Button --}}
                                                             <button type="button"
                                                                 @click="open = true; selectedShades = []"
                                                                 class="send-production-btn px-2 py-1 mt-3 rounded transition-all duration-200
@@ -1516,7 +1517,8 @@
                                                                     </form>
                                                                 </div>
                                                             </div>
-                                                        @else
+                                                        @elseif ($prep->sendOrderToProductionStatus)
+                                                            {{-- Show Sent Only If Status is Actually Set --}}
                                                             <span
                                                                 class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-orange-200 dark:bg-gray-800 px-3 py-1 rounded">
                                                                 Sent on <br>
@@ -1524,6 +1526,9 @@
                                                                 at
                                                                 {{ \Carbon\Carbon::parse($prep->sendOrderToProductionStatus)->format('H:i') }}
                                                             </span>
+                                                        @else
+                                                            {{-- No Pending + Not Sent = Show Placeholder --}}
+                                                            <span class="text-gray-400 italic">—</span>
                                                         @endif
                                                     @else
                                                         <span class="text-gray-400 italic">—</span>
@@ -1612,66 +1617,152 @@
                                                     @endif
                                                 </td>
 
-                                                <!-- Yarn Leftover Weight -->
-                                                <td class="px-4 py-3 border-r border-gray-300 text-center">
+                                                {{-- Yarn Leftover Weight --}}
+                                                <td class="px-4 py-3 border-r border-gray-300 text-center"
+                                                    x-data="{ openWeight: false }">
                                                     @if ($prep->alreadyDeveloped == 'Need to Develop')
+                                                        @php
+                                                            $shades = array_map('trim', explode(',', $prep->shade));
+                                                            $weights = $prep->yarnLeftoverWeight
+                                                                ? explode(',', $prep->yarnLeftoverWeight)
+                                                                : [];
+                                                            $canSave =
+                                                                $prep->production &&
+                                                                is_numeric($prep->production->production_output) &&
+                                                                is_numeric($prep->production->damaged_output);
+                                                        @endphp
+
                                                         @if (Auth::user()->role === 'ADMIN' or Auth::user()->role === 'PRODUCTIONOFFICER')
-                                                            {{-- ADMIN/PRODUCTION OFFICER: Read-only --}}
-                                                            {{-- Check if yarn leftover weight is locked --}}
+                                                            {{-- ADMIN/PRODUCTION OFFICER --}}
                                                             @if ($prep->is_yarn_leftover_weight_locked)
-                                                                <span class="readonly">{{ $prep->yarnLeftoverWeight }}
-                                                                    g</span>
+                                                                <button type="button" @click="openWeight = true"
+                                                                    class="px-2 py-1 rounded transition-all duration-200 bg-gray-300 text-black hover:bg-gray-400">
+                                                                    View
+                                                                </button>
                                                             @elseif ($prep->yarnLeftoverWeight)
-                                                                <span
-                                                                    class="inline-block bg-gray-200 dark:bg-gray-600 text-gray-500 dark:text-gray-400 text-sm font-medium px-3 py-1 rounded cursor-not-allowed"
-                                                                    title="Admin view only">
-                                                                    {{ $prep->yarnLeftoverWeight }} g
-                                                                </span>
+                                                                <button type="button" @click="openWeight = true"
+                                                                    class="px-2 py-1 rounded transition-all duration-200 bg-gray-300 text-black hover:bg-gray-400">
+                                                                    View ({{ $prep->yarnLeftoverWeight }} g)
+                                                                </button>
                                                             @else
-                                                                <span
-                                                                    class="inline-block bg-gray-200 dark:bg-gray-600 text-gray-500 dark:text-gray-400 text-sm font-medium px-3 py-1 rounded cursor-not-allowed"
-                                                                    title="Admin view only">
+                                                                <button type="button" @click="openWeight = true"
+                                                                    class="px-2 py-1 rounded transition-all duration-200 bg-gray-300 text-black hover:bg-gray-400">
                                                                     Not Provided
-                                                                </span>
+                                                                </button>
                                                             @endif
                                                         @else
                                                             {{-- Non-Admin Users --}}
-                                                            @php
-                                                                $canSave =
-                                                                    $prep->production &&
-                                                                    is_numeric($prep->production->production_output) &&
-                                                                    is_numeric($prep->production->damaged_output);
-                                                            @endphp
-
                                                             @if (!$prep->is_yarn_leftover_weight_locked)
-                                                                {{-- Editable form --}}
-                                                                <form action="{{ route('rnd.updateYarnWeights') }}"
-                                                                    method="POST">
-                                                                    @csrf
-                                                                    <input type="hidden" name="id"
-                                                                        value="{{ $prep->id }}">
-                                                                    <input type="hidden" name="field"
-                                                                        value="yarnLeftoverWeight">
-                                                                    <input type="number" step="0.01" min="0"
-                                                                        name="value"
-                                                                        value="{{ $prep->yarnLeftoverWeight }}"
-                                                                        class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                                        required>
-
-                                                                    <button type="submit"
-                                                                        class="w-full mt-1 px-3 py-1 rounded text-sm transition-all duration-200
-                                                                            {{ $canSave ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-gray-300 text-gray-500 cursor-not-allowed' }}"
-                                                                        {{ $canSave ? '' : 'disabled' }}
-                                                                        title="{{ $canSave ? '' : 'Production Output and Damaged Output are required' }}">
-                                                                        Save
-                                                                    </button>
-                                                                </form>
+                                                                <button type="button" @click="openWeight = true"
+                                                                    class="px-2 py-1 rounded transition-all duration-200 bg-blue-600 text-white hover:bg-blue-700">
+                                                                    Add / Edit
+                                                                </button>
                                                             @else
-                                                                {{-- Locked - readonly --}}
-                                                                <span class="readonly">{{ $prep->yarnLeftoverWeight }}
-                                                                    g</span>
+                                                                @php
+                                                                    $shades = array_map(
+                                                                        'trim',
+                                                                        explode(',', $prep->shade),
+                                                                    );
+                                                                    $weights = $prep->yarnLeftoverWeight
+                                                                        ? explode(',', $prep->yarnLeftoverWeight)
+                                                                        : [];
+                                                                    $totalWeight = array_sum(
+                                                                        array_map('floatval', $weights),
+                                                                    );
+                                                                @endphp
+
+                                                                <button type="button" @click="openWeight = true"
+                                                                    class="px-2 py-1 rounded transition-all duration-200 bg-gray-300 text-black hover:bg-gray-400">
+                                                                    @if (count($shades) === 1)
+                                                                        {{ $weights[0] ?? 'Not Provided' }} g
+                                                                    @else
+                                                                        {{ $totalWeight }} g
+                                                                    @endif
+                                                                </button>
                                                             @endif
                                                         @endif
+
+                                                        {{-- Modal --}}
+                                                        <div x-show="openWeight" x-transition
+                                                            class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+                                                            style="display:none;">
+                                                            <div
+                                                                class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 w-full max-w-lg relative max-h-[80vh] overflow-y-auto">
+                                                                <button @click="openWeight = false"
+                                                                    class="absolute top-2 right-2 text-gray-600 hover:text-gray-900">✕</button>
+
+                                                                <h2
+                                                                    class="text-lg font-semibold text-blue-900 dark:text-white mb-4">
+                                                                    Yarn Leftover Weights</h2>
+
+                                                                @if (Auth::user()->role === 'ADMIN' or Auth::user()->role === 'PRODUCTIONOFFICER')
+                                                                    {{-- Admin readonly shade-wise view --}}
+                                                                    <div class="space-y-2">
+                                                                        @foreach ($shades as $index => $shade)
+                                                                            <div
+                                                                                class="flex justify-between text-sm text-gray-700 dark:text-gray-300 px-2 py-1 border rounded bg-gray-100 dark:bg-gray-700">
+                                                                                <span
+                                                                                    class="font-medium">{{ $shade }}:</span>
+                                                                                <span>{{ isset($weights[$index]) ? $weights[$index] . ' g' : 'Not Provided' }}</span>
+                                                                            </div>
+                                                                        @endforeach
+                                                                    </div>
+                                                                @else
+                                                                    {{-- Editable form --}}
+                                                                    @if (!$prep->is_yarn_leftover_weight_locked)
+                                                                        <form
+                                                                            action="{{ route('rnd.updateYarnWeights') }}"
+                                                                            method="POST">
+                                                                            @csrf
+                                                                            <input type="hidden" name="id"
+                                                                                value="{{ $prep->id }}">
+                                                                            <input type="hidden" name="field"
+                                                                                value="yarnLeftoverWeight">
+
+                                                                            @foreach ($shades as $index => $shade)
+                                                                                <div class="mb-2">
+                                                                                    <label
+                                                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                                                                        Shade: {{ $shade }}
+                                                                                    </label>
+                                                                                    <input type="number" step="0.01"
+                                                                                        min="0" name="value[]"
+                                                                                        value="{{ $weights[$index] ?? '' }}"
+                                                                                        class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                                                        required>
+                                                                                </div>
+                                                                            @endforeach
+
+                                                                            <div class="mt-4 flex justify-end gap-2">
+                                                                                <button type="button"
+                                                                                    @click="openWeight = false"
+                                                                                    class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400">
+                                                                                    Cancel
+                                                                                </button>
+                                                                                <button type="submit"
+                                                                                    class="px-4 py-2 rounded text-sm transition-all duration-200 {{ $canSave ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-gray-300 text-gray-500 cursor-not-allowed' }}"
+                                                                                    {{ $canSave ? '' : 'disabled' }}
+                                                                                    title="{{ $canSave ? '' : 'Production Output and Damaged Output are required' }}">
+                                                                                    Save
+                                                                                </button>
+                                                                            </div>
+                                                                        </form>
+                                                                    @else
+                                                                        {{-- Locked shade-wise view for non-admin --}}
+                                                                        <div class="space-y-2">
+                                                                            @foreach ($shades as $index => $shade)
+                                                                                <div
+                                                                                    class="flex justify-between text-sm text-gray-700 dark:text-gray-300 px-2 py-1 border rounded bg-gray-100 dark:bg-gray-700">
+                                                                                    <span
+                                                                                        class="font-medium">{{ $shade }}:</span>
+                                                                                    <span>{{ isset($weights[$index]) ? $weights[$index] . ' g' : 'Not Provided' }}</span>
+                                                                                </div>
+                                                                            @endforeach
+                                                                        </div>
+                                                                    @endif
+                                                                @endif
+                                                            </div>
+                                                        </div>
                                                     @else
                                                         <span class="text-gray-400 italic">—</span>
                                                     @endif
@@ -2707,7 +2798,7 @@
             input.placeholder = 'Enter Shade';
             input.className = 'flex-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm';
             input.required = true;
-            
+
             // create delete button with SVG icon
             const btn = document.createElement('button');
             btn.type = 'button';
@@ -2720,8 +2811,8 @@
              stroke="currentColor"
              class="w-5 h-5">
             <path stroke-linecap="round" stroke-linejoin="round"
-                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 
-                     01-1.995-1.858L5 7m5 4v6m4-6v6M9 7V4a1 1 0 
+                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0
+                     01-1.995-1.858L5 7m5 4v6m4-6v6M9 7V4a1 1 0
                      011-1h4a1 1 0 011 1v3m-9 0h10" />
         </svg>
     `;
