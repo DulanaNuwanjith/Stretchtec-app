@@ -17,7 +17,6 @@
                 <div class="w-full px-6 lg:px-2">
                     <div class="bg-white dark:bg-gray-800 overflow-hidden">
                         <div class="p-4 text-gray-900 dark:text-gray-100">
-
                             {{-- Style for Sweet Alert --}}
                             <style>
                                 .swal2-toast {
@@ -1005,7 +1004,7 @@
                                                                             <input type="number" name="delivered_qty" min="1"
                                                                                    max="{{ optional($inquiry->referenceNo ? \App\Models\SampleStock::where('reference_no', $inquiry->referenceNo)->first() : null)?->available_stock ?? 1 }}"
                                                                                    placeholder="Delivered Qty"
-                                                                                   class="px-3 py-2 mb-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm w-40">
+                                                                                   class="px-3 py-2 mb-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm w-full">
                                                                         @endif
 
                                                                         <button type="submit"
