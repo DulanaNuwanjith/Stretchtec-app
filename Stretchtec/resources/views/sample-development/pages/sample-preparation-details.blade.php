@@ -956,11 +956,10 @@
                                                                                                         stroke-linecap="round"
                                                                                                         stroke-linejoin="round"
                                                                                                         d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0
-                                         01-1.995-1.858L5 7m5 4v6m4-6v6M9 7V4a1 1 0
-                                         011-1h4a1 1 0 011 1v3m-9 0h10" />
+                                   01-1.995-1.858L5 7m5 4v6m4-6v6M9 7V4a1 1 0
+                                   011-1h4a1 1 0 011 1v3m-9 0h10" />
                                                                                                 </svg>
                                                                                             </button>
-
                                                                                         </div>
                                                                                     </div>
 
@@ -969,8 +968,12 @@
                                                                                         class="mt-2 px-3 py-1 bg-blue-500 text-white rounded-md text-sm">
                                                                                         + Add Option
                                                                                     </button>
-                                                                                </div>
 
+                                                                                    <p id="shadeError"
+                                                                                        class="mt-1 text-red-500 text-sm hidden">
+                                                                                        You can only add up to 10 shades.
+                                                                                    </p>
+                                                                                </div>
 
                                                                                 {{-- Weight --}}
                                                                                 <div class="mb-4">
@@ -2786,6 +2789,15 @@
     <script>
         function addOptionInput() {
             const wrapper = document.getElementById('optionsWrapper');
+            const error = document.getElementById('shadeError');
+            const currentCount = wrapper.querySelectorAll('input[name="shades[]"]').length;
+
+            if (currentCount >= 10) {
+                error.classList.remove('hidden'); // show error
+                return;
+            } else {
+                error.classList.add('hidden'); // hide error if under limit
+            }
 
             // create container div
             const div = document.createElement('div');
@@ -2804,32 +2816,37 @@
             btn.type = 'button';
             btn.className = 'text-blue-500 hover:text-blue-700';
             btn.innerHTML = `
-        <svg xmlns="http://www.w3.org/2000/svg"
-             fill="none"
-             viewBox="0 0 24 24"
-             stroke-width="2"
-             stroke="currentColor"
-             class="w-5 h-5">
-            <path stroke-linecap="round" stroke-linejoin="round"
-                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0
-                     01-1.995-1.858L5 7m5 4v6m4-6v6M9 7V4a1 1 0
-                     011-1h4a1 1 0 011 1v3m-9 0h10" />
-        </svg>
-    `;
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 fill="none"
+                 viewBox="0 0 24 24"
+                 stroke-width="2"
+                 stroke="currentColor"
+                 class="w-5 h-5">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0
+                         01-1.995-1.858L5 7m5 4v6m4-6v6M9 7V4a1 1 0
+                         011-1h4a1 1 0 011 1v3m-9 0h10" />
+            </svg>
+        `;
             btn.onclick = function() {
                 removeOptionInput(btn);
             };
 
-            // append input and button to div
             div.appendChild(input);
             div.appendChild(btn);
-
-            // append div to wrapper
             wrapper.appendChild(div);
         }
 
         function removeOptionInput(button) {
+            const wrapper = document.getElementById('optionsWrapper');
             button.parentElement.remove();
+
+            // hide error if input count drops below 10
+            const error = document.getElementById('shadeError');
+            const currentCount = wrapper.querySelectorAll('input[name="shades[]"]').length;
+            if (currentCount < 10) {
+                error.classList.add('hidden');
+            }
         }
     </script>
 
