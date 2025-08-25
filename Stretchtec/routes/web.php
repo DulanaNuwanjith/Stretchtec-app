@@ -1,14 +1,17 @@
 <?php
 
+use App\Http\Controllers\LeftoverYarnController;
 use App\Http\Controllers\ColorMatchRejectController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\OperatorsandSupervisorsController;
-use App\Http\Controllers\SampleInquiryController;
-use App\Http\Controllers\SamplePreparationRnDController;
-use App\Http\Controllers\SamplePreparationProductionController;
-use App\Http\Controllers\SampleStockController;
-use App\Http\Controllers\UserMananagementController;
 use App\Http\Controllers\ProductCatalogController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\SampleInquiryController;
+use App\Http\Controllers\SamplePreparationProductionController;
+use App\Http\Controllers\SamplePreparationRnDController;
+use App\Http\Controllers\SampleStockController;
+use App\Http\Controllers\StoresController;
+use App\Http\Controllers\UserMananagementController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -28,7 +31,7 @@ Route::middleware([
     Route::get('sample-preparation-details', [SamplePreparationRnDController::class, 'viewRnD'])
         ->name('sample-preparation-details.index');
 
-    Route::get('/dashboard', [\App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::patch('/sample-preparation-production/update-operator/{id}', [SamplePreparationProductionController::class, 'updateOperator'])
         ->name('sample-preparation-production.update-operator');
@@ -37,7 +40,7 @@ Route::middleware([
 
     Route::patch('/sample-inquery-details/{id}/update-notes', [SampleInquiryController::class, 'updateNotes'])->name('sample-inquery-details.update-notes');
 
-    Route::resource('leftoverYarnManagement', 'App\Http\Controllers\LeftoverYarnController')->names([
+    Route::resource('leftoverYarnManagement', LeftoverYarnController::class)->names([
         'index' => 'leftoverYarn.index',
         'store' => 'leftoverYarn.store',
         'update' => 'leftoverYarn.update',
@@ -45,7 +48,7 @@ Route::middleware([
     ]);
     Route::post('/leftover-yarn/borrow/{id}', [SamplePreparationRnDController::class, 'borrow'])->name('leftover-yarn.borrow');
 
-    Route::resource('sampleStockManagement', 'App\Http\Controllers\SampleStockController')->names([
+    Route::resource('sampleStockManagement', SampleStockController::class)->names([
         'index' => 'sampleStock.index',
         'store' => 'sampleStock.store',
         'update' => 'sampleStock.update',
@@ -57,7 +60,7 @@ Route::middleware([
         return view('production-catalog.productCatalog');
     })->name('productCatalog.index');
 
-    Route::get('storeManagement', [\App\Http\Controllers\StoresController::class, 'index'])->name('storeManagement.index');
+    Route::get('storeManagement', [StoresController::class, 'index'])->name('storeManagement.index');
 
     Route::get('elasticCatalog', [ProductCatalogController::class, 'elasticCatalog'])->name('elasticCatalog.index');
     Route::get('tapeCatalog', [ProductCatalogController::class, 'tapeCatalog'])->name('tapeCatalog.index');
@@ -71,7 +74,7 @@ Route::middleware([
     Route::patch('product-catalog/{productCatalog}/approval', [ProductCatalogController::class, 'updateApproval'])->name('product-catalog.updateApproval');
 
     //Sample inquiry routes
-    Route::resource('sampleInquiry', 'App\Http\Controllers\SampleInquiryController')->names([
+    Route::resource('sampleInquiry', SampleInquiryController::class)->names([
         'index' => 'sample-inquery-details.index',
         'store' => 'sampleInquiry.store',
         'destroy' => 'sampleInquiry.destroy',
@@ -152,7 +155,7 @@ Route::middleware(['auth'])->group(function () {
             ->name('rnd.updateYarnWeights');
         Route::post('/color-match-rejects/store', [ColorMatchRejectController::class, 'store'])
             ->name('colorMatchRejects.store');
-        Route::get('/color-match-reject/{id}', [\App\Http\Controllers\ColorMatchRejectController::class, 'getRejectDetails']);
+        Route::get('/color-match-reject/{id}', [ColorMatchRejectController::class, 'getRejectDetails']);
     });
 });
 
@@ -227,7 +230,9 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/reports/customer-decision', [ReportController::class, 'inquiryCustomerDecisionReport'])->name('reports.customerDecision');
         Route::get('/report/order', [ReportController::class, 'generateOrderReport'])->name('report.order');
         Route::get('/report/inquiry-range', [ReportController::class, 'inquiryRangeReport'])->name('report.inquiryRange');
-        Route::get('/reports/production-reports', function () {return view('reports.production-reports');})->name('production-reports.index');
+        Route::get('/reports/production-reports', function () {
+            return view('reports.production-reports');
+        })->name('production-reports.index');
         Route::get('/reports/yarn-supplier-spending', [ReportController::class, 'yarnSupplierSpendingReport'])->name('reports.yarnSupplierSpending');
         Route::get('/reports/coordinator/pdf', [ReportController::class, 'coordinatorReportPdf'])->name('reports.coordinatorPdf');
         Route::get('/reports/reference-delivery', [ReportController::class, 'referenceDeliveryReport'])->name('reports.reference_delivery');
