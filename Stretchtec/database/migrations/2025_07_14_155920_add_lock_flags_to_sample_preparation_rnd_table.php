@@ -4,9 +4,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
-   public function up()
+return new class extends Migration {
+    public function up()
     {
         Schema::table('sample_preparation_rnd', function (Blueprint $table) {
             // Do NOT add is_dev_plan_locked here again

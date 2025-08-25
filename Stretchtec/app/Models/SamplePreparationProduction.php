@@ -26,11 +26,11 @@ class SamplePreparationProduction extends Model
     ];
 
     protected $casts = [
-        'production_deadline'    => 'date',
-        'order_received_at'      => 'datetime',
-        'order_start_at'         => 'datetime',
-        'order_complete_at'      => 'datetime',
-        'dispatch_to_rnd_at'     => 'datetime',
+        'production_deadline' => 'date',
+        'order_received_at' => 'datetime',
+        'order_start_at' => 'datetime',
+        'order_complete_at' => 'datetime',
+        'dispatch_to_rnd_at' => 'datetime',
     ];
 
     public function samplePreparationRnD()
