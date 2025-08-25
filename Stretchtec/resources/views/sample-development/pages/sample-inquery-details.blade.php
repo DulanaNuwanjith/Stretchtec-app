@@ -1058,6 +1058,11 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
+                                                        @else
+                                                            {{-- Show message when referenceNo is null --}}
+                                                            @if(empty($inquiry->referenceNo) && !$allDelivered)
+                                                                <span class="text-red-600 font-semibold text-sm">Set Ref No to Deliver</span>
+                                                            @endif
                                                         @endif
 
                                                         {{-- Dispatch Note available if any delivery happened --}}
