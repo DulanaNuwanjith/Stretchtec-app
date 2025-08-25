@@ -128,6 +128,7 @@ class SamplePreparationProductionController extends Controller
 
         $shade = ShadeOrder::findOrFail($request->shade_id);
         $shade->status = 'Production Complete';
+        $shade->production_complete_date = Carbon::now();
         $shade->save();
 
         // Check if ALL shades of this RnD are completed
@@ -212,6 +213,7 @@ class SamplePreparationProductionController extends Controller
             $shade->damaged_output = ($shade->damaged_output ?? 0) + $damagedOutput;
             $shade->dispatched_by = $dispatchedBy;
             $shade->status = 'Dispatched to RnD';
+            $shade->dispatched_date = Carbon::now();
             $shade->save();
 
             // Update totals
