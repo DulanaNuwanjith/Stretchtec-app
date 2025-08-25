@@ -3,19 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Models\SampleInquiry;
-use App\Models\SamplePreparationProduction;
+use App\Models\SamplePreparationRnD;
 use App\Models\SampleStock;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\ValidationException;
-use Illuminate\Support\Facades\DB;
-use App\Models\SamplePreparationRnD;
-use PhpOffice\PhpSpreadsheet\IOFactory;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
-use App\Models\DispatchCounter;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\ValidationException;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class SampleInquiryController extends Controller
 {
@@ -84,7 +81,7 @@ class SampleInquiryController extends Controller
             ->orderBy('rejectNO')
             ->pluck('rejectNO');
 
-        return view('sample-development.pages.sample-inquery-details', compact('inquiries', 'customers', 'merchandisers','items','coordinators','orderNos', 'distinctRejectNumbers'));
+        return view('sample-development.pages.sample-inquery-details', compact('inquiries', 'customers', 'merchandisers', 'items', 'coordinators', 'orderNos', 'distinctRejectNumbers'));
     }
 
     public function updateNotes(Request $request, $id)
@@ -184,7 +181,7 @@ class SampleInquiryController extends Controller
             return redirect()->back()
                 ->withErrors($e->validator)
                 ->withInput();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error('Sample Inquiry Store Error: ' . $e->getMessage());
 
             return redirect()->back()
@@ -226,7 +223,7 @@ class SampleInquiryController extends Controller
         try {
             $sampleInquiry->delete(); // Use soft delete if enabled
             return redirect()->back()->with('success', 'Sample Inquiry deleted successfully.');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error('Sample Inquiry Delete Error: ' . $e->getMessage());
             return redirect()->back()->with('error', 'Failed to delete the inquiry.');
         }
@@ -297,7 +294,7 @@ class SampleInquiryController extends Controller
                 $shade = $dispatchedShades->where('id', $shadeId)->first();
                 if (!$shade) continue;
 
-                $quantity = (int) $shadeData['quantity'];
+                $quantity = (int)$shadeData['quantity'];
                 $stock = SampleStock::where('reference_no', $inquiry->referenceNo)
                     ->where('shade', $shade->shade)
                     ->first();
@@ -392,7 +389,7 @@ class SampleInquiryController extends Controller
 
             $inquiry->dNoteNumber = $fileName;
             $inquiry->save();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             \Log::error('Dispatch Note Generation Failed: ' . $e->getMessage());
             return back()->with('error', 'Delivery marked, but dispatch note generation failed.');
         }

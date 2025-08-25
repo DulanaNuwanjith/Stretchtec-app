@@ -6,6 +6,7 @@ use App\Models\OperatorsandSupervisors;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
+use Exception;
 
 class OperatorsandSupervisorsController extends Controller
 {
@@ -21,7 +22,7 @@ class OperatorsandSupervisorsController extends Controller
             // Return Blade view with data
             return view('user-management.pages.addResponsiblePerson', compact('operatorsAndSupervisors'));
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error('Failed to fetch Operators and Supervisors: ' . $e->getMessage());
 
             return redirect()->back()->with('error', 'An unexpected error occurred.');
@@ -70,7 +71,7 @@ class OperatorsandSupervisorsController extends Controller
             // Return validation error message with redirect
             return redirect()->back()->withErrors($e->errors())->withInput();
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             // Log unexpected errors
             Log::error('Failed to create Operator or Supervisor: ' . $e->getMessage());
 
@@ -123,7 +124,7 @@ class OperatorsandSupervisorsController extends Controller
                 'errors' => $e->errors()
             ], 422);
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             // Log unexpected errors
             Log::error('Failed to update Operator or Supervisor: ' . $e->getMessage());
 
@@ -146,7 +147,7 @@ class OperatorsandSupervisorsController extends Controller
 
             return redirect()->back()->with('success', 'Operator or Supervisor deleted successfully.');
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error('Failed to delete Operator or Supervisor: ' . $e->getMessage());
 
             return redirect()->back()->with('error', 'An unexpected error occurred while deleting the Operator or Supervisor.');

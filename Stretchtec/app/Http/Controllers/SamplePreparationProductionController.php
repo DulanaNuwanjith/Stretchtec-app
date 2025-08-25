@@ -2,19 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\OperatorsandSupervisors;
 use App\Models\SamplePreparationProduction;
 use App\Models\ShadeOrder;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 
 class SamplePreparationProductionController extends Controller
 {
     public function index(Request $request)
     {
-        $operators = \App\Models\OperatorsandSupervisors::where('role', 'OPERATOR')->get();
-        $supervisors = \App\Models\OperatorsandSupervisors::where('role', 'SUPERVISOR')->get();
+        $operators = OperatorsandSupervisors::where('role', 'OPERATOR')->get();
+        $supervisors = OperatorsandSupervisors::where('role', 'SUPERVISOR')->get();
 
         $productionsQuery = SamplePreparationProduction::with([
             'samplePreparationRnD.sampleInquiry',

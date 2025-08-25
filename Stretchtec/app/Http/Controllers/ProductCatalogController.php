@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\ProductCatalog;
-use Illuminate\Support\Facades\Storage;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ProductCatalogController extends Controller
 {
@@ -308,7 +309,7 @@ class ProductCatalogController extends Controller
             $catalog->save();
 
             return redirect()->back()->with('success', 'Shade updated successfully.');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return redirect()->back()->with('error', 'Failed to update shade. Please try again.');
         }
     }

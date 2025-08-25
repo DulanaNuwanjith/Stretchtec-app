@@ -31,7 +31,7 @@ class SamplePreparationRnDController extends Controller
 
         if ($request->filled('shade')) {
             // Filter by shade_orders table if needed
-            $query->whereHas('shadeOrders', function($q) use ($request) {
+            $query->whereHas('shadeOrders', function ($q) use ($request) {
                 $q->where('shade', $request->shade);
             });
         }
@@ -49,7 +49,7 @@ class SamplePreparationRnDController extends Controller
         }
 
         if ($request->filled('coordinator_name')) {
-            $query->whereHas('sampleInquiry', function($q) use ($request) {
+            $query->whereHas('sampleInquiry', function ($q) use ($request) {
                 $q->where('coordinatorName', $request->coordinator_name);
             });
         }
@@ -81,7 +81,6 @@ class SamplePreparationRnDController extends Controller
             'dispatchCheck'
         ));
     }
-
 
 
     public function markColourMatchSent(Request $request)
@@ -209,7 +208,7 @@ class SamplePreparationRnDController extends Controller
 
                 if ($pstNoInput) {
                     // Clean input, multiple comma-separated values allowed
-                    $pstNumbers = array_map(function($num) {
+                    $pstNumbers = array_map(function ($num) {
                         $num = preg_replace('/\D/', '', $num); // keep only digits
                         return 'PA/ST-' . str_pad($num, 5, '0', STR_PAD_LEFT);
                     }, explode(',', $pstNoInput));
@@ -510,7 +509,7 @@ class SamplePreparationRnDController extends Controller
             $prep->is_yarn_ordered_weight_locked = true;
         }
 
-        if ($request->alreadyDeveloped === 'No Need to Develop'){
+        if ($request->alreadyDeveloped === 'No Need to Develop') {
             $prep->productionStatus = 'No Development';
 
             $sampleInquiry = SampleInquiry::where('orderNo', $prep->orderNo)->first();
@@ -544,18 +543,18 @@ class SamplePreparationRnDController extends Controller
             $shadeList = array_map('trim', explode(',', $prep->shade));
 
             // Ensure $values is always an array
-            $values = is_array($request->value) ? $request->value : explode(',', (string) $request->value);
+            $values = is_array($request->value) ? $request->value : explode(',', (string)$request->value);
 
             foreach ($shadeList as $index => $shade) {
                 $weight = isset($values[$index]) ? (float)$values[$index] : 0;
 
                 LeftoverYarn::create([
-                    'shade'              => $shade,
-                    'po_number'          => $prep->yarnOrderedPONumber,
-                    'yarn_received_date' => \Carbon\Carbon::parse($prep->yarnReceiveDate)->format('Y-m-d'),
-                    'tkt'                => $prep->tkt,
-                    'yarn_supplier'      => $prep->yarnSupplier,
-                    'available_stock'    => $weight, // always numeric
+                    'shade' => $shade,
+                    'po_number' => $prep->yarnOrderedPONumber,
+                    'yarn_received_date' => Carbon::parse($prep->yarnReceiveDate)->format('Y-m-d'),
+                    'tkt' => $prep->tkt,
+                    'yarn_supplier' => $prep->yarnSupplier,
+                    'available_stock' => $weight, // always numeric
                 ]);
             }
 
@@ -568,12 +567,12 @@ class SamplePreparationRnDController extends Controller
 
             if ($field === 'yarnLeftoverWeight') {
                 LeftoverYarn::create([
-                    'shade'              => $prep->shade,
-                    'po_number'          => $prep->yarnOrderedPONumber,
-                    'yarn_received_date' => \Carbon\Carbon::parse($prep->yarnReceiveDate)->format('Y-m-d'),
-                    'tkt'                => $prep->tkt,
-                    'yarn_supplier'      => $prep->yarnSupplier,
-                    'available_stock'    => $weight, // always numeric
+                    'shade' => $prep->shade,
+                    'po_number' => $prep->yarnOrderedPONumber,
+                    'yarn_received_date' => Carbon::parse($prep->yarnReceiveDate)->format('Y-m-d'),
+                    'tkt' => $prep->tkt,
+                    'yarn_supplier' => $prep->yarnSupplier,
+                    'available_stock' => $weight, // always numeric
                 ]);
             }
         }

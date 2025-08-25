@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\SampleStock;
+use Exception;
 use Illuminate\Http\Request;
 
 class SampleStockController extends Controller
@@ -48,7 +49,7 @@ class SampleStockController extends Controller
      */
     public function store(Request $request)
     {
-        try{
+        try {
             $request->validate([
                 'reference_no' => 'required|string|max:255|unique:sample_stocks',
                 'shade' => 'required|string|max:255',
@@ -64,7 +65,7 @@ class SampleStockController extends Controller
             ]);
 
             return redirect()->back()->with('success', 'Sample stock created successfully.');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return redirect()->back()->withErrors(['error' => 'Failed to create sample stock: ' . $e->getMessage()]);
         }
     }
