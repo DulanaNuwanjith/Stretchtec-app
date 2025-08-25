@@ -457,7 +457,7 @@
                                                         class="readonly font-bold hover:text-blue-600 hover:underline cursor-pointer
                                                             {{ $prep->productionStatus === 'Order Delivered' ? 'text-red-600' : '' }}
                                                             {{ $prep->productionStatus === 'Dispatched to RnD' ? 'text-yellow-600' : 'text-black' }}"
-                                                                                                            onclick="openRndSampleModal(
+                                                        onclick="openRndSampleModal(
                                                             '{{ addslashes($prep->orderNo) }}',
                                                             '{{ addslashes($prep->sampleInquiry->customerName ?? '-') }}',
                                                             '{{ addslashes($prep->sampleInquiry->coordinatorName ?? '-') }}',
@@ -956,8 +956,8 @@
                                                                                                         stroke-linecap="round"
                                                                                                         stroke-linejoin="round"
                                                                                                         d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0
-                                                                                                           01-1.995-1.858L5 7m5 4v6m4-6v6M9 7V4a1 1 0
-                                                                                                           011-1h4a1 1 0 011 1v3m-9 0h10" />
+                                                                                                                   01-1.995-1.858L5 7m5 4v6m4-6v6M9 7V4a1 1 0
+                                                                                                                   011-1h4a1 1 0 011 1v3m-9 0h10" />
                                                                                                 </svg>
                                                                                             </button>
                                                                                         </div>
@@ -1160,7 +1160,7 @@
 
                                                                 {{-- Title --}}
                                                                 <h2
-                                                                    class="text-lg font-semibold text-blue-900 dark:text-white mb-4">
+                                                                    class="text-lg text-left font-semibold text-blue-900 dark:text-white mb-4">
                                                                     Shades for Order #{{ $prep->orderNo }}
                                                                 </h2>
 
@@ -1215,9 +1215,8 @@
                                                     @elseif(in_array($prep->alreadyDeveloped, ['No Need to Develop']))
                                                         <span class="text-gray-400 italic">—</span>
                                                     @else
-                                                        <span
-                                                            class="text-sm font-medium text-gray-800 dark:text-gray-200">
-                                                            {{$prep->shade ?? '—'}}
+                                                        <span class="text-sm font-medium text-gray-800 dark:text-gray-200">
+                                                            {{ $prep->shade ?? '—' }}
                                                         </span>
                                                     @endif
                                                 </td>
@@ -1590,32 +1589,37 @@
                                                 <td class="py-3 whitespace-normal break-words border-r border-gray-300 text-center"
                                                     x-data="{ open: false }">
                                                     @php
-                                                        $dispatchedShades = $prep->shadeOrders->whereIn('status', ['Dispatched to RnD', 'Delivered']);
+                                                        $dispatchedShades = $prep->shadeOrders->whereIn('status', [
+                                                            'Dispatched to RnD',
+                                                            'Delivered',
+                                                        ]);
                                                     @endphp
 
                                                     @if ($prep->alreadyDeveloped == 'Need to Develop' && $dispatchedShades->isNotEmpty())
                                                         {{-- Neutral Button --}}
                                                         <button type="button" @click="open = true"
-                                                                class="px-3 py-1.5 mt-2 rounded-lg text-sm font-medium bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600 transition">
-                                                            Dispatched <span class="ml-1 text-xs font-semibold text-gray-500 dark:text-gray-400">
-                                                                            ({{ $dispatchedShades->count() }})
-                                                                        </span>
+                                                            class="px-3 py-1.5 mt-2 rounded-lg text-sm font-medium bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600 transition">
+                                                            Dispatched <span
+                                                                class="ml-1 text-xs font-semibold text-gray-500 dark:text-gray-400">
+                                                                ({{ $dispatchedShades->count() }})
+                                                            </span>
                                                         </button>
 
                                                         {{-- Modal --}}
                                                         <div x-show="open" x-transition
-                                                             class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50"
-                                                             style="display:none;">
+                                                            class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50"
+                                                            style="display:none;">
                                                             <div
                                                                 class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 w-full max-w-lg relative max-h-[80vh] overflow-y-auto border border-gray-200 dark:border-gray-700">
 
                                                                 {{-- Close --}}
                                                                 <button @click="open = false"
-                                                                        class="absolute top-3 right-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition">
+                                                                    class="absolute top-3 right-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition">
                                                                     ✕
                                                                 </button>
 
-                                                                <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                                                                <h2
+                                                                    class="text-lg text-left font-semibold text-blue-900 dark:text-white mb-4">
                                                                     Dispatched to R&D – Shade Outputs
                                                                 </h2>
 
@@ -1623,16 +1627,19 @@
                                                                     @foreach ($dispatchedShades as $shade)
                                                                         <div
                                                                             class="p-4 border rounded-xl bg-gray-50 dark:bg-gray-700/50 border-gray-200 dark:border-gray-600">
-                                                                            <div class="font-semibold text-gray-900 dark:text-gray-100 mb-1">
+                                                                            <div
+                                                                                class="font-semibold text-gray-900 dark:text-gray-100 mb-1">
                                                                                 Shade: {{ $shade->shade }}
                                                                             </div>
-                                                                            <p class="text-sm text-gray-700 dark:text-gray-300">
+                                                                            <p
+                                                                                class="text-sm text-gray-700 dark:text-gray-300">
                                                                                 Production Output:
                                                                                 <span class="font-medium">
                                                                                     {{ is_numeric($shade->production_output) ? $shade->production_output . ' g' : '-' }}
                                                                                 </span>
                                                                             </p>
-                                                                            <p class="text-sm text-gray-700 dark:text-gray-300">
+                                                                            <p
+                                                                                class="text-sm text-gray-700 dark:text-gray-300">
                                                                                 Damaged Output:
                                                                                 <span class="font-medium">
                                                                                     {{ is_numeric($shade->damaged_output) ? $shade->damaged_output . ' g' : '-' }}
@@ -1644,7 +1651,7 @@
 
                                                                 <div class="mt-5 flex justify-end">
                                                                     <button type="button" @click="open = false"
-                                                                            class="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 bg-white hover:bg-gray-100 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-600 transition">
+                                                                        class="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 bg-white hover:bg-gray-100 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-600 transition">
                                                                         Close
                                                                     </button>
                                                                 </div>
@@ -1813,17 +1820,26 @@
                                                         $canEditReference = false;
 
                                                         // Check if all related shade orders are delivered
-                                                        $allShadesDelivered = $prep->shadeOrders->isNotEmpty() &&
-                                                                              $prep->shadeOrders->every(fn($s) => trim($s->status) === 'Delivered');
+                                                        $allShadesDelivered =
+                                                            $prep->shadeOrders->isNotEmpty() &&
+                                                            $prep->shadeOrders->every(
+                                                                fn($s) => trim($s->status) === 'Delivered',
+                                                            );
 
                                                         if ($prep->alreadyDeveloped === 'Need to Develop') {
                                                             // Get dispatched shades for this prep only
-                                                            $dispatchedShades = $prep->shadeOrders
-                                                                ->where('status', 'Dispatched to RnD');
+                                                            $dispatchedShades = $prep->shadeOrders->where(
+                                                                'status',
+                                                                'Dispatched to RnD',
+                                                            );
 
                                                             // Filter out shades that are already in stock
-                                                            $newShades = $dispatchedShades
-                                                                ->filter(fn($s) => !\App\Models\SampleStock::where('shade', $s->shade)->exists());
+                                                            $newShades = $dispatchedShades->filter(
+                                                                fn($s) => !\App\Models\SampleStock::where(
+                                                                    'shade',
+                                                                    $s->shade,
+                                                                )->exists(),
+                                                            );
 
                                                             // Editable only if there are new dispatched shades not yet in stock
                                                             $canEditReference = $newShades->isNotEmpty();
@@ -1834,82 +1850,122 @@
                                                         <span class="readonly">{{ $prep->referenceNo ?? '—' }}</span>
                                                     @else
                                                         {{-- Global lock: once all shades delivered, reference number is locked forever --}}
-                                                        @if($allShadesDelivered)
+                                                        @if ($allShadesDelivered)
                                                             <span class="readonly">{{ $prep->referenceNo ?? '—' }}</span>
                                                         @else
                                                             @if ($prep->alreadyDeveloped === 'Need to Develop')
                                                                 @if ($canEditReference)
                                                                     {{-- Editable input for new dispatched shades --}}
-                                                                    <form action="{{ route('rnd.lockReferenceField') }}" method="POST">
+                                                                    <form action="{{ route('rnd.lockReferenceField') }}"
+                                                                        method="POST">
                                                                         @csrf
-                                                                        <input type="hidden" name="id" value="{{ $prep->id }}">
+                                                                        <input type="hidden" name="id"
+                                                                            value="{{ $prep->id }}">
                                                                         <div class="mb-1">
-                                                                            <input type="text" name="referenceNo" value="{{ $prep->referenceNo ?? '' }}"
-                                                                                   class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                                                   required>
+                                                                            <input type="text" name="referenceNo"
+                                                                                value="{{ $prep->referenceNo ?? '' }}"
+                                                                                class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                                                required>
                                                                         </div>
                                                                         <button type="submit"
-                                                                                class="w-full mt-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm">
+                                                                            class="w-full mt-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm">
                                                                             Save
                                                                         </button>
                                                                     </form>
                                                                 @else
                                                                     {{-- Locked / uneditable input --}}
                                                                     <div class="flex flex-col items-center gap-2">
-                                                                        <input type="text" value="{{ $prep->referenceNo ?? '—' }}"
-                                                                               class="w-full px-3 py-2 border rounded-md text-gray-500 bg-gray-100 text-sm cursor-not-allowed"
-                                                                               disabled>
+                                                                        <input type="text"
+                                                                            value="{{ $prep->referenceNo }}"
+                                                                            class="w-full px-3 py-2 border rounded-md text-gray-500 bg-gray-100 text-sm cursor-not-allowed"
+                                                                            disabled>
                                                                         <button type="button" disabled
-                                                                                class="w-full bg-gray-400 text-white px-3 py-1 rounded text-sm cursor-not-allowed">
+                                                                            class="w-full bg-gray-400 text-white px-3 py-1 rounded text-sm cursor-not-allowed">
                                                                             Lock Reference
                                                                         </button>
                                                                     </div>
                                                                 @endif
                                                             @elseif ($prep->alreadyDeveloped === 'Tape Match Pan Asia' && !$prep->referenceNo)
                                                                 {{-- Tape Match logic unchanged --}}
-                                                                <form action="{{ route('rnd.lockReferenceField') }}" method="POST">
+                                                                <form action="{{ route('rnd.lockReferenceField') }}"
+                                                                    method="POST">
                                                                     @csrf
-                                                                    <input type="hidden" name="id" value="{{ $prep->id }}">
-                                                                    <div class="mb-4">
-                                                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                                                            Reference Number
-                                                                        </label>
-                                                                        <input type="text" name="referenceNo" value="{{ $prep->referenceNo ?? '' }}"
-                                                                               class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                                               required>
+                                                                    <input type="hidden" name="id"
+                                                                        value="{{ $prep->id }}">
+                                                                    <div class="mb-1">
+                                                                        <input type="text" name="referenceNo"
+                                                                            value="{{ $prep->referenceNo ?? '' }}"
+                                                                            class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                                            required>
                                                                     </div>
                                                                     <button type="submit"
-                                                                            class="w-full mt-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm">
+                                                                        class="w-full mt-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm">
                                                                         Save
                                                                     </button>
                                                                 </form>
                                                             @elseif ($prep->alreadyDeveloped === 'No Need to Develop')
-                                                                @if($prep->referenceNo)
-                                                                    <span class="readonly">{{ $prep->referenceNo }}</span>
+                                                                @if ($prep->referenceNo)
+                                                                    <span
+                                                                        class="readonly">{{ $prep->referenceNo }}</span>
                                                                 @else
-                                                                    <form action="{{ route('rnd.lockReferenceField') }}" method="POST">
+                                                                    <form action="{{ route('rnd.lockReferenceField') }}"
+                                                                        method="POST">
                                                                         @csrf
-                                                                        <input type="hidden" name="id" value="{{ $prep->id }}">
-                                                                        <div class="mb-4">
-                                                                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                                                                Reference Number
-                                                                            </label>
-                                                                            <select name="referenceNo" required
-                                                                                    class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                                                                <option value="">Select Reference</option>
-                                                                                @foreach($sampleStockReferences as $ref)
-                                                                                    <option value="{{ $ref }}">{{ $ref }}</option>
+                                                                        <input type="hidden" name="id"
+                                                                            value="{{ $prep->id }}">
+
+                                                                        {{-- Custom Reference No Dropdown --}}
+                                                                        <div
+                                                                            class="relative inline-block text-left w-full mb-2">
+                                                                            <input type="hidden" name="referenceNo"
+                                                                                id="referenceInput" required>
+
+                                                                            <button id="referenceDropdown" type="button"
+                                                                                class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10"
+                                                                                aria-expanded="false"
+                                                                                aria-haspopup="listbox"
+                                                                                onclick="toggleReferenceDropdown(event)">
+                                                                                <span id="selectedReference">Select
+                                                                                    Reference</span>
+                                                                                <svg class="ml-2 h-5 w-5 text-gray-400"
+                                                                                    viewBox="0 0 20 20"
+                                                                                    fill="currentColor">
+                                                                                    <path fill-rule="evenodd"
+                                                                                        d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
+                                                                                        clip-rule="evenodd" />
+                                                                                </svg>
+                                                                            </button>
+
+                                                                            <div id="referenceDropdownMenu"
+                                                                                class="absolute z-40 mt-1 w-full bg-white border rounded-lg shadow-lg hidden max-h-48 overflow-y-auto p-2"
+                                                                                role="listbox"
+                                                                                aria-labelledby="referenceDropdown">
+                                                                                <input type="text"
+                                                                                    id="referenceSearchInput"
+                                                                                    onkeyup="filterReferences()"
+                                                                                    placeholder="Search..."
+                                                                                    class="w-full px-2 py-1 text-sm border rounded-md mb-1"
+                                                                                    autocomplete="off">
+
+                                                                                @foreach ($sampleStockReferences as $ref)
+                                                                                    <div onclick="selectReference('{{ $ref }}')"
+                                                                                        tabindex="0"
+                                                                                        class="reference-option px-4 py-2 hover:bg-gray-100 cursor-pointer text-sm">
+                                                                                        {{ $ref }}
+                                                                                    </div>
                                                                                 @endforeach
-                                                                            </select>
+                                                                            </div>
                                                                         </div>
+
                                                                         <button type="submit"
-                                                                                class="w-full mt-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm">
+                                                                            class="w-full mt-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm">
                                                                             Save
                                                                         </button>
                                                                     </form>
                                                                 @endif
                                                             @else
-                                                                <span class="readonly">{{ $prep->referenceNo ?? '—' }}</span>
+                                                                <span
+                                                                    class="readonly">{{ $prep->referenceNo ?? '—' }}</span>
                                                             @endif
                                                         @endif
                                                     @endif
@@ -2096,7 +2152,8 @@
                                             <!-- Signature spaces (only visible in print) -->
                                             <div class="hidden print:flex justify-between mt-10">
                                                 <div class="w-1/3 text-center">
-                                                    <div class="border-b border-black mt-10">{{ Auth::user()->name }}</div>
+                                                    <div class="border-b border-black mt-10">{{ Auth::user()->name }}
+                                                    </div>
                                                     <span class="text-sm">Prepared By</span>
                                                 </div>
                                                 <div class="w-1/3 text-center">
@@ -2373,7 +2430,6 @@
             });
         });
     </script>
-
 
     <script>
         function editRow(rowId) {
@@ -2932,5 +2988,52 @@
             document.body.innerHTML = originalContent;
             location.reload(); // reload to restore JS event listeners
         }
+    </script>
+    <script>
+        // ======= REFERENCE NO DROPDOWN =======
+        const referenceDropdownBtn = document.getElementById("referenceDropdown");
+        const referenceDropdownMenu = document.getElementById("referenceDropdownMenu");
+
+        if (referenceDropdownMenu) {
+            referenceDropdownMenu.addEventListener("click", (event) => {
+                event.stopPropagation();
+            });
+        }
+
+        // Toggle Reference dropdown
+        window.toggleReferenceDropdown = function(event) {
+            event.stopPropagation();
+            closeAllReferenceDropdowns();
+            referenceDropdownMenu.classList.toggle("hidden");
+            referenceDropdownBtn.setAttribute("aria-expanded", !referenceDropdownMenu.classList.contains("hidden"));
+        };
+
+        function closeAllReferenceDropdowns() {
+            referenceDropdownMenu.classList.add("hidden");
+            referenceDropdownBtn.setAttribute("aria-expanded", "false");
+        }
+
+        // Close when clicking outside
+        document.addEventListener("click", () => {
+            closeAllReferenceDropdowns();
+        });
+
+        // Select reference
+        window.selectReference = function(value) {
+            document.getElementById("referenceInput").value = value;
+            document.getElementById("selectedReference").textContent = value || "Select Reference";
+            closeAllReferenceDropdowns();
+        };
+
+        // Filter references
+        window.filterReferences = function() {
+            const input = document.getElementById("referenceSearchInput");
+            const filter = input.value.toLowerCase();
+            const options = document.querySelectorAll(".reference-option");
+
+            options.forEach(option => {
+                option.style.display = option.textContent.toLowerCase().includes(filter) ? "block" : "none";
+            });
+        };
     </script>
 @endsection
