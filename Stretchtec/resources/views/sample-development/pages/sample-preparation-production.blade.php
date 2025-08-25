@@ -796,8 +796,8 @@
                                                 </td>
 
                                                 {{-- Dispatch to R&D --}}
-                                                <td
-                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                                <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center"
+                                                    x-data="{ openDispatch: false }">
                                                     @auth
                                                         @if (auth()->user()->role === 'ADMIN')
                                                             <div class="text-sm text-gray-800 dark:text-white font-medium">
@@ -819,23 +819,63 @@
                                                                 $allDispatched =
                                                                     $totalShades > 0 &&
                                                                     $dispatchedCount === $totalShades;
-
-                                                                // get last dispatched record (if exists)
                                                                 $lastDispatched = $shadeOrders
                                                                     ->where('status', 'Dispatched to RnD')
-                                                                    ->sortByDesc('updated_at')
+                                                                    ->sortByDesc('dispatched_date')
                                                                     ->first();
+                                                                $dispatchNames = [
+                                                                    'Kanchana Madushani',
+                                                                    'Imashi Prasangika',
+                                                                    'Tenuli Dihansa',
+                                                                    'Sanduni Indeewari',
+                                                                    'Kanchana Dharmadasa',
+                                                                ];
                                                             @endphp
 
                                                             @if ($allDispatched && $lastDispatched)
-                                                                {{-- ✅ Show banner once all shades dispatched --}}
-                                                                <div
-                                                                    class="p-3 rounded-lg bg-green-100 dark:bg-green-700 text-green-900 dark:text-green-100 text-sm font-medium">
+                                                                {{-- ✅ Clickable banner for all dispatched shades --}}
+                                                                <div @click="openDispatch = true"
+                                                                    class="cursor-pointer p-3 rounded-lg bg-green-100 dark:bg-green-700 text-green-900 dark:text-green-100 text-sm font-medium">
                                                                     ✅ Dispatched to <span
-                                                                        class="font-semibold">{{ $lastDispatched->dispatched_by ?? 'Unknown' }}</span>
-                                                                    <br>
-                                                                    on {{ $lastDispatched->updated_at->format('Y-m-d') }}
-                                                                    at {{ $lastDispatched->updated_at->format('H:i') }}
+                                                                        class="font-semibold">{{ $lastDispatched->dispatched_by ?? 'Unknown' }}</span><br>
+                                                                    on {{ ($lastDispatched->dispatched_date) }}
+                                                                </div>
+
+                                                                {{-- Modal showing all dispatched shades --}}
+                                                                <div x-show="openDispatch" x-transition x-cloak
+                                                                    class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+                                                                    <div
+                                                                        class="relative p-6 bg-white dark:bg-gray-800 w-11/12 max-w-3xl rounded-2xl shadow-xl">
+                                                                        <div
+                                                                            class="flex justify-between items-center border-b pb-3">
+                                                                            <h2
+                                                                                class="text-xl font-semibold text-blue-900 dark:text-gray-100">
+                                                                                Dispatched Shades Details</h2>
+                                                                            <button type="button"
+                                                                                @click="openDispatch = false"
+                                                                                class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">✕</button>
+                                                                        </div>
+
+                                                                        <div
+                                                                            class="space-y-4 max-h-[420px] overflow-y-auto pr-1 mt-4">
+                                                                            @foreach ($shadeOrders->where('status', 'Dispatched to RnD') as $shade)
+                                                                                <div
+                                                                                    class="flex justify-between items-center p-4 border rounded-lg bg-gray-50 dark:bg-gray-700/50">
+                                                                                    <span
+                                                                                        class="font-medium text-gray-900 dark:text-gray-100">{{ $shade->shade }}</span>
+                                                                                    <span
+                                                                                        class="text-sm text-gray-700 dark:text-gray-200">Dispatched
+                                                                                        on
+                                                                                        {{ $shade->dispatched_date }}
+                                                                                </div>
+                                                                            @endforeach
+                                                                        </div>
+
+                                                                        <div class="flex justify-end mt-5 border-t pt-4">
+                                                                            <button @click="openDispatch = false"
+                                                                                class="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-700">Close</button>
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
                                                             @else
                                                                 @php
@@ -843,43 +883,29 @@
                                                                         $shadeOrders
                                                                             ->where('status', 'Production Complete')
                                                                             ->count() > 0;
-                                                                    $dispatchNames = [
-                                                                        'Kanchana Madushani',
-                                                                        'Imashi Prasangika',
-                                                                        'Tenuli Dihansa',
-                                                                        'Sanduni Indeewari',
-                                                                        'Kanchana Dharmadasa',
-                                                                    ];
                                                                 @endphp
-
                                                                 <button type="button"
-                                                                    class="px-3 py-1 rounded text-white transition
-                                                                         {{ $hasProductionComplete ? 'bg-blue-500 hover:bg-blue-600' : 'bg-gray-300 cursor-not-allowed' }}"
+                                                                    class="px-3 py-1 rounded text-white transition {{ $hasProductionComplete ? 'bg-blue-500 hover:bg-blue-600' : 'bg-gray-300 cursor-not-allowed' }}"
                                                                     onclick="{{ $hasProductionComplete ? "openDispatchModal($prod->id)" : '' }}"
                                                                     {{ $hasProductionComplete ? '' : 'disabled' }}>
                                                                     Dispatch
                                                                 </button>
 
-                                                                {{-- Modal --}}
+                                                                {{-- Original Dispatch modal for selecting shades --}}
                                                                 <div id="dispatch-modal-{{ $prod->id }}"
                                                                     class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
                                                                     <div
                                                                         class="relative p-6 bg-white dark:bg-gray-800 w-11/12 max-w-3xl rounded-2xl shadow-xl">
-
-                                                                        {{-- Header --}}
                                                                         <div
                                                                             class="flex justify-between items-center border-b pb-3">
                                                                             <h2
-                                                                                class="text-xl font-semibold text-gray-900 dark:text-gray-100">
-                                                                                🚚 Dispatch Shades</h2>
+                                                                                class="text-xl font-semibold text-blue-900 dark:text-gray-100">
+                                                                                Dispatch Shades</h2>
                                                                             <button type="button"
                                                                                 onclick="closeDispatchModal({{ $prod->id }})"
-                                                                                class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
-                                                                                ✕
-                                                                            </button>
+                                                                                class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">✕</button>
                                                                         </div>
 
-                                                                        {{-- Form --}}
                                                                         <form action="{{ route('production.dispatchToRnd') }}"
                                                                             method="POST" class="mt-4 space-y-4"
                                                                             onsubmit="return validateDispatchForm(this)">
@@ -887,14 +913,11 @@
                                                                             <input type="hidden" name="production_id"
                                                                                 value="{{ $prod->id }}">
 
-                                                                            {{-- Shades List --}}
                                                                             <div
                                                                                 class="space-y-4 max-h-[420px] overflow-y-auto pr-1">
                                                                                 @foreach ($shadeOrders->where('status', 'Production Complete') as $shade)
                                                                                     <div
                                                                                         class="p-4 border rounded-lg bg-gray-50 dark:bg-gray-700/50 hover:shadow-md transition">
-
-                                                                                        {{-- Shade Header --}}
                                                                                         <label class="flex items-center gap-2">
                                                                                             <input type="checkbox"
                                                                                                 name="shades[{{ $shade->id }}][selected]"
@@ -902,12 +925,9 @@
                                                                                                 class="shade-checkbox rounded text-blue-600 focus:ring-blue-500"
                                                                                                 data-shade="{{ $shade->id }}">
                                                                                             <span
-                                                                                                class="font-medium text-gray-900 dark:text-gray-100">
-                                                                                                {{ $shade->shade }}
-                                                                                            </span>
+                                                                                                class="font-medium text-gray-900 dark:text-gray-100">{{ $shade->shade }}</span>
                                                                                         </label>
 
-                                                                                        {{-- Inputs --}}
                                                                                         <div
                                                                                             class="mt-3 grid grid-cols-1 md:grid-cols-3 gap-3">
                                                                                             <input type="number"
@@ -922,7 +942,6 @@
                                                                                                 placeholder="Damaged Output"
                                                                                                 class="shade-input-{{ $shade->id }} border rounded-lg px-3 py-2 w-full text-sm dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100 focus:ring-blue-500 focus:border-blue-500">
 
-                                                                                            {{-- Dropdown --}}
                                                                                             <div
                                                                                                 class="relative inline-block w-full">
                                                                                                 <button type="button"
@@ -940,7 +959,6 @@
                                                                                                             clip-rule="evenodd" />
                                                                                                     </svg>
                                                                                                 </button>
-
                                                                                                 <div
                                                                                                     class="dropdown-menu-dispatch-{{ $prod->id }}-{{ $shade->id }} hidden absolute z-10 mt-2 w-full rounded-lg bg-white dark:bg-gray-800 shadow-lg ring-1 ring-black/10 max-h-48 overflow-y-auto">
                                                                                                     <div
@@ -972,17 +990,12 @@
                                                                                 @endforeach
                                                                             </div>
 
-                                                                            {{-- Footer --}}
                                                                             <div class="flex justify-end gap-3 pt-4 border-t">
                                                                                 <button type="button"
                                                                                     onclick="closeDispatchModal({{ $prod->id }})"
-                                                                                    class="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-700">
-                                                                                    Cancel
-                                                                                </button>
+                                                                                    class="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-700">Cancel</button>
                                                                                 <button type="submit"
-                                                                                    class="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 shadow-sm">
-                                                                                    Submit
-                                                                                </button>
+                                                                                    class="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 shadow-sm">Submit</button>
                                                                             </div>
                                                                         </form>
                                                                     </div>
@@ -991,6 +1004,7 @@
                                                         @endif
                                                     @endauth
                                                 </td>
+
 
                                                 {{-- Note --}}
                                                 <td
