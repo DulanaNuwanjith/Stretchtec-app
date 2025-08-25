@@ -430,7 +430,7 @@
                                                 class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-36 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Production Status</th>
                                             <th
-                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-36 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Output</th>
                                             <th
                                                 class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
@@ -1694,8 +1694,8 @@
                                                             {{-- Non-Admin Users --}}
                                                             @if (!$prep->is_yarn_leftover_weight_locked)
                                                                 <button type="button" @click="openWeight = true"
-                                                                    class="px-2 py-1 rounded transition-all duration-200 bg-blue-600 text-white hover:bg-blue-700">
-                                                                    Add / Edit
+                                                                    class="w-full mt-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm">
+                                                                    Add
                                                                 </button>
                                                             @else
                                                                 @php
@@ -1843,17 +1843,14 @@
                                                                     <form action="{{ route('rnd.lockReferenceField') }}" method="POST">
                                                                         @csrf
                                                                         <input type="hidden" name="id" value="{{ $prep->id }}">
-                                                                        <div class="mb-4">
-                                                                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                                                                Reference Number
-                                                                            </label>
+                                                                        <div class="mb-1">
                                                                             <input type="text" name="referenceNo" value="{{ $prep->referenceNo ?? '' }}"
                                                                                    class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                                                    required>
                                                                         </div>
                                                                         <button type="submit"
                                                                                 class="w-full mt-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm">
-                                                                            Save / Add New Dispatch Stock
+                                                                            Save
                                                                         </button>
                                                                     </form>
                                                                 @else
@@ -1863,8 +1860,8 @@
                                                                                class="w-full px-3 py-2 border rounded-md text-gray-500 bg-gray-100 text-sm cursor-not-allowed"
                                                                                disabled>
                                                                         <button type="button" disabled
-                                                                                class="w-full mt-1 bg-gray-400 text-white px-3 py-1 rounded text-sm cursor-not-allowed">
-                                                                            Lock Reference / Action
+                                                                                class="w-full bg-gray-400 text-white px-3 py-1 rounded text-sm cursor-not-allowed">
+                                                                            Lock Reference
                                                                         </button>
                                                                     </div>
                                                                 @endif

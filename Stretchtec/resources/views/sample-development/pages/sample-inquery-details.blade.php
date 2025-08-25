@@ -708,8 +708,8 @@
                                                         {{ $inquiry->orderNo }}
                                                     </span>
                                                     <input type="text"
-                                                           class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                           value="{{ $inquiry->orderNo }}" />
+                                                        class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                        value="{{ $inquiry->orderNo }}" />
                                                 </td>
 
                                                 <!-- Inquiry Receive Date -->
@@ -979,7 +979,7 @@
                                                     <span class="readonly">{{ $inquiry->referenceNo ?? '—' }}</span>
                                                     <input type="text" name="referenceNo"
                                                         class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                        value="{{ $inquiry->referenceNo ?? '—'}}" />
+                                                        value="{{ $inquiry->referenceNo ?? '—' }}" />
                                                 </td>
 
                                                 <td class="px-4 py-3 border-r border-gray-300 text-center">
@@ -987,70 +987,94 @@
                                                         $prepRnd = $inquiry->samplePreparationRnD;
                                                         $shadeOrders = $prepRnd?->shadeOrders ?? collect();
 
-                                                        // Shades dispatched but not yet delivered
-                                                        $pendingShades = $shadeOrders->filter(fn($s) => trim($s->status) === 'Dispatched to RnD');
+                                                        $pendingShades = $shadeOrders->filter(
+                                                            fn($s) => trim($s->status) === 'Dispatched to RnD',
+                                                        );
+                                                        $allDelivered =
+                                                            $shadeOrders->isNotEmpty() &&
+                                                            $shadeOrders->every(
+                                                                fn($s) => trim($s->status) === 'Delivered',
+                                                            );
+                                                        $anyDelivered = $shadeOrders->contains(
+                                                            fn($s) => trim($s->status) === 'Delivered',
+                                                        );
+                                                        $specialCase = in_array($prepRnd?->alreadyDeveloped, [
+                                                            'No Need to Develop',
+                                                            'Tape Match Pan Asia',
+                                                        ]);
 
-                                                        // Check if all shades are delivered
-                                                        $allDelivered = $shadeOrders->isNotEmpty() && $shadeOrders->every(fn($s) => trim($s->status) === 'Delivered');
-
-                                                        // Check if at least one delivery has been made
-                                                        $anyDelivered = $shadeOrders->contains(fn($s) => trim($s->status) === 'Delivered');
-
-                                                        // Special cases (tape match / no need to develop)
-                                                        $specialCase = in_array($prepRnd?->alreadyDeveloped, ['No Need to Develop', 'Tape Match Pan Asia']);
+                                                        // Delivered shades
+                                                        $deliveredShades = $shadeOrders->filter(
+                                                            fn($s) => trim($s->status) === 'Delivered',
+                                                        );
                                                     @endphp
 
                                                     {{-- CASE 1: Shades based deliveries --}}
-                                                    @if(!$specialCase)
+                                                    @if (!$specialCase)
                                                         {{-- Deliver Button / Modal --}}
-                                                        @if(!$allDelivered && $pendingShades->isNotEmpty() && !empty($inquiry->referenceNo))
+                                                        @if (!$allDelivered && $pendingShades->isNotEmpty() && !empty($inquiry->referenceNo))
                                                             <div x-data="{ open: false }">
                                                                 <button type="button" @click="open = true"
-                                                                        class="px-3 py-1 rounded text-white bg-green-600 hover:bg-green-700 transition duration-200">
+                                                                    class="px-3 py-1 rounded text-white bg-green-600 hover:bg-green-700 transition duration-200">
                                                                     Deliver
                                                                 </button>
 
-                                                                {{-- Modal --}}
+                                                                {{-- Modal for delivering shades --}}
                                                                 <div x-show="open" x-transition
-                                                                     class="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm z-50"
-                                                                     style="display:none;">
-                                                                    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 w-full max-w-3xl relative max-h-[80vh] overflow-y-auto">
+                                                                    class="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm z-50"
+                                                                    style="display:none;">
+                                                                    <div
+                                                                        class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 w-full max-w-3xl relative max-h-[80vh] overflow-y-auto">
                                                                         <button @click="open = false"
-                                                                                class="absolute top-3 right-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">✕</button>
+                                                                            class="absolute top-3 right-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">✕</button>
 
-                                                                        <h2 class="text-xl font-semibold mb-4 text-gray-900 dark:text-white">Select Shades to Deliver</h2>
+                                                                        <h2
+                                                                            class="text-xl font-semibold mb-4 text-gray-900 dark:text-white">
+                                                                            Select Shades to Deliver</h2>
 
-                                                                        <form action="{{ route('inquiry.markCustomerDelivered') }}" method="POST" class="space-y-4">
+                                                                        <form
+                                                                            action="{{ route('inquiry.markCustomerDelivered') }}"
+                                                                            method="POST" class="space-y-4">
                                                                             @csrf
-                                                                            <input type="hidden" name="id" value="{{ $inquiry->id }}">
+                                                                            <input type="hidden" name="id"
+                                                                                value="{{ $inquiry->id }}">
 
-                                                                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[400px] overflow-y-auto pr-1">
-                                                                                @foreach($pendingShades as $shade)
-                                                                                    <div class="p-4 border rounded-lg bg-gray-50 dark:bg-gray-700/50 hover:shadow-md transition">
-                                                                                        <label class="flex items-center gap-2">
-                                                                                            <input type="checkbox" name="shades[{{ $shade->id }}][selected]" value="1"
-                                                                                                   class="rounded text-green-600 focus:ring-green-500">
-                                                                                            <span class="font-medium text-gray-900 dark:text-gray-100">
+                                                                            <div
+                                                                                class="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[400px] overflow-y-auto pr-1">
+                                                                                @foreach ($pendingShades as $shade)
+                                                                                    <div
+                                                                                        class="p-4 border rounded-lg bg-gray-50 dark:bg-gray-700/50 hover:shadow-md transition">
+                                                                                        <label
+                                                                                            class="flex items-center gap-2">
+                                                                                            <input type="checkbox"
+                                                                                                name="shades[{{ $shade->id }}][selected]"
+                                                                                                value="1"
+                                                                                                class="rounded text-green-600 focus:ring-green-500">
+                                                                                            <span
+                                                                                                class="font-medium text-gray-900 dark:text-gray-100">
                                                                                                 {{ $shade->shade }}
                                                                                             </span>
                                                                                         </label>
 
-                                                                                        <input type="number" min="1"
-                                                                                               name="shades[{{ $shade->id }}][quantity]"
-                                                                                               max="{{ \App\Models\SampleStock::where('reference_no', $inquiry->referenceNo)->where('shade', $shade->shade)->first()?->available_stock ?? 1 }}"
-                                                                                               placeholder="Quantity"
-                                                                                               class="mt-2 w-full px-2 py-1 border rounded text-sm dark:bg-gray-800 dark:text-white">
+                                                                                        <input type="number"
+                                                                                            min="1"
+                                                                                            name="shades[{{ $shade->id }}][quantity]"
+                                                                                            max="{{ \App\Models\SampleStock::where('reference_no', $inquiry->referenceNo)->where('shade', $shade->shade)->first()?->available_stock ?? 1 }}"
+                                                                                            placeholder="Quantity"
+                                                                                            class="mt-2 w-full px-2 py-1 border rounded text-sm dark:bg-gray-800 dark:text-white">
                                                                                     </div>
                                                                                 @endforeach
                                                                             </div>
 
-                                                                            <div class="flex justify-end gap-3 pt-4 border-t">
-                                                                                <button type="button" @click="open = false"
-                                                                                        class="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-700">
+                                                                            <div
+                                                                                class="flex justify-end gap-3 pt-4 border-t">
+                                                                                <button type="button"
+                                                                                    @click="open = false"
+                                                                                    class="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-700">
                                                                                     Cancel
                                                                                 </button>
                                                                                 <button type="submit"
-                                                                                        class="px-4 py-2 rounded-lg bg-green-600 text-white hover:bg-green-700 shadow-sm">
+                                                                                    class="px-4 py-2 rounded-lg bg-green-600 text-white hover:bg-green-700 shadow-sm">
                                                                                     Deliver & Generate Dispatch Note
                                                                                 </button>
                                                                             </div>
@@ -1059,143 +1083,251 @@
                                                                 </div>
                                                             </div>
                                                         @else
-                                                            {{-- Show message when referenceNo is null --}}
-                                                            @if(empty($inquiry->referenceNo) && !$allDelivered)
-                                                                <span class="text-red-600 font-semibold text-sm">Set Ref No to Deliver</span>
+                                                            @if (empty($inquiry->referenceNo) && !$allDelivered)
+                                                                <span class="text-red-600 font-semibold text-sm">Set Ref No
+                                                                    to Deliver</span>
                                                             @endif
                                                         @endif
 
-                                                        {{-- Dispatch Note available if any delivery happened --}}
-                                                        @if($anyDelivered && $inquiry->dNoteNumber)
-                                                            <a href="{{ asset('storage/dispatches/' . $inquiry->dNoteNumber) }}" target="_blank"
-                                                               class="px-3 py-1 rounded text-sm bg-blue-600 text-white hover:bg-blue-700 transition mt-2 inline-block">
+                                                        {{-- Dispatch Note --}}
+                                                        @if ($anyDelivered && $inquiry->dNoteNumber)
+                                                            <a href="{{ asset('storage/dispatches/' . $inquiry->dNoteNumber) }}"
+                                                                target="_blank"
+                                                                class="px-3 py-1 rounded text-sm bg-green-600 text-white hover:bg-green-700 transition mt-2 inline-block">
                                                                 Dispatch Note
                                                             </a>
                                                         @endif
 
-                                                        {{-- Final Delivered Banner --}}
-                                                        @if($allDelivered)
-                                                            <div class="flex flex-col items-center space-y-1 mt-2">
-                                                            <span class="inline-block text-sm font-semibold text-gray-700 dark:text-white bg-green-100 dark:bg-gray-800 px-3 py-1 rounded text-center">
-                                                                Delivered on <br>
-                                                                {{ \Carbon\Carbon::parse($inquiry->customerDeliveryDate)->format('Y-m-d H:i') }}
-                                                            </span>
+                                                        {{-- Final Delivered Banner (clickable for shade-wise details) --}}
+                                                        @if ($allDelivered)
+                                                            <div x-data="{ openShades: false }"
+                                                                class="flex flex-col items-center space-y-1 mt-2">
+                                                                <span @click="openShades = true"
+                                                                    class="cursor-pointer inline-block text-sm font-semibold text-gray-700 dark:text-white bg-green-100 dark:bg-gray-800 px-3 py-1 rounded text-center">
+                                                                    Delivered on <br>
+                                                                    {{ \Carbon\Carbon::parse($inquiry->customerDeliveryDate)->format('Y-m-d') }}
+                                                                    at {{ \Carbon\Carbon::parse($inquiry->customerDeliveryDate)->format('H:i') }}
+                                                                </span>
+
+                                                                {{-- Modal: Shade-wise Delivered Details --}}
+                                                                <div x-show="openShades" x-transition x-cloak
+                                                                    class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+                                                                    <div
+                                                                        class="relative p-6 bg-white dark:bg-gray-800 w-11/12 max-w-3xl rounded-2xl shadow-xl max-h-[80vh] overflow-y-auto">
+                                                                        <button @click="openShades = false"
+                                                                            class="absolute top-3 right-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">✕</button>
+
+                                                                        <h2
+                                                                            class="text-xl text-left font-semibold mb-4 text-blue-900 dark:text-white">
+                                                                            Shade-wise Delivery Details</h2>
+
+                                                                        <div class="space-y-2">
+                                                                            @foreach ($deliveredShades as $shade)
+                                                                                <div
+                                                                                    class="flex justify-between items-center p-3 border rounded-lg bg-gray-50 dark:bg-gray-700/50">
+                                                                                    <span
+                                                                                        class="font-medium text-gray-900 dark:text-gray-100">{{ $shade->shade }}</span>
+                                                                                    <span
+                                                                                        class="text-sm text-gray-700 dark:text-gray-200">
+                                                                                        Delivered on
+                                                                                        {{ \Carbon\Carbon::parse($shade->delivered_date)->format('Y-m-d') }}
+                                                                                        at
+                                                                                        {{ \Carbon\Carbon::parse($shade->delivered_date)->format('H:i') }}
+                                                                                        (Qty:
+                                                                                        {{ $shade->quantity ?? '—' }})
+                                                                                    </span>
+                                                                                </div>
+                                                                            @endforeach
+                                                                        </div>
+
+                                                                        <div class="flex justify-end mt-4">
+                                                                            <button @click="openShades = false"
+                                                                                class="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-700">
+                                                                                Close
+                                                                            </button>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                         @endif
 
-                                                        @if(!$allDelivered && $pendingShades->isEmpty() && !$anyDelivered)
+                                                        @if (!$allDelivered && $pendingShades->isEmpty() && !$anyDelivered)
                                                             <span class="text-gray-400 italic">—</span>
                                                         @endif
                                                     @endif
 
                                                     {{-- CASE 2: Tape Match / No Need to Develop --}}
-                                                    @if($specialCase)
-                                                        @if(!empty($inquiry->referenceNo))
-                                                            @if($inquiry->productionStatus !== 'Delivered')
-                                                                {{-- Show Deliver button if not yet delivered --}}
-                                                                <form action="{{ route('inquiry.markCustomerDelivered') }}" method="POST">
+                                                    @if ($specialCase)
+                                                        @if (!empty($inquiry->referenceNo))
+                                                            @if ($inquiry->productionStatus !== 'Delivered')
+                                                                <form
+                                                                    action="{{ route('inquiry.markCustomerDelivered') }}"
+                                                                    method="POST">
                                                                     @csrf
-                                                                    <input type="hidden" name="id" value="{{ $inquiry->id }}">
+                                                                    <input type="hidden" name="id"
+                                                                        value="{{ $inquiry->id }}">
                                                                     <button type="submit"
-                                                                            class="px-3 py-1 rounded text-white bg-green-600 hover:bg-green-700 transition duration-200">
+                                                                        class="px-3 py-1 rounded text-white bg-green-600 hover:bg-green-700 transition duration-200">
                                                                         Deliver
                                                                     </button>
                                                                 </form>
                                                             @else
-                                                                {{-- Show Delivered banner + dispatch note once status is Delivered --}}
-                                                                <div class="flex flex-col items-center space-y-1 mt-2">
-                                                                <span class="inline-block text-sm font-semibold text-gray-700 dark:text-white bg-green-100 dark:bg-gray-800 px-3 py-1 rounded text-center">
-                                                                    Delivered on <br>
-                                                                    {{ \Carbon\Carbon::parse($inquiry->customerDeliveryDate)->format('Y-m-d H:i') }}
-                                                                </span>
+                                                                <div x-data="{ openShades: false }"
+                                                                    class="flex flex-col items-center space-y-1 mt-2">
+                                                                    <span @click="openShades = true"
+                                                                        class="cursor-pointer inline-block text-sm font-semibold text-gray-700 dark:text-white bg-green-100 dark:bg-gray-800 px-3 py-1 rounded text-center">
+                                                                        Delivered on <br>
+                                                                        {{ \Carbon\Carbon::parse($inquiry->customerDeliveryDate)->format('Y-m-d') }}
+                                                                        at {{ \Carbon\Carbon::parse($inquiry->customerDeliveryDate)->format('H:i') }}
+                                                                    </span>
 
-                                                                    @if($inquiry->dNoteNumber)
-                                                                        <a href="{{ asset('storage/dispatches/' . $inquiry->dNoteNumber) }}" target="_blank"
-                                                                           class="px-3 py-1 rounded text-sm bg-blue-600 text-white hover:bg-blue-700 transition">
+                                                                    {{-- Modal for shade-wise details --}}
+                                                                    <div x-show="openShades" x-transition x-cloak
+                                                                        class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+                                                                        <div
+                                                                            class="relative p-6 bg-white dark:bg-gray-800 w-11/12 max-w-3xl rounded-2xl shadow-xl max-h-[80vh] overflow-y-auto">
+                                                                            <button @click="openShades = false"
+                                                                                class="absolute top-3 right-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">✕</button>
+
+                                                                            <h2
+                                                                                class="text-xl text-left font-semibold mb-4 text-blue-900 dark:text-white">
+                                                                                Shade-wise Delivery Details</h2>
+
+                                                                            <div class="space-y-2">
+                                                                                @foreach ($deliveredShades as $shade)
+                                                                                    <div
+                                                                                        class="flex justify-between items-center p-3 border rounded-lg bg-gray-50 dark:bg-gray-700/50">
+                                                                                        <span
+                                                                                            class="font-medium text-gray-900 dark:text-gray-100">{{ $shade->shade }}</span>
+                                                                                        <span
+                                                                                            class="text-sm text-gray-700 dark:text-gray-200">
+                                                                                            Delivered on
+                                                                                            {{ \Carbon\Carbon::parse($shade->delivered_date)->format('Y-m-d') }}
+                                                                                            at
+                                                                                            {{ \Carbon\Carbon::parse($shade->delivered_date)->format('H:i') }}
+                                                                                            (Qty:
+                                                                                            {{ $shade->quantity ?? '—' }})
+                                                                                        </span>
+                                                                                    </div>
+                                                                                @endforeach
+                                                                            </div>
+
+                                                                            <div class="flex justify-end mt-4">
+                                                                                <button @click="openShades = false"
+                                                                                    class="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-700">
+                                                                                    Close
+                                                                                </button>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    {{-- Dispatch Note --}}
+                                                                    @if ($inquiry->dNoteNumber)
+                                                                        <a href="{{ asset('storage/dispatches/' . $inquiry->dNoteNumber) }}"
+                                                                            target="_blank"
+                                                                            class="px-3 py-1 rounded text-sm bg-green-600 text-white hover:bg-green-700 transition mt-2 inline-block">
                                                                             Dispatch Note
                                                                         </a>
                                                                     @endif
                                                                 </div>
                                                             @endif
                                                         @else
-                                                            {{-- Show message when referenceNo is null --}}
-                                                            <span class="text-red-600 font-semibold text-sm">Set Ref No to Deliver</span>
+                                                            <span class="text-red-600 font-semibold text-sm">Set Ref No to
+                                                                Deliver</span>
                                                         @endif
                                                     @endif
                                                 </td>
 
-                                                <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300">
-                                                    <div x-data="{
-                                                                openDropdown: false,
-                                                                openModal: false,
-                                                                selectedDecision: '{{ $inquiry->customerDecision ?? 'Select Decision' }}',
-                                                                selectedColor: '{{ $inquiry->customerDecision ?? '' }}', // for dynamic color
-                                                                id: {{ $inquiry->id }},
-                                                                isDisabled: {{ is_null($inquiry->customerDeliveryDate) ? 'true' : 'false' }},
-                                                                decisionColors: {
-                                                                    'Pending': 'bg-gray-200 text-gray-700',
-                                                                    'Order Received': 'bg-green-100 text-green-700',
-                                                                    'Order Not Received': 'bg-yellow-100 text-yellow-700',
-                                                                    'Order Rejected': 'bg-red-100 text-red-700'
-                                                                },
-                                                                setDecision(decision) {
-                                                                    this.selectedDecision = decision;
-                                                                    this.selectedColor = decision;
 
-                                                                    if (decision === 'Order Rejected') {
-                                                                        this.openModal = true;
-                                                                        this.openDropdown = false;
-                                                                    } else {
-                                                                        this.$refs.decisionInput.value = decision;
-                                                                        this.$refs.form.submit();
-                                                                    }
-                                                                },
-                                                                toggleDropdown() {
-                                                                    if (!this.isDisabled) this.openDropdown = !this.openDropdown;
-                                                                }
-                                                            }" class="relative inline-block text-left"
-                                                         @click.away="openDropdown = false; openModal = false">
+                                                <td
+                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300">
+                                                    <div x-data="{
+                                                        openDropdown: false,
+                                                        openModal: false,
+                                                        selectedDecision: '{{ $inquiry->customerDecision ?? 'Select Decision' }}',
+                                                        selectedColor: '{{ $inquiry->customerDecision ?? '' }}', // for dynamic color
+                                                        id: {{ $inquiry->id }},
+                                                        isDisabled: {{ is_null($inquiry->customerDeliveryDate) ? 'true' : 'false' }},
+                                                        decisionColors: {
+                                                            'Pending': 'bg-gray-200 text-gray-700',
+                                                            'Order Received': 'bg-green-100 text-green-700',
+                                                            'Order Not Received': 'bg-yellow-100 text-yellow-700',
+                                                            'Order Rejected': 'bg-red-100 text-red-700'
+                                                        },
+                                                        setDecision(decision) {
+                                                            this.selectedDecision = decision;
+                                                            this.selectedColor = decision;
+                                                    
+                                                            if (decision === 'Order Rejected') {
+                                                                this.openModal = true;
+                                                                this.openDropdown = false;
+                                                            } else {
+                                                                this.$refs.decisionInput.value = decision;
+                                                                this.$refs.form.submit();
+                                                            }
+                                                        },
+                                                        toggleDropdown() {
+                                                            if (!this.isDisabled) this.openDropdown = !this.openDropdown;
+                                                        }
+                                                    }" class="relative inline-block text-left"
+                                                        @click.away="openDropdown = false; openModal = false">
 
                                                         {{-- Form for normal decisions --}}
-                                                        <form method="POST" action="{{ route('sample-inquery-details.update-decision', $inquiry->id) }}" x-ref="form">
+                                                        <form method="POST"
+                                                            action="{{ route('sample-inquery-details.update-decision', $inquiry->id) }}"
+                                                            x-ref="form">
                                                             @csrf
                                                             @method('PATCH')
-                                                            <input type="hidden" name="customerDecision" x-ref="decisionInput">
+                                                            <input type="hidden" name="customerDecision"
+                                                                x-ref="decisionInput">
 
                                                             {{-- Dropdown Button --}}
-                                                            <button type="button"
-                                                                    :disabled="isDisabled"
-                                                                    :class="isDisabled ? 'bg-gray-200 text-gray-500 cursor-not-allowed' : decisionColors[selectedColor] + ' shadow-sm ring-1 ring-gray-300'"
-                                                                    class="inline-flex justify-between w-48 rounded-md px-3 py-2 text-sm font-semibold h-10 transition-all duration-200"
-                                                                    @click="toggleDropdown()"
-                                                                    :title="isDisabled ? 'Customer Delivery Date not set yet' : ''">
+                                                            <button type="button" :disabled="isDisabled"
+                                                                :class="isDisabled ?
+                                                                    'bg-gray-200 text-gray-500 cursor-not-allowed' :
+                                                                    decisionColors[selectedColor] +
+                                                                    ' shadow-sm ring-1 ring-gray-300'"
+                                                                class="inline-flex justify-between w-48 rounded-md px-3 py-2 text-sm font-semibold h-10 transition-all duration-200"
+                                                                @click="toggleDropdown()"
+                                                                :title="isDisabled ? 'Customer Delivery Date not set yet' : ''">
                                                                 <span x-text="selectedDecision"></span>
-                                                                <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                                                <svg class="ml-2 h-5 w-5 text-gray-400"
+                                                                    viewBox="0 0 20 20" fill="currentColor"
+                                                                    aria-hidden="true">
                                                                     <path fill-rule="evenodd"
-                                                                          d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
-                                                                          clip-rule="evenodd" />
+                                                                        d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
+                                                                        clip-rule="evenodd" />
                                                                 </svg>
                                                             </button>
 
                                                             {{-- Dropdown Menu --}}
                                                             <div x-show="openDropdown" x-transition
-                                                                 class="absolute mt-2 w-48 rounded-md bg-white shadow-lg ring-1 ring-black/5 z-10"
-                                                                 style="display: none;">
+                                                                class="absolute mt-2 w-48 rounded-md bg-white shadow-lg ring-1 ring-black/5 z-10"
+                                                                style="display: none;">
                                                                 <div class="py-1">
                                                                     @php
-                                                                        $options = ['Pending', 'Order Received', 'Order Not Received', 'Order Rejected'];
+                                                                        $options = [
+                                                                            'Pending',
+                                                                            'Order Received',
+                                                                            'Order Not Received',
+                                                                            'Order Rejected',
+                                                                        ];
                                                                         $colors = [
-                                                                            'Pending' => 'hover:bg-gray-100 text-gray-700',
-                                                                            'Order Received' => 'hover:bg-green-100 text-green-700',
-                                                                            'Order Not Received' => 'hover:bg-yellow-100 text-yellow-700',
-                                                                            'Order Rejected' => 'hover:bg-red-100 text-red-700',
+                                                                            'Pending' =>
+                                                                                'hover:bg-gray-100 text-gray-700',
+                                                                            'Order Received' =>
+                                                                                'hover:bg-green-100 text-green-700',
+                                                                            'Order Not Received' =>
+                                                                                'hover:bg-yellow-100 text-yellow-700',
+                                                                            'Order Rejected' =>
+                                                                                'hover:bg-red-100 text-red-700',
                                                                         ];
                                                                     @endphp
 
                                                                     @foreach ($options as $option)
                                                                         <button type="button"
-                                                                                @click.prevent="setDecision('{{ $option }}')"
-                                                                                class="w-full text-left px-4 py-2 text-sm {{ $colors[$option] }}">
+                                                                            @click.prevent="setDecision('{{ $option }}')"
+                                                                            class="w-full text-left px-4 py-2 text-sm {{ $colors[$option] }}">
                                                                             {{ $option }}
                                                                         </button>
                                                                     @endforeach
@@ -1205,35 +1337,41 @@
 
                                                         {{-- Modal for Order Rejected --}}
                                                         <div x-show="openModal" x-transition
-                                                             class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
-                                                             style="display: none;">
-                                                            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 w-full max-w-md relative">
+                                                            class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+                                                            style="display: none;">
+                                                            <div
+                                                                class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 w-full max-w-md relative">
                                                                 <button @click="openModal = false"
-                                                                        class="absolute top-2 right-2 text-gray-600 hover:text-gray-900">✕</button>
+                                                                    class="absolute top-2 right-2 text-gray-600 hover:text-gray-900">✕</button>
 
-                                                                <h2 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">
+                                                                <h2
+                                                                    class="text-lg font-semibold text-gray-800 dark:text-white mb-4">
                                                                     Order Rejection
                                                                 </h2>
 
-                                                                <form method="POST" action="{{ route('sample-inquery-details.update-decision', $inquiry->id) }}">
+                                                                <form method="POST"
+                                                                    action="{{ route('sample-inquery-details.update-decision', $inquiry->id) }}">
                                                                     @csrf
                                                                     @method('PATCH')
-                                                                    <input type="hidden" name="customerDecision" value="Order Rejected">
+                                                                    <input type="hidden" name="customerDecision"
+                                                                        value="Order Rejected">
 
-                                                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                                                    <label
+                                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                                                                         Order Reject Number
                                                                     </label>
-                                                                    <input type="text" name="orderRejectNumber" required
-                                                                           class="mt-1 w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-base py-3 px-3 dark:bg-gray-700 dark:text-white dark:border-gray-600"
-                                                                           placeholder="Enter reject number here...">
+                                                                    <input type="text" name="orderRejectNumber"
+                                                                        required
+                                                                        class="mt-1 w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-base py-3 px-3 dark:bg-gray-700 dark:text-white dark:border-gray-600"
+                                                                        placeholder="Enter reject number here...">
 
                                                                     <div class="mt-6 flex justify-end space-x-2">
                                                                         <button type="button" @click="openModal = false"
-                                                                                class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400">
+                                                                            class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400">
                                                                             Cancel
                                                                         </button>
                                                                         <button type="submit"
-                                                                                class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700">
+                                                                            class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700">
                                                                             Confirm Reject
                                                                         </button>
                                                                     </div>
@@ -1552,40 +1690,48 @@
 
                                                 <!-- Reject Number Dropdown with Search -->
                                                 <div class="w-full">
-                                                    <label for="rejectNO" class="block text-sm mb-1 font-medium text-gray-700 dark:text-gray-300">Reject Number</label>
+                                                    <label for="rejectNO"
+                                                        class="block text-sm mb-1 font-medium text-gray-700 dark:text-gray-300">Reject
+                                                        Number</label>
 
                                                     <div class="relative inline-block w-full text-left">
                                                         <button type="button"
-                                                                class="dropdown-btn inline-flex justify-between w-full rounded-md bg-white dark:bg-gray-700 px-3 py-2 text-sm font-semibold text-gray-900 dark:text-white shadow-sm ring-1 ring-gray-300 hover:bg-gray-50"
-                                                                onclick="toggleDropdownReject(this)">
+                                                            class="dropdown-btn inline-flex justify-between w-full rounded-md bg-white dark:bg-gray-700 px-3 py-2 text-sm font-semibold text-gray-900 dark:text-white shadow-sm ring-1 ring-gray-300 hover:bg-gray-50"
+                                                            onclick="toggleDropdownReject(this)">
                                                             <span class="selected-reject">Select Reject Number</span>
-                                                            <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                                                            <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20"
+                                                                fill="currentColor">
                                                                 <path fill-rule="evenodd"
-                                                                      d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
-                                                                      clip-rule="evenodd" />
+                                                                    d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
+                                                                    clip-rule="evenodd" />
                                                             </svg>
                                                         </button>
 
-                                                        <div class="dropdown-menu-reject hidden absolute z-10 mt-2 w-full rounded-md bg-white dark:bg-gray-700 shadow-lg ring-1 ring-black/5 max-h-48 overflow-y-auto">
+                                                        <div
+                                                            class="dropdown-menu-reject hidden absolute z-10 mt-2 w-full rounded-md bg-white dark:bg-gray-700 shadow-lg ring-1 ring-black/5 max-h-48 overflow-y-auto">
                                                             <!-- Search Box -->
-                                                            <input type="text" class="search-reject w-full px-4 py-2 border-b border-gray-300 dark:border-gray-600 focus:outline-none text-sm dark:bg-gray-700 dark:text-white"
-                                                                   placeholder="Search..." onkeyup="filterRejectOptions(this)">
+                                                            <input type="text"
+                                                                class="search-reject w-full px-4 py-2 border-b border-gray-300 dark:border-gray-600 focus:outline-none text-sm dark:bg-gray-700 dark:text-white"
+                                                                placeholder="Search..."
+                                                                onkeyup="filterRejectOptions(this)">
 
-                                                            <div class="py-1 options-container" role="listbox" tabindex="-1">
+                                                            <div class="py-1 options-container" role="listbox"
+                                                                tabindex="-1">
                                                                 <!-- Default Null Option -->
                                                                 <button type="button"
-                                                                        class="dropdown-option w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
-                                                                        onclick="selectDropdownReject(this, '')">None</button>
+                                                                    class="dropdown-option w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
+                                                                    onclick="selectDropdownReject(this, '')">None</button>
 
-                                                                @foreach($distinctRejectNumbers as $rejectNumber)
+                                                                @foreach ($distinctRejectNumbers as $rejectNumber)
                                                                     <button type="button"
-                                                                            class="dropdown-option w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
-                                                                            onclick="selectDropdownReject(this, '{{ $rejectNumber }}')">{{ $rejectNumber }}</button>
+                                                                        class="dropdown-option w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
+                                                                        onclick="selectDropdownReject(this, '{{ $rejectNumber }}')">{{ $rejectNumber }}</button>
                                                                 @endforeach
                                                             </div>
                                                         </div>
 
-                                                        <input type="hidden" name="rejectNO" class="input-reject" value="">
+                                                        <input type="hidden" name="rejectNO" class="input-reject"
+                                                            value="">
                                                     </div>
                                                 </div>
 
@@ -2254,7 +2400,8 @@
         document.addEventListener('DOMContentLoaded', () => {
             // Store original options for each dropdown
             document.querySelectorAll('.dropdown-menu-reject .options-container').forEach(container => {
-                container.dataset.original = JSON.stringify(Array.from(container.children).map(opt => opt.outerHTML));
+                container.dataset.original = JSON.stringify(Array.from(container.children).map(opt => opt
+                    .outerHTML));
             });
         });
 
