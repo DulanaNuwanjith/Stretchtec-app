@@ -23,9 +23,9 @@ return new class extends Migration
             $table->integer('production_output')->nullable(); // production output
             $table->integer('damaged_output')->nullable(); // damaged output
             $table->string('dispatched_by')->nullable(); // dispatched by
-            $table->dateTime('delivered_date')->nullable(); // delivered date
-            $table->dateTime('production_complete_date')->nullable(); // production complete date
-            $table->dateTime('dispatched_date')->nullable(); // dispatched date
+            $table->DateTime('delivered_date')->nullable(); // delivered date
+            $table->DateTime('production_complete_date')->nullable(); // production complete date
+            $table->DateTime('dispatched_date')->nullable(); // dispatched date
             $table->timestamps();
         });
     }
