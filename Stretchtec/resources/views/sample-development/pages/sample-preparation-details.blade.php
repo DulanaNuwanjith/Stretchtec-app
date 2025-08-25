@@ -1111,7 +1111,6 @@
                                                 </td>
 
 
-
                                                 <td class="px-4 py-3 border-r border-gray-300 text-center break-words">
                                                     @if ($prep->alreadyDeveloped == 'Need to Develop')
                                                         @if (!empty($prep->yarnOrderedPONumber))
@@ -1175,13 +1174,15 @@
                                                                             'In Production' =>
                                                                                 'bg-yellow-100 text-yellow-800 dark:bg-yellow-700 dark:text-yellow-200',
                                                                             'Sent to Production' =>
-                                                                                'bg-emerald-100 text-emerald-800 dark:bg-emerald-700 dark:text-emerald-200',
+                                                                                'bg-blue-100 text-blue-800 dark:bg-blue-700 dark:text-blue-200',
                                                                             'Yarn Received' =>
                                                                                 'bg-pink-100 text-pink-800 dark:bg-pink-700 dark:text-pink-200',
                                                                             'Pending' =>
                                                                                 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200',
-                                                                            'Order Delivered' =>
-                                                                                'bg-blue-100 text-blue-800 dark:bg-blue-700 dark:text-blue-200',
+                                                                            'Dispatched to RnD' =>
+                                                                                'bg-purple-100 text-purple-800 dark:bg-purple-700 dark:text-purple-200',
+                                                                            'Delivered' =>
+                                                                                'bg-green-100 text-green-800 dark:bg-green-700 dark:text-green-200',
                                                                         ];
                                                                     @endphp
 
