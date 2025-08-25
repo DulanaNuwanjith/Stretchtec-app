@@ -3,6 +3,7 @@
     {{-- Tailwind CSS and Sweet Alert Imports --}}
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="//unpkg.com/alpinejs" defer></script>
 
     <title>StretchTec</title>
 </head>
@@ -134,8 +135,7 @@
                             <div class="flex justify-start">
                                 <button onclick="toggleFilterForm()"
                                     class="bg-white border border-blue-500 text-blue-500 hover:text-blue-600 hover:border-blue-600 font-semibold py-1 px-3 rounded shadow flex items-center gap-2 mb-6">
-                                    <img src="{{ asset('icons/filter.png') }}" class="w-6 h-6"
-                                        alt="Filter Icon">
+                                    <img src="{{ asset('icons/filter.png') }}" class="w-6 h-6" alt="Filter Icon">
                                     Filters
                                 </button>
                             </div>
@@ -331,23 +331,32 @@
                                                     x-data="{ open: false }">
 
                                                     @php
-                                                        $sentShades = $prod->samplePreparationRnD->shadeOrders->where('status', 'Sent to Production');
-                                                        $inProdShades = $prod->samplePreparationRnD->shadeOrders->where('status', 'In Production');
+                                                        $sentShades = $prod->samplePreparationRnD->shadeOrders->where(
+                                                            'status',
+                                                            'Sent to Production',
+                                                        );
+                                                        $inProdShades = $prod->samplePreparationRnD->shadeOrders->where(
+                                                            'status',
+                                                            'In Production',
+                                                        );
                                                     @endphp
 
                                                     @auth
                                                         @if (auth()->user()->role === 'ADMIN')
                                                             {{-- Just show status for admin --}}
                                                             @if ($inProdShades->isEmpty())
-                                                                <span class="inline-block mt-3 text-sm font-semibold text-gray-700 dark:text-white
+                                                                <span
+                                                                    class="inline-block mt-3 text-sm font-semibold text-gray-700 dark:text-white
                                                                             bg-gray-200 dark:bg-gray-800 px-3 py-1 rounded">
                                                                     Pending
                                                                 </span>
                                                             @else
-                                                                <span class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white
+                                                                <span
+                                                                    class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white
                                                                     bg-pink-200 dark:bg-gray-800 px-3 py-1 rounded">
                                                                     Started on <br>
-                                                                    {{ $prod->order_start_at?->format('Y-m-d') }} at {{ $prod->order_start_at?->format('H:i') }}
+                                                                    {{ $prod->order_start_at?->format('Y-m-d') }} at
+                                                                    {{ $prod->order_start_at?->format('H:i') }}
                                                                 </span>
                                                             @endif
                                                         @else
@@ -355,35 +364,50 @@
                                                             @if ($sentShades->isNotEmpty())
                                                                 {{-- Button to trigger modal --}}
                                                                 <button type="button" @click="open = true"
-                                                                        class="order-start-btn px-2 py-1 mt-3 rounded transition-all duration-200
+                                                                    class="order-start-btn px-2 py-1 mt-3 rounded transition-all duration-200
                                                                         bg-gray-300 text-black hover:bg-gray-400">
                                                                     Pending ({{ $sentShades->count() }})
                                                                 </button>
 
                                                                 {{-- Modal --}}
-                                                                <div x-show="open" x-transition class="fixed inset-0 flex items-center justify-center
-                                                                bg-black bg-opacity-50 z-50" style="display:none;">
-                                                                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 w-full max-w-lg relative max-h-[80vh] overflow-y-auto">
+                                                                <div x-show="open" x-transition
+                                                                    class="fixed inset-0 flex items-center justify-center
+                                                                bg-black bg-opacity-50 z-50"
+                                                                    style="display:none;">
+                                                                    <div
+                                                                        class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 w-full max-w-lg relative max-h-[80vh] overflow-y-auto">
 
                                                                         <button @click="open = false"
-                                                                                class="absolute top-2 right-2 text-gray-600 hover:text-gray-900">✕</button>
+                                                                            class="absolute top-2 right-2 text-gray-600 hover:text-gray-900">✕</button>
 
-                                                                        <h2 class="text-lg font-semibold text-blue-900 dark:text-white mb-4">
+                                                                        <h2
+                                                                            class="text-lg font-semibold text-blue-900 dark:text-white mb-4">
                                                                             Start Production for Shades
                                                                         </h2>
 
-                                                                        <form action="{{ route('production.markStart') }}" method="POST">
+                                                                        <form action="{{ route('production.markStart') }}"
+                                                                            method="POST">
                                                                             @csrf
-                                                                            <input type="hidden" name="production_id" value="{{ $prod->id }}">
+                                                                            <input type="hidden" name="production_id"
+                                                                                value="{{ $prod->id }}">
 
                                                                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                                                                @foreach($sentShades as $shade)
-                                                                                    <div class="p-4 border rounded bg-gray-100 dark:bg-gray-700">
+                                                                                @foreach ($sentShades as $shade)
+                                                                                    <div
+                                                                                        class="p-4 border rounded bg-gray-100 dark:bg-gray-700">
                                                                                         <label class="flex items-start gap-2">
-                                                                                            <input type="checkbox" name="shade_ids[]" value="{{ $shade->id }}" class="mt-1">
+                                                                                            <input type="checkbox"
+                                                                                                name="shade_ids[]"
+                                                                                                value="{{ $shade->id }}"
+                                                                                                class="mt-1">
                                                                                             <div>
-                                                                                                <div class="font-semibold">Shade: {{ $shade->shade }}</div>
-                                                                                                <div class="text-sm text-gray-600 dark:text-gray-300">Status: {{ $shade->status }}</div>
+                                                                                                <div class="font-semibold">
+                                                                                                    Shade: {{ $shade->shade }}
+                                                                                                </div>
+                                                                                                <div
+                                                                                                    class="text-sm text-gray-600 dark:text-gray-300">
+                                                                                                    Status:
+                                                                                                    {{ $shade->status }}</div>
                                                                                             </div>
                                                                                         </label>
                                                                                     </div>
@@ -392,11 +416,11 @@
 
                                                                             <div class="mt-4 flex justify-end gap-2">
                                                                                 <button type="button" @click="open = false"
-                                                                                        class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400">
+                                                                                    class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400">
                                                                                     Cancel
                                                                                 </button>
                                                                                 <button type="submit"
-                                                                                        class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+                                                                                    class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
                                                                                     Start Selected
                                                                                 </button>
                                                                             </div>
@@ -404,10 +428,12 @@
                                                                     </div>
                                                                 </div>
                                                             @else
-                                                                <span class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white
+                                                                <span
+                                                                    class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white
                                                                             bg-pink-200 dark:bg-gray-800 px-3 py-1 rounded">
                                                                     Started on <br>
-                                                                    {{ $prod->order_start_at?->format('Y-m-d') }} at {{ $prod->order_start_at?->format('H:i') }}
+                                                                    {{ $prod->order_start_at?->format('Y-m-d') }} at
+                                                                    {{ $prod->order_start_at?->format('H:i') }}
                                                                 </span>
                                                             @endif
                                                         @endif
@@ -542,65 +568,127 @@
                                                 </td>
 
                                                 {{-- Order Complete / Production Complete --}}
-                                                <td class="py-3 whitespace-normal break-words border-r border-gray-300 text-center" x-data="{ open: false }">
+                                                <td class="py-3 whitespace-normal break-words border-r border-gray-300 text-center"
+                                                    x-data="{ open: false, openCompleted: false }">
                                                     @auth
                                                         @if (auth()->user()->role !== 'ADMIN')
                                                             @php
-                                                                $shadeOrders = $prod->samplePreparationRnD?->shadeOrders ?? collect();
+                                                                $shadeOrders =
+                                                                    $prod->samplePreparationRnD?->shadeOrders ??
+                                                                    collect();
                                                                 $totalShades = $shadeOrders->count();
-                                                                $dispatchedCount = $shadeOrders->where('status', 'Dispatched to RnD')->count();
-                                                                $allDispatched = $totalShades > 0 && $dispatchedCount === $totalShades;
+                                                                $dispatchedCount = $shadeOrders
+                                                                    ->where('status', 'Dispatched to RnD')
+                                                                    ->count();
+                                                                $allDispatched =
+                                                                    $totalShades > 0 &&
+                                                                    $dispatchedCount === $totalShades;
                                                             @endphp
 
                                                             @if ($allDispatched)
-                                                                {{-- ✅ Show banner if all shades dispatched --}}
+                                                                {{-- ✅ Clickable Production Complete Badge --}}
                                                                 @php
                                                                     $lastDispatched = $shadeOrders
                                                                         ->where('status', 'Dispatched to RnD')
                                                                         ->sortByDesc('updated_at')
                                                                         ->first();
                                                                 @endphp
-                                                                <span class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white
-                                                                             bg-green-100 dark:bg-green-800 px-3 py-1 rounded">
+                                                                <span @click="openCompleted = true"
+                                                                    class="cursor-pointer inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white
+                             bg-green-100 dark:bg-green-800 px-3 py-1 rounded">
                                                                     Production Complete<br>
-                                                                    on {{ $lastDispatched->updated_at->format('Y-m-d') }} at {{ $lastDispatched->updated_at->format('H:i') }}
+                                                                    on {{ $lastDispatched->updated_at->format('Y-m-d') }} at
+                                                                    {{ $lastDispatched->updated_at->format('H:i') }}
                                                                 </span>
+
+                                                                {{-- Modal showing all shades --}}
+                                                                <div x-show="openCompleted" x-transition x-cloak
+                                                                    class="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm z-50">
+                                                                    <div
+                                                                        class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 w-full max-w-lg relative">
+                                                                        <button @click="openCompleted = false"
+                                                                            class="absolute top-3 right-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">✕</button>
+                                                                        <h2
+                                                                            class="text-xl font-semibold text-gray-900 dark:text-gray-100 border-b pb-3 mb-4">
+                                                                            🎨 Completed Shades Details
+                                                                        </h2>
+
+                                                                        {{-- Shades List --}}
+                                                                        <div
+                                                                            class="space-y-4 max-h-[420px] overflow-y-auto pr-1">
+                                                                            @foreach ($shadeOrders->where('status', 'Dispatched to RnD') as $shade)
+                                                                                <div
+                                                                                    class="flex justify-between items-center p-4 border rounded-lg bg-gray-50 dark:bg-gray-700/50">
+                                                                                    <span
+                                                                                        class="font-medium text-gray-900 dark:text-gray-100">{{ $shade->shade }}</span>
+                                                                                    <span
+                                                                                        class="text-sm text-gray-700 dark:text-gray-200">
+                                                                                        Completed on
+                                                                                        {{ $shade->updated_at->format('Y-m-d') }}
+                                                                                        at
+                                                                                        {{ $shade->updated_at->format('H:i') }}
+                                                                                    </span>
+                                                                                </div>
+                                                                            @endforeach
+                                                                        </div>
+
+                                                                        {{-- Footer --}}
+                                                                        <div class="flex justify-end mt-5 border-t pt-4">
+                                                                            <button @click="openCompleted = false"
+                                                                                class="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-700">
+                                                                                Close
+                                                                            </button>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
                                                             @elseif (!$prod->order_complete_at)
                                                                 @php
-                                                                    $hasInProduction = $shadeOrders->contains('status', 'In Production');
-                                                                    $canComplete = $hasInProduction && $prod->operator_name && $prod->supervisor_name;
+                                                                    $hasInProduction = $shadeOrders->contains(
+                                                                        'status',
+                                                                        'In Production',
+                                                                    );
+                                                                    $canComplete =
+                                                                        $hasInProduction &&
+                                                                        $prod->operator_name &&
+                                                                        $prod->supervisor_name;
                                                                 @endphp
 
-                                                                {{-- Button to open modal --}}
-                                                                <button type="button"
-                                                                        @click="open = true"
-                                                                        class="px-2 py-1 mt-3 rounded transition
-                                                                    {{ $canComplete ? 'bg-green-600 hover:bg-green-700 text-white' : 'bg-gray-300 text-black cursor-not-allowed' }}"
+                                                                {{-- Button to open modal for marking shades complete --}}
+                                                                <button type="button" @click="open = true"
+                                                                    class="px-2 py-1 mt-3 rounded transition
+                            {{ $canComplete ? 'bg-green-600 hover:bg-green-700 text-white' : 'bg-gray-300 text-black cursor-not-allowed' }}"
                                                                     {{ $canComplete ? '' : 'disabled' }}>
                                                                     Production Complete
                                                                 </button>
 
-                                                                {{-- Modal --}}
-                                                                <div x-show="open" x-transition
-                                                                     class="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm z-50"
-                                                                     style="display:none;">
-                                                                    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 w-full max-w-lg relative">
+                                                                {{-- Modal for marking shades complete --}}
+                                                                <div x-show="open" x-transition x-cloak
+                                                                    class="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm z-50">
+                                                                    <div
+                                                                        class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 w-full max-w-lg relative">
                                                                         <button @click="open = false"
-                                                                                class="absolute top-3 right-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">✕</button>
-                                                                        <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100 border-b pb-3 mb-4">
+                                                                            class="absolute top-3 right-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">✕</button>
+                                                                        <h2
+                                                                            class="text-xl font-semibold text-gray-900 dark:text-gray-100 border-b pb-3 mb-4">
                                                                             ✅ Mark Shades as Production Complete
                                                                         </h2>
 
                                                                         {{-- Shades List --}}
-                                                                        <div class="space-y-4 max-h-[420px] overflow-y-auto pr-1">
+                                                                        <div
+                                                                            class="space-y-4 max-h-[420px] overflow-y-auto pr-1">
                                                                             @foreach ($shadeOrders->where('status', 'In Production') as $shade)
-                                                                                <form action="{{ route('production.markComplete') }}" method="POST"
-                                                                                      class="flex justify-between items-center p-4 border rounded-lg bg-gray-50 dark:bg-gray-700/50 hover:shadow-md transition">
+                                                                                <form
+                                                                                    action="{{ route('production.markComplete') }}"
+                                                                                    method="POST"
+                                                                                    class="flex justify-between items-center p-4 border rounded-lg bg-gray-50 dark:bg-gray-700/50 hover:shadow-md transition">
                                                                                     @csrf
-                                                                                    <input type="hidden" name="shade_id" value="{{ $shade->id }}">
-                                                                                    <span class="font-medium text-gray-900 dark:text-gray-100">🎨 {{ $shade->shade }}</span>
+                                                                                    <input type="hidden" name="shade_id"
+                                                                                        value="{{ $shade->id }}">
+                                                                                    <span
+                                                                                        class="font-medium text-gray-900 dark:text-gray-100">🎨
+                                                                                        {{ $shade->shade }}</span>
                                                                                     <button type="submit"
-                                                                                            class="px-4 py-2 bg-green-600 text-white text-sm rounded-lg shadow-sm hover:bg-green-700 focus:ring-2 focus:ring-green-400">
+                                                                                        class="px-4 py-2 bg-green-600 text-white text-sm rounded-lg shadow-sm hover:bg-green-700 focus:ring-2 focus:ring-green-400">
                                                                                         Mark Complete
                                                                                     </button>
                                                                                 </form>
@@ -610,31 +698,79 @@
                                                                         {{-- Footer --}}
                                                                         <div class="flex justify-end mt-5 border-t pt-4">
                                                                             <button @click="open = false"
-                                                                                    class="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-700">
+                                                                                class="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-700">
                                                                                 Close
                                                                             </button>
                                                                         </div>
                                                                     </div>
                                                                 </div>
                                                             @else
-                                                                {{-- Already completed manually --}}
-                                                                <span class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white
-                                                                             bg-green-100 dark:bg-gray-800 px-3 py-1 rounded">
+                                                                {{-- Already completed manually (clickable) --}}
+                                                                <span @click="openCompleted = true"
+                                                                    class="cursor-pointer inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white
+                             bg-green-100 dark:bg-gray-800 px-3 py-1 rounded">
                                                                     Completed on <br>
-                                                                    {{ $prod->order_complete_at->format('Y-m-d') }} at {{ $prod->order_complete_at->format('H:i') }}
+                                                                    {{ $prod->order_complete_at->format('Y-m-d') }} at
+                                                                    {{ $prod->order_complete_at->format('H:i') }}
                                                                 </span>
+
+                                                                {{-- Modal showing all shades for completed order --}}
+                                                                <div x-show="openCompleted" x-transition x-cloak
+                                                                    class="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm z-50">
+                                                                    <div
+                                                                        class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 w-full max-w-lg relative">
+                                                                        <button @click="openCompleted = false"
+                                                                            class="absolute top-3 right-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">✕</button>
+                                                                        <h2
+                                                                            class="text-xl font-semibold text-gray-900 dark:text-gray-100 border-b pb-3 mb-4">
+                                                                            🎨 Completed Shades Details
+                                                                        </h2>
+
+                                                                        {{-- Shades List --}}
+                                                                        <div
+                                                                            class="space-y-4 max-h-[420px] overflow-y-auto pr-1">
+                                                                            @foreach ($shadeOrders as $shade)
+                                                                                @if ($shade->status === 'Dispatched to RnD' || $shade->status === 'Completed')
+                                                                                    <div
+                                                                                        class="flex justify-between items-center p-4 border rounded-lg bg-gray-50 dark:bg-gray-700/50">
+                                                                                        <span
+                                                                                            class="font-medium text-gray-900 dark:text-gray-100">{{ $shade->shade }}</span>
+                                                                                        <span
+                                                                                            class="text-sm text-gray-700 dark:text-gray-200">
+                                                                                            Completed on
+                                                                                            {{ $shade->updated_at->format('Y-m-d') }}
+                                                                                            at
+                                                                                            {{ $shade->updated_at->format('H:i') }}
+                                                                                        </span>
+                                                                                    </div>
+                                                                                @endif
+                                                                            @endforeach
+                                                                        </div>
+
+                                                                        {{-- Footer --}}
+                                                                        <div class="flex justify-end mt-5 border-t pt-4">
+                                                                            <button @click="openCompleted = false"
+                                                                                class="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-700">
+                                                                                Close
+                                                                            </button>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
                                                             @endif
                                                         @else
                                                             {{-- Admin view only --}}
                                                             @if ($prod->order_complete_at)
-                                                                <span class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white
-                                                                             bg-green-100 dark:bg-gray-800 px-3 py-1 rounded">
+                                                                <span
+                                                                    class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white
+                             bg-green-100 dark:bg-gray-800 px-3 py-1 rounded">
                                                                     Completed on <br>
-                                                                    {{ $prod->order_complete_at->format('Y-m-d') }} at {{ $prod->order_complete_at->format('H:i') }}
+                                                                    {{ $prod->order_complete_at->format('Y-m-d') }} at
+                                                                    {{ $prod->order_complete_at->format('H:i') }}
                                                                 </span>
                                                             @else
-                                                                <span class="inline-block mt-3 text-sm font-semibold text-gray-700 dark:text-white
-                                                                             bg-gray-200 dark:bg-gray-800 px-3 py-1 rounded">
+                                                                <span
+                                                                    class="inline-block mt-3 text-sm font-semibold text-gray-700 dark:text-white
+                             bg-gray-200 dark:bg-gray-800 px-3 py-1 rounded">
                                                                     Pending
                                                                 </span>
                                                             @endif
@@ -642,36 +778,47 @@
                                                     @endauth
                                                 </td>
 
+
                                                 {{-- Production Output --}}
-                                                <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
-                                                <span class="readonly">
-                                                    {{ is_numeric($prod->production_output) ? $prod->production_output . ' g' : '-' }}
-                                                </span>
+                                                <td
+                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                                    <span class="readonly">
+                                                        {{ is_numeric($prod->production_output) ? $prod->production_output . ' g' : '-' }}
+                                                    </span>
                                                 </td>
 
                                                 {{-- Damaged Output --}}
-                                                <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
-                                                <span class="readonly">
-                                                    {{ is_numeric($prod->damaged_output) ? $prod->damaged_output . ' g' : '-' }}
-                                                </span>
+                                                <td
+                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                                    <span class="readonly">
+                                                        {{ is_numeric($prod->damaged_output) ? $prod->damaged_output . ' g' : '-' }}
+                                                    </span>
                                                 </td>
 
                                                 {{-- Dispatch to R&D --}}
-                                                <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                                <td
+                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
                                                     @auth
                                                         @if (auth()->user()->role === 'ADMIN')
                                                             <div class="text-sm text-gray-800 dark:text-white font-medium">
                                                                 {{ $prod->dispatched_by ?? '-' }}
                                                             </div>
-                                                            <div class="sample-dispatch-timestamp text-xs text-gray-500 dark:text-gray-400">
+                                                            <div
+                                                                class="sample-dispatch-timestamp text-xs text-gray-500 dark:text-gray-400">
                                                                 {{ $prod->dispatch_to_rnd_at ? $prod->dispatch_to_rnd_at->format('Y-m-d H:i') : '-' }}
                                                             </div>
                                                         @else
                                                             @php
-                                                                $shadeOrders = $prod->samplePreparationRnD?->shadeOrders ?? collect();
+                                                                $shadeOrders =
+                                                                    $prod->samplePreparationRnD?->shadeOrders ??
+                                                                    collect();
                                                                 $totalShades = $shadeOrders->count();
-                                                                $dispatchedCount = $shadeOrders->where('status', 'Dispatched to RnD')->count();
-                                                                $allDispatched = $totalShades > 0 && $dispatchedCount === $totalShades;
+                                                                $dispatchedCount = $shadeOrders
+                                                                    ->where('status', 'Dispatched to RnD')
+                                                                    ->count();
+                                                                $allDispatched =
+                                                                    $totalShades > 0 &&
+                                                                    $dispatchedCount === $totalShades;
 
                                                                 // get last dispatched record (if exists)
                                                                 $lastDispatched = $shadeOrders
@@ -682,14 +829,20 @@
 
                                                             @if ($allDispatched && $lastDispatched)
                                                                 {{-- ✅ Show banner once all shades dispatched --}}
-                                                                <div class="p-3 rounded-lg bg-green-100 dark:bg-green-700 text-green-900 dark:text-green-100 text-sm font-medium">
-                                                                    ✅ Dispatched to <span class="font-semibold">{{ $lastDispatched->dispatched_by ?? 'Unknown' }}</span> <br>
+                                                                <div
+                                                                    class="p-3 rounded-lg bg-green-100 dark:bg-green-700 text-green-900 dark:text-green-100 text-sm font-medium">
+                                                                    ✅ Dispatched to <span
+                                                                        class="font-semibold">{{ $lastDispatched->dispatched_by ?? 'Unknown' }}</span>
+                                                                    <br>
                                                                     on {{ $lastDispatched->updated_at->format('Y-m-d') }}
                                                                     at {{ $lastDispatched->updated_at->format('H:i') }}
                                                                 </div>
                                                             @else
                                                                 @php
-                                                                    $hasProductionComplete = $shadeOrders->where('status', 'Production Complete')->count() > 0;
+                                                                    $hasProductionComplete =
+                                                                        $shadeOrders
+                                                                            ->where('status', 'Production Complete')
+                                                                            ->count() > 0;
                                                                     $dispatchNames = [
                                                                         'Kanchana Madushani',
                                                                         'Imashi Prasangika',
@@ -700,92 +853,119 @@
                                                                 @endphp
 
                                                                 <button type="button"
-                                                                        class="px-3 py-1 rounded text-white transition
+                                                                    class="px-3 py-1 rounded text-white transition
                                                                          {{ $hasProductionComplete ? 'bg-blue-500 hover:bg-blue-600' : 'bg-gray-300 cursor-not-allowed' }}"
-                                                                        onclick="{{ $hasProductionComplete ? "openDispatchModal($prod->id)" : '' }}"
+                                                                    onclick="{{ $hasProductionComplete ? "openDispatchModal($prod->id)" : '' }}"
                                                                     {{ $hasProductionComplete ? '' : 'disabled' }}>
                                                                     Dispatch
                                                                 </button>
 
                                                                 {{-- Modal --}}
                                                                 <div id="dispatch-modal-{{ $prod->id }}"
-                                                                     class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+                                                                    class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
                                                                     <div
                                                                         class="relative p-6 bg-white dark:bg-gray-800 w-11/12 max-w-3xl rounded-2xl shadow-xl">
 
                                                                         {{-- Header --}}
-                                                                        <div class="flex justify-between items-center border-b pb-3">
-                                                                            <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100">🚚 Dispatch Shades</h2>
-                                                                            <button type="button" onclick="closeDispatchModal({{ $prod->id }})"
-                                                                                    class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
+                                                                        <div
+                                                                            class="flex justify-between items-center border-b pb-3">
+                                                                            <h2
+                                                                                class="text-xl font-semibold text-gray-900 dark:text-gray-100">
+                                                                                🚚 Dispatch Shades</h2>
+                                                                            <button type="button"
+                                                                                onclick="closeDispatchModal({{ $prod->id }})"
+                                                                                class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
                                                                                 ✕
                                                                             </button>
                                                                         </div>
 
                                                                         {{-- Form --}}
-                                                                        <form action="{{ route('production.dispatchToRnd') }}" method="POST" class="mt-4 space-y-4"
-                                                                              onsubmit="return validateDispatchForm(this)">
+                                                                        <form action="{{ route('production.dispatchToRnd') }}"
+                                                                            method="POST" class="mt-4 space-y-4"
+                                                                            onsubmit="return validateDispatchForm(this)">
                                                                             @csrf
-                                                                            <input type="hidden" name="production_id" value="{{ $prod->id }}">
+                                                                            <input type="hidden" name="production_id"
+                                                                                value="{{ $prod->id }}">
 
                                                                             {{-- Shades List --}}
-                                                                            <div class="space-y-4 max-h-[420px] overflow-y-auto pr-1">
-                                                                                @foreach($shadeOrders->where('status', 'Production Complete') as $shade)
+                                                                            <div
+                                                                                class="space-y-4 max-h-[420px] overflow-y-auto pr-1">
+                                                                                @foreach ($shadeOrders->where('status', 'Production Complete') as $shade)
                                                                                     <div
                                                                                         class="p-4 border rounded-lg bg-gray-50 dark:bg-gray-700/50 hover:shadow-md transition">
 
                                                                                         {{-- Shade Header --}}
                                                                                         <label class="flex items-center gap-2">
-                                                                                            <input type="checkbox" name="shades[{{ $shade->id }}][selected]" value="1"
-                                                                                                   class="shade-checkbox rounded text-blue-600 focus:ring-blue-500"
-                                                                                                   data-shade="{{ $shade->id }}">
-                                                                                            <span class="font-medium text-gray-900 dark:text-gray-100">
+                                                                                            <input type="checkbox"
+                                                                                                name="shades[{{ $shade->id }}][selected]"
+                                                                                                value="1"
+                                                                                                class="shade-checkbox rounded text-blue-600 focus:ring-blue-500"
+                                                                                                data-shade="{{ $shade->id }}">
+                                                                                            <span
+                                                                                                class="font-medium text-gray-900 dark:text-gray-100">
                                                                                                 {{ $shade->shade }}
                                                                                             </span>
                                                                                         </label>
 
                                                                                         {{-- Inputs --}}
-                                                                                        <div class="mt-3 grid grid-cols-1 md:grid-cols-3 gap-3">
-                                                                                            <input type="number" min="0"
-                                                                                                   name="shades[{{ $shade->id }}][production_output]"
-                                                                                                   placeholder="Production Output"
-                                                                                                   class="shade-input-{{ $shade->id }} border rounded-lg px-3 py-2 w-full text-sm dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100 focus:ring-blue-500 focus:border-blue-500">
+                                                                                        <div
+                                                                                            class="mt-3 grid grid-cols-1 md:grid-cols-3 gap-3">
+                                                                                            <input type="number"
+                                                                                                min="0"
+                                                                                                name="shades[{{ $shade->id }}][production_output]"
+                                                                                                placeholder="Production Output"
+                                                                                                class="shade-input-{{ $shade->id }} border rounded-lg px-3 py-2 w-full text-sm dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100 focus:ring-blue-500 focus:border-blue-500">
 
-                                                                                            <input type="number" min="0"
-                                                                                                   name="shades[{{ $shade->id }}][damaged_output]"
-                                                                                                   placeholder="Damaged Output"
-                                                                                                   class="shade-input-{{ $shade->id }} border rounded-lg px-3 py-2 w-full text-sm dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100 focus:ring-blue-500 focus:border-blue-500">
+                                                                                            <input type="number"
+                                                                                                min="0"
+                                                                                                name="shades[{{ $shade->id }}][damaged_output]"
+                                                                                                placeholder="Damaged Output"
+                                                                                                class="shade-input-{{ $shade->id }} border rounded-lg px-3 py-2 w-full text-sm dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100 focus:ring-blue-500 focus:border-blue-500">
 
                                                                                             {{-- Dropdown --}}
-                                                                                            <div class="relative inline-block w-full">
+                                                                                            <div
+                                                                                                class="relative inline-block w-full">
                                                                                                 <button type="button"
-                                                                                                        class="dropdown-btn inline-flex w-full justify-between rounded-lg bg-white dark:bg-gray-800 px-3 py-2 text-sm font-medium text-gray-900 dark:text-gray-100 shadow-sm ring-1 ring-gray-300 dark:ring-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700"
-                                                                                                        onclick="toggleDropdownDispatch(this, 'dispatch-{{ $prod->id }}-{{ $shade->id }}')">
-                                                                                                    <span class="selected-dispatch-{{ $prod->id }}-{{ $shade->id }}">Select Name</span>
-                                                                                                    <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
-                                                                                                        <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z" clip-rule="evenodd" />
+                                                                                                    class="dropdown-btn inline-flex w-full justify-between rounded-lg bg-white dark:bg-gray-800 px-3 py-2 text-sm font-medium text-gray-900 dark:text-gray-100 shadow-sm ring-1 ring-gray-300 dark:ring-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700"
+                                                                                                    onclick="toggleDropdownDispatch(this, 'dispatch-{{ $prod->id }}-{{ $shade->id }}')">
+                                                                                                    <span
+                                                                                                        class="selected-dispatch-{{ $prod->id }}-{{ $shade->id }}">Select
+                                                                                                        Name</span>
+                                                                                                    <svg class="ml-2 h-5 w-5 text-gray-400"
+                                                                                                        viewBox="0 0 20 20"
+                                                                                                        fill="currentColor">
+                                                                                                        <path
+                                                                                                            fill-rule="evenodd"
+                                                                                                            d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
+                                                                                                            clip-rule="evenodd" />
                                                                                                     </svg>
                                                                                                 </button>
 
-                                                                                                <div class="dropdown-menu-dispatch-{{ $prod->id }}-{{ $shade->id }} hidden absolute z-10 mt-2 w-full rounded-lg bg-white dark:bg-gray-800 shadow-lg ring-1 ring-black/10 max-h-48 overflow-y-auto">
-                                                                                                    <div class="p-2 sticky top-0 bg-white dark:bg-gray-800 z-10">
-                                                                                                        <input type="text" placeholder="Search name..."
-                                                                                                               class="w-full px-2 py-1 text-sm border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"
-                                                                                                               oninput="filterDropdownOptionsDispatch(this)" />
+                                                                                                <div
+                                                                                                    class="dropdown-menu-dispatch-{{ $prod->id }}-{{ $shade->id }} hidden absolute z-10 mt-2 w-full rounded-lg bg-white dark:bg-gray-800 shadow-lg ring-1 ring-black/10 max-h-48 overflow-y-auto">
+                                                                                                    <div
+                                                                                                        class="p-2 sticky top-0 bg-white dark:bg-gray-800 z-10">
+                                                                                                        <input type="text"
+                                                                                                            placeholder="Search name..."
+                                                                                                            class="w-full px-2 py-1 text-sm border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"
+                                                                                                            oninput="filterDropdownOptionsDispatch(this)" />
                                                                                                     </div>
-                                                                                                    <div class="py-1" role="listbox" tabindex="-1">
+                                                                                                    <div class="py-1"
+                                                                                                        role="listbox"
+                                                                                                        tabindex="-1">
                                                                                                         @foreach ($dispatchNames as $name)
-                                                                                                            <button type="button"
-                                                                                                                    class="dropdown-option w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600"
-                                                                                                                    onclick="selectDropdownOptionDispatch(this, '{{ $name }}', 'dispatch-{{ $prod->id }}-{{ $shade->id }}')">
+                                                                                                            <button
+                                                                                                                type="button"
+                                                                                                                class="dropdown-option w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600"
+                                                                                                                onclick="selectDropdownOptionDispatch(this, '{{ $name }}', 'dispatch-{{ $prod->id }}-{{ $shade->id }}')">
                                                                                                                 {{ $name }}
                                                                                                             </button>
                                                                                                         @endforeach
                                                                                                     </div>
                                                                                                 </div>
                                                                                                 <input type="hidden"
-                                                                                                       name="shades[{{ $shade->id }}][dispatched_by]"
-                                                                                                       class="input-dispatch-{{ $prod->id }}-{{ $shade->id }}">
+                                                                                                    name="shades[{{ $shade->id }}][dispatched_by]"
+                                                                                                    class="input-dispatch-{{ $prod->id }}-{{ $shade->id }}">
                                                                                             </div>
                                                                                         </div>
                                                                                     </div>
@@ -794,12 +974,13 @@
 
                                                                             {{-- Footer --}}
                                                                             <div class="flex justify-end gap-3 pt-4 border-t">
-                                                                                <button type="button" onclick="closeDispatchModal({{ $prod->id }})"
-                                                                                        class="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-700">
+                                                                                <button type="button"
+                                                                                    onclick="closeDispatchModal({{ $prod->id }})"
+                                                                                    class="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-700">
                                                                                     Cancel
                                                                                 </button>
                                                                                 <button type="submit"
-                                                                                        class="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 shadow-sm">
+                                                                                    class="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 shadow-sm">
                                                                                     Submit
                                                                                 </button>
                                                                             </div>
@@ -938,7 +1119,8 @@
                                             <!-- Signature spaces (only visible in print) -->
                                             <div class="hidden print:flex justify-between mt-10">
                                                 <div class="w-1/3 text-center">
-                                                    <div class="border-b border-black mt-10">{{ Auth::user()->name }}</div>
+                                                    <div class="border-b border-black mt-10">{{ Auth::user()->name }}
+                                                    </div>
                                                     <span class="text-sm">Prepared By</span>
                                                 </div>
                                                 <div class="w-1/3 text-center">
@@ -1157,7 +1339,8 @@
     </script>
 
     <script>
-        function openSampleModal(orderNo, customerName, item, description, size, qtRef, color, style, sampleQty, shade, operator,
+        function openSampleModal(orderNo, customerName, item, description, size, qtRef, color, style, sampleQty, shade,
+            operator,
             supervisor) {
             document.getElementById('modalOrderNo').textContent = 'Order Number: ' + orderNo;
             document.getElementById('modalCustomerName').textContent = customerName;
@@ -1274,7 +1457,8 @@
 
                 if (sampleDropdownBtn && sampleDropdownMenu) {
                     document.addEventListener('click', function(e) {
-                        if (!sampleDropdownBtn.contains(e.target) && !sampleDropdownMenu.contains(e.target)) {
+                        if (!sampleDropdownBtn.contains(e.target) && !sampleDropdownMenu.contains(e
+                                .target)) {
                             sampleDropdownMenu.classList.add('hidden');
                             sampleDropdownBtn.setAttribute('aria-expanded', 'false');
                         }
@@ -1371,6 +1555,7 @@
         function closeDispatchModal(id) {
             document.getElementById('dispatch-modal-' + id).classList.add('hidden');
         }
+
         function validateDispatchForm(form) {
             const checkboxes = form.querySelectorAll('.shade-checkbox');
             let atLeastOneSelected = false;
@@ -1382,9 +1567,11 @@
                     atLeastOneSelected = true;
                     const shadeId = checkbox.getAttribute('data-shade');
 
-                    const productionOutput = form.querySelector(`.shade-input-${shadeId}[name*="[production_output]"]`);
+                    const productionOutput = form.querySelector(
+                        `.shade-input-${shadeId}[name*="[production_output]"]`);
                     const damagedOutput = form.querySelector(`.shade-input-${shadeId}[name*="[damaged_output]"]`);
-                    const dispatchInput = form.querySelector(`.input-dispatch-${form.querySelector('input[name=production_id]').value}-${shadeId}`);
+                    const dispatchInput = form.querySelector(
+                        `.input-dispatch-${form.querySelector('input[name=production_id]').value}-${shadeId}`);
 
                     if (!productionOutput.value.trim()) {
                         valid = false;
@@ -1413,7 +1600,5 @@
 
             return true;
         }
-
     </script>
-
 @endsection
