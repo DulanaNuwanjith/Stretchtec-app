@@ -609,8 +609,8 @@
                                                                         <button @click="openCompleted = false"
                                                                             class="absolute top-3 right-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">✕</button>
                                                                         <h2
-                                                                            class="text-xl font-semibold text-gray-900 dark:text-gray-100 border-b pb-3 mb-4">
-                                                                            🎨 Completed Shades Details
+                                                                            class="text-xl font-semibold text-blue-900 dark:text-gray-100 border-b pb-3 mb-4">
+                                                                            Completed Shades Details
                                                                         </h2>
 
                                                                         {{-- Shades List --}}
