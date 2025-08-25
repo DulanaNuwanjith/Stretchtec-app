@@ -702,14 +702,15 @@
                                                 <td
                                                     class="sticky left-0 z-10 px-4 py-3 bg-gray-100 whitespace-normal break-words border-r border-gray-300">
                                                     <span
-                                                        class="readonly font-bold {{ $inquiry->customerDeliveryDate ? 'text-red-600' : '' }}">
+                                                        class="readonly font-bold
+                                                        {{ $inquiry->productionStatus === 'Delivered' ? 'text-red-600' : '' }}
+                                                        {{ $inquiry->productionStatus === 'Dispatched to RnD' ? 'text-yellow-600' : '' }}">
                                                         {{ $inquiry->orderNo }}
                                                     </span>
                                                     <input type="text"
                                                            class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                            value="{{ $inquiry->orderNo }}" />
                                                 </td>
-
 
                                                 <!-- Inquiry Receive Date -->
                                                 <td
@@ -881,7 +882,7 @@
                                                 <td
                                                     class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
                                                     <span class="readonly">
-                                                        {{ optional($inquiry->developPlannedDate)->format('Y-m-d') ?? 'N/D' }}
+                                                        {{ optional($inquiry->developPlannedDate)->format('Y-m-d') ?? '—' }}
                                                     </span>
                                                     <input type="date" name="developPlannedDate"
                                                         class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
@@ -930,6 +931,8 @@
                                                                 => 'bg-purple-50 text-purple-700 dark:bg-purple-900 dark:text-purple-200',
                                                             'No Development'
                                                                 => 'bg-red-50 text-red-700 dark:bg-red-900 dark:text-red-200',
+                                                            'Delivered'
+                                                                => 'bg-green-500 text-white dark:bg-green-700 dark:text-white',
                                                             'Yarn Ordered'
                                                                 => 'bg-orange-50 text-orange-700 dark:bg-orange-900 dark:text-orange-200',
                                                             'Yarn Received'
@@ -973,10 +976,10 @@
                                                 <!-- Reference No -->
                                                 <td
                                                     class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
-                                                    <span class="readonly">{{ $inquiry->referenceNo ?? '-' }}</span>
+                                                    <span class="readonly">{{ $inquiry->referenceNo ?? '—' }}</span>
                                                     <input type="text" name="referenceNo"
                                                         class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                        value="{{ $inquiry->referenceNo ?? '-'}}" />
+                                                        value="{{ $inquiry->referenceNo ?? '—'}}" />
                                                 </td>
 
                                                 <td class="px-4 py-3 border-r border-gray-300 text-center">
@@ -1076,7 +1079,7 @@
                                                         @endif
 
                                                         @if(!$allDelivered && $pendingShades->isEmpty() && !$anyDelivered)
-                                                            <span class="text-gray-400 italic">-</span>
+                                                            <span class="text-gray-400 italic">—</span>
                                                         @endif
                                                     @endif
 
@@ -1111,7 +1114,7 @@
                                                             @endif
                                                         @else
                                                             {{-- Show message when referenceNo is null --}}
-                                                            <span class="text-red-600 font-semibold">Set Ref No to Deliver</span>
+                                                            <span class="text-red-600 font-semibold text-sm">Set Ref No to Deliver</span>
                                                         @endif
                                                     @endif
                                                 </td>

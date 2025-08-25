@@ -454,8 +454,10 @@
                                                 <td
                                                     class="sticky left-0 z-20 px-4 py-3 bg-gray-100 whitespace-normal break-words border-r border-gray-300">
                                                     <span
-                                                        class="readonly font-bold hover:text-blue-600 hover:underline cursor-pointer {{ $prep->productionStatus == 'Order Delivered' ? 'text-red-600' : 'text-black' }}"
-                                                        onclick="openRndSampleModal(
+                                                        class="readonly font-bold hover:text-blue-600 hover:underline cursor-pointer
+                                                            {{ $prep->productionStatus === 'Order Delivered' ? 'text-red-600' : '' }}
+                                                            {{ $prep->productionStatus === 'Dispatched to RnD' ? 'text-yellow-600' : 'text-black' }}"
+                                                                                                            onclick="openRndSampleModal(
                                                             '{{ addslashes($prep->orderNo) }}',
                                                             '{{ addslashes($prep->sampleInquiry->customerName ?? '-') }}',
                                                             '{{ addslashes($prep->sampleInquiry->coordinatorName ?? '-') }}',
@@ -954,8 +956,8 @@
                                                                                                         stroke-linecap="round"
                                                                                                         stroke-linejoin="round"
                                                                                                         d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0
-                                       01-1.995-1.858L5 7m5 4v6m4-6v6M9 7V4a1 1 0
-                                       011-1h4a1 1 0 011 1v3m-9 0h10" />
+                                                                                                           01-1.995-1.858L5 7m5 4v6m4-6v6M9 7V4a1 1 0
+                                                                                                           011-1h4a1 1 0 011 1v3m-9 0h10" />
                                                                                                 </svg>
                                                                                             </button>
                                                                                         </div>
@@ -1213,8 +1215,8 @@
                                                         <span class="text-gray-400 italic">—</span>
                                                     @else
                                                         <span
-                                                            class="inline-block bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 text-sm font-medium px-3 py-1 rounded">
-                                                            Not Added
+                                                            class="text-sm font-medium text-gray-800 dark:text-gray-200">
+                                                            {{$prep->shade ?? '—'}}
                                                         </span>
                                                     @endif
                                                 </td>
@@ -1280,7 +1282,7 @@
                                                         <span class="text-sm font-medium text-gray-800 dark:text-gray-200">
                                                             {{ $prep->yarnPrice }}
                                                         </span>
-                                                    @elseif ($prep->alreadyDeveloped == 'No Need to Develop')
+                                                    @elseif ($prep->alreadyDeveloped == 'No Need to Develop' || $prep->alreadyDeveloped == 'Tape Match Pan Asia')
                                                         {{-- Not available for No Need to Develop --}}
                                                         <span class="text-gray-400 italic">—</span>
                                                     @else

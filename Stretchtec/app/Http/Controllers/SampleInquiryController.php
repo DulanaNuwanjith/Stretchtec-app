@@ -270,6 +270,7 @@ class SampleInquiryController extends Controller
         return back()->with('success', 'Marked as sent to sample development.');
     }
 
+    //Not Checked yet
     public function markCustomerDelivered(Request $request)
     {
         $request->validate([
@@ -306,6 +307,7 @@ class SampleInquiryController extends Controller
                     $stock->available_stock <= 0 ? $stock->delete() : $stock->save();
 
                     $shade->status = 'Delivered';
+                    $shade->delivered_date = now();
                     $shade->save();
 
                     $totalDelivered += $quantity;
@@ -321,6 +323,13 @@ class SampleInquiryController extends Controller
 
             $inquiry->deliveryQty = $totalDelivered;
 
+            // ✅ Update prepRnd->productionStatus ONLY if all shades are delivered
+            $allDelivered = $prepRnd->shadeOrders->every(fn($s) => $s->status === 'Delivered');
+            if ($allDelivered) {
+                $prepRnd->productionStatus = 'Order Delivered';
+                $inquiry->productionStatus = 'Delivered';
+            }
+
         } else {
             // For Tape Match & No Need to Develop: just mark delivered without shades
             $deliveredShades[] = [
@@ -328,11 +337,13 @@ class SampleInquiryController extends Controller
                 'quantity' => 1
             ];
             $inquiry->productionStatus = 'Delivered';
+
+            // ✅ Directly set as Delivered since no shades exist
+            $prepRnd->productionStatus = 'Order Delivered';
         }
 
         // Update delivery info
         $inquiry->customerDeliveryDate = now();
-        $prepRnd->productionStatus = 'Order Delivered';
         $prepRnd->save();
         $inquiry->save();
 
@@ -354,7 +365,17 @@ class SampleInquiryController extends Controller
             $sheet->setCellValue('F12', $inquiry->color);
             $sheet->setCellValue('B16', Auth::user()->name);
 
+            $sheet->setCellValue('D24', $now->format('Y-m-d H:i:s'));
+            $sheet->setCellValue('D25', $dispatchCode);
+            $sheet->setCellValue('B27', $inquiry->customerName);
+            $sheet->setCellValue('F27', $inquiry->merchandiseName);
+            $sheet->setCellValue('A31', $inquiry->orderNo);
+            $sheet->setCellValue('B31', $inquiry->item . ' / ' . $inquiry->size);
+            $sheet->setCellValue('B32', $inquiry->referenceNo ?? '-');
+            $sheet->setCellValue('F31', $inquiry->color);
+            $sheet->setCellValue('B35', Auth::user()->name);
             $startRows = [12, 31];
+
             foreach ($startRows as $startRow) {
                 $row = $startRow;
                 foreach ($deliveredShades as $shadeData) {
