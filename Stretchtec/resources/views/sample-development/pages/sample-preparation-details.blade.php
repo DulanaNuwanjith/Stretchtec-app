@@ -956,8 +956,8 @@
                                                                                                         stroke-linecap="round"
                                                                                                         stroke-linejoin="round"
                                                                                                         d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0
-                                                                                                                   01-1.995-1.858L5 7m5 4v6m4-6v6M9 7V4a1 1 0
-                                                                                                                   011-1h4a1 1 0 011 1v3m-9 0h10" />
+                                                                                                                       01-1.995-1.858L5 7m5 4v6m4-6v6M9 7V4a1 1 0
+                                                                                                                       011-1h4a1 1 0 011 1v3m-9 0h10" />
                                                                                                 </svg>
                                                                                             </button>
                                                                                         </div>
@@ -1149,7 +1149,7 @@
 
                                                         {{-- Modal --}}
                                                         <div x-show="open" x-transition
-                                                            class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+                                                            class="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm z-50"
                                                             style="display: none;">
                                                             <div
                                                                 class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 w-full max-w-lg relative max-h-[80vh] overflow-y-auto">
@@ -1314,7 +1314,7 @@
 
                                                             {{-- Modal --}}
                                                             <div x-show="open" x-transition
-                                                                class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+                                                                class="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm z-50"
                                                                 style="display:none;">
                                                                 <div
                                                                     class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 w-full max-w-lg relative max-h-[80vh] overflow-y-auto">
@@ -1322,7 +1322,7 @@
                                                                         class="absolute top-2 right-2 text-gray-600 hover:text-gray-900">✕</button>
 
                                                                     <h2
-                                                                        class="text-lg font-semibold text-blue-900 dark:text-white mb-4">
+                                                                        class="text-lg font-semibold text-left text-blue-900 dark:text-white mb-4">
                                                                         Mark Yarn Received</h2>
                                                                     <form action="{{ route('rnd.markYarnReceived') }}"
                                                                         method="POST">
@@ -1461,7 +1461,7 @@
 
                                                             {{-- Modal --}}
                                                             <div x-show="open" x-transition
-                                                                class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+                                                                class="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm z-50"
                                                                 style="display:none;">
                                                                 <div
                                                                     class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 w-full max-w-lg relative max-h-[80vh] overflow-y-auto">
