@@ -786,8 +786,13 @@
 
                                                             {{-- ✅ If already dispatched, show banner --}}
                                                             @if ($hasDispatchedAtLeastOne && $lastDispatched)
+                                                                @php
+                                                                    $allDispatched = $shadeOrders->count() > 0 &&
+                                                                        $shadeOrders->every(fn($s) => $s->status === 'Dispatched to RnD' || $s->status === 'Delivered');
+                                                                @endphp
                                                                 <div @click="openDispatch = true"
-                                                                    class="cursor-pointer inline-block m-1 text-sm font-semibold text-gray-700 bg-green-100 px-3 py-1 rounded">
+                                                                     class="cursor-pointer inline-block m-1 text-sm font-semibold text-gray-700
+                                                                    {{ $allDispatched ? 'bg-green-100' : 'bg-yellow-100' }} px-3 py-1 rounded">
                                                                     Dispatched to <span
                                                                         class="font-semibold">{{ explode(' ', $lastDispatched->dispatched_by ?? 'Unknown')[0] }}</span><br>
                                                                     on
@@ -798,8 +803,8 @@
                                                             @else
                                                                 {{-- ✅ Show dispatch button if shades ready --}}
                                                                 <button type="button"
-                                                                    class="px-3 py-1 rounded text-white transition {{ $hasProductionComplete ? 'bg-blue-500 hover:bg-blue-600' : 'bg-gray-300 cursor-not-allowed' }}"
-                                                                    @if ($hasProductionComplete) @click="openDispatch = true" @endif
+                                                                        class="px-3 py-1 rounded text-white transition {{ $hasProductionComplete ? 'bg-blue-500 hover:bg-blue-600' : 'bg-gray-300 cursor-not-allowed' }}"
+                                                                        @if ($hasProductionComplete) @click="openDispatch = true" @endif
                                                                     {{ $hasProductionComplete ? '' : 'disabled' }}>
                                                                     Dispatch
                                                                 </button>
@@ -847,56 +852,53 @@
                                                                         </div>
                                                                     </div>
 
-                                                                    {{-- Dispatch Form --}}
+                                                                    {{-- ✅ Dispatch Form --}}
                                                                     <form action="{{ route('production.dispatchToRnd') }}"
-                                                                        method="POST" class="mt-6 space-y-4"
-                                                                        onsubmit="return validateDispatchForm(this)">
+                                                                          method="POST" class="mt-6 space-y-4"
+                                                                          onsubmit="return validateDispatchForm(this)">
                                                                         @csrf
                                                                         <input type="hidden" name="production_id"
-                                                                            value="{{ $prod->id }}">
+                                                                               value="{{ $prod->id }}">
 
-                                                                        <div
-                                                                            class="space-y-4 max-h-[300px] overflow-y-auto pr-1">
+                                                                        <div class="space-y-4 max-h-[300px] overflow-y-auto pr-1">
                                                                             @foreach ($shadeOrders->where('status', 'Production Complete') as $shade)
                                                                                 <div
                                                                                     class="p-4 border rounded-lg bg-gray-50 dark:bg-gray-700/50 hover:shadow-md transition">
                                                                                     <label class="flex items-center gap-2">
                                                                                         <input type="checkbox"
-                                                                                            name="shades[{{ $shade->id }}][selected]"
-                                                                                            value="1"
-                                                                                            class="shade-checkbox rounded text-blue-600 focus:ring-blue-500"
-                                                                                            data-shade="{{ $shade->id }}">
+                                                                                               name="shades[{{ $shade->id }}][selected]"
+                                                                                               value="1"
+                                                                                               class="shade-checkbox rounded text-blue-600 focus:ring-blue-500"
+                                                                                               data-shade="{{ $shade->id }}">
                                                                                         <span
                                                                                             class="font-medium text-gray-900 dark:text-gray-100">{{ $shade->shade }}</span>
                                                                                     </label>
 
-                                                                                    <div
-                                                                                        class="mt-3 grid grid-cols-1 md:grid-cols-3 gap-3">
+                                                                                    <div class="mt-3 grid grid-cols-1 md:grid-cols-3 gap-3">
                                                                                         <input type="number" min="0"
-                                                                                            name="shades[{{ $shade->id }}][production_output]"
-                                                                                            placeholder="Production Output"
-                                                                                            class="border rounded-lg px-3 py-2 w-full text-sm dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100">
+                                                                                               name="shades[{{ $shade->id }}][production_output]"
+                                                                                               placeholder="Production Output"
+                                                                                               class="border rounded-lg px-3 py-2 w-full text-sm dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100">
 
                                                                                         <input type="number" min="0"
-                                                                                            name="shades[{{ $shade->id }}][damaged_output]"
-                                                                                            placeholder="Damaged Output"
-                                                                                            class="border rounded-lg px-3 py-2 w-full text-sm dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100">
+                                                                                               name="shades[{{ $shade->id }}][damaged_output]"
+                                                                                               placeholder="Damaged Output"
+                                                                                               class="border rounded-lg px-3 py-2 w-full text-sm dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100">
 
                                                                                         {{-- Dropdown --}}
-                                                                                        <div
-                                                                                            class="relative inline-block w-full">
+                                                                                        <div class="relative inline-block w-full">
                                                                                             <button type="button"
-                                                                                                class="dropdown-btn inline-flex w-full justify-between rounded-lg bg-white dark:bg-gray-800 px-3 py-2 text-sm font-medium text-gray-900 dark:text-gray-100 shadow-sm ring-1 ring-gray-300 dark:ring-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700"
-                                                                                                onclick="toggleDropdownDispatch(this, 'dispatch-{{ $prod->id }}-{{ $shade->id }}')">
-                                                                                                <span
-                                                                                                    class="selected-dispatch-{{ $prod->id }}-{{ $shade->id }}">Select
-                                                                                                    Name</span>
+                                                                                                    class="dropdown-btn inline-flex w-full justify-between rounded-lg bg-white dark:bg-gray-800 px-3 py-2 text-sm font-medium text-gray-900 dark:text-gray-100 shadow-sm ring-1 ring-gray-300 dark:ring-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700"
+                                                                                                    onclick="toggleDropdownDispatch(this, 'dispatch-{{ $prod->id }}-{{ $shade->id }}')">
+                                                                                                    <span
+                                                                                                        class="selected-dispatch-{{ $prod->id }}-{{ $shade->id }}">Select
+                                                                                                        Name</span>
                                                                                                 <svg class="ml-2 h-5 w-5 text-gray-400"
-                                                                                                    viewBox="0 0 20 20"
-                                                                                                    fill="currentColor">
+                                                                                                     viewBox="0 0 20 20"
+                                                                                                     fill="currentColor">
                                                                                                     <path fill-rule="evenodd"
-                                                                                                        d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
-                                                                                                        clip-rule="evenodd" />
+                                                                                                          d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
+                                                                                                          clip-rule="evenodd" />
                                                                                                 </svg>
                                                                                             </button>
                                                                                             <div
@@ -904,25 +906,23 @@
                                                                                                 <div
                                                                                                     class="p-2 sticky top-0 bg-white dark:bg-gray-800 z-10">
                                                                                                     <input type="text"
-                                                                                                        placeholder="Search name..."
-                                                                                                        class="w-full px-2 py-1 text-sm border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"
-                                                                                                        oninput="filterDropdownOptionsDispatch(this)" />
+                                                                                                           placeholder="Search name..."
+                                                                                                           class="w-full px-2 py-1 text-sm border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"
+                                                                                                           oninput="filterDropdownOptionsDispatch(this)" />
                                                                                                 </div>
-                                                                                                <div class="py-1"
-                                                                                                    role="listbox"
-                                                                                                    tabindex="-1">
+                                                                                                <div class="py-1" role="listbox" tabindex="-1">
                                                                                                     @foreach ($dispatchNames as $name)
                                                                                                         <button type="button"
-                                                                                                            class="dropdown-option w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600"
-                                                                                                            onclick="selectDropdownOptionDispatch(this, '{{ $name }}', 'dispatch-{{ $prod->id }}-{{ $shade->id }}')">
+                                                                                                                class="dropdown-option w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600"
+                                                                                                                onclick="selectDropdownOptionDispatch(this, '{{ $name }}', 'dispatch-{{ $prod->id }}-{{ $shade->id }}')">
                                                                                                             {{ $name }}
                                                                                                         </button>
                                                                                                     @endforeach
                                                                                                 </div>
                                                                                             </div>
                                                                                             <input type="hidden"
-                                                                                                name="shades[{{ $shade->id }}][dispatched_by]"
-                                                                                                class="input-dispatch-{{ $prod->id }}-{{ $shade->id }}">
+                                                                                                   name="shades[{{ $shade->id }}][dispatched_by]"
+                                                                                                   class="input-dispatch-{{ $prod->id }}-{{ $shade->id }}">
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
@@ -932,12 +932,12 @@
                                                                         {{-- Footer --}}
                                                                         <div class="flex justify-end gap-3 pt-4 border-t">
                                                                             <button type="button"
-                                                                                @click="openDispatch = false"
-                                                                                class="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:border-gray-600">
+                                                                                    @click="openDispatch = false"
+                                                                                    class="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:border-gray-600">
                                                                                 Cancel
                                                                             </button>
                                                                             <button type="submit"
-                                                                                class="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 shadow-sm">
+                                                                                    class="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 shadow-sm">
                                                                                 Submit
                                                                             </button>
                                                                         </div>
@@ -1557,4 +1557,46 @@
             return true;
         }
     </script>
+
+{{-- ✅ Validation Script --}}
+<script>
+    function validateDispatchForm(form) {
+        const selectedShades = form.querySelectorAll('.shade-checkbox:checked');
+        const productionId = form.querySelector('input[name="production_id"]').value; // ✅ Get prod id dynamically
+
+        // 🔹 Step 1: Must select at least one shade
+        if (selectedShades.length === 0) {
+            alert("⚠️ Please select at least one shade before submitting.");
+            return false;
+        }
+
+        let errors = [];
+
+        // 🔹 Step 2: Validate each selected shade
+        for (let checkbox of selectedShades) {
+            const shadeId = checkbox.dataset.shade;
+
+            const productionOutput = form.querySelector(`[name="shades[${shadeId}][production_output]"]`);
+            const damagedOutput = form.querySelector(`[name="shades[${shadeId}][damaged_output]"]`);
+            const dispatchedBy = form.querySelector(`.input-dispatch-${productionId}-${shadeId}`);
+
+            let missing = [];
+            if (!productionOutput.value.trim()) missing.push("Production Output");
+            if (!damagedOutput.value.trim()) missing.push("Damaged Output");
+            if (!dispatchedBy.value.trim()) missing.push("Dispatch Name");
+
+            if (missing.length > 0) {
+                errors.push(`Shade ${shadeId}: Missing ${missing.join(", ")}`);
+            }
+        }
+
+        // 🔹 Step 3: If errors exist, show all in one message
+        if (errors.length > 0) {
+            alert("🚨 Please complete all required fields:\n\n" + errors.join("\n"));
+            return false;
+        }
+
+        return true; // ✅ All good
+    }
+</script>
 @endsection
