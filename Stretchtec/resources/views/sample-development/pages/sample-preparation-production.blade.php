@@ -17,8 +17,8 @@
         <div class="flex-1 overflow-y-hidden">
             <div class="">
                 <div class="w-full px-6 lg:px-2">
-                    <div class="bg-white dark:bg-gray-800 overflow-hidden">
-                        <div class="p-4 text-gray-900 dark:text-gray-100">
+                    <div class="bg-white overflow-hidden">
+                        <div class="p-4 text-gray-900">
 
                             {{-- Style for Sweet Alert --}}
                             <style>
@@ -151,12 +151,12 @@
                                         {{-- Filter - Order No Dropdown --}}
                                         <div class="relative inline-block text-left w-48">
                                             <label for="orderDropdownTab3"
-                                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Order
+                                                class="block text-sm font-medium text-gray-700 mb-1">Order
                                                 No</label>
                                             <input type="hidden" name="order_no" id="orderInputTab3"
                                                 value="{{ request('order_no') }}">
                                             <button id="orderDropdownTab3" type="button"
-                                                class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10 dark:bg-gray-700 dark:text-white"
+                                                class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10"
                                                 aria-expanded="false" aria-haspopup="listbox"
                                                 onclick="toggleOrderDropdownTab3(event)">
                                                 <span
@@ -174,7 +174,7 @@
                                                 role="listbox" aria-labelledby="orderDropdownTab3">
                                                 <input type="text" id="orderSearchInputTab3" onkeyup="filterOrdersTab3()"
                                                     placeholder="Search..."
-                                                    class="w-full px-2 py-1 text-sm border rounded-md dark:bg-gray-600 dark:text-white"
+                                                    class="w-full px-2 py-1 text-sm border rounded-md"
                                                     autocomplete="off">
                                                 @foreach ($orderNosTab3 as $order)
                                                     <div onclick="selectOrderTab3('{{ $order }}')" tabindex="0"
@@ -200,7 +200,7 @@
                                                 class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Apply
                                                 Filters</button>
                                             <button type="button" id="clearFiltersBtnTab3"
-                                                class="mt-4 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 px-4 py-2 rounded hover:bg-gray-300">Clear</button>
+                                                class="mt-4 bg-gray-200 text-gray-700 px-4 py-2 rounded hover:bg-gray-300">Clear</button>
                                         </div>
 
                                     </div>
@@ -208,7 +208,7 @@
                             </div>
 
                             <div class="flex justify-between items-center mb-6">
-                                <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100 py-1">Sample Preparation
+                                <h1 class="text-2xl font-bold text-gray-800 py-1">Sample Preparation
                                     Production
                                     Records
                                 </h1>
@@ -216,60 +216,60 @@
 
                             {{-- Main Table --}}
                             <div id="SampleProductionRecordsScroll"
-                                class="overflow-x-auto max-h-[1200px] bg-white dark:bg-gray-900 shadow rounded-lg">
-                                <table class="table-fixed w-full text-sm divide-y divide-gray-200 dark:divide-gray-700">
-                                    <thead class="bg-gray-100 dark:bg-gray-700 text-left">
+                                class="overflow-x-auto max-h-[1200px] bg-white shadow rounded-lg">
+                                <table class="table-fixed w-full text-sm divide-y divide-gray-200">
+                                    <thead class="bg-gray-100 text-left">
                                         <tr class="text-center">
                                             <th
-                                                class="font-bold sticky left-0 top-0 z-30 bg-white px-4 py-3 w-32 box-border text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold sticky left-0 top-0 z-30 bg-white px-4 py-3 w-32 box-border text-xs text-gray-600 uppercase whitespace-normal break-words">
                                                 Order No
                                             </th>
                                             <th
-                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 uppercase whitespace-normal break-words">
                                                 Production Deadline
                                             </th>
                                             <th
-                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-48 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-48 text-xs text-gray-600 uppercase whitespace-normal break-words">
                                                 Order Received Date & Time
                                             </th>
                                             <th
-                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-48 text-center text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-48 text-center text-xs text-gray-600 uppercase whitespace-normal break-words">
                                                 Order Start Date & Time
                                             </th>
                                             <th
-                                                class="font-bold sticky top-0 z-20 bg-gray-200 px-4 py-3 w-52 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold sticky top-0 z-20 bg-gray-200 px-4 py-3 w-52 text-xs text-gray-600 uppercase whitespace-normal break-words">
                                                 Operator Name
                                             </th>
                                             <th
-                                                class="font-bold sticky top-0 z-20 bg-gray-200 px-4 py-3 w-52 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold sticky top-0 z-20 bg-gray-200 px-4 py-3 w-52 text-xs text-gray-600 uppercase whitespace-normal break-words">
                                                 Supervisor Name
                                             </th>
                                             <th
-                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-48 text-center text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-48 text-center text-xs text-gray-600 uppercase whitespace-normal break-words">
                                                 Order Complete Date & Time
                                             </th>
                                             <th
-                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 uppercase whitespace-normal break-words">
                                                 Production Output</th>
                                             <th
-                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 uppercase whitespace-normal break-words">
                                                 Damaged Output</th>
                                             <th
-                                                class="font-bold sticky top-0 z-20 bg-gray-200 px-4 py-3 w-64 text-center text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold sticky top-0 z-20 bg-gray-200 px-4 py-3 w-64 text-center text-xs text-gray-600 uppercase whitespace-normal break-words">
                                                 Dispatch to R&D
                                             </th>
                                             <th
-                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-72 text-center text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-72 text-center text-xs text-gray-600 uppercase whitespace-normal break-words">
                                                 Note
                                             </th>
                                             <th
-                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-48 text-center text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-48 text-center text-xs text-gray-600 uppercase whitespace-normal break-words">
                                                 Action
                                             </th>
                                         </tr>
                                     </thead>
                                     <tbody id="serviceRecords"
-                                        class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                                        class="bg-white divide-y divide-gray-200">
                                         @foreach ($productions as $prod)
                                             <tr id="serviceRow{{ $prod->id }}"
                                                 class="odd:bg-white even:bg-gray-50 border-b border-gray-200  text-left">
@@ -296,7 +296,7 @@
                                                     </span>
 
                                                     <input type="text" name="order_no"
-                                                        class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                        class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md text-sm"
                                                         value="{{ $prod->order_no }}" />
                                                 </td>
 
@@ -307,7 +307,7 @@
                                                         {{ $prod->production_deadline ? $prod->production_deadline->format('Y-m-d') : '-' }}
                                                     </span>
                                                     <input type="date" name="production_deadline"
-                                                        class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                        class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md text-sm"
                                                         value="{{ $prod->production_deadline ? $prod->production_deadline->format('Y-m-d') : '' }}" />
                                                 </td>
 
@@ -315,14 +315,14 @@
                                                 <td
                                                     class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
                                                     <span
-                                                        class="readonly inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-yellow-100 dark:bg-gray-800 px-3 py-1 rounded">
+                                                        class="readonly inline-block m-1 text-sm font-semibold text-gray-700 bg-yellow-100 px-3 py-1 rounded">
                                                         Received on <br>
                                                         {{ \Carbon\Carbon::parse($prod->order_received_at)->format('Y-m-d') }}
                                                         at
                                                         {{ \Carbon\Carbon::parse($prod->order_received_at)->format('H:i') }}
                                                     </span>
                                                     <input type="datetime-local" name="order_received_at"
-                                                        class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                        class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md text-sm"
                                                         value="{{ $prod->order_received_at ? $prod->order_received_at->format('Y-m-d\TH:i') : '' }}" />
                                                 </td>
 
@@ -346,14 +346,14 @@
                                                             {{-- Just show status for admin --}}
                                                             @if ($inProdShades->isEmpty())
                                                                 <span
-                                                                    class="inline-block mt-3 text-sm font-semibold text-gray-700 dark:text-white
-                                                                            bg-gray-200 dark:bg-gray-800 px-3 py-1 rounded">
+                                                                    class="inline-block mt-3 text-sm font-semibold text-gray-700
+                                                                            bg-gray-200 px-3 py-1 rounded">
                                                                     Pending
                                                                 </span>
                                                             @else
                                                                 <span
-                                                                    class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white
-                                                                    bg-pink-200 dark:bg-gray-800 px-3 py-1 rounded">
+                                                                    class="inline-block m-1 text-sm font-semibold text-gray-700
+                                                                    bg-pink-200 px-3 py-1 rounded">
                                                                     Started on <br>
                                                                     {{ $prod->order_start_at?->format('Y-m-d') }} at
                                                                     {{ $prod->order_start_at?->format('H:i') }}
@@ -375,13 +375,13 @@
                                                                 bg-black bg-opacity-50 z-50"
                                                                     style="display:none;">
                                                                     <div
-                                                                        class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 w-full max-w-lg relative max-h-[80vh] overflow-y-auto">
+                                                                        class="bg-white rounded-lg shadow-lg p-6 w-full max-w-lg relative max-h-[80vh] overflow-y-auto">
 
                                                                         <button @click="open = false"
                                                                             class="absolute top-2 right-2 text-gray-600 hover:text-gray-900">✕</button>
 
                                                                         <h2
-                                                                            class="text-lg font-semibold text-blue-900 dark:text-white mb-4">
+                                                                            class="text-lg font-semibold text-blue-900 mb-4">
                                                                             Start Production for Shades
                                                                         </h2>
 
@@ -394,7 +394,7 @@
                                                                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                                                                 @foreach ($sentShades as $shade)
                                                                                     <div
-                                                                                        class="p-4 border rounded bg-gray-100 dark:bg-gray-700">
+                                                                                        class="p-4 border rounded bg-gray-100">
                                                                                         <label class="flex items-start gap-2">
                                                                                             <input type="checkbox"
                                                                                                 name="shade_ids[]"
@@ -405,7 +405,7 @@
                                                                                                     Shade: {{ $shade->shade }}
                                                                                                 </div>
                                                                                                 <div
-                                                                                                    class="text-sm text-gray-600 dark:text-gray-300">
+                                                                                                    class="text-sm text-gray-600">
                                                                                                     Status:
                                                                                                     {{ $shade->status }}</div>
                                                                                             </div>
@@ -429,8 +429,8 @@
                                                                 </div>
                                                             @else
                                                                 <span
-                                                                    class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white
-                                                                            bg-pink-200 dark:bg-gray-800 px-3 py-1 rounded">
+                                                                    class="inline-block m-1 text-sm font-semibold text-gray-700
+                                                                            bg-pink-200 px-3 py-1 rounded">
                                                                     Started on <br>
                                                                     {{ $prod->order_start_at?->format('Y-m-d') }} at
                                                                     {{ $prod->order_start_at?->format('H:i') }}
@@ -591,27 +591,27 @@
                                                                     $lastCompleted = $completedShades->sortByDesc('production_complete_date')->first();
                                                                 @endphp
                                                                 <span @click="openCompleted = true"
-                                                                      class="cursor-pointer inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white
-                                                                      bg-green-100 dark:bg-green-800 px-3 py-1 rounded">
+                                                                      class="cursor-pointer inline-block m-1 text-sm font-semibold text-gray-700
+                                                                      bg-green-100 px-3 py-1 rounded">
                                                                     Production Complete<br> on {{ \Carbon\Carbon::parse($lastCompleted->production_complete_date)->format('Y-m-d') }} at {{ \Carbon\Carbon::parse($lastCompleted->production_complete_date)->format('H:i') }}
                                                                 </span>
 
                                                                 {{-- Modal showing all completed shades --}}
                                                                 <div x-show="openCompleted" x-transition x-cloak
                                                                      class="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm z-50">
-                                                                    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 w-full max-w-2xl relative">
+                                                                    <div class="bg-white rounded-2xl shadow-xl p-6 w-full max-w-2xl relative">
                                                                         <button @click="openCompleted = false"
-                                                                                class="absolute top-3 right-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">✕</button>
-                                                                        <h2 class="text-xl text-left font-semibold text-blue-900 dark:text-gray-100 border-b pb-3 mb-4">
+                                                                                class="absolute top-3 right-3 text-gray-400 hover:text-gray-600">✕</button>
+                                                                        <h2 class="text-xl text-left font-semibold text-blue-900 border-b pb-3 mb-4">
                                                                             Completed Shades Details
                                                                         </h2>
 
                                                                         {{-- Shades List --}}
                                                                         <div class="space-y-4 max-h-[420px] overflow-y-auto pr-1">
                                                                             @foreach ($completedShades as $shade)
-                                                                                <div class="flex justify-between items-center p-4 border rounded-lg bg-gray-50 dark:bg-gray-700/50">
-                                                                                    <span class="font-medium text-gray-900 dark:text-gray-100">{{ $shade->shade }}</span>
-                                                                                    <span class="text-sm text-gray-700 dark:text-gray-200">
+                                                                                <div class="flex justify-between items-center p-4 border rounded-lg bg-gray-50">
+                                                                                    <span class="font-medium text-gray-900">{{ $shade->shade }}</span>
+                                                                                    <span class="text-sm text-gray-700">
                                                                                         Completed on {{ $shade->production_complete_date }}
                                                                                     </span>
                                                                                 </div>
@@ -621,7 +621,7 @@
                                                                         {{-- Footer --}}
                                                                         <div class="flex justify-end mt-5 border-t pt-4">
                                                                             <button @click="openCompleted = false"
-                                                                                    class="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-700">
+                                                                                    class="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100">
                                                                                 Close
                                                                             </button>
                                                                         </div>
@@ -645,10 +645,10 @@
                                                                 {{-- Modal for marking shades complete --}}
                                                                 <div x-show="open" x-transition x-cloak
                                                                      class="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm z-50">
-                                                                    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 w-full max-w-lg relative">
+                                                                    <div class="bg-white rounded-2xl shadow-xl p-6 w-full max-w-lg relative">
                                                                         <button @click="open = false"
-                                                                                class="absolute top-3 right-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">✕</button>
-                                                                        <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100 border-b pb-3 mb-4">
+                                                                                class="absolute top-3 right-3 text-gray-400 hover:text-gray-600">✕</button>
+                                                                        <h2 class="text-xl font-semibold text-gray-900 border-b pb-3 mb-4">
                                                                             Mark Shades as Production Complete
                                                                         </h2>
 
@@ -656,10 +656,10 @@
                                                                         <div class="space-y-4 max-h-[420px] overflow-y-auto pr-1">
                                                                             @foreach ($inProductionShades as $shade)
                                                                                 <form action="{{ route('production.markComplete') }}" method="POST"
-                                                                                      class="flex justify-between items-center p-4 border rounded-lg bg-gray-50 dark:bg-gray-700/50 hover:shadow-md transition">
+                                                                                      class="flex justify-between items-center p-4 border rounded-lg bg-gray-50 hover:shadow-md transition">
                                                                                     @csrf
                                                                                     <input type="hidden" name="shade_id" value="{{ $shade->id }}">
-                                                                                    <span class="font-medium text-gray-900 dark:text-gray-100">🎨 {{ $shade->shade }}</span>
+                                                                                    <span class="font-medium text-gray-900">🎨 {{ $shade->shade }}</span>
                                                                                     <button type="submit"
                                                                                             class="px-4 py-2 bg-green-600 text-white text-sm rounded-lg shadow-sm hover:bg-green-700 focus:ring-2 focus:ring-green-400">
                                                                                         Mark Complete
@@ -671,7 +671,7 @@
                                                                         {{-- Footer --}}
                                                                         <div class="flex justify-end mt-5 border-t pt-4">
                                                                             <button @click="open = false"
-                                                                                    class="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-700">
+                                                                                    class="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100">
                                                                                 Close
                                                                             </button>
                                                                         </div>
@@ -680,23 +680,23 @@
                                                             @elseif(!$hasCompletedAtLeastOne)
                                                                 {{-- No shades completed and none in production --}}
                                                                 <span
-                                                                    class="inline-block mt-3 text-sm font-semibold text-gray-700 dark:text-white
-                                                                        bg-gray-200 dark:bg-gray-800 px-3 py-1 rounded">
+                                                                    class="inline-block mt-3 text-sm font-semibold text-gray-700
+                                                                        bg-gray-200 px-3 py-1 rounded">
                                                                     Pending
                                                                 </span>
                                                             @endif
                                                         @else
                                                             {{-- Admin view --}}
                                                             @if ($prod->order_complete_at)
-                                                                <span class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white
-                                                                        bg-green-100 dark:bg-green-800 px-3 py-1 rounded">
+                                                                <span class="inline-block m-1 text-sm font-semibold text-gray-700
+                                                                        bg-green-100 px-3 py-1 rounded">
                                                                     Completed on <br>
                                                                     {{ $prod->order_complete_at->format('Y-m-d') }} at
                                                                     {{ $prod->order_complete_at->format('H:i') }}
                                                                 </span>
                                                             @else
-                                                                <span class="inline-block mt-3 text-sm font-semibold text-gray-700 dark:text-white
-                                                                        bg-gray-200 dark:bg-gray-800 px-3 py-1 rounded">
+                                                                <span class="inline-block mt-3 text-sm font-semibold text-gray-700
+                                                                        bg-gray-200 px-3 py-1 rounded">
                                                                     Pending
                                                                 </span>
                                                             @endif
@@ -726,10 +726,10 @@
                                                     x-data="{ openDispatch: false }">
                                                     @auth
                                                         @if (auth()->user()->role === 'ADMIN')
-                                                            <div class="text-sm text-gray-800 dark:text-white font-medium">
+                                                            <div class="text-sm text-gray-800 font-medium">
                                                                 {{ $prod->dispatched_by ?? '-' }}
                                                             </div>
-                                                            <div class="sample-dispatch-timestamp text-xs text-gray-500 dark:text-gray-400">
+                                                            <div class="sample-dispatch-timestamp text-xs text-gray-500">
                                                                 {{ $prod->dispatch_to_rnd_at ? $prod->dispatch_to_rnd_at->format('Y-m-d H:i') : '-' }}
                                                             </div>
                                                         @else
@@ -750,7 +750,7 @@
                                                             @if ($hasDispatchedAtLeastOne && $lastDispatched)
                                                                 {{-- ✅ Clickable banner for dispatched shades --}}
                                                                 <div @click="openDispatch = true"
-                                                                     class="cursor-pointer font-semibold p-3 rounded-lg bg-green-100 dark:bg-green-700 text-green-900 dark:text-green-100 text-sm font-medium">
+                                                                     class="cursor-pointer font-semibold p-3 rounded-lg bg-green-100 text-green-900 text-sm font-medium">
                                                                     Dispatched to <span class="font-semibold">{{ explode(' ', $lastDispatched->dispatched_by ?? 'Unknown')[0] }}</span><br>
                                                                     on {{ \Carbon\Carbon::parse($lastDispatched->dispatched_date)->format('Y-m-d') }}
                                                                     at {{ \Carbon\Carbon::parse($lastDispatched->dispatched_date)->format('H:i') }}
@@ -759,20 +759,20 @@
                                                                 {{-- Modal showing all dispatched shades --}}
                                                                 <div x-show="openDispatch" x-transition x-cloak
                                                                      class="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm z-50">
-                                                                    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 w-full max-w-2xl relative">
+                                                                    <div class="bg-white rounded-2xl shadow-xl p-6 w-full max-w-2xl relative">
                                                                         <div class="flex justify-between items-center border-b pb-3">
-                                                                            <h2 class="text-xl font-semibold text-blue-900 dark:text-gray-100">
+                                                                            <h2 class="text-xl font-semibold text-blue-900">
                                                                                 Dispatched Shades Details
                                                                             </h2>
                                                                             <button type="button" @click="openDispatch = false"
-                                                                                    class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">✕</button>
+                                                                                    class="text-gray-400 hover:text-gray-600">✕</button>
                                                                         </div>
 
                                                                         <div class="space-y-4 max-h-[420px] overflow-y-auto pr-1 mt-4">
                                                                             @foreach ($dispatchedShades as $shade)
-                                                                                <div class="flex justify-between items-center p-4 border rounded-lg bg-gray-50 dark:bg-gray-700/50">
-                                                                                    <span class="font-medium text-gray-900 dark:text-gray-100">{{ $shade->shade }}</span>
-                                                                                    <span class="text-sm text-gray-700 dark:text-gray-200">
+                                                                                <div class="flex justify-between items-center p-4 border rounded-lg bg-gray-50">
+                                                                                    <span class="font-medium text-gray-900">{{ $shade->shade }}</span>
+                                                                                    <span class="text-sm text-gray-700">
                                                                                         Dispatched on {{ $shade->dispatched_date }} to {{ $shade->dispatched_by }}
                                                                                     </span>
                                                                                 </div>
@@ -781,7 +781,7 @@
 
                                                                         <div class="flex justify-end mt-5 border-t pt-4">
                                                                             <button @click="openDispatch = false"
-                                                                                    class="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-700">
+                                                                                    class="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100">
                                                                                 Close
                                                                             </button>
                                                                         </div>
@@ -814,7 +814,7 @@
                                                             @method('PATCH')
 
                                                             <textarea name="notes" rows="2"
-                                                                class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm" required>{{ old('notes', $prod->sampleInquiry->notes) }}</textarea>
+                                                                class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md text-sm" required>{{ old('notes', $prod->sampleInquiry->notes) }}</textarea>
 
                                                             <button type="submit"
                                                                 class="w-full mt-1 px-2 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition-all duration-200 text-sm">
@@ -858,7 +858,7 @@
                                     class="fixed inset-0 z-50 hidden bg-black bg-opacity-50 flex items-center justify-center py-5"
                                     onclick="this.classList.add('hidden')">
 
-                                    <div class="w-full max-w-[700px] bg-white dark:bg-gray-900 rounded-2xl shadow-2xl p-4 transform transition-all scale-95 max-h-[calc(100vh-10rem)] overflow-y-auto"
+                                    <div class="w-full max-w-[700px] bg-white rounded-2xl shadow-2xl p-4 transform transition-all scale-95 max-h-[calc(100vh-10rem)] overflow-y-auto"
                                         onclick="event.stopPropagation()">
 
                                         <div class="max-w-[600px] mx-auto p-6" id="printAreaSample">
