@@ -979,24 +979,28 @@
                                                         value="{{ $inquiry->referenceNo ?? '-'}}" />
                                                 </td>
 
-                                                <!-- Customer Delivery Status -->
                                                 <td class="px-4 py-3 border-r border-gray-300 text-center">
                                                     @php
                                                         $prepRnd = $inquiry->samplePreparationRnD;
-                                                        $delivered = $inquiry->customerDeliveryDate ? true : false;
-                                                        $canDeliver = in_array($prepRnd?->alreadyDeveloped, ['Need to Develop', 'No Need to Develop', 'Tape Match Pan Asia']);
-
                                                         $shadeOrders = $prepRnd?->shadeOrders ?? collect();
 
-                                                        // Only shades for this prep with status exactly 'Dispatched to RnD'
-                                                        $dispatchedShades = $shadeOrders->filter(fn($s) => trim($s->status) === 'Dispatched to RnD');
+                                                        // Shades dispatched but not yet delivered
+                                                        $pendingShades = $shadeOrders->filter(fn($s) => trim($s->status) === 'Dispatched to RnD');
 
+                                                        // Check if all shades are delivered
                                                         $allDelivered = $shadeOrders->isNotEmpty() && $shadeOrders->every(fn($s) => trim($s->status) === 'Delivered');
+
+                                                        // Check if at least one delivery has been made
+                                                        $anyDelivered = $shadeOrders->contains(fn($s) => trim($s->status) === 'Delivered');
+
+                                                        // Special cases (tape match / no need to develop)
+                                                        $specialCase = in_array($prepRnd?->alreadyDeveloped, ['No Need to Develop', 'Tape Match Pan Asia']);
                                                     @endphp
 
-                                                    {{-- Deliver Button / Modal --}}
-                                                    @if(!$delivered && $canDeliver)
-                                                        @if($prepRnd?->alreadyDeveloped === 'Need to Develop' && $dispatchedShades->isNotEmpty())
+                                                    {{-- CASE 1: Shades based deliveries --}}
+                                                    @if(!$specialCase)
+                                                        {{-- Deliver Button / Modal --}}
+                                                        @if(!$allDelivered && $pendingShades->isNotEmpty() && !empty($inquiry->referenceNo))
                                                             <div x-data="{ open: false }">
                                                                 <button type="button" @click="open = true"
                                                                         class="px-3 py-1 rounded text-white bg-green-600 hover:bg-green-700 transition duration-200">
@@ -1018,14 +1022,14 @@
                                                                             <input type="hidden" name="id" value="{{ $inquiry->id }}">
 
                                                                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[400px] overflow-y-auto pr-1">
-                                                                                @foreach($dispatchedShades as $shade)
+                                                                                @foreach($pendingShades as $shade)
                                                                                     <div class="p-4 border rounded-lg bg-gray-50 dark:bg-gray-700/50 hover:shadow-md transition">
                                                                                         <label class="flex items-center gap-2">
                                                                                             <input type="checkbox" name="shades[{{ $shade->id }}][selected]" value="1"
                                                                                                    class="rounded text-green-600 focus:ring-green-500">
                                                                                             <span class="font-medium text-gray-900 dark:text-gray-100">
-                                                {{ $shade->shade }}
-                                            </span>
+                                                                                                {{ $shade->shade }}
+                                                                                            </span>
                                                                                         </label>
 
                                                                                         <input type="number" min="1"
@@ -1051,39 +1055,66 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                        @else
-                                                            {{-- Simple Deliver Button for Tape Match & No Need to Develop --}}
-                                                            <form action="{{ route('inquiry.markCustomerDelivered') }}" method="POST">
-                                                                @csrf
-                                                                <input type="hidden" name="id" value="{{ $inquiry->id }}">
-                                                                <button type="submit"
-                                                                        class="px-3 py-1 rounded text-white bg-green-600 hover:bg-green-700 transition duration-200">
-                                                                    Deliver
-                                                                </button>
-                                                            </form>
+                                                        @endif
+
+                                                        {{-- Dispatch Note available if any delivery happened --}}
+                                                        @if($anyDelivered && $inquiry->dNoteNumber)
+                                                            <a href="{{ asset('storage/dispatches/' . $inquiry->dNoteNumber) }}" target="_blank"
+                                                               class="px-3 py-1 rounded text-sm bg-blue-600 text-white hover:bg-blue-700 transition mt-2 inline-block">
+                                                                Dispatch Note
+                                                            </a>
+                                                        @endif
+
+                                                        {{-- Final Delivered Banner --}}
+                                                        @if($allDelivered)
+                                                            <div class="flex flex-col items-center space-y-1 mt-2">
+                                                            <span class="inline-block text-sm font-semibold text-gray-700 dark:text-white bg-green-100 dark:bg-gray-800 px-3 py-1 rounded text-center">
+                                                                Delivered on <br>
+                                                                {{ \Carbon\Carbon::parse($inquiry->customerDeliveryDate)->format('Y-m-d H:i') }}
+                                                            </span>
+                                                            </div>
+                                                        @endif
+
+                                                        @if(!$allDelivered && $pendingShades->isEmpty() && !$anyDelivered)
+                                                            <span class="text-gray-400 italic">-</span>
                                                         @endif
                                                     @endif
 
-                                                    {{-- Delivered Banner / Dispatch Note --}}
-                                                    @if($delivered)
-                                                        <div class="flex flex-col items-center space-y-1 mt-2">
-            <span class="inline-block text-sm font-semibold text-gray-700 dark:text-white bg-green-100 dark:bg-gray-800 px-3 py-1 rounded text-center">
-                Delivered on <br>
-                {{ \Carbon\Carbon::parse($inquiry->customerDeliveryDate)->format('Y-m-d H:i') }}
-            </span>
+                                                    {{-- CASE 2: Tape Match / No Need to Develop --}}
+                                                    @if($specialCase)
+                                                        @if(!empty($inquiry->referenceNo))
+                                                            @if($inquiry->productionStatus !== 'Delivered')
+                                                                {{-- Show Deliver button if not yet delivered --}}
+                                                                <form action="{{ route('inquiry.markCustomerDelivered') }}" method="POST">
+                                                                    @csrf
+                                                                    <input type="hidden" name="id" value="{{ $inquiry->id }}">
+                                                                    <button type="submit"
+                                                                            class="px-3 py-1 rounded text-white bg-green-600 hover:bg-green-700 transition duration-200">
+                                                                        Deliver
+                                                                    </button>
+                                                                </form>
+                                                            @else
+                                                                {{-- Show Delivered banner + dispatch note once status is Delivered --}}
+                                                                <div class="flex flex-col items-center space-y-1 mt-2">
+                                                                <span class="inline-block text-sm font-semibold text-gray-700 dark:text-white bg-green-100 dark:bg-gray-800 px-3 py-1 rounded text-center">
+                                                                    Delivered on <br>
+                                                                    {{ \Carbon\Carbon::parse($inquiry->customerDeliveryDate)->format('Y-m-d H:i') }}
+                                                                </span>
 
-                                                            @if($inquiry->dNoteNumber)
-                                                                <a href="{{ asset('storage/dispatches/' . $inquiry->dNoteNumber) }}" target="_blank"
-                                                                   class="px-3 py-1 rounded text-sm bg-blue-600 text-white hover:bg-blue-700 transition">
-                                                                    Dispatch Note
-                                                                </a>
+                                                                    @if($inquiry->dNoteNumber)
+                                                                        <a href="{{ asset('storage/dispatches/' . $inquiry->dNoteNumber) }}" target="_blank"
+                                                                           class="px-3 py-1 rounded text-sm bg-blue-600 text-white hover:bg-blue-700 transition">
+                                                                            Dispatch Note
+                                                                        </a>
+                                                                    @endif
+                                                                </div>
                                                             @endif
-                                                        </div>
-                                                    @elseif(!$delivered)
-                                                        <span class="text-gray-400 italic">-</span>
+                                                        @else
+                                                            {{-- Show message when referenceNo is null --}}
+                                                            <span class="text-red-600 font-semibold">Set Ref No to Deliver</span>
+                                                        @endif
                                                     @endif
                                                 </td>
-
 
                                                 <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300">
                                                     <div x-data="{

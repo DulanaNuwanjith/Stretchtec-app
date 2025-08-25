@@ -327,6 +327,7 @@ class SampleInquiryController extends Controller
                 'shade' => $inquiry->referenceNo ?? '-',
                 'quantity' => 1
             ];
+            $inquiry->productionStatus = 'Delivered';
         }
 
         // Update delivery info
