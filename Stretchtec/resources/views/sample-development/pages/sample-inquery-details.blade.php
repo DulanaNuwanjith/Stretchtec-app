@@ -1151,7 +1151,7 @@
                                                             </div>
                                                         @endif
 
-                                                        @if (!$allDelivered && $pendingShades->isEmpty() && !$anyDelivered)
+                                                        @if (!$allDelivered && $pendingShades->isEmpty() && !$anyDelivered && !(empty($inquiry->referenceNo) && !$allDelivered))
                                                             <span class="text-gray-400 italic">—</span>
                                                         @endif
                                                     @endif
