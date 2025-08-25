@@ -943,6 +943,8 @@
                                                                 => 'bg-pink-50 text-pink-700 dark:bg-pink-900 dark:text-pink-200',
                                                             'Colour Match Received'
                                                                 => 'bg-emerald-50 text-emerald-700 dark:bg-emerald-900 dark:text-emerald-200',
+                                                             'Dispatched to RnD'
+                                                                => 'bg-purple-500 text-white dark:bg-purple-700 dark:text-white',
                                                             default
                                                                 => 'bg-gray-50 text-gray-700 dark:bg-gray-900 dark:text-gray-200',
                                                         };
