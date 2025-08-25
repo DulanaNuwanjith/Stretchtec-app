@@ -26,6 +26,7 @@ return new class extends Migration
             $table->DateTime('delivered_date')->nullable(); // delivered date
             $table->DateTime('production_complete_date')->nullable(); // production complete date
             $table->DateTime('dispatched_date')->nullable(); // dispatched date
+            $table->integer('qty')->nullable(); // quantity
             $table->timestamps();
         });
     }

@@ -1134,7 +1134,7 @@
                                                                                         at
                                                                                         {{ \Carbon\Carbon::parse($shade->delivered_date)->format('H:i') }}
                                                                                         (Qty:
-                                                                                        {{ $shade->quantity ?? '—' }})
+                                                                                        {{ $shade->qty ?? '—' }})
                                                                                     </span>
                                                                                 </div>
                                                                             @endforeach
@@ -1257,7 +1257,7 @@
                                                         setDecision(decision) {
                                                             this.selectedDecision = decision;
                                                             this.selectedColor = decision;
-                                                    
+
                                                             if (decision === 'Order Rejected') {
                                                                 this.openModal = true;
                                                                 this.openDropdown = false;

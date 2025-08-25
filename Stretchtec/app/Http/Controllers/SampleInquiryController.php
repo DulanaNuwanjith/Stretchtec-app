@@ -308,6 +308,7 @@ class SampleInquiryController extends Controller
 
                     $shade->status = 'Delivered';
                     $shade->delivered_date = now();
+                    $shade->qty = $quantity;
                     $shade->save();
 
                     $totalDelivered += $quantity;
