@@ -460,6 +460,9 @@ class SampleInquiryController extends Controller
         // Store orderRejectNumber only if customerDecision is 'Order Rejected'
         if ($request->input('customerDecision') === 'Order Rejected') {
             $sampleInquiry->rejectNO = $request->input('orderRejectNumber');
+        }else {
+            // Clear reject number for other decisions
+            $sampleInquiry->rejectNO = null;
         }
 
         $sampleInquiry->save();

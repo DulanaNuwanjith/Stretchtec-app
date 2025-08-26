@@ -473,12 +473,29 @@ class SamplePreparationRnDController extends Controller
         ]);
 
         $prep = SamplePreparationRnD::findOrFail($request->id);
+        $referenceNo = $request->input('referenceNo');
+
+        // Only check for duplicates if type is 'Need to Develop' or 'Tape Match Pan Asia'
+        if (in_array($prep->alreadyDeveloped, ['Need to Develop', 'Tape Match Pan Asia'])) {
+            $exists = SamplePreparationRnD::where('referenceNo', $referenceNo)
+                ->where('id', '!=', $prep->id)
+                ->exists();
+
+            if ($exists) {
+                return back()->withErrors(['referenceNo' => 'Reference No already exists.'])->withInput();
+            }
+        }
+
         $isFirstTime = !$prep->is_reference_locked;
 
         // Lock reference if first time
         if ($isFirstTime) {
-            $prep->referenceNo = $request->referenceNo;
+            $prep->referenceNo = $referenceNo;
             $prep->is_reference_locked = true;
+            $prep->save();
+        } else {
+            // Update reference for other cases (including No Need to Develop)
+            $prep->referenceNo = $referenceNo;
             $prep->save();
         }
 
@@ -513,9 +530,8 @@ class SamplePreparationRnDController extends Controller
 
         return back()->with('success', $isFirstTime
             ? 'Reference No saved and Sample Stock(s) created for dispatched shades.'
-            : 'New dispatched shades added to Sample Stock.');
+            : 'Reference No updated and new dispatched shades added to Sample Stock.');
     }
-
 
     /**
      * Update the Developed Status and related fields, locking them as necessary.

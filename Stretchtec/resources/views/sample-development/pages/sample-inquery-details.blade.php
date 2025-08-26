@@ -943,7 +943,7 @@
                                                                 => 'bg-pink-50 text-pink-700 dark:bg-pink-900 dark:text-pink-200',
                                                             'Colour Match Received'
                                                                 => 'bg-emerald-50 text-emerald-700 dark:bg-emerald-900 dark:text-emerald-200',
-                                                             'Dispatched to RnD'
+                                                            'Dispatched to RnD'
                                                                 => 'bg-purple-500 text-white dark:bg-purple-700 dark:text-white',
                                                             default
                                                                 => 'bg-gray-50 text-gray-700 dark:bg-gray-900 dark:text-gray-200',
@@ -1108,7 +1108,8 @@
                                                                     class="cursor-pointer inline-block text-sm font-semibold text-gray-700 dark:text-white bg-green-100 dark:bg-gray-800 px-3 py-1 rounded text-center">
                                                                     Delivered on <br>
                                                                     {{ \Carbon\Carbon::parse($inquiry->customerDeliveryDate)->format('Y-m-d') }}
-                                                                    at {{ \Carbon\Carbon::parse($inquiry->customerDeliveryDate)->format('H:i') }}
+                                                                    at
+                                                                    {{ \Carbon\Carbon::parse($inquiry->customerDeliveryDate)->format('H:i') }}
                                                                 </span>
 
                                                                 {{-- Modal: Shade-wise Delivered Details --}}
@@ -1227,6 +1228,7 @@
                                                                 @endif
 
                                                             @else
+<<<<<<< Updated upstream
                                                                 {{-- Already Delivered - show delivered date and Dispatch Note --}}
                                                                 <div x-data="{ openShades: false }" class="flex flex-col items-center space-y-1 mt-2">
                                                                 <span @click="openShades = true"
@@ -1235,6 +1237,17 @@
                                                                     {{ \Carbon\Carbon::parse($inquiry->customerDeliveryDate)->format('Y-m-d') }}
                                                                     at {{ \Carbon\Carbon::parse($inquiry->customerDeliveryDate)->format('H:i') }}
                                                                 </span>
+=======
+                                                                <div x-data="{ openShades: false }"
+                                                                    class="flex flex-col items-center space-y-1 mt-2">
+                                                                    <span @click="openShades = true"
+                                                                        class="cursor-pointer inline-block text-sm font-semibold text-gray-700 dark:text-white bg-green-100 dark:bg-gray-800 px-3 py-1 rounded text-center">
+                                                                        Delivered on <br>
+                                                                        {{ \Carbon\Carbon::parse($inquiry->customerDeliveryDate)->format('Y-m-d') }}
+                                                                        at
+                                                                        {{ \Carbon\Carbon::parse($inquiry->customerDeliveryDate)->format('H:i') }}
+                                                                    </span>
+>>>>>>> Stashed changes
 
                                                                     {{-- Modal for shade-wise details --}}
                                                                     <div x-show="openShades" x-transition x-cloak
@@ -1303,7 +1316,7 @@
                                                         setDecision(decision) {
                                                             this.selectedDecision = decision;
                                                             this.selectedColor = decision;
-
+                                                    
                                                             if (decision === 'Order Rejected') {
                                                                 this.openModal = true;
                                                                 this.openDropdown = false;
@@ -1380,6 +1393,13 @@
                                                                 </div>
                                                             </div>
                                                         </form>
+
+                                                        {{-- Show Reject Number if exists --}}
+                                                        @if (!empty($inquiry->rejectNO))
+                                                            <div class="mt-2 text-sm text-red-700 font-semibold">
+                                                                Reject No: {{ $inquiry->rejectNO }}
+                                                            </div>
+                                                        @endif
 
                                                         {{-- Modal for Order Rejected --}}
                                                         <div x-show="openModal" x-transition
