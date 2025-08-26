@@ -1,8 +1,25 @@
 <?php
 
-use App\Http\Controllers\LeftoverYarnController;
+/**
+ * --------------------------------------------------------------------------
+ * Web Routes File (web.php)
+ * --------------------------------------------------------------------------
+ * This file defines all the HTTP routes for the application.
+ * It maps URLs to specific controllers, methods, or views.
+ *
+ * Routes are grouped logically with middleware restrictions to ensure
+ * proper access control based on authentication and user roles.
+ *
+ * Storyline Approach:
+ * - Start with general access routes (login, dashboard).
+ * - Move into functional modules (Catalog, Sample Inquiries, R&D, Production).
+ * - Add role-restricted areas (Operators, Supervisors, Reports).
+ * - End with advanced reporting routes.
+ */
+
 use App\Http\Controllers\ColorMatchRejectController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\LeftoverYarnController;
 use App\Http\Controllers\OperatorsandSupervisorsController;
 use App\Http\Controllers\ProductCatalogController;
 use App\Http\Controllers\ReportController;
@@ -15,31 +32,107 @@ use App\Http\Controllers\UserMananagementController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
+/* ==========================================================================
+ |  AUTHENTICATION & ENTRY POINT
+ |==========================================================================*/
+
+/**
+ * Default route: redirect user to login view when visiting root URL.
+ */
 Route::get('/', function () {
     return view('auth.login');
 });
 
+
+/* ==========================================================================
+ |  AUTHENTICATED USER ROUTES
+ |==========================================================================*/
+
+/**
+ * All routes within this group require:
+ * - Sanctum authentication
+ * - Jetstream session
+ * - Verified user email
+ */
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
 
+    /* ----------------------------------------------------------------------
+     | Dashboard
+     |----------------------------------------------------------------------
+     | Displays key metrics and overview for logged-in users.
+     */
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+
+    /* ----------------------------------------------------------------------
+     | Product Catalog Routes
+     |----------------------------------------------------------------------
+     | Manage product catalog including elastic, tape, and code variations.
+     */
     Route::patch('/product-catalog/{catalog}/update-shade', [ProductCatalogController::class, 'updateShade'])
         ->name('productCatalog.updateShade');
 
+    Route::get('productCatalog', function () {
+        return view('production-catalog.productCatalog');
+    })->name('productCatalog.index');
+
+    Route::get('elasticCatalog', [ProductCatalogController::class, 'elasticCatalog'])->name('elasticCatalog.index');
+    Route::get('tapeCatalog', [ProductCatalogController::class, 'tapeCatalog'])->name('tapeCatalog.index');
+    Route::get('codeCatalog', [ProductCatalogController::class, 'codeCatalog'])->name('codeCatalog.index');
+
+    // Resourceful routes for full catalog CRUD
+    Route::resource('product-catalog', ProductCatalogController::class);
+
+    // Specific POST routes for creating catalog entries
+    Route::post('/product-catalog', [ProductCatalogController::class, 'store'])->name('product-catalog.store');
+    Route::post('elasticCatalog/store', [ProductCatalogController::class, 'storeElastic'])->name('elasticCatalog.store');
+    Route::post('codeCatalog/store', [ProductCatalogController::class, 'storeCode'])->name('codeCatalog.store');
+    Route::post('tapeCatalog/store', [ProductCatalogController::class, 'storeTape'])->name('tapeCatalog.store');
+
+    // Upload product images and approvals
+    Route::post('catalog/{catalog}/upload-image', [ProductCatalogController::class, 'uploadOrderImage'])->name('catalog.uploadImage');
+    Route::patch('product-catalog/{productCatalog}/approval', [ProductCatalogController::class, 'updateApproval'])->name('product-catalog.updateApproval');
+
+
+    /* ----------------------------------------------------------------------
+     | Sample Preparation (RnD & Production) Routes
+     |----------------------------------------------------------------------
+     */
     Route::get('sample-preparation-details', [SamplePreparationRnDController::class, 'viewRnD'])
         ->name('sample-preparation-details.index');
-
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::patch('/sample-preparation-production/update-operator/{id}', [SamplePreparationProductionController::class, 'updateOperator'])
         ->name('sample-preparation-production.update-operator');
     Route::patch('/sample-preparation-production/update-supervisor/{id}', [SamplePreparationProductionController::class, 'updateSupervisor'])
         ->name('sample-preparation-production.update-supervisor');
 
+
+    /* ----------------------------------------------------------------------
+     | Sample Inquiry Routes
+     |----------------------------------------------------------------------
+     | Manage inquiries from customers regarding sample development.
+     */
     Route::patch('/sample-inquery-details/{id}/update-notes', [SampleInquiryController::class, 'updateNotes'])->name('sample-inquery-details.update-notes');
 
+    Route::resource('sampleInquiry', SampleInquiryController::class)->names([
+        'index' => 'sample-inquery-details.index',
+        'store' => 'sampleInquiry.store',
+        'destroy' => 'sampleInquiry.destroy',
+    ]);
+
+    Route::post('/sampleInquiry/mark-customer-delivered', [SampleInquiryController::class, 'markCustomerDelivered'])
+        ->name('inquiry.markCustomerDelivered');
+    Route::post('/inquiry/mark-delivered', [SampleInquiryController::class, 'markCustomerDelivered'])->name('inquiry.markCustomerDelivered');
+
+
+    /* ----------------------------------------------------------------------
+     | Leftover Yarn Management Routes
+     |----------------------------------------------------------------------
+     */
     Route::resource('leftoverYarnManagement', LeftoverYarnController::class)->names([
         'index' => 'leftoverYarn.index',
         'store' => 'leftoverYarn.store',
@@ -48,6 +141,11 @@ Route::middleware([
     ]);
     Route::post('/leftover-yarn/borrow/{id}', [SamplePreparationRnDController::class, 'borrow'])->name('leftover-yarn.borrow');
 
+
+    /* ----------------------------------------------------------------------
+     | Sample Stock Management Routes
+     |----------------------------------------------------------------------
+     */
     Route::resource('sampleStockManagement', SampleStockController::class)->names([
         'index' => 'sampleStock.index',
         'store' => 'sampleStock.store',
@@ -56,33 +154,18 @@ Route::middleware([
     ]);
     Route::post('/sample-stock/{id}/borrow', [SampleStockController::class, 'borrow'])->name('sampleStock.borrow');
 
-    Route::get('productCatalog', function () {
-        return view('production-catalog.productCatalog');
-    })->name('productCatalog.index');
 
+    /* ----------------------------------------------------------------------
+     | Stores Management (Inventory)
+     |----------------------------------------------------------------------
+     */
     Route::get('storeManagement', [StoresController::class, 'index'])->name('storeManagement.index');
 
-    Route::get('elasticCatalog', [ProductCatalogController::class, 'elasticCatalog'])->name('elasticCatalog.index');
-    Route::get('tapeCatalog', [ProductCatalogController::class, 'tapeCatalog'])->name('tapeCatalog.index');
-    Route::get('codeCatalog', [ProductCatalogController::class, 'codeCatalog'])->name('codeCatalog.index');
-    Route::resource('product-catalog', ProductCatalogController::class);
-    Route::post('/product-catalog', [ProductCatalogController::class, 'store'])->name('product-catalog.store');
-    Route::post('elasticCatalog/store', [ProductCatalogController::class, 'storeElastic'])->name('elasticCatalog.store');
-    Route::post('codeCatalog/store', [ProductCatalogController::class, 'storeCode'])->name('codeCatalog.store');
-    Route::post('tapeCatalog/store', [ProductCatalogController::class, 'storeTape'])->name('tapeCatalog.store');
-    Route::post('catalog/{catalog}/upload-image', [ProductCatalogController::class, 'uploadOrderImage'])->name('catalog.uploadImage');
-    Route::patch('product-catalog/{productCatalog}/approval', [ProductCatalogController::class, 'updateApproval'])->name('product-catalog.updateApproval');
 
-    //Sample inquiry routes
-    Route::resource('sampleInquiry', SampleInquiryController::class)->names([
-        'index' => 'sample-inquery-details.index',
-        'store' => 'sampleInquiry.store',
-        'destroy' => 'sampleInquiry.destroy',
-    ]);
-    Route::post('/sampleInquiry/mark-customer-delivered', [SampleInquiryController::class, 'markCustomerDelivered'])
-        ->name('inquiry.markCustomerDelivered');
-    Route::post('/inquiry/mark-delivered', [SampleInquiryController::class, 'markCustomerDelivered'])->name('inquiry.markCustomerDelivered');
-
+    /* ----------------------------------------------------------------------
+     | Production Inquiry & Order Preparation Views
+     |----------------------------------------------------------------------
+     */
     Route::get('production-inquery-details', function () {
         return view('production.pages.production-inquery-details');
     })->name('production-inquery-details.index');
@@ -93,9 +176,14 @@ Route::middleware([
 });
 
 
-//SAMPLE INQUIRY ROUTES
+/* ==========================================================================
+ |  MODULE-SPECIFIC ROUTES WITH ROLE RESTRICTIONS
+ |==========================================================================*/
+
+/**
+ * SAMPLE INQUIRY ROUTES - Restricted to ADMIN, SUPERADMIN, CUSTOMERCOORDINATOR
+ */
 Route::middleware(['auth'])->group(function () {
-    // Allow only ADMIN, SUPERADMIN, CUSTOMERCOORDINATOR
     Route::group(['middleware' => function ($request, $next) {
         $allowedRoles = ['ADMIN', 'SUPERADMIN', 'CUSTOMERCOORDINATOR'];
         if (!Auth::check() || !in_array(Auth::user()->role, $allowedRoles)) {
@@ -112,9 +200,11 @@ Route::middleware(['auth'])->group(function () {
     });
 });
 
-// SAMPLE PREPARATION R&D ROUTES
+
+/**
+ * SAMPLE PREPARATION R&D ROUTES - Restricted to ADMIN, SUPERADMIN, SAMPLEDEVELOPER
+ */
 Route::middleware(['auth'])->group(function () {
-    // Restrict access to admin, superadmin, and sampledeveloper
     Route::group(['middleware' => function ($request, $next) {
         $allowedRoles = ['ADMIN', 'SUPERADMIN', 'SAMPLEDEVELOPER'];
         if (!Auth::check() || !in_array(Auth::user()->role, $allowedRoles)) {
@@ -123,6 +213,7 @@ Route::middleware(['auth'])->group(function () {
         return $next($request);
     }], function () {
 
+        // Colour matching & yarn management
         Route::post('/rnd/mark-colour-match-sent', [SamplePreparationRnDController::class, 'markColourMatchSent'])
             ->name('rnd.markColourMatchSent');
         Route::post('/rnd/mark-colour-match-receive', [SamplePreparationRnDController::class, 'markColourMatchReceive'])
@@ -131,37 +222,39 @@ Route::middleware(['auth'])->group(function () {
             ->name('rnd.markYarnOrdered');
         Route::post('/rnd/mark-yarn-received', [SamplePreparationRnDController::class, 'markYarnReceived'])
             ->name('rnd.markYarnReceived');
+
+        // Workflow progression
         Route::post('/rnd/mark-send-to-production', [SamplePreparationRnDController::class, 'markSendToProduction'])
             ->name('rnd.markSendToProduction');
         Route::post('/rnd/set-develop-plan-date', [SamplePreparationRnDController::class, 'setDevelopPlanDate'])
             ->name('rnd.setDevelopPlanDate');
-        Route::post('/rnd/lockPoField', [SamplePreparationRnDController::class, 'lockPoField'])
-            ->name('rnd.lockPoField');
-        Route::post('/rnd/lockShadeField', [SamplePreparationRnDController::class, 'lockShadeField'])
-            ->name('rnd.lockShadeField');
-        Route::post('/rnd/lockQtyField', [SamplePreparationRnDController::class, 'lockQtyField'])
-            ->name('rnd.lockQtyField');
-        Route::post('/rnd/lockTktField', [SamplePreparationRnDController::class, 'lockTktField'])
-            ->name('rnd.lockTktField');
-        Route::post('/rnd/lockSupplierField', [SamplePreparationRnDController::class, 'lockSupplierField'])
-            ->name('rnd.lockSupplierField');
-        Route::post('/rnd/lockDeadlineField', [SamplePreparationRnDController::class, 'lockDeadlineField'])
-            ->name('rnd.lockDeadlineField');
-        Route::post('/rnd/lockReferenceField', [SamplePreparationRnDController::class, 'lockReferenceField'])
-            ->name('rnd.lockReferenceField');
+
+        // Field locking (ensure values can’t be modified further)
+        Route::post('/rnd/lockPoField', [SamplePreparationRnDController::class, 'lockPoField'])->name('rnd.lockPoField');
+        Route::post('/rnd/lockShadeField', [SamplePreparationRnDController::class, 'lockShadeField'])->name('rnd.lockShadeField');
+        Route::post('/rnd/lockQtyField', [SamplePreparationRnDController::class, 'lockQtyField'])->name('rnd.lockQtyField');
+        Route::post('/rnd/lockTktField', [SamplePreparationRnDController::class, 'lockTktField'])->name('rnd.lockTktField');
+        Route::post('/rnd/lockSupplierField', [SamplePreparationRnDController::class, 'lockSupplierField'])->name('rnd.lockSupplierField');
+        Route::post('/rnd/lockDeadlineField', [SamplePreparationRnDController::class, 'lockDeadlineField'])->name('rnd.lockDeadlineField');
+        Route::post('/rnd/lockReferenceField', [SamplePreparationRnDController::class, 'lockReferenceField'])->name('rnd.lockReferenceField');
+
+        // Development status & yarn weight updates
         Route::post('/sample-preparation/update-developed', [SamplePreparationRnDController::class, 'updateDevelopedStatus'])
             ->name('rnd.updateDevelopedStatus');
         Route::post('/rnd/update-yarn-weights', [SamplePreparationRnDController::class, 'updateYarnWeights'])
             ->name('rnd.updateYarnWeights');
-        Route::post('/color-match-rejects/store', [ColorMatchRejectController::class, 'store'])
-            ->name('colorMatchRejects.store');
+
+        // Colour match rejects
+        Route::post('/color-match-rejects/store', [ColorMatchRejectController::class, 'store'])->name('colorMatchRejects.store');
         Route::get('/color-match-reject/{id}', [ColorMatchRejectController::class, 'getRejectDetails']);
     });
 });
 
-// SAMPLE PREPARATION PRODUCTION ROUTES
+
+/**
+ * SAMPLE PREPARATION PRODUCTION ROUTES - Restricted to PRODUCTIONOFFICER, ADMIN, SUPERADMIN
+ */
 Route::middleware(['auth'])->group(function () {
-    // Restrict to production_officer, admin, superadmin
     Route::group(['middleware' => function ($request, $next) {
         $allowedRoles = ['PRODUCTIONOFFICER', 'ADMIN', 'SUPERADMIN'];
         if (!Auth::check() || !in_array(Auth::user()->role, $allowedRoles)) {
@@ -170,31 +263,28 @@ Route::middleware(['auth'])->group(function () {
         return $next($request);
     }], function () {
 
+        // Grouped under prefix 'sample-production'
         Route::prefix('sample-production')->group(function () {
-            Route::get('/', [SamplePreparationProductionController::class, 'index'])
-                ->name('production.index');
-            Route::post('/update', [SamplePreparationProductionController::class, 'update'])
-                ->name('production.update');
-            Route::post('/mark-start', [SamplePreparationProductionController::class, 'markOrderStart'])
-                ->name('production.markStart');
-            Route::post('/mark-complete', [SamplePreparationProductionController::class, 'markOrderComplete'])
-                ->name('production.markComplete');
-            Route::post('/dispatch-to-rnd', [SamplePreparationProductionController::class, 'dispatchToRnd'])
-                ->name('production.dispatchToRnd');
-            Route::post('/update-output', [SamplePreparationProductionController::class, 'updateOutput'])
-                ->name('production.updateOutput');
-            Route::post('/update-damagedOutput', [SamplePreparationProductionController::class, 'updateDamagedOutput'])
-                ->name('production.updateDamagedOutput');
+            Route::get('/', [SamplePreparationProductionController::class, 'index'])->name('production.index');
+            Route::post('/update', [SamplePreparationProductionController::class, 'update'])->name('production.update');
+            Route::post('/mark-start', [SamplePreparationProductionController::class, 'markOrderStart'])->name('production.markStart');
+            Route::post('/mark-complete', [SamplePreparationProductionController::class, 'markOrderComplete'])->name('production.markComplete');
+            Route::post('/dispatch-to-rnd', [SamplePreparationProductionController::class, 'dispatchToRnd'])->name('production.dispatchToRnd');
+            Route::post('/update-output', [SamplePreparationProductionController::class, 'updateOutput'])->name('production.updateOutput');
+            Route::post('/update-damagedOutput', [SamplePreparationProductionController::class, 'updateDamagedOutput'])->name('production.updateDamagedOutput');
         });
 
+        // Alternative index route (outside prefix)
         Route::get('/sample-preparation-production', [SamplePreparationProductionController::class, 'index'])
             ->name('sample-preparation-production.index');
     });
 });
 
-//OPERATORS AND SUPERVISORS ROUTES
+
+/**
+ * OPERATORS & SUPERVISORS ROUTES - Restricted to SUPERADMIN only
+ */
 Route::middleware(['auth'])->group(function () {
-    // Restrict only to superadmin
     Route::group(['middleware' => function ($request, $next) {
         if (!Auth::check() || Auth::user()->role !== 'SUPERADMIN') {
             abort(403, 'Unauthorized access.');
@@ -202,7 +292,7 @@ Route::middleware(['auth'])->group(function () {
         return $next($request);
     }], function () {
 
-        // Operators and Supervisors routes
+        // Operators and Supervisors Management
         Route::resource('operatorsandSupervisors', OperatorsandSupervisorsController::class)->names([
             'index' => 'operatorsandSupervisors.index',
             'store' => 'operatorsandSupervisors.store',
@@ -210,13 +300,16 @@ Route::middleware(['auth'])->group(function () {
             'destroy' => 'operatorsandSupervisors.destroy',
         ]);
 
-        // User management routes
+        // User Management
         Route::get('/userDetails', [UserMananagementController::class, 'index'])->name('userDetails.index');
         Route::delete('/userDetails/{id}', [UserMananagementController::class, 'destroy'])->name('userDetails.destroy');
     });
 });
 
-// REPORTS ROUTES
+
+/**
+ * REPORTS ROUTES - Restricted to ADMIN and SUPERADMIN
+ */
 Route::middleware(['auth'])->group(function () {
     Route::group(['middleware' => function ($request, $next) {
         $allowedRoles = ['ADMIN', 'SUPERADMIN'];
@@ -226,17 +319,20 @@ Route::middleware(['auth'])->group(function () {
         return $next($request);
     }], function () {
 
+        // General and specific reports
         Route::get('/reports/sample-reports', [ReportController::class, 'showReportPage'])->name('sample-reports.index');
         Route::get('/reports/customer-decision', [ReportController::class, 'inquiryCustomerDecisionReport'])->name('reports.customerDecision');
         Route::get('/report/order', [ReportController::class, 'generateOrderReport'])->name('report.order');
         Route::get('/report/inquiry-range', [ReportController::class, 'inquiryRangeReport'])->name('report.inquiryRange');
+
+        // Views for production-related reports
         Route::get('/reports/production-reports', function () {
             return view('reports.production-reports');
         })->name('production-reports.index');
+
+        // Yarn supplier spending and coordinator reports
         Route::get('/reports/yarn-supplier-spending', [ReportController::class, 'yarnSupplierSpendingReport'])->name('reports.yarnSupplierSpending');
         Route::get('/reports/coordinator/pdf', [ReportController::class, 'coordinatorReportPdf'])->name('reports.coordinatorPdf');
         Route::get('/reports/reference-delivery', [ReportController::class, 'referenceDeliveryReport'])->name('reports.reference_delivery');
     });
 });
-
-
