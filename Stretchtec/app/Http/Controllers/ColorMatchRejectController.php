@@ -52,6 +52,7 @@ class ColorMatchRejectController extends Controller
         //
     }
 
+
     /**
      * Store a newly created resource in storage.
      */
@@ -93,6 +94,7 @@ class ColorMatchRejectController extends Controller
         return redirect()->back()->with('success', 'Color match reject created successfully.');
     }
 
+
     /**
      * Display the specified resource.
      */
@@ -100,6 +102,7 @@ class ColorMatchRejectController extends Controller
     {
         //
     }
+
 
     /**
      * Show the form for editing the specified resource.
@@ -109,6 +112,7 @@ class ColorMatchRejectController extends Controller
         //
     }
 
+
     /**
      * Update the specified resource in storage.
      */
@@ -116,6 +120,7 @@ class ColorMatchRejectController extends Controller
     {
         //
     }
+
 
     /**
      * Remove the specified resource from storage.

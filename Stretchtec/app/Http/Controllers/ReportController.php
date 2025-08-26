@@ -13,7 +13,9 @@ use Illuminate\Http\Request;
 
 class ReportController extends Controller
 {
-    // Show report filter page with customers dropdown
+    /**
+     * Display the report generation page with customer list.
+     */
     public function showReportPage()
     {
         $customers = SampleInquiry::select('customerName')
@@ -24,7 +26,10 @@ class ReportController extends Controller
         return view('reports.sample-reports', compact('customers'));
     }
 
-    // Generate PDF report filtered by date range and optional customer
+
+    /**
+     * Generate inquiry report filtered by customer decision and date range
+     */
     public function inquiryCustomerDecisionReport(Request $request)
     {
         $request->validate([
@@ -52,6 +57,10 @@ class ReportController extends Controller
         return $pdf->download("Inquiry_Customer_Decision_Report_{$request->start_date}_to_{$request->end_date}.pdf");
     }
 
+
+    /**
+     * Generate detailed order report by order number
+     */
     public function generateOrderReport(Request $request)
     {
         $request->validate([
@@ -107,6 +116,10 @@ class ReportController extends Controller
         return $pdf->download("Order_Report_{$orderNo}.pdf");
     }
 
+
+    /**
+     * Generate inquiry report filtered by date range
+     */
     public function inquiryRangeReport(Request $request)
     {
         $request->validate([
@@ -127,7 +140,7 @@ class ReportController extends Controller
         // Delivered = customerDeliveryDate is NOT NULL
         $needToDeliver = $inquiries->whereNotNull('customerDeliveryDate');
 
-        $pdf = \PDF::loadView('reports.inquiry-range-pdf', [
+        $pdf = PDF::loadView('reports.inquiry-range-pdf', [
             'notDelivered' => $notDelivered,
             'needToDeliver' => $needToDeliver,
             'start_date' => $request->start_date,
@@ -137,6 +150,10 @@ class ReportController extends Controller
         return $pdf->download("Inquiry_Report_{$request->start_date}_to_{$request->end_date}.pdf");
     }
 
+
+    /**
+     * Generate yarn supplier spending report filtered by date range
+     */
     public function yarnSupplierSpendingReport(Request $request)
     {
         $request->validate([
@@ -150,7 +167,7 @@ class ReportController extends Controller
             ->orderBy('total_spent', 'desc')
             ->get();
 
-        $pdf = \PDF::loadView('reports.yarn-supplier-spending-pdf', [
+        $pdf = PDF::loadView('reports.yarn-supplier-spending-pdf', [
             'suppliers' => $suppliers,
             'start_date' => $request->start_date,
             'end_date' => $request->end_date,
@@ -159,6 +176,10 @@ class ReportController extends Controller
         return $pdf->download("Yarn_Supplier_Spending_{$request->start_date}_to_{$request->end_date}.pdf");
     }
 
+
+    /**
+     * Generate coordinator performance report filtered by date range
+     */
     public function coordinatorReportPdf(Request $request)
     {
         $request->validate([
@@ -210,6 +231,10 @@ class ReportController extends Controller
         return $pdf->download("Coordinator_Report_{$startDate}_to_{$endDate}.pdf");
     }
 
+
+    /**
+     * Generate coordinator performance report filtered by date range
+     */
     public function referenceDeliveryReport(Request $request)
     {
         $request->validate([
@@ -236,11 +261,15 @@ class ReportController extends Controller
                 return $inquiry;
             });
 
-        $pdf = \PDF::loadView('reports.reference_delivery_report_pdf', compact('inquiries', 'startDate', 'endDate'));
+        $pdf = PDF::loadView('reports.reference_delivery_report_pdf', compact('inquiries', 'startDate', 'endDate'));
 
         return $pdf->download("Reference_Delivery_Report_{$startDate}_to_{$endDate}.pdf");
     }
 
+
+    /**
+     * Generate sample inquiry report filtered by date range and coordinators
+     */
     public function generateSampleInquiryReport(Request $request)
     {
         $request->validate([

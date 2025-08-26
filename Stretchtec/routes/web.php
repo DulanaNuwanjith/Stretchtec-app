@@ -29,7 +29,7 @@
  *      3.2 Sample Preparation R&D (Admin / Superadmin / SampleDeveloper)
  *      3.3 Sample Preparation Production (Admin / Superadmin / ProductionOfficer)
  *      3.4 Operators & Supervisors (Superadmin Only)
- *      3.5 Reports (Admin / Superadmin)
+ *      3.5 Reports (Admin / Superadmin / Customer Coordinator)
  *
  * --------------------------------------------------------------------------
  * Storyline:
@@ -293,8 +293,6 @@ Route::middleware(['auth'])->group(function () {
             Route::post('/mark-start', [SamplePreparationProductionController::class, 'markOrderStart'])->name('production.markStart');
             Route::post('/mark-complete', [SamplePreparationProductionController::class, 'markOrderComplete'])->name('production.markComplete');
             Route::post('/dispatch-to-rnd', [SamplePreparationProductionController::class, 'dispatchToRnd'])->name('production.dispatchToRnd');
-            Route::post('/update-output', [SamplePreparationProductionController::class, 'updateOutput'])->name('production.updateOutput');
-            Route::post('/update-damagedOutput', [SamplePreparationProductionController::class, 'updateDamagedOutput'])->name('production.updateDamagedOutput');
         });
 
         // Alternative index route (outside prefix)
@@ -331,7 +329,7 @@ Route::middleware(['auth'])->group(function () {
 
 
 /**
- * REPORTS ROUTES - Restricted to ADMIN and SUPERADMIN
+ * REPORTS ROUTES - Restricted to ADMIN and SUPERADMIN and CUSTOMERCOORDINATOR
  */
 Route::middleware(['auth'])->group(function () {
     Route::group(['middleware' => function ($request, $next) {

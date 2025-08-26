@@ -12,6 +12,9 @@ use Illuminate\Support\Facades\Log;
 
 class SamplePreparationProductionController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     */
     public function index(Request $request)
     {
         $operators = OperatorsandSupervisors::where('role', 'OPERATOR')->get();
@@ -52,7 +55,10 @@ class SamplePreparationProductionController extends Controller
         ));
     }
 
-    // Update editable fields like operator_name, supervisor_name, production_output, deadline, order_no
+
+    /**
+     * Update the specified resource in storage.
+     */
     public function update(Request $request)
     {
         $request->validate([
@@ -72,6 +78,10 @@ class SamplePreparationProductionController extends Controller
         return redirect()->back()->with('success', 'Production record updated successfully.');
     }
 
+
+    /**
+     * Mark selected shades as In Production and update related statuses.
+     */
     public function markOrderStart(Request $request)
     {
         $request->validate([
@@ -121,6 +131,10 @@ class SamplePreparationProductionController extends Controller
         }
     }
 
+
+    /**
+     * Mark a specific shade as Production Complete and update related statuses.
+     */
     public function markOrderComplete(Request $request)
     {
         $request->validate([
@@ -180,6 +194,10 @@ class SamplePreparationProductionController extends Controller
         return back()->with('success', 'Shade marked as Production Complete.');
     }
 
+
+    /**
+     * Dispatch selected shades to RnD and update outputs.
+     */
     public function dispatchToRnd(Request $request)
     {
         $request->validate([
@@ -232,6 +250,10 @@ class SamplePreparationProductionController extends Controller
         return redirect()->back()->with('success', 'Shades dispatched and outputs updated successfully.');
     }
 
+
+    /**
+     * Update operator name for a production record.
+     */
     public function updateOperator(Request $request, $id)
     {
         $request->validate([
@@ -245,6 +267,10 @@ class SamplePreparationProductionController extends Controller
         return redirect()->back()->with('success', 'Operator updated successfully.');
     }
 
+
+    /**
+     * Update supervisor name for a production record.
+     */
     public function updateSupervisor(Request $request, $id)
     {
         $request->validate([
@@ -257,46 +283,4 @@ class SamplePreparationProductionController extends Controller
 
         return redirect()->back()->with('success', 'Supervisor updated successfully.');
     }
-
-    public function updateOutput(Request $request)
-    {
-        // Validate input
-        $request->validate([
-            'id' => 'required|exists:sample_preparation_production,id',
-            'production_output' => 'required|numeric|min:0',
-        ]);
-
-        // Find the production record
-        $prod = SamplePreparationProduction::findOrFail($request->id);
-
-        // Update the production output and lock the field
-        $prod->production_output = $request->production_output;
-        $prod->is_output_locked = true;
-        $prod->save();
-
-        // Redirect back with success message
-        return redirect()->back()->with('success', 'Production output updated and locked.');
-    }
-
-    public function updateDamagedOutput(Request $request)
-    {
-        // Validate input
-        $request->validate([
-            'id' => 'required|exists:sample_preparation_production,id',
-            'damaged_output' => 'required|numeric|min:0',
-        ]);
-
-        // Find the production record
-        $prod = SamplePreparationProduction::findOrFail($request->id);
-
-        // Update the production output and lock the field
-        $prod->damaged_output = $request->damaged_output;
-        $prod->is_damagedOutput_locked = true;
-        $prod->save();
-
-        // Redirect back with success message
-        return redirect()->back()->with('success', 'Production damaged output updated and locked.');
-    }
-
-
 }

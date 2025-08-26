@@ -9,6 +9,9 @@ use Illuminate\Support\Facades\Log;
 
 class UserMananagementController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     */
     public function index()
     {
         try {
@@ -22,6 +25,10 @@ class UserMananagementController extends Controller
         }
     }
 
+
+    /**
+     * Remove the specified resource from storage.
+     */
     public function destroy($id)
     {
         try {

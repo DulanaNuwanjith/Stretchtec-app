@@ -36,6 +36,7 @@ class LeftoverYarnController extends Controller
         //
     }
 
+
     /**
      * Store a newly created resource in storage.
      */
@@ -43,6 +44,7 @@ class LeftoverYarnController extends Controller
     {
         //
     }
+
 
     /**
      * Display the specified resource.
@@ -52,6 +54,7 @@ class LeftoverYarnController extends Controller
         //
     }
 
+
     /**
      * Show the form for editing the specified resource.
      */
@@ -60,6 +63,7 @@ class LeftoverYarnController extends Controller
         //
     }
 
+
     /**
      * Update the specified resource in storage.
      */
@@ -67,6 +71,7 @@ class LeftoverYarnController extends Controller
     {
         //
     }
+
 
     /**
      * Remove the specified resource from storage.

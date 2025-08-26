@@ -15,6 +15,9 @@ use Illuminate\Support\Str;
 
 class SamplePreparationRnDController extends Controller
 {
+    /**
+     * Display a listing of the Sample Preparation RnD records with filters and pagination.
+     */
     public function viewRnD(Request $request)
     {
         // Eager load sampleInquiry and shadeOrders
@@ -83,6 +86,9 @@ class SamplePreparationRnDController extends Controller
     }
 
 
+    /**
+     * Mark Colour Match as Sent or Received and update production status accordingly.
+     */
     public function markColourMatchSent(Request $request)
     {
         $request->validate([
@@ -103,6 +109,10 @@ class SamplePreparationRnDController extends Controller
         return back()->with('success', 'Colour Match marked as sent.');
     }
 
+
+    /**
+     * Mark Colour Match as Received and update production status accordingly.
+     */
     public function markColourMatchReceive(Request $request)
     {
         $request->validate([
@@ -123,6 +133,10 @@ class SamplePreparationRnDController extends Controller
         return back()->with('success', 'Colour Match marked as received.');
     }
 
+
+    /**
+     * Mark Yarn as Ordered along with shades and update production status.
+     */
     public function markYarnOrdered(Request $request)
     {
         // Validate the request
@@ -187,6 +201,10 @@ class SamplePreparationRnDController extends Controller
         return back()->with('success', 'Yarn Ordered Date and shades marked successfully.');
     }
 
+
+    /**
+     * Mark Yarn as Received along with PST numbers and update production status.
+     */
     public function markYarnReceived(Request $request)
     {
         $request->validate([
@@ -256,6 +274,10 @@ class SamplePreparationRnDController extends Controller
         return back()->with('success', 'Yarn receipt and PST numbers updated successfully.');
     }
 
+
+    /**
+     * Mark selected shades as Sent to Production and update statuses accordingly.
+     */
     public function markSendToProduction(Request $request)
     {
         $request->validate([
@@ -310,6 +332,10 @@ class SamplePreparationRnDController extends Controller
         return back()->with('success', 'Selected shades sent to production successfully.');
     }
 
+
+    /**
+     * Set and lock the Development Plan Date for a Sample Preparation RnD record.
+     */
     public function setDevelopPlanDate(Request $request)
     {
         $request->validate([
@@ -331,6 +357,9 @@ class SamplePreparationRnDController extends Controller
     }
 
 
+    /**
+     * Lock the PO Number field to prevent further edits when yarn ordered PO Number is added
+     */
     public function lockPoField(Request $request)
     {
         $request->validate([
@@ -348,6 +377,10 @@ class SamplePreparationRnDController extends Controller
         return back()->with('success', 'PO Number saved.');
     }
 
+
+    /**
+     * Lock the Shade field to prevent further edits when shades are added
+     */
     public function lockShadeField(Request $request)
     {
         $request->validate([
@@ -365,6 +398,10 @@ class SamplePreparationRnDController extends Controller
         return back()->with('success', 'Shade saved.');
     }
 
+
+    /**
+     * Lock the TKT field to prevent further edits when TKT is added
+     */
     public function lockTktField(Request $request)
     {
         $request->validate([
@@ -382,6 +419,10 @@ class SamplePreparationRnDController extends Controller
         return back()->with('success', 'TKT saved.');
     }
 
+
+    /**
+     * Lock the Supplier field to prevent further edits when Supplier is added
+     */
     public function lockSupplierField(Request $request)
     {
         $request->validate([
@@ -399,6 +440,10 @@ class SamplePreparationRnDController extends Controller
         return back()->with('success', 'Supplier saved.');
     }
 
+
+    /**
+     * Lock the Yarn Ordered Weight field to prevent further edits when weight is added
+     */
     public function lockDeadlineField(Request $request)
     {
         $request->validate([
@@ -416,6 +461,10 @@ class SamplePreparationRnDController extends Controller
         return back()->with('success', 'Production Deadline saved.');
     }
 
+
+    /**
+     * Lock the Reference No field, create Sample Stock for dispatched shades, and sync with Sample Inquiry
+     */
     public function lockReferenceField(Request $request)
     {
         $request->validate([
@@ -467,6 +516,10 @@ class SamplePreparationRnDController extends Controller
             : 'New dispatched shades added to Sample Stock.');
     }
 
+
+    /**
+     * Update the Developed Status and related fields, locking them as necessary.
+     */
     public function updateDevelopedStatus(Request $request)
     {
         $request->validate([
@@ -526,6 +579,9 @@ class SamplePreparationRnDController extends Controller
     }
 
 
+    /**
+     * Update yarn weights (ordered or leftover) and create LeftoverYarn records as needed.
+     */
     public function updateYarnWeights(Request $request)
     {
         $request->validate([
@@ -583,6 +639,10 @@ class SamplePreparationRnDController extends Controller
         return back()->with('success', 'Yarn weights updated successfully.');
     }
 
+
+    /**
+     * Handle borrowing of leftover yarn, updating stock or deleting record as needed.
+     */
     public function borrow(Request $request, $id)
     {
         $request->validate([

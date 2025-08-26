@@ -4,17 +4,57 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * --------------------------------------------------------------------------
+ * LeftoverYarn Model
+ * --------------------------------------------------------------------------
+ * Represents the `leftover_yarns` table in the database.
+ *
+ * This model is responsible for handling leftover yarn stock details,
+ * including shade, supplier, PO number, stock availability, and received dates.
+ *
+ * ✅ Key Points:
+ *  - Inherits from Eloquent's base Model.
+ *  - Uses `$fillable` to protect against mass assignment vulnerabilities.
+ *  - Uses `$casts` to automatically handle date conversions.
+ * --------------------------------------------------------------------------
+ */
 class LeftoverYarn extends Model
 {
+    /**
+     * ----------------------------------------------------------------------
+     * Mass-Assignable Attributes
+     * ----------------------------------------------------------------------
+     * Defines which fields can be bulk-assigned.
+     * Protects against mass assignment vulnerabilities.
+     *
+     * Columns:
+     *  - shade             → Yarn shade identifier
+     *  - po_number         → Purchase Order number related to yarn order
+     *  - yarn_received_date→ Date the yarn was received
+     *  - tkt               → TKT (ticket/thread specification)
+     *  - yarn_supplier     → Supplier name of the yarn
+     *  - available_stock   → Current available stock (quantity)
+     */
     protected $fillable = [
-        'shade',                // Shade
+        'shade',                // Yarn Shade
         'po_number',            // Yarn Ordered PO Number
-        'yarn_received_date',   // Yarn Received Date
-        'tkt',                  // Tkt
-        'yarn_supplier',        // Yarn Supplier
-        'available_stock',      // Available Stock
+        'yarn_received_date',   // Date when yarn was received
+        'tkt',                  // TKT (thread spec)
+        'yarn_supplier',        // Supplier of the yarn
+        'available_stock',      // Current available stock
     ];
 
+    /**
+     * ----------------------------------------------------------------------
+     * Attribute Casting
+     * ----------------------------------------------------------------------
+     * Ensures that `yarn_received_date` is always treated as a `date`
+     * when retrieved or stored.
+     *
+     * Example:
+     *   $yarn->yarn_received_date → Carbon instance
+     */
     protected $casts = [
         'yarn_received_date' => 'date',
     ];

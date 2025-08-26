@@ -4,8 +4,52 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * --------------------------------------------------------------------------
+ * SampleInquiry Model
+ * --------------------------------------------------------------------------
+ * Represents the `sample_inquiries` table in the database.
+ *
+ * This model is responsible for managing customer sample inquiries
+ * including order details, customer information, production timelines,
+ * and their linkage to R&D and production processes.
+ *
+ * ✅ Key Points:
+ *  - `$fillable` defines attributes safe for mass assignment.
+ *  - `$casts` ensures automatic type conversion (dates, datetime).
+ *  - Relationships link inquiries to Sample Preparation RnD,
+ *    Product Catalogs, and Production processes.
+ *  - `booted()` lifecycle method auto-creates ProductCatalog records
+ *    when reference numbers are updated.
+ *
+ * Example:
+ *   $inquiry = SampleInquiry::create([
+ *       'orderNo' => 'ORD001',
+ *       'customerName' => 'ABC Textiles',
+ *       'item' => 'Elastic',
+ *       'size' => 'L',
+ *       'color' => 'Black',
+ *       'sampleQty' => 100,
+ *       'inquiryReceiveDate' => now(),
+ *   ]);
+ * --------------------------------------------------------------------------
+ */
 class SampleInquiry extends Model
 {
+    /**
+     * ----------------------------------------------------------------------
+     * Mass-Assignable Attributes
+     * ----------------------------------------------------------------------
+     * Defines which fields can be bulk assigned during `create()` or `update()`.
+     *
+     * Includes:
+     *  - File references (orderFile, referenceNo, dNoteNumber, notes)
+     *  - Order & inquiry details (orderNo, inquiryReceiveDate, item, size, style)
+     *  - Customer info (customerName, merchandiseName, coordinatorName, decision)
+     *  - Production-related fields (sampleQty, alreadyDeveloped, developPlannedDate)
+     *  - Delivery details (customerRequestDate, customerDeliveryDate, deliveryQty)
+     *  - Rejections (rejectNO, customerSpecialComment)
+     */
     protected $fillable = [
         'orderFile',
         'orderNo',
@@ -35,36 +79,76 @@ class SampleInquiry extends Model
         'rejectNO',
     ];
 
+    /**
+     * ----------------------------------------------------------------------
+     * Attribute Casting
+     * ----------------------------------------------------------------------
+     * Automatically converts attributes to proper data types.
+     *
+     *  - inquiryReceiveDate   → `date`
+     *  - customerRequestDate  → `date`
+     *  - developPlannedDate   → `date`
+     *  - customerDeliveryDate → `datetime`
+     */
     protected $casts = [
         'inquiryReceiveDate' => 'date',
         'customerRequestDate' => 'date',
         'developPlannedDate' => 'date',
-        'customerDeliveryDate' => 'datetime'
+        'customerDeliveryDate' => 'datetime',
     ];
 
+    /* ======================================================================
+     * RELATIONSHIPS
+     * ======================================================================
+     */
+
+    /**
+     * Each inquiry has one Sample Preparation RnD entry.
+     */
     public function samplePreparationRnD()
     {
         return $this->hasOne(SamplePreparationRnD::class);
     }
 
+    /**
+     * Each inquiry can be linked to one Product Catalog.
+     */
     public function productCatalog()
     {
         return $this->hasOne(ProductCatalog::class);
     }
 
+    /**
+     * Each inquiry can be linked through SamplePreparationRnD
+     * to a Sample Preparation Production record.
+     *
+     * Uses a `hasOneThrough` relationship for indirect linkage.
+     */
     public function samplePreparationProduction()
     {
         return $this->hasOneThrough(
             SamplePreparationProduction::class,
             SamplePreparationRnD::class,
-            'sample_inquiry_id',        // Foreign key on sample_preparation_rnd table
-            'sample_preparation_rnd_id',// Foreign key on sample_preparation_production table
-            'id',                       // Local key on inquiry table
-            'id'                        // Local key on sample_preparation_rnd table
+            'sample_inquiry_id',         // Foreign key on sample_preparation_rnd
+            'sample_preparation_rnd_id', // Foreign key on sample_preparation_production
+            'id',                        // Local key on sample_inquiries
+            'id'                         // Local key on sample_preparation_rnd
         );
     }
 
+    /* ======================================================================
+     * MODEL EVENTS
+     * ======================================================================
+     */
 
+    /**
+     * Lifecycle Hook: booted()
+     * ----------------------------------------------------------------------
+     * Runs when the model is "booted".
+     * Logic: When `referenceNo` is updated, and if it has a linked
+     * SamplePreparationRnD entry (that isn't marked "No Need to Develop"),
+     * a corresponding ProductCatalog record is automatically created.
+     */
     protected static function booted()
     {
         static::updated(function ($inquiry) {
@@ -75,7 +159,7 @@ class SampleInquiry extends Model
             ) {
                 $rnd = $inquiry->samplePreparationRnD;
 
-                // Add check for alreadyDeveloped status before creating ProductCatalog
+                // Ensure the RnD entry exists and requires development
                 if ($rnd && $rnd->alreadyDeveloped !== 'No Need to Develop') {
                     ProductCatalog::create([
                         'order_no' => $inquiry->orderNo,

@@ -84,6 +84,10 @@ class SampleInquiryController extends Controller
         return view('sample-development.pages.sample-inquery-details', compact('inquiries', 'customers', 'merchandisers', 'items', 'coordinators', 'orderNos', 'distinctRejectNumbers'));
     }
 
+
+    /**
+     * Note Updating Function
+     */
     public function updateNotes(Request $request, $id)
     {
         $request->validate([
@@ -105,6 +109,7 @@ class SampleInquiryController extends Controller
     {
         //
     }
+
 
     /**
      * Store a newly created resource in storage.
@@ -199,6 +204,7 @@ class SampleInquiryController extends Controller
         //
     }
 
+
     /**
      * Show the form for editing the specified resource.
      */
@@ -207,6 +213,7 @@ class SampleInquiryController extends Controller
         //
     }
 
+
     /**
      * Update the specified resource in storage.
      */
@@ -214,6 +221,7 @@ class SampleInquiryController extends Controller
     {
         //
     }
+
 
     /**
      * Remove the specified resource from storage.
@@ -230,6 +238,9 @@ class SampleInquiryController extends Controller
     }
 
 
+    /**
+     * Function to update developed status (alreadyDeveloped)
+     */
     public function updateDevelopedStatus(Request $request)
     {
         $request->validate([
@@ -244,6 +255,10 @@ class SampleInquiryController extends Controller
         return back()->with('success', 'Development status updated!');
     }
 
+
+    /**
+     * Function to mark as sent to sample development (sets sentToSampleDevelopmentDate)
+     */
     public function markSentToSampleDevelopment(Request $request)
     {
         $request->validate([
@@ -267,7 +282,10 @@ class SampleInquiryController extends Controller
         return back()->with('success', 'Marked as sent to sample development.');
     }
 
-    //Not Checked yet
+
+    /**
+     * Function to mark as delivered to customer (sets customerDeliveryDate and generates dispatch note)
+     */
     public function markCustomerDelivered(Request $request)
     {
         $request->validate([
@@ -390,6 +408,10 @@ class SampleInquiryController extends Controller
         return back()->with('success', 'Delivered successfully. Latest dispatch note generated.');
     }
 
+
+    /**
+     * Function to update customer decision (customerDecision and rejectNO)
+     */
     public function updateDecision(Request $request, $id)
     {
         $request->validate([
@@ -411,6 +433,9 @@ class SampleInquiryController extends Controller
     }
 
 
+    /**
+     * Function to upload order file (orderFile)
+     */
     public function uploadOrderFile(Request $request, $id)
     {
         $request->validate([

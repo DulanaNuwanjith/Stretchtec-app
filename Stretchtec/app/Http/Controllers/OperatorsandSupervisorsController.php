@@ -29,6 +29,7 @@ class OperatorsandSupervisorsController extends Controller
         }
     }
 
+
     /**
      * Show the form for creating a new resource.
      */
@@ -36,6 +37,7 @@ class OperatorsandSupervisorsController extends Controller
     {
         //
     }
+
 
     /**
      * Store a newly created resource in storage.
@@ -79,6 +81,7 @@ class OperatorsandSupervisorsController extends Controller
         }
     }
 
+
     /**
      * Display the specified resource.
      */
@@ -87,6 +90,7 @@ class OperatorsandSupervisorsController extends Controller
         //
     }
 
+
     /**
      * Show the form for editing the specified resource.
      */
@@ -94,6 +98,7 @@ class OperatorsandSupervisorsController extends Controller
     {
         //
     }
+
 
     /**
      * Update the specified resource in storage.
@@ -133,6 +138,7 @@ class OperatorsandSupervisorsController extends Controller
             ], 500);
         }
     }
+
 
     /**
      * Remove the specified resource from storage.
