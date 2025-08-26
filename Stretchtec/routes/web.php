@@ -10,11 +10,34 @@
  * Routes are grouped logically with middleware restrictions to ensure
  * proper access control based on authentication and user roles.
  *
- * Storyline Approach:
- * - Start with general access routes (login, dashboard).
- * - Move into functional modules (Catalog, Sample Inquiries, R&D, Production).
- * - Add role-restricted areas (Operators, Supervisors, Reports).
- * - End with advanced reporting routes.
+ * --------------------------------------------------------------------------
+ * TABLE OF CONTENTS
+ * --------------------------------------------------------------------------
+ *  1. Authentication & Entry Point
+ *  2. Authenticated User Routes
+ *      2.1 Dashboard
+ *      2.2 Product Catalog
+ *      2.3 Sample Preparation (RnD & Production)
+ *      2.4 Sample Inquiries
+ *      2.5 Leftover Yarn Management
+ *      2.6 Sample Stock Management
+ *      2.7 Store Management
+ *      2.8 Production Inquiry & Order Preparation Views
+ *
+ *  3. Module-Specific Routes with Role Restrictions
+ *      3.1 Sample Inquiries (Admin / Superadmin / Coordinator)
+ *      3.2 Sample Preparation R&D (Admin / Superadmin / SampleDeveloper)
+ *      3.3 Sample Preparation Production (Admin / Superadmin / ProductionOfficer)
+ *      3.4 Operators & Supervisors (Superadmin Only)
+ *      3.5 Reports (Admin / Superadmin)
+ *
+ * --------------------------------------------------------------------------
+ * Storyline:
+ * - Start with login and general routes.
+ * - Then explore core modules (catalog, inquiries, yarn, stocks, stores).
+ * - Afterwards, dive into module-specific role-restricted areas.
+ * - Finish with reporting functionality for admin-level users.
+ * --------------------------------------------------------------------------
  */
 
 use App\Http\Controllers\ColorMatchRejectController;
