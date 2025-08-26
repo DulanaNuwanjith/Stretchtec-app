@@ -1162,53 +1162,99 @@
                                                     @if ($specialCase)
                                                         @if (!empty($inquiry->referenceNo))
                                                             @if ($inquiry->productionStatus !== 'Delivered')
-                                                                <form
-                                                                    action="{{ route('inquiry.markCustomerDelivered') }}"
-                                                                    method="POST">
-                                                                    @csrf
-                                                                    <input type="hidden" name="id"
-                                                                        value="{{ $inquiry->id }}">
-                                                                    <button type="submit"
-                                                                        class="px-3 py-1 rounded text-white bg-green-600 hover:bg-green-700 transition duration-200">
-                                                                        Deliver
-                                                                    </button>
-                                                                </form>
+
+                                                                @php
+                                                                    // Determine if this is a "No Need to Develop" order
+                                                                    $isNoDevelopment = $inquiry->productionStatus === 'No Development';
+                                                                    $sampleStockQty = \App\Models\SampleStock::where('reference_no', $inquiry->referenceNo)->sum('available_stock');
+                                                                @endphp
+
+                                                                @if ($isNoDevelopment)
+                                                                    {{-- Modal for entering quantity for No Development --}}
+                                                                    <div x-data="{ openDeliverModal: false, quantity: 1, maxQty: @js($sampleStockQty) }">
+                                                                        {{-- Button to open modal --}}
+                                                                        <button @click="openDeliverModal = true"
+                                                                                class="px-3 py-1 rounded text-white bg-green-600 hover:bg-green-700 transition duration-200">
+                                                                            Deliver
+                                                                        </button>
+
+                                                                        {{-- Delivery Modal --}}
+                                                                        <div x-show="openDeliverModal" x-transition x-cloak
+                                                                             class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+
+                                                                            <div class="relative p-6 bg-white dark:bg-gray-800 w-11/12 max-w-md rounded-2xl shadow-xl">
+                                                                                <button @click="openDeliverModal = false"
+                                                                                        class="absolute top-3 right-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">✕</button>
+
+                                                                                <h2 class="text-xl font-semibold mb-4 text-blue-900 dark:text-white">Enter Delivery Quantity</h2>
+
+                                                                                <form method="POST" action="{{ route('inquiry.markCustomerDelivered') }}">
+                                                                                    @csrf
+                                                                                    <input type="hidden" name="id" value="{{ $inquiry->id }}">
+                                                                                    <div class="mb-4">
+                                                                                        <label for="sampleQty" class="block text-sm font-medium text-gray-700 dark:text-gray-200">
+                                                                                            Quantity (Available: <span x-text="maxQty"></span>)
+                                                                                        </label>
+                                                                                        <input type="number" id="sampleQty" name="sampleQty" x-model="sampleQty"
+                                                                                               :max="maxQty" min="1" required
+                                                                                               class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                                                                    </div>
+
+                                                                                    <div class="flex justify-end space-x-2">
+                                                                                        <button type="button" @click="openDeliverModal = false"
+                                                                                                class="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-700">
+                                                                                            Cancel
+                                                                                        </button>
+                                                                                        <button type="submit"
+                                                                                                class="px-4 py-2 rounded-lg bg-green-600 text-white hover:bg-green-700 transition">
+                                                                                            Deliver
+                                                                                        </button>
+                                                                                    </div>
+                                                                                </form>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                @else
+                                                                    {{-- Tape Match: direct delivery --}}
+                                                                    <form action="{{ route('inquiry.markCustomerDelivered') }}" method="POST">
+                                                                        @csrf
+                                                                        <input type="hidden" name="id" value="{{ $inquiry->id }}">
+                                                                        <button type="submit"
+                                                                                class="px-3 py-1 rounded text-white bg-green-600 hover:bg-green-700 transition duration-200">
+                                                                            Deliver
+                                                                        </button>
+                                                                    </form>
+                                                                @endif
+
                                                             @else
-                                                                <div x-data="{ openShades: false }"
-                                                                    class="flex flex-col items-center space-y-1 mt-2">
-                                                                    <span @click="openShades = true"
-                                                                        class="cursor-pointer inline-block text-sm font-semibold text-gray-700 dark:text-white bg-green-100 dark:bg-gray-800 px-3 py-1 rounded text-center">
-                                                                        Delivered on <br>
-                                                                        {{ \Carbon\Carbon::parse($inquiry->customerDeliveryDate)->format('Y-m-d') }}
-                                                                        at {{ \Carbon\Carbon::parse($inquiry->customerDeliveryDate)->format('H:i') }}
-                                                                    </span>
+                                                                {{-- Already Delivered - show delivered date and Dispatch Note --}}
+                                                                <div x-data="{ openShades: false }" class="flex flex-col items-center space-y-1 mt-2">
+                                                                <span @click="openShades = true"
+                                                                      class="cursor-pointer inline-block text-sm font-semibold text-gray-700 dark:text-white bg-green-100 dark:bg-gray-800 px-3 py-1 rounded text-center">
+                                                                    Delivered on <br>
+                                                                    {{ \Carbon\Carbon::parse($inquiry->customerDeliveryDate)->format('Y-m-d') }}
+                                                                    at {{ \Carbon\Carbon::parse($inquiry->customerDeliveryDate)->format('H:i') }}
+                                                                </span>
 
                                                                     {{-- Modal for shade-wise details --}}
                                                                     <div x-show="openShades" x-transition x-cloak
-                                                                        class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-                                                                        <div
-                                                                            class="relative p-6 bg-white dark:bg-gray-800 w-11/12 max-w-3xl rounded-2xl shadow-xl max-h-[80vh] overflow-y-auto">
+                                                                         class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+                                                                        <div class="relative p-6 bg-white dark:bg-gray-800 w-11/12 max-w-3xl rounded-2xl shadow-xl max-h-[80vh] overflow-y-auto">
                                                                             <button @click="openShades = false"
-                                                                                class="absolute top-3 right-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">✕</button>
+                                                                                    class="absolute top-3 right-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">✕</button>
 
-                                                                            <h2
-                                                                                class="text-xl text-left font-semibold mb-4 text-blue-900 dark:text-white">
-                                                                                Shade-wise Delivery Details</h2>
+                                                                            <h2 class="text-xl text-left font-semibold mb-4 text-blue-900 dark:text-white">
+                                                                                Shade-wise Delivery Details
+                                                                            </h2>
 
                                                                             <div class="space-y-2">
                                                                                 @foreach ($deliveredShades as $shade)
-                                                                                    <div
-                                                                                        class="flex justify-between items-center p-3 border rounded-lg bg-gray-50 dark:bg-gray-700/50">
-                                                                                        <span
-                                                                                            class="font-medium text-gray-900 dark:text-gray-100">{{ $shade->shade }}</span>
-                                                                                        <span
-                                                                                            class="text-sm text-gray-700 dark:text-gray-200">
-                                                                                            Delivered on
-                                                                                            {{ \Carbon\Carbon::parse($shade->delivered_date)->format('Y-m-d') }}
-                                                                                            at
-                                                                                            {{ \Carbon\Carbon::parse($shade->delivered_date)->format('H:i') }}
-                                                                                            (Qty:
-                                                                                            {{ $shade->quantity ?? '—' }})
+                                                                                    <div class="flex justify-between items-center p-3 border rounded-lg bg-gray-50 dark:bg-gray-700/50">
+                                                                                        <span class="font-medium text-gray-900 dark:text-gray-100">{{ $shade->shade }}</span>
+                                                                                        <span class="text-sm text-gray-700 dark:text-gray-200">
+                                                                                            Delivered on {{ \Carbon\Carbon::parse($shade->delivered_date)->format('Y-m-d') }}
+                                                                                            at {{ \Carbon\Carbon::parse($shade->delivered_date)->format('H:i') }}
+                                                                                            (Qty: {{ $shade->quantity ?? '—' }})
                                                                                         </span>
                                                                                     </div>
                                                                                 @endforeach
@@ -1216,7 +1262,7 @@
 
                                                                             <div class="flex justify-end mt-4">
                                                                                 <button @click="openShades = false"
-                                                                                    class="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-700">
+                                                                                        class="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-700">
                                                                                     Close
                                                                                 </button>
                                                                             </div>
@@ -1225,17 +1271,15 @@
 
                                                                     {{-- Dispatch Note --}}
                                                                     @if ($inquiry->dNoteNumber)
-                                                                        <a href="{{ asset('storage/dispatches/' . $inquiry->dNoteNumber) }}"
-                                                                            target="_blank"
-                                                                            class="px-3 py-1 rounded text-sm bg-green-600 text-white hover:bg-green-700 transition mt-2 inline-block">
+                                                                        <a href="{{ asset('storage/dispatches/' . $inquiry->dNoteNumber) }}" target="_blank"
+                                                                           class="px-3 py-1 rounded text-sm bg-green-600 text-white hover:bg-green-700 transition mt-2 inline-block">
                                                                             Dispatch Note
                                                                         </a>
                                                                     @endif
                                                                 </div>
                                                             @endif
                                                         @else
-                                                            <span class="text-red-600 font-semibold text-sm">Set Ref No to
-                                                                Deliver</span>
+                                                            <span class="text-red-600 font-semibold text-sm">Set Ref No to Deliver</span>
                                                         @endif
                                                     @endif
                                                 </td>

@@ -347,14 +347,49 @@ class SampleInquiryController extends Controller
             }
 
         } else {
-            // For Tape Match & No Need to Develop: just mark delivered without shades
-            $deliveredShades[] = [
-                'quantity' => 1
-            ];
-            $inquiry->productionStatus = 'Delivered';
+            if ($prepRnd->alreadyDeveloped === 'No Need to Develop') {
+                // For Tape Match & No Need to Develop: just mark delivered without shades
+                $deliveredQty = (int) ($request->input('sampleQty') ?? $inquiry->sampleQty ?? 1); // Take frontend value if provided
+                $deliveredShades[] = [
+                    'quantity' => $deliveredQty,
+                ];
+                $inquiry->productionStatus = 'Delivered';
+                $inquiry->deliveryQty = $deliveredQty;
 
-            // ✅ Directly set as Delivered since no shades exist
-            $prepRnd->productionStatus = 'Order Delivered';
+                // ✅ Directly set as Delivered since no shades exist
+                $prepRnd->productionStatus = 'Order Delivered';
+
+                if ($inquiry->referenceNo && $deliveredQty > 0) {
+                    $remainingQty = $deliveredQty;
+
+                    // Get all stock records for this reference number
+                    $stocks = SampleStock::where('reference_no', $inquiry->referenceNo)
+                        ->orderBy('id')
+                        ->get();
+
+                    foreach ($stocks as $stock) {
+                        if ($remainingQty <= 0) break;
+
+                        $available = (int) $stock->available_stock;
+                        if ($available <= 0) continue; // skip depleted stock
+
+                        $deductQty = min($available, $remainingQty);
+
+                        $stock->available_stock = $available - $deductQty;
+                        $remainingQty -= $deductQty;
+
+                        if ($stock->available_stock <= 0) {
+                            $stock->delete(); // delete only if fully depleted
+                        } else {
+                            $stock->save(); // save updated stock
+                        }
+                    }
+                }
+            } else{
+                $inquiry->productionStatus = 'Delivered';
+                $inquiry->deliveryQty = 0;
+                $prepRnd->productionStatus = 'Order Delivered';
+            }
         }
 
         $totalDeliveredQty = array_sum(array_column($deliveredShades, 'quantity'));
