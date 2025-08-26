@@ -71,7 +71,9 @@ class ReportController extends Controller
 
         $sampleInquiry = SampleInquiry::where('orderNo', $orderNo)->first();
 
-        $rnd = SamplePreparationRnD::where('orderNo', $orderNo)->first();
+        $rnd = SamplePreparationRnD::where('orderNo', $orderNo)
+            ->with('shadeOrders') 
+            ->first();
 
         $production = SamplePreparationProduction::where('order_no', $orderNo)->first();
 
