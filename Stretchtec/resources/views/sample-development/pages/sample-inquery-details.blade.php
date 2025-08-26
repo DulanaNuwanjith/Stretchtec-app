@@ -1009,6 +1009,8 @@
                                                         $deliveredShades = $shadeOrders->filter(
                                                             fn($s) => trim($s->status) === 'Delivered',
                                                         );
+
+                                                        $sampleStockQtyrnd = \App\Models\SampleStock::where('reference_no', $inquiry->referenceNo)->sum('available_stock');
                                                     @endphp
 
                                                     {{-- CASE 1: Shades based deliveries --}}
@@ -1044,26 +1046,36 @@
                                                                             <div
                                                                                 class="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[400px] overflow-y-auto pr-1">
                                                                                 @foreach ($pendingShades as $shade)
+                                                                                    @php
+                                                                                        // Get the available stock for this shade + reference number
+                                                                                        $availableStock = \App\Models\SampleStock::where('reference_no', $inquiry->referenceNo)
+                                                                                            ->where('shade', $shade->shade)
+                                                                                            ->sum('available_stock');
+                                                                                    @endphp
+
                                                                                     <div
                                                                                         class="p-4 border rounded-lg bg-gray-50 dark:bg-gray-700/50 hover:shadow-md transition">
-                                                                                        <label
-                                                                                            class="flex items-center gap-2">
+                                                                                        <label class="flex items-center gap-2">
                                                                                             <input type="checkbox"
-                                                                                                name="shades[{{ $shade->id }}][selected]"
-                                                                                                value="1"
-                                                                                                class="rounded text-green-600 focus:ring-green-500">
-                                                                                            <span
-                                                                                                class="font-medium text-gray-900 dark:text-gray-100">
+                                                                                                   name="shades[{{ $shade->id }}][selected]"
+                                                                                                   value="1"
+                                                                                                   class="rounded text-green-600 focus:ring-green-500">
+                                                                                            <span class="font-medium text-gray-900 dark:text-gray-100">
                                                                                                 {{ $shade->shade }}
                                                                                             </span>
                                                                                         </label>
 
+                                                                                        {{-- Show available stock info --}}
+                                                                                        <p class="text-sm text-gray-600 dark:text-gray-300 mt-1">
+                                                                                            Available: <span class="font-semibold">{{ $availableStock }}</span>
+                                                                                        </p>
+
                                                                                         <input type="number"
-                                                                                            min="1"
-                                                                                            name="shades[{{ $shade->id }}][quantity]"
-                                                                                            max="{{ \App\Models\SampleStock::where('reference_no', $inquiry->referenceNo)->where('shade', $shade->shade)->first()?->available_stock ?? 1 }}"
-                                                                                            placeholder="Quantity"
-                                                                                            class="mt-2 w-full px-2 py-1 border rounded text-sm dark:bg-gray-800 dark:text-white">
+                                                                                               min="1"
+                                                                                               name="shades[{{ $shade->id }}][quantity]"
+                                                                                               max="{{ $availableStock }}"
+                                                                                               placeholder="Quantity"
+                                                                                               class="mt-2 w-full px-2 py-1 border rounded text-sm dark:bg-gray-800 dark:text-white">
                                                                                     </div>
                                                                                 @endforeach
                                                                             </div>
