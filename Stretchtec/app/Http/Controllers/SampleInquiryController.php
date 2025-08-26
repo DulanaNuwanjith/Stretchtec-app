@@ -331,7 +331,6 @@ class SampleInquiryController extends Controller
         } else {
             // For Tape Match & No Need to Develop: just mark delivered without shades
             $deliveredShades[] = [
-                'shade' => $inquiry->referenceNo ?? '-',
                 'quantity' => 1
             ];
             $inquiry->productionStatus = 'Delivered';
@@ -339,6 +338,8 @@ class SampleInquiryController extends Controller
             // ✅ Directly set as Delivered since no shades exist
             $prepRnd->productionStatus = 'Order Delivered';
         }
+
+        $totalDeliveredQty = array_sum(array_column($deliveredShades, 'quantity'));
 
         // Update delivery info
         $inquiry->customerDeliveryDate = now();
@@ -362,6 +363,7 @@ class SampleInquiryController extends Controller
             $sheet->setCellValue('B13', $inquiry->referenceNo ?? '-');
             $sheet->setCellValue('F12', $inquiry->color);
             $sheet->setCellValue('B16', Auth::user()->name);
+            $sheet->setCellValue('H12', $totalDeliveredQty);
 
             $sheet->setCellValue('D24', $now->format('Y-m-d H:i:s'));
             $sheet->setCellValue('D25', $dispatchCode);
@@ -372,16 +374,7 @@ class SampleInquiryController extends Controller
             $sheet->setCellValue('B32', $inquiry->referenceNo ?? '-');
             $sheet->setCellValue('F31', $inquiry->color);
             $sheet->setCellValue('B35', Auth::user()->name);
-            $startRows = [12, 31];
-
-            foreach ($startRows as $startRow) {
-                $row = $startRow;
-                foreach ($deliveredShades as $shadeData) {
-                    $sheet->setCellValue('A' . $row, $shadeData['shade']);
-                    $sheet->setCellValue('H' . $row, $shadeData['quantity']);
-                    $row++;
-                }
-            }
+            $sheet->setCellValue('H31', $totalDeliveredQty);
 
             $fileName = 'dispatch_note_' . $dispatchCode . '.xlsx';
             $savePath = storage_path('app/public/dispatches/' . $fileName);
