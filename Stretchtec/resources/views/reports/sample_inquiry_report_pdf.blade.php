@@ -45,22 +45,23 @@
         <thead>
             <tr>
                 <th>Order No</th>
-                <th>Reference No</th>
-                <th>Coordinator</th>
-                <th>Merchandiser Name</th>
                 <th>Inquiry Date</th>
-                <th>Customer Requested Date</th>
-                <th>Develop Planned Date</th>
+                <th>Customer Name</th>
+                <th>Merchandiser Name</th>
                 <th>Item</th>
+                <th>Reference No</th>
                 <th>Item Description</th>
                 <th>Size</th>
                 <th>Color</th>
+                <th>Style</th>
+                <th>Customer Requested Qty</th>
+                <th>Customer Requested Date</th>
+                <th>Develop Planned Date</th>
+                <th>Production Status</th>
+                <th>Delivery Qty</th>
+                <th>Customer Delivery Date</th>
                 <th>Shade</th>
                 <th>TKT</th>
-                <th>Yarn Supplier</th>
-                <th>Style</th>
-                <th>Customer Delivery Date</th>
-                <th>Delivery Qty</th>
                 <th>Customer Decision</th>
             </tr>
         </thead>
@@ -68,22 +69,23 @@
             @forelse($inquiries as $inq)
                 <tr>
                     <td>{{ $inq->orderNo }}</td>
-                    <td>{{ $inq->referenceNo ?? '-' }}</td>
-                    <td>{{ $inq->coordinatorName ?? '-' }}</td>
-                    <td>{{ $inq->merchandiseName ?? '-' }}</td>
                     <td>{{ $inq->inquiryReceiveDate ? $inq->inquiryReceiveDate->format('Y-m-d') : '-' }}</td>
-                    <td>{{ $inq->customerRequestDate ? $inq->customerRequestDate->format('Y-m-d') : '-' }}</td>
-                    <td>{{ $inq->developPlannedDate ? $inq->developPlannedDate->format('Y-m-d') : '-' }}</td>
+                    <td>{{ $inq->customerName ?? '-' }}</td>
+                    <td>{{ $inq->merchandiseName ?? '-' }}</td>
                     <td>{{ $inq->item ?? '-' }}</td>
+                    <td>{{ $inq->referenceNo ?? '-' }}</td>
                     <td>{{ $inq->ItemDiscription ?? '-' }}</td>
                     <td>{{ $inq->size ?? '-' }}</td>
                     <td>{{ $inq->color ?? '-' }}</td>
+                    <td>{{ $inq->style ?? '-' }}</td>
+                    <td>{{ $inq->sampleQty ?? '-' }}</td>
+                    <td>{{ $inq->customerRequestDate ? $inq->customerRequestDate->format('Y-m-d') : '-' }}</td>
+                    <td>{{ $inq->developPlannedDate ? $inq->developPlannedDate->format('Y-m-d') : '-' }}</td>
+                    <td>{{ $inq->productionStatus ?? '-' }}</td>
+                    <td>{{ $inq->deliveryQty ?? '-' }}</td>
+                    <td>{{ $inq->customerDeliveryDate ? $inq->customerDeliveryDate->format('Y-m-d') : '-' }}</td>
                     <td>{{ $inq->samplePreparationRnD->shade ?? '-' }}</td>
                     <td>{{ $inq->samplePreparationRnD->tkt ?? '-' }}</td>
-                    <td>{{ $inq->samplePreparationRnD->yarnSupplier ?? '-' }}</td>
-                    <td>{{ $inq->style ?? '-' }}</td>
-                    <td>{{ $inq->customerDeliveryDate ? $inq->customerDeliveryDate->format('Y-m-d') : '-' }}</td>
-                    <td>{{ $inq->deliveryQty ?? '-' }}</td>
                     <td>{{ $inq->customerDecision ?? '-' }}</td>
                 </tr>
             @empty
