@@ -23,7 +23,14 @@ class ReportController extends Controller
             ->orderBy('customerName')
             ->pluck('customerName');
 
-        return view('reports.sample-reports', compact('customers'));
+        // Get all distinct reject numbers from SampleInquiry
+        $rejectNumbers = SampleInquiry::select('rejectNO')
+            ->distinct()
+            ->whereNotNull('rejectNO')
+            ->orderBy('rejectNO')
+            ->pluck('rejectNO');
+
+        return view('reports.sample-reports', compact('customers', 'rejectNumbers'));
     }
 
 
@@ -296,4 +303,107 @@ class ReportController extends Controller
 
         return $pdf->download("Sample_Inquiry_Report_{$request->start_date}_to_{$request->end_date}.pdf");
     }
+    
+    public function generateRejectReportPdf(Request $request)
+    {
+        $request->validate([
+            'reject_no' => 'required|string',
+        ]);
+
+        $rejectNo = $request->reject_no;
+
+        // Get all SampleInquiry records with rejectNO = $rejectNo
+        $inquiries = SampleInquiry::whereNotNull('rejectNO')
+            ->where('rejectNO', $rejectNo)
+            ->with('samplePreparationRnD')
+            ->get();
+
+        // Get unique customer names and coordinator names (in case there are multiple)
+        $customerNames = $inquiries->pluck('customerName')->unique()->join(', ');
+        $coordinatorNames = $inquiries->pluck('coordinatorName')->unique()->join(', ');
+
+        // Group by orderNo
+        $orders = $inquiries->groupBy('orderNo')->map(function ($items, $orderNo) {
+            $totalYarnPrice = $items->sum(function($inquiry) {
+                return $inquiry->samplePreparationRnD->yarnPrice ?? 0;
+            });
+
+            $rejectCount = $items->count();
+
+            // Collect all customerDecision values for this order
+            $customerDecisions = $items->pluck('customerDecision')->unique()->join(', ');
+
+            return [
+                'reject_count' => $rejectCount,
+                'total_yarn_price' => $totalYarnPrice,
+                'orderNos' => $orderNo,
+                'customerDecision' => $customerDecisions,
+            ];
+        });
+
+        $pdf = PDF::loadView('reports.reject_report_pdf', [
+            'orders' => $orders,
+            'rejectNo' => $rejectNo,
+            'customerNames' => $customerNames,
+            'coordinatorNames' => $coordinatorNames,
+        ])->setPaper('A4', 'portrait');
+
+        return $pdf->download("Reject_Report_{$rejectNo}.pdf");
+    }
+
+    public function generateCustomerRejectReportPdf(Request $request)
+    {
+        $request->validate([
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after_or_equal:start_date',
+            'customer_name' => 'required|string',
+        ]);
+
+        $start = $request->start_date;
+        $end = $request->end_date;
+        $customer = $request->customer_name;
+
+        // Get SampleInquiry records for customer within date range
+        $inquiries = SampleInquiry::where('customerName', $customer)
+            ->whereBetween('inquiryReceiveDate', [$start, $end])
+            ->whereNotNull('rejectNO')
+            ->with('samplePreparationRnD')
+            ->get();
+
+        // Group by rejectNO
+        $rejectGroups = $inquiries->groupBy('rejectNO')->map(function ($items, $rejectNo) {
+            // Group orders under this reject
+            $orders = $items->groupBy('orderNo')->map(function ($orderItems, $orderNo) {
+                $totalYarnPrice = $orderItems->sum(fn($i) => $i->samplePreparationRnD->yarnPrice ?? 0);
+                $customerDecisions = $orderItems->pluck('customerDecision')->unique()->join(', ');
+
+                return [
+                    'orderNo' => $orderNo,
+                    'customerDecision' => $customerDecisions,
+                    'total_yarn_price' => $totalYarnPrice,
+                ];
+            });
+
+            $totalOrders = $orders->count();
+            $totalRejections = $orders->filter(fn($o) => str_contains($o['customerDecision'], 'Order Rejected'))->count();
+            $totalYarn = $orders->sum('total_yarn_price');
+
+            return [
+                'orders' => $orders,
+                'total_orders' => $totalOrders,
+                'total_rejections' => $totalRejections,
+                'total_yarn_price' => $totalYarn,
+            ];
+        });
+
+        $pdf = PDF::loadView('reports.customer_reject_report_pdf', [
+            'rejectGroups' => $rejectGroups,
+            'customerName' => $customer,
+            'start_date' => $start,
+            'end_date' => $end,
+        ])->setPaper('A4', 'portrait');
+
+        return $pdf->download("Customer_Reject_Report_{$customer}_{$start}_to_{$end}.pdf");
+    }
+
 }
