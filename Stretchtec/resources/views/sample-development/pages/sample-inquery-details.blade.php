@@ -1010,7 +1010,10 @@
                                                             fn($s) => trim($s->status) === 'Delivered',
                                                         );
 
-                                                        $sampleStockQtyrnd = \App\Models\SampleStock::where('reference_no', $inquiry->referenceNo)->sum('available_stock');
+                                                        $sampleStockQtyrnd = \App\Models\SampleStock::where(
+                                                            'reference_no',
+                                                            $inquiry->referenceNo,
+                                                        )->sum('available_stock');
                                                     @endphp
 
                                                     {{-- CASE 1: Shades based deliveries --}}
@@ -1048,34 +1051,44 @@
                                                                                 @foreach ($pendingShades as $shade)
                                                                                     @php
                                                                                         // Get the available stock for this shade + reference number
-                                                                                        $availableStock = \App\Models\SampleStock::where('reference_no', $inquiry->referenceNo)
-                                                                                            ->where('shade', $shade->shade)
+                                                                                        $availableStock = \App\Models\SampleStock::where(
+                                                                                            'reference_no',
+                                                                                            $inquiry->referenceNo,
+                                                                                        )
+                                                                                            ->where(
+                                                                                                'shade',
+                                                                                                $shade->shade,
+                                                                                            )
                                                                                             ->sum('available_stock');
                                                                                     @endphp
 
                                                                                     <div
                                                                                         class="p-4 border rounded-lg bg-gray-50 dark:bg-gray-700/50 hover:shadow-md transition">
-                                                                                        <label class="flex items-center gap-2">
+                                                                                        <label
+                                                                                            class="flex items-center gap-2">
                                                                                             <input type="checkbox"
-                                                                                                   name="shades[{{ $shade->id }}][selected]"
-                                                                                                   value="1"
-                                                                                                   class="rounded text-green-600 focus:ring-green-500">
-                                                                                            <span class="font-medium text-gray-900 dark:text-gray-100">
+                                                                                                name="shades[{{ $shade->id }}][selected]"
+                                                                                                value="1"
+                                                                                                class="rounded text-green-600 focus:ring-green-500">
+                                                                                            <span
+                                                                                                class="font-medium text-gray-900 dark:text-gray-100">
                                                                                                 {{ $shade->shade }}
                                                                                             </span>
                                                                                         </label>
 
                                                                                         {{-- Show available stock info --}}
-                                                                                        <p class="text-sm text-gray-600 dark:text-gray-300 mt-1">
-                                                                                            Available: <span class="font-semibold">{{ $availableStock }}</span>
+                                                                                        <p
+                                                                                            class="text-sm text-gray-600 dark:text-gray-300 mt-1">
+                                                                                            Available: <span
+                                                                                                class="font-semibold">{{ $availableStock }}</span>
                                                                                         </p>
 
                                                                                         <input type="number"
-                                                                                               min="1"
-                                                                                               name="shades[{{ $shade->id }}][quantity]"
-                                                                                               max="{{ $availableStock }}"
-                                                                                               placeholder="Quantity"
-                                                                                               class="mt-2 w-full px-2 py-1 border rounded text-sm dark:bg-gray-800 dark:text-white">
+                                                                                            min="1"
+                                                                                            name="shades[{{ $shade->id }}][quantity]"
+                                                                                            max="{{ $availableStock }}"
+                                                                                            placeholder="Quantity"
+                                                                                            class="mt-2 w-full px-2 py-1 border rounded text-sm dark:bg-gray-800 dark:text-white">
                                                                                     </div>
                                                                                 @endforeach
                                                                             </div>
@@ -1175,11 +1188,14 @@
                                                     @if ($specialCase)
                                                         @if (!empty($inquiry->referenceNo))
                                                             @if ($inquiry->productionStatus !== 'Delivered')
-
                                                                 @php
                                                                     // Determine if this is a "No Need to Develop" order
-                                                                    $isNoDevelopment = $inquiry->productionStatus === 'No Development';
-                                                                    $sampleStockQty = \App\Models\SampleStock::where('reference_no', $inquiry->referenceNo)->sum('available_stock');
+                                                                    $isNoDevelopment =
+                                                                        $inquiry->productionStatus === 'No Development';
+                                                                    $sampleStockQty = \App\Models\SampleStock::where(
+                                                                        'reference_no',
+                                                                        $inquiry->referenceNo,
+                                                                    )->sum('available_stock');
                                                                 @endphp
 
                                                                 @if ($isNoDevelopment)
@@ -1187,39 +1203,52 @@
                                                                     <div x-data="{ openDeliverModal: false, quantity: 1, maxQty: @js($sampleStockQty) }">
                                                                         {{-- Button to open modal --}}
                                                                         <button @click="openDeliverModal = true"
-                                                                                class="px-3 py-1 rounded text-white bg-green-600 hover:bg-green-700 transition duration-200">
+                                                                            class="px-3 py-1 rounded text-white bg-green-600 hover:bg-green-700 transition duration-200">
                                                                             Deliver
                                                                         </button>
 
                                                                         {{-- Delivery Modal --}}
                                                                         <div x-show="openDeliverModal" x-transition x-cloak
-                                                                             class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+                                                                            class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
 
-                                                                            <div class="relative p-6 bg-white dark:bg-gray-800 w-11/12 max-w-md rounded-2xl shadow-xl">
+                                                                            <div
+                                                                                class="relative p-6 bg-white dark:bg-gray-800 w-11/12 max-w-md rounded-2xl shadow-xl">
                                                                                 <button @click="openDeliverModal = false"
-                                                                                        class="absolute top-3 right-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">✕</button>
+                                                                                    class="absolute top-3 right-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">✕</button>
 
-                                                                                <h2 class="text-xl font-semibold mb-4 text-blue-900 dark:text-white">Enter Delivery Quantity</h2>
+                                                                                <h2
+                                                                                    class="text-xl font-semibold mb-4 text-blue-900 dark:text-white">
+                                                                                    Enter Delivery Quantity</h2>
 
-                                                                                <form method="POST" action="{{ route('inquiry.markCustomerDelivered') }}">
+                                                                                <form method="POST"
+                                                                                    action="{{ route('inquiry.markCustomerDelivered') }}">
                                                                                     @csrf
-                                                                                    <input type="hidden" name="id" value="{{ $inquiry->id }}">
+                                                                                    <input type="hidden" name="id"
+                                                                                        value="{{ $inquiry->id }}">
                                                                                     <div class="mb-4">
-                                                                                        <label for="sampleQty" class="block text-sm font-medium text-gray-700 dark:text-gray-200">
-                                                                                            Quantity (Available: <span x-text="maxQty"></span>)
+                                                                                        <label for="sampleQty"
+                                                                                            class="block text-sm font-medium text-gray-700 dark:text-gray-200">
+                                                                                            Quantity (Available: <span
+                                                                                                x-text="maxQty"></span>)
                                                                                         </label>
-                                                                                        <input type="number" id="sampleQty" name="sampleQty" x-model="sampleQty"
-                                                                                               :max="maxQty" min="1" required
-                                                                                               class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                                                                        <input type="number"
+                                                                                            id="sampleQty"
+                                                                                            name="sampleQty"
+                                                                                            x-model="sampleQty"
+                                                                                            :max="maxQty"
+                                                                                            min="1" required
+                                                                                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                                                                                     </div>
 
-                                                                                    <div class="flex justify-end space-x-2">
-                                                                                        <button type="button" @click="openDeliverModal = false"
-                                                                                                class="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-700">
+                                                                                    <div
+                                                                                        class="flex justify-end space-x-2">
+                                                                                        <button type="button"
+                                                                                            @click="openDeliverModal = false"
+                                                                                            class="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-700">
                                                                                             Cancel
                                                                                         </button>
                                                                                         <button type="submit"
-                                                                                                class="px-4 py-2 rounded-lg bg-green-600 text-white hover:bg-green-700 transition">
+                                                                                            class="px-4 py-2 rounded-lg bg-green-600 text-white hover:bg-green-700 transition">
                                                                                             Deliver
                                                                                         </button>
                                                                                     </div>
@@ -1229,45 +1258,57 @@
                                                                     </div>
                                                                 @else
                                                                     {{-- Tape Match: direct delivery --}}
-                                                                    <form action="{{ route('inquiry.markCustomerDelivered') }}" method="POST">
+                                                                    <form
+                                                                        action="{{ route('inquiry.markCustomerDelivered') }}"
+                                                                        method="POST">
                                                                         @csrf
-                                                                        <input type="hidden" name="id" value="{{ $inquiry->id }}">
+                                                                        <input type="hidden" name="id"
+                                                                            value="{{ $inquiry->id }}">
                                                                         <button type="submit"
-                                                                                class="px-3 py-1 rounded text-white bg-green-600 hover:bg-green-700 transition duration-200">
+                                                                            class="px-3 py-1 rounded text-white bg-green-600 hover:bg-green-700 transition duration-200">
                                                                             Deliver
                                                                         </button>
                                                                     </form>
                                                                 @endif
-
                                                             @else
                                                                 {{-- Already Delivered - show delivered date and Dispatch Note --}}
-                                                                <div x-data="{ openShades: false }" class="flex flex-col items-center space-y-1 mt-2">
-                                                                <span @click="openShades = true"
-                                                                      class="cursor-pointer inline-block text-sm font-semibold text-gray-700 dark:text-white bg-green-100 dark:bg-gray-800 px-3 py-1 rounded text-center">
-                                                                    Delivered on <br>
-                                                                    {{ \Carbon\Carbon::parse($inquiry->customerDeliveryDate)->format('Y-m-d') }}
-                                                                    at {{ \Carbon\Carbon::parse($inquiry->customerDeliveryDate)->format('H:i') }}
-                                                                </span>
+                                                                <div x-data="{ openShades: false }"
+                                                                    class="flex flex-col items-center space-y-1 mt-2">
+                                                                    <span @click="openShades = true"
+                                                                        class="cursor-pointer inline-block text-sm font-semibold text-gray-700 dark:text-white bg-green-100 dark:bg-gray-800 px-3 py-1 rounded text-center">
+                                                                        Delivered on <br>
+                                                                        {{ \Carbon\Carbon::parse($inquiry->customerDeliveryDate)->format('Y-m-d') }}
+                                                                        at
+                                                                        {{ \Carbon\Carbon::parse($inquiry->customerDeliveryDate)->format('H:i') }}
+                                                                    </span>
 
                                                                     {{-- Modal for shade-wise details --}}
                                                                     <div x-show="openShades" x-transition x-cloak
-                                                                         class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-                                                                        <div class="relative p-6 bg-white dark:bg-gray-800 w-11/12 max-w-3xl rounded-2xl shadow-xl max-h-[80vh] overflow-y-auto">
+                                                                        class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+                                                                        <div
+                                                                            class="relative p-6 bg-white dark:bg-gray-800 w-11/12 max-w-3xl rounded-2xl shadow-xl max-h-[80vh] overflow-y-auto">
                                                                             <button @click="openShades = false"
-                                                                                    class="absolute top-3 right-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">✕</button>
+                                                                                class="absolute top-3 right-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">✕</button>
 
-                                                                            <h2 class="text-xl text-left font-semibold mb-4 text-blue-900 dark:text-white">
+                                                                            <h2
+                                                                                class="text-xl text-left font-semibold mb-4 text-blue-900 dark:text-white">
                                                                                 Shade-wise Delivery Details
                                                                             </h2>
 
                                                                             <div class="space-y-2">
                                                                                 @foreach ($deliveredShades as $shade)
-                                                                                    <div class="flex justify-between items-center p-3 border rounded-lg bg-gray-50 dark:bg-gray-700/50">
-                                                                                        <span class="font-medium text-gray-900 dark:text-gray-100">{{ $shade->shade }}</span>
-                                                                                        <span class="text-sm text-gray-700 dark:text-gray-200">
-                                                                                            Delivered on {{ \Carbon\Carbon::parse($shade->delivered_date)->format('Y-m-d') }}
-                                                                                            at {{ \Carbon\Carbon::parse($shade->delivered_date)->format('H:i') }}
-                                                                                            (Qty: {{ $shade->quantity ?? '—' }})
+                                                                                    <div
+                                                                                        class="flex justify-between items-center p-3 border rounded-lg bg-gray-50 dark:bg-gray-700/50">
+                                                                                        <span
+                                                                                            class="font-medium text-gray-900 dark:text-gray-100">{{ $shade->shade }}</span>
+                                                                                        <span
+                                                                                            class="text-sm text-gray-700 dark:text-gray-200">
+                                                                                            Delivered on
+                                                                                            {{ \Carbon\Carbon::parse($shade->delivered_date)->format('Y-m-d') }}
+                                                                                            at
+                                                                                            {{ \Carbon\Carbon::parse($shade->delivered_date)->format('H:i') }}
+                                                                                            (Qty:
+                                                                                            {{ $shade->quantity ?? '—' }})
                                                                                         </span>
                                                                                     </div>
                                                                                 @endforeach
@@ -1275,7 +1316,7 @@
 
                                                                             <div class="flex justify-end mt-4">
                                                                                 <button @click="openShades = false"
-                                                                                        class="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-700">
+                                                                                    class="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-700">
                                                                                     Close
                                                                                 </button>
                                                                             </div>
@@ -1284,15 +1325,17 @@
 
                                                                     {{-- Dispatch Note --}}
                                                                     @if ($inquiry->dNoteNumber)
-                                                                        <a href="{{ asset('storage/dispatches/' . $inquiry->dNoteNumber) }}" target="_blank"
-                                                                           class="px-3 py-1 rounded text-sm bg-green-600 text-white hover:bg-green-700 transition mt-2 inline-block">
+                                                                        <a href="{{ asset('storage/dispatches/' . $inquiry->dNoteNumber) }}"
+                                                                            target="_blank"
+                                                                            class="px-3 py-1 rounded text-sm bg-green-600 text-white hover:bg-green-700 transition mt-2 inline-block">
                                                                             Dispatch Note
                                                                         </a>
                                                                     @endif
                                                                 </div>
                                                             @endif
                                                         @else
-                                                            <span class="text-red-600 font-semibold text-sm">Set Ref No to Deliver</span>
+                                                            <span class="text-red-600 font-semibold text-sm">Set Ref No to
+                                                                Deliver</span>
                                                         @endif
                                                     @endif
                                                 </td>
@@ -1316,7 +1359,7 @@
                                                         setDecision(decision) {
                                                             this.selectedDecision = decision;
                                                             this.selectedColor = decision;
-
+                                                    
                                                             if (decision === 'Order Rejected') {
                                                                 this.openModal = true;
                                                                 this.openDropdown = false;
@@ -1761,8 +1804,9 @@
                                                         Number</label>
 
                                                     <div class="relative inline-block w-full text-left">
+                                                        <!-- Button -->
                                                         <button type="button"
-                                                            class="dropdown-btn inline-flex justify-between w-full rounded-md bg-white dark:bg-gray-700 px-3 py-2 text-sm font-semibold text-gray-900 dark:text-white shadow-sm ring-1 ring-gray-300 hover:bg-gray-50"
+                                                            class="dropdown-btn inline-flex justify-between w-full rounded-md bg-white dark:bg-gray-700 px-3 py-2 text-sm font-semibold text-gray-900 dark:text-white shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10"
                                                             onclick="toggleDropdownReject(this)">
                                                             <span class="selected-reject">Select Reject Number</span>
                                                             <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20"
@@ -1773,14 +1817,19 @@
                                                             </svg>
                                                         </button>
 
+                                                        <!-- Dropdown Menu -->
                                                         <div
                                                             class="dropdown-menu-reject hidden absolute z-10 mt-2 w-full rounded-md bg-white dark:bg-gray-700 shadow-lg ring-1 ring-black/5 max-h-48 overflow-y-auto">
-                                                            <!-- Search Box -->
-                                                            <input type="text"
-                                                                class="search-reject w-full px-4 py-2 border-b border-gray-300 dark:border-gray-600 focus:outline-none text-sm dark:bg-gray-700 dark:text-white"
-                                                                placeholder="Search..."
-                                                                onkeyup="filterRejectOptions(this)">
 
+                                                            <!-- Search Box -->
+                                                            <div class="p-2 sticky top-0 bg-white dark:bg-gray-700 z-10">
+                                                                <input type="text"
+                                                                    class="search-reject w-full px-2 py-1 text-sm border rounded-md dark:bg-gray-600 dark:text-white dark:placeholder-gray-300"
+                                                                    placeholder="Search..."
+                                                                    onkeyup="filterRejectOptions(this)">
+                                                            </div>
+
+                                                            <!-- Options -->
                                                             <div class="py-1 options-container" role="listbox"
                                                                 tabindex="-1">
                                                                 <!-- Default Null Option -->
@@ -1796,6 +1845,7 @@
                                                             </div>
                                                         </div>
 
+                                                        <!-- Hidden Input -->
                                                         <input type="hidden" name="rejectNO" class="input-reject"
                                                             value="">
                                                     </div>
@@ -2496,7 +2546,8 @@
 
         function filterRejectOptions(input) {
             const filter = input.value.toLowerCase();
-            const container = input.nextElementSibling;
+            const dropdownMenu = input.closest('.dropdown-menu-reject');
+            const container = dropdownMenu.querySelector('.options-container');
 
             // Restore all original options first
             const originalOptions = JSON.parse(container.dataset.original);
