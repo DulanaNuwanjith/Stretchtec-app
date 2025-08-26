@@ -1228,7 +1228,6 @@
                                                                 @endif
 
                                                             @else
-<<<<<<< Updated upstream
                                                                 {{-- Already Delivered - show delivered date and Dispatch Note --}}
                                                                 <div x-data="{ openShades: false }" class="flex flex-col items-center space-y-1 mt-2">
                                                                 <span @click="openShades = true"
@@ -1237,17 +1236,6 @@
                                                                     {{ \Carbon\Carbon::parse($inquiry->customerDeliveryDate)->format('Y-m-d') }}
                                                                     at {{ \Carbon\Carbon::parse($inquiry->customerDeliveryDate)->format('H:i') }}
                                                                 </span>
-=======
-                                                                <div x-data="{ openShades: false }"
-                                                                    class="flex flex-col items-center space-y-1 mt-2">
-                                                                    <span @click="openShades = true"
-                                                                        class="cursor-pointer inline-block text-sm font-semibold text-gray-700 dark:text-white bg-green-100 dark:bg-gray-800 px-3 py-1 rounded text-center">
-                                                                        Delivered on <br>
-                                                                        {{ \Carbon\Carbon::parse($inquiry->customerDeliveryDate)->format('Y-m-d') }}
-                                                                        at
-                                                                        {{ \Carbon\Carbon::parse($inquiry->customerDeliveryDate)->format('H:i') }}
-                                                                    </span>
->>>>>>> Stashed changes
 
                                                                     {{-- Modal for shade-wise details --}}
                                                                     <div x-show="openShades" x-transition x-cloak
@@ -1316,7 +1304,7 @@
                                                         setDecision(decision) {
                                                             this.selectedDecision = decision;
                                                             this.selectedColor = decision;
-                                                    
+
                                                             if (decision === 'Order Rejected') {
                                                                 this.openModal = true;
                                                                 this.openDropdown = false;
