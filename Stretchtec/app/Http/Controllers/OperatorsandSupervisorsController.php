@@ -6,6 +6,7 @@ use App\Models\OperatorsandSupervisors;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
+use Exception;
 
 class OperatorsandSupervisorsController extends Controller
 {
@@ -21,12 +22,13 @@ class OperatorsandSupervisorsController extends Controller
             // Return Blade view with data
             return view('user-management.pages.addResponsiblePerson', compact('operatorsAndSupervisors'));
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error('Failed to fetch Operators and Supervisors: ' . $e->getMessage());
 
             return redirect()->back()->with('error', 'An unexpected error occurred.');
         }
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -35,6 +37,7 @@ class OperatorsandSupervisorsController extends Controller
     {
         //
     }
+
 
     /**
      * Store a newly created resource in storage.
@@ -70,13 +73,14 @@ class OperatorsandSupervisorsController extends Controller
             // Return validation error message with redirect
             return redirect()->back()->withErrors($e->errors())->withInput();
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             // Log unexpected errors
             Log::error('Failed to create Operator or Supervisor: ' . $e->getMessage());
 
             return redirect()->back()->with('error', 'An unexpected error occurred. Please try again later.');
         }
     }
+
 
     /**
      * Display the specified resource.
@@ -86,6 +90,7 @@ class OperatorsandSupervisorsController extends Controller
         //
     }
 
+
     /**
      * Show the form for editing the specified resource.
      */
@@ -93,6 +98,7 @@ class OperatorsandSupervisorsController extends Controller
     {
         //
     }
+
 
     /**
      * Update the specified resource in storage.
@@ -123,7 +129,7 @@ class OperatorsandSupervisorsController extends Controller
                 'errors' => $e->errors()
             ], 422);
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             // Log unexpected errors
             Log::error('Failed to update Operator or Supervisor: ' . $e->getMessage());
 
@@ -132,6 +138,7 @@ class OperatorsandSupervisorsController extends Controller
             ], 500);
         }
     }
+
 
     /**
      * Remove the specified resource from storage.
@@ -146,7 +153,7 @@ class OperatorsandSupervisorsController extends Controller
 
             return redirect()->back()->with('success', 'Operator or Supervisor deleted successfully.');
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error('Failed to delete Operator or Supervisor: ' . $e->getMessage());
 
             return redirect()->back()->with('error', 'An unexpected error occurred while deleting the Operator or Supervisor.');

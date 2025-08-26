@@ -3,12 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use Illuminate\Http\Request;
+use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 class UserMananagementController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     */
     public function index()
     {
         try {
@@ -16,12 +19,16 @@ class UserMananagementController extends Controller
 
             return view('user-management.pages.userDetails', compact('users'));
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error('Failed to fetch users: ' . $e->getMessage());
             return redirect()->back()->with('error', 'Unable to load users.');
         }
     }
 
+
+    /**
+     * Remove the specified resource from storage.
+     */
     public function destroy($id)
     {
         try {
@@ -38,7 +45,7 @@ class UserMananagementController extends Controller
 
             return redirect()->back()->with('success', 'User deleted successfully.');
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             // Log the error for debugging
             Log::error('Failed to delete User: ' . $e->getMessage());
 

@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -20,6 +19,13 @@ return new class extends Migration
             $table->string('status')->default('Pending'); // default status
             $table->DateTime('yarn_receive_date')->nullable();
             $table->string('pst_no')->nullable(); // PST number
+            $table->integer('production_output')->nullable(); // production output
+            $table->integer('damaged_output')->nullable(); // damaged output
+            $table->string('dispatched_by')->nullable(); // dispatched by
+            $table->DateTime('delivered_date')->nullable(); // delivered date
+            $table->DateTime('production_complete_date')->nullable(); // production complete date
+            $table->DateTime('dispatched_date')->nullable(); // dispatched date
+            $table->integer('qty')->nullable(); // quantity
             $table->timestamps();
         });
     }

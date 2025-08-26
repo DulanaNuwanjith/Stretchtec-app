@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\SampleStock;
+use Exception;
 use Illuminate\Http\Request;
 
 class SampleStockController extends Controller
@@ -35,6 +36,7 @@ class SampleStockController extends Controller
         return view('sample-development.sample-stock-management', compact('sampleStocks', 'search'));
     }
 
+
     /**
      * Show the form for creating a new resource.
      */
@@ -43,12 +45,13 @@ class SampleStockController extends Controller
         //
     }
 
+
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
-        try{
+        try {
             $request->validate([
                 'reference_no' => 'required|string|max:255|unique:sample_stocks',
                 'shade' => 'required|string|max:255',
@@ -64,10 +67,11 @@ class SampleStockController extends Controller
             ]);
 
             return redirect()->back()->with('success', 'Sample stock created successfully.');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return redirect()->back()->withErrors(['error' => 'Failed to create sample stock: ' . $e->getMessage()]);
         }
     }
+
 
     /**
      * Display the specified resource.
@@ -77,6 +81,7 @@ class SampleStockController extends Controller
         //
     }
 
+
     /**
      * Show the form for editing the specified resource.
      */
@@ -84,6 +89,7 @@ class SampleStockController extends Controller
     {
         //
     }
+
 
     /**
      * Update the specified resource in storage.
@@ -101,6 +107,7 @@ class SampleStockController extends Controller
         return back()->with('success', 'Special note updated successfully.');
     }
 
+
     /**
      * Remove the specified resource from storage.
      */
@@ -109,6 +116,10 @@ class SampleStockController extends Controller
         //
     }
 
+
+    /**
+     * Handle borrowing of stock.
+     */
     public function borrow(Request $request, $id)
     {
         $request->validate([

@@ -4,10 +4,68 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * --------------------------------------------------------------------------
+ * SamplePreparationRnD Model
+ * --------------------------------------------------------------------------
+ * Represents the `sample_preparation_rnd` table in the database.
+ *
+ * This model manages the **Research & Development (RnD)** stage of the
+ * sample preparation process, including:
+ *  - Planning (development plans, deadlines, reference numbers)
+ *  - Yarn ordering & supplier details
+ *  - Shade and Tkt details
+ *  - Colour matching timelines
+ *  - Locking mechanisms to prevent accidental overwrites
+ *  - Linking back to the original customer inquiry
+ *
+ * ✅ Key Points:
+ *  - `$fillable` defines the attributes that can be mass-assigned.
+ *  - `$casts` ensures automatic type conversions (dates, booleans, strings).
+ *  - Relationships:
+ *      • BelongsTo → `SampleInquiry`
+ *      • HasOne → `SamplePreparationProduction`
+ *      • HasMany → `ShadeOrder`
+ *  - Boot Logic: Keeps `SampleInquiry` synchronized when `referenceNo`
+ *    or `developPlannedDate` are updated in RnD.
+ *
+ * Example:
+ *   $rnd = SamplePreparationRnD::create([
+ *       'sample_inquiry_id' => 1,
+ *       'orderNo' => 'ORD1001',
+ *       'developPlannedDate' => '2025-09-01',
+ *       'shade' => 'Navy Blue',
+ *       'tkt' => '40',
+ *       'yarnSupplier' => 'ABC Textiles',
+ *   ]);
+ * --------------------------------------------------------------------------
+ */
 class SamplePreparationRnD extends Model
 {
+    /**
+     * ----------------------------------------------------------------------
+     * Table Name
+     * ----------------------------------------------------------------------
+     * Explicitly maps to the `sample_preparation_rnd` table.
+     */
     protected $table = 'sample_preparation_rnd';
 
+    /**
+     * ----------------------------------------------------------------------
+     * Mass-Assignable Attributes
+     * ----------------------------------------------------------------------
+     * Defines which fields can be safely inserted or updated.
+     *
+     * Includes:
+     *  - Foreign Key: sample_inquiry_id
+     *  - Order details: orderNo, referenceNo
+     *  - Planning: customerRequestDate, developPlannedDate, productionDeadline
+     *  - Yarn details: yarnOrderedDate, yarnSupplier, yarnPrice, yarnReceiveDate
+     *  - Colour matching: colourMatchSentDate, colourMatchReceiveDate
+     *  - Shade/Tkt details with locking fields
+     *  - Output tracking: productionOutput, yarnOrderedWeight, yarnLeftoverWeight
+     *  - Lock flags to prevent unwanted changes
+     */
     protected $fillable = [
         'sample_inquiry_id',
         'orderNo',
@@ -42,6 +100,18 @@ class SamplePreparationRnD extends Model
         'is_yarn_leftover_weight_locked',
     ];
 
+    /**
+     * ----------------------------------------------------------------------
+     * Attribute Casting
+     * ----------------------------------------------------------------------
+     * Automatically converts fields into proper PHP types.
+     *
+     * - Dates & Datetimes: customerRequestDate, developPlannedDate,
+     *   colourMatchSentDate, colourMatchReceiveDate, yarnOrderedDate,
+     *   yarnReceiveDate, productionDeadline, sendOrderToProductionStatus
+     * - Booleans: Lock flags
+     * - Strings: alreadyDeveloped
+     */
     protected $casts = [
         'customerRequestDate' => 'date',
         'developPlannedDate' => 'date',
@@ -63,11 +133,50 @@ class SamplePreparationRnD extends Model
         'is_yarn_leftover_weight_locked' => 'boolean',
     ];
 
+    /* ======================================================================
+     * RELATIONSHIPS
+     * ======================================================================
+     */
+
+    /**
+     * Belongs To → Sample Inquiry
+     * Links each RnD preparation to its parent inquiry.
+     */
     public function sampleInquiry()
     {
         return $this->belongsTo(SampleInquiry::class, 'sample_inquiry_id');
     }
 
+    /**
+     * Has One → Production
+     * Each RnD record can lead to one production entry.
+     */
+    public function production()
+    {
+        return $this->hasOne(SamplePreparationProduction::class, 'sample_preparation_rnd_id');
+    }
+
+    /**
+     * Has Many → Shade Orders
+     * One RnD record can be linked with multiple shade orders.
+     */
+    public function shadeOrders()
+    {
+        return $this->hasMany(ShadeOrder::class, 'sample_preparation_rnd_id');
+    }
+
+    /* ======================================================================
+     * BOOT LOGIC (Model Events)
+     * ======================================================================
+     */
+
+    /**
+     * Booted: Automatically keeps related `SampleInquiry` in sync.
+     * ----------------------------------------------------------------------
+     * When this model is saved:
+     *  - If `referenceNo` changes → Updates inquiry's referenceNo.
+     *  - If `developPlannedDate` changes → Updates inquiry's developPlannedDate.
+     */
     protected static function booted()
     {
         static::saved(function ($prep) {
@@ -88,15 +197,4 @@ class SamplePreparationRnD extends Model
             }
         });
     }
-
-    public function production()
-    {
-        return $this->hasOne(SamplePreparationProduction::class, 'sample_preparation_rnd_id');
-    }
-
-    public function shadeOrders()
-    {
-        return $this->hasMany(ShadeOrder::class, 'sample_preparation_rnd_id');
-    }
-
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ColorMatchReject;
+use App\Models\SamplePreparationRnD;
 use Illuminate\Http\Request;
 
 class ColorMatchRejectController extends Controller
@@ -12,7 +13,7 @@ class ColorMatchRejectController extends Controller
      */
     public function getRejectDetails($id)
     {
-        $sample = \App\Models\SamplePreparationRnD::with('sampleInquiry')->find($id);
+        $sample = SamplePreparationRnD::with('sampleInquiry')->find($id);
 
         if (!$sample) {
             return response()->json(['success' => false, 'message' => 'Sample not found.']);
@@ -24,9 +25,9 @@ class ColorMatchRejectController extends Controller
             ->get()
             ->map(function ($reject) {
                 return [
-                    'sentDate'     => optional($reject->sentDate)->format('Y-m-d H:i'),
-                    'receiveDate'  => optional($reject->receiveDate)->format('Y-m-d H:i'),
-                    'rejectDate'   => optional($reject->rejectDate)->format('Y-m-d H:i'),
+                    'sentDate' => optional($reject->sentDate)->format('Y-m-d H:i'),
+                    'receiveDate' => optional($reject->receiveDate)->format('Y-m-d H:i'),
+                    'rejectDate' => optional($reject->rejectDate)->format('Y-m-d H:i'),
                     'rejectReason' => $reject->rejectReason,
                 ];
             });
@@ -43,7 +44,6 @@ class ColorMatchRejectController extends Controller
     }
 
 
-
     /**
      * Show the form for creating a new resource.
      */
@@ -51,6 +51,7 @@ class ColorMatchRejectController extends Controller
     {
         //
     }
+
 
     /**
      * Store a newly created resource in storage.
@@ -63,7 +64,7 @@ class ColorMatchRejectController extends Controller
         ]);
 
         // Find the SamplePreparationRnD record using the provided ID
-        $sampleInquiry = \App\Models\SamplePreparationRnD::with('sampleInquiry') // eager load if relation exists
+        $sampleInquiry = SamplePreparationRnD::with('sampleInquiry') // eager load if relation exists
         ->find($request->id);
 
         if (!$sampleInquiry) {
@@ -93,6 +94,7 @@ class ColorMatchRejectController extends Controller
         return redirect()->back()->with('success', 'Color match reject created successfully.');
     }
 
+
     /**
      * Display the specified resource.
      */
@@ -100,6 +102,7 @@ class ColorMatchRejectController extends Controller
     {
         //
     }
+
 
     /**
      * Show the form for editing the specified resource.
@@ -109,6 +112,7 @@ class ColorMatchRejectController extends Controller
         //
     }
 
+
     /**
      * Update the specified resource in storage.
      */
@@ -116,6 +120,7 @@ class ColorMatchRejectController extends Controller
     {
         //
     }
+
 
     /**
      * Remove the specified resource from storage.

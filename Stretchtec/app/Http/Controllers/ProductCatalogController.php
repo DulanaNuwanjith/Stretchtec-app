@@ -3,12 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\ProductCatalog;
-use Illuminate\Support\Facades\Storage;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ProductCatalogController extends Controller
 {
-    // Display a listing of the product catalog entries
+    /**
+     * Display a listing of the product catalog entries
+     */
     public function elasticCatalog(Request $request)
     {
         // Eager load shade orders using sample_preparation_rnd_id
@@ -41,7 +44,9 @@ class ProductCatalogController extends Controller
     }
 
 
-    // Display a listing of the product catalog entries
+    /**
+     * Display a listing of the product catalog entries
+     */
     public function codeCatalog(Request $request)
     {
         // Eager load shade orders using sample_preparation_rnd_id
@@ -73,7 +78,10 @@ class ProductCatalogController extends Controller
         ));
     }
 
-    // Display a listing of the product catalog entries
+
+    /**
+     * Display a listing of the product catalog entries
+     */
     public function tapeCatalog(Request $request)
     {
         // Eager-load shade orders via sample_preparation_rnd_id
@@ -105,13 +113,19 @@ class ProductCatalogController extends Controller
         ));
     }
 
-    // Show the form for creating a new product catalog entry (optional)
+
+    /**
+     * Display a listing of all product catalog entries
+     */
     public function create()
     {
         return view('product-catalog.create');
     }
 
-    // Store a newly created product catalog entry in storage
+
+    /**
+     * Common storing method for all catalog entries
+     */
     public function store(Request $request)
     {
         $request->validate([
@@ -133,7 +147,10 @@ class ProductCatalogController extends Controller
         return redirect()->route('product-catalog.index')->with('success', 'Catalog entry created.');
     }
 
-    // Store method forcing item = Elastic
+
+    /**
+     * Store method forcing item = Elastic
+     */
     public function storeElastic(Request $request)
     {
         $request->validate([
@@ -157,6 +174,10 @@ class ProductCatalogController extends Controller
         return redirect()->route('elasticCatalog.index')->with('success', 'Elastic catalog entry created.');
     }
 
+
+    /**
+     * Store method forcing item = Elastic
+     */
     public function storeCode(Request $request)
     {
         $request->validate([
@@ -180,6 +201,10 @@ class ProductCatalogController extends Controller
         return redirect()->route('codeCatalog.index')->with('success', 'Cord catalog entry created.');
     }
 
+
+    /**
+     * Store method forcing item = Elastic
+     */
     public function storeTape(Request $request)
     {
         $request->validate([
@@ -203,6 +228,10 @@ class ProductCatalogController extends Controller
         return redirect()->route('tapeCatalog.index')->with('success', 'Tape catalog entry created.');
     }
 
+
+    /**
+     * Upload order image for a specific catalog entry
+     */
     public function uploadOrderImage(Request $request, ProductCatalog $catalog)
     {
         $request->validate([
@@ -227,6 +256,10 @@ class ProductCatalogController extends Controller
         return back()->with('success', 'Order image uploaded successfully.');
     }
 
+
+    /**
+     * Update approval details for a specific catalog entry
+     */
     public function updateApproval(Request $request, ProductCatalog $productCatalog)
     {
         $request->validate([
@@ -263,13 +296,18 @@ class ProductCatalogController extends Controller
     }
 
 
-    // Show the form for editing the specified product catalog entry
+    /**
+     * Show the form for editing the specified product catalog entry
+     */
     public function edit(ProductCatalog $productCatalog)
     {
         return view('product-catalog.edit', compact('productCatalog'));
     }
 
-    // Update the specified product catalog entry
+
+    /**
+     * Update the specified product catalog entry
+     */
     public function update(Request $request, ProductCatalog $productCatalog)
     {
         $request->validate([
@@ -289,7 +327,10 @@ class ProductCatalogController extends Controller
         return redirect()->route('product-catalog.index')->with('success', 'Catalog entry updated.');
     }
 
-    // Delete the specified product catalog entry
+
+    /**
+     * Remove the specified product catalog entry from storage
+     */
     public function destroy(ProductCatalog $productCatalog)
     {
         $productCatalog->delete();
@@ -297,6 +338,10 @@ class ProductCatalogController extends Controller
         return redirect()->route('product-catalog.index')->with('success', 'Catalog entry deleted.');
     }
 
+
+    /**
+     * Update shade for a specific catalog entry
+     */
     public function updateShade(Request $request, ProductCatalog $catalog)
     {
         $request->validate([
@@ -308,7 +353,7 @@ class ProductCatalogController extends Controller
             $catalog->save();
 
             return redirect()->back()->with('success', 'Shade updated successfully.');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return redirect()->back()->with('error', 'Failed to update shade. Please try again.');
         }
     }

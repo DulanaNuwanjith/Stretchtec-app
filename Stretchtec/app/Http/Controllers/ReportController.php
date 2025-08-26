@@ -2,18 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\SampleInquiry;
-use App\Models\SamplePreparationRnD;
-use App\Models\SamplePreparationProduction;
 use App\Models\ColorMatchReject;
 use App\Models\ProductCatalog;
+use App\Models\SampleInquiry;
+use App\Models\SamplePreparationProduction;
+use App\Models\SamplePreparationRnD;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 
 class ReportController extends Controller
 {
-    // Show report filter page with customers dropdown
+    /**
+     * Display the report generation page with customer list.
+     */
     public function showReportPage()
     {
         $customers = SampleInquiry::select('customerName')
@@ -21,20 +23,30 @@ class ReportController extends Controller
             ->orderBy('customerName')
             ->pluck('customerName');
 
-        return view('reports.sample-reports', compact('customers'));
+        // Get all distinct reject numbers from SampleInquiry
+        $rejectNumbers = SampleInquiry::select('rejectNO')
+            ->distinct()
+            ->whereNotNull('rejectNO')
+            ->orderBy('rejectNO')
+            ->pluck('rejectNO');
+
+        return view('reports.sample-reports', compact('customers', 'rejectNumbers'));
     }
 
-    // Generate PDF report filtered by date range and optional customer
+
+    /**
+     * Generate inquiry report filtered by customer decision and date range
+     */
     public function inquiryCustomerDecisionReport(Request $request)
     {
         $request->validate([
             'start_date' => 'required|date',
-            'end_date'   => 'required|date|after_or_equal:start_date',
-            'customer'   => 'nullable|string',
+            'end_date' => 'required|date|after_or_equal:start_date',
+            'customer' => 'nullable|string',
         ]);
 
         $query = SampleInquiry::whereBetween('inquiryReceiveDate', [$request->start_date, $request->end_date])
-                            ->whereNotNull('customerDeliveryDate'); // Only those with delivery date
+            ->whereNotNull('customerDeliveryDate'); // Only those with delivery date
 
         if ($request->filled('customer')) {
             $query->where('customerName', $request->customer);
@@ -43,15 +55,19 @@ class ReportController extends Controller
         $inquiries = $query->select('orderNo', 'customerName', 'customerDecision', 'inquiryReceiveDate', 'customerDeliveryDate')->get();
 
         $pdf = PDF::loadView('reports.inquiry-customer-decision-pdf', [
-            'inquiries'  => $inquiries,
+            'inquiries' => $inquiries,
             'start_date' => $request->start_date,
-            'end_date'   => $request->end_date,
-            'customer'   => $request->customer,
+            'end_date' => $request->end_date,
+            'customer' => $request->customer,
         ]);
 
         return $pdf->download("Inquiry_Customer_Decision_Report_{$request->start_date}_to_{$request->end_date}.pdf");
     }
 
+
+    /**
+     * Generate detailed order report by order number
+     */
     public function generateOrderReport(Request $request)
     {
         $request->validate([
@@ -62,7 +78,9 @@ class ReportController extends Controller
 
         $sampleInquiry = SampleInquiry::where('orderNo', $orderNo)->first();
 
-        $rnd = SamplePreparationRnD::where('orderNo', $orderNo)->first();
+        $rnd = SamplePreparationRnD::where('orderNo', $orderNo)
+            ->with('shadeOrders') 
+            ->first();
 
         $production = SamplePreparationProduction::where('order_no', $orderNo)->first();
 
@@ -83,23 +101,23 @@ class ReportController extends Controller
 
         if ($sampleInquiry->inquiryReceiveDate && $sampleInquiry->customerDeliveryDate) {
             $start = Carbon::parse($sampleInquiry->inquiryReceiveDate)->startOfDay();
-            $end   = Carbon::parse($sampleInquiry->customerDeliveryDate)->startOfDay();
+            $end = Carbon::parse($sampleInquiry->customerDeliveryDate)->startOfDay();
 
             $daysToDelivery = $start->diffInDays($end); // Always integer
         }
 
 
         $reportData = [
-            'sampleInquiry'        => $sampleInquiry,
-            'rnd'                  => $rnd,
-            'production'           => $production,
-            'colorRejects'         => $colorRejects,
-            'productCatalogs'      => $productCatalogs,  // Pass it here!
-            'customerDecision'     => $customerDecision,
-            'yarnOrderedQuantity'  => $yarnOrderedQuantity,
+            'sampleInquiry' => $sampleInquiry,
+            'rnd' => $rnd,
+            'production' => $production,
+            'colorRejects' => $colorRejects,
+            'productCatalogs' => $productCatalogs,  // Pass it here!
+            'customerDecision' => $customerDecision,
+            'yarnOrderedQuantity' => $yarnOrderedQuantity,
             'leftoverYarnQuantity' => $leftoverYarnQuantity,
-            'yarnPrice'            => $yarnPrice,
-            'daysToDelivery'       => $daysToDelivery,
+            'yarnPrice' => $yarnPrice,
+            'daysToDelivery' => $daysToDelivery,
         ];
 
         $pdf = PDF::loadView('reports.sampleOrder_report_pdf', $reportData);
@@ -107,17 +125,21 @@ class ReportController extends Controller
         return $pdf->download("Order_Report_{$orderNo}.pdf");
     }
 
+
+    /**
+     * Generate inquiry report filtered by date range
+     */
     public function inquiryRangeReport(Request $request)
     {
         $request->validate([
             'start_date' => 'required|date',
-            'end_date'   => 'required|date|after_or_equal:start_date'
+            'end_date' => 'required|date|after_or_equal:start_date'
         ]);
 
         $inquiries = SampleInquiry::whereBetween('inquiryReceiveDate', [
-                $request->start_date,
-                $request->end_date
-            ])
+            $request->start_date,
+            $request->end_date
+        ])
             ->select('orderNo', 'customerName', 'coordinatorName', 'customerDecision', 'customerDeliveryDate')
             ->get();
 
@@ -127,7 +149,7 @@ class ReportController extends Controller
         // Delivered = customerDeliveryDate is NOT NULL
         $needToDeliver = $inquiries->whereNotNull('customerDeliveryDate');
 
-        $pdf = \PDF::loadView('reports.inquiry-range-pdf', [
+        $pdf = PDF::loadView('reports.inquiry-range-pdf', [
             'notDelivered' => $notDelivered,
             'needToDeliver' => $needToDeliver,
             'start_date' => $request->start_date,
@@ -137,11 +159,15 @@ class ReportController extends Controller
         return $pdf->download("Inquiry_Report_{$request->start_date}_to_{$request->end_date}.pdf");
     }
 
+
+    /**
+     * Generate yarn supplier spending report filtered by date range
+     */
     public function yarnSupplierSpendingReport(Request $request)
     {
         $request->validate([
             'start_date' => 'required|date',
-            'end_date'   => 'required|date|after_or_equal:start_date',
+            'end_date' => 'required|date|after_or_equal:start_date',
         ]);
 
         $suppliers = SamplePreparationRnD::whereBetween('yarnOrderedDate', [$request->start_date, $request->end_date])
@@ -150,20 +176,24 @@ class ReportController extends Controller
             ->orderBy('total_spent', 'desc')
             ->get();
 
-        $pdf = \PDF::loadView('reports.yarn-supplier-spending-pdf', [
-            'suppliers'  => $suppliers,
+        $pdf = PDF::loadView('reports.yarn-supplier-spending-pdf', [
+            'suppliers' => $suppliers,
             'start_date' => $request->start_date,
-            'end_date'   => $request->end_date,
+            'end_date' => $request->end_date,
         ]);
 
         return $pdf->download("Yarn_Supplier_Spending_{$request->start_date}_to_{$request->end_date}.pdf");
     }
 
+
+    /**
+     * Generate coordinator performance report filtered by date range
+     */
     public function coordinatorReportPdf(Request $request)
     {
         $request->validate([
             'start_date' => 'required|date',
-            'end_date'   => 'required|date|after_or_equal:start_date',
+            'end_date' => 'required|date|after_or_equal:start_date',
         ]);
 
         $startDate = $request->start_date;
@@ -210,15 +240,19 @@ class ReportController extends Controller
         return $pdf->download("Coordinator_Report_{$startDate}_to_{$endDate}.pdf");
     }
 
+
+    /**
+     * Generate coordinator performance report filtered by date range
+     */
     public function referenceDeliveryReport(Request $request)
     {
         $request->validate([
             'start_date' => 'required|date',
-            'end_date'   => 'required|date|after_or_equal:start_date'
+            'end_date' => 'required|date|after_or_equal:start_date'
         ]);
 
         $startDate = $request->start_date;
-        $endDate   = $request->end_date;
+        $endDate = $request->end_date;
 
         $inquiries = SampleInquiry::whereBetween('inquiryReceiveDate', [$startDate, $endDate])
             ->whereNotNull('customerDeliveryDate') // ✅ Only after delivery
@@ -227,25 +261,29 @@ class ReportController extends Controller
             ->get()
             ->map(function ($inquiry) {
                 $inquiry->inquiryReceiveDate = $inquiry->inquiryReceiveDate
-                    ? \Carbon\Carbon::parse($inquiry->inquiryReceiveDate)->format('Y-m-d')
+                    ? Carbon::parse($inquiry->inquiryReceiveDate)->format('Y-m-d')
                     : null;
                 $inquiry->customerDeliveryDate = $inquiry->customerDeliveryDate
-                    ? \Carbon\Carbon::parse($inquiry->customerDeliveryDate)->format('Y-m-d')
+                    ? Carbon::parse($inquiry->customerDeliveryDate)->format('Y-m-d')
                     : null;
                 $inquiry->deliveryQty = $inquiry->deliveryQty ?? '-';
                 return $inquiry;
             });
 
-        $pdf = \PDF::loadView('reports.reference_delivery_report_pdf', compact('inquiries', 'startDate', 'endDate'));
+        $pdf = PDF::loadView('reports.reference_delivery_report_pdf', compact('inquiries', 'startDate', 'endDate'));
 
         return $pdf->download("Reference_Delivery_Report_{$startDate}_to_{$endDate}.pdf");
     }
 
+
+    /**
+     * Generate sample inquiry report filtered by date range and coordinators
+     */
     public function generateSampleInquiryReport(Request $request)
     {
         $request->validate([
             'start_date' => 'required|date',
-            'end_date'   => 'required|date|after_or_equal:start_date',
+            'end_date' => 'required|date|after_or_equal:start_date',
             'coordinatorName' => 'required|array',
         ]);
 
@@ -257,12 +295,115 @@ class ReportController extends Controller
 
         // Generate PDF in landscape orientation
         $pdf = Pdf::loadView('reports.sample_inquiry_report_pdf', [
-            'inquiries'   => $inquiries,
-            'start_date'  => $request->start_date,
-            'end_date'    => $request->end_date,
-            'coordinators'=> $request->coordinatorName,
+            'inquiries' => $inquiries,
+            'start_date' => $request->start_date,
+            'end_date' => $request->end_date,
+            'coordinators' => $request->coordinatorName,
         ])->setPaper('legal', 'landscape'); // <--- set landscape
 
         return $pdf->download("Sample_Inquiry_Report_{$request->start_date}_to_{$request->end_date}.pdf");
     }
+    
+    public function generateRejectReportPdf(Request $request)
+    {
+        $request->validate([
+            'reject_no' => 'required|string',
+        ]);
+
+        $rejectNo = $request->reject_no;
+
+        // Get all SampleInquiry records with rejectNO = $rejectNo
+        $inquiries = SampleInquiry::whereNotNull('rejectNO')
+            ->where('rejectNO', $rejectNo)
+            ->with('samplePreparationRnD')
+            ->get();
+
+        // Get unique customer names and coordinator names (in case there are multiple)
+        $customerNames = $inquiries->pluck('customerName')->unique()->join(', ');
+        $coordinatorNames = $inquiries->pluck('coordinatorName')->unique()->join(', ');
+
+        // Group by orderNo
+        $orders = $inquiries->groupBy('orderNo')->map(function ($items, $orderNo) {
+            $totalYarnPrice = $items->sum(function($inquiry) {
+                return $inquiry->samplePreparationRnD->yarnPrice ?? 0;
+            });
+
+            $rejectCount = $items->count();
+
+            // Collect all customerDecision values for this order
+            $customerDecisions = $items->pluck('customerDecision')->unique()->join(', ');
+
+            return [
+                'reject_count' => $rejectCount,
+                'total_yarn_price' => $totalYarnPrice,
+                'orderNos' => $orderNo,
+                'customerDecision' => $customerDecisions,
+            ];
+        });
+
+        $pdf = PDF::loadView('reports.reject_report_pdf', [
+            'orders' => $orders,
+            'rejectNo' => $rejectNo,
+            'customerNames' => $customerNames,
+            'coordinatorNames' => $coordinatorNames,
+        ])->setPaper('A4', 'portrait');
+
+        return $pdf->download("Reject_Report_{$rejectNo}.pdf");
+    }
+
+    public function generateCustomerRejectReportPdf(Request $request)
+    {
+        $request->validate([
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after_or_equal:start_date',
+            'customer_name' => 'required|string',
+        ]);
+
+        $start = $request->start_date;
+        $end = $request->end_date;
+        $customer = $request->customer_name;
+
+        // Get SampleInquiry records for customer within date range
+        $inquiries = SampleInquiry::where('customerName', $customer)
+            ->whereBetween('inquiryReceiveDate', [$start, $end])
+            ->whereNotNull('rejectNO')
+            ->with('samplePreparationRnD')
+            ->get();
+
+        // Group by rejectNO
+        $rejectGroups = $inquiries->groupBy('rejectNO')->map(function ($items, $rejectNo) {
+            // Group orders under this reject
+            $orders = $items->groupBy('orderNo')->map(function ($orderItems, $orderNo) {
+                $totalYarnPrice = $orderItems->sum(fn($i) => $i->samplePreparationRnD->yarnPrice ?? 0);
+                $customerDecisions = $orderItems->pluck('customerDecision')->unique()->join(', ');
+
+                return [
+                    'orderNo' => $orderNo,
+                    'customerDecision' => $customerDecisions,
+                    'total_yarn_price' => $totalYarnPrice,
+                ];
+            });
+
+            $totalOrders = $orders->count();
+            $totalRejections = $orders->filter(fn($o) => str_contains($o['customerDecision'], 'Order Rejected'))->count();
+            $totalYarn = $orders->sum('total_yarn_price');
+
+            return [
+                'orders' => $orders,
+                'total_orders' => $totalOrders,
+                'total_rejections' => $totalRejections,
+                'total_yarn_price' => $totalYarn,
+            ];
+        });
+
+        $pdf = PDF::loadView('reports.customer_reject_report_pdf', [
+            'rejectGroups' => $rejectGroups,
+            'customerName' => $customer,
+            'start_date' => $start,
+            'end_date' => $end,
+        ])->setPaper('A4', 'portrait');
+
+        return $pdf->download("Customer_Reject_Report_{$customer}_{$start}_to_{$end}.pdf");
+    }
+
 }

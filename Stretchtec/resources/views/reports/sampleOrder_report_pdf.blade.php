@@ -150,6 +150,14 @@
                         <strong style="width: 180px; display: inline-block;">Customer Delivery Date:</strong>
                         {{ $sampleInquiry->customerDeliveryDate ? $sampleInquiry->customerDeliveryDate->format('Y-m-d') : 'N/A' }}
                     </li>
+                    <li>
+                        <strong style="width: 180px; display: inline-block;">Customer Delivery Qty:</strong>
+                        @if ($rnd && $rnd->shadeOrders->isNotEmpty())
+                            {{ $rnd->shadeOrders->sum('qty') }}
+                        @else
+                            {{ $sampleInquiry->deliveryQty ?? 'N/A' }}
+                        @endif
+                    </li>
                     <li><strong style="width: 180px; display: inline-block;">Customer Decision:</strong>
                         {{ $customerDecision ?? 'N/A' }}</li>
                     @if ($sampleInquiry->inquiryReceiveDate && $sampleInquiry->customerDeliveryDate)
@@ -217,19 +225,9 @@
                         {{ optional($production->order_received_at)->format('Y-m-d H:i') ?? 'N/A' }}</li>
                     <li><strong>Order Start At:</strong>
                         {{ optional($production->order_start_at)->format('Y-m-d H:i') ?? 'N/A' }}</li>
-                    <li><strong>Order Complete At:</strong>
-                        {{ optional($production->order_complete_at)->format('Y-m-d H:i') ?? 'N/A' }}</li>
                     <li><strong>Operator:</strong> {{ $production->operator_name ?? 'N/A' }}</li>
                     <li><strong>Supervisor:</strong> {{ $production->supervisor_name ?? 'N/A' }}</li>
-                    <li><strong>Production Output (grams):</strong>
-                        {{ $production->production_output ? number_format($production->production_output) : 'N/A' }}
-                    </li>
-                    <li><strong>Damaged Output (grams):</strong>
-                        {{ $production->damaged_output ? number_format($production->damaged_output) : 'N/A' }}</li>
-                    <li><strong>Dispatch To R&D At:</strong>
-                        {{ optional($production->dispatch_to_rnd_at)->format('Y-m-d H:i') ?? 'N/A' }}</li>
-                    <li><strong>Dispatched By:</strong> {{ $production->dispatched_by ?? 'N/A' }}</li>
-                    <li><strong>Note:</strong> {{ $production->note ?? 'N/A' }}</li>
+
                 </ul>
             @else
                 <p>No production data available for this order.</p>
@@ -263,6 +261,55 @@
                 <p>No colour match reject records found.</p>
             @endif
         </div>
+
+        <!-- Shade Wise Details -->
+        @if ($rnd && $rnd->shadeOrders->isNotEmpty())
+            <div class="section full-width">
+                <h2>Shade Wise Details</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Shade</th>
+                            <th>Yarn Receive Date</th>
+                            <th>Production Output</th>
+                            <th>Damaged Output</th>
+                            <th>Production Complete Date</th>
+                            <th>Dispatched Date</th>
+                            <th>Delivered Date</th>
+                            <th>Delivered Quantity</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($rnd->shadeOrders as $shade)
+                            <tr>
+                                <td>{{ $shade->shade }}</td>
+                                <td>{{ $shade->yarn_receive_date ? \Carbon\Carbon::parse($shade->yarn_receive_date)->format('Y-m-d') : '–' }}
+                                </td>
+                                <td>{{ $shade->production_output ?? '–' }}</td>
+                                <td>{{ $shade->damaged_output ?? '–' }}</td>
+                                <td>{{ $shade->production_complete_date ? \Carbon\Carbon::parse($shade->production_complete_date)->format('Y-m-d') : '–' }}
+                                </td>
+                                <td>{{ $shade->dispatched_date ? \Carbon\Carbon::parse($shade->dispatched_date)->format('Y-m-d') : '–' }}
+                                </td>
+                                <td>{{ $shade->delivered_date ? \Carbon\Carbon::parse($shade->delivered_date)->format('Y-m-d') : '–' }}
+                                </td>
+                                <td>{{ $shade->qty ?? '–' }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th colspan="2">Total</th>
+                            <th>{{ $rnd->shadeOrders->sum('production_output') }}</th>
+                            <th>{{ $rnd->shadeOrders->sum('damaged_output') }}</th>
+                            <th colspan="3"></th>
+                            <th>{{ $rnd->shadeOrders->sum('qty') }}</th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        @endif
+
     </div>
 
     <!-- Full width Product Catalog Images -->

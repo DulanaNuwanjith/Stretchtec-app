@@ -247,6 +247,147 @@
                         </form>
                     </div>
 
+                    <div class="flex-1 min-w-[300px] max-w-sm flex">
+                        <form action="{{ route('reports.rejectReportPdf') }}" method="GET"
+                            class="flex flex-col bg-white dark:bg-gray-800 p-6 rounded shadow flex-1">
+                            @csrf
+                            <div class="flex-grow space-y-6">
+                                <h3 class="text-xl font-semibold text-gray-900 dark:text-gray-100">Reject Report Generator
+                                </h3>
+                                <h3 class="text-sm font-semibold text-gray-900 dark:text-gray-100">
+                                    Produce a complete, detailed report containing all relevant data associated with the
+                                    selected reject number.
+                                </h3>
+
+                                <!-- Reject No Dropdown -->
+                                <div>
+                                    <label class="block font-medium mb-2 text-gray-700 dark:text-gray-300">Reject
+                                        No</label>
+                                    <div class="relative inline-block text-left w-full">
+                                        <button type="button"
+                                            class="dropdown-btn inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50"
+                                            onclick="toggleDropdown(this, 'reject')">
+                                            <span class="selected-reject">Select Reject No</span>
+                                            <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20"
+                                                fill="currentColor">
+                                                <path fill-rule="evenodd"
+                                                    d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
+                                                    clip-rule="evenodd" />
+                                            </svg>
+                                        </button>
+
+                                        <div
+                                            class="dropdown-menu-reject hidden absolute z-10 mt-2 w-full rounded-md bg-white shadow-lg ring-1 ring-black/5 max-h-48 overflow-y-auto">
+                                            <div class="p-2 sticky top-0 bg-white z-10">
+                                                <input type="text" placeholder="Search reject no..."
+                                                    class="w-full px-2 py-1 text-sm border rounded-md"
+                                                    oninput="filterDropdown(this, 'reject')" />
+                                            </div>
+
+                                            <div class="py-1" role="listbox" tabindex="-1">
+                                                @foreach ($rejectNumbers as $reject)
+                                                    <button type="button"
+                                                        class="dropdown-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                                        onclick="selectDropdownOption(this, 'reject')">
+                                                        {{ $reject }}
+                                                    </button>
+                                                @endforeach
+                                            </div>
+                                        </div>
+
+                                        <input type="hidden" name="reject_no" class="input-reject" value="">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button type="submit"
+                                class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded transition mt-5">
+                                Download PDF
+                            </button>
+                        </form>
+                    </div>
+
+                    <div class="flex-1 min-w-[300px] max-w-sm flex">
+                        <form action="{{ route('reports.customerRejectReportPdf') }}" method="GET"
+                            class="flex flex-col bg-white dark:bg-gray-800 p-6 rounded shadow flex-1">
+                            @csrf
+                            <div class="flex-grow space-y-6">
+                                <h3 class="text-xl font-semibold text-gray-900 dark:text-gray-100">Customer Reject Report
+                                </h3>
+                                <h3 class="text-sm font-semibold text-gray-900 dark:text-gray-100">
+                                    Produce a complete, detailed report of all customer rejects within the selected date
+                                    range,
+                                    including all relevant details for each rejected order.
+                                </h3>
+
+                                <!-- Date Range -->
+                                <div>
+                                    <label class="block font-medium mb-2 text-gray-700 dark:text-gray-300">Start
+                                        Date</label>
+                                    <input type="date" name="start_date"
+                                        class="w-full border border-gray-300 rounded px-3 py-2 text-gray-900 dark:bg-gray-700 dark:text-white"
+                                        required>
+                                </div>
+                                <div>
+                                    <label class="block font-medium mb-2 text-gray-700 dark:text-gray-300">End Date</label>
+                                    <input type="date" name="end_date"
+                                        class="w-full border border-gray-300 rounded px-3 py-2 text-gray-900 dark:bg-gray-700 dark:text-white"
+                                        required>
+                                </div>
+
+                                <!-- Customer Dropdown -->
+                                <div>
+                                    <label class="block font-medium mb-2 text-gray-700 dark:text-gray-300">Customer</label>
+                                    <div class="relative inline-block text-left w-full">
+                                        <button type="button"
+                                            class="dropdown-btn inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50"
+                                            onclick="toggleDropdownDispatch(this, 'customer')">
+                                            <span class="selected-customer">All Customers</span>
+                                            <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20"
+                                                fill="currentColor">
+                                                <path fill-rule="evenodd"
+                                                    d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
+                                                    clip-rule="evenodd" />
+                                            </svg>
+                                        </button>
+
+                                        <div
+                                            class="dropdown-menu-customer hidden absolute z-10 mt-2 w-full rounded-md bg-white shadow-lg ring-1 ring-black/5 max-h-48 overflow-y-auto">
+                                            <div class="p-2 sticky top-0 bg-white z-10">
+                                                <input type="text" placeholder="Search customer..."
+                                                    class="w-full px-2 py-1 text-sm border rounded-md"
+                                                    oninput="filterDropdownOptionsDispatch(this)" />
+                                            </div>
+
+                                            <div class="py-1" role="listbox" tabindex="-1">
+                                                <button type="button"
+                                                    class="dropdown-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                                    onclick="selectDropdownOptionDispatch(this, '', 'customer')">
+                                                    All Customers
+                                                </button>
+                                                @foreach ($customers as $cust)
+                                                    <button type="button"
+                                                        class="dropdown-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                                        onclick="selectDropdownOptionDispatch(this, '{{ $cust }}', 'customer')">
+                                                        {{ $cust }}
+                                                    </button>
+                                                @endforeach
+                                            </div>
+                                        </div>
+
+                                        <input type="hidden" name="customer_name" class="input-customer"
+                                            value="">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button type="submit"
+                                class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded transition mt-5">
+                                Download PDF
+                            </button>
+                        </form>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -271,6 +412,39 @@
         function filterDropdownOptionsDispatch(input) {
             const filter = input.value.toLowerCase();
             const options = input.closest('[class^="dropdown-menu-"]').querySelectorAll('.dropdown-option');
+            options.forEach(option => {
+                const text = option.textContent.toLowerCase();
+                option.style.display = text.includes(filter) ? 'block' : 'none';
+            });
+        }
+
+        document.addEventListener('click', function(event) {
+            document.querySelectorAll('[class^="dropdown-menu-"]').forEach(menu => {
+                if (!menu.contains(event.target) && !menu.previousElementSibling.contains(event.target)) {
+                    menu.classList.add('hidden');
+                }
+            });
+        });
+    </script>
+    <script>
+        function toggleDropdown(button, type) {
+            const menu = button.nextElementSibling;
+            document.querySelectorAll('.dropdown-menu-' + type).forEach(m => {
+                if (m !== menu) m.classList.add('hidden');
+            });
+            menu.classList.toggle('hidden');
+        }
+
+        function selectDropdownOption(button, type) {
+            const dropdown = button.closest('.relative');
+            dropdown.querySelector('.selected-' + type).innerText = button.innerText;
+            dropdown.querySelector('.input-' + type).value = button.innerText;
+            dropdown.querySelector('.dropdown-menu-' + type).classList.add('hidden');
+        }
+
+        function filterDropdown(input, type) {
+            const filter = input.value.toLowerCase();
+            const options = input.closest('.dropdown-menu-' + type).querySelectorAll('.dropdown-option');
             options.forEach(option => {
                 const text = option.textContent.toLowerCase();
                 option.style.display = text.includes(filter) ? 'block' : 'none';
