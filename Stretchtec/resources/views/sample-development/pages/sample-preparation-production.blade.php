@@ -285,7 +285,7 @@
                                                     );
 
                                                     // ✅ Assign text color classes
-                                                    $orderColorClass = 'text-gray-900'; // default (black)
+                                                    $orderColorClass = 'text-gray-900 font-bold'; // default (black)
                                                     if ($allDispatchedOrDelivered) {
                                                         $orderColorClass = 'text-red-600 font-bold'; // 🔴 red if all dispatched/delivered
                                                     } elseif ($hasSentToProductionNotDispatched) {
