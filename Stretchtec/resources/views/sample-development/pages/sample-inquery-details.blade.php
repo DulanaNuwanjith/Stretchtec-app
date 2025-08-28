@@ -1051,7 +1051,7 @@
                                                 {{-- CASE 1: Shades based deliveries --}}
                                                 @if (!$specialCase)
                                                     {{-- Deliver Button / Modal --}}
-                                                    @if (!$allDelivered && $pendingShades->isNotEmpty() && !empty($inquiry->referenceNo))
+                                                    @if ($pendingShades->isNotEmpty() && !empty($inquiry->referenceNo))
                                                         <div x-data="{ open: false }">
                                                             <button type="button" @click="open = true"
                                                                     class="px-3 py-1 rounded text-white bg-green-600 hover:bg-green-700 transition duration-200">
@@ -1069,56 +1069,40 @@
                                                                         ✕
                                                                     </button>
 
-                                                                    <h2
-                                                                        class="text-xl font-semibold mb-4 text-gray-900 dark:text-white">
-                                                                        Select Shades to Deliver</h2>
+                                                                    <h2 class="text-xl font-semibold mb-4 text-gray-900 dark:text-white">
+                                                                        Select Shades to Deliver
+                                                                    </h2>
 
-                                                                    <form
-                                                                        action="{{ route('inquiry.markCustomerDelivered') }}"
-                                                                        method="POST" class="space-y-4">
+                                                                    <form action="{{ route('inquiry.markCustomerDelivered') }}" method="POST" class="space-y-4">
                                                                         @csrf
-                                                                        <input type="hidden" name="id"
-                                                                               value="{{ $inquiry->id }}">
+                                                                        <input type="hidden" name="id" value="{{ $inquiry->id }}">
 
-                                                                        <div
-                                                                            class="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[400px] overflow-y-auto pr-1">
+                                                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[400px] overflow-y-auto pr-1">
                                                                             @foreach ($pendingShades as $shade)
                                                                                 @php
-                                                                                    // Get the available stock for this shade + reference number
-                                                                                    $availableStock = SampleStock::where(
-                                                                                        'reference_no',
-                                                                                        $inquiry->referenceNo,
-                                                                                    )
-                                                                                        ->where(
-                                                                                            'shade',
-                                                                                            $shade->shade,
-                                                                                        )
+                                                                                    $availableStock = SampleStock::where('reference_no', $inquiry->referenceNo)
+                                                                                        ->where('shade', $shade->shade)
                                                                                         ->sum('available_stock');
                                                                                 @endphp
 
                                                                                 <div
                                                                                     class="p-4 border rounded-lg bg-gray-50 dark:bg-gray-700/50 hover:shadow-md transition">
-                                                                                    <label
-                                                                                        class="flex items-center gap-2">
+                                                                                    <label class="flex items-center gap-2">
                                                                                         <input type="checkbox"
                                                                                                name="shades[{{ $shade->id }}][selected]"
                                                                                                value="1"
                                                                                                class="rounded text-green-600 focus:ring-green-500">
-                                                                                        <span
-                                                                                            class="font-medium text-gray-900 dark:text-gray-100">
-                                                                                                {{ $shade->shade }}
-                                                                                            </span>
+                                                                                        <span class="font-medium text-gray-900 dark:text-gray-100">
+                                            {{ $shade->shade }}
+                                        </span>
                                                                                     </label>
 
-                                                                                    {{-- Show available stock info --}}
-                                                                                    <p
-                                                                                        class="text-sm text-gray-600 dark:text-gray-300 mt-1">
-                                                                                        Available: <span
-                                                                                            class="font-semibold">{{ $availableStock }}</span>
+                                                                                    <p class="text-sm text-gray-600 dark:text-gray-300 mt-1">
+                                                                                        Available:
+                                                                                        <span class="font-semibold">{{ $availableStock }}</span>
                                                                                     </p>
 
-                                                                                    <input type="number"
-                                                                                           min="1"
+                                                                                    <input type="number" min="1"
                                                                                            name="shades[{{ $shade->id }}][quantity]"
                                                                                            max="{{ $availableStock }}"
                                                                                            placeholder="Quantity"
@@ -1127,10 +1111,8 @@
                                                                             @endforeach
                                                                         </div>
 
-                                                                        <div
-                                                                            class="flex justify-end gap-3 pt-4 border-t">
-                                                                            <button type="button"
-                                                                                    @click="open = false"
+                                                                        <div class="flex justify-end gap-3 pt-4 border-t">
+                                                                            <button type="button" @click="open = false"
                                                                                     class="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-700">
                                                                                 Cancel
                                                                             </button>
@@ -1143,25 +1125,27 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    @else
-                                                        @if (empty($inquiry->referenceNo) && !$allDelivered)
-                                                            <span class="text-red-600 font-semibold text-sm">Set Ref No
-                                                                    to Deliver</span>
-                                                        @endif
+                                                    @elseif (empty($inquiry->referenceNo) && !$allDelivered)
+                                                        <span class="text-red-600 font-semibold text-sm">Set Ref No to Deliver</span>
                                                     @endif
 
 
-                                                    {{-- Final Delivered Banner (clickable for shade-wise details) --}}
-                                                    @if ($allDelivered)
-                                                        <div x-data="{ openShades: false }"
-                                                             class="flex flex-col items-center space-y-1 mt-2">
+                                                    {{-- Banner + Shade-wise details --}}
+                                                    @if ($anyDelivered)
+                                                        <div x-data="{ openShades: false }" class="flex flex-col items-center space-y-1 mt-2">
+                                                            @if ($allDelivered)
                                                                 <span @click="openShades = true"
                                                                       class="cursor-pointer inline-block text-sm font-semibold text-gray-700 dark:text-white bg-green-100 dark:bg-gray-800 px-3 py-1 rounded text-center">
                                                                     Delivered on <br>
                                                                     {{ Carbon::parse($inquiry->customerDeliveryDate)->format('Y-m-d') }}
-                                                                    at
-                                                                    {{ Carbon::parse($inquiry->customerDeliveryDate)->format('H:i') }}
+                                                                    at {{ Carbon::parse($inquiry->customerDeliveryDate)->format('H:i') }}
                                                                 </span>
+                                                            @else
+                                                                <span @click="openShades = true"
+                                                                      class="cursor-pointer inline-block text-sm font-semibold text-gray-700 dark:text-white bg-yellow-100 dark:bg-gray-800 px-3 py-1 rounded text-center">
+                                                                    Partially Delivered
+                                                                </span>
+                                                            @endif
 
                                                             {{-- Modal: Shade-wise Delivered Details --}}
                                                             <div x-show="openShades" x-transition x-cloak
@@ -1173,25 +1157,20 @@
                                                                         ✕
                                                                     </button>
 
-                                                                    <h2
-                                                                        class="text-xl text-left font-semibold mb-4 text-blue-900 dark:text-white">
-                                                                        Shade-wise Delivery Details</h2>
+                                                                    <h2 class="text-xl text-left font-semibold mb-4 text-blue-900 dark:text-white">
+                                                                        Shade-wise Delivery Details
+                                                                    </h2>
 
                                                                     <div class="space-y-2">
                                                                         @foreach ($deliveredShades as $shade)
                                                                             <div
                                                                                 class="flex justify-between items-center p-3 border rounded-lg bg-gray-50 dark:bg-gray-700/50">
-                                                                                    <span
-                                                                                        class="font-medium text-gray-900 dark:text-gray-100">{{ $shade->shade }}</span>
-                                                                                <span
-                                                                                    class="text-sm text-gray-700 dark:text-gray-200">
-                                                                                        Delivered on
-                                                                                        {{ Carbon::parse($shade->delivered_date)->format('Y-m-d') }}
-                                                                                        at
-                                                                                        {{ Carbon::parse($shade->delivered_date)->format('H:i') }}
-                                                                                        (Qty:
-                                                                                        {{ $shade->qty ?? '—' }})
-                                                                                    </span>
+                                                                                <span class="font-medium text-gray-900 dark:text-gray-100">{{ $shade->shade }}</span>
+                                                                                <span class="text-sm text-gray-700 dark:text-gray-200">
+                                                                                    Delivered on {{ Carbon::parse($shade->delivered_date)->format('Y-m-d') }}
+                                                                                    at {{ Carbon::parse($shade->delivered_date)->format('H:i') }}
+                                                                                    (Qty: {{ $shade->qty ?? '—' }})
+                                                                                </span>
                                                                             </div>
                                                                         @endforeach
                                                                     </div>
@@ -1204,10 +1183,10 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            {{-- Dispatch Note --}}
-                                                            @if ($anyDelivered && $inquiry->dNoteNumber)
-                                                                <a href="{{ asset('storage/dispatches/' . $inquiry->dNoteNumber) }}"
-                                                                   target="_blank"
+
+                                                            {{-- Dispatch Note should always show if ANY delivered --}}
+                                                            @if ($inquiry->dNoteNumber)
+                                                                <a href="{{ asset('storage/dispatches/' . $inquiry->dNoteNumber) }}" target="_blank"
                                                                    class="mt-4 inline-block px-4 py-2 rounded-lg bg-green-600 text-white hover:bg-green-700 transition">
                                                                     Dispatch Note
                                                                 </a>
@@ -1215,6 +1194,7 @@
                                                         </div>
                                                     @endif
 
+                                                    {{-- No shades delivered and no pending --}}
                                                     @if (!$allDelivered && $pendingShades->isEmpty() && !$anyDelivered && !(empty($inquiry->referenceNo) && !$allDelivered))
                                                         <span class="text-gray-400 italic">—</span>
                                                     @endif

@@ -1822,24 +1822,18 @@
                                                         // Check if all related shade orders are delivered
                                                         $allShadesDelivered =
                                                             $prep->shadeOrders->isNotEmpty() &&
-                                                            $prep->shadeOrders->every(
-                                                                fn($s) => trim($s->status) === 'Delivered',
-                                                            );
+                                                            $prep->shadeOrders->every(fn($s) => trim($s->status) === 'Delivered');
 
                                                         if ($prep->alreadyDeveloped === 'Need to Develop') {
                                                             // Get dispatched shades for this prep only
-                                                            $dispatchedShades = $prep->shadeOrders->where(
-                                                                'status',
-                                                                'Dispatched to RnD',
-                                                            );
+                                                            $dispatchedShades = $prep->shadeOrders->where('status', 'Dispatched to RnD');
 
-                                                            // Filter out shades that are already in stock
-                                                            $newShades = $dispatchedShades->filter(
-                                                                fn($s) => !\App\Models\SampleStock::where(
-                                                                    'shade',
-                                                                    $s->shade,
-                                                                )->exists(),
-                                                            );
+                                                            // Filter out shades that are already in stock with the SAME shade + referenceNo
+                                                            $newShades = $dispatchedShades->filter(function ($s) use ($prep) {
+                                                                return !\App\Models\SampleStock::where('shade', $s->shade)
+                                                                    ->where('reference_no', $prep->referenceNo) // ✅ match by both
+                                                                    ->exists();
+                                                            });
 
                                                             // Editable only if there are new dispatched shades not yet in stock
                                                             $canEditReference = $newShades->isNotEmpty();
