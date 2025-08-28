@@ -69,6 +69,7 @@ class SamplePreparationRnDController extends Controller
         $references = SamplePreparationRnD::whereNotNull('referenceNo')->where('referenceNo', '!=', '')->distinct()->orderBy('referenceNo')->pluck('referenceNo');
         $coordinators = SampleInquiry::whereNotNull('coordinatorName')->where('coordinatorName', '!=', '')->distinct()->orderBy('coordinatorName')->pluck('coordinatorName');
         $sampleStockReferences = SampleStock::pluck('reference_no')->unique();
+        $sampleStockShade = SampleStock::pluck('shade')->unique();
 
         // Production dispatch check
         $dispatchCheck = SamplePreparationProduction::all();
@@ -81,7 +82,8 @@ class SamplePreparationRnDController extends Controller
             'references',
             'sampleStockReferences',
             'coordinators',
-            'dispatchCheck'
+            'dispatchCheck',
+            'sampleStockShade'
         ));
     }
 
@@ -470,10 +472,12 @@ class SamplePreparationRnDController extends Controller
         $request->validate([
             'id' => 'required|exists:sample_preparation_rnd,id',
             'referenceNo' => 'required|string',
+            'shade' => 'nullable|string',
         ]);
 
         $prep = SamplePreparationRnD::findOrFail($request->id);
         $referenceNo = $request->input('referenceNo');
+        $shadeRef = $request->input('shade');
 
         // Only check for duplicates if type is 'Need to Develop' or 'Tape Match Pan Asia'
         if (in_array($prep->alreadyDeveloped, ['Need to Develop', 'Tape Match Pan Asia'])) {
@@ -488,14 +492,21 @@ class SamplePreparationRnDController extends Controller
 
         $isFirstTime = !$prep->is_reference_locked;
 
-        // Lock reference if first time
+        // --- Handle "No Need to Develop" differently ---
+        if ($prep->alreadyDeveloped === 'No Need to Develop') {
+            $finalReference = $shadeRef
+                ? "{$referenceNo}|{$shadeRef}"
+                : $referenceNo;
+        } else {
+            $finalReference = $referenceNo;
+        }
+
         if ($isFirstTime) {
-            $prep->referenceNo = $referenceNo;
+            $prep->referenceNo = $finalReference;
             $prep->is_reference_locked = true;
             $prep->save();
         } else {
-            // Update reference for other cases (including No Need to Develop)
-            $prep->referenceNo = $referenceNo;
+            $prep->referenceNo = $finalReference;
             $prep->save();
         }
 

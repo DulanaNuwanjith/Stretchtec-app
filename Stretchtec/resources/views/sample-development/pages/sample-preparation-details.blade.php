@@ -1964,6 +1964,39 @@
                                                                                         {{ $ref }}
                                                                                     </div>
                                                                                 @endforeach
+
+                                                                            </div>
+                                                                        </div>
+
+                                                                        {{-- Custom Shade Dropdown --}}
+                                                                        <div class="relative inline-block text-left w-full mb-2">
+                                                                            <input type="hidden" name="shade" id="shadeInputRef" required>
+
+                                                                            <button id="shadeDropdownRef" type="button"
+                                                                                    class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10"
+                                                                                    aria-expanded="false" aria-haspopup="listbox"
+                                                                                    onclick="toggleShadeDropdown(event)">
+                                                                                <span id="selectedShadeRef">Select Shade</span>
+                                                                                <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                                                                                    <path fill-rule="evenodd"
+                                                                                          d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
+                                                                                          clip-rule="evenodd" />
+                                                                                </svg>
+                                                                            </button>
+
+                                                                            <div id="shadeDropdownMenuRef"
+                                                                                 class="absolute z-40 mt-1 w-full bg-white border rounded-lg shadow-lg hidden max-h-48 overflow-y-auto p-2"
+                                                                                 role="listbox" aria-labelledby="shadeDropdown">
+                                                                                <input type="text" id="shadeSearchInputRef" onkeyup="filterShades()"
+                                                                                       placeholder="Search..."
+                                                                                       class="w-full px-2 py-1 text-sm border rounded-md mb-1" autocomplete="off">
+
+                                                                                @foreach ($sampleStockShade as $shade)
+                                                                                    <div onclick="selectShade('{{ $shade }}')" tabindex="0"
+                                                                                         class="shade-option px-4 py-2 hover:bg-gray-100 cursor-pointer text-sm">
+                                                                                        {{ $shade }}
+                                                                                    </div>
+                                                                                @endforeach
                                                                             </div>
                                                                         </div>
 
@@ -3045,5 +3078,45 @@
                 option.style.display = option.textContent.toLowerCase().includes(filter) ? "block" : "none";
             });
         };
+
+        // ======= SHADE DROPDOWN =======
+        const shadeDropdownBtn = document.getElementById("shadeDropdownRef");
+        const shadeDropdownMenu = document.getElementById("shadeDropdownMenuRef");
+
+        if (shadeDropdownMenu) {
+            shadeDropdownMenu.addEventListener("click", (event) => event.stopPropagation());
+        }
+
+        window.toggleShadeDropdown = function(event) {
+            event.stopPropagation();
+            closeAllDropdowns();
+            shadeDropdownMenu.classList.toggle("hidden");
+            shadeDropdownBtn.setAttribute("aria-expanded", !shadeDropdownMenu.classList.contains("hidden"));
+        };
+
+        window.selectShade = function(value) {
+            document.getElementById("shadeInputRef").value = value;
+            document.getElementById("selectedShadeRef").textContent = value || "Select Shade";
+            closeAllDropdowns();
+        };
+
+        window.filterShades = function() {
+            const input = document.getElementById("shadeSearchInputRef").value.toLowerCase();
+            document.querySelectorAll(".shade-option").forEach(option => {
+                option.style.display = option.textContent.toLowerCase().includes(input) ? "block" : "none";
+            });
+        };
+
+        // ======= COMMON: CLOSE DROPDOWNS =======
+        function closeAllDropdowns() {
+            referenceDropdownMenu.classList.add("hidden");
+            referenceDropdownBtn.setAttribute("aria-expanded", "false");
+
+            shadeDropdownMenu.classList.add("hidden");
+            shadeDropdownBtn.setAttribute("aria-expanded", "false");
+        }
+
+        document.addEventListener("click", () => closeAllDropdowns());
+
     </script>
 @endsection
