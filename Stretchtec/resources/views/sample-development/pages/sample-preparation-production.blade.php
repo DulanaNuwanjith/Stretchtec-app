@@ -272,30 +272,48 @@
                                             <tr id="serviceRow{{ $prod->id }}"
                                                 class="odd:bg-white even:bg-gray-50 border-b border-gray-200  text-left">
                                                 {{-- Order No --}}
-                                                <td
-                                                    class="sticky left-0 z-20 px-4 py-3 bg-gray-100 whitespace-normal break-words border-r border-gray-300">
-                                                    <span
-                                                        class="readonly font-bold hover:text-blue-600 hover:underline cursor-pointer"
-                                                        onclick="openSampleModal(
-                                                            '{{ addslashes($prod->order_no) }}',
-                                                            '{{ addslashes($prod->sampleInquiry->customerName ?? '-') }}',
-                                                            '{{ addslashes($prod->sampleInquiry->item ?? '-') }}',
-                                                            '{{ addslashes($prod->sampleInquiry->ItemDiscription ?? '-') }}',
-                                                            '{{ addslashes($prod->sampleInquiry->size ?? '-') }}',
-                                                            '{{ addslashes($prod->sampleInquiry->qtRef ?? '-') }}',
-                                                            '{{ addslashes($prod->sampleInquiry->color ?? '-') }}',
-                                                            '{{ addslashes($prod->sampleInquiry->style ?? '-') }}',
-                                                            '{{ addslashes($prod->sampleInquiry->sampleQty ?? '-') }}',
-                                                            '{{ addslashes($prod->samplePreparationRnd->shade ?? '-') }}',
-                                                            // '{{ addslashes($prod->operator_name ?? '-') }}',
-                                                            // '{{ addslashes($prod->supervisor_name ?? '-') }}',
-                                                        )">
-                                                        {{ $prod->order_no }}
-                                                    </span>
+                                                @php
+                                                    $shadeOrders = $prod->samplePreparationRnD?->shadeOrders ?? collect();
+
+                                                    // ✅ Check conditions
+                                                    $allDispatchedOrDelivered = $shadeOrders->isNotEmpty() &&
+                                                        $shadeOrders->every(fn($s) => in_array($s->status, ['Dispatched to RnD', 'Delivered']));
+
+                                                    $hasSentToProductionNotDispatched = $shadeOrders->contains(fn($s) =>
+                                                        $s->status === 'Sent to Production' ||
+                                                        ($s->status === 'Production Complete' && !$shadeOrders->contains('status', 'Dispatched to RnD'))
+                                                    );
+
+                                                    // ✅ Assign text color classes
+                                                    $orderColorClass = 'text-gray-900'; // default (black)
+                                                    if ($allDispatchedOrDelivered) {
+                                                        $orderColorClass = 'text-red-600 font-bold'; // 🔴 red if all dispatched/delivered
+                                                    } elseif ($hasSentToProductionNotDispatched) {
+                                                        $orderColorClass = 'text-blue-00 font-bold'; // 🔵 blue if some still in production and not dispatched
+                                                    }
+                                                @endphp
+
+                                                <td class="sticky left-0 z-20 px-4 py-3 bg-gray-100 whitespace-normal break-words border-r border-gray-300">
+                                                <span
+                                                    class="readonly hover:underline cursor-pointer {{ $orderColorClass }}"
+                                                    onclick="openSampleModal(
+                                                        '{{ addslashes($prod->order_no) }}',
+                                                        '{{ addslashes($prod->sampleInquiry->customerName ?? '-') }}',
+                                                        '{{ addslashes($prod->sampleInquiry->item ?? '-') }}',
+                                                        '{{ addslashes($prod->sampleInquiry->ItemDiscription ?? '-') }}',
+                                                        '{{ addslashes($prod->sampleInquiry->size ?? '-') }}',
+                                                        '{{ addslashes($prod->sampleInquiry->qtRef ?? '-') }}',
+                                                        '{{ addslashes($prod->sampleInquiry->color ?? '-') }}',
+                                                        '{{ addslashes($prod->sampleInquiry->style ?? '-') }}',
+                                                        '{{ addslashes($prod->sampleInquiry->sampleQty ?? '-') }}',
+                                                        '{{ addslashes($prod->samplePreparationRnd->shade ?? '-') }}',
+                                                    )">
+                                                    {{ $prod->order_no }}
+                                                </span>
 
                                                     <input type="text" name="order_no"
-                                                        class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md text-sm"
-                                                        value="{{ $prod->order_no }}" />
+                                                           class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md text-sm"
+                                                           value="{{ $prod->order_no }}" />
                                                 </td>
 
                                                 {{-- Production Deadline --}}
@@ -1568,7 +1586,6 @@
         }
     </script>
 
-    {{-- ✅ Validation Script --}}
     <script>
         function validateDispatchForm(form) {
             const selectedShades = form.querySelectorAll('.shade-checkbox:checked');
@@ -1576,7 +1593,18 @@
 
             // 🔹 Step 1: Must select at least one shade
             if (selectedShades.length === 0) {
-                alert("⚠️ Please select at least one shade before submitting.");
+                Swal.fire({
+                    toast: true,
+                    position: 'top-end',
+                    icon: 'warning',
+                    title: 'Please select at least one shade before submitting.',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    customClass: {
+                        popup: 'swal2-toast swal2-shadow'
+                    }
+                });
                 return false;
             }
 
@@ -1600,9 +1628,21 @@
                 }
             }
 
-            // 🔹 Step 3: If errors exist, show all in one message
+            // 🔹 Step 3: If errors exist, show all in one SweetAlert toast
             if (errors.length > 0) {
-                alert("🚨 Please complete all required fields:\n\n" + errors.join("\n"));
+                Swal.fire({
+                    toast: true,
+                    position: 'top-end',
+                    icon: 'error',
+                    title: 'Please complete all required fields',
+                    html: errors.join("<br>"),
+                    showConfirmButton: false,
+                    timer: 4000,
+                    timerProgressBar: true,
+                    customClass: {
+                        popup: 'swal2-toast swal2-shadow'
+                    }
+                });
                 return false;
             }
 

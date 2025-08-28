@@ -20,7 +20,7 @@
     @php
         $role = auth()->user()->role;
         $userRole = Auth::user()->role;
-        if (in_array($userRole, ['SUPERADMIN', 'ADMIN', 'CUSTOMERCOORDINATOR', 'SAMPLEDEVELOPER'])) {
+        if (in_array($userRole, ['SUPERADMIN', 'ADMIN', 'CUSTOMERCOORDINATOR'])) {
             $sampleRoute = route('sample-inquery-details.index');
         } elseif ($userRole === 'SAMPLEDEVELOPER') {
             $sampleRoute = route('sample-preparation-details.index');
