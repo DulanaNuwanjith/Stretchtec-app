@@ -456,7 +456,7 @@
                                                     <span
                                                         class="readonly font-bold hover:text-blue-600 hover:underline cursor-pointer
                                                             {{ $prep->productionStatus === 'Order Delivered' ? 'text-red-600' : '' }}
-                                                            {{ $prep->productionStatus === 'Dispatched to RnD' ? 'text-yellow-600' : 'text-black' }}"
+                                                            {{ $prep->productionStatus === 'Dispatched to RnD' ? 'text-blue-500' : 'text-black' }}"
                                                         onclick="openRndSampleModal(
                                                             '{{ addslashes($prep->orderNo) }}',
                                                             '{{ addslashes($prep->sampleInquiry->customerName ?? '-') }}',

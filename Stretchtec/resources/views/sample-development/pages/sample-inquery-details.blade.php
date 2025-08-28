@@ -736,7 +736,7 @@
                                                     <span
                                                         class="readonly font-bold
                                                         {{ $inquiry->productionStatus === 'Delivered' ? 'text-red-600' : '' }}
-                                                        {{ $inquiry->productionStatus === 'Dispatched to RnD' ? 'text-yellow-600' : '' }}">
+                                                        {{ $inquiry->productionStatus === 'Dispatched to RnD' ? 'text-blue-500' : '' }}">
                                                         {{ $inquiry->orderNo }}
                                                     </span>
                                                 <input type="text"
