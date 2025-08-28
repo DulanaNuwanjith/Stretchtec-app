@@ -1513,7 +1513,7 @@
                                                                             <button type="submit"
                                                                                 :disabled="selectedShades.length == 0"
                                                                                 class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
-                                                                                x-text="selectedShades.length > 1 ? 'Send Selected' : 'Send to Production'">
+                                                                                x-text="'Send to Production'">
                                                                                 Send
                                                                             </button>
                                                                         </div>
@@ -1530,8 +1530,14 @@
                                                                 {{ \Carbon\Carbon::parse($prep->sendOrderToProductionStatus)->format('H:i') }}
                                                             </span>
                                                         @else
-                                                            {{-- No Pending + Not Sent = Show Placeholder --}}
-                                                            <span class="text-gray-400 italic">—</span>
+                                                            <button type="button"
+                                                                @click="open = true; selectedShades = []"
+                                                                class="send-production-btn px-2 py-1 mt-3 rounded transition-all duration-200
+                                                                    {{ $prep->developPlannedDate && $prep->productionDeadline ? 'bg-gray-300 text-black hover:bg-gray-400' : 'bg-gray-200 text-gray-500 cursor-not-allowed' }}"
+                                                                {{ $prep->developPlannedDate && $prep->productionDeadline ? '' : 'disabled' }}
+                                                                title="{{ $prep->developPlannedDate && $prep->productionDeadline ? '' : 'Please set Development Plan & Production Deadline Date first' }}">
+                                                                Pending ({{ $pendingShades->count() }})
+                                                            </button>
                                                         @endif
                                                     @else
                                                         <span class="text-gray-400 italic">—</span>
@@ -1975,7 +1981,7 @@
                                                                             <button id="shadeDropdownRef" type="button"
                                                                                     class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10"
                                                                                     aria-expanded="false" aria-haspopup="listbox"
-                                                                                    onclick="toggleShadeDropdown(event)">
+                                                                                    onclick="toggleShadeDropdownRef(event)">
                                                                                 <span id="selectedShadeRef">Select Shade</span>
                                                                                 <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
                                                                                     <path fill-rule="evenodd"
@@ -1987,12 +1993,12 @@
                                                                             <div id="shadeDropdownMenuRef"
                                                                                  class="absolute z-40 mt-1 w-full bg-white border rounded-lg shadow-lg hidden max-h-48 overflow-y-auto p-2"
                                                                                  role="listbox" aria-labelledby="shadeDropdown">
-                                                                                <input type="text" id="shadeSearchInputRef" onkeyup="filterShades()"
+                                                                                <input type="text" id="shadeSearchInputRef" onkeyup="filterShadesRef()"
                                                                                        placeholder="Search..."
                                                                                        class="w-full px-2 py-1 text-sm border rounded-md mb-1" autocomplete="off">
 
                                                                                 @foreach ($sampleStockShade as $shade)
-                                                                                    <div onclick="selectShade('{{ $shade }}')" tabindex="0"
+                                                                                    <div onclick="selectShadeRef('{{ $shade }}')" tabindex="0"
                                                                                          class="shade-option px-4 py-2 hover:bg-gray-100 cursor-pointer text-sm">
                                                                                         {{ $shade }}
                                                                                     </div>
@@ -3087,20 +3093,20 @@
             shadeDropdownMenu.addEventListener("click", (event) => event.stopPropagation());
         }
 
-        window.toggleShadeDropdown = function(event) {
+        window.toggleShadeDropdownRef = function(event) {
             event.stopPropagation();
             closeAllDropdowns();
             shadeDropdownMenu.classList.toggle("hidden");
             shadeDropdownBtn.setAttribute("aria-expanded", !shadeDropdownMenu.classList.contains("hidden"));
         };
 
-        window.selectShade = function(value) {
+        window.selectShadeRef = function(value) {
             document.getElementById("shadeInputRef").value = value;
             document.getElementById("selectedShadeRef").textContent = value || "Select Shade";
             closeAllDropdowns();
         };
 
-        window.filterShades = function() {
+        window.filterShadesRef = function() {
             const input = document.getElementById("shadeSearchInputRef").value.toLowerCase();
             document.querySelectorAll(".shade-option").forEach(option => {
                 option.style.display = option.textContent.toLowerCase().includes(input) ? "block" : "none";
@@ -3108,7 +3114,7 @@
         };
 
         // ======= COMMON: CLOSE DROPDOWNS =======
-        function closeAllDropdowns() {
+        function closeAllDropdownsRef() {
             referenceDropdownMenu.classList.add("hidden");
             referenceDropdownBtn.setAttribute("aria-expanded", "false");
 
