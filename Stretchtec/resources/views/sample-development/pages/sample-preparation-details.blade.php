@@ -1855,32 +1855,48 @@
                                                         @else
                                                             @if ($prep->alreadyDeveloped === 'Need to Develop')
                                                                 @if ($canEditReference)
-                                                                    {{-- Editable input for new dispatched shades --}}
-                                                                    <form action="{{ route('rnd.lockReferenceField') }}"
-                                                                        method="POST">
-                                                                        @csrf
-                                                                        <input type="hidden" name="id"
-                                                                            value="{{ $prep->id }}">
-                                                                        <div class="mb-1">
-                                                                            <input type="text" name="referenceNo"
-                                                                                value="{{ $prep->referenceNo ?? '' }}"
-                                                                                class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                                                required>
-                                                                        </div>
-                                                                        <button type="submit"
-                                                                            class="w-full mt-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm">
-                                                                            Save
-                                                                        </button>
-                                                                    </form>
+                                                                    {{-- Editable only if no referenceNo exists yet --}}
+                                                                    @if (empty($prep->referenceNo))
+                                                                        <form action="{{ route('rnd.lockReferenceField') }}" method="POST">
+                                                                            @csrf
+                                                                            <input type="hidden" name="id" value="{{ $prep->id }}">
+                                                                            <div class="mb-1">
+                                                                                <input type="text" name="referenceNo"
+                                                                                       value="{{ $prep->referenceNo ?? '' }}"
+                                                                                       class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                                                       required>
+                                                                            </div>
+                                                                            <button type="submit"
+                                                                                    class="w-full mt-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm">
+                                                                                Save
+                                                                            </button>
+                                                                        </form>
+                                                                    @else
+                                                                        {{-- ReferenceNo exists -> show readonly input, but keep Save button enabled --}}
+                                                                        <form action="{{ route('rnd.lockReferenceField') }}" method="POST">
+                                                                            @csrf
+                                                                            <input type="hidden" name="id" value="{{ $prep->id }}">
+                                                                            <div class="mb-1">
+                                                                                <input type="text" name="referenceNo"
+                                                                                       value="{{ $prep->referenceNo }}"
+                                                                                       class="w-full px-3 py-2 border rounded-md text-gray-500 bg-gray-100 text-sm cursor-not-allowed"
+                                                                                       readonly>
+                                                                            </div>
+                                                                            <button type="submit"
+                                                                                    class="w-full mt-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm">
+                                                                                Lock Reference
+                                                                            </button>
+                                                                        </form>
+                                                                    @endif
                                                                 @else
                                                                     {{-- Locked / uneditable input --}}
                                                                     <div class="flex flex-col items-center gap-2">
                                                                         <input type="text"
-                                                                            value="{{ $prep->referenceNo }}"
-                                                                            class="w-full px-3 py-2 border rounded-md text-gray-500 bg-gray-100 text-sm cursor-not-allowed"
-                                                                            disabled>
+                                                                               value="{{ $prep->referenceNo }}"
+                                                                               class="w-full px-3 py-2 border rounded-md text-gray-500 bg-gray-100 text-sm cursor-not-allowed"
+                                                                               disabled>
                                                                         <button type="button" disabled
-                                                                            class="w-full bg-gray-400 text-white px-3 py-1 rounded text-sm cursor-not-allowed">
+                                                                                class="w-full bg-gray-400 text-white px-3 py-1 rounded text-sm cursor-not-allowed">
                                                                             Lock Reference
                                                                         </button>
                                                                     </div>

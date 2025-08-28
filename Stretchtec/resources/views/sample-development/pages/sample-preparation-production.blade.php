@@ -1568,7 +1568,6 @@
         }
     </script>
 
-    {{-- ✅ Validation Script --}}
     <script>
         function validateDispatchForm(form) {
             const selectedShades = form.querySelectorAll('.shade-checkbox:checked');
@@ -1576,7 +1575,18 @@
 
             // 🔹 Step 1: Must select at least one shade
             if (selectedShades.length === 0) {
-                alert("⚠️ Please select at least one shade before submitting.");
+                Swal.fire({
+                    toast: true,
+                    position: 'top-end',
+                    icon: 'warning',
+                    title: 'Please select at least one shade before submitting.',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    customClass: {
+                        popup: 'swal2-toast swal2-shadow'
+                    }
+                });
                 return false;
             }
 
@@ -1600,9 +1610,21 @@
                 }
             }
 
-            // 🔹 Step 3: If errors exist, show all in one message
+            // 🔹 Step 3: If errors exist, show all in one SweetAlert toast
             if (errors.length > 0) {
-                alert("🚨 Please complete all required fields:\n\n" + errors.join("\n"));
+                Swal.fire({
+                    toast: true,
+                    position: 'top-end',
+                    icon: 'error',
+                    title: 'Please complete all required fields',
+                    html: errors.join("<br>"),
+                    showConfirmButton: false,
+                    timer: 4000,
+                    timerProgressBar: true,
+                    customClass: {
+                        popup: 'swal2-toast swal2-shadow'
+                    }
+                });
                 return false;
             }
 
