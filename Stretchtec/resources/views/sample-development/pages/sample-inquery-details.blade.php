@@ -610,7 +610,7 @@
 
                                     <div class="flex space-x-3">
                                         {{-- Only show Add New Order if NOT ADMIN --}}
-                                        @if (Auth::user()->role !== 'ADMIN')
+                                        @if (Auth::user()->role !== 'ADMIN' && Auth::user()->role !== 'SAMPLEDEVELOPER')
                                             <button
                                                 onclick="document.getElementById('addSampleModal').classList.remove('hidden')"
                                                 class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded shadow">
