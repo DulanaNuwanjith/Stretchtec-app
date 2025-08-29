@@ -955,8 +955,8 @@
                                                                                                         stroke-linecap="round"
                                                                                                         stroke-linejoin="round"
                                                                                                         d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0
-                                                                                                                           01-1.995-1.858L5 7m5 4v6m4-6v6M9 7V4a1 1 0
-                                                                                                                           011-1h4a1 1 0 011 1v3m-9 0h10" />
+                                                                                                                                   01-1.995-1.858L5 7m5 4v6m4-6v6M9 7V4a1 1 0
+                                                                                                                                   011-1h4a1 1 0 011 1v3m-9 0h10" />
                                                                                                 </svg>
                                                                                             </button>
                                                                                         </div>
@@ -3004,19 +3004,19 @@
     <script>
         function addOptionInput() {
             const wrapper = document.getElementById('optionsWrapper');
-            const error = document.getElementById('shadeError');
             const currentCount = wrapper.querySelectorAll('input[name="shades[]"]').length;
 
             if (currentCount >= 10) {
-                error.classList.remove('hidden'); // show error
+                alert("You can only add up to 10 shades.");
                 return;
-            } else {
-                error.classList.add('hidden'); // hide error if under limit
             }
 
             // create container div
             const div = document.createElement('div');
-            div.className = "flex items-center space-x-2";
+            div.className = "flex flex-col space-y-1"; // stack vertically (input + error msg)
+
+            const row = document.createElement('div');
+            row.className = "flex items-center space-x-2";
 
             // create input
             const input = document.createElement('input');
@@ -3025,6 +3025,24 @@
             input.placeholder = 'Enter Shade';
             input.className = 'flex-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm';
             input.required = true;
+
+            // error message span (per input)
+            const errorSpan = document.createElement('span');
+            errorSpan.className = "text-red-500 text-xs hidden";
+            errorSpan.textContent = "Duplicate shade not allowed!";
+
+            // check duplicates live
+            input.addEventListener("input", function() {
+                const allInputs = wrapper.querySelectorAll('input[name="shades[]"]');
+                const values = Array.from(allInputs).map(i => i.value.trim().toLowerCase());
+                const currentValue = input.value.trim().toLowerCase();
+
+                if (currentValue && values.filter(v => v === currentValue).length > 1) {
+                    errorSpan.classList.remove("hidden");
+                } else {
+                    errorSpan.classList.add("hidden");
+                }
+            });
 
             // create delete button with SVG icon
             const btn = document.createElement('button');
@@ -3044,27 +3062,18 @@
             </svg>
         `;
             btn.onclick = function() {
-                removeOptionInput(btn);
+                div.remove();
             };
 
-            div.appendChild(input);
-            div.appendChild(btn);
+            row.appendChild(input);
+            row.appendChild(btn);
+
+            div.appendChild(row);
+            div.appendChild(errorSpan);
             wrapper.appendChild(div);
         }
-
-        function removeOptionInput(button) {
-            const wrapper = document.getElementById('optionsWrapper');
-            button.parentElement.remove();
-
-            // hide error if input count drops below 10
-            const error = document.getElementById('shadeError');
-            const currentCount = wrapper.querySelectorAll('input[name="shades[]"]').length;
-            if (currentCount < 10) {
-                error.classList.add('hidden');
-            }
-        }
     </script>
-
+    
     {{-- Printing Sample Details --}}
     <script>
         function printSampleDetails() {
