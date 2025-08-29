@@ -1331,13 +1331,6 @@
                                                                             <div
                                                                                 class="flex justify-between items-center p-3 border rounded-lg bg-gray-50 dark:bg-gray-700/50">
                                                                                 <span
-                                                                                    class="font-medium text-gray-900 dark:text-gray-100">Quantity:</span>
-                                                                                <span
-                                                                                    class="text-sm text-gray-700 dark:text-gray-200">{{ $inquiry->deliveryQty ?? '—' }}</span>
-                                                                            </div>
-                                                                            <div
-                                                                                class="flex justify-between items-center p-3 border rounded-lg bg-gray-50 dark:bg-gray-700/50">
-                                                                                <span
                                                                                     class="font-medium text-gray-900 dark:text-gray-100">Reference Number:</span>
                                                                                 <span
                                                                                     class="text-sm text-gray-700 dark:text-gray-200">{{ $inquiry->referenceNo ?? '—' }}</span>

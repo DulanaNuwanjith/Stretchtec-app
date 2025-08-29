@@ -1298,7 +1298,6 @@
                                                     x-data="{ open: false }">
                                                     @php
                                                         $pendingYarns = $prep->shadeOrders->where('status', 'Pending');
-<<<<<<< Updated upstream
                                                         $receivedYarns = $prep->shadeOrders->whereIn('status', [
                                                             'Yarn Received',
                                                             'Sent to Production',
@@ -1307,14 +1306,7 @@
                                                             'Dispatched to RnD',
                                                             'Delivered',
                                                         ]);
-                                                        @endphp
-=======
-                                                        $receivedYarns = $prep->shadeOrders->where(
-                                                            'status',
-                                                            'Yarn Received',
-                                                        );
                                                     @endphp
->>>>>>> Stashed changes
 
                                                     @if ($prep->alreadyDeveloped == 'Need to Develop')
                                                         @if ($prep->shadeOrders->isNotEmpty())
