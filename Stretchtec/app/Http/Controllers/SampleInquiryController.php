@@ -350,7 +350,7 @@ class SampleInquiryController extends Controller
         } else {
             if ($prepRnd->alreadyDeveloped === 'No Need to Develop') {
                 // For Tape Match & No Need to Develop: just mark delivered without shades
-                $deliveredQty = (int) ($request->input('sampleQty') ?? $inquiry->sampleQty ?? 1); // Take frontend value if provided
+                $deliveredQty = (int) ($request->input('sampleQty') ?? $inquiry->sampleQty ?? 1);
                 $deliveredShades[] = [
                     'quantity' => $deliveredQty,
                 ];
@@ -361,32 +361,35 @@ class SampleInquiryController extends Controller
                 $prepRnd->productionStatus = 'Order Delivered';
 
                 if ($inquiry->referenceNo && $deliveredQty > 0) {
-                    $remainingQty = $deliveredQty;
+                    $refNo = $inquiry->referenceNo;
+                    $shade = null;
 
-                    // Get all stock records for this reference number
-                    $stocks = SampleStock::where('reference_no', $inquiry->referenceNo)
-                        ->orderBy('id')
-                        ->get();
+                    if (str_contains($refNo, '|')) {
+                        [$refNo, $shade] = explode('|', $refNo);
+                        $refNo = trim($refNo);
+                        $shade = trim($shade);
+                    }
 
-                    foreach ($stocks as $stock) {
-                        if ($remainingQty <= 0) break;
+                    // Ensure both refNo + shade are used
+                    $stockQuery = SampleStock::where('reference_no', $refNo);
+                    if ($shade) {
+                        $stockQuery->where('shade', $shade);
+                    }
 
-                        $available = (int) $stock->available_stock;
-                        if ($available <= 0) continue; // skip depleted stock
+                    $stock = $stockQuery->first();
 
-                        $deductQty = min($available, $remainingQty);
-
-                        $stock->available_stock = $available - $deductQty;
-                        $remainingQty -= $deductQty;
+                    if ($stock && $deliveredQty <= $stock->available_stock) {
+                        // decrease stock
+                        $stock->available_stock -= $deliveredQty;
 
                         if ($stock->available_stock <= 0) {
-                            $stock->delete(); // delete only if fully depleted
+                            $stock->delete();
                         } else {
-                            $stock->save(); // save updated stock
+                            $stock->save();
                         }
                     }
                 }
-            } else{
+        } else{
                 $inquiry->productionStatus = 'Delivered';
                 $inquiry->deliveryQty = 0;
                 $prepRnd->productionStatus = 'Order Delivered';
