@@ -1,5 +1,4 @@
 <head>
-
     <!-- Include Tailwind CSS -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <!-- Include SweetAlert2 -->
@@ -1366,11 +1365,11 @@
                                                                 {{-- All shades received: show date & time --}}
                                                                 <span
                                                                     class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-pink-200 dark:bg-gray-800 px-3 py-1 rounded">
-                    Received on <br>
-                    {{ \Carbon\Carbon::parse($prep->yarnReceiveDate)->format('Y-m-d') }}
-                    at
-                    {{ \Carbon\Carbon::parse($prep->yarnReceiveDate)->format('H:i') }}
-                </span>
+                                                                    Received on <br>
+                                                                    {{ \Carbon\Carbon::parse($prep->yarnReceiveDate)->format('Y-m-d') }}
+                                                                    at
+                                                                    {{ \Carbon\Carbon::parse($prep->yarnReceiveDate)->format('H:i') }}
+                                                                </span>
                                                             @endif
                                                         @else
                                                             {{-- Disabled button when no yarn ordered --}}
