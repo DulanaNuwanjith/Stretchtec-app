@@ -22,11 +22,21 @@ class SamplePreparationProductionController extends Controller
 
         $productionsQuery = SamplePreparationProduction::with([
             'samplePreparationRnD.sampleInquiry',
-            'samplePreparationRnD.shadeOrders' // eager load related shade_orders
+            'samplePreparationRnD.shadeOrders'
         ])
+            ->select('sample_preparation_production.*')
+            ->addSelect([
+                'all_dispatched' => \DB::table('shade_orders')
+                    ->selectRaw("CASE WHEN COUNT(*) > 0
+                              AND COUNT(CASE WHEN status IN ('Dispatched to RnD', 'Delivered') THEN 1 END) = COUNT(*)
+                              THEN 1 ELSE 0 END")
+                    ->whereColumn('sample_preparation_rnd_id', 'sample_preparation_production.sample_preparation_rnd_id')
+            ])
+            ->orderByRaw('all_dispatched ASC') // not all dispatched = 0 → top, all dispatched = 1 → bottom
             ->orderByRaw('dispatch_to_rnd_at IS NULL DESC') // dispatched rows first
             ->orderBy('production_deadline', 'asc')         // nearest upcoming deadline first
-            ->latest();                                     // fallback to newest created
+            ->latest();
+        // fallback to newest created
 
         // Tab 3 Filters
         if ($request->filled('tab') && $request->tab == '3') {
