@@ -1365,6 +1365,96 @@
                                                     @else
                                                         <span class="text-red-600 font-semibold text-sm">Set Ref No to Deliver</span>
                                                     @endif
+                                                @else
+                                                    {{-- CASE: Tape Match (Pan Asia) --}}
+                                                    @if ($prepRnd?->alreadyDeveloped === 'Tape Match Pan Asia')
+                                                        @if ($inquiry->productionStatus !== 'Delivered')
+                                                            <form method="POST" action="{{ route('inquiry.markCustomerDelivered') }}">
+                                                                @csrf
+                                                                <input type="hidden" name="id" value="{{ $inquiry->id }}">
+                                                                {{-- For Pan Asia we don’t ask for qty, default to 1 or backend handles logic --}}
+                                                                <input type="hidden" name="sampleQty" value="1">
+
+                                                                <button type="submit"
+                                                                        class="px-3 py-1 rounded text-white bg-green-600 hover:bg-green-700 transition duration-200">
+                                                                    Deliver
+                                                                </button>
+                                                            </form>
+                                                        @else
+                                                            {{-- Already Delivered --}}
+                                                            <div x-data="{ openDelivered: false }"
+                                                                 class="flex flex-col items-center space-y-2 mt-2">
+                                                                <span @click="openDelivered = true"
+                                                                      class="cursor-pointer inline-block text-sm font-semibold text-gray-700 dark:text-white bg-green-100 dark:bg-gray-800 px-3 py-1 rounded text-center">
+                                                                    Delivered on <br>
+                                                                    {{ \Carbon\Carbon::parse($inquiry->customerDeliveryDate)->format('Y-m-d') }}
+                                                                    at
+                                                                    {{ \Carbon\Carbon::parse($inquiry->customerDeliveryDate)->format('H:i') }}
+                                                                </span>
+
+                                                                {{-- Modal --}}
+                                                                <div x-show="openDelivered" x-transition x-cloak
+                                                                     class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+                                                                    <div
+                                                                        class="relative p-6 bg-white dark:bg-gray-800 w-11/12 max-w-md rounded-2xl shadow-xl max-h-[80vh] overflow-y-auto">
+                                                                        <button @click="openDelivered = false"
+                                                                                class="absolute top-3 right-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
+                                                                            ✕
+                                                                        </button>
+                                                                        <h2 class="text-xl text-left font-semibold mb-4 text-blue-900 dark:text-white">
+                                                                            Delivery Details
+                                                                        </h2>
+                                                                        <div class="space-y-2">
+                                                                            <div
+                                                                                class="flex justify-between items-center p-3 border rounded-lg bg-gray-50 dark:bg-gray-700/50">
+                                                                                <span
+                                                                                    class="font-medium text-gray-900 dark:text-gray-100">Delivered Date:</span>
+                                                                                <span
+                                                                                    class="text-sm text-gray-700 dark:text-gray-200">{{ \Carbon\Carbon::parse($inquiry->customerDeliveryDate)->format('Y-m-d') }}</span>
+                                                                            </div>
+                                                                            <div
+                                                                                class="flex justify-between items-center p-3 border rounded-lg bg-gray-50 dark:bg-gray-700/50">
+                                                                                <span
+                                                                                    class="font-medium text-gray-900 dark:text-gray-100">Delivered Time:</span>
+                                                                                <span
+                                                                                    class="text-sm text-gray-700 dark:text-gray-200">{{ \Carbon\Carbon::parse($inquiry->customerDeliveryDate)->format('H:i') }}</span>
+                                                                            </div>
+                                                                            <div
+                                                                                class="flex justify-between items-center p-3 border rounded-lg bg-gray-50 dark:bg-gray-700/50">
+                                                                                <span
+                                                                                    class="font-medium text-gray-900 dark:text-gray-100">Quantity:</span>
+                                                                                <span
+                                                                                    class="text-sm text-gray-700 dark:text-gray-200">{{ $inquiry->deliveryQty ?? '—' }}</span>
+                                                                            </div>
+                                                                            <div
+                                                                                class="flex justify-between items-center p-3 border rounded-lg bg-gray-50 dark:bg-gray-700/50">
+                                                                                <span
+                                                                                    class="font-medium text-gray-900 dark:text-gray-100">Reference Number:</span>
+                                                                                <span
+                                                                                    class="text-sm text-gray-700 dark:text-gray-200">{{ $inquiry->referenceNo ?? '—' }}</span>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="flex justify-end mt-4">
+                                                                            <button @click="openDelivered = false"
+                                                                                    class="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-700">
+                                                                                Close
+                                                                            </button>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+                                                                {{-- (Reuse your Delivered details modal + dispatch note logic here if needed) --}}
+                                                                {{-- Dispatch Note --}}
+                                                                @if ($inquiry->dNoteNumber)
+                                                                    <a href="{{ asset('storage/dispatches/' . $inquiry->dNoteNumber) }}"
+                                                                       target="_blank"
+                                                                       class="mt-4 inline-block px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition">
+                                                                        Dispatch Note
+                                                                    </a>
+                                                                @endif
+                                                            </div>
+                                                        @endif
+                                                    @endif
                                                 @endif
                                             </td>
 
