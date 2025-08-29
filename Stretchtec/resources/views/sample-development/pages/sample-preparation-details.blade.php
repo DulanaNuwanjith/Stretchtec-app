@@ -955,8 +955,8 @@
                                                                                                         stroke-linecap="round"
                                                                                                         stroke-linejoin="round"
                                                                                                         d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0
-                                                                                                                       01-1.995-1.858L5 7m5 4v6m4-6v6M9 7V4a1 1 0
-                                                                                                                       011-1h4a1 1 0 011 1v3m-9 0h10" />
+                                                                                                                           01-1.995-1.858L5 7m5 4v6m4-6v6M9 7V4a1 1 0
+                                                                                                                           011-1h4a1 1 0 011 1v3m-9 0h10" />
                                                                                                 </svg>
                                                                                             </button>
                                                                                         </div>
@@ -1298,6 +1298,7 @@
                                                     x-data="{ open: false }">
                                                     @php
                                                         $pendingYarns = $prep->shadeOrders->where('status', 'Pending');
+<<<<<<< Updated upstream
                                                         $receivedYarns = $prep->shadeOrders->whereIn('status', [
                                                             'Yarn Received',
                                                             'Sent to Production',
@@ -1307,61 +1308,80 @@
                                                             'Delivered',
                                                         ]);
                                                         @endphp
+=======
+                                                        $receivedYarns = $prep->shadeOrders->where(
+                                                            'status',
+                                                            'Yarn Received',
+                                                        );
+                                                    @endphp
+>>>>>>> Stashed changes
 
                                                     @if ($prep->alreadyDeveloped == 'Need to Develop')
                                                         @if ($prep->shadeOrders->isNotEmpty())
                                                             @if ($pendingYarns->isNotEmpty())
                                                                 {{-- Pending button --}}
                                                                 <button type="button" @click="open = true"
-                                                                        class="px-2 py-1 mt-3 rounded transition-all duration-200 bg-gray-300 text-black hover:bg-gray-400">
+                                                                    class="px-2 py-1 mt-3 rounded transition-all duration-200 bg-gray-300 text-black hover:bg-gray-400">
                                                                     Pending ({{ $pendingYarns->count() }})
                                                                 </button>
 
                                                                 {{-- Modal --}}
                                                                 <div x-show="open" x-transition
-                                                                     class="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm z-50"
-                                                                     style="display:none;">
+                                                                    class="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm z-50"
+                                                                    style="display:none;">
                                                                     <div
                                                                         class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 w-full max-w-lg relative max-h-[80vh] overflow-y-auto">
                                                                         <button @click="open = false"
-                                                                                class="absolute top-2 right-2 text-gray-600 hover:text-gray-900">✕</button>
+                                                                            class="absolute top-2 right-2 text-gray-600 hover:text-gray-900">✕</button>
 
-                                                                        <h2 class="text-lg font-semibold text-left text-blue-900 dark:text-white mb-4">
+                                                                        <h2
+                                                                            class="text-lg font-semibold text-left text-blue-900 dark:text-white mb-4">
                                                                             Mark Yarn Received</h2>
-                                                                        <form action="{{ route('rnd.markYarnReceived') }}" method="POST">
+                                                                        <form
+                                                                            action="{{ route('rnd.markYarnReceived') }}"
+                                                                            method="POST">
                                                                             @csrf
-                                                                            <input type="hidden" name="rnd_id" value="{{ $prep->id }}">
+                                                                            <input type="hidden" name="rnd_id"
+                                                                                value="{{ $prep->id }}">
 
-                                                                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                                                            <div
+                                                                                class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                                                                 @foreach ($pendingYarns as $shade)
                                                                                     <div
                                                                                         class="p-4 border rounded bg-gray-100 dark:bg-gray-700">
-                                                                                        <label class="flex items-start gap-2">
-                                                                                            <input type="checkbox" name="shade_ids[]" value="{{ $shade->id }}" class="mt-1">
+                                                                                        <label
+                                                                                            class="flex items-start gap-2">
+                                                                                            <input type="checkbox"
+                                                                                                name="shade_ids[]"
+                                                                                                value="{{ $shade->id }}"
+                                                                                                class="mt-1">
                                                                                             <div>
                                                                                                 <div class="font-semibold">
-                                                                                                    Shade: {{ $shade->shade }}
+                                                                                                    Shade:
+                                                                                                    {{ $shade->shade }}
                                                                                                 </div>
                                                                                             </div>
                                                                                         </label>
 
                                                                                         {{-- PST input only for Pan Asia --}}
                                                                                         @if ($prep->yarnSupplier === 'Pan Asia')
-                                                                                            <input type="text" name="pst_no[{{ $shade->id }}]"
-                                                                                                   placeholder="Enter PA/ST No"
-                                                                                                   class="mt-2 w-full px-2 py-1 border rounded text-sm dark:bg-gray-700 dark:text-white">
+                                                                                            <input type="text"
+                                                                                                name="pst_no[{{ $shade->id }}]"
+                                                                                                placeholder="Enter PA/ST No"
+                                                                                                class="mt-2 w-full px-2 py-1 border rounded text-sm dark:bg-gray-700 dark:text-white">
                                                                                         @endif
                                                                                     </div>
                                                                                 @endforeach
                                                                             </div>
 
                                                                             <div class="mt-4 flex justify-end gap-2">
-                                                                                <button type="button" @click="open = false"
-                                                                                        class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400">
+                                                                                <button type="button"
+                                                                                    @click="open = false"
+                                                                                    class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400">
                                                                                     Cancel
                                                                                 </button>
                                                                                 <button type="submit"
-                                                                                        class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+                                                                                    class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
                                                                                     Save
                                                                                 </button>
                                                                             </div>
@@ -1381,7 +1401,7 @@
                                                         @else
                                                             {{-- Disabled button when no yarn ordered --}}
                                                             <button type="button" disabled
-                                                                    class="px-2 py-1 mt-3 rounded transition-all duration-200 bg-gray-300 text-black hover:bg-gray-400 cursor-not-allowed">
+                                                                class="px-2 py-1 mt-3 rounded transition-all duration-200 bg-gray-300 text-black hover:bg-gray-400 cursor-not-allowed">
                                                                 Pending
                                                             </button>
                                                         @endif
@@ -1833,15 +1853,25 @@
                                                         // Check if all related shade orders are delivered
                                                         $allShadesDelivered =
                                                             $prep->shadeOrders->isNotEmpty() &&
-                                                            $prep->shadeOrders->every(fn($s) => trim($s->status) === 'Delivered');
+                                                            $prep->shadeOrders->every(
+                                                                fn($s) => trim($s->status) === 'Delivered',
+                                                            );
 
                                                         if ($prep->alreadyDeveloped === 'Need to Develop') {
                                                             // Get dispatched shades for this prep only
-                                                            $dispatchedShades = $prep->shadeOrders->where('status', 'Dispatched to RnD');
+                                                            $dispatchedShades = $prep->shadeOrders->where(
+                                                                'status',
+                                                                'Dispatched to RnD',
+                                                            );
 
                                                             // Filter out shades that are already in stock with the SAME shade + referenceNo
-                                                            $newShades = $dispatchedShades->filter(function ($s) use ($prep) {
-                                                                return !\App\Models\SampleStock::where('shade', $s->shade)
+                                                            $newShades = $dispatchedShades->filter(function ($s) use (
+                                                                $prep,
+                                                            ) {
+                                                                return !\App\Models\SampleStock::where(
+                                                                    'shade',
+                                                                    $s->shade,
+                                                                )
                                                                     ->where('reference_no', $prep->referenceNo) // ✅ match by both
                                                                     ->exists();
                                                             });
@@ -1862,33 +1892,39 @@
                                                                 @if ($canEditReference)
                                                                     {{-- Editable only if no referenceNo exists yet --}}
                                                                     @if (empty($prep->referenceNo))
-                                                                        <form action="{{ route('rnd.lockReferenceField') }}" method="POST">
+                                                                        <form
+                                                                            action="{{ route('rnd.lockReferenceField') }}"
+                                                                            method="POST">
                                                                             @csrf
-                                                                            <input type="hidden" name="id" value="{{ $prep->id }}">
+                                                                            <input type="hidden" name="id"
+                                                                                value="{{ $prep->id }}">
                                                                             <div class="mb-1">
                                                                                 <input type="text" name="referenceNo"
-                                                                                       value="{{ $prep->referenceNo ?? '' }}"
-                                                                                       class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                                                       required>
+                                                                                    value="{{ $prep->referenceNo ?? '' }}"
+                                                                                    class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                                                    required>
                                                                             </div>
                                                                             <button type="submit"
-                                                                                    class="w-full mt-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm">
+                                                                                class="w-full mt-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm">
                                                                                 Save
                                                                             </button>
                                                                         </form>
                                                                     @else
                                                                         {{-- ReferenceNo exists -> show readonly input, but keep Save button enabled --}}
-                                                                        <form action="{{ route('rnd.lockReferenceField') }}" method="POST">
+                                                                        <form
+                                                                            action="{{ route('rnd.lockReferenceField') }}"
+                                                                            method="POST">
                                                                             @csrf
-                                                                            <input type="hidden" name="id" value="{{ $prep->id }}">
+                                                                            <input type="hidden" name="id"
+                                                                                value="{{ $prep->id }}">
                                                                             <div class="mb-1">
                                                                                 <input type="text" name="referenceNo"
-                                                                                       value="{{ $prep->referenceNo }}"
-                                                                                       class="w-full px-3 py-2 border rounded-md text-gray-500 bg-gray-100 text-sm cursor-not-allowed"
-                                                                                       readonly>
+                                                                                    value="{{ $prep->referenceNo }}"
+                                                                                    class="w-full px-3 py-2 border rounded-md text-gray-500 bg-gray-100 text-sm cursor-not-allowed"
+                                                                                    readonly>
                                                                             </div>
                                                                             <button type="submit"
-                                                                                    class="w-full mt-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm">
+                                                                                class="w-full mt-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm">
                                                                                 Lock Reference
                                                                             </button>
                                                                         </form>
@@ -1897,11 +1933,11 @@
                                                                     {{-- Locked / uneditable input --}}
                                                                     <div class="flex flex-col items-center gap-2">
                                                                         <input type="text"
-                                                                               value="{{ $prep->referenceNo }}"
-                                                                               class="w-full px-3 py-2 border rounded-md text-gray-500 bg-gray-100 text-sm cursor-not-allowed"
-                                                                               disabled>
+                                                                            value="{{ $prep->referenceNo }}"
+                                                                            class="w-full px-3 py-2 border rounded-md text-gray-500 bg-gray-100 text-sm cursor-not-allowed"
+                                                                            disabled>
                                                                         <button type="button" disabled
-                                                                                class="w-full bg-gray-400 text-white px-3 py-1 rounded text-sm cursor-not-allowed">
+                                                                            class="w-full bg-gray-400 text-white px-3 py-1 rounded text-sm cursor-not-allowed">
                                                                             Lock Reference
                                                                         </button>
                                                                     </div>
@@ -1980,31 +2016,42 @@
                                                                         </div>
 
                                                                         {{-- Custom Shade Dropdown --}}
-                                                                        <div class="relative inline-block text-left w-full mb-2">
-                                                                            <input type="hidden" name="shade" id="shadeInputRef" required>
+                                                                        <div
+                                                                            class="relative inline-block text-left w-full mb-2">
+                                                                            <input type="hidden" name="shade"
+                                                                                id="shadeInputRef" required>
 
                                                                             <button id="shadeDropdownRef" type="button"
-                                                                                    class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10"
-                                                                                    aria-expanded="false" aria-haspopup="listbox"
-                                                                                    onclick="toggleShadeDropdownRef(event)">
-                                                                                <span id="selectedShadeRef">Select Shade</span>
-                                                                                <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                                                                                class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10"
+                                                                                aria-expanded="false"
+                                                                                aria-haspopup="listbox"
+                                                                                onclick="toggleShadeDropdownRef(event)">
+                                                                                <span id="selectedShadeRef">Select
+                                                                                    Shade</span>
+                                                                                <svg class="ml-2 h-5 w-5 text-gray-400"
+                                                                                    viewBox="0 0 20 20"
+                                                                                    fill="currentColor">
                                                                                     <path fill-rule="evenodd"
-                                                                                          d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
-                                                                                          clip-rule="evenodd" />
+                                                                                        d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
+                                                                                        clip-rule="evenodd" />
                                                                                 </svg>
                                                                             </button>
 
                                                                             <div id="shadeDropdownMenuRef"
-                                                                                 class="absolute z-40 mt-1 w-full bg-white border rounded-lg shadow-lg hidden max-h-48 overflow-y-auto p-2"
-                                                                                 role="listbox" aria-labelledby="shadeDropdown">
-                                                                                <input type="text" id="shadeSearchInputRef" onkeyup="filterShadesRef()"
-                                                                                       placeholder="Search..."
-                                                                                       class="w-full px-2 py-1 text-sm border rounded-md mb-1" autocomplete="off">
+                                                                                class="absolute z-40 mt-1 w-full bg-white border rounded-lg shadow-lg hidden max-h-48 overflow-y-auto p-2"
+                                                                                role="listbox"
+                                                                                aria-labelledby="shadeDropdown">
+                                                                                <input type="text"
+                                                                                    id="shadeSearchInputRef"
+                                                                                    onkeyup="filterShadesRef()"
+                                                                                    placeholder="Search..."
+                                                                                    class="w-full px-2 py-1 text-sm border rounded-md mb-1"
+                                                                                    autocomplete="off">
 
                                                                                 @foreach ($sampleStockShade as $shade)
-                                                                                    <div onclick="selectShadeRef('{{ $shade }}')" tabindex="0"
-                                                                                         class="shade-option px-4 py-2 hover:bg-gray-100 cursor-pointer text-sm">
+                                                                                    <div onclick="selectShadeRef('{{ $shade }}')"
+                                                                                        tabindex="0"
+                                                                                        class="shade-option px-4 py-2 hover:bg-gray-100 cursor-pointer text-sm">
                                                                                         {{ $shade }}
                                                                                     </div>
                                                                                 @endforeach
@@ -3100,7 +3147,7 @@
 
         window.toggleShadeDropdownRef = function(event) {
             event.stopPropagation();
-            closeAllDropdowns();
+            closeAllDropdownsRef(); // ✅ call the right function
             shadeDropdownMenu.classList.toggle("hidden");
             shadeDropdownBtn.setAttribute("aria-expanded", !shadeDropdownMenu.classList.contains("hidden"));
         };
@@ -3108,26 +3155,24 @@
         window.selectShadeRef = function(value) {
             document.getElementById("shadeInputRef").value = value;
             document.getElementById("selectedShadeRef").textContent = value || "Select Shade";
-            closeAllDropdowns();
+            closeAllDropdownsRef(); // ✅ call the right function
         };
 
         window.filterShadesRef = function() {
             const input = document.getElementById("shadeSearchInputRef").value.toLowerCase();
-            document.querySelectorAll(".shade-option").forEach(option => {
+            document.querySelectorAll("#shadeDropdownMenuRef .shade-option").forEach(option => {
                 option.style.display = option.textContent.toLowerCase().includes(input) ? "block" : "none";
             });
         };
 
         // ======= COMMON: CLOSE DROPDOWNS =======
         function closeAllDropdownsRef() {
-            referenceDropdownMenu.classList.add("hidden");
-            referenceDropdownBtn.setAttribute("aria-expanded", "false");
-
-            shadeDropdownMenu.classList.add("hidden");
-            shadeDropdownBtn.setAttribute("aria-expanded", "false");
+            if (shadeDropdownMenu) {
+                shadeDropdownMenu.classList.add("hidden");
+                shadeDropdownBtn.setAttribute("aria-expanded", "false");
+            }
         }
 
-        document.addEventListener("click", () => closeAllDropdowns());
-
+        document.addEventListener("click", () => closeAllDropdownsRef());
     </script>
 @endsection
