@@ -65,7 +65,16 @@ class SamplePreparationRnDController extends Controller
         // Dropdown dynamic values
         $orderNos = SamplePreparationRnD::whereNotNull('orderNo')->where('orderNo', '!=', '')->distinct()->orderBy('orderNo')->pluck('orderNo');
         $poNos = SamplePreparationRnD::whereNotNull('yarnOrderedPONumber')->where('yarnOrderedPONumber', '!=', '')->distinct()->orderBy('yarnOrderedPONumber')->pluck('yarnOrderedPONumber');
-        $shades = SamplePreparationRnD::whereNotNull('shade')->where('shade', '!=', '')->distinct()->orderBy('shade')->pluck('shade');
+        $shades = SamplePreparationRnD::whereNotNull('shade')
+                ->where('shade', '!=', '')
+                ->pluck('shade')
+                ->flatMap(function ($shade) {
+                    return collect(explode(',', $shade))->map(fn($s) => trim($s));
+                })
+                ->filter()
+                ->unique()
+                ->sort()
+                ->values();
         $references = SamplePreparationRnD::whereNotNull('referenceNo')->where('referenceNo', '!=', '')->distinct()->orderBy('referenceNo')->pluck('referenceNo');
         $coordinators = SampleInquiry::whereNotNull('coordinatorName')->where('coordinatorName', '!=', '')->distinct()->orderBy('coordinatorName')->pluck('coordinatorName');
         $sampleStockReferences = SampleStock::pluck('reference_no')->unique();

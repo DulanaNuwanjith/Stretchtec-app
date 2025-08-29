@@ -271,25 +271,22 @@
                                         @foreach ($productions as $prod)
                                             <tr id="serviceRow{{ $prod->id }}"
                                                 class="odd:bg-white even:bg-gray-50 border-b border-gray-200  text-left">
-                                                {{-- Order No --}}
                                                 @php
                                                     $shadeOrders = $prod->samplePreparationRnD?->shadeOrders ?? collect();
 
-                                                    // ✅ Check conditions
+                                                    // ✅ Condition 1: All dispatched/delivered
                                                     $allDispatchedOrDelivered = $shadeOrders->isNotEmpty() &&
                                                         $shadeOrders->every(fn($s) => in_array($s->status, ['Dispatched to RnD', 'Delivered']));
 
-                                                    $hasSentToProductionNotDispatched = $shadeOrders->contains(fn($s) =>
-                                                        $s->status === 'Sent to Production' ||
-                                                        ($s->status === 'Production Complete' && !$shadeOrders->contains('status', 'Dispatched to RnD'))
-                                                    );
+                                                    // ✅ Condition 2: At least one dispatched/delivered (but not all)
+                                                    $atLeastOneDispatchedOrDelivered = $shadeOrders->contains(fn($s) => in_array($s->status, ['Dispatched to RnD', 'Delivered']));
 
-                                                    // ✅ Assign text color classes
-                                                    $orderColorClass = 'text-gray-900'; // default (black)
+                                                    // ✅ Assign color
+                                                    $orderColorClass = 'text-gray-900 font-bold'; // default black
                                                     if ($allDispatchedOrDelivered) {
-                                                        $orderColorClass = 'text-red-600 font-bold'; // 🔴 red if all dispatched/delivered
-                                                    } elseif ($hasSentToProductionNotDispatched) {
-                                                        $orderColorClass = 'text-blue-00 font-bold'; // 🔵 blue if some still in production and not dispatched
+                                                        $orderColorClass = 'text-red-600 font-bold'; // 🔴 red
+                                                    } elseif ($atLeastOneDispatchedOrDelivered) {
+                                                        $orderColorClass = 'text-blue-600 font-bold'; // 🔵 blue
                                                     }
                                                 @endphp
 
@@ -315,6 +312,7 @@
                                                            class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md text-sm"
                                                            value="{{ $prod->order_no }}" />
                                                 </td>
+
 
                                                 {{-- Production Deadline --}}
                                                 <td

@@ -63,9 +63,10 @@ class SampleInquiryController extends Controller
         }
 
         $inquiries = $query
-            ->orderByRaw('customerDeliveryDate IS NULL DESC') // Pending first
-            ->orderByDesc('customerDeliveryDate')              // then recently delivered
-            ->orderByDesc('orderNo')                           // fallback
+            ->orderByRaw("CASE WHEN productionStatus = 'Delivered' THEN 1 ELSE 0 END ASC")
+            ->orderByRaw('customerDeliveryDate IS NULL DESC') // Pending first among non-delivered
+            ->orderByDesc('customerDeliveryDate')             // then recently delivered/non-delivered
+            ->orderByDesc('orderNo')                          // fallback
             ->paginate(10);
 
         // Dynamic dropdown values
