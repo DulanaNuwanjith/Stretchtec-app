@@ -955,8 +955,8 @@
                                                                                                         stroke-linecap="round"
                                                                                                         stroke-linejoin="round"
                                                                                                         d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0
-                                                                                                                                   01-1.995-1.858L5 7m5 4v6m4-6v6M9 7V4a1 1 0
-                                                                                                                                   011-1h4a1 1 0 011 1v3m-9 0h10" />
+                                                                                                                                       01-1.995-1.858L5 7m5 4v6m4-6v6M9 7V4a1 1 0
+                                                                                                                                       011-1h4a1 1 0 011 1v3m-9 0h10" />
                                                                                                 </svg>
                                                                                             </button>
                                                                                         </div>
@@ -3013,7 +3013,7 @@
 
             // create container div
             const div = document.createElement('div');
-            div.className = "flex flex-col space-y-1"; // stack vertically (input + error msg)
+            div.className = "flex flex-col space-y-1";
 
             const row = document.createElement('div');
             row.className = "flex items-center space-x-2";
@@ -3032,19 +3032,9 @@
             errorSpan.textContent = "Duplicate shade not allowed!";
 
             // check duplicates live
-            input.addEventListener("input", function() {
-                const allInputs = wrapper.querySelectorAll('input[name="shades[]"]');
-                const values = Array.from(allInputs).map(i => i.value.trim().toLowerCase());
-                const currentValue = input.value.trim().toLowerCase();
+            input.addEventListener("input", checkForDuplicates);
 
-                if (currentValue && values.filter(v => v === currentValue).length > 1) {
-                    errorSpan.classList.remove("hidden");
-                } else {
-                    errorSpan.classList.add("hidden");
-                }
-            });
-
-            // create delete button with SVG icon
+            // create delete button
             const btn = document.createElement('button');
             btn.type = 'button';
             btn.className = 'text-blue-500 hover:text-blue-700';
@@ -3063,6 +3053,7 @@
         `;
             btn.onclick = function() {
                 div.remove();
+                checkForDuplicates();
             };
 
             row.appendChild(input);
@@ -3072,8 +3063,43 @@
             div.appendChild(errorSpan);
             wrapper.appendChild(div);
         }
+
+        function checkForDuplicates() {
+            const wrapper = document.getElementById('optionsWrapper');
+            const saveBtn = document.getElementById('saveBtn');
+            const allInputs = wrapper.querySelectorAll('input[name="shades[]"]');
+
+            let values = [];
+            let hasDuplicate = false;
+
+            allInputs.forEach(input => {
+                const val = input.value.trim().toLowerCase();
+                const errorSpan = input.parentElement.nextSibling;
+
+                if (val) {
+                    if (values.includes(val)) {
+                        errorSpan.classList.remove("hidden");
+                        hasDuplicate = true;
+                    } else {
+                        values.push(val);
+                        errorSpan.classList.add("hidden");
+                    }
+                } else {
+                    errorSpan.classList.add("hidden");
+                }
+            });
+
+            // disable/enable save button
+            if (hasDuplicate) {
+                saveBtn.disabled = true;
+                saveBtn.classList.add("opacity-50", "cursor-not-allowed");
+            } else {
+                saveBtn.disabled = false;
+                saveBtn.classList.remove("opacity-50", "cursor-not-allowed");
+            }
+        }
     </script>
-    
+
     {{-- Printing Sample Details --}}
     <script>
         function printSampleDetails() {
