@@ -1,6 +1,6 @@
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta charset="UTF-8"/>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Stretchtec Dashboard</title>
 </head>
@@ -63,8 +63,9 @@
                  $blueShadow   = 'rgba(59, 130, 246, 0.5)'; // blue-500
             @endphp
 
-        @foreach ($cards as $card)
-                <div class="bg-white dark:bg-gray-800 rounded-xl transition-shadow duration-300 p-6 flex flex-col items-center space-y-6 border border-gray-100 dark:border-gray-700"
+            @foreach ($cards as $card)
+                <div
+                    class="bg-white dark:bg-gray-800 rounded-xl transition-shadow duration-300 p-6 flex flex-col items-center space-y-6 border border-gray-100 dark:border-gray-700"
                     style="box-shadow: 0 4px 15px 0 {{ $shadowColors[$card['color']] ?? 'rgba(0,0,0,0.1)' }};">
                     <h3 class="text-lg font-semibold text-gray-800 dark:text-white text-center">
                         {{ $card['title'] }}
@@ -77,7 +78,7 @@
                         <div class="text-gray-400 text-xs">Samples</div>
                     </div>
 
-                    <hr class="w-full border-gray-200 dark:border-gray-700" />
+                    <hr class="w-full border-gray-200 dark:border-gray-700"/>
 
                     <!-- Last 30 days data -->
                     <div class="text-center w-full">
@@ -89,7 +90,8 @@
             @endforeach
 
             <!-- Yarn Ordered but Not Received - Single Card with Supplier List -->
-            <div class="bg-white dark:bg-gray-800 rounded-xl transition-shadow duration-300 p-6 flex flex-col items-center space-y-6 border border-gray-100 dark:border-gray-700"
+            <div
+                class="bg-white dark:bg-gray-800 rounded-xl transition-shadow duration-300 p-6 flex flex-col items-center space-y-6 border border-gray-100 dark:border-gray-700"
                 style="box-shadow: 0 4px 15px 0 {{ $yellowShadow }};">
                 <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-6 text-center">
                     Yarn Ordered But Not Received
@@ -113,7 +115,8 @@
             </div>
 
             <!-- Other Information-->
-            <div class="bg-white dark:bg-gray-800 rounded-xl transition-shadow duration-300 p-6 flex flex-col items-center space-y-6 border border-gray-100 dark:border-gray-700"
+            <div
+                class="bg-white dark:bg-gray-800 rounded-xl transition-shadow duration-300 p-6 flex flex-col items-center space-y-6 border border-gray-100 dark:border-gray-700"
                 style="box-shadow: 0 4px 15px 0 {{ $blueShadow }};">
                 <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-6 text-center">
                     Sample Production Details
@@ -141,7 +144,8 @@
         <!-- Charts Section -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <div
-                class="bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 p-6 flex flex-col" style="border-top: 3px solid #3b82f6;">
+                class="bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 p-6 flex flex-col"
+                style="border-top: 3px solid #3b82f6;">
                 <h3 class="text-xl font-semibold mb-4 text-gray-700 dark:text-gray-200">
                     Sample Overview by Customer Coordinators
                 </h3>
@@ -149,7 +153,8 @@
             </div>
 
             <div
-                class="bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 p-6 flex flex-col" style="border-bottom: 3px solid #3b82f6;">
+                class="bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 p-6 flex flex-col"
+                style="border-bottom: 3px solid #3b82f6;">
                 <h3 class="text-xl font-semibold mb-4 text-gray-700 dark:text-gray-200">
                     Sample Overview by Customers
                 </h3>
@@ -169,7 +174,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         const ctx = document.getElementById('ordersChart').getContext('2d');
 
         // These variables will be injected from the controller as JSON encoded data
@@ -182,10 +187,10 @@
             data: {
                 labels: labels,
                 datasets: [{
-                        label: 'Accepted Samples',
-                        data: acceptedSamples,
-                        backgroundColor: 'rgba(34, 197, 94, 0.7)', // greenish
-                    },
+                    label: 'Accepted Samples',
+                    data: acceptedSamples,
+                    backgroundColor: 'rgba(34, 197, 94, 0.7)', // greenish
+                },
                     {
                         label: 'Rejected Samples',
                         data: rejectedSamples,
@@ -220,10 +225,10 @@
             data: {
                 labels: @json($customerNames), // e.g. ["Customer A", "Customer B", "Customer C"]
                 datasets: [{
-                        label: 'Accepted Samples',
-                        data: @json($acceptedSamplesCount2), // e.g. [10, 15, 7]
-                        backgroundColor: 'rgba(34, 197, 94, 0.7)', // green-ish
-                    },
+                    label: 'Accepted Samples',
+                    data: @json($acceptedSamplesCount2), // e.g. [10, 15, 7]
+                    backgroundColor: 'rgba(34, 197, 94, 0.7)', // green-ish
+                },
                     {
                         label: 'Rejected Samples',
                         data: @json($rejectedSamplesCount2), // e.g. [2, 3, 1]
