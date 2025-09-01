@@ -1296,9 +1296,9 @@
                                                             <span @click="openDelivered = true"
                                                                   class="cursor-pointer inline-block text-sm font-semibold text-gray-700 dark:text-white bg-green-100 dark:bg-gray-800 px-3 py-1 rounded text-center">
                                                                 Delivered on <br>
-                                                                {{ \Carbon\Carbon::parse($inquiry->customerDeliveryDate)->format('Y-m-d') }}
+                                                                {{ Carbon::parse($inquiry->customerDeliveryDate)->format('Y-m-d') }}
                                                                 at
-                                                                {{ \Carbon\Carbon::parse($inquiry->customerDeliveryDate)->format('H:i') }}
+                                                                {{ Carbon::parse($inquiry->customerDeliveryDate)->format('H:i') }}
                                                             </span>
 
                                                                 {{-- Modal --}}
@@ -1319,14 +1319,14 @@
                                                                                 <span
                                                                                     class="font-medium text-gray-900 dark:text-gray-100">Delivered Date:</span>
                                                                                 <span
-                                                                                    class="text-sm text-gray-700 dark:text-gray-200">{{ \Carbon\Carbon::parse($inquiry->customerDeliveryDate)->format('Y-m-d') }}</span>
+                                                                                    class="text-sm text-gray-700 dark:text-gray-200">{{ Carbon::parse($inquiry->customerDeliveryDate)->format('Y-m-d') }}</span>
                                                                             </div>
                                                                             <div
                                                                                 class="flex justify-between items-center p-3 border rounded-lg bg-gray-50 dark:bg-gray-700/50">
                                                                                 <span
                                                                                     class="font-medium text-gray-900 dark:text-gray-100">Delivered Time:</span>
                                                                                 <span
-                                                                                    class="text-sm text-gray-700 dark:text-gray-200">{{ \Carbon\Carbon::parse($inquiry->customerDeliveryDate)->format('H:i') }}</span>
+                                                                                    class="text-sm text-gray-700 dark:text-gray-200">{{ Carbon::parse($inquiry->customerDeliveryDate)->format('H:i') }}</span>
                                                                             </div>
                                                                             <div
                                                                                 class="flex justify-between items-center p-3 border rounded-lg bg-gray-50 dark:bg-gray-700/50">
@@ -1369,9 +1369,11 @@
                                                     {{-- CASE: Tape Match (Pan Asia) --}}
                                                     @if ($prepRnd?->alreadyDeveloped === 'Tape Match Pan Asia')
                                                         @if ($inquiry->productionStatus !== 'Delivered')
-                                                            <form method="POST" action="{{ route('inquiry.markCustomerDelivered') }}">
+                                                            <form method="POST"
+                                                                  action="{{ route('inquiry.markCustomerDelivered') }}">
                                                                 @csrf
-                                                                <input type="hidden" name="id" value="{{ $inquiry->id }}">
+                                                                <input type="hidden" name="id"
+                                                                       value="{{ $inquiry->id }}">
                                                                 {{-- For Pan Asia we don’t ask for qty, default to 1 or backend handles logic --}}
                                                                 <input type="hidden" name="sampleQty" value="1">
 
@@ -1387,9 +1389,9 @@
                                                                 <span @click="openDelivered = true"
                                                                       class="cursor-pointer inline-block text-sm font-semibold text-gray-700 dark:text-white bg-green-100 dark:bg-gray-800 px-3 py-1 rounded text-center">
                                                                     Delivered on <br>
-                                                                    {{ \Carbon\Carbon::parse($inquiry->customerDeliveryDate)->format('Y-m-d') }}
+                                                                    {{ Carbon::parse($inquiry->customerDeliveryDate)->format('Y-m-d') }}
                                                                     at
-                                                                    {{ \Carbon\Carbon::parse($inquiry->customerDeliveryDate)->format('H:i') }}
+                                                                    {{ Carbon::parse($inquiry->customerDeliveryDate)->format('H:i') }}
                                                                 </span>
 
                                                                 {{-- Modal --}}
@@ -1410,14 +1412,14 @@
                                                                                 <span
                                                                                     class="font-medium text-gray-900 dark:text-gray-100">Delivered Date:</span>
                                                                                 <span
-                                                                                    class="text-sm text-gray-700 dark:text-gray-200">{{ \Carbon\Carbon::parse($inquiry->customerDeliveryDate)->format('Y-m-d') }}</span>
+                                                                                    class="text-sm text-gray-700 dark:text-gray-200">{{ Carbon::parse($inquiry->customerDeliveryDate)->format('Y-m-d') }}</span>
                                                                             </div>
                                                                             <div
                                                                                 class="flex justify-between items-center p-3 border rounded-lg bg-gray-50 dark:bg-gray-700/50">
                                                                                 <span
                                                                                     class="font-medium text-gray-900 dark:text-gray-100">Delivered Time:</span>
                                                                                 <span
-                                                                                    class="text-sm text-gray-700 dark:text-gray-200">{{ \Carbon\Carbon::parse($inquiry->customerDeliveryDate)->format('H:i') }}</span>
+                                                                                    class="text-sm text-gray-700 dark:text-gray-200">{{ Carbon::parse($inquiry->customerDeliveryDate)->format('H:i') }}</span>
                                                                             </div>
                                                                             <div
                                                                                 class="flex justify-between items-center p-3 border rounded-lg bg-gray-50 dark:bg-gray-700/50">
