@@ -8,6 +8,7 @@ use App\Models\ShadeOrder;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class SamplePreparationProductionController extends Controller
@@ -26,7 +27,7 @@ class SamplePreparationProductionController extends Controller
         ])
             ->select('sample_preparation_production.*')
             ->addSelect([
-                'all_dispatched' => \DB::table('shade_orders')
+                'all_dispatched' => DB::table('shade_orders')
                     ->selectRaw("CASE WHEN COUNT(*) > 0
                               AND COUNT(CASE WHEN status IN ('Dispatched to RnD', 'Delivered') THEN 1 END) = COUNT(*)
                               THEN 1 ELSE 0 END")

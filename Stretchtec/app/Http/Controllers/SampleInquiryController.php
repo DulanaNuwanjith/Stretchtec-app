@@ -350,7 +350,7 @@ class SampleInquiryController extends Controller
         } else {
             if ($prepRnd->alreadyDeveloped === 'No Need to Develop') {
                 // For Tape Match & No Need to Develop: just mark delivered without shades
-                $deliveredQty = (int) ($request->input('sampleQty') ?? $inquiry->sampleQty ?? 1);
+                $deliveredQty = (int)($request->input('sampleQty') ?? $inquiry->sampleQty ?? 1);
                 $deliveredShades[] = [
                     'quantity' => $deliveredQty,
                 ];
@@ -389,7 +389,7 @@ class SampleInquiryController extends Controller
                         }
                     }
                 }
-        } else{
+            } else {
                 $inquiry->productionStatus = 'Delivered';
                 $inquiry->deliveryQty = 0;
                 $prepRnd->productionStatus = 'Order Delivered';
@@ -464,7 +464,7 @@ class SampleInquiryController extends Controller
         // Store orderRejectNumber only if customerDecision is 'Order Rejected'
         if ($request->input('customerDecision') === 'Order Rejected') {
             $sampleInquiry->rejectNO = $request->input('orderRejectNumber');
-        }else {
+        } else {
             // Clear reject number for other decisions
             $sampleInquiry->rejectNO = null;
         }

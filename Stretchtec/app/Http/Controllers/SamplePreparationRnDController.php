@@ -2,15 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ColorMatchReject;
 use App\Models\LeftoverYarn;
 use App\Models\SampleInquiry;
-use App\Models\SamplePreparationRnD;
 use App\Models\SamplePreparationProduction;
+use App\Models\SamplePreparationRnD;
 use App\Models\SampleStock;
 use App\Models\ShadeOrder;
-use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
 class SamplePreparationRnDController extends Controller
@@ -66,15 +65,15 @@ class SamplePreparationRnDController extends Controller
         $orderNos = SamplePreparationRnD::whereNotNull('orderNo')->where('orderNo', '!=', '')->distinct()->orderBy('orderNo')->pluck('orderNo');
         $poNos = SamplePreparationRnD::whereNotNull('yarnOrderedPONumber')->where('yarnOrderedPONumber', '!=', '')->distinct()->orderBy('yarnOrderedPONumber')->pluck('yarnOrderedPONumber');
         $shades = SamplePreparationRnD::whereNotNull('shade')
-                ->where('shade', '!=', '')
-                ->pluck('shade')
-                ->flatMap(function ($shade) {
-                    return collect(explode(',', $shade))->map(fn($s) => trim($s));
-                })
-                ->filter()
-                ->unique()
-                ->sort()
-                ->values();
+            ->where('shade', '!=', '')
+            ->pluck('shade')
+            ->flatMap(function ($shade) {
+                return collect(explode(',', $shade))->map(fn($s) => trim($s));
+            })
+            ->filter()
+            ->unique()
+            ->sort()
+            ->values();
         $references = SamplePreparationRnD::whereNotNull('referenceNo')->where('referenceNo', '!=', '')->distinct()->orderBy('referenceNo')->pluck('referenceNo');
         $coordinators = SampleInquiry::whereNotNull('coordinatorName')->where('coordinatorName', '!=', '')->distinct()->orderBy('coordinatorName')->pluck('coordinatorName');
         $sampleStockReferences = SampleStock::pluck('reference_no')->unique();
