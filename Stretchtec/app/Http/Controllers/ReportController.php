@@ -79,7 +79,7 @@ class ReportController extends Controller
         $sampleInquiry = SampleInquiry::where('orderNo', $orderNo)->first();
 
         $rnd = SamplePreparationRnD::where('orderNo', $orderNo)
-            ->with('shadeOrders') 
+            ->with('shadeOrders')
             ->first();
 
         $production = SamplePreparationProduction::where('order_no', $orderNo)->first();
@@ -303,7 +303,7 @@ class ReportController extends Controller
 
         return $pdf->download("Sample_Inquiry_Report_{$request->start_date}_to_{$request->end_date}.pdf");
     }
-    
+
     public function generateRejectReportPdf(Request $request)
     {
         $request->validate([
@@ -324,7 +324,7 @@ class ReportController extends Controller
 
         // Group by orderNo
         $orders = $inquiries->groupBy('orderNo')->map(function ($items, $orderNo) {
-            $totalYarnPrice = $items->sum(function($inquiry) {
+            $totalYarnPrice = $items->sum(function ($inquiry) {
                 return $inquiry->samplePreparationRnD->yarnPrice ?? 0;
             });
 
@@ -351,7 +351,7 @@ class ReportController extends Controller
         return $pdf->download("Reject_Report_{$rejectNo}.pdf");
     }
 
-   public function generateCustomerRejectReportPdf(Request $request)
+    public function generateCustomerRejectReportPdf(Request $request)
     {
         $request->validate([
             'start_date' => 'required|date',
@@ -410,7 +410,6 @@ class ReportController extends Controller
 
         return $pdf->download($fileName);
     }
-
 
 
 }

@@ -13,9 +13,9 @@
                     <h2 class="text-3xl font-bold text-gray-800 dark:text-white">Production Reports Generator</h2>
                 </div>
 
-                
+
             </div>
         </div>
 
-    </div>
+</div>
 @endsection

@@ -1,8 +1,9 @@
-<!DOCTYPE html>
+@php use Carbon\Carbon; @endphp
+    <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8"/>
     <title>Inquiry Sample Customer Decision Report</title>
     <style>
         body {
@@ -36,48 +37,48 @@
 
 <body>
 
-    <h1>Inquiry Sample Customer Decision Report</h1>
-    <p style="text-align:center;">
-        Date Range: {{ $start_date }} to {{ $end_date }}<br>
-        @if ($customer)
-            Customer: {{ $customer }}
-        @else
-            Customer: All
-        @endif
-    </p>
+<h1>Inquiry Sample Customer Decision Report</h1>
+<p style="text-align:center;">
+    Date Range: {{ $start_date }} to {{ $end_date }}<br>
+    @if ($customer)
+        Customer: {{ $customer }}
+    @else
+        Customer: All
+    @endif
+</p>
 
-    <table>
-        <thead>
-            <tr>
-                <th>Order No</th>
-                <th>Customer</th>
-                <th>Inquiry Date</th>
-                <th>Customer Delivery Date</th>
-                <th>Customer Decision</th>
-            </tr>
-        </thead>
-        <tbody>
-            @forelse($inquiries as $inq)
-                <tr>
-                    <td>{{ $inq->orderNo }}</td>
-                    <td>{{ $inq->customerName }}</td>
-                    <td>{{ \Carbon\Carbon::parse($inq->inquiryReceiveDate)->format('Y-m-d') }}</td>
-                    <td>
-                        @if ($inq->customerDeliveryDate)
-                            {{ \Carbon\Carbon::parse($inq->customerDeliveryDate)->format('Y-m-d') }}
-                        @else
-                            N/A
-                        @endif
-                    </td>
-                    <td>{{ $inq->customerDecision }}</td>
-                </tr>
-            @empty
-                <tr>
-                    <td colspan="5" style="text-align:center;">No records found</td>
-                </tr>
-            @endforelse
-        </tbody>
-    </table>
+<table>
+    <thead>
+    <tr>
+        <th>Order No</th>
+        <th>Customer</th>
+        <th>Inquiry Date</th>
+        <th>Customer Delivery Date</th>
+        <th>Customer Decision</th>
+    </tr>
+    </thead>
+    <tbody>
+    @forelse($inquiries as $inq)
+        <tr>
+            <td>{{ $inq->orderNo }}</td>
+            <td>{{ $inq->customerName }}</td>
+            <td>{{ Carbon::parse($inq->inquiryReceiveDate)->format('Y-m-d') }}</td>
+            <td>
+                @if ($inq->customerDeliveryDate)
+                    {{ Carbon::parse($inq->customerDeliveryDate)->format('Y-m-d') }}
+                @else
+                    N/A
+                @endif
+            </td>
+            <td>{{ $inq->customerDecision }}</td>
+        </tr>
+    @empty
+        <tr>
+            <td colspan="5" style="text-align:center;">No records found</td>
+        </tr>
+    @endforelse
+    </tbody>
+</table>
 
 </body>
 

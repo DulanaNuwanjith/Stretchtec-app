@@ -49,40 +49,40 @@
 
 <body>
 
-    <h1>Reject Report</h1>
-    <h2>Reject No: {{ $rejectNo }}</h2>
-    <h2>Customer(s): {{ $customerNames }}</h2>
-    <h2>Coordinator(s): {{ $coordinatorNames }}</h2>
+<h1>Reject Report</h1>
+<h2>Reject No: {{ $rejectNo }}</h2>
+<h2>Customer(s): {{ $customerNames }}</h2>
+<h2>Coordinator(s): {{ $coordinatorNames }}</h2>
 
-    <table>
-        <thead>
-            <tr>
-                <th>Order No</th>
-                <th>Customer Decision</th>
-                <th>Total Yarn Price</th>
-            </tr>
-        </thead>
-        <tbody>
-            @forelse($orders as $order)
-                <tr>
-                    <td>{{ $order['orderNos'] }}</td>
-                    <td>{{ $order['customerDecision'] ?: 'N/A' }}</td>
-                    <td>{{ number_format($order['total_yarn_price'], 2) }}</td>
-                </tr>
-            @empty
-                <tr>
-                    <td colspan="3">No records found for this reject number.</td>
-                </tr>
-            @endforelse
-        </tbody>
-    </table>
+<table>
+    <thead>
+    <tr>
+        <th>Order No</th>
+        <th>Customer Decision</th>
+        <th>Total Yarn Price</th>
+    </tr>
+    </thead>
+    <tbody>
+    @forelse($orders as $order)
+        <tr>
+            <td>{{ $order['orderNos'] }}</td>
+            <td>{{ $order['customerDecision'] ?: 'N/A' }}</td>
+            <td>{{ number_format($order['total_yarn_price'], 2) }}</td>
+        </tr>
+    @empty
+        <tr>
+            <td colspan="3">No records found for this reject number.</td>
+        </tr>
+    @endforelse
+    </tbody>
+</table>
 
-    <p class="summary">
-        Total Orders: {{ $orders->count() }}<br>
-        Total Rejections (Order Rejected):
-        {{ $orders->filter(fn($o) => str_contains($o['customerDecision'], 'Order Rejected'))->count() }}<br>
-        Total Yarn Price: {{ number_format($orders->sum('total_yarn_price'), 2) }}
-    </p>
+<p class="summary">
+    Total Orders: {{ $orders->count() }}<br>
+    Total Rejections (Order Rejected):
+    {{ $orders->filter(fn($o) => str_contains($o['customerDecision'], 'Order Rejected'))->count() }}<br>
+    Total Yarn Price: {{ number_format($orders->sum('total_yarn_price'), 2) }}
+</p>
 
 </body>
 

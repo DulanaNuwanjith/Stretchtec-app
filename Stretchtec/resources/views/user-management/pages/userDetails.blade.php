@@ -47,49 +47,49 @@
                         <script>
                             document.addEventListener('DOMContentLoaded', () => {
                                 @if (session('success'))
-                                    Swal.fire({
-                                        toast: true,
-                                        position: 'top-end',
-                                        icon: 'success',
-                                        title: '{{ session('success') }}',
-                                        showConfirmButton: false,
-                                        timer: 2000,
-                                        timerProgressBar: true,
-                                        customClass: {
-                                            popup: 'swal2-toast swal2-shadow'
-                                        },
-                                    });
+                                Swal.fire({
+                                    toast: true,
+                                    position: 'top-end',
+                                    icon: 'success',
+                                    title: '{{ session('success') }}',
+                                    showConfirmButton: false,
+                                    timer: 2000,
+                                    timerProgressBar: true,
+                                    customClass: {
+                                        popup: 'swal2-toast swal2-shadow'
+                                    },
+                                });
                                 @endif
 
                                 @if (session('error'))
-                                    Swal.fire({
-                                        toast: true,
-                                        position: 'top-end',
-                                        icon: 'error',
-                                        title: '{{ session('error') }}',
-                                        showConfirmButton: false,
-                                        timer: 2000,
-                                        timerProgressBar: true,
-                                        customClass: {
-                                            popup: 'swal2-toast swal2-shadow'
-                                        },
-                                    });
+                                Swal.fire({
+                                    toast: true,
+                                    position: 'top-end',
+                                    icon: 'error',
+                                    title: '{{ session('error') }}',
+                                    showConfirmButton: false,
+                                    timer: 2000,
+                                    timerProgressBar: true,
+                                    customClass: {
+                                        popup: 'swal2-toast swal2-shadow'
+                                    },
+                                });
                                 @endif
 
                                 @if ($errors->any())
-                                    Swal.fire({
-                                        toast: true,
-                                        position: 'top-end',
-                                        icon: 'warning',
-                                        title: 'Validation Errors',
-                                        html: `{!! implode('<br>', $errors->all()) !!}`,
-                                        showConfirmButton: false,
-                                        timer: 3000,
-                                        timerProgressBar: true,
-                                        customClass: {
-                                            popup: 'swal2-toast swal2-shadow'
-                                        },
-                                    });
+                                Swal.fire({
+                                    toast: true,
+                                    position: 'top-end',
+                                    icon: 'warning',
+                                    title: 'Validation Errors',
+                                    html: `{!! implode('<br>', $errors->all()) !!}`,
+                                    showConfirmButton: false,
+                                    timer: 3000,
+                                    timerProgressBar: true,
+                                    customClass: {
+                                        popup: 'swal2-toast swal2-shadow'
+                                    },
+                                });
                                 @endif
                             });
                         </script>
@@ -124,81 +124,86 @@
                         <div class="overflow-x-auto bg-white dark:bg-gray-900 shadow rounded-lg">
                             <table class="table-fixed w-full text-sm divide-y divide-gray-200 dark:divide-gray-700">
                                 <thead class="bg-gray-100 dark:bg-gray-700 text-left">
-                                    <tr>
-                                        <th
-                                            class="px-4 py-3 w-24 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                            User ID</th>
-                                        <th
-                                            class="px-4 py-3 w-40 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                            Name</th>
-                                        <th
-                                            class="px-4 py-3 w-40 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                            Role</th>
-                                        <th
-                                            class="px-4 py-3 w-36 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                            Email</th>
-                                        <th
-                                            class="px-4 py-3 w-48 text-xs text-center font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                            Action</th>
-                                    </tr>
+                                <tr>
+                                    <th
+                                        class="px-4 py-3 w-24 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                        User ID
+                                    </th>
+                                    <th
+                                        class="px-4 py-3 w-40 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                        Name
+                                    </th>
+                                    <th
+                                        class="px-4 py-3 w-40 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                        Role
+                                    </th>
+                                    <th
+                                        class="px-4 py-3 w-36 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                        Email
+                                    </th>
+                                    <th
+                                        class="px-4 py-3 w-48 text-xs text-center font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                        Action
+                                    </th>
+                                </tr>
                                 </thead>
                                 <tbody id="serviceRecords"
-                                    class="bg-white dark:bg-gray-800 divide-y text-left divide-gray-200 dark:divide-gray-700">
+                                       class="bg-white dark:bg-gray-800 divide-y text-left divide-gray-200 dark:divide-gray-700">
 
-                                    @foreach ($users as $index => $user)
-                                        @php
-                                            $rowId = 'row' . ($index + 1);
-                                        @endphp
-                                        <tr id="{{ $rowId }}">
-                                            <td class="px-4 py-3 w-24 whitespace-normal break-words">
-                                                <span class="readonly">{{ $user->id }}</span>
-                                                <input
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="{{ $user->id }}" />
-                                            </td>
-                                            <td class="px-4 py-3 w-40 whitespace-normal break-words">
-                                                <span class="readonly">{{ $user->name }}</span>
-                                                <input type="text"
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="{{ $user->name }}" />
-                                            </td>
-                                            <td class="px-4 py-3 w-40 whitespace-normal break-words">
+                                @foreach ($users as $index => $user)
+                                    @php
+                                        $rowId = 'row' . ($index + 1);
+                                    @endphp
+                                    <tr id="{{ $rowId }}">
+                                        <td class="px-4 py-3 w-24 whitespace-normal break-words">
+                                            <span class="readonly">{{ $user->id }}</span>
+                                            <input
+                                                class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                value="{{ $user->id }}"/>
+                                        </td>
+                                        <td class="px-4 py-3 w-40 whitespace-normal break-words">
+                                            <span class="readonly">{{ $user->name }}</span>
+                                            <input type="text"
+                                                   class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                   value="{{ $user->name }}"/>
+                                        </td>
+                                        <td class="px-4 py-3 w-40 whitespace-normal break-words">
                                                 <span class="readonly">
                                                     {{ $user->role ?? 'N/A' }}
                                                 </span>
-                                                <input type="text"
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="{{ $user->role ?? 'N/A' }}" />
-                                            </td>
-                                            <td class="px-4 py-3 w-32 whitespace-normal break-words">
-                                                <span class="readonly">{{ $user->email }}</span>
-                                                <input type="email"
-                                                    class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                    value="{{ $user->email }}" />
-                                            </td>
-                                            <td class="px-4 py-3 w-48 text-center whitespace-normal break-words">
-                                                <div class="flex space-x-2 justify-center">
-                                                    <form id="delete-form-{{ $user->id }}"
-                                                        action="{{ route('userDetails.destroy', $user->id) }}"
-                                                        method="POST" class="inline-block">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="button"
+                                            <input type="text"
+                                                   class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                   value="{{ $user->role ?? 'N/A' }}"/>
+                                        </td>
+                                        <td class="px-4 py-3 w-32 whitespace-normal break-words">
+                                            <span class="readonly">{{ $user->email }}</span>
+                                            <input type="email"
+                                                   class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                   value="{{ $user->email }}"/>
+                                        </td>
+                                        <td class="px-4 py-3 w-48 text-center whitespace-normal break-words">
+                                            <div class="flex space-x-2 justify-center">
+                                                <form id="delete-form-{{ $user->id }}"
+                                                      action="{{ route('userDetails.destroy', $user->id) }}"
+                                                      method="POST" class="inline-block">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="button"
                                                             onclick="confirmDelete('{{ $user->id }}')"
                                                             class="bg-red-600 h-10 hover:bg-red-700 text-white px-3 py-1 rounded text-sm">
-                                                            Delete
-                                                        </button>
-                                                    </form>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    @endforeach
+                                                        Delete
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endforeach
 
-                                    @if ($users->isEmpty())
-                                        <tr>
-                                            <td colspan="5" class="text-center py-4 text-red-500">No users found.</td>
-                                        </tr>
-                                    @endif
+                                @if ($users->isEmpty())
+                                    <tr>
+                                        <td colspan="5" class="text-center py-4 text-red-500">No users found.</td>
+                                    </tr>
+                                @endif
                                 </tbody>
 
                             </table>
@@ -267,7 +272,7 @@
         }
 
         // Close dropdowns on outside click
-        document.addEventListener('click', function(e) {
+        document.addEventListener('click', function (e) {
             ['item', 'customer', 'merchandiser'].forEach(type => {
                 const btn = document.getElementById(`${type}Dropdown`);
                 const menu = document.getElementById(`${type}DropdownMenu`);
