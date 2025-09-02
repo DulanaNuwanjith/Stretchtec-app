@@ -77,7 +77,15 @@ class SamplePreparationRnDController extends Controller
         $references = SamplePreparationRnD::whereNotNull('referenceNo')->where('referenceNo', '!=', '')->distinct()->orderBy('referenceNo')->pluck('referenceNo');
         $coordinators = SampleInquiry::whereNotNull('coordinatorName')->where('coordinatorName', '!=', '')->distinct()->orderBy('coordinatorName')->pluck('coordinatorName');
         $sampleStockReferences = SampleStock::pluck('reference_no')->unique();
-        $sampleStockShade = SampleStock::pluck('shade')->unique();
+        $sampleStockReferences = SampleStock::pluck('reference_no')->unique();
+
+        // ✅ build reference → shades map
+        $referenceShadesMap = SampleStock::select('reference_no', 'shade')
+            ->get()
+            ->groupBy('reference_no')
+            ->map(fn($items) => $items->pluck('shade')->unique()->values())
+            ->toArray();
+
 
         // Production dispatch check
         $dispatchCheck = SamplePreparationProduction::all();
@@ -91,10 +99,9 @@ class SamplePreparationRnDController extends Controller
             'sampleStockReferences',
             'coordinators',
             'dispatchCheck',
-            'sampleStockShade'
+            'referenceShadesMap',
         ));
     }
-
 
     /**
      * Mark Colour Match as Sent or Received and update production status accordingly.
