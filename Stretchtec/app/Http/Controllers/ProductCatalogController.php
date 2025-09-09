@@ -244,9 +244,12 @@ class ProductCatalogController extends Controller
                 Storage::disk('public')->delete('order_images/' . $catalog->order_image);
             }
 
-            // Store new image in storage/app/public/order_images
+            // Store new image with reference_no as filename
             $file = $request->file('order_image');
-            $filename = time() . '_' . preg_replace('/\s+/', '_', $file->getClientOriginalName());
+            $extension = $file->getClientOriginalExtension();
+            $safeReference = preg_replace('/[^A-Za-z0-9_\-]/', '_', $catalog->reference_no); // clean reference_no
+            $filename = $safeReference . '.' . $extension;
+
             $file->storeAs('order_images', $filename, 'public');
 
             $catalog->order_image = $filename;
