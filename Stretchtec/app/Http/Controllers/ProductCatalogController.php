@@ -282,7 +282,15 @@ class ProductCatalogController extends Controller
                 Storage::disk('public')->delete($productCatalog->approval_card);
             }
 
-            $path = $request->file('approval_card')->store('approval_cards', 'public');
+            // Create a clean filename using reference_no
+            $file = $request->file('approval_card');
+            $extension = $file->getClientOriginalExtension();
+            $safeReference = preg_replace('/[^A-Za-z0-9_\-]/', '_', $productCatalog->reference_no); // clean filename
+            $filename = $safeReference . '.' . $extension;
+
+            // Save file with reference_no as name
+            $path = $file->storeAs('approval_cards', $filename, 'public');
+
             $updateData['approval_card'] = $path;
             $updateData['is_approval_card_locked'] = true;
         }
@@ -294,7 +302,6 @@ class ProductCatalogController extends Controller
 
         return back()->with('success', 'Approval details updated successfully.');
     }
-
 
     /**
      * Show the form for editing the specified product catalog entry
