@@ -66,7 +66,7 @@
         <th>Customer Name</th>
         <th>Merchandiser Name</th>
         <th>Item</th>
-        <th>Reference No</th>
+        <th class="w-14">Reference No</th>
         <th>Item Description</th>
         <th>Size</th>
         <th>Color</th>
@@ -107,7 +107,7 @@
         </tr>
     @empty
         <tr>
-            <td colspan="16" style="text-align:center;">No records found</td>
+            <td colspan="19" style="text-align:center;">No records found</td>
         </tr>
     @endforelse
     </tbody>
