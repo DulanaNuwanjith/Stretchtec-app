@@ -66,7 +66,7 @@
         <th>Customer Name</th>
         <th>Merchandiser Name</th>
         <th>Item</th>
-        <th class="w-14">Reference No</th>
+        <th>Reference No</th>
         <th>Item Description</th>
         <th>Size</th>
         <th>Color</th>
@@ -84,6 +84,23 @@
     </thead>
     <tbody>
     @forelse($inquiries as $inq)
+        @php
+            $status = $inq->productionStatus;
+
+            $statusDate = match ($status) {
+                'Tape Match' => null,
+                'No Development' => null,
+                'In Production' => optional($inq->samplePreparationProduction)->order_start_at,
+                'Production Complete' => optional($inq->samplePreparationProduction)->order_complete_at,
+                'Yarn Ordered' => optional($inq->samplePreparationRnD)->yarnOrderedDate,
+                'Yarn Received' => optional($inq->samplePreparationRnD)->yarnReceiveDate,
+                'Sent to Production' => optional($inq->samplePreparationRnD)->sendOrderToProductionStatus,
+                'Colour Match Sent' => optional($inq->samplePreparationRnD)->colourMatchSentDate,
+                'Colour Match Received' => optional($inq->samplePreparationRnD)->colourMatchReceiveDate,
+                default => null,
+            };
+        @endphp
+
         <tr>
             <td>{{ $inq->orderNo }}</td>
             <td>{{ $inq->inquiryReceiveDate ? $inq->inquiryReceiveDate->format('Y-m-d') : '-' }}</td>
@@ -98,13 +115,22 @@
             <td>{{ $inq->sampleQty ?? '-' }}</td>
             <td>{{ $inq->customerRequestDate ? $inq->customerRequestDate->format('Y-m-d') : '-' }}</td>
             <td>{{ $inq->developPlannedDate ? $inq->developPlannedDate->format('Y-m-d') : '-' }}</td>
-            <td>{{ $inq->productionStatus ?? '-' }}</td>
+
+            {{-- ✅ Show status with date --}}
+            <td>
+                {{ $status ?? '-' }}
+                @if($statusDate)
+                    ({{ \Carbon\Carbon::parse($statusDate)->format('Y-m-d') }})
+                @endif
+            </td>
+
             <td>{{ $inq->deliveryQty ?? '-' }}</td>
             <td>{{ $inq->customerDeliveryDate ? $inq->customerDeliveryDate->format('Y-m-d') : '-' }}</td>
             <td>{{ $inq->samplePreparationRnD->shade ?? '-' }}</td>
             <td>{{ $inq->samplePreparationRnD->tkt ?? '-' }}</td>
             <td>{{ $inq->customerDecision ?? '-' }}</td>
         </tr>
+
     @empty
         <tr>
             <td colspan="19" style="text-align:center;">No records found</td>
