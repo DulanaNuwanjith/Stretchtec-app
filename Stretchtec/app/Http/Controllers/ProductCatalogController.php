@@ -43,7 +43,6 @@ class ProductCatalogController extends Controller
         ));
     }
 
-
     /**
      * Display a listing of the product catalog entries
      */
@@ -77,7 +76,6 @@ class ProductCatalogController extends Controller
             'catalogs', 'orderNos', 'merchandisers', 'referenceNos'
         ));
     }
-
 
     /**
      * Display a listing of the product catalog entries
@@ -113,7 +111,6 @@ class ProductCatalogController extends Controller
         ));
     }
 
-
     /**
      * Display a listing of all product catalog entries
      */
@@ -121,7 +118,6 @@ class ProductCatalogController extends Controller
     {
         return view('product-catalog.create');
     }
-
 
     /**
      * Common storing method for all catalog entries
@@ -146,7 +142,6 @@ class ProductCatalogController extends Controller
 
         return redirect()->route('product-catalog.index')->with('success', 'Catalog entry created.');
     }
-
 
     /**
      * Store method forcing item = Elastic
@@ -174,7 +169,6 @@ class ProductCatalogController extends Controller
         return redirect()->route('elasticCatalog.index')->with('success', 'Elastic catalog entry created.');
     }
 
-
     /**
      * Store method forcing item = Elastic
      */
@@ -201,7 +195,6 @@ class ProductCatalogController extends Controller
         return redirect()->route('codeCatalog.index')->with('success', 'Cord catalog entry created.');
     }
 
-
     /**
      * Store method forcing item = Elastic
      */
@@ -227,7 +220,6 @@ class ProductCatalogController extends Controller
 
         return redirect()->route('tapeCatalog.index')->with('success', 'Tape catalog entry created.');
     }
-
 
     /**
      * Upload order image for a specific catalog entry
@@ -258,7 +250,6 @@ class ProductCatalogController extends Controller
 
         return back()->with('success', 'Order image uploaded successfully.');
     }
-
 
     /**
      * Update approval details for a specific catalog entry
@@ -314,7 +305,6 @@ class ProductCatalogController extends Controller
         return view('product-catalog.edit', compact('productCatalog'));
     }
 
-
     /**
      * Update the specified product catalog entry
      */
@@ -337,7 +327,6 @@ class ProductCatalogController extends Controller
         return redirect()->route('product-catalog.index')->with('success', 'Catalog entry updated.');
     }
 
-
     /**
      * Remove the specified product catalog entry from storage
      */
@@ -347,7 +336,6 @@ class ProductCatalogController extends Controller
 
         return redirect()->route('product-catalog.index')->with('success', 'Catalog entry deleted.');
     }
-
 
     /**
      * Update shade for a specific catalog entry

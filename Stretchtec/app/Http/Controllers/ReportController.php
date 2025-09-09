@@ -289,7 +289,17 @@ class ReportController extends Controller
 
         $inquiries = SampleInquiry::with('samplePreparationRnD')
             ->whereBetween('inquiryReceiveDate', [$request->start_date, $request->end_date])
-            ->whereIn('coordinatorName', $request->coordinatorName)
+            ->when($request->coordinatorName, function ($q) use ($request) {
+                $q->whereIn('coordinatorName', $request->coordinatorName);
+            })
+            ->when($request->status, function ($q) use ($request) {
+                if (in_array('Pending', $request->status) && !in_array('Delivered', $request->status)) {
+                    $q->whereNull('customerDeliveryDate');
+                } elseif (!in_array('Pending', $request->status) && in_array('Delivered', $request->status)) {
+                    $q->whereNotNull('customerDeliveryDate');
+                }
+                // If both selected or none selected, show all
+            })
             ->orderBy('id', 'desc')
             ->get();
 
