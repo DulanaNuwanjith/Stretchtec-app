@@ -77,7 +77,6 @@ class SamplePreparationRnDController extends Controller
         $references = SamplePreparationRnD::whereNotNull('referenceNo')->where('referenceNo', '!=', '')->distinct()->orderBy('referenceNo')->pluck('referenceNo');
         $coordinators = SampleInquiry::whereNotNull('coordinatorName')->where('coordinatorName', '!=', '')->distinct()->orderBy('coordinatorName')->pluck('coordinatorName');
         $sampleStockReferences = SampleStock::pluck('reference_no')->unique();
-        $sampleStockReferences = SampleStock::pluck('reference_no')->unique();
 
         // ✅ build reference → shades map
         $referenceShadesMap = SampleStock::select('reference_no', 'shade')
