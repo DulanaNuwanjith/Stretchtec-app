@@ -314,6 +314,55 @@ class ReportController extends Controller
         return $pdf->download("Sample_Inquiry_Report_{$request->start_date}_to_{$request->end_date}.pdf");
     }
 
+    /**
+     * Generate Pending / Delivered RnD Report
+     */
+    public function generateRndReport(Request $request)
+    {
+        $request->validate([
+            'start_date' => 'required|date',
+            'end_date'   => 'required|date|after_or_equal:start_date',
+            'status'     => 'required|array', // ['Pending', 'Delivered']
+            'coordinatorName' => 'nullable|array',
+        ]);
+
+        $startDate = $request->start_date;
+        $endDate   = $request->end_date;
+
+        $query = SamplePreparationRnD::with(['sampleInquiry', 'shadeOrders'])
+            ->whereBetween('customerRequestDate', [$startDate, $endDate])
+            ->when($request->filled('coordinatorName') && !empty($request->coordinatorName), function ($q) use ($request) {
+                $q->whereHas('sampleInquiry', function ($sq) use ($request) {
+                    $sq->whereIn('coordinatorName', $request->coordinatorName);
+                });
+            })
+            ->when($request->status, function ($q) use ($request) {
+                // Match logic with SampleInquiryReport
+                if (in_array('Pending', $request->status) && !in_array('Delivered', $request->status)) {
+                    $q->where(function ($sub) {
+                        $sub->whereNull('productionStatus')
+                            ->orWhere('productionStatus', '!=', 'Order Delivered');
+                    });
+                } elseif (!in_array('Pending', $request->status) && in_array('Delivered', $request->status)) {
+                    $q->where('productionStatus', 'Order Delivered');
+                }
+                // If both selected → show all
+            });
+
+        $records = $query->orderBy('id', 'desc')->get();
+
+        // Pass data to PDF
+        $pdf = Pdf::loadView('reports.rnd_pending_delivered_pdf', [
+            'records'             => $records,
+            'start_date'          => $startDate,
+            'end_date'            => $endDate,
+            'selectedCoordinators'=> $request->coordinatorName ?? [],
+            'selectedStatuses'    => $request->status ?? [],
+        ])->setPaper('legal', 'landscape');
+
+        return $pdf->download("RnD_Report_{$startDate}_to_{$endDate}.pdf");
+    }
+
     public function generateRejectReportPdf(Request $request)
     {
         $request->validate([
