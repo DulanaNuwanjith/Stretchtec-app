@@ -3420,8 +3420,17 @@
                 }
             });
             coordCheckboxes.forEach(cb => cb.addEventListener('change', () => {
-                const selected = Array.from(coordCheckboxes).filter(c => c.checked).map(c => c.value);
-                coordText.textContent = selected.length ? selected.join(', ') : 'Select Coordinator(s)';
+                const selected = Array.from(coordCheckboxes)
+                    .filter(c => c.checked)
+                    .map(c => c.value);
+
+                if (selected.length === 0) {
+                    coordText.textContent = 'Select Coordinator(s)';
+                } else if (selected.length <= 2) {
+                    coordText.textContent = selected.join(', ');
+                } else {
+                    coordText.textContent = selected.slice(0, 2).join(', ') + '...';
+                }
             }));
             coordSearch.addEventListener('input', () => {
                 const q = coordSearch.value.toLowerCase();
