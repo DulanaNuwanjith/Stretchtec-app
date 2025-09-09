@@ -593,6 +593,56 @@
                                             </div>
                                         </div>
 
+                                        <!-- Customer Delivery Status (Multiple Select) -->
+                                        <div class="relative inline-block text-left w-56">
+                                            <label for="deliveryStatusDropdownReport"
+                                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                                Customer Delivery Status
+                                            </label>
+                                            <div>
+                                                <button type="button" id="deliveryStatusDropdownReport"
+                                                        class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10 dark:bg-gray-700 dark:text-white"
+                                                        aria-haspopup="listbox" aria-expanded="false">
+                                                    <span id="selectedDeliveryStatusReport">
+                                                        {{ request('deliveryStatus') ? implode(', ', (array) request('deliveryStatus')) : 'Select Status(es)' }}
+                                                    </span>
+                                                    <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                                                        <path fill-rule="evenodd"
+                                                            d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
+                                                            clip-rule="evenodd"/>
+                                                    </svg>
+                                                </button>
+                                            </div>
+
+                                            <div id="deliveryStatusDropdownMenuReport"
+                                                class="hidden absolute z-40 mt-2 w-full rounded-md bg-white shadow-lg ring-1 ring-black/5 dark:bg-gray-700 max-h-48 overflow-y-auto">
+
+                                                <div class="p-2 sticky top-0 bg-white dark:bg-gray-700 z-10">
+                                                    <input type="text" id="deliveryStatusSearchInputReport"
+                                                        placeholder="Search status..."
+                                                        class="w-full px-2 py-1 text-sm border rounded-md dark:bg-gray-600 dark:text-white dark:placeholder-gray-300"/>
+                                                </div>
+
+                                                <div class="py-1" id="deliveryStatusOptionsReport" role="listbox"
+                                                    tabindex="-1" aria-labelledby="deliveryStatusDropdownReport">
+                                                    @php
+                                                        $statuses = ['Delivered', 'Pending']; // You can extend this
+                                                    @endphp
+                                                    @foreach ($statuses as $status)
+                                                        <label
+                                                            class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600">
+                                                            <input type="checkbox" name="deliveryStatus[]"
+                                                                value="{{ $status }}"
+                                                                {{ in_array($status, (array) request('deliveryStatus', [])) ? 'checked' : '' }}
+                                                                class="mr-2 deliveryStatus-checkboxReport">
+                                                            {{ $status }}
+                                                        </label>
+                                                    @endforeach
+                                                </div>
+                                            </div>
+                                        </div>
+
+
                                         <!-- Submit Button -->
                                         <div>
                                             <button type="submit"
@@ -2598,6 +2648,7 @@
         }
     });
 </script>
+
 <script>
     document.addEventListener("DOMContentLoaded", () => {
         // Elements
@@ -2643,6 +2694,51 @@
 
     });
 </script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        // Elements
+        const dropdownBtnStatus = document.getElementById('deliveryStatusDropdownReport');
+        const dropdownMenuStatus = document.getElementById('deliveryStatusDropdownMenuReport');
+        const checkboxesStatus = document.querySelectorAll('.deliveryStatus-checkboxReport');
+        const searchInputStatus = document.getElementById('deliveryStatusSearchInputReport');
+        const selectedTextStatus = document.getElementById('selectedDeliveryStatusReport');
+
+        // Toggle dropdown open/close
+        dropdownBtnStatus.addEventListener('click', () => {
+            dropdownMenuStatus.classList.toggle('hidden');
+        });
+
+        // Close dropdown if clicked outside
+        document.addEventListener('click', (e) => {
+            if (!dropdownBtnStatus.contains(e.target) && !dropdownMenuStatus.contains(e.target)) {
+                dropdownMenuStatus.classList.add('hidden');
+            }
+        });
+
+        // Update button text when checkboxes change
+        checkboxesStatus.forEach(cb => {
+            cb.addEventListener('change', () => {
+                const selected = Array.from(checkboxesStatus)
+                    .filter(c => c.checked)
+                    .map(c => c.value);
+                selectedTextStatus.textContent = selected.length ? selected.join(', ') :
+                    'Select Status(es)';
+            });
+        });
+
+        // Search filter
+        searchInputStatus.addEventListener('input', () => {
+            const query = searchInputStatus.value.toLowerCase();
+            const options = document.querySelectorAll('#deliveryStatusOptionsReport label');
+            options.forEach(option => {
+                const text = option.textContent.toLowerCase();
+                option.style.display = text.includes(query) ? 'flex' : 'none';
+            });
+        });
+    });
+</script>
+
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {

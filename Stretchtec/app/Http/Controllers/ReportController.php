@@ -277,32 +277,46 @@ class ReportController extends Controller
 
 
     /**
-     * Generate sample inquiry report filtered by date range and coordinators
+     * Generate sample inquiry report filtered by date range, coordinators, and delivery status
      */
     public function generateSampleInquiryReport(Request $request)
     {
         $request->validate([
-            'start_date' => 'required|date',
-            'end_date' => 'required|date|after_or_equal:start_date',
-            'coordinatorName' => 'required|array',
+            'start_date'       => 'required|date',
+            'end_date'         => 'required|date|after_or_equal:start_date',
+            'coordinatorName'  => 'required|array',
+            'customerDeliveryDate'   => 'nullable|array', // ✅ fix name
         ]);
 
         $inquiries = SampleInquiry::with('samplePreparationRnD')
             ->whereBetween('inquiryReceiveDate', [$request->start_date, $request->end_date])
             ->whereIn('coordinatorName', $request->coordinatorName)
+            ->when($request->customerDeliveryDate, function ($query, $statuses) {
+                $query->where(function ($q) use ($statuses) {
+                    if (in_array('Pending', $statuses)) {
+                        $q->orWhereNull('customerDeliveryDate');
+                    }
+                    if (in_array('Delivered', $statuses)) {
+                        $q->orWhereNotNull('customerDeliveryDate');
+                    }
+                });
+            })
             ->orderBy('id', 'desc')
             ->get();
 
         // Generate PDF in landscape orientation
         $pdf = Pdf::loadView('reports.sample_inquiry_report_pdf', [
-            'inquiries' => $inquiries,
-            'start_date' => $request->start_date,
-            'end_date' => $request->end_date,
-            'coordinators' => $request->coordinatorName,
-        ])->setPaper('legal', 'landscape'); // <--- set landscape
+            'inquiries'     => $inquiries,
+            'start_date'    => $request->start_date,
+            'end_date'      => $request->end_date,
+            'coordinators'  => $request->coordinatorName,
+            'customerDeliveryDate' => $request->customerDeliveryDate, // ✅ pass to view
+        ])->setPaper('legal', 'landscape');
 
         return $pdf->download("Sample_Inquiry_Report_{$request->start_date}_to_{$request->end_date}.pdf");
     }
+
+
 
     public function generateRejectReportPdf(Request $request)
     {
@@ -410,6 +424,4 @@ class ReportController extends Controller
 
         return $pdf->download($fileName);
     }
-
-
 }
