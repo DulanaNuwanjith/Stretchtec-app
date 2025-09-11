@@ -28,6 +28,7 @@ use Illuminate\Database\Eloquent\Model;
  *       'role'    => 'Supervisor',
  *   ]);
  * --------------------------------------------------------------------------
+ * @method static where(string $string, string $string1)
  */
 class OperatorsandSupervisors extends Model
 {

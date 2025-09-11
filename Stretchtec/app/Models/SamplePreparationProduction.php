@@ -34,6 +34,7 @@ use Illuminate\Database\Eloquent\Model;
  * --------------------------------------------------------------------------
  * @method static where(string $string, mixed $orderNo)
  * @method static firstOrNew(array $array)
+ * @method static findOrFail(mixed $id)
  */
 class SamplePreparationProduction extends Model
 {
