@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 
 /**
  * --------------------------------------------------------------------------
@@ -10,7 +12,7 @@ use Illuminate\Database\Eloquent\Model;
  * --------------------------------------------------------------------------
  * Represents the `sample_inquiries` table in the database.
  *
- * This model is responsible for managing customer sample inquiries
+ * This model is responsible for managing customer sample inquiries,
  * including order details, customer information, production timelines,
  * and their linkage to R&D and production processes.
  *
@@ -93,9 +95,9 @@ class SampleInquiry extends Model
      * ----------------------------------------------------------------------
      * Automatically converts attributes to proper data types.
      *
-     *  - inquiryReceiveDate   → `date`
-     *  - customerRequestDate  → `date`
-     *  - developPlannedDate   → `date`
+     *  - inquiryReceiveDate → `date`
+     *  - customerRequestDate → `date`
+     *  - developPlannedDate → `date`
      *  - customerDeliveryDate → `datetime`
      */
     protected $casts = [
@@ -113,7 +115,7 @@ class SampleInquiry extends Model
     /**
      * Each inquiry has one Sample Preparation RnD entry.
      */
-    public function samplePreparationRnD()
+    public function samplePreparationRnD(): HasOne
     {
         return $this->hasOne(SamplePreparationRnD::class);
     }
@@ -121,7 +123,7 @@ class SampleInquiry extends Model
     /**
      * Each inquiry can be linked to one Product Catalog.
      */
-    public function productCatalog()
+    public function productCatalog(): HasOne
     {
         return $this->hasOne(ProductCatalog::class);
     }
@@ -132,7 +134,7 @@ class SampleInquiry extends Model
      *
      * Uses a `hasOneThrough` relationship for indirect linkage.
      */
-    public function samplePreparationProduction()
+    public function samplePreparationProduction(): HasOneThrough
     {
         return $this->hasOneThrough(
             SamplePreparationProduction::class,
@@ -157,9 +159,9 @@ class SampleInquiry extends Model
      * SamplePreparationRnD entry (that isn't marked "No Need to Develop"),
      * a corresponding ProductCatalog record is automatically created.
      */
-    protected static function booted()
+    protected static function booted(): void
     {
-        static::updated(function ($inquiry) {
+        static::updated(static function ($inquiry) {
             if (
                 $inquiry->isDirty('referenceNo') &&
                 !empty($inquiry->referenceNo) &&

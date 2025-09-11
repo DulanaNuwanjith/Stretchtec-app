@@ -16,7 +16,7 @@ use Illuminate\Database\Eloquent\Model;
  *
  * ✅ Key Points:
  *  - `$fillable` → Defines safe attributes for mass assignment.
- *  - `$casts` → Automatically converts dates & timestamps.
+ *  - `$casts` → Automatically converts dates and timestamps.
  *  - Relationships → Connects to Sample Preparation RnD and Inquiry.
  *  - Includes an accessor (`getOrderFileUrlAttribute`) to fetch
  *    the linked order file path for easy Blade template usage.
@@ -85,10 +85,10 @@ class SamplePreparationProduction extends Model
      * Automatically converts database fields into proper PHP types.
      *
      *  - production_deadline → `date`
-     *  - order_received_at   → `datetime`
-     *  - order_start_at      → `datetime`
-     *  - order_complete_at   → `datetime`
-     *  - dispatch_to_rnd_at  → `datetime`
+     *  - order_received_at → `datetime`
+     *  - order_start_at → `datetime`
+     *  - order_complete_at → `datetime`
+     *  - dispatch_to_rnd_at → `datetime`
      */
     protected $casts = [
         'production_deadline' => 'date',
@@ -107,7 +107,7 @@ class SamplePreparationProduction extends Model
      * Belongs To → Sample Preparation RnD
      * Each production entry is linked to one RnD preparation.
      */
-    public function samplePreparationRnD()
+    public function samplePreparationRnD(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(SamplePreparationRnD::class, 'sample_preparation_rnd_id');
     }
@@ -117,7 +117,7 @@ class SamplePreparationProduction extends Model
      * Links production back to the inquiry using `order_no`.
      * Adjusts foreign keys if inquiry keys differ.
      */
-    public function sampleInquiry()
+    public function sampleInquiry(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(SampleInquiry::class, 'order_no', 'orderNo');
     }
@@ -131,12 +131,12 @@ class SamplePreparationProduction extends Model
      * Accessor: getOrderFileUrlAttribute
      * ----------------------------------------------------------------------
      * Returns the full URL to the order file uploaded with the inquiry.
-     * If no file exists, returns `null`.
+     * If no file exists, it returns `null`.
      *
      * Usage Example in Blade:
      *   <a href="{{ $production->order_file_url }}">Download File</a>
      */
-    public function getOrderFileUrlAttribute()
+    public function getOrderFileUrlAttribute(): ?string
     {
         return $this->samplePreparationRnD?->sampleInquiry?->orderFile
             ? asset('storage/' . $this->samplePreparationRnD->sampleInquiry->orderFile)

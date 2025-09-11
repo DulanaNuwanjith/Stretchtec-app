@@ -21,11 +21,11 @@ use Illuminate\Database\Eloquent\Model;
  *
  * Example:
  *   $employee = OperatorsandSupervisors::create([
- *       'empID'   => 'EMP001',
- *       'name'    => 'John Doe',
+ *       'empID' => 'EMP001',
+ *       'name' => 'John Doe',
  *       'phoneNo' => '0711234567',
  *       'address' => 'Colombo, Sri Lanka',
- *       'role'    => 'Supervisor',
+ *       'role' => 'Supervisor',
  *   ]);
  * --------------------------------------------------------------------------
  * @method static where(string $string, string $string1)
@@ -52,11 +52,11 @@ class OperatorsandSupervisors extends Model
      * Defines which attributes are safe to be mass assigned.
      *
      * Columns:
-     *  - empID   → Employee ID
-     *  - name    → Full name of the operator/supervisor
+     *  - empID → Employee ID
+     *  - name → Full name of the operator/supervisor
      *  - phoneNo → Contact number
      *  - address → Residential address
-     *  - role    → Role designation (e.g., Operator, Supervisor)
+     *  - role → Role designation (e.g., Operator, Supervisor)
      */
     protected $fillable = [
         'empID',
@@ -65,13 +65,4 @@ class OperatorsandSupervisors extends Model
         'address',
         'role',
     ];
-
-    /**
-     * ----------------------------------------------------------------------
-     * Timestamps
-     * ----------------------------------------------------------------------
-     * Ensures `created_at` and `updated_at` columns are automatically
-     * managed by Eloquent when creating or updating records.
-     */
-    public $timestamps = true;
 }

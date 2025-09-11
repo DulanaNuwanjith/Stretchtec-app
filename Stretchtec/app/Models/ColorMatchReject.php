@@ -21,6 +21,7 @@ use Illuminate\Database\Eloquent\Model;
  *  - Defines a relationship with the `SampleInquiry` model.
  * --------------------------------------------------------------------------
  * @method static where(string $string, mixed $orderNo)
+ * @method static create(array $data)
  */
 class ColorMatchReject extends Model
 {

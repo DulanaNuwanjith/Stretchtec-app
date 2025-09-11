@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\ColorMatchReject;
 use App\Models\SamplePreparationRnD;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class ColorMatchRejectController extends Controller
@@ -11,7 +13,7 @@ class ColorMatchRejectController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function getRejectDetails($id)
+    public function getRejectDetails($id): JsonResponse
     {
         $sample = SamplePreparationRnD::with('sampleInquiry')->find($id);
 
@@ -47,7 +49,7 @@ class ColorMatchRejectController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(): void
     {
         //
     }
@@ -56,7 +58,7 @@ class ColorMatchRejectController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         $request->validate([
             'id' => 'required|integer',
@@ -98,7 +100,7 @@ class ColorMatchRejectController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(ColorMatchReject $colorMatchReject)
+    public function show(ColorMatchReject $colorMatchReject): void
     {
         //
     }
@@ -107,7 +109,7 @@ class ColorMatchRejectController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(ColorMatchReject $colorMatchReject)
+    public function edit(ColorMatchReject $colorMatchReject): void
     {
         //
     }
@@ -116,7 +118,7 @@ class ColorMatchRejectController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, ColorMatchReject $colorMatchReject)
+    public function update(Request $request, ColorMatchReject $colorMatchReject): void
     {
         //
     }
@@ -125,7 +127,7 @@ class ColorMatchRejectController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(ColorMatchReject $colorMatchReject)
+    public function destroy(ColorMatchReject $colorMatchReject): void
     {
         //
     }

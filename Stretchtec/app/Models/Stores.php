@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
  * Represents the `stores` table in the database.
  *
  * This is an empty model for now. It can be extended in the future
- * to manage store-related data, including:
+ * to manage store-related data, including
  *  - Store details (name, location, manager)
  *  - Inventory tracking
  *  - Other store-related functionalities

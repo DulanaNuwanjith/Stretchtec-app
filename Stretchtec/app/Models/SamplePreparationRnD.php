@@ -3,6 +3,9 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
  * --------------------------------------------------------------------------
@@ -11,11 +14,11 @@ use Illuminate\Database\Eloquent\Model;
  * Represents the `sample_preparation_rnd` table in the database.
  *
  * This model manages the **Research & Development (RnD)** stage of the
- * sample preparation process, including:
+ * sample preparation process, including
  *  - Planning (development plans, deadlines, reference numbers)
- *  - Yarn ordering & supplier details
+ *  - Yarn ordering and supplier details
  *  - Shade and Tkt details
- *  - Colour matching timelines
+ *  - Color matching timelines
  *  - Locking mechanisms to prevent accidental overwrites
  *  - Linking back to the original customer inquiry
  *
@@ -148,7 +151,7 @@ class SamplePreparationRnD extends Model
      * Belongs To → Sample Inquiry
      * Links each RnD preparation to its parent inquiry.
      */
-    public function sampleInquiry()
+    public function sampleInquiry(): BelongsTo
     {
         return $this->belongsTo(SampleInquiry::class, 'sample_inquiry_id');
     }
@@ -157,7 +160,7 @@ class SamplePreparationRnD extends Model
      * Has One → Production
      * Each RnD record can lead to one production entry.
      */
-    public function production()
+    public function production(): HasOne
     {
         return $this->hasOne(SamplePreparationProduction::class, 'sample_preparation_rnd_id');
     }
@@ -166,7 +169,7 @@ class SamplePreparationRnD extends Model
      * Has Many → Shade Orders
      * One RnD record can be linked with multiple shade orders.
      */
-    public function shadeOrders()
+    public function shadeOrders(): HasMany
     {
         return $this->hasMany(ShadeOrder::class, 'sample_preparation_rnd_id');
     }
@@ -183,9 +186,9 @@ class SamplePreparationRnD extends Model
      *  - If `referenceNo` changes → Updates inquiry's referenceNo.
      *  - If `developPlannedDate` changes → Updates inquiry's developPlannedDate.
      */
-    protected static function booted()
+    protected static function booted(): void
     {
-        static::saved(function ($prep) {
+        static::saved(static function ($prep) {
             if ($prep->sampleInquiry && ($prep->isDirty('referenceNo') || $prep->isDirty('developPlannedDate'))) {
                 $updateData = [];
 

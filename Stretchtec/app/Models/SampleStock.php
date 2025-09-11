@@ -41,7 +41,7 @@ class SampleStock extends Model
      *
      * Includes:
      *  - reference_no → Unique reference number for the sample stock
-     *  - shade        → Color/shade of the sample
+     *  - shade → Color/shade of the sample
      *  - available_stock → Current available quantity
      *  - special_note → Optional notes regarding the stock
      */
@@ -63,7 +63,7 @@ class SampleStock extends Model
      *       return $sampleStock;
      *   });
      */
-    public function getRouteKeyName()
+    public function getRouteKeyName(): string
     {
         return 'reference_no';
     }
