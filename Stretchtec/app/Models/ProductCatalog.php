@@ -35,6 +35,7 @@ use Illuminate\Database\Eloquent\Model;
  *       'reference_added_date' => now(),
  *   ]);
  * --------------------------------------------------------------------------
+ * @method static where(string $string, mixed $orderNo)
  */
 class ProductCatalog extends Model
 {

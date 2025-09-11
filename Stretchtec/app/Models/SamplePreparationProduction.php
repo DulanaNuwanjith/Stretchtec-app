@@ -32,6 +32,7 @@ use Illuminate\Database\Eloquent\Model;
  *       'damaged_output' => 50,
  *   ]);
  * --------------------------------------------------------------------------
+ * @method static where(string $string, mixed $orderNo)
  */
 class SamplePreparationProduction extends Model
 {

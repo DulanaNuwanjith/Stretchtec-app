@@ -16,7 +16,7 @@ class ReportController extends Controller
     /**
      * Display the report generation page with customer list.
      */
-    public function showReportPage()
+    public function showReportPage(): object
     {
         $customers = SampleInquiry::select('customerName')
             ->distinct()
@@ -37,7 +37,7 @@ class ReportController extends Controller
     /**
      * Generate inquiry report filtered by customer decision and date range
      */
-    public function inquiryCustomerDecisionReport(Request $request)
+    public function inquiryCustomerDecisionReport(Request $request): object
     {
         $request->validate([
             'start_date' => 'required|date',
@@ -68,7 +68,7 @@ class ReportController extends Controller
     /**
      * Generate detailed order report by order number
      */
-    public function generateOrderReport(Request $request)
+    public function generateOrderReport(Request $request):object
     {
         $request->validate([
             'order_no' => 'required|string|exists:sample_inquiries,orderNo',
@@ -120,16 +120,14 @@ class ReportController extends Controller
             'daysToDelivery' => $daysToDelivery,
         ];
 
-        $pdf = PDF::loadView('reports.sampleOrder_report_pdf', $reportData);
-
-        return $pdf->download("Order_Report_{$orderNo}.pdf");
+        return PDF::loadView('reports.sampleOrder_report_pdf', $reportData)->download("Order_Report_{$orderNo}.pdf");
     }
 
 
     /**
      * Generate inquiry report filtered by date range
      */
-    public function inquiryRangeReport(Request $request)
+    public function inquiryRangeReport(Request $request): object
     {
         $request->validate([
             'start_date' => 'required|date',
@@ -163,7 +161,7 @@ class ReportController extends Controller
     /**
      * Generate yarn supplier spending report filtered by date range
      */
-    public function yarnSupplierSpendingReport(Request $request)
+    public function yarnSupplierSpendingReport(Request $request): object
     {
         $request->validate([
             'start_date' => 'required|date',
@@ -189,7 +187,7 @@ class ReportController extends Controller
     /**
      * Generate coordinator performance report filtered by date range
      */
-    public function coordinatorReportPdf(Request $request)
+    public function coordinatorReportPdf(Request $request): object
     {
         $request->validate([
             'start_date' => 'required|date',
@@ -244,7 +242,7 @@ class ReportController extends Controller
     /**
      * Generate coordinator performance report filtered by date range
      */
-    public function referenceDeliveryReport(Request $request)
+    public function referenceDeliveryReport(Request $request): object
     {
         $request->validate([
             'start_date' => 'required|date',
@@ -279,7 +277,7 @@ class ReportController extends Controller
     /**
      * Generate sample inquiry report filtered by date range and coordinators
      */
-    public function generateSampleInquiryReport(Request $request)
+    public function generateSampleInquiryReport(Request $request): object
     {
         $request->validate([
             'start_date' => 'required|date',
@@ -293,9 +291,9 @@ class ReportController extends Controller
                 $q->whereIn('coordinatorName', $request->coordinatorName);
             })
             ->when($request->status, function ($q) use ($request) {
-                if (in_array('Pending', $request->status) && !in_array('Delivered', $request->status)) {
+                if (in_array('Pending', $request->status, true) && !in_array('Delivered', $request->status)) {
                     $q->whereNull('customerDeliveryDate');
-                } elseif (!in_array('Pending', $request->status) && in_array('Delivered', $request->status)) {
+                } elseif (!in_array('Pending', $request->status, true) && in_array('Delivered', $request->status)) {
                     $q->whereNotNull('customerDeliveryDate');
                 }
                 // If both selected or none selected, show all
@@ -314,28 +312,28 @@ class ReportController extends Controller
         return $pdf->download("Sample_Inquiry_Report_{$request->start_date}_to_{$request->end_date}.pdf");
     }
 
-    public function generateRndReport(Request $request)
+    public function generateRndReport(Request $request): object
     {
         $request->validate([
-            'start_date'       => 'required|date',
-            'end_date'         => 'required|date|after_or_equal:start_date',
-            'status'           => 'required|array', // ['Pending', 'Delivered']
-            'coordinatorName'  => 'nullable|array',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after_or_equal:start_date',
+            'status' => 'required|array', // ['Pending', 'Delivered']
+            'coordinatorName' => 'nullable|array',
         ]);
 
         // normalize dates (avoid timezone/time issues)
         $startDate = Carbon::parse($request->start_date)->toDateString();
-        $endDate   = Carbon::parse($request->end_date)->toDateString();
+        $endDate = Carbon::parse($request->end_date)->toDateString();
 
         // normalize statuses (case-insensitive)
-        $statuses = array_map('strtolower', (array) $request->input('status', []));
-        $wantPending = in_array('pending', $statuses);
-        $wantDelivered = in_array('delivered', $statuses);
+        $statuses = array_map('strtolower', (array)$request->input('status', []));
+        $wantPending = in_array('pending', $statuses, true);
+        $wantDelivered = in_array('delivered', $statuses, true);
 
         $query = SamplePreparationRnD::with(['sampleInquiry', 'shadeOrders'])
-        ->whereHas('sampleInquiry', function ($q) use ($startDate, $endDate) {
-            $q->whereBetween('inquiryReceiveDate', [$startDate, $endDate]);
-        });
+            ->whereHas('sampleInquiry', function ($q) use ($startDate, $endDate) {
+                $q->whereBetween('inquiryReceiveDate', [$startDate, $endDate]);
+            });
 
         // coordinator filter (unchanged)
         if ($request->filled('coordinatorName') && !empty($request->coordinatorName)) {
@@ -345,12 +343,12 @@ class ReportController extends Controller
         }
 
         // status filter using the related SampleInquiry.customerDeliveryDate
-        if ($wantPending && ! $wantDelivered) {
+        if ($wantPending && !$wantDelivered) {
             // only Pending -> sample_inquiries.customerDeliveryDate IS NULL
             $query->whereHas('sampleInquiry', function ($sq) {
                 $sq->whereNull('customerDeliveryDate');
             });
-        } elseif ($wantDelivered && ! $wantPending) {
+        } elseif ($wantDelivered && !$wantPending) {
             // only Delivered -> sample_inquiries.customerDeliveryDate IS NOT NULL
             $query->whereHas('sampleInquiry', function ($sq) {
                 $sq->whereNotNull('customerDeliveryDate');
@@ -372,17 +370,17 @@ class ReportController extends Controller
         });
 
         $pdf = Pdf::loadView('reports.rnd_pending_delivered_pdf', [
-            'records'             => $records,
-            'start_date'          => $startDate,
-            'end_date'            => $endDate,
-            'selectedCoordinators'=> $request->coordinatorName ?? [],
-            'selectedStatuses'    => $request->status ?? [],
+            'records' => $records,
+            'start_date' => $startDate,
+            'end_date' => $endDate,
+            'selectedCoordinators' => $request->coordinatorName ?? [],
+            'selectedStatuses' => $request->status ?? [],
         ])->setPaper('legal', 'landscape');
 
         return $pdf->download("RnD_Report_{$startDate}_to_{$endDate}.pdf");
     }
 
-    public function generateRejectReportPdf(Request $request)
+    public function generateRejectReportPdf(Request $request): object
     {
         $request->validate([
             'reject_no' => 'required|string',
@@ -429,7 +427,7 @@ class ReportController extends Controller
         return $pdf->download("Reject_Report_{$rejectNo}.pdf");
     }
 
-    public function generateCustomerRejectReportPdf(Request $request)
+    public function generateCustomerRejectReportPdf(Request $request): object
     {
         $request->validate([
             'start_date' => 'required|date',
@@ -488,6 +486,4 @@ class ReportController extends Controller
 
         return $pdf->download($fileName);
     }
-
-
 }

@@ -20,6 +20,7 @@ use Illuminate\Database\Eloquent\Model;
  *  - Uses `$casts` to automatically handle date/datetime conversions.
  *  - Defines a relationship with the `SampleInquiry` model.
  * --------------------------------------------------------------------------
+ * @method static where(string $string, mixed $orderNo)
  */
 class ColorMatchReject extends Model
 {

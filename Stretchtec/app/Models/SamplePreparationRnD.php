@@ -39,6 +39,8 @@ use Illuminate\Database\Eloquent\Model;
  *       'yarnSupplier' => 'ABC Textiles',
  *   ]);
  * --------------------------------------------------------------------------
+ * @method static where(string $string, mixed $orderNo)
+ * @method static whereBetween(string $string, array $array)
  */
 class SamplePreparationRnD extends Model
 {
