@@ -61,14 +61,14 @@ class ReportController extends Controller
             'customer' => $request->customer,
         ]);
 
-        return $pdf->download("Inquiry_Customer_Decision_Report_{$request->start_date}_to_{$request->end_date}.pdf");
+        return $pdf->download("Inquiry_Customer_Decision_Report_{$request->start_date}_to_$request->end_date.pdf");
     }
 
 
     /**
      * Generate detailed order report by order number
      */
-    public function generateOrderReport(Request $request):object
+    public function generateOrderReport(Request $request): object
     {
         $request->validate([
             'order_no' => 'required|string|exists:sample_inquiries,orderNo',
@@ -120,7 +120,7 @@ class ReportController extends Controller
             'daysToDelivery' => $daysToDelivery,
         ];
 
-        return PDF::loadView('reports.sampleOrder_report_pdf', $reportData)->download("Order_Report_{$orderNo}.pdf");
+        return PDF::loadView('reports.sampleOrder_report_pdf', $reportData)->download("Order_Report_$orderNo.pdf");
     }
 
 
@@ -154,7 +154,7 @@ class ReportController extends Controller
             'end_date' => $request->end_date,
         ]);
 
-        return $pdf->download("Inquiry_Report_{$request->start_date}_to_{$request->end_date}.pdf");
+        return $pdf->download("Inquiry_Report_{$request->start_date}_to_$request->end_date.pdf");
     }
 
 
@@ -180,7 +180,7 @@ class ReportController extends Controller
             'end_date' => $request->end_date,
         ]);
 
-        return $pdf->download("Yarn_Supplier_Spending_{$request->start_date}_to_{$request->end_date}.pdf");
+        return $pdf->download("Yarn_Supplier_Spending_{$request->start_date}_to_$request->end_date.pdf");
     }
 
 
@@ -235,7 +235,7 @@ class ReportController extends Controller
 
         $pdf = Pdf::loadView('reports.coordinator_report_pdf', compact('report', 'startDate', 'endDate'));
 
-        return $pdf->download("Coordinator_Report_{$startDate}_to_{$endDate}.pdf");
+        return $pdf->download("Coordinator_Report_{$startDate}_to_$endDate.pdf");
     }
 
 
@@ -270,7 +270,7 @@ class ReportController extends Controller
 
         $pdf = PDF::loadView('reports.reference_delivery_report_pdf', compact('inquiries', 'startDate', 'endDate'));
 
-        return $pdf->download("Reference_Delivery_Report_{$startDate}_to_{$endDate}.pdf");
+        return $pdf->download("Reference_Delivery_Report_{$startDate}_to_$endDate.pdf");
     }
 
 
@@ -291,9 +291,9 @@ class ReportController extends Controller
                 $q->whereIn('coordinatorName', $request->coordinatorName);
             })
             ->when($request->status, function ($q) use ($request) {
-                if (in_array('Pending', $request->status, true) && !in_array('Delivered', $request->status)) {
+                if (in_array('Pending', $request->status, true) && !in_array('Delivered', $request->status, true)) {
                     $q->whereNull('customerDeliveryDate');
-                } elseif (!in_array('Pending', $request->status, true) && in_array('Delivered', $request->status)) {
+                } elseif (!in_array('Pending', $request->status, true) && in_array('Delivered', $request->status, true)) {
                     $q->whereNotNull('customerDeliveryDate');
                 }
                 // If both selected or none selected, show all
@@ -309,7 +309,7 @@ class ReportController extends Controller
             'coordinators' => $request->coordinatorName,
         ])->setPaper('legal', 'landscape'); // <--- set landscape
 
-        return $pdf->download("Sample_Inquiry_Report_{$request->start_date}_to_{$request->end_date}.pdf");
+        return $pdf->download("Sample_Inquiry_Report_{$request->start_date}_to_$request->end_date.pdf");
     }
 
     public function generateRndReport(Request $request): object
@@ -377,7 +377,7 @@ class ReportController extends Controller
             'selectedStatuses' => $request->status ?? [],
         ])->setPaper('legal', 'landscape');
 
-        return $pdf->download("RnD_Report_{$startDate}_to_{$endDate}.pdf");
+        return $pdf->download("RnD_Report_{$startDate}_to_$endDate.pdf");
     }
 
     public function generateRejectReportPdf(Request $request): object
@@ -422,9 +422,9 @@ class ReportController extends Controller
             'rejectNo' => $rejectNo,
             'customerNames' => $customerNames,
             'coordinatorNames' => $coordinatorNames,
-        ])->setPaper('A4', 'portrait');
+        ])->setPaper('A4');
 
-        return $pdf->download("Reject_Report_{$rejectNo}.pdf");
+        return $pdf->download("Reject_Report_$rejectNo.pdf");
     }
 
     public function generateCustomerRejectReportPdf(Request $request): object
@@ -452,7 +452,7 @@ class ReportController extends Controller
         $inquiries = $query->get();
 
         // Group by rejectNO
-        $rejectGroups = $inquiries->groupBy('rejectNO')->map(function ($items, $rejectNo) {
+        $rejectGroups = $inquiries->groupBy('rejectNO')->map(function ($items) {
             $orders = $items->groupBy('orderNo')->map(function ($orderItems, $orderNo) {
                 $totalYarnPrice = $orderItems->sum(fn($i) => $i->samplePreparationRnD->yarnPrice ?? 0);
                 $customerDecisions = $orderItems->pluck('customerDecision')->unique()->join(', ');
@@ -478,11 +478,11 @@ class ReportController extends Controller
             'customerName' => $customer ?: 'All Customers',
             'start_date' => $start,
             'end_date' => $end,
-        ])->setPaper('A4', 'portrait');
+        ])->setPaper('A4');
 
         // Build filename safely
         $fileNameCustomer = $customer ?: 'All_Customers';
-        $fileName = "Customer_Reject_Report_{$fileNameCustomer}_{$start}_to_{$end}.pdf";
+        $fileName = "Customer_Reject_Report_{$fileNameCustomer}_{$start}_to_$end.pdf";
 
         return $pdf->download($fileName);
     }
