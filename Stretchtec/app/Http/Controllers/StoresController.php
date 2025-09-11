@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\SampleStock;
 use App\Models\Stores;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 
 class StoresController extends Controller
@@ -11,7 +13,7 @@ class StoresController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index(Request $request): View|Factory
     {
         // Get search term if any
         $search = $request->input('search');
@@ -21,9 +23,9 @@ class StoresController extends Controller
 
         if ($search) {
             $query->where(function ($q) use ($search) {
-                $q->where('reference_no', 'like', "%{$search}%")
-                    ->orWhere('shade', 'like', "%{$search}%")
-                    ->orWhere('special_note', 'like', "%{$search}%");
+                $q->where('reference_no', 'like', "%$search%")
+                    ->orWhere('shade', 'like', "%$search%")
+                    ->orWhere('special_note', 'like', "%$search%");
             });
         }
 
@@ -40,7 +42,7 @@ class StoresController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(): void
     {
         //
     }
@@ -49,7 +51,7 @@ class StoresController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request): void
     {
         //
     }
@@ -58,7 +60,7 @@ class StoresController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Stores $stores)
+    public function show(Stores $stores): void
     {
         //
     }
@@ -67,7 +69,7 @@ class StoresController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Stores $stores)
+    public function edit(Stores $stores): void
     {
         //
     }
@@ -76,7 +78,7 @@ class StoresController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Stores $stores)
+    public function update(Request $request, Stores $stores): void
     {
         //
     }
@@ -85,7 +87,7 @@ class StoresController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Stores $stores)
+    public function destroy(Stores $stores): void
     {
         //
     }
