@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * --------------------------------------------------------------------------
@@ -30,6 +31,8 @@ use Illuminate\Database\Eloquent\Model;
  *       'pst_no' => 'PST123',
  *   ]);
  * --------------------------------------------------------------------------
+ * @method static findOrFail(mixed $shadeId)
+ * @method static whereIn(string $string, mixed $shade_ids)
  */
 class ShadeOrder extends Model
 {
@@ -76,7 +79,7 @@ class ShadeOrder extends Model
      * Connects this shade order to its corresponding product catalogs
      * through the `sample_preparation_rnd_id`.
      */
-    public function productCatalogs()
+    public function productCatalogs(): BelongsTo
     {
         return $this->belongsTo(ProductCatalog::class, 'sample_preparation_rnd_id', 'sample_preparation_rnd_id');
     }

@@ -18,6 +18,8 @@ use Illuminate\Database\Eloquent\Model;
  *  - Uses `$fillable` to protect against mass assignment vulnerabilities.
  *  - Uses `$casts` to automatically handle date conversions.
  * --------------------------------------------------------------------------
+ * @method static create(array $array)
+ * @method static findOrFail($id)
  */
 class LeftoverYarn extends Model
 {

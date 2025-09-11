@@ -33,6 +33,7 @@ use Illuminate\Database\Eloquent\Model;
  *   ]);
  * --------------------------------------------------------------------------
  * @method static where(string $string, mixed $orderNo)
+ * @method static firstOrNew(array $array)
  */
 class SamplePreparationProduction extends Model
 {

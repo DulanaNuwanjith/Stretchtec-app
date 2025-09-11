@@ -9,15 +9,17 @@ use App\Models\SamplePreparationRnD;
 use App\Models\SampleStock;
 use App\Models\ShadeOrder;
 use Carbon\Carbon;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\View\View;
 
 class SamplePreparationRnDController extends Controller
 {
     /**
      * Display a listing of the Sample Preparation RnD records with filters and pagination.
      */
-    public function viewRnD(Request $request)
+    public function viewRnD(Request $request): View
     {
         // Eager load sampleInquiry and shadeOrders
         $query = SamplePreparationRnD::with(['sampleInquiry', 'shadeOrders']);
@@ -32,7 +34,7 @@ class SamplePreparationRnDController extends Controller
         }
 
         if ($request->filled('shade')) {
-            // Filter by shade_orders table if needed
+            // Filter by the shade_orders table if needed
             $query->whereHas('shadeOrders', function ($q) use ($request) {
                 $q->where('shade', $request->shade);
             });
@@ -105,7 +107,7 @@ class SamplePreparationRnDController extends Controller
     /**
      * Mark Colour Match as Sent or Received and update production status accordingly.
      */
-    public function markColourMatchSent(Request $request)
+    public function markColourMatchSent(Request $request): RedirectResponse
     {
         $request->validate([
             'id' => 'required|exists:sample_preparation_rnd,id',
@@ -129,7 +131,7 @@ class SamplePreparationRnDController extends Controller
     /**
      * Mark Colour Match as Received and update production status accordingly.
      */
-    public function markColourMatchReceive(Request $request)
+    public function markColourMatchReceive(Request $request): RedirectResponse
     {
         $request->validate([
             'id' => 'required|exists:sample_preparation_rnd,id',
@@ -153,7 +155,7 @@ class SamplePreparationRnDController extends Controller
     /**
      * Mark Yarn as Ordered along with shades and update production status.
      */
-    public function markYarnOrdered(Request $request)
+    public function markYarnOrdered(Request $request): RedirectResponse
     {
         // Validate the request
         $request->validate([
@@ -161,7 +163,7 @@ class SamplePreparationRnDController extends Controller
             'yarnOrderedPONumber' => 'nullable|string',
             'value' => 'nullable|numeric',
             'shades' => 'nullable|array', // Accept array of shades
-            'shades.*' => 'nullable|string', // Each shade as string
+            'shades.*' => 'nullable|string', // Each shade as a string
             'tkt' => 'nullable|string',
             'yarnPrice' => 'nullable|string',
             'yarnSupplier' => 'required|string',
@@ -194,7 +196,7 @@ class SamplePreparationRnDController extends Controller
             // Delete old shade records if any
             $rnd->shadeOrders()->delete();
 
-            // Insert new shade records into shade_orders table
+            // Insert new shade records into the shade_orders table
             foreach ($request->shades as $shade) {
                 $rnd->shadeOrders()->create([
                     'shade' => $shade,
@@ -202,7 +204,7 @@ class SamplePreparationRnDController extends Controller
                 ]);
             }
 
-            // Update RnD shade column with comma-separated values
+            // Update the RnD shade column with comma-separated values
             $rnd->shade = implode(', ', $request->shades);
             $rnd->save();
         }
@@ -221,7 +223,7 @@ class SamplePreparationRnDController extends Controller
     /**
      * Mark Yarn as Received along with PST numbers and update production status.
      */
-    public function markYarnReceived(Request $request)
+    public function markYarnReceived(Request $request): RedirectResponse
     {
         $request->validate([
             'rnd_id' => 'required|exists:sample_preparation_rnd,id',
@@ -237,12 +239,12 @@ class SamplePreparationRnDController extends Controller
             $shade = ShadeOrder::findOrFail($shadeId);
 
             // Only process PST if RnD supplier is Pan Asia
-            if (trim(strtolower($rnd->yarnSupplier)) === 'pan asia') {
+            if (strtolower(trim($rnd->yarnSupplier)) === 'pan asia') {
                 $pstNoInput = $request->pst_no[$shadeId] ?? null;
 
                 if ($pstNoInput) {
                     // Clean input, multiple comma-separated values allowed
-                    $pstNumbers = array_map(function ($num) {
+                    $pstNumbers = array_map(static function ($num) {
                         $num = preg_replace('/\D/', '', $num); // keep only digits
                         return 'PA/ST-' . str_pad($num, 5, '0', STR_PAD_LEFT);
                     }, explode(',', $pstNoInput));
@@ -294,7 +296,7 @@ class SamplePreparationRnDController extends Controller
     /**
      * Mark selected shades as Sent to Production and update statuses accordingly.
      */
-    public function markSendToProduction(Request $request)
+    public function markSendToProduction(Request $request): RedirectResponse
     {
         $request->validate([
             'rnd_id' => 'required|exists:sample_preparation_rnd,id',
@@ -341,7 +343,7 @@ class SamplePreparationRnDController extends Controller
             }
         } else {
             // Partially sent
-            $rnd->productionStatus = 'Sent to Production*'; // distinguish partial
+            $rnd->productionStatus = 'Sent to Production*';
             $rnd->save();
         }
 
@@ -352,7 +354,7 @@ class SamplePreparationRnDController extends Controller
     /**
      * Set and lock the Development Plan Date for a Sample Preparation RnD record.
      */
-    public function setDevelopPlanDate(Request $request)
+    public function setDevelopPlanDate(Request $request): RedirectResponse
     {
         $request->validate([
             'id' => 'required|exists:sample_preparation_rnd,id',
@@ -376,7 +378,7 @@ class SamplePreparationRnDController extends Controller
     /**
      * Lock the PO Number field to prevent further edits when yarn ordered PO Number is added
      */
-    public function lockPoField(Request $request)
+    public function lockPoField(Request $request): RedirectResponse
     {
         $request->validate([
             'id' => 'required|exists:sample_preparation_rnd,id',
@@ -397,7 +399,7 @@ class SamplePreparationRnDController extends Controller
     /**
      * Lock the Shade field to prevent further edits when shades are added
      */
-    public function lockShadeField(Request $request)
+    public function lockShadeField(Request $request): RedirectResponse
     {
         $request->validate([
             'id' => 'required|exists:sample_preparation_rnd,id',
@@ -418,7 +420,7 @@ class SamplePreparationRnDController extends Controller
     /**
      * Lock the TKT field to prevent further edits when TKT is added
      */
-    public function lockTktField(Request $request)
+    public function lockTktField(Request $request): RedirectResponse
     {
         $request->validate([
             'id' => 'required|exists:sample_preparation_rnd,id',
@@ -439,7 +441,7 @@ class SamplePreparationRnDController extends Controller
     /**
      * Lock the Supplier field to prevent further edits when Supplier is added
      */
-    public function lockSupplierField(Request $request)
+    public function lockSupplierField(Request $request): RedirectResponse
     {
         $request->validate([
             'id' => 'required|exists:sample_preparation_rnd,id',
@@ -460,7 +462,7 @@ class SamplePreparationRnDController extends Controller
     /**
      * Lock the Yarn Ordered Weight field to prevent further edits when weight is added
      */
-    public function lockDeadlineField(Request $request)
+    public function lockDeadlineField(Request $request): RedirectResponse
     {
         $request->validate([
             'id' => 'required|exists:sample_preparation_rnd,id',
@@ -481,7 +483,7 @@ class SamplePreparationRnDController extends Controller
     /**
      * Lock the Reference No field, create Sample Stock for dispatched shades, and sync with Sample Inquiry
      */
-    public function lockReferenceField(Request $request)
+    public function lockReferenceField(Request $request): RedirectResponse
     {
         $request->validate([
             'id' => 'required|exists:sample_preparation_rnd,id',
@@ -493,7 +495,7 @@ class SamplePreparationRnDController extends Controller
         $referenceNo = $request->input('referenceNo');
         $shadeRef = $request->input('shade');
 
-        // Only check for duplicates if type is 'Need to Develop' or 'Tape Match Pan Asia'
+        // Only check for duplicates if the type is 'Need to Develop' or 'Tape Match Pan Asia'
         if (in_array($prep->alreadyDeveloped, ['Need to Develop', 'Tape Match Pan Asia'])) {
             $exists = SamplePreparationRnD::where('referenceNo', $referenceNo)
                 ->where('id', '!=', $prep->id)
@@ -561,7 +563,7 @@ class SamplePreparationRnDController extends Controller
     /**
      * Update the Developed Status and related fields, locking them as necessary.
      */
-    public function updateDevelopedStatus(Request $request)
+    public function updateDevelopedStatus(Request $request): RedirectResponse
     {
         $request->validate([
             'id' => 'required|exists:sample_preparation_rnd,id',
@@ -623,7 +625,7 @@ class SamplePreparationRnDController extends Controller
     /**
      * Update yarn weights (ordered or leftover) and create LeftoverYarn records as needed.
      */
-    public function updateYarnWeights(Request $request)
+    public function updateYarnWeights(Request $request): RedirectResponse
     {
         $request->validate([
             'id' => 'required|exists:sample_preparation_rnd,id',
@@ -684,7 +686,7 @@ class SamplePreparationRnDController extends Controller
     /**
      * Handle borrowing of leftover yarn, updating stock or deleting record as needed.
      */
-    public function borrow(Request $request, $id)
+    public function borrow(Request $request, $id): RedirectResponse
     {
         $request->validate([
             'borrow_qty' => 'required|integer|min:1',
@@ -697,7 +699,7 @@ class SamplePreparationRnDController extends Controller
             return back()->with('error', 'Borrowed quantity exceeds available stock.');
         }
 
-        if ($borrowQty == $leftover->available_stock) {
+        if ($borrowQty === $leftover->available_stock) {
             $leftover->delete();
             return back()->with('success', 'All yarn borrowed. Record deleted.');
         }
@@ -707,5 +709,4 @@ class SamplePreparationRnDController extends Controller
 
         return back()->with('success', 'Borrowed successfully.');
     }
-
 }

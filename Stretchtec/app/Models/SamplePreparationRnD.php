@@ -41,6 +41,8 @@ use Illuminate\Database\Eloquent\Model;
  * --------------------------------------------------------------------------
  * @method static where(string $string, mixed $orderNo)
  * @method static whereBetween(string $string, array $array)
+ * @method static whereNotNull(string $string)
+ * @method static findOrFail(mixed $id)
  */
 class SamplePreparationRnD extends Model
 {
