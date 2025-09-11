@@ -285,7 +285,7 @@ class ProductCatalogController extends Controller
             $safeReference = preg_replace('/[^A-Za-z0-9_\-]/', '_', $productCatalog->reference_no); // clean filename
             $filename = $safeReference . '.' . $extension;
 
-            // Save file with reference_no as name
+            // Save a file with reference_no as name
             $path = $file->storeAs('approval_cards', $filename, 'public');
 
             $updateData['approval_card'] = $path;
@@ -354,7 +354,7 @@ class ProductCatalogController extends Controller
             $catalog->save();
 
             return redirect()->back()->with('success', 'Shade updated successfully.');
-        } catch (Exception $e) {
+        } catch (Exception) {
             return redirect()->back()->with('error', 'Failed to update shade. Please try again.');
         }
     }

@@ -4,21 +4,23 @@ namespace App\Http\Controllers;
 
 use App\Models\LeftoverYarn;
 use Illuminate\Http\Request;
+use Illuminate\View\Factory;
+use Illuminate\View\View;
 
 class LeftoverYarnController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index(Request $request): View|Factory
     {
         $search = $request->input('search');
 
         $leftoverYarns = LeftoverYarn::query()
             ->when($search, function ($query, $search) {
-                $query->where('shade', 'like', "%{$search}%")
-                    ->orWhere('po_number', 'like', "%{$search}%")
-                    ->orWhere('yarn_supplier', 'like', "%{$search}%");
+                $query->where('shade', 'like', "%$search%")
+                    ->orWhere('po_number', 'like', "%$search%")
+                    ->orWhere('yarn_supplier', 'like', "%$search%");
                 // Add other searchable columns here if needed
             })
             ->paginate(10) // Adjust pagination size as needed
@@ -31,7 +33,7 @@ class LeftoverYarnController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(): void
     {
         //
     }
@@ -40,7 +42,7 @@ class LeftoverYarnController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request): void
     {
         //
     }
@@ -49,7 +51,7 @@ class LeftoverYarnController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(LeftoverYarn $leftoverYarn)
+    public function show(LeftoverYarn $leftoverYarn): void
     {
         //
     }
@@ -58,7 +60,7 @@ class LeftoverYarnController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(LeftoverYarn $leftoverYarn)
+    public function edit(LeftoverYarn $leftoverYarn): void
     {
         //
     }
@@ -67,7 +69,7 @@ class LeftoverYarnController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, LeftoverYarn $leftoverYarn)
+    public function update(Request $request, LeftoverYarn $leftoverYarn): void
     {
         //
     }
@@ -76,7 +78,7 @@ class LeftoverYarnController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(LeftoverYarn $leftoverYarn)
+    public function destroy(LeftoverYarn $leftoverYarn): void
     {
         //
     }
