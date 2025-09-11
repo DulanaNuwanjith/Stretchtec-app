@@ -8,13 +8,15 @@ use App\Models\SamplePreparationProduction;
 use App\Models\SamplePreparationRnD;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\View\Factory;
+use Illuminate\View\View;
 
 class DashboardController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): View|Factory
     {
         $allSamplesReceived = SampleInquiry::all()->count();
         $allSamplesReceivedWithin30Days = SampleInquiry::where('created_at', '>=', now()->subDays(30))->count();
@@ -35,15 +37,15 @@ class DashboardController extends Controller
             ->where('created_at', '>=', now()->subDays(30))
             ->count();
 
-        //Get sample delivered by checking null in delivery date
+        //Get a sample delivered by checking null in the delivery date
         $ordersDelivered = SampleInquiry::whereNotNull('customerDeliveryDate')->count();
 
-        //Get sample delivered by checking null in delivery date within 30 days
+        //Get a sample delivered by checking null in the delivery date within 30 days
         $ordersDeliveredWithin30Days = SampleInquiry::whereNotNull('customerDeliveryDate')
             ->where('created_at', '>=', now()->subDays(30))
             ->count();
 
-        // Get distinct Yarn Suppliers from Sample Preparation RnD table
+        // Get distinct Yarn Suppliers from the Sample Preparation RnD table
         $yarnSuppliers = SamplePreparationRnD::distinct()
             ->pluck('yarnSupplier')
             ->toArray();
@@ -62,17 +64,17 @@ class DashboardController extends Controller
             $yarnOrderedNotReceived[$supplier] = $orderedCount;
         }
 
-        // Sum of available_stock from LeftoverYarn for last 60 days
+        // Sum of available_stock from LeftoverYarn for the last 60 days
         $totalLeftOverYarn = LeftoverYarn::where('created_at', '>=', Carbon::now()->subDays(30))
             ->sum('available_stock');
-        $totalLeftOverYarn = number_format($totalLeftOverYarn, 0);
+        $totalLeftOverYarn = number_format($totalLeftOverYarn);
 
-        // Sum of damaged_output from SamplePreparationProduction for last 60 days
+        // Sum of damaged_output from SamplePreparationProduction for the last 60 days
         $totalDamagedOutput = SamplePreparationProduction::where('created_at', '>=', Carbon::now()->subDays(30))
             ->sum('damaged_output');
-        $totalDamagedOutput = number_format($totalDamagedOutput, 0);
+        $totalDamagedOutput = number_format($totalDamagedOutput);
 
-        // Sum of production_output and damaged_output for last 60 days
+        // Sum of production_output and damaged_output for the last 60 days
         $prodOutput = SamplePreparationProduction::where('created_at', '>=', Carbon::now()->subDays(30))
             ->sum('production_output');
 
@@ -80,7 +82,7 @@ class DashboardController extends Controller
             ->sum('damaged_output');
 
         $totalProductionOutput = $prodOutput - $damageOutput;
-        $totalProductionOutput = number_format($totalProductionOutput, 0);
+        $totalProductionOutput = number_format($totalProductionOutput);
 
         // Get distinct customer coordinators
         $coordinatorNames = User::where('role', 'CUSTOMERCOORDINATOR')
@@ -105,7 +107,7 @@ class DashboardController extends Controller
         }
 
 
-        // Get distinct customer names from SampleInquiry table
+        // Get distinct customer names from the SampleInquiry table
         $customerNames = SampleInquiry::distinct()
             ->pluck('customerName')
             ->toArray();

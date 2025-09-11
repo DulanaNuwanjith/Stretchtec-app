@@ -39,6 +39,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static whereNotNull(string $string)
  * @method static findOrFail($id)
  * @method static create(array $array)
+ * @method static distinct()
+ * @method static whereIn(string $string, string[] $array)
  */
 class SampleInquiry extends Model
 {
