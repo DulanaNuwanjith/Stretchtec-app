@@ -25,6 +25,8 @@ use Illuminate\Database\Eloquent\Model;
  *       'special_note' => 'Keep away from sunlight',
  *   ]);
  * --------------------------------------------------------------------------
+ * @method static create(array $array)
+ * @method static findOrFail($id)
  */
 class SampleStock extends Model
 {
