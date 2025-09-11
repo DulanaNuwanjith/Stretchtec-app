@@ -320,10 +320,10 @@ class ReportController extends Controller
     public function generateRndReport(Request $request)
     {
         $request->validate([
-            'start_date' => 'required|date',
-            'end_date'   => 'required|date|after_or_equal:start_date',
-            'status'     => 'required|array', // ['Pending', 'Delivered']
-            'coordinatorName' => 'nullable|array',
+            'start_date'       => 'required|date',
+            'end_date'         => 'required|date|after_or_equal:start_date',
+            'status'           => 'required|array', // ['Pending', 'Delivered']
+            'coordinatorName'  => 'nullable|array',
         ]);
 
         $startDate = $request->start_date;
@@ -337,16 +337,21 @@ class ReportController extends Controller
                 });
             })
             ->when($request->status, function ($q) use ($request) {
-                // Match logic with SampleInquiryReport
-                if (in_array('Pending', $request->status) && !in_array('Delivered', $request->status)) {
-                    $q->where(function ($sub) {
-                        $sub->whereNull('productionStatus')
-                            ->orWhere('productionStatus', '!=', 'Order Delivered');
+                $statuses = $request->status;
+
+                // Only Pending → customerDeliveryDate IS NULL
+                if (in_array('Pending', $statuses) && !in_array('Delivered', $statuses)) {
+                    $q->whereHas('sampleInquiry', function ($sq) {
+                        $sq->whereNull('customerDeliveryDate');
                     });
-                } elseif (!in_array('Pending', $request->status) && in_array('Delivered', $request->status)) {
-                    $q->where('productionStatus', 'Order Delivered');
                 }
-                // If both selected → show all
+                // Only Delivered → customerDeliveryDate IS NOT NULL
+                elseif (!in_array('Pending', $statuses) && in_array('Delivered', $statuses)) {
+                    $q->whereHas('sampleInquiry', function ($sq) {
+                        $sq->whereNotNull('customerDeliveryDate');
+                    });
+                }
+                // Both selected → show all (no filtering)
             });
 
         $records = $query->orderBy('id', 'desc')->get();
