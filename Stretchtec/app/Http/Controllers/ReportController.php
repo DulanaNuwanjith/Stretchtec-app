@@ -314,6 +314,74 @@ class ReportController extends Controller
         return $pdf->download("Sample_Inquiry_Report_{$request->start_date}_to_{$request->end_date}.pdf");
     }
 
+    public function generateRndReport(Request $request)
+    {
+        $request->validate([
+            'start_date'       => 'required|date',
+            'end_date'         => 'required|date|after_or_equal:start_date',
+            'status'           => 'required|array', // ['Pending', 'Delivered']
+            'coordinatorName'  => 'nullable|array',
+        ]);
+
+        // normalize dates (avoid timezone/time issues)
+        $startDate = Carbon::parse($request->start_date)->toDateString();
+        $endDate   = Carbon::parse($request->end_date)->toDateString();
+
+        // normalize statuses (case-insensitive)
+        $statuses = array_map('strtolower', (array) $request->input('status', []));
+        $wantPending = in_array('pending', $statuses);
+        $wantDelivered = in_array('delivered', $statuses);
+
+        $query = SamplePreparationRnD::with(['sampleInquiry', 'shadeOrders'])
+        ->whereHas('sampleInquiry', function ($q) use ($startDate, $endDate) {
+            $q->whereBetween('inquiryReceiveDate', [$startDate, $endDate]);
+        });
+
+        // coordinator filter (unchanged)
+        if ($request->filled('coordinatorName') && !empty($request->coordinatorName)) {
+            $query->whereHas('sampleInquiry', function ($sq) use ($request) {
+                $sq->whereIn('coordinatorName', $request->coordinatorName);
+            });
+        }
+
+        // status filter using the related SampleInquiry.customerDeliveryDate
+        if ($wantPending && ! $wantDelivered) {
+            // only Pending -> sample_inquiries.customerDeliveryDate IS NULL
+            $query->whereHas('sampleInquiry', function ($sq) {
+                $sq->whereNull('customerDeliveryDate');
+            });
+        } elseif ($wantDelivered && ! $wantPending) {
+            // only Delivered -> sample_inquiries.customerDeliveryDate IS NOT NULL
+            $query->whereHas('sampleInquiry', function ($sq) {
+                $sq->whereNotNull('customerDeliveryDate');
+            });
+        }
+        // both selected -> show all (no additional filter)
+
+        // debug - uncomment if you want to log the built SQL & bindings
+        // Log::debug('RnD query SQL', ['sql' => $query->toSql(), 'bindings' => $query->getBindings(), 'statuses' => $statuses]);
+
+        $records = $query->orderBy('id', 'desc')->get();
+
+        // attach a derived `status` property for the view
+        $records = $records->map(function ($record) {
+            $record->status = ($record->sampleInquiry && $record->sampleInquiry->customerDeliveryDate)
+                ? 'Delivered'
+                : 'Pending';
+            return $record;
+        });
+
+        $pdf = Pdf::loadView('reports.rnd_pending_delivered_pdf', [
+            'records'             => $records,
+            'start_date'          => $startDate,
+            'end_date'            => $endDate,
+            'selectedCoordinators'=> $request->coordinatorName ?? [],
+            'selectedStatuses'    => $request->status ?? [],
+        ])->setPaper('legal', 'landscape');
+
+        return $pdf->download("RnD_Report_{$startDate}_to_{$endDate}.pdf");
+    }
+
     public function generateRejectReportPdf(Request $request)
     {
         $request->validate([

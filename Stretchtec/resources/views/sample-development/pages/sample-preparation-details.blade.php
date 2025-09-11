@@ -138,6 +138,10 @@
                                     <img src="{{ asset('icons/filter.png') }}" class="w-6 h-6" alt="Filter Icon">
                                     Filters
                                 </button>
+                                <button onclick="toggleReportForm()"
+                                    class="bg-white border border-blue-500 text-blue-500 hover:text-blue-600 hover:border-blue-600 font-semibold py-1 px-3 rounded shadow flex items-center gap-2 mb-6 ml-2">
+                                    Generate Report
+                                </button>
                             </div>
 
                             <div id="filterFormContainer" class="hidden mt-4">
@@ -359,25 +363,148 @@
                                 </form>
                             </div>
 
-                            <div class="flex justify-between items-center mb-6">
-                                <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Sample Preparation R & D
-                                    Records
-                                </h1>
+                            <div class="flex-1">
+                                <div id="rndReportFormContainer" class="hidden mt-4">
+                                    <form action="{{ route('report.rndReport') }}" method="POST"
+                                        class="flex space-x-3">
+                                        @csrf
 
-                                {{-- Other Tabs Buttons --}}
-                                <div class="flex space-x-3">
-                                    <a href="{{ route('sampleStock.index') }}">
-                                        <button
-                                            class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded shadow">
-                                            Sample Stock Management
-                                        </button>
-                                    </a>
-                                    <a href="{{ route('leftoverYarn.index') }}">
-                                        <button
-                                            class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded shadow">
-                                            Leftover Yarn Management
-                                        </button>
-                                    </a>
+                                        <!-- Start Date -->
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Start
+                                                Date</label>
+                                            <input type="date" name="start_date"
+                                                class="border rounded w-full p-2 mt-1" required>
+                                        </div>
+
+                                        <!-- End Date -->
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">End
+                                                Date</label>
+                                            <input type="date" name="end_date" class="border rounded w-full p-2 mt-1"
+                                                required>
+                                        </div>
+
+                                        <!-- Coordinator Dropdown -->
+                                        <div class="relative inline-block text-left w-56">
+                                            <label
+                                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Coordinator
+                                                Name</label>
+                                            <div>
+                                                <button type="button" id="coordinatorDropdownRnd"
+                                                    class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10 dark:bg-gray-700 dark:text-white">
+                                                    <span id="selectedCoordinatorsRnd">Select Coordinator(s)</span>
+                                                    <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20"
+                                                        fill="currentColor">
+                                                        <path fill-rule="evenodd"
+                                                            d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
+                                                            clip-rule="evenodd" />
+                                                    </svg>
+                                                </button>
+                                            </div>
+
+                                            <div id="coordinatorDropdownMenuRnd"
+                                                class="hidden absolute z-40 mt-2 w-full rounded-md bg-white shadow-lg ring-1 ring-black/5 dark:bg-gray-700 max-h-48 overflow-y-auto">
+
+                                                <!-- Search -->
+                                                <div class="p-2 sticky top-0 bg-white dark:bg-gray-700 z-10">
+                                                    <input type="text" id="coordinatorSearchInputRnd"
+                                                        placeholder="Search coordinator..."
+                                                        class="w-full px-2 py-1 text-sm border rounded-md dark:bg-gray-600 dark:text-white dark:placeholder-gray-300" />
+                                                </div>
+
+                                                <!-- Options -->
+                                                <div class="py-1" id="coordinatorOptionsRnd">
+                                                    @php
+                                                        $coordinators = \App\Models\SampleInquiry::select(
+                                                            'coordinatorName',
+                                                        )
+                                                            ->distinct()
+                                                            ->pluck('coordinatorName');
+                                                    @endphp
+                                                    @foreach ($coordinators as $c)
+                                                        <label
+                                                            class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600">
+                                                            <input type="checkbox" name="coordinatorName[]"
+                                                                value="{{ $c }}"
+                                                                class="mr-2 coordinator-checkboxRnd">
+                                                            {{ $c }}
+                                                        </label>
+                                                    @endforeach
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Status Dropdown -->
+                                        <div class="relative inline-block text-left w-56 ml-3">
+                                            <label
+                                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Status</label>
+                                            <div>
+                                                <button type="button" id="statusDropdownRnd"
+                                                    class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10 dark:bg-gray-700 dark:text-white">
+                                                    <span id="selectedStatusRnd">Select Status</span>
+                                                    <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20"
+                                                        fill="currentColor">
+                                                        <path fill-rule="evenodd"
+                                                            d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
+                                                            clip-rule="evenodd" />
+                                                    </svg>
+                                                </button>
+                                            </div>
+
+                                            <div id="statusDropdownMenuRnd"
+                                                class="hidden absolute z-40 mt-2 w-full rounded-md bg-white shadow-lg ring-1 ring-black/5 dark:bg-gray-700 max-h-48 overflow-y-auto">
+                                                <div class="p-2 sticky top-0 bg-white dark:bg-gray-700 z-10">
+                                                    <input type="text" id="statusSearchInputRnd"
+                                                        placeholder="Search status..."
+                                                        class="w-full px-2 py-1 text-sm border rounded-md dark:bg-gray-600 dark:text-white dark:placeholder-gray-300" />
+                                                </div>
+
+                                                <div class="py-1" id="statusOptionsRnd">
+                                                    @foreach (['Pending', 'Delivered'] as $status)
+                                                        <label
+                                                            class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600">
+                                                            <input type="checkbox" name="status[]"
+                                                                value="{{ $status }}"
+                                                                class="mr-2 status-checkboxRnd">
+                                                            {{ $status }}
+                                                        </label>
+                                                    @endforeach
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Submit -->
+                                        <div>
+                                            <button type="submit"
+                                                class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded shadow mt-6">
+                                                Generate PDF
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+
+                                <div class="flex justify-between items-center mb-6">
+                                    <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Sample Preparation R &
+                                        D
+                                        Records
+                                    </h1>
+
+                                    {{-- Other Tabs Buttons --}}
+                                    <div class="flex space-x-3">
+                                        <a href="{{ route('sampleStock.index') }}">
+                                            <button
+                                                class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded shadow">
+                                                Sample Stock Management
+                                            </button>
+                                        </a>
+                                        <a href="{{ route('leftoverYarn.index') }}">
+                                            <button
+                                                class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded shadow">
+                                                Leftover Yarn Management
+                                            </button>
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
 
@@ -993,8 +1120,8 @@
                                                                                                         stroke-linecap="round"
                                                                                                         stroke-linejoin="round"
                                                                                                         d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0
-                                                                                                                                               01-1.995-1.858L5 7m5 4v6m4-6v6M9 7V4a1 1 0
-                                                                                                                                               011-1h4a1 1 0 011 1v3m-9 0h10" />
+                                                                                                                                                               01-1.995-1.858L5 7m5 4v6m4-6v6M9 7V4a1 1 0
+                                                                                                                                                               011-1h4a1 1 0 011 1v3m-9 0h10" />
                                                                                                 </svg>
                                                                                             </button>
                                                                                         </div>
@@ -1235,7 +1362,8 @@
                                                                         <div
                                                                             class="border rounded-md p-4 {{ $colorClass }}">
                                                                             <div class="font-semibold mb-1">
-                                                                                Option {{ $letters[$index] ?? $index + 1 }}
+                                                                                Option
+                                                                                {{ $letters[$index] ?? $index + 1 }}
                                                                             </div>
                                                                             <div class="text-sm">
                                                                                 <span
@@ -2735,6 +2863,11 @@
             const form = document.getElementById('filterFormContainer');
             form.classList.toggle('hidden');
         }
+
+        function toggleReportForm() {
+            const form = document.getElementById('rndReportFormContainer');
+            form.classList.toggle('hidden');
+        }
     </script>
 
     <script>
@@ -3271,5 +3404,66 @@
             }
         }
     </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // Coordinator dropdown
+            const coordBtn = document.getElementById('coordinatorDropdownRnd');
+            const coordMenu = document.getElementById('coordinatorDropdownMenuRnd');
+            const coordCheckboxes = document.querySelectorAll('.coordinator-checkboxRnd');
+            const coordSearch = document.getElementById('coordinatorSearchInputRnd');
+            const coordText = document.getElementById('selectedCoordinatorsRnd');
+
+            coordBtn.addEventListener('click', () => coordMenu.classList.toggle('hidden'));
+            document.addEventListener('click', e => {
+                if (!coordBtn.contains(e.target) && !coordMenu.contains(e.target)) {
+                    coordMenu.classList.add('hidden');
+                }
+            });
+            coordCheckboxes.forEach(cb => cb.addEventListener('change', () => {
+                const selected = Array.from(coordCheckboxes)
+                    .filter(c => c.checked)
+                    .map(c => c.value);
+
+                if (selected.length === 0) {
+                    coordText.textContent = 'Select Coordinator(s)';
+                } else if (selected.length <= 2) {
+                    coordText.textContent = selected.join(', ');
+                } else {
+                    coordText.textContent = selected.slice(0, 2).join(', ') + '...';
+                }
+            }));
+            coordSearch.addEventListener('input', () => {
+                const q = coordSearch.value.toLowerCase();
+                document.querySelectorAll('#coordinatorOptionsRnd label').forEach(opt => {
+                    opt.style.display = opt.textContent.toLowerCase().includes(q) ? 'flex' : 'none';
+                });
+            });
+
+            // Status dropdown
+            const statusBtn = document.getElementById('statusDropdownRnd');
+            const statusMenu = document.getElementById('statusDropdownMenuRnd');
+            const statusCheckboxes = document.querySelectorAll('.status-checkboxRnd');
+            const statusSearch = document.getElementById('statusSearchInputRnd');
+            const statusText = document.getElementById('selectedStatusRnd');
+
+            statusBtn.addEventListener('click', () => statusMenu.classList.toggle('hidden'));
+            document.addEventListener('click', e => {
+                if (!statusBtn.contains(e.target) && !statusMenu.contains(e.target)) {
+                    statusMenu.classList.add('hidden');
+                }
+            });
+            statusCheckboxes.forEach(cb => cb.addEventListener('change', () => {
+                const selected = Array.from(statusCheckboxes).filter(c => c.checked).map(c => c.value);
+                statusText.textContent = selected.length ? selected.join(', ') : 'Select Status';
+            }));
+            statusSearch.addEventListener('input', () => {
+                const q = statusSearch.value.toLowerCase();
+                document.querySelectorAll('#statusOptionsRnd label').forEach(opt => {
+                    opt.style.display = opt.textContent.toLowerCase().includes(q) ? 'flex' : 'none';
+                });
+            });
+        });
+    </script>
+
 
 @endsection

@@ -270,6 +270,8 @@ Route::middleware(['auth'])->group(function () {
         // Colour match rejects
         Route::post('/color-match-rejects/store', [ColorMatchRejectController::class, 'store'])->name('colorMatchRejects.store');
         Route::get('/color-match-reject/{id}', [ColorMatchRejectController::class, 'getRejectDetails']);
+
+        Route::post('/report/rnd', [ReportController::class, 'generateRndReport'])->name('report.rndReport');
     });
 });
 
