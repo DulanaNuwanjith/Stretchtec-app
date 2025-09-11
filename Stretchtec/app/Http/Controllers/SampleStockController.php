@@ -6,6 +6,7 @@ use App\Models\SampleStock;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\View\Factory;
 use Illuminate\View\View;
 
 class SampleStockController extends Controller
@@ -13,7 +14,7 @@ class SampleStockController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request): View
+    public function index(Request $request): View|Factory
     {
         // Get search term if any
         $search = $request->input('search');

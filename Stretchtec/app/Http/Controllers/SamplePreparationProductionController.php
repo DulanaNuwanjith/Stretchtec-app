@@ -11,6 +11,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\View\Factory;
 use Illuminate\View\View;
 
 class SamplePreparationProductionController extends Controller
@@ -18,7 +19,7 @@ class SamplePreparationProductionController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request): View
+    public function index(Request $request): View|Factory|RedirectResponse
     {
         $operators = OperatorsandSupervisors::where('role', 'OPERATOR')->get();
         $supervisors = OperatorsandSupervisors::where('role', 'SUPERVISOR')->get();

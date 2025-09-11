@@ -43,6 +43,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static whereBetween(string $string, array $array)
  * @method static whereNotNull(string $string)
  * @method static findOrFail(mixed $id)
+ * @method static create(array $array)
  */
 class SamplePreparationRnD extends Model
 {

@@ -12,6 +12,7 @@ use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\View\Factory;
 use Illuminate\View\View;
 
 class SamplePreparationRnDController extends Controller
@@ -19,7 +20,7 @@ class SamplePreparationRnDController extends Controller
     /**
      * Display a listing of the Sample Preparation RnD records with filters and pagination.
      */
-    public function viewRnD(Request $request): View
+    public function viewRnD(Request $request): View|Factory
     {
         // Eager load sampleInquiry and shadeOrders
         $query = SamplePreparationRnD::with(['sampleInquiry', 'shadeOrders']);
