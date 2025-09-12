@@ -314,6 +314,7 @@
                                                         '{{ addslashes($prod->sampleInquiry->style ?? '-') }}',
                                                         '{{ addslashes($prod->sampleInquiry->sampleQty ?? '-') }}',
                                                         '{{ addslashes($prod->samplePreparationRnd->shade ?? '-') }}',
+                                                        '{{ addslashes($shadeOrders->pluck('pst_no')->implode(', ')) }}'
                                                     )">
                                                     {{ $prod->order_no }}
                                                 </span>
@@ -1101,14 +1102,10 @@
                                                     <th class="p-2 border">Shade</th>
                                                     <td class="p-2 border" id="modalShade"></td>
                                                 </tr>
-                                                {{-- <tr>
-                                                    <th class="p-2 border">Operator Name</th>
-                                                    <td class="p-2 border" id="modalOperator"></td>
-                                                </tr>
                                                 <tr>
-                                                    <th class="p-2 border">Supervisor Name</th>
-                                                    <td class="p-2 border" id="modalSupervisor"></td>
-                                                </tr> --}}
+                                                    <th class="p-2 border">PST Number</th>
+                                                    <td class="p-2 border" id="modalPST"></td>
+                                                </tr>
                                                 </tbody>
                                             </table>
 
@@ -1347,9 +1344,7 @@
 </script>
 
 <script>
-    function openSampleModal(orderNo, customerName, item, description, size, qtRef, color, style, sampleQty, shade,
-                             operator,
-                             supervisor) {
+    function openSampleModal(orderNo, customerName, item, description, size, qtRef, color, style, sampleQty, shade, pstNO) {
         document.getElementById('modalOrderNo').textContent = 'Order Number: ' + orderNo;
         document.getElementById('modalCustomerName').textContent = customerName;
         document.getElementById('modalItem').textContent = item;
@@ -1360,7 +1355,7 @@
         document.getElementById('modalStyle').textContent = style;
         document.getElementById('modalSampleQty').textContent = sampleQty;
         document.getElementById('modalShade').textContent = shade;
-        // document.getElementById('modalOperator').textContent = operator;
+        document.getElementById('modalPST').textContent = pstNO;
         // document.getElementById('modalSupervisor').textContent = supervisor;
 
         document.getElementById('viewDetailsSample').classList.remove('hidden');
