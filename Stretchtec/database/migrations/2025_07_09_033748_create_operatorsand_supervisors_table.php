@@ -10,7 +10,7 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('operatorsand_supervisors', function (Blueprint $table) {
+        Schema::create('operatorsand_supervisors', static function (Blueprint $table) {
             $table->id();
             $table->string('empID')->unique();
             $table->string('name');

@@ -8,9 +8,9 @@ return new class extends Migration {
     /**
      * Run the migrations.
      */
-    public function up()
+    public function up(): void
     {
-        Schema::table('sample_preparation_rnd', function (Blueprint $table) {
+        Schema::table('sample_preparation_rnd', static function (Blueprint $table) {
             $table->string('pst_no')->nullable()->after('yarnReceiveDate');
         });
     }

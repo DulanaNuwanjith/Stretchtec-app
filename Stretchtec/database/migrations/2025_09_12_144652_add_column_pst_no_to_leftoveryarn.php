@@ -20,7 +20,7 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::table('leftover_yarns', function (Blueprint $table) {
+        Schema::table('leftover_yarns', static function (Blueprint $table) {
             $table->dropColumn('pst_no');
         });
     }

@@ -10,7 +10,7 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('color_match_rejects', function (Blueprint $table) {
+        Schema::create('color_match_rejects', static function (Blueprint $table) {
             $table->id();
 
             // Foreign key field for orderNo

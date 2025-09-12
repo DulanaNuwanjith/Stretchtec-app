@@ -6,9 +6,9 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateSamplePreparationProductionTable extends Migration
 {
-    public function up()
+    public function up(): void
     {
-        Schema::create('sample_preparation_production', function (Blueprint $table) {
+        Schema::create('sample_preparation_production', static function (Blueprint $table) {
             $table->id();
             $table->foreignId('sample_preparation_rnd_id')->constrained('sample_preparation_rnd')->onDelete('cascade');
             $table->string('order_no');
@@ -25,7 +25,7 @@ class CreateSamplePreparationProductionTable extends Migration
         });
     }
 
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('sample_preparation_production');
     }

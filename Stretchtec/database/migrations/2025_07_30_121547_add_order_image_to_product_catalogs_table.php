@@ -10,7 +10,7 @@ return new class extends Migration {
      */
     public function up()
     {
-        Schema::table('product_catalogs', function (Blueprint $table) {
+        Schema::table('product_catalogs', static function (Blueprint $table) {
             $table->string('order_image')->nullable();
         });
     }

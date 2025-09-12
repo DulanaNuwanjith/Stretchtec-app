@@ -10,7 +10,7 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('product_catalogs', function (Blueprint $table) {
+        Schema::create('product_catalogs', static function (Blueprint $table) {
             $table->id();
 
             // Foreign keys (assuming each catalog belongs to one R&D record)

@@ -10,7 +10,7 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('shade_orders', function (Blueprint $table) {
+        Schema::create('shade_orders', static function (Blueprint $table) {
             $table->id();
             $table->foreignId('sample_preparation_rnd_id')
                 ->constrained('sample_preparation_rnd') // your RnD table

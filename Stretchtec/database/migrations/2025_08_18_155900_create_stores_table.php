@@ -10,7 +10,7 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('stores', function (Blueprint $table) {
+        Schema::create('stores', static function (Blueprint $table) {
             $table->id();
             $table->timestamps();
         });
