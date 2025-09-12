@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\SampleInquiry;
 use App\Models\SamplePreparationRnD;
 use App\Models\SampleStock;
+use App\Models\User;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -27,33 +28,33 @@ class SampleInquiryController extends Controller
 
         // Apply filters
         if ($request->filled('orderNo')) {
-            $query->where('orderNo', $request->orderNo);
+            $query->where('orderNo', $request->input('orderNo'));
         }
 
         if ($request->filled('customer')) {
-            $query->where('customerName', $request->customer);
+            $query->where('customerName', $request->input('customer'));
         }
 
         if ($request->filled('merchandiser')) {
-            $query->where('merchandiseName', $request->merchandiser);
+            $query->where('merchandiseName', $request->input('merchandiser'));
         }
 
         if ($request->filled('item')) {
-            $query->where('item', $request->item);
+            $query->where('item', $request->input('item'));
         }
 
         if ($request->filled('coordinator')) {
-            $query->whereIn('coordinatorName', (array)$request->coordinator);
+            $query->whereIn('coordinatorName', (array)$request->input('coordinator'));
         }
 
         // Filter by delivery status using customerDeliveryDate
         if ($request->filled('deliveryStatus')) {
             $validStatuses = ['Delivered', 'Pending'];
 
-            if (in_array($request->deliveryStatus, $validStatuses, true)) {
-                if ($request->deliveryStatus === 'Delivered') {
+            if (in_array($request->input('deliveryStatus'), $validStatuses, true)) {
+                if ($request->input('deliveryStatus') === 'Delivered') {
                     $query->whereNotNull('customerDeliveryDate');
-                } elseif ($request->deliveryStatus === 'Pending') {
+                } elseif ($request->input('deliveryStatus') === 'Pending') {
                     $query->whereNull('customerDeliveryDate');
                 }
             }
@@ -61,7 +62,7 @@ class SampleInquiryController extends Controller
 
         // Filter by customer decision
         if ($request->filled('customerDecision')) {
-            $query->where('customerDecision', $request->customerDecision);
+            $query->where('customerDecision', $request->input('customerDecision'));
         }
 
         $inquiries = $query
@@ -98,7 +99,7 @@ class SampleInquiryController extends Controller
         ]);
 
         $inquiry = SampleInquiry::findOrFail($id);
-        $inquiry->notes = $request->notes;
+        $inquiry->notes = $request->input('notes');
         $inquiry->save();
 
         return redirect()->back()->with('success', 'Note updated successfully.');
@@ -151,10 +152,10 @@ class SampleInquiryController extends Controller
             $orderFilePath = null;
             if ($request->hasFile('order_file')) {
                 $date = now()->format('Ymd'); // e.g. 20250707
-                $extension = $request->file('order_file')->getClientOriginalExtension();
+                $extension = $request->file('order_file')?->getClientOriginalExtension();
                 $fileName = $orderNo . '_' . $date . '.' . $extension;
 
-                $orderFilePath = $request->file('order_file')->storeAs(
+                $orderFilePath = $request->file('order_file')?->storeAs(
                     'order_files',
                     $fileName,
                     'public'
@@ -247,8 +248,8 @@ class SampleInquiryController extends Controller
             'alreadyDeveloped' => 'required|in:0,1',
         ]);
 
-        $inquiry = SampleInquiry::findOrFail($request->id);
-        $inquiry->alreadyDeveloped = $request->alreadyDeveloped;
+        $inquiry = SampleInquiry::findOrFail($request->input('id'));
+        $inquiry->alreadyDeveloped = $request->input('alreadyDeveloped');
         $inquiry->save();
 
         return back()->with('success', 'Development status updated!');
@@ -264,7 +265,7 @@ class SampleInquiryController extends Controller
             'id' => 'required|exists:sample_inquiries,id',
         ]);
 
-        $inquiry = SampleInquiry::findOrFail($request->id);
+        $inquiry = SampleInquiry::findOrFail($request->input('id'));
 
         // Set the timestamp to now
         $inquiry->sentToSampleDevelopmentDate = Carbon::now();
@@ -291,7 +292,7 @@ class SampleInquiryController extends Controller
             'id' => 'required|exists:sample_inquiries,id',
         ]);
 
-        $inquiry = SampleInquiry::findOrFail($request->id);
+        $inquiry = SampleInquiry::findOrFail($request->input('id'));
         $prepRnd = $inquiry->samplePreparationRnD;
 
         if (!$prepRnd) {
@@ -306,7 +307,7 @@ class SampleInquiryController extends Controller
             $dispatchedShades = $prepRnd->shadeOrders->where('status', 'Dispatched to RnD');
             $totalDelivered = 0;
 
-            foreach ($request->shades as $shadeId => $shadeData) {
+            foreach ($request->input('shades') as $shadeId => $shadeData) {
                 if (!isset($shadeData['selected'])) {
                     continue;
                 }
@@ -419,9 +420,15 @@ class SampleInquiryController extends Controller
             $sheet->setCellValue('B12', $inquiry->item . ' / ' . $inquiry->size);
             $sheet->setCellValue('B13', $inquiry->referenceNo ?? '-');
             $sheet->setCellValue('F12', $inquiry->color);
-            $sheet->setCellValue('B16', Auth::user()->name);
-            $sheet->setCellValue('H12', $totalDeliveredQty);
 
+            /** @var User $user */
+            $user = Auth::user();
+            if ($user) {
+                $sheet->setCellValue('B16', $user->name);
+            } else {
+                $sheet->setCellValue('B16', 'Guest');
+            }
+            $sheet->setCellValue('H12', $totalDeliveredQty);
             $sheet->setCellValue('D24', $now->format('Y-m-d H:i:s'));
             $sheet->setCellValue('D25', $dispatchCode);
             $sheet->setCellValue('B27', $inquiry->customerName);
@@ -430,9 +437,15 @@ class SampleInquiryController extends Controller
             $sheet->setCellValue('B31', $inquiry->item . ' / ' . $inquiry->size);
             $sheet->setCellValue('B32', $inquiry->referenceNo ?? '-');
             $sheet->setCellValue('F31', $inquiry->color);
-            $sheet->setCellValue('B35', Auth::user()->name);
-            $sheet->setCellValue('H31', $totalDeliveredQty);
 
+            /** @var User $user */
+            $user = Auth::user();
+            if ($user) {
+                $sheet->setCellValue('B35', $user->name);
+            } else {
+                $sheet->setCellValue('B16', 'Guest');
+            }
+            $sheet->setCellValue('H31', $totalDeliveredQty);
             $fileName = 'dispatch_note_' . $dispatchCode . '.xlsx';
             $savePath = storage_path('app/public/dispatches/' . $fileName);
             IOFactory::createWriter($spreadsheet, 'Xlsx')->save($savePath);
@@ -491,10 +504,10 @@ class SampleInquiryController extends Controller
         // Handle file upload
         if ($request->hasFile('order_file')) {
             $date = now()->format('YmdHis'); // e.g. 20250818113045
-            $extension = $request->file('order_file')->getClientOriginalExtension();
+            $extension = $request->file('order_file')?->getClientOriginalExtension();
             $fileName = $orderNo . '_' . $date . '_' . uniqid('', true) . '.' . $extension;
 
-            $orderFilePath = $request->file('order_file')->storeAs(
+            $orderFilePath = $request->file('order_file')?->storeAs(
                 'order_files',
                 $fileName,
                 'public'
