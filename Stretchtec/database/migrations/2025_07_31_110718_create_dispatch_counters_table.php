@@ -10,7 +10,7 @@ return new class extends Migration {
      */
     public function up()
     {
-        Schema::create('dispatch_counters', function (Blueprint $table) {
+        Schema::create('dispatch_counters', static function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('last_number')->default(0);
             $table->timestamps();

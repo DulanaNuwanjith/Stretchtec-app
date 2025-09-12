@@ -8,9 +8,9 @@ return new class extends Migration {
     /**
      * Run the migrations.
      */
-    public function up()
+    public function up(): void
     {
-        Schema::create('sample_preparation_rnd', function (Blueprint $table) {
+        Schema::create('sample_preparation_rnd', static function (Blueprint $table) {
             $table->id();
             $table->foreignId('sample_inquiry_id')->constrained()->onDelete('cascade');
             $table->string('orderNo');

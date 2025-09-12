@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Exception;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
@@ -12,7 +15,7 @@ class UserMananagementController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): View|Factory|RedirectResponse
     {
         try {
             $users = User::paginate(10);
@@ -29,11 +32,11 @@ class UserMananagementController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id)
+    public function destroy($id): RedirectResponse
     {
         try {
             // Prevent the logged-in user from deleting their own account
-            if (Auth::id() == $id) {
+            if (Auth::id() === $id) {
                 return redirect()->back()->with('error', 'You cannot delete your own account.');
             }
 

@@ -10,7 +10,7 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('sample_stocks', function (Blueprint $table) {
+        Schema::create('sample_stocks', static function (Blueprint $table) {
             $table->id();
             $table->string('reference_no', 100);
             $table->string('shade', 100);

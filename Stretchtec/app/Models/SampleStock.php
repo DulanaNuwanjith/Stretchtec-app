@@ -25,6 +25,11 @@ use Illuminate\Database\Eloquent\Model;
  *       'special_note' => 'Keep away from sunlight',
  *   ]);
  * --------------------------------------------------------------------------
+ * @method static create(array $array)
+ * @method static findOrFail($id)
+ * @method static pluck(string $string)
+ * @method static select(string $string, string $string1)
+ * @method static where(string $string, $referenceNo)
  */
 class SampleStock extends Model
 {
@@ -36,7 +41,7 @@ class SampleStock extends Model
      *
      * Includes:
      *  - reference_no → Unique reference number for the sample stock
-     *  - shade        → Color/shade of the sample
+     *  - shade → Color/shade of the sample
      *  - available_stock → Current available quantity
      *  - special_note → Optional notes regarding the stock
      */
@@ -58,7 +63,7 @@ class SampleStock extends Model
      *       return $sampleStock;
      *   });
      */
-    public function getRouteKeyName()
+    public function getRouteKeyName(): string
     {
         return 'reference_no';
     }

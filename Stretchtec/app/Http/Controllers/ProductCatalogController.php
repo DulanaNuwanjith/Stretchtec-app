@@ -4,15 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Models\ProductCatalog;
 use Exception;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\View\Factory;
+use Illuminate\View\View;
 
 class ProductCatalogController extends Controller
 {
     /**
      * Display a listing of the product catalog entries
      */
-    public function elasticCatalog(Request $request)
+    public function elasticCatalog(Request $request): View|Factory
     {
         // Eager load shade orders using sample_preparation_rnd_id
         $query = ProductCatalog::with('shadeOrders')
@@ -46,7 +49,7 @@ class ProductCatalogController extends Controller
     /**
      * Display a listing of the product catalog entries
      */
-    public function codeCatalog(Request $request)
+    public function codeCatalog(Request $request): View|Factory
     {
         // Eager load shade orders using sample_preparation_rnd_id
         $query = ProductCatalog::with('shadeOrders')
@@ -80,7 +83,7 @@ class ProductCatalogController extends Controller
     /**
      * Display a listing of the product catalog entries
      */
-    public function tapeCatalog(Request $request)
+    public function tapeCatalog(Request $request): View|Factory
     {
         // Eager-load shade orders via sample_preparation_rnd_id
         $query = ProductCatalog::with('shadeOrders')
@@ -114,7 +117,7 @@ class ProductCatalogController extends Controller
     /**
      * Display a listing of all product catalog entries
      */
-    public function create()
+    public function create(): View|Factory
     {
         return view('product-catalog.create');
     }
@@ -122,7 +125,7 @@ class ProductCatalogController extends Controller
     /**
      * Common storing method for all catalog entries
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         $request->validate([
             'order_no' => 'required|string|max:255',
@@ -146,7 +149,7 @@ class ProductCatalogController extends Controller
     /**
      * Store method forcing item = Elastic
      */
-    public function storeElastic(Request $request)
+    public function storeElastic(Request $request): RedirectResponse
     {
         $request->validate([
             'order_no' => 'required|string|max:255',
@@ -172,7 +175,7 @@ class ProductCatalogController extends Controller
     /**
      * Store method forcing item = Elastic
      */
-    public function storeCode(Request $request)
+    public function storeCode(Request $request): RedirectResponse
     {
         $request->validate([
             'order_no' => 'required|string|max:255',
@@ -198,7 +201,7 @@ class ProductCatalogController extends Controller
     /**
      * Store method forcing item = Elastic
      */
-    public function storeTape(Request $request)
+    public function storeTape(Request $request): RedirectResponse
     {
         $request->validate([
             'order_no' => 'required|string|max:255',
@@ -224,7 +227,7 @@ class ProductCatalogController extends Controller
     /**
      * Upload order image for a specific catalog entry
      */
-    public function uploadOrderImage(Request $request, ProductCatalog $catalog)
+    public function uploadOrderImage(Request $request, ProductCatalog $catalog): RedirectResponse
     {
         $request->validate([
             'order_image' => 'required|image|max:2048',
@@ -236,7 +239,7 @@ class ProductCatalogController extends Controller
                 Storage::disk('public')->delete('order_images/' . $catalog->order_image);
             }
 
-            // Store new image with reference_no as filename
+            // Store a new image with reference_no as filename
             $file = $request->file('order_image');
             $extension = $file->getClientOriginalExtension();
             $safeReference = preg_replace('/[^A-Za-z0-9_\-]/', '_', $catalog->reference_no); // clean reference_no
@@ -254,7 +257,7 @@ class ProductCatalogController extends Controller
     /**
      * Update approval details for a specific catalog entry
      */
-    public function updateApproval(Request $request, ProductCatalog $productCatalog)
+    public function updateApproval(Request $request, ProductCatalog $productCatalog): RedirectResponse
     {
         $request->validate([
             'approved_by' => 'nullable|string|max:255',
@@ -282,7 +285,7 @@ class ProductCatalogController extends Controller
             $safeReference = preg_replace('/[^A-Za-z0-9_\-]/', '_', $productCatalog->reference_no); // clean filename
             $filename = $safeReference . '.' . $extension;
 
-            // Save file with reference_no as name
+            // Save a file with reference_no as name
             $path = $file->storeAs('approval_cards', $filename, 'public');
 
             $updateData['approval_card'] = $path;
@@ -300,7 +303,7 @@ class ProductCatalogController extends Controller
     /**
      * Show the form for editing the specified product catalog entry
      */
-    public function edit(ProductCatalog $productCatalog)
+    public function edit(ProductCatalog $productCatalog): View|Factory
     {
         return view('product-catalog.edit', compact('productCatalog'));
     }
@@ -308,7 +311,7 @@ class ProductCatalogController extends Controller
     /**
      * Update the specified product catalog entry
      */
-    public function update(Request $request, ProductCatalog $productCatalog)
+    public function update(Request $request, ProductCatalog $productCatalog): RedirectResponse
     {
         $request->validate([
             'order_no' => 'required|string|max:255',
@@ -330,7 +333,7 @@ class ProductCatalogController extends Controller
     /**
      * Remove the specified product catalog entry from storage
      */
-    public function destroy(ProductCatalog $productCatalog)
+    public function destroy(ProductCatalog $productCatalog): RedirectResponse
     {
         $productCatalog->delete();
 
@@ -340,7 +343,7 @@ class ProductCatalogController extends Controller
     /**
      * Update shade for a specific catalog entry
      */
-    public function updateShade(Request $request, ProductCatalog $catalog)
+    public function updateShade(Request $request, ProductCatalog $catalog): RedirectResponse
     {
         $request->validate([
             'selected_shade' => 'required|string',
@@ -351,7 +354,7 @@ class ProductCatalogController extends Controller
             $catalog->save();
 
             return redirect()->back()->with('success', 'Shade updated successfully.');
-        } catch (Exception $e) {
+        } catch (Exception) {
             return redirect()->back()->with('error', 'Failed to update shade. Please try again.');
         }
     }

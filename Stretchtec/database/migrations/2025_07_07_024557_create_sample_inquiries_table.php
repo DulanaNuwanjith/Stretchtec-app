@@ -10,7 +10,7 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('sample_inquiries', function (Blueprint $table) {
+        Schema::create('sample_inquiries', static function (Blueprint $table) {
             $table->id();
             $table->string('orderFile')->nullable();
             $table->string('orderNo')->unique();

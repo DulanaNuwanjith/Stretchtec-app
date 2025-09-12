@@ -7,16 +7,19 @@ use App\Models\SamplePreparationProduction;
 use App\Models\ShadeOrder;
 use Carbon\Carbon;
 use Exception;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\View\Factory;
+use Illuminate\View\View;
 
 class SamplePreparationProductionController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index(Request $request): View|Factory|RedirectResponse
     {
         $operators = OperatorsandSupervisors::where('role', 'OPERATOR')->get();
         $supervisors = OperatorsandSupervisors::where('role', 'SUPERVISOR')->get();
@@ -70,7 +73,7 @@ class SamplePreparationProductionController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request)
+    public function update(Request $request): RedirectResponse
     {
         $request->validate([
             'id' => 'required|exists:sample_preparation_production,id',
@@ -93,7 +96,7 @@ class SamplePreparationProductionController extends Controller
     /**
      * Mark selected shades as In Production and update related statuses.
      */
-    public function markOrderStart(Request $request)
+    public function markOrderStart(Request $request): RedirectResponse
     {
         $request->validate([
             'production_id' => 'required|exists:sample_preparation_production,id',
@@ -114,7 +117,7 @@ class SamplePreparationProductionController extends Controller
                 'status' => 'In Production',
             ]);
 
-            // Set start time if not already set
+            // Set the start time if not already set
             if (!$production->order_start_at) {
                 $production->order_start_at = now();
                 $production->save();
@@ -146,7 +149,7 @@ class SamplePreparationProductionController extends Controller
     /**
      * Mark a specific shade as Production Complete and update related statuses.
      */
-    public function markOrderComplete(Request $request)
+    public function markOrderComplete(Request $request): RedirectResponse
     {
         $request->validate([
             'shade_id' => 'required|exists:shade_orders,id',
@@ -209,7 +212,7 @@ class SamplePreparationProductionController extends Controller
     /**
      * Dispatch selected shades to RnD and update outputs.
      */
-    public function dispatchToRnd(Request $request)
+    public function dispatchToRnd(Request $request): RedirectResponse
     {
         $request->validate([
             'production_id' => 'required|exists:sample_preparation_production,id',
@@ -263,9 +266,9 @@ class SamplePreparationProductionController extends Controller
 
 
     /**
-     * Update operator name for a production record.
+     * Update the operator name for a production record.
      */
-    public function updateOperator(Request $request, $id)
+    public function updateOperator(Request $request, $id): RedirectResponse
     {
         $request->validate([
             'operator_name' => 'required|string|max:255',
@@ -280,9 +283,9 @@ class SamplePreparationProductionController extends Controller
 
 
     /**
-     * Update supervisor name for a production record.
+     * Update the supervisor name for a production record.
      */
-    public function updateSupervisor(Request $request, $id)
+    public function updateSupervisor(Request $request, $id): RedirectResponse
     {
         $request->validate([
             'supervisor_name' => 'required|string|max:255',

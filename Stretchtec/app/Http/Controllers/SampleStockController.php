@@ -4,14 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Models\SampleStock;
 use Exception;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\View\Factory;
+use Illuminate\View\View;
 
 class SampleStockController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index(Request $request): View|Factory
     {
         // Get search term if any
         $search = $request->input('search');
@@ -21,9 +24,9 @@ class SampleStockController extends Controller
 
         if ($search) {
             $query->where(function ($q) use ($search) {
-                $q->where('reference_no', 'like', "%{$search}%")
-                    ->orWhere('shade', 'like', "%{$search}%")
-                    ->orWhere('special_note', 'like', "%{$search}%");
+                $q->where('reference_no', 'like', "%$search%")
+                    ->orWhere('shade', 'like', "%$search%")
+                    ->orWhere('special_note', 'like', "%$search%");
             });
         }
 
@@ -40,7 +43,7 @@ class SampleStockController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(): void
     {
         //
     }
@@ -49,7 +52,7 @@ class SampleStockController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request): ?RedirectResponse
     {
         try {
             $request->validate([
@@ -76,7 +79,7 @@ class SampleStockController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(SampleStock $sampleStock)
+    public function show(SampleStock $sampleStock): void
     {
         //
     }
@@ -85,7 +88,7 @@ class SampleStockController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(SampleStock $sampleStock)
+    public function edit(SampleStock $sampleStock): void
     {
         //
     }
@@ -94,7 +97,7 @@ class SampleStockController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id): RedirectResponse
     {
         $request->validate([
             'special_note' => 'nullable|string|max:1000',
@@ -111,7 +114,7 @@ class SampleStockController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(SampleStock $sampleStock)
+    public function destroy(SampleStock $sampleStock): void
     {
         //
     }
@@ -120,7 +123,7 @@ class SampleStockController extends Controller
     /**
      * Handle borrowing of stock.
      */
-    public function borrow(Request $request, $id)
+    public function borrow(Request $request, $id): RedirectResponse
     {
         $request->validate([
             'borrow_qty' => 'required|integer|min:1',
@@ -137,13 +140,12 @@ class SampleStockController extends Controller
         $stock->available_stock -= $borrowQty;
 
         // If stock becomes 0, delete it
-        if ($stock->available_stock == 0) {
+        if ($stock->available_stock === 0) {
             $stock->delete();
             return redirect()->back()->with('success', 'Stock fully borrowed and record removed.');
-        } else {
-            $stock->save();
-            return redirect()->back()->with('success', 'Stock borrowed successfully.');
         }
-    }
 
+        $stock->save();
+        return redirect()->back()->with('success', 'Stock borrowed successfully.');
+    }
 }

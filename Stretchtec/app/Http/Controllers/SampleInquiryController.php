@@ -6,12 +6,14 @@ use App\Models\SampleInquiry;
 use App\Models\SamplePreparationRnD;
 use App\Models\SampleStock;
 use Exception;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Validation\ValidationException;
+use Illuminate\View\Factory;
+use Illuminate\View\View;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class SampleInquiryController extends Controller
@@ -19,7 +21,7 @@ class SampleInquiryController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index(Request $request): View|Factory
     {
         $query = SampleInquiry::query();
 
@@ -48,7 +50,7 @@ class SampleInquiryController extends Controller
         if ($request->filled('deliveryStatus')) {
             $validStatuses = ['Delivered', 'Pending'];
 
-            if (in_array($request->deliveryStatus, $validStatuses)) {
+            if (in_array($request->deliveryStatus, $validStatuses, true)) {
                 if ($request->deliveryStatus === 'Delivered') {
                     $query->whereNotNull('customerDeliveryDate');
                 } elseif ($request->deliveryStatus === 'Pending') {
@@ -89,7 +91,7 @@ class SampleInquiryController extends Controller
     /**
      * Note Updating Function
      */
-    public function updateNotes(Request $request, $id)
+    public function updateNotes(Request $request, $id): RedirectResponse
     {
         $request->validate([
             'notes' => 'nullable|string|max:5000',
@@ -106,7 +108,7 @@ class SampleInquiryController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(): void
     {
         //
     }
@@ -115,7 +117,7 @@ class SampleInquiryController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request): ?RedirectResponse
     {
         try {
             // ✅ Validate input (excluding orderNo)
@@ -183,10 +185,6 @@ class SampleInquiryController extends Controller
             ]);
 
             return redirect()->back()->with('success', 'Sample Inquiry Created Successfully!');
-        } catch (ValidationException $e) {
-            return redirect()->back()
-                ->withErrors($e->validator)
-                ->withInput();
         } catch (Exception $e) {
             Log::error('Sample Inquiry Store Error: ' . $e->getMessage());
 
@@ -200,7 +198,7 @@ class SampleInquiryController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(SampleInquiry $sampleInquiry)
+    public function show(SampleInquiry $sampleInquiry): void
     {
         //
     }
@@ -209,7 +207,7 @@ class SampleInquiryController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(SampleInquiry $sampleInquiry)
+    public function edit(SampleInquiry $sampleInquiry): void
     {
         //
     }
@@ -218,7 +216,7 @@ class SampleInquiryController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, SampleInquiry $sampleInquiry)
+    public function update(Request $request, SampleInquiry $sampleInquiry): void
     {
         //
     }
@@ -227,7 +225,7 @@ class SampleInquiryController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(SampleInquiry $sampleInquiry)
+    public function destroy(SampleInquiry $sampleInquiry): ?RedirectResponse
     {
         try {
             $sampleInquiry->delete(); // Use soft delete if enabled
@@ -242,7 +240,7 @@ class SampleInquiryController extends Controller
     /**
      * Function to update developed status (alreadyDeveloped)
      */
-    public function updateDevelopedStatus(Request $request)
+    public function updateDevelopedStatus(Request $request): RedirectResponse
     {
         $request->validate([
             'id' => 'required|exists:sample_inquiries,id',
@@ -260,7 +258,7 @@ class SampleInquiryController extends Controller
     /**
      * Function to mark as sent to sample development (sets sentToSampleDevelopmentDate)
      */
-    public function markSentToSampleDevelopment(Request $request)
+    public function markSentToSampleDevelopment(Request $request): RedirectResponse
     {
         $request->validate([
             'id' => 'required|exists:sample_inquiries,id',
@@ -287,7 +285,7 @@ class SampleInquiryController extends Controller
     /**
      * Function to mark as delivered to customer (sets customerDeliveryDate and generates dispatch note)
      */
-    public function markCustomerDelivered(Request $request)
+    public function markCustomerDelivered(Request $request): RedirectResponse
     {
         $request->validate([
             'id' => 'required|exists:sample_inquiries,id',
@@ -309,9 +307,13 @@ class SampleInquiryController extends Controller
             $totalDelivered = 0;
 
             foreach ($request->shades as $shadeId => $shadeData) {
-                if (!isset($shadeData['selected'])) continue;
+                if (!isset($shadeData['selected'])) {
+                    continue;
+                }
                 $shade = $dispatchedShades->where('id', $shadeId)->first();
-                if (!$shade) continue;
+                if (!$shade) {
+                    continue;
+                }
 
                 $quantity = (int)$shadeData['quantity'];
                 $stock = SampleStock::where('reference_no', $inquiry->referenceNo)
@@ -334,7 +336,7 @@ class SampleInquiryController extends Controller
                         'quantity' => $quantity
                     ];
                 } else {
-                    return back()->with('error', "Quantity for shade {$shade->shade} exceeds available stock.");
+                    return back()->with('error', "Quantity for shade $shade->shade exceeds available stock.");
                 }
             }
 
@@ -347,53 +349,51 @@ class SampleInquiryController extends Controller
                 $inquiry->productionStatus = 'Delivered';
             }
 
-        } else {
-            if ($prepRnd->alreadyDeveloped === 'No Need to Develop') {
-                // For Tape Match & No Need to Develop: just mark delivered without shades
-                $deliveredQty = (int)($request->input('sampleQty') ?? $inquiry->sampleQty ?? 1);
-                $deliveredShades[] = [
-                    'quantity' => $deliveredQty,
-                ];
-                $inquiry->productionStatus = 'Delivered';
-                $inquiry->deliveryQty = $deliveredQty;
+        } else if ($prepRnd->alreadyDeveloped === 'No Need to Develop') {
+            // For Tape Match & No Need to Develop: just mark delivered without shades
+            $deliveredQty = (int)($request->input('sampleQty') ?? $inquiry->sampleQty ?? 1);
+            $deliveredShades[] = [
+                'quantity' => $deliveredQty,
+            ];
+            $inquiry->productionStatus = 'Delivered';
+            $inquiry->deliveryQty = $deliveredQty;
 
-                // ✅ Directly set as Delivered since no shades exist
-                $prepRnd->productionStatus = 'Order Delivered';
+            // ✅ Directly set as Delivered since no shades exist
+            $prepRnd->productionStatus = 'Order Delivered';
 
-                if ($inquiry->referenceNo && $deliveredQty > 0) {
-                    $refNo = $inquiry->referenceNo;
-                    $shade = null;
+            if ($inquiry->referenceNo && $deliveredQty > 0) {
+                $refNo = $inquiry->referenceNo;
+                $shade = null;
 
-                    if (str_contains($refNo, '|')) {
-                        [$refNo, $shade] = explode('|', $refNo);
-                        $refNo = trim($refNo);
-                        $shade = trim($shade);
-                    }
+                if (str_contains($refNo, '|')) {
+                    [$refNo, $shade] = explode('|', $refNo);
+                    $refNo = trim($refNo);
+                    $shade = trim($shade);
+                }
 
-                    // Ensure both refNo + shade are used
-                    $stockQuery = SampleStock::where('reference_no', $refNo);
-                    if ($shade) {
-                        $stockQuery->where('shade', $shade);
-                    }
+                // Ensure both refNo + shade are used
+                $stockQuery = SampleStock::where('reference_no', $refNo);
+                if ($shade) {
+                    $stockQuery->where('shade', $shade);
+                }
 
-                    $stock = $stockQuery->first();
+                $stock = $stockQuery->first();
 
-                    if ($stock && $deliveredQty <= $stock->available_stock) {
-                        // decrease stock
-                        $stock->available_stock -= $deliveredQty;
+                if ($stock && $deliveredQty <= $stock->available_stock) {
+                    // decrease stock
+                    $stock->available_stock -= $deliveredQty;
 
-                        if ($stock->available_stock <= 0) {
-                            $stock->delete();
-                        } else {
-                            $stock->save();
-                        }
+                    if ($stock->available_stock <= 0) {
+                        $stock->delete();
+                    } else {
+                        $stock->save();
                     }
                 }
-            } else {
-                $inquiry->productionStatus = 'Delivered';
-                $inquiry->deliveryQty = 0;
-                $prepRnd->productionStatus = 'Order Delivered';
             }
+        } else {
+            $inquiry->productionStatus = 'Delivered';
+            $inquiry->deliveryQty = 0;
+            $prepRnd->productionStatus = 'Order Delivered';
         }
 
         $totalDeliveredQty = array_sum(array_column($deliveredShades, 'quantity'));
@@ -440,7 +440,7 @@ class SampleInquiryController extends Controller
             $inquiry->dNoteNumber = $fileName;
             $inquiry->save();
         } catch (Exception $e) {
-            \Log::error('Dispatch Note Generation Failed: ' . $e->getMessage());
+            Log::error('Dispatch Note Generation Failed: ' . $e->getMessage());
             return back()->with('error', 'Delivery marked, but dispatch note generation failed.');
         }
 
@@ -451,7 +451,7 @@ class SampleInquiryController extends Controller
     /**
      * Function to update customer decision (customerDecision and rejectNO)
      */
-    public function updateDecision(Request $request, $id)
+    public function updateDecision(Request $request, $id): RedirectResponse
     {
         $request->validate([
             'customerDecision' => 'required|string|in:Pending,Order Received,Order Not Received,Order Rejected',
@@ -461,7 +461,7 @@ class SampleInquiryController extends Controller
         $sampleInquiry = SampleInquiry::findOrFail($id);
         $sampleInquiry->customerDecision = $request->input('customerDecision');
 
-        // Store orderRejectNumber only if customerDecision is 'Order Rejected'
+        // Store orderRejectNumber only if the customerDecision is 'Order Rejected'
         if ($request->input('customerDecision') === 'Order Rejected') {
             $sampleInquiry->rejectNO = $request->input('orderRejectNumber');
         } else {
@@ -476,9 +476,9 @@ class SampleInquiryController extends Controller
 
 
     /**
-     * Function to upload order file (orderFile)
+     * Function to upload the order file (orderFile)
      */
-    public function uploadOrderFile(Request $request, $id)
+    public function uploadOrderFile(Request $request, $id): RedirectResponse
     {
         $request->validate([
             'order_file' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048', // max 2MB
@@ -486,14 +486,13 @@ class SampleInquiryController extends Controller
 
         $inquiry = SampleInquiry::findOrFail($id);
 
-        $orderNo = $inquiry->order_no; // or whatever field represents the order number
-        $orderFilePath = null;
+        $orderNo = $inquiry->order_no; // or whatever field represents the order number?
 
         // Handle file upload
         if ($request->hasFile('order_file')) {
             $date = now()->format('YmdHis'); // e.g. 20250818113045
             $extension = $request->file('order_file')->getClientOriginalExtension();
-            $fileName = $orderNo . '_' . $date . '_' . uniqid() . '.' . $extension;
+            $fileName = $orderNo . '_' . $date . '_' . uniqid('', true) . '.' . $extension;
 
             $orderFilePath = $request->file('order_file')->storeAs(
                 'order_files',
@@ -501,12 +500,11 @@ class SampleInquiryController extends Controller
                 'public'
             );
 
-            // Save file path in database
+            // Save file path in the database
             $inquiry->orderFile = $orderFilePath;
             $inquiry->save();
         }
 
         return redirect()->back()->with('success', 'Swatch uploaded successfully!');
     }
-
 }

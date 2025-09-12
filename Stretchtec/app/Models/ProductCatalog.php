@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * --------------------------------------------------------------------------
@@ -24,17 +26,19 @@ use Illuminate\Database\Eloquent\Model;
  *
  * Example:
  *   $catalog = ProductCatalog::create([
- *       'order_no'       => 'ORD123',
- *       'reference_no'   => 'REF456',
- *       'item'           => 'Elastic Band',
- *       'size'           => 'M',
- *       'colour'         => 'Blue',
- *       'shade'          => 'Shade A',
- *       'tkt'            => 'TKT-12',
- *       'supplier'       => 'ABC Suppliers',
+ *       'order_no' => 'ORD123',
+ *       'reference_no' => 'REF456',
+ *       'item' => 'Elastic Band',
+ *       'size' => 'M',
+ *       'color' => 'Blue',
+ *       'shade' => 'Shade A',
+ *       'tkt' => 'TKT-12',
+ *       'supplier' => 'ABC Suppliers',
  *       'reference_added_date' => now(),
  *   ]);
  * --------------------------------------------------------------------------
+ * @method static where(string $string, mixed $orderNo)
+ * @method static create(array $data)
  */
 class ProductCatalog extends Model
 {
@@ -55,7 +59,7 @@ class ProductCatalog extends Model
      *  - coordinator_name           → Name of the customer coordinator
      *  - item                       → Item type (e.g., Elastic, Tape)
      *  - size                       → Item size
-     *  - colour                     → Item color
+     *  - color → Item color
      *  - shade                      → Shade name/number
      *  - tkt                        → Ticket number for yarn
      *  - order_image                → Path to uploaded image of the order
@@ -117,7 +121,7 @@ class ProductCatalog extends Model
      * Each ProductCatalog belongs to a single Sample Preparation RnD entry.
      * This ties product catalog data back to RnD details.
      */
-    public function samplePreparationRnD()
+    public function samplePreparationRnD(): BelongsTo
     {
         return $this->belongsTo(SamplePreparationRnD::class);
     }
@@ -129,7 +133,7 @@ class ProductCatalog extends Model
      * Each ProductCatalog can be linked to a single Sample Inquiry.
      * This allows tracking of customer requests tied to the catalog.
      */
-    public function sampleInquiry()
+    public function sampleInquiry(): BelongsTo
     {
         return $this->belongsTo(SampleInquiry::class);
     }
@@ -141,7 +145,7 @@ class ProductCatalog extends Model
      * A ProductCatalog can have many Shade Orders associated with it.
      * This is mapped using `sample_preparation_rnd_id`.
      */
-    public function shadeOrders()
+    public function shadeOrders(): HasMany
     {
         return $this->hasMany(ShadeOrder::class, 'sample_preparation_rnd_id', 'sample_preparation_rnd_id');
     }

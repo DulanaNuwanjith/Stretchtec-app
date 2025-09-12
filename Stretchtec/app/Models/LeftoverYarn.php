@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -18,6 +19,9 @@ use Illuminate\Database\Eloquent\Model;
  *  - Uses `$fillable` to protect against mass assignment vulnerabilities.
  *  - Uses `$casts` to automatically handle date conversions.
  * --------------------------------------------------------------------------
+ * @method static create(array $array)
+ * @method static findOrFail($id)
+ * @method static where(string $string, string $string1, Carbon $subDays)
  */
 class LeftoverYarn extends Model
 {
@@ -29,15 +33,16 @@ class LeftoverYarn extends Model
      * Protects against mass assignment vulnerabilities.
      *
      * Columns:
-     *  - shade             → Yarn shade identifier
-     *  - po_number         → Purchase Order number related to yarn order
+     *  - shade → Yarn shade identifier
+     *  - po_number → Purchase Order number related to yarn order
      *  - yarn_received_date→ Date the yarn was received
-     *  - tkt               → TKT (ticket/thread specification)
-     *  - yarn_supplier     → Supplier name of the yarn
-     *  - available_stock   → Current available stock (quantity)
+     *  - tkt → TKT (ticket/thread specification)
+     *  - yarn_supplier → Supplier name of the yarn
+     *  - available_stock → Current available stock (quantity)
      */
     protected $fillable = [
         'shade',                // Yarn Shade
+        'pst_no',               // PST Number
         'po_number',            // Yarn Ordered PO Number
         'yarn_received_date',   // Date when yarn was received
         'tkt',                  // TKT (thread spec)

@@ -145,6 +145,10 @@
                     </th>
                     <th
                         class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase border-r border-gray-300 dark:border-gray-600">
+                        PST No
+                    </th>
+                    <th
+                        class="px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase border-r border-gray-300 dark:border-gray-600">
                         Yarn Ordered PO Number
                     </th>
                     <th
@@ -184,6 +188,12 @@
                             <input
                                 class="hidden editable w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm text-center"
                                 value="{{ $record->shade }}"/>
+                        </td>
+                        <td class="px-4 py-3 border-r border-gray-300 dark:border-gray-600">
+                            <span class="readonly">{{ $record->pst_no ?? '-'}}</span>
+                            <input
+                                class="hidden editable w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm text-center"
+                                value="{{ $record->pst_no }}"/>
                         </td>
                         <td class="px-4 py-3 border-r border-gray-300 dark:border-gray-600">
                             <span class="readonly">{{ $record->po_number }}</span>

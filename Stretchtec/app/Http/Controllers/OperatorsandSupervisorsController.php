@@ -4,16 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Models\OperatorsandSupervisors;
 use Exception;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Validation\ValidationException;
+use Illuminate\View\Factory;
+use Illuminate\View\View;
 
 class OperatorsandSupervisorsController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): View|Factory|RedirectResponse
     {
         try {
             // Order by 'empID' ascending before pagination
@@ -33,7 +36,7 @@ class OperatorsandSupervisorsController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(): void
     {
         //
     }
@@ -42,7 +45,7 @@ class OperatorsandSupervisorsController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request): ?RedirectResponse
     {
         try {
             // Validate incoming request
@@ -65,13 +68,8 @@ class OperatorsandSupervisorsController extends Controller
                 'role' => $validatedData['role'],
             ]);
 
-            // Redirect back with success message
+            // Redirect back with the success message
             return redirect()->back()->with('success', 'Operator or Supervisor created successfully.');
-
-        } catch (ValidationException $e) {
-            Log::error('Validation failed for Operator or Supervisor creation: ' . $e->getMessage());
-            // Return validation error message with redirect
-            return redirect()->back()->withErrors($e->errors())->withInput();
 
         } catch (Exception $e) {
             // Log unexpected errors
@@ -85,7 +83,7 @@ class OperatorsandSupervisorsController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(OperatorsandSupervisors $operatorsandSupervisors)
+    public function show(OperatorsandSupervisors $operatorsandSupervisors): void
     {
         //
     }
@@ -94,7 +92,7 @@ class OperatorsandSupervisorsController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(OperatorsandSupervisors $operatorsandSupervisors)
+    public function edit(OperatorsandSupervisors $operatorsandSupervisors): void
     {
         //
     }
@@ -103,7 +101,7 @@ class OperatorsandSupervisorsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, OperatorsandSupervisors $operatorsandSupervisors)
+    public function update(Request $request, OperatorsandSupervisors $operatorsandSupervisors): JsonResponse
     {
         try {
             // Validate incoming request
@@ -120,14 +118,7 @@ class OperatorsandSupervisorsController extends Controller
 
             return response()->json([
                 'message' => 'Operator or Supervisor updated successfully'
-            ], 200);
-
-        } catch (ValidationException $e) {
-            // Return validation error messages
-            return response()->json([
-                'message' => 'Validation failed',
-                'errors' => $e->errors()
-            ], 422);
+            ]);
 
         } catch (Exception $e) {
             // Log unexpected errors
@@ -143,7 +134,7 @@ class OperatorsandSupervisorsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id)
+    public function destroy($id): RedirectResponse
     {
         try {
             // Manually find by ID to ensure deletion works even if route binding breaks

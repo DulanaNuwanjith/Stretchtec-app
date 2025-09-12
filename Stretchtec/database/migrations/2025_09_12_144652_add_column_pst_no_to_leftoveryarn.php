@@ -10,8 +10,8 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::table('sample_preparation_rnd', static function (Blueprint $table) {
-            $table->string('pst_no')->nullable()->after('yarnReceiveDate');
+        Schema::table('leftover_yarns', static function (Blueprint $table) {
+            $table->string('pst_no')->nullable()->after('shade'); // add pst_no after shade
         });
     }
 
@@ -20,8 +20,8 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::table('sample_preparation_rnd', function (Blueprint $table) {
-            //
+        Schema::table('leftover_yarns', static function (Blueprint $table) {
+            $table->dropColumn('pst_no');
         });
     }
 };

@@ -10,6 +10,11 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
 
+/**
+ * @method static paginate(int $int)
+ * @method static findOrFail($id)
+ * @method static where(string $string, string $string1)
+ */
 class User extends Authenticatable
 {
     use HasApiTokens;
