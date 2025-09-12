@@ -433,7 +433,8 @@
                                                                                                 Shade: {{ $shade->shade }}
                                                                                             </div>
                                                                                             <div class="font-semibold">
-                                                                                                PST No: {{ $shade->pst_no }}
+                                                                                                PST
+                                                                                                No: {{ $shade->pst_no }}
                                                                                             </div>
                                                                                             <div
                                                                                                 class="text-sm text-gray-600">
