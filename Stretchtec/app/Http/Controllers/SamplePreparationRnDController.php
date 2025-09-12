@@ -27,35 +27,35 @@ class SamplePreparationRnDController extends Controller
 
         // Filters
         if ($request->filled('order_no')) {
-            $query->where('orderNo', $request->order_no);
+            $query->where('orderNo', $request->input('order_no'));
         }
 
         if ($request->filled('po_no')) {
-            $query->where('yarnOrderedPONumber', $request->po_no);
+            $query->where('yarnOrderedPONumber', $request->input('po_no'));
         }
 
         if ($request->filled('shade')) {
             // Filter by the shade_orders table if needed
             $query->whereHas('shadeOrders', function ($q) use ($request) {
-                $q->where('shade', $request->shade);
+                $q->where('shade', $request->input('shade'));
             });
         }
 
         if ($request->filled('reference_no')) {
-            $query->where('referenceNo', $request->reference_no);
+            $query->where('referenceNo', $request->input('reference_no'));
         }
 
         if ($request->filled('customer_requested_date')) {
-            $query->whereDate('customerRequestDate', $request->customer_requested_date);
+            $query->whereDate('customerRequestDate', $request->input('customer_requested_date'));
         }
 
         if ($request->filled('development_plan_date')) {
-            $query->whereDate('developPlannedDate', $request->development_plan_date);
+            $query->whereDate('developPlannedDate', $request->input('development_plan_date'));
         }
 
         if ($request->filled('coordinator_name')) {
             $query->whereHas('sampleInquiry', function ($q) use ($request) {
-                $q->where('coordinatorName', $request->coordinator_name);
+                $q->where('coordinatorName', $request->input('coordinator_name'));
             });
         }
 
@@ -114,7 +114,7 @@ class SamplePreparationRnDController extends Controller
             'id' => 'required|exists:sample_preparation_rnd,id',
         ]);
 
-        $rnd = SamplePreparationRnD::findOrFail($request->id);
+        $rnd = SamplePreparationRnD::findOrFail($request->input('id'));
         $rnd->colourMatchSentDate = Carbon::now();
         $rnd->productionStatus = 'Colour Match Sent'; // Update production status
         $rnd->save();
@@ -138,7 +138,7 @@ class SamplePreparationRnDController extends Controller
             'id' => 'required|exists:sample_preparation_rnd,id',
         ]);
 
-        $rnd = SamplePreparationRnD::findOrFail($request->id);
+        $rnd = SamplePreparationRnD::findOrFail($request->input('id'));
         $rnd->colourMatchReceiveDate = Carbon::now();
         $rnd->productionStatus = 'Colour Match Received'; // Update production status
         $rnd->save();
@@ -172,15 +172,15 @@ class SamplePreparationRnDController extends Controller
         ]);
 
         // Determine supplier
-        $yarnSupplier = $request->customSupplier ?: $request->yarnSupplier;
+        $yarnSupplier = $request->input('customSupplier') ?: $request->input('yarnSupplier');
 
         // Find the RnD record
-        $rnd = SamplePreparationRnD::findOrFail($request->id);
+        $rnd = SamplePreparationRnD::findOrFail($request->input('id'));
         $rnd->yarnOrderedDate = Carbon::now();
-        $rnd->yarnOrderedPONumber = $request->yarnOrderedPONumber;
-        $rnd->yarnOrderedWeight = $request->value;
-        $rnd->tkt = $request->tkt;
-        $rnd->yarnPrice = $request->yarnPrice;
+        $rnd->yarnOrderedPONumber = $request->input('yarnOrderedPONumber');
+        $rnd->yarnOrderedWeight = $request->input('value');
+        $rnd->tkt = $request->input('tkt');
+        $rnd->yarnPrice = $request->input('yarnPrice');
         $rnd->yarnSupplier = $yarnSupplier;
 
         // Lock fields after submission
@@ -193,12 +193,12 @@ class SamplePreparationRnDController extends Controller
         $rnd->save();
 
         // Handle shades
-        if ($request->shades && count($request->shades) > 0) {
+        if ($request->input('shades') && count($request->input('shades')) > 0) {
             // Delete old shade records if any
             $rnd->shadeOrders()->delete();
 
             // Insert new shade records into the shade_orders table
-            foreach ($request->shades as $shade) {
+            foreach ($request->input('shades') as $shade) {
                 $rnd->shadeOrders()->create([
                     'shade' => $shade,
                     'status' => 'Pending',
@@ -206,7 +206,7 @@ class SamplePreparationRnDController extends Controller
             }
 
             // Update the RnD shade column with comma-separated values
-            $rnd->shade = implode(', ', $request->shades);
+            $rnd->shade = implode(', ', $request->input('shades'));
             $rnd->save();
         }
 
@@ -232,11 +232,11 @@ class SamplePreparationRnDController extends Controller
             'shade_ids.*' => 'exists:shade_orders,id',
         ]);
 
-        $rnd = SamplePreparationRnD::findOrFail($request->rnd_id);
+        $rnd = SamplePreparationRnD::findOrFail($request->input('rnd_id'));
 
         $newPstNumbers = []; // For RnD aggregated column
 
-        foreach ($request->shade_ids as $shadeId) {
+        foreach ($request->input('shade_ids') as $shadeId) {
             $shade = ShadeOrder::findOrFail($shadeId);
 
             // Only process PST if RnD supplier is Pan Asia
@@ -251,7 +251,7 @@ class SamplePreparationRnDController extends Controller
                     }, explode(',', $pstNoInput));
 
                     // Append to RnD aggregated column
-                    $newPstNumbers = array_merge($newPstNumbers, $pstNumbers);
+                    array_push($newPstNumbers, ...$pstNumbers);
 
                     // Save to shade_orders table (per shade)
                     $existingShadePst = $shade->pst_no ? explode(',', $shade->pst_no) : [];
@@ -267,7 +267,8 @@ class SamplePreparationRnDController extends Controller
         // Append aggregated PST to RnD column
         if (!empty($newPstNumbers)) {
             $existingPst = $rnd->pst_no ? explode(',', $rnd->pst_no) : [];
-            $rnd->pst_no = implode(',', array_merge($existingPst, $newPstNumbers));
+            array_push($existingPst, ...$newPstNumbers);
+            $rnd->pst_no = implode(',', $existingPst);
         }
 
         // Update production status
@@ -305,10 +306,10 @@ class SamplePreparationRnDController extends Controller
             'shade_ids.*' => 'exists:shade_orders,id',
         ]);
 
-        $rnd = SamplePreparationRnD::findOrFail($request->rnd_id);
+        $rnd = SamplePreparationRnD::findOrFail($request->input('rnd_id'));
 
         // Update selected shades to "Sent to Production"
-        ShadeOrder::whereIn('id', $request->shade_ids)->update([
+        ShadeOrder::whereIn('id', $request->input('shade_ids'))->update([
             'status' => 'Sent to Production',
         ]);
 
@@ -362,13 +363,13 @@ class SamplePreparationRnDController extends Controller
             'developPlannedDate' => 'required|date',
         ]);
 
-        $prep = SamplePreparationRnD::findOrFail($request->id);
+        $prep = SamplePreparationRnD::findOrFail($request->input('id'));
 
         if ($prep->developPlannedDate) {
             return back()->with('error', 'Development Plan Date is already set and locked.');
         }
 
-        $prep->developPlannedDate = $request->developPlannedDate;
+        $prep->developPlannedDate = $request->input('developPlannedDate');
         $prep->is_dev_plan_locked = true;
         $prep->save();
 
@@ -386,9 +387,9 @@ class SamplePreparationRnDController extends Controller
             'yarnOrderedPONumber' => 'required|string',
         ]);
 
-        $prep = SamplePreparationRnD::findOrFail($request->id);
+        $prep = SamplePreparationRnD::findOrFail($request->input('id'));
         if (!$prep->is_po_locked) {
-            $prep->yarnOrderedPONumber = $request->yarnOrderedPONumber;
+            $prep->yarnOrderedPONumber = $request->input('yarnOrderedPONumber');
             $prep->is_po_locked = true;
             $prep->save();
         }
@@ -407,9 +408,9 @@ class SamplePreparationRnDController extends Controller
             'shade' => 'required|string',
         ]);
 
-        $prep = SamplePreparationRnD::findOrFail($request->id);
+        $prep = SamplePreparationRnD::findOrFail($request->input('id'));
         if (!$prep->is_shade_locked) {
-            $prep->shade = $request->shade;
+            $prep->shade = $request->input('shade');
             $prep->is_shade_locked = true;
             $prep->save();
         }
@@ -428,9 +429,9 @@ class SamplePreparationRnDController extends Controller
             'tkt' => 'required|string',
         ]);
 
-        $prep = SamplePreparationRnD::findOrFail($request->id);
+        $prep = SamplePreparationRnD::findOrFail($request->input('id'));
         if (!$prep->is_tkt_locked) {
-            $prep->tkt = $request->tkt;
+            $prep->tkt = $request->input('tkt');
             $prep->is_tkt_locked = true;
             $prep->save();
         }
@@ -449,9 +450,9 @@ class SamplePreparationRnDController extends Controller
             'yarnSupplier' => 'required|string',
         ]);
 
-        $prep = SamplePreparationRnD::findOrFail($request->id);
+        $prep = SamplePreparationRnD::findOrFail($request->input('id'));
         if (!$prep->is_supplier_locked) {
-            $prep->yarnSupplier = $request->yarnSupplier;
+            $prep->yarnSupplier = $request->input('yarnSupplier');
             $prep->is_supplier_locked = true;
             $prep->save();
         }
@@ -470,9 +471,9 @@ class SamplePreparationRnDController extends Controller
             'productionDeadline' => 'required|date',
         ]);
 
-        $prep = SamplePreparationRnD::findOrFail($request->id);
+        $prep = SamplePreparationRnD::findOrFail($request->input('id'));
         if (!$prep->is_deadline_locked) {
-            $prep->productionDeadline = $request->productionDeadline;
+            $prep->productionDeadline = $request->input('productionDeadline');
             $prep->is_deadline_locked = true;
             $prep->save();
         }
@@ -492,7 +493,7 @@ class SamplePreparationRnDController extends Controller
             'shade' => 'nullable|string',
         ]);
 
-        $prep = SamplePreparationRnD::findOrFail($request->id);
+        $prep = SamplePreparationRnD::findOrFail($request->input('id'));
         $referenceNo = $request->input('referenceNo');
         $shadeRef = $request->input('shade');
 
@@ -512,20 +513,17 @@ class SamplePreparationRnDController extends Controller
         // --- Handle "No Need to Develop" differently ---
         if ($prep->alreadyDeveloped === 'No Need to Develop') {
             $finalReference = $shadeRef
-                ? "{$referenceNo}|{$shadeRef}"
+                ? "$referenceNo|$shadeRef"
                 : $referenceNo;
         } else {
             $finalReference = $referenceNo;
         }
 
+        $prep->referenceNo = $finalReference;
         if ($isFirstTime) {
-            $prep->referenceNo = $finalReference;
             $prep->is_reference_locked = true;
-            $prep->save();
-        } else {
-            $prep->referenceNo = $finalReference;
-            $prep->save();
         }
+        $prep->save();
 
         // Fetch shades dispatched to RnD but not yet in stock
         $dispatchedShades = $prep->shadeOrders
@@ -575,7 +573,7 @@ class SamplePreparationRnDController extends Controller
             'value' => 'nullable|numeric',
         ]);
 
-        $prep = SamplePreparationRnD::findOrFail($request->id);
+        $prep = SamplePreparationRnD::findOrFail($request->input('id'));
 
         // Disallow update if locked (you can adjust this condition if locking rules differ)
         if ($prep->alreadyDeveloped || $prep->developPlannedDate) {
@@ -583,14 +581,14 @@ class SamplePreparationRnDController extends Controller
         }
 
         // Always update alreadyDeveloped
-        $prep->alreadyDeveloped = $request->alreadyDeveloped;
+        $prep->alreadyDeveloped = $request->input('alreadyDeveloped');
 
         // Only update extra fields when Tape Match Pan Asia
-        if ($request->alreadyDeveloped === 'Tape Match Pan Asia') {
-            $prep->shade = $request->shade;
-            $prep->tkt = $request->tkt;
-            $prep->yarnSupplier = $request->yarnSupplier;
-            $prep->yarnOrderedWeight = $request->value;
+        if ($request->input('alreadyDeveloped') === 'Tape Match Pan Asia') {
+            $prep->shade = $request->input('shade');
+            $prep->tkt = $request->input('tkt');
+            $prep->yarnSupplier = $request->input('yarnSupplier');
+            $prep->yarnOrderedWeight = $request->input('value');
             $prep->productionStatus = 'Tape Match';
 
             $sampleInquiry = SampleInquiry::where('orderNo', $prep->orderNo)->first();
@@ -606,7 +604,7 @@ class SamplePreparationRnDController extends Controller
             $prep->is_yarn_ordered_weight_locked = true;
         }
 
-        if ($request->alreadyDeveloped === 'No Need to Develop') {
+        if ($request->input('alreadyDeveloped') === 'No Need to Develop') {
             $prep->productionStatus = 'No Development';
 
             $sampleInquiry = SampleInquiry::where('orderNo', $prep->orderNo)->first();
@@ -634,8 +632,8 @@ class SamplePreparationRnDController extends Controller
             'value' => 'required',
         ]);
 
-        $prep = SamplePreparationRnD::findOrFail($request->id);
-        $field = $request->field;
+        $prep = SamplePreparationRnD::findOrFail($request->input('id'));
+        $field = $request->input('field');
         $lockField = 'is_' . Str::snake($field) . '_locked';
 
         // If yarnLeftoverWeight and multiple shades -> array values expected
@@ -643,10 +641,10 @@ class SamplePreparationRnDController extends Controller
             $shadeList = array_map('trim', explode(',', $prep->shade));
 
             // Ensure $values is always an array
-            $values = is_array($request->value) ? $request->value : explode(',', (string) $request->value);
+            $values = is_array($request->input('value')) ? $request->input('value') : explode(',', (string)$request->input('value'));
 
             foreach ($shadeList as $index => $shade) {
-                $weight = isset($values[$index]) ? (float) $values[$index] : 0;
+                $weight = isset($values[$index]) ? (float)$values[$index] : 0;
 
                 // Get pst_no from related shadeOrders for this shade
                 $pstNo = $prep->shadeOrders()
@@ -674,7 +672,7 @@ class SamplePreparationRnDController extends Controller
             $prep->$field = implode(',', $values);
         } else {
             // Single shade scenario: enforce numeric value
-            $weight = is_array($request->value) ? (float) ($request->value[0] ?? 0) : (float) $request->value;
+            $weight = is_array($request->input('value')) ? (float)($request->value[0] ?? 0) : (float)$request->input('value');
             $prep->$field = $weight;
 
             if ($field === 'yarnLeftoverWeight') {
@@ -718,7 +716,7 @@ class SamplePreparationRnDController extends Controller
         ]);
 
         $leftover = LeftoverYarn::findOrFail($id);
-        $borrowQty = $request->borrow_qty;
+        $borrowQty = $request->input('borrow_qty');
 
         if ($borrowQty > $leftover->available_stock) {
             return back()->with('error', 'Borrowed quantity exceeds available stock.');

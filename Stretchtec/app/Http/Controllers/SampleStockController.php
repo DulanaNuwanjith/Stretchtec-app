@@ -63,10 +63,10 @@ class SampleStockController extends Controller
             ]);
 
             SampleStock::create([
-                'reference_no' => $request->reference_no,
-                'shade' => $request->shade,
-                'available_stock' => $request->available_stock,
-                'special_note' => $request->special_note,
+                'reference_no' => $request->input('reference_no'),
+                'shade' => $request->input('shade'),
+                'available_stock' => $request->input('available_stock'),
+                'special_note' => $request->input('special_note'),
             ]);
 
             return redirect()->back()->with('success', 'Sample stock created successfully.');
@@ -104,7 +104,7 @@ class SampleStockController extends Controller
         ]);
 
         $stock = SampleStock::findOrFail($id);
-        $stock->special_note = $request->special_note;
+        $stock->special_note = $request->input('special_note');
         $stock->save();
 
         return back()->with('success', 'Special note updated successfully.');
@@ -130,7 +130,7 @@ class SampleStockController extends Controller
         ]);
 
         $stock = SampleStock::findOrFail($id);
-        $borrowQty = $request->borrow_qty;
+        $borrowQty = $request->input('borrow_qty');
 
         if ($borrowQty > $stock->available_stock) {
             return redirect()->back()->withErrors(['borrow_qty' => 'Borrowing quantity exceeds available stock.']);
