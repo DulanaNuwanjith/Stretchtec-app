@@ -1865,7 +1865,7 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                @elseif($prep->alreadyDeveloped == 'Need to Develop')
+                                                @elseif($prep->alreadyDeveloped === 'Need to Develop')
                                                     <span class="text-gray-400 italic">No dispatched shades</span>
                                                 @else
                                                     <span class="text-gray-400 italic">—</span>
@@ -1875,19 +1875,23 @@
                                             {{-- Yarn Leftover Weight --}}
                                             <td class="px-4 py-3 border-r border-gray-300 text-center"
                                                 x-data="{ openWeight: false }">
-                                                @if ($prep->alreadyDeveloped == 'Need to Develop')
+                                                @if ($prep->alreadyDeveloped === 'Need to Develop')
                                                     @php
-                                                        $shades = array_map('trim', explode(',', $prep->shade));
+                                                        // Get shade orders (with shade + pst_no)
+                                                        $shadeOrders = $prep->shadeOrders ?? collect();
+
+                                                        // Yarn weights as array
                                                         $weights = $prep->yarnLeftoverWeight
                                                             ? explode(',', $prep->yarnLeftoverWeight)
                                                             : [];
+
                                                         $canSave =
                                                             $prep->production &&
                                                             is_numeric($prep->production->production_output) &&
                                                             is_numeric($prep->production->damaged_output);
                                                     @endphp
 
-                                                    @if (Auth::user()->role === 'ADMIN' or Auth::user()->role === 'PRODUCTIONOFFICER')
+                                                    @if (Auth::user()->role === 'ADMIN' || Auth::user()->role === 'PRODUCTIONOFFICER')
                                                         {{-- ADMIN/PRODUCTION OFFICER --}}
                                                         @if ($prep->is_yarn_leftover_weight_locked)
                                                             <button type="button" @click="openWeight = true"
@@ -1914,21 +1918,11 @@
                                                             </button>
                                                         @else
                                                             @php
-                                                                $shades = array_map(
-                                                                    'trim',
-                                                                    explode(',', $prep->shade),
-                                                                );
-                                                                $weights = $prep->yarnLeftoverWeight
-                                                                    ? explode(',', $prep->yarnLeftoverWeight)
-                                                                    : [];
-                                                                $totalWeight = array_sum(
-                                                                    array_map('floatval', $weights),
-                                                                );
+                                                                $totalWeight = array_sum(array_map('floatval', $weights));
                                                             @endphp
-
                                                             <button type="button" @click="openWeight = true"
                                                                     class="px-2 py-1 rounded transition-all duration-200 bg-gray-300 text-black hover:bg-gray-400">
-                                                                @if (count($shades) === 1)
+                                                                @if ($shadeOrders->count() === 1)
                                                                     {{ $weights[0] ?? 'Not Provided' }} g
                                                                 @else
                                                                     {{ $totalWeight }} g
@@ -1948,18 +1942,19 @@
                                                                 ✕
                                                             </button>
 
-                                                            <h2
-                                                                class="text-lg font-semibold text-blue-900 dark:text-white mb-4">
-                                                                Yarn Leftover Weights</h2>
+                                                            <h2 class="text-lg font-semibold text-blue-900 dark:text-white mb-4">
+                                                                Yarn Leftover Weights
+                                                            </h2>
 
                                                             @if (Auth::user()->role === 'ADMIN' or Auth::user()->role === 'PRODUCTIONOFFICER')
                                                                 {{-- Admin readonly shade-wise view --}}
                                                                 <div class="space-y-2">
-                                                                    @foreach ($shades as $index => $shade)
+                                                                    @foreach ($shadeOrders as $index => $order)
                                                                         <div
                                                                             class="flex justify-between text-sm text-gray-700 dark:text-gray-300 px-2 py-1 border rounded bg-gray-100 dark:bg-gray-700">
-                                                                                <span
-                                                                                    class="font-medium">{{ $shade }}:</span>
+                                <span class="font-medium">
+                                    {{ $order->shade }} (PST: {{ $order->pst_no }})
+                                </span>
                                                                             <span>{{ isset($weights[$index]) ? $weights[$index] . ' g' : 'Not Provided' }}</span>
                                                                         </div>
                                                                     @endforeach
@@ -1967,23 +1962,17 @@
                                                             @else
                                                                 {{-- Editable form --}}
                                                                 @if (!$prep->is_yarn_leftover_weight_locked)
-                                                                    <form
-                                                                        action="{{ route('rnd.updateYarnWeights') }}"
-                                                                        method="POST">
+                                                                    <form action="{{ route('rnd.updateYarnWeights') }}" method="POST">
                                                                         @csrf
-                                                                        <input type="hidden" name="id"
-                                                                               value="{{ $prep->id }}">
-                                                                        <input type="hidden" name="field"
-                                                                               value="yarnLeftoverWeight">
+                                                                        <input type="hidden" name="id" value="{{ $prep->id }}">
+                                                                        <input type="hidden" name="field" value="yarnLeftoverWeight">
 
-                                                                        @foreach ($shades as $index => $shade)
+                                                                        @foreach ($shadeOrders as $index => $order)
                                                                             <div class="mb-2">
-                                                                                <label
-                                                                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                                                                    Shade: {{ $shade }}
+                                                                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                                                                    Shade: {{ $order->shade }} - PST NO: {{ $order->pst_no }}
                                                                                 </label>
-                                                                                <input type="number" step="0.01"
-                                                                                       min="0" name="value[]"
+                                                                                <input type="number" step="0.01" min="0" name="value[]"
                                                                                        value="{{ $weights[$index] ?? '' }}"
                                                                                        class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                                                        required>
@@ -1991,8 +1980,7 @@
                                                                         @endforeach
 
                                                                         <div class="mt-4 flex justify-end gap-2">
-                                                                            <button type="button"
-                                                                                    @click="openWeight = false"
+                                                                            <button type="button" @click="openWeight = false"
                                                                                     class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400">
                                                                                 Cancel
                                                                             </button>
@@ -2007,11 +1995,12 @@
                                                                 @else
                                                                     {{-- Locked shade-wise view for non-admin --}}
                                                                     <div class="space-y-2">
-                                                                        @foreach ($shades as $index => $shade)
+                                                                        @foreach ($shadeOrders as $index => $order)
                                                                             <div
                                                                                 class="flex justify-between text-sm text-gray-700 dark:text-gray-300 px-2 py-1 border rounded bg-gray-100 dark:bg-gray-700">
-                                                                                    <span
-                                                                                        class="font-medium">{{ $shade }}:</span>
+                                    <span class="font-medium">
+                                        {{ $order->shade }} (PST: {{ $order->pst_no }})
+                                    </span>
                                                                                 <span>{{ isset($weights[$index]) ? $weights[$index] . ' g' : 'Not Provided' }}</span>
                                                                             </div>
                                                                         @endforeach
