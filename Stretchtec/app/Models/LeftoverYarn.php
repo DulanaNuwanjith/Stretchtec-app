@@ -42,6 +42,7 @@ class LeftoverYarn extends Model
      */
     protected $fillable = [
         'shade',                // Yarn Shade
+        'pst_no',               // PST Number
         'po_number',            // Yarn Ordered PO Number
         'yarn_received_date',   // Date when yarn was received
         'tkt',                  // TKT (thread spec)

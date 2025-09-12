@@ -643,10 +643,21 @@ class SamplePreparationRnDController extends Controller
             $shadeList = array_map('trim', explode(',', $prep->shade));
 
             // Ensure $values is always an array
-            $values = is_array($request->value) ? $request->value : explode(',', (string)$request->value);
+            $values = is_array($request->value) ? $request->value : explode(',', (string) $request->value);
 
             foreach ($shadeList as $index => $shade) {
-                $weight = isset($values[$index]) ? (float)$values[$index] : 0;
+                $weight = isset($values[$index]) ? (float) $values[$index] : 0;
+
+                // Get pst_no from related shadeOrders for this shade
+                $pstNo = $prep->shadeOrders()
+                    ->where('shade', $shade)
+                    ->pluck('pst_no')
+                    ->unique()
+                    ->implode(', ');
+
+                if (empty($pstNo)) {
+                    $pstNo = '-';
+                }
 
                 LeftoverYarn::create([
                     'shade' => $shade,
@@ -655,6 +666,7 @@ class SamplePreparationRnDController extends Controller
                     'tkt' => $prep->tkt,
                     'yarn_supplier' => $prep->yarnSupplier,
                     'available_stock' => $weight, // always numeric
+                    'pst_no' => $pstNo,
                 ]);
             }
 
@@ -662,10 +674,21 @@ class SamplePreparationRnDController extends Controller
             $prep->$field = implode(',', $values);
         } else {
             // Single shade scenario: enforce numeric value
-            $weight = is_array($request->value) ? (float)($request->value[0] ?? 0) : (float)$request->value;
+            $weight = is_array($request->value) ? (float) ($request->value[0] ?? 0) : (float) $request->value;
             $prep->$field = $weight;
 
             if ($field === 'yarnLeftoverWeight') {
+                // Get pst_no from related shadeOrders for this single shade
+                $pstNo = $prep->shadeOrders()
+                    ->where('shade', $prep->shade)
+                    ->pluck('pst_no')
+                    ->unique()
+                    ->implode(', ');
+
+                if (empty($pstNo)) {
+                    $pstNo = '-';
+                }
+
                 LeftoverYarn::create([
                     'shade' => $prep->shade,
                     'po_number' => $prep->yarnOrderedPONumber,
@@ -673,6 +696,7 @@ class SamplePreparationRnDController extends Controller
                     'tkt' => $prep->tkt,
                     'yarn_supplier' => $prep->yarnSupplier,
                     'available_stock' => $weight, // always numeric
+                    'pst_no' => $pstNo,
                 ]);
             }
         }

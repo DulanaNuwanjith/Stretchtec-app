@@ -10,7 +10,7 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('leftover_yarns', function (Blueprint $table) {
+        Schema::create('leftover_yarns', static function (Blueprint $table) {
             $table->id();
             $table->string('shade')->nullable();                              // Shade
             $table->string('po_number')->nullable();                          // Yarn Ordered PO Number
