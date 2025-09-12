@@ -163,9 +163,9 @@ class SampleInquiry extends Model
     {
         static::updated(static function ($inquiry) {
             if (
-                $inquiry->isDirty('referenceNo') &&
                 !empty($inquiry->referenceNo) &&
-                !$inquiry->productCatalog
+                !$inquiry->productCatalog &&
+                $inquiry->isDirty('referenceNo')
             ) {
                 $rnd = $inquiry->samplePreparationRnD;
 

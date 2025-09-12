@@ -37,11 +37,11 @@ return [
     |
     | This value defines which model attribute should be considered as your
     | application's "username" field. Typically, this might be the email
-    | address of the users but you are free to change this value here.
+    | address of the users, but you are free to change this value here.
     |
     | Out of the box, Fortify expects forgot password and reset password
     | requests to have a field named 'email'. If the application uses
-    | another name for the field you may define it below as needed.
+    | another name for the field, you may define it below as needed.
     |
     */
 
@@ -82,7 +82,7 @@ return [
     |
     | Here you may specify which prefix Fortify will assign to all the routes
     | that it registers with the application. If necessary, you may change
-    | subdomain under which all of the Fortify routes will be available.
+    | subdomain under which all the Fortify routes will be available.
     |
     */
 
@@ -97,7 +97,7 @@ return [
     |
     | Here you may specify which middleware Fortify will assign to the routes
     | that it registers with the application. If necessary, you may change
-    | these middleware but typically this provided default is preferred.
+    | this middleware, but typically this provided default is preferred.
     |
     */
 
@@ -110,7 +110,7 @@ return [
     |
     | By default, Fortify will throttle logins to five requests per minute for
     | every email and IP address combination. However, if you would like to
-    | specify a custom rate limiter to call then you may specify it here.
+    | specify a custom rate limiter to call, then you may specify it here.
     |
     */
 
@@ -139,7 +139,7 @@ return [
     |
     | Some of the Fortify features are optional. You may disable the features
     | by removing them from this array. You're free to only remove some of
-    | these features or you can even remove all of these if you need to.
+    | these features, or you can even remove all of these if you need to.
     |
     */
 

@@ -8,7 +8,7 @@ return new class extends Migration {
     /**
      * Run the migrations.
      */
-    public function up()
+    public function up(): void
     {
         Schema::table('product_catalogs', static function (Blueprint $table) {
             $table->string('order_image')->nullable();

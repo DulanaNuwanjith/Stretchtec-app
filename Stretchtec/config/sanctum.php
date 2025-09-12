@@ -11,7 +11,7 @@ return [
     |
     | Requests from the following domains / hosts will receive stateful API
     | authentication cookies. Typically, these should include your local
-    | and production domains which access your API via a frontend SPA.
+    | and production domains, which access your API via a frontend SPA.
     |
     */
 
@@ -54,7 +54,7 @@ return [
     | Token Prefix
     |--------------------------------------------------------------------------
     |
-    | Sanctum can prefix new tokens in order to take advantage of numerous
+    | Sanctum can prefix new tokens to take advantage of many
     | security scanning initiatives maintained by open source platforms
     | that notify developers if they commit tokens into repositories.
     |
@@ -69,7 +69,7 @@ return [
     | Sanctum Middleware
     |--------------------------------------------------------------------------
     |
-    | When authenticating your first-party SPA with Sanctum you may need to
+    | When authenticating your first-party SPA with Sanctum, you may need to
     | customize some of the middleware Sanctum uses while processing the
     | request. You may change the middleware listed below as required.
     |

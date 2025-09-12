@@ -14,7 +14,8 @@
         "laravel/tinker": "^2.10.1",
         "livewire/livewire": "^3.0",
         "mpdf/mpdf": "^8.2",
-        "phpoffice/phpspreadsheet": "^4.5"
+        "phpoffice/phpspreadsheet": "^4.5",
+        "ext-pdo": "*"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",

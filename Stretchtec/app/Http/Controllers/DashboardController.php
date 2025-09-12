@@ -19,7 +19,9 @@ class DashboardController extends Controller
     public function index(): View|Factory
     {
         $allSamplesReceived = SampleInquiry::all()->count();
-        $allSamplesReceivedWithin30Days = SampleInquiry::where('created_at', '>=', now()->subDays(30))->count();
+        $allSamplesReceivedWithin30Days = SampleInquiry::query()
+            ->where('created_at', '>=', now()->subDays(30))
+            ->count();
 
         $acceptedSamples = SampleInquiry::where('customerDecision', 'Order Received')->count();
         $acceptedSamplesWithin30Days = SampleInquiry::where('customerDecision', 'Order Received')
@@ -70,15 +72,18 @@ class DashboardController extends Controller
         $totalLeftOverYarn = number_format($totalLeftOverYarn);
 
         // Sum of damaged_output from SamplePreparationProduction for the last 60 days
-        $totalDamagedOutput = SamplePreparationProduction::where('created_at', '>=', Carbon::now()->subDays(30))
+        $totalDamagedOutput = SamplePreparationProduction::query()
+            ->where('created_at', '>=', Carbon::now()->subDays(30))
             ->sum('damaged_output');
         $totalDamagedOutput = number_format($totalDamagedOutput);
 
         // Sum of production_output and damaged_output for the last 60 days
-        $prodOutput = SamplePreparationProduction::where('created_at', '>=', Carbon::now()->subDays(30))
+        $prodOutput = SamplePreparationProduction::query()
+            ->where('created_at', '>=', Carbon::now()->subDays(30))
             ->sum('production_output');
 
-        $damageOutput = SamplePreparationProduction::where('created_at', '>=', Carbon::now()->subDays(30))
+        $damageOutput = SamplePreparationProduction::query()
+            ->where('created_at', '>=', Carbon::now()->subDays(30))
             ->sum('damaged_output');
 
         $totalProductionOutput = $prodOutput - $damageOutput;

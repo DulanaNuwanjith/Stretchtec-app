@@ -52,6 +52,7 @@ use App\Http\Controllers\SamplePreparationRnDController;
 use App\Http\Controllers\SampleStockController;
 use App\Http\Controllers\StoresController;
 use App\Http\Controllers\UserMananagementController;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -62,7 +63,7 @@ use Illuminate\Support\Facades\Route;
 /**
  * Default route: redirect user to login view when visiting root URL.
  */
-Route::get('/', function () {
+Route::get('/', static function () {
     return view('auth.login');
 });
 
@@ -99,7 +100,7 @@ Route::middleware([
     Route::patch('/product-catalog/{catalog}/update-shade', [ProductCatalogController::class, 'updateShade'])
         ->name('productCatalog.updateShade');
 
-    Route::get('productCatalog', function () {
+    Route::get('productCatalog', static function () {
         return view('production-catalog.productCatalog');
     })->name('productCatalog.index');
 
@@ -189,11 +190,11 @@ Route::middleware([
      | Production Inquiry & Order Preparation Views
      |----------------------------------------------------------------------
      */
-    Route::get('production-inquery-details', function () {
+    Route::get('production-inquery-details', static function () {
         return view('production.pages.production-inquery-details');
     })->name('production-inquery-details.index');
 
-    Route::get('production-order-preparation', function () {
+    Route::get('production-order-preparation', static function () {
         return view('production.pages.production-order-preparation');
     })->name('production-order-preparation.index');
 });
@@ -209,11 +210,11 @@ Route::middleware([
 Route::middleware(['auth'])->group(function () {
     Route::group(['middleware' => function ($request, $next) {
         $allowedRoles = ['ADMIN', 'SUPERADMIN', 'CUSTOMERCOORDINATOR'];
-        if (!Auth::check() || !in_array(Auth::user()->role, $allowedRoles)) {
+        if (!Auth::check() || !in_array(Auth::user()?->role ?? '', $allowedRoles, true)) {
             abort(403, 'Unauthorized access.');
         }
         return $next($request);
-    }], function () {
+    }], static function () {
         Route::post('/sampleInquiry/mark-sent-to-sample-dev', [SampleInquiryController::class, 'markSentToSampleDevelopment'])
             ->name('inquiry.markSentToSampleDev');
         Route::patch('/sample-inquery-details/{id}/update-decision', [SampleInquiryController::class, 'updateDecision'])
@@ -230,11 +231,11 @@ Route::middleware(['auth'])->group(function () {
 Route::middleware(['auth'])->group(function () {
     Route::group(['middleware' => function ($request, $next) {
         $allowedRoles = ['ADMIN', 'SUPERADMIN', 'SAMPLEDEVELOPER'];
-        if (!Auth::check() || !in_array(Auth::user()->role, $allowedRoles)) {
+        if (!Auth::check() || !in_array(Auth::user()?->role ?? '', $allowedRoles, true)) {
             abort(403, 'Unauthorized access.');
         }
         return $next($request);
-    }], function () {
+    }], static function () {
 
         // Colour matching & yarn management
         Route::post('/rnd/mark-colour-match-sent', [SamplePreparationRnDController::class, 'markColourMatchSent'])
@@ -267,7 +268,7 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/rnd/update-yarn-weights', [SamplePreparationRnDController::class, 'updateYarnWeights'])
             ->name('rnd.updateYarnWeights');
 
-        // Colour match rejects
+        // Color match rejects
         Route::post('/color-match-rejects/store', [ColorMatchRejectController::class, 'store'])->name('colorMatchRejects.store');
         Route::get('/color-match-reject/{id}', [ColorMatchRejectController::class, 'getRejectDetails']);
 
@@ -282,11 +283,11 @@ Route::middleware(['auth'])->group(function () {
 Route::middleware(['auth'])->group(function () {
     Route::group(['middleware' => function ($request, $next) {
         $allowedRoles = ['PRODUCTIONOFFICER', 'ADMIN', 'SUPERADMIN'];
-        if (!Auth::check() || !in_array(Auth::user()->role, $allowedRoles)) {
+        if (!Auth::check() || !in_array(Auth::user()?->role ?? '', $allowedRoles, true)) {
             abort(403, 'Unauthorized access.');
         }
         return $next($request);
-    }], function () {
+    }], static function () {
 
         // Grouped under prefix 'sample-production'
         Route::prefix('sample-production')->group(function () {
@@ -309,11 +310,16 @@ Route::middleware(['auth'])->group(function () {
  */
 Route::middleware(['auth'])->group(function () {
     Route::group(['middleware' => function ($request, $next) {
-        if (!Auth::check() || Auth::user()->role !== 'SUPERADMIN') {
+
+        /** @var User $user */
+        $user = Auth::user();
+
+        if (!$user || $user->role !== 'SUPERADMIN') {
             abort(403, 'Unauthorized access.');
         }
+
         return $next($request);
-    }], function () {
+    }], static function () {
 
         // Operators and Supervisors Management
         Route::resource('operatorsandSupervisors', OperatorsandSupervisorsController::class)->names([
@@ -336,11 +342,11 @@ Route::middleware(['auth'])->group(function () {
 Route::middleware(['auth'])->group(function () {
     Route::group(['middleware' => function ($request, $next) {
         $allowedRoles = ['ADMIN', 'SUPERADMIN', 'CUSTOMERCOORDINATOR'];
-        if (!Auth::check() || !in_array(Auth::user()->role, $allowedRoles)) {
+        if (!Auth::check() || !in_array(Auth::user()?->role ?? '', $allowedRoles, true)) {
             abort(403, 'Unauthorized access.');
         }
         return $next($request);
-    }], function () {
+    }], static function () {
 
         // General and specific reports
         Route::get('/reports/sample-reports', [ReportController::class, 'showReportPage'])->name('sample-reports.index');
@@ -349,7 +355,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/report/inquiry-range', [ReportController::class, 'inquiryRangeReport'])->name('report.inquiryRange');
 
         // Views for production-related reports
-        Route::get('/reports/production-reports', function () {
+        Route::get('/reports/production-reports', static function () {
             return view('reports.production-reports');
         })->name('production-reports.index');
 

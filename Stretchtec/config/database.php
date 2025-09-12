@@ -11,7 +11,7 @@ return [
     |
     | Here you may specify which of the database connections below you wish
     | to use as your default connection for database operations. This is
-    | the connection which will be utilized unless another connection
+    | the connection that will be used unless another connection
     | is explicitly specified when you execute a query / statement.
     |
     */
@@ -23,7 +23,7 @@ return [
     | Database Connections
     |--------------------------------------------------------------------------
     |
-    | Below are all of the database connections defined for your application.
+    | Below are all the database connections defined for your application.
     | An example configuration is provided for each database system which
     | is supported by Laravel. You're free to add / remove connections.
     |

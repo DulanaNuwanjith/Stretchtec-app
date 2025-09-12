@@ -27,9 +27,9 @@ class ColorMatchRejectController extends Controller
             ->get()
             ->map(function ($reject) {
                 return [
-                    'sentDate' => optional($reject->sentDate)->format('Y-m-d H:i'),
-                    'receiveDate' => optional($reject->receiveDate)->format('Y-m-d H:i'),
-                    'rejectDate' => optional($reject->rejectDate)->format('Y-m-d H:i'),
+                    'sentDate' => $reject->sentDate?->format('Y-m-d H:i'),
+                    'receiveDate' => $reject->receiveDate?->format('Y-m-d H:i'),
+                    'rejectDate' => $reject->rejectDate?->format('Y-m-d H:i'),
                     'rejectReason' => $reject->rejectReason,
                 ];
             });
@@ -67,7 +67,7 @@ class ColorMatchRejectController extends Controller
 
         // Find the SamplePreparationRnD record using the provided ID
         $sampleInquiry = SamplePreparationRnD::with('sampleInquiry') // eager load if relation exists
-        ->find($request->id);
+        ->find($request->input('id'));
 
         if (!$sampleInquiry) {
             return redirect()->back()
@@ -80,7 +80,7 @@ class ColorMatchRejectController extends Controller
         // Prepare data for insert
         $data = [
             'orderNo' => $orderNo,
-            'rejectReason' => $request->rejectReason,
+            'rejectReason' => $request->input('rejectReason'),
             'sentDate' => $sampleInquiry->colourMatchSentDate,
             'receiveDate' => $sampleInquiry->colourMatchReceiveDate,
             'rejectDate' => now(),
