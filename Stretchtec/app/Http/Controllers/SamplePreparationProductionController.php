@@ -38,18 +38,18 @@ class SamplePreparationProductionController extends Controller
             ])
             ->orderByRaw('all_dispatched ASC') // not all dispatched = 0 → top, all dispatched = 1 → bottom
             ->orderByRaw('dispatch_to_rnd_at IS NULL DESC') // dispatched rows first
-            ->orderBy('production_deadline', 'asc')         // nearest upcoming deadline first
+            ->orderBy('production_deadline')         // nearest upcoming deadline first
             ->latest();
         // fallback to newest created
 
         // Tab 3 Filters
-        if ($request->filled('tab') && $request->tab == '3') {
+        if ($request->input('tab') === '3' && $request->filled('tab')) {
             if ($request->filled('order_no')) {
-                $productionsQuery->where('order_no', $request->order_no);
+                $productionsQuery->where('order_no', $request->input('order_no'));
             }
 
             if ($request->filled('development_plan_date')) {
-                $productionsQuery->whereDate('production_deadline', $request->development_plan_date);
+                $productionsQuery->whereDate('production_deadline', $request->input('development_plan_date'));
             }
         }
 
@@ -81,12 +81,12 @@ class SamplePreparationProductionController extends Controller
             'supervisor_name' => 'nullable|string|max:255',
         ]);
 
-        $production = SamplePreparationProduction::findOrFail($request->id);
+        $production = SamplePreparationProduction::findOrFail($request->input('id'));
 
         $production->update([
-            'operator_name' => $request->operator_name,
-            'supervisor_name' => $request->supervisor_name,
-            'production_deadline' => $request->production_deadline,
+            'operator_name' => $request->input('operator_name'),
+            'supervisor_name' => $request->input('supervisor_name'),
+            'production_deadline' => $request->input('production_deadline'),
         ]);
 
         return redirect()->back()->with('success', 'Production record updated successfully.');
@@ -105,7 +105,7 @@ class SamplePreparationProductionController extends Controller
         ]);
 
         try {
-            $production = SamplePreparationProduction::findOrFail($request->production_id);
+            $production = SamplePreparationProduction::findOrFail($request->input('production_id'));
             $rnd = $production->samplePreparationRnD;
 
             if (!$rnd) {
@@ -113,7 +113,7 @@ class SamplePreparationProductionController extends Controller
             }
 
             // Update selected shades to In Production
-            ShadeOrder::whereIn('id', $request->shade_ids)->update([
+            ShadeOrder::whereIn('id', $request->input('shade_ids'))->update([
                 'status' => 'In Production',
             ]);
 
@@ -155,7 +155,7 @@ class SamplePreparationProductionController extends Controller
             'shade_id' => 'required|exists:shade_orders,id',
         ]);
 
-        $shade = ShadeOrder::findOrFail($request->shade_id);
+        $shade = ShadeOrder::findOrFail($request->input('shade_id'));
         $shade->status = 'Production Complete';
         $shade->production_complete_date = Carbon::now();
         $shade->save();
@@ -219,7 +219,7 @@ class SamplePreparationProductionController extends Controller
             'shades' => 'required|array',
         ]);
 
-        $production = SamplePreparationProduction::findOrFail($request->production_id);
+        $production = SamplePreparationProduction::findOrFail($request->input('production_id'));
         $samplePreparationRnD = $production->samplePreparationRnD;
         $sampleInquiry = $samplePreparationRnD->sampleInquiry;
 
@@ -232,8 +232,10 @@ class SamplePreparationProductionController extends Controller
         $samplePreparationRnD->productionStatus = 'Dispatched to RnD';
         $samplePreparationRnD->save();
 
-        foreach ($request->shades as $shadeId => $shadeData) {
-            if (!isset($shadeData['selected'])) continue;
+        foreach ($request->input('shades') as $shadeId => $shadeData) {
+            if (!isset($shadeData['selected'])) {
+                continue;
+            }
 
             $shade = ShadeOrder::findOrFail($shadeId);
 
@@ -258,7 +260,7 @@ class SamplePreparationProductionController extends Controller
         $production->production_output = $totalProduction;
         $production->damaged_output = $totalDamaged;
         $production->dispatch_to_rnd_at = Carbon::now();
-        $production->dispatched_by = $request->shades[array_key_first($request->shades)]['dispatched_by'] ?? $production->dispatched_by;
+        $production->dispatched_by = $request->shades[array_key_first($request->input('shades'))]['dispatched_by'] ?? $production->dispatched_by;
         $production->save();
 
         return redirect()->back()->with('success', 'Shades dispatched and outputs updated successfully.');
@@ -275,7 +277,7 @@ class SamplePreparationProductionController extends Controller
         ]);
 
         $production = SamplePreparationProduction::findOrFail($id);
-        $production->operator_name = $request->operator_name;
+        $production->operator_name = $request->input('operator_name');
         $production->save();
 
         return redirect()->back()->with('success', 'Operator updated successfully.');
@@ -292,7 +294,7 @@ class SamplePreparationProductionController extends Controller
         ]);
 
         $production = SamplePreparationProduction::findOrFail($id);
-        $production->supervisor_name = $request->supervisor_name;
+        $production->supervisor_name = $request->input('supervisor_name');
         $production->save();
 
         return redirect()->back()->with('success', 'Supervisor updated successfully.');
