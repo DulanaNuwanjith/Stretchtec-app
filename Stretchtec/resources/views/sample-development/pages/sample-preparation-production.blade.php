@@ -432,6 +432,9 @@
                                                                                             <div class="font-semibold">
                                                                                                 Shade: {{ $shade->shade }}
                                                                                             </div>
+                                                                                            <div class="font-semibold">
+                                                                                                PST No: {{ $shade->pst_no }}
+                                                                                            </div>
                                                                                             <div
                                                                                                 class="text-sm text-gray-600">
                                                                                                 Status:
@@ -718,6 +721,8 @@
                                                                                        value="{{ $shade->id }}">
                                                                                 <span class="font-medium text-gray-900">
                                                                                         {{ $shade->shade }}</span>
+                                                                                <span class="font-medium text-gray-900">
+                                                                                {{ $shade->pst_no }}</span>
                                                                                 <button type="submit"
                                                                                         class="px-4 py-2 bg-green-600 text-white text-sm rounded-lg shadow-sm hover:bg-green-700 focus:ring-2 focus:ring-green-400">
                                                                                     Mark Complete
@@ -915,6 +920,8 @@
                                                                                            data-shade="{{ $shade->id }}">
                                                                                     <span
                                                                                         class="font-medium text-gray-900 dark:text-gray-100">{{ $shade->shade }}</span>
+                                                                                    <span
+                                                                                        class="font-medium text-gray-900 dark:text-gray-100"> - {{ $shade->pst_no }}</span>
                                                                                 </label>
 
                                                                                 <div
