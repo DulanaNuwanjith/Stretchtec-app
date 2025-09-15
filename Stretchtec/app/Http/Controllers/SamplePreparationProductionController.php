@@ -56,7 +56,7 @@ class SamplePreparationProductionController extends Controller
         // Apply pagination and keep filters in links
         $productions = $productionsQuery
             ->paginate(10)
-            ->appends($request->query());
+            ->withQueryString();
 
         // For Order No dropdown
         $orderNosTab3 = SamplePreparationProduction::select('order_no')

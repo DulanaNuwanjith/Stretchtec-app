@@ -62,7 +62,8 @@ class SamplePreparationRnDController extends Controller
         $samplePreparations = $query
             ->orderByRaw("CASE WHEN productionStatus = 'Order Delivered' THEN 1 ELSE 0 END ASC")
             ->orderByDesc('id')
-            ->paginate(10);
+            ->paginate(10)
+            ->withQueryString();
 
         // Dropdown dynamic values
         $orderNos = SamplePreparationRnD::whereNotNull('orderNo')->where('orderNo', '!=', '')->distinct()->orderBy('orderNo')->pluck('orderNo');

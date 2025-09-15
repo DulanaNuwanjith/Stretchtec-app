@@ -70,7 +70,8 @@ class SampleInquiryController extends Controller
             ->orderByRaw('customerDeliveryDate IS NULL DESC') // Pending first among non-delivered
             ->orderByDesc('customerDeliveryDate')             // then recently delivered/non-delivered
             ->orderByDesc('orderNo')                          // fallback
-            ->paginate(10);
+            ->paginate(10)
+            ->withQueryString();
 
         // Dynamic dropdown values
         $customers = SampleInquiry::select('customerName')->distinct()->orderBy('customerName')->pluck('customerName');
