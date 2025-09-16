@@ -180,6 +180,7 @@ class SampleInquiry extends Model
                         'size' => $inquiry->size,
                         'colour' => $inquiry->color,
                         'shade' => $rnd->shade,
+                        'supplierComment' => $rnd->supplierComment,
                         'tkt' => $rnd->tkt,
                         'sample_inquiry_id' => $inquiry->id,
                         'sample_preparation_rnd_id' => $rnd->id,

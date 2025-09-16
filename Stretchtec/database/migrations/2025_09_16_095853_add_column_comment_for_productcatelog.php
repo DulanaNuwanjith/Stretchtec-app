@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('sample_preparation_rnd', static function (Blueprint $table) {
+        Schema::table('product_catalogs', static function (Blueprint $table) {
             $table->longText('supplierComment')->nullable()->after('shade'); // add pst_no after shade
         });
     }
@@ -21,7 +21,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('sample_preparation_rnd', static function (Blueprint $table) {
+        Schema::table('product_catalogs', static function (Blueprint $table) {
             $table->dropColumn('supplierComment');
         });
     }
