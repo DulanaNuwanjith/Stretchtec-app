@@ -21,12 +21,12 @@ return [
     | Mailer Configurations
     |--------------------------------------------------------------------------
     |
-    | Here you may configure all of the mailers used by your application plus
+    | Here you may configure all the mailers used by your application plus
     | their respective settings. Several examples have been configured for
-    | you and you are free to add your own as your application requires.
+    | you, and you are free to add your own as your application requires.
     |
     | Laravel supports a variety of mail "transport" drivers that can be used
-    | when delivering an email. You may specify which one you're using for
+    | when delivering an email. You may specify which one you use for
     | your mailers below. You may also add additional mailers if needed.
     |
     | Supported: "smtp", "sendmail", "mailgun", "ses", "ses-v2",
@@ -105,7 +105,7 @@ return [
     |--------------------------------------------------------------------------
     |
     | You may wish for all emails sent by your application to be sent from
-    | the same address. Here you may specify a name and address that is
+    | the same address. Here you may specify a name and address
     | used globally for all emails that are sent by your application.
     |
     */

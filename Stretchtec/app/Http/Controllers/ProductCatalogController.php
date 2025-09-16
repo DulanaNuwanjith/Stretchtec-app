@@ -23,15 +23,15 @@ class ProductCatalogController extends Controller
 
         // Apply filters
         if ($request->filled('orderNo')) {
-            $query->where('order_no', $request->orderNo);
+            $query->where('order_no', $request->input('orderNo'));
         }
 
         if ($request->filled('merchandiser')) {
-            $query->where('coordinator_name', $request->merchandiser);
+            $query->where('coordinator_name', $request->input('merchandiser'));
         }
 
         if ($request->filled('referenceNo')) {
-            $query->where('reference_no', $request->referenceNo);
+            $query->where('reference_no', $request->input('referenceNo'));
         }
 
         $catalogs = $query->latest()->paginate(15)->appends($request->query());
@@ -57,15 +57,15 @@ class ProductCatalogController extends Controller
 
         // Apply filters
         if ($request->filled('orderNo')) {
-            $query->where('order_no', $request->orderNo);
+            $query->where('order_no', $request->input('orderNo'));
         }
 
         if ($request->filled('merchandiser')) {
-            $query->where('coordinator_name', $request->merchandiser);
+            $query->where('coordinator_name', $request->input('merchandiser'));
         }
 
         if ($request->filled('referenceNo')) {
-            $query->where('reference_no', $request->referenceNo);
+            $query->where('reference_no', $request->input('referenceNo'));
         }
 
         $catalogs = $query->latest()->paginate(15)->appends($request->query());
@@ -91,15 +91,15 @@ class ProductCatalogController extends Controller
 
         // Apply filters
         if ($request->filled('orderNo')) {
-            $query->where('order_no', $request->orderNo);
+            $query->where('order_no', $request->input('orderNo'));
         }
 
         if ($request->filled('merchandiser')) {
-            $query->where('coordinator_name', $request->merchandiser);
+            $query->where('coordinator_name', $request->input('merchandiser'));
         }
 
         if ($request->filled('referenceNo')) {
-            $query->where('reference_no', $request->referenceNo);
+            $query->where('reference_no', $request->input('referenceNo'));
         }
 
         $catalogs = $query->latest()->paginate(15)->appends($request->query());
@@ -350,7 +350,7 @@ class ProductCatalogController extends Controller
         ]);
 
         try {
-            $catalog->shade = $request->selected_shade;
+            $catalog->shade = $request->input('selected_shade');
             $catalog->save();
 
             return redirect()->back()->with('success', 'Shade updated successfully.');

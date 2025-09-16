@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * --------------------------------------------------------------------------
@@ -54,7 +55,7 @@ class ColorMatchReject extends Model
      * Attribute Casting
      * ----------------------------------------------------------------------
      * Automatically converts database fields into proper PHP data types.
-     * For example:
+     * For example,
      *   - `sentDate` => Carbon instance (datetime)
      *   - `receiveDate` => Carbon instance (datetime)
      *   - `rejectDate` => Carbon instance (datetime)
@@ -76,7 +77,7 @@ class ColorMatchReject extends Model
      *
      * This allows us to retrieve the associated inquiry for each rejection.
      */
-    public function sampleInquiry()
+    public function sampleInquiry(): BelongsTo
     {
         return $this->belongsTo(SampleInquiry::class, 'orderNo', 'orderNo');
     }

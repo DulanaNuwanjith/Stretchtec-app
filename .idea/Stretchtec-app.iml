@@ -11,7 +11,6 @@
       <sourceFolder url="file://$MODULE_DIR$/spec" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/tests" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/bacon/bacon-qr-code" />
-      <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/brick/math" />
       <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/carbonphp/carbon-doctrine-types" />
       <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/composer" />
       <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/dasprid/enum" />
@@ -66,7 +65,6 @@
       <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/ramsey/collection" />
       <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/ramsey/uuid" />
       <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/symfony/clock" />
-      <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/symfony/console" />
       <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/symfony/css-selector" />
       <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/symfony/deprecation-contracts" />
       <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/symfony/error-handler" />
@@ -121,7 +119,6 @@
       <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/phpunit/php-invoker" />
       <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/phpunit/php-text-template" />
       <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/phpunit/php-timer" />
-      <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/phpunit/phpunit" />
       <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/sebastian/cli-parser" />
       <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/sebastian/code-unit" />
       <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/sebastian/code-unit-reverse-lookup" />
@@ -138,7 +135,6 @@
       <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/sebastian/type" />
       <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/sebastian/version" />
       <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/staabm/side-effects-detector" />
-      <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/symfony/yaml" />
       <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/theseer/tokenizer" />
       <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/barryvdh/laravel-dompdf" />
       <excludeFolder url="file://$MODULE_DIR$/Stretchtec/vendor/dompdf/dompdf" />

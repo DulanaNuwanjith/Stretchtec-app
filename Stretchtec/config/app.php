@@ -22,7 +22,7 @@ return [
     |
     | This value determines the "environment" your application is currently
     | running in. This may determine how you prefer to configure various
-    | services the application utilizes. Set this in your ".env" file.
+    | services the application uses. Set this in your ".env" file.
     |
     */
 
@@ -89,9 +89,9 @@ return [
     | Encryption Key
     |--------------------------------------------------------------------------
     |
-    | This key is utilized by Laravel's encryption services and should be set
-    | to a random, 32 character string to ensure that all encrypted values
-    | are secure. You should do this prior to deploying the application.
+    | This key is used by Laravel's encryption services and should be set
+    | to a random, 32-character string to ensure that all encrypted values
+    | are secure. You should do this before deploying the application.
     |
     */
 

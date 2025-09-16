@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * --------------------------------------------------------------------------
@@ -35,6 +36,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static where(string $string, mixed $orderNo)
  * @method static firstOrNew(array $array)
  * @method static findOrFail(mixed $id)
+ * @method static select(string $string)
+ * @property mixed $samplePreparationRnD
  */
 class SamplePreparationProduction extends Model
 {
@@ -107,7 +110,7 @@ class SamplePreparationProduction extends Model
      * Belongs To → Sample Preparation RnD
      * Each production entry is linked to one RnD preparation.
      */
-    public function samplePreparationRnD(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function samplePreparationRnD(): BelongsTo
     {
         return $this->belongsTo(SamplePreparationRnD::class, 'sample_preparation_rnd_id');
     }
@@ -117,7 +120,7 @@ class SamplePreparationProduction extends Model
      * Links production back to the inquiry using `order_no`.
      * Adjusts foreign keys if inquiry keys differ.
      */
-    public function sampleInquiry(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function sampleInquiry(): BelongsTo
     {
         return $this->belongsTo(SampleInquiry::class, 'order_no', 'orderNo');
     }

@@ -10,6 +10,7 @@ use App\Models\SamplePreparationRnD;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 
 class ReportController extends Controller
 {
@@ -45,23 +46,23 @@ class ReportController extends Controller
             'customer' => 'nullable|string',
         ]);
 
-        $query = SampleInquiry::whereBetween('inquiryReceiveDate', [$request->start_date, $request->end_date])
+        $query = SampleInquiry::whereBetween('inquiryReceiveDate', [$request->input('start_date'), $request->input('end_date')])
             ->whereNotNull('customerDeliveryDate'); // Only those with delivery date
 
         if ($request->filled('customer')) {
-            $query->where('customerName', $request->customer);
+            $query->where('customerName', $request->input('customer'));
         }
 
         $inquiries = $query->select('orderNo', 'customerName', 'customerDecision', 'inquiryReceiveDate', 'customerDeliveryDate')->get();
 
         $pdf = PDF::loadView('reports.inquiry-customer-decision-pdf', [
             'inquiries' => $inquiries,
-            'start_date' => $request->start_date,
-            'end_date' => $request->end_date,
-            'customer' => $request->customer,
+            'start_date' => $request->input('start_date'),
+            'end_date' => $request->input('end_date'),
+            'customer' => $request->input('customer'),
         ]);
 
-        return $pdf->download("Inquiry_Customer_Decision_Report_{$request->start_date}_to_$request->end_date.pdf");
+        return $pdf->download("Inquiry_Customer_Decision_Report_{$request->input('start_date')}_to_{$request->input('end_date')}.pdf");
     }
 
 
@@ -74,7 +75,7 @@ class ReportController extends Controller
             'order_no' => 'required|string|exists:sample_inquiries,orderNo',
         ]);
 
-        $orderNo = $request->order_no;
+        $orderNo = $request->input('order_no');
 
         $sampleInquiry = SampleInquiry::where('orderNo', $orderNo)->first();
 
@@ -135,8 +136,8 @@ class ReportController extends Controller
         ]);
 
         $inquiries = SampleInquiry::whereBetween('inquiryReceiveDate', [
-            $request->start_date,
-            $request->end_date
+            $request->input('start_date'),
+            $request->input('end_date')
         ])
             ->select('orderNo', 'customerName', 'coordinatorName', 'customerDecision', 'customerDeliveryDate')
             ->get();
@@ -150,11 +151,11 @@ class ReportController extends Controller
         $pdf = PDF::loadView('reports.inquiry-range-pdf', [
             'notDelivered' => $notDelivered,
             'needToDeliver' => $needToDeliver,
-            'start_date' => $request->start_date,
-            'end_date' => $request->end_date,
+            'start_date' => $request->input('start_date'),
+            'end_date' => $request->input('end_date'),
         ]);
 
-        return $pdf->download("Inquiry_Report_{$request->start_date}_to_$request->end_date.pdf");
+        return $pdf->download("Inquiry_Report_{$request->input('start_date')}_to_{$request->input('end_date')}.pdf");
     }
 
 
@@ -168,7 +169,7 @@ class ReportController extends Controller
             'end_date' => 'required|date|after_or_equal:start_date',
         ]);
 
-        $suppliers = SamplePreparationRnD::whereBetween('yarnOrderedDate', [$request->start_date, $request->end_date])
+        $suppliers = SamplePreparationRnD::whereBetween('yarnOrderedDate', [$request->input('start_date'), $request->input('end_date')])
             ->selectRaw('yarnSupplier, SUM(yarnPrice) as total_spent, SUM(yarnOrderedWeight) as total_weight')
             ->groupBy('yarnSupplier')
             ->orderBy('total_spent', 'desc')
@@ -176,11 +177,11 @@ class ReportController extends Controller
 
         $pdf = PDF::loadView('reports.yarn-supplier-spending-pdf', [
             'suppliers' => $suppliers,
-            'start_date' => $request->start_date,
-            'end_date' => $request->end_date,
+            'start_date' => $request->input('start_date'),
+            'end_date' => $request->input('end_date'),
         ]);
 
-        return $pdf->download("Yarn_Supplier_Spending_{$request->start_date}_to_$request->end_date.pdf");
+        return $pdf->download("Yarn_Supplier_Spending_{$request->input('start_date')}_to_{$request->input('end_date')}.pdf");
     }
 
 
@@ -194,8 +195,8 @@ class ReportController extends Controller
             'end_date' => 'required|date|after_or_equal:start_date',
         ]);
 
-        $startDate = $request->start_date;
-        $endDate = $request->end_date;
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
 
         $coordinators = SampleInquiry::query()
             ->whereBetween('inquiryReceiveDate', [$startDate, $endDate])
@@ -213,6 +214,7 @@ class ReportController extends Controller
 
         $report = [];
 
+        /** @var Collection<int, SampleInquiry> $orders */
         foreach ($coordinators as $coordinator => $orders) {
             // Format inquiryReceiveDate to only show date
             $orders->transform(function ($order) {
@@ -249,8 +251,8 @@ class ReportController extends Controller
             'end_date' => 'required|date|after_or_equal:start_date'
         ]);
 
-        $startDate = $request->start_date;
-        $endDate = $request->end_date;
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
 
         $inquiries = SampleInquiry::whereBetween('inquiryReceiveDate', [$startDate, $endDate])
             ->whereNotNull('customerDeliveryDate') // ✅ Only after delivery
@@ -286,14 +288,14 @@ class ReportController extends Controller
         ]);
 
         $inquiries = SampleInquiry::with('samplePreparationRnD')
-            ->whereBetween('inquiryReceiveDate', [$request->start_date, $request->end_date])
-            ->when($request->coordinatorName, function ($q) use ($request) {
-                $q->whereIn('coordinatorName', $request->coordinatorName);
+            ->whereBetween('inquiryReceiveDate', [$request->input('start_date'), $request->input('end_date')])
+            ->when($request->input('coordinatorName'), function ($q) use ($request) {
+                $q->whereIn('coordinatorName', $request->input('coordinatorName'));
             })
-            ->when($request->status, function ($q) use ($request) {
-                if (in_array('Pending', $request->status, true) && !in_array('Delivered', $request->status, true)) {
+            ->when($request->input('status'), function ($q) use ($request) {
+                if (!in_array('Delivered', $request->input('status'), true) && in_array('Pending', $request->input('status'), true)) {
                     $q->whereNull('customerDeliveryDate');
-                } elseif (!in_array('Pending', $request->status, true) && in_array('Delivered', $request->status, true)) {
+                } elseif (in_array('Delivered', $request->input('status'), true) && !in_array('Pending', $request->input('status'), true)) {
                     $q->whereNotNull('customerDeliveryDate');
                 }
                 // If both selected or none selected, show all
@@ -304,12 +306,12 @@ class ReportController extends Controller
         // Generate PDF in landscape orientation
         $pdf = Pdf::loadView('reports.sample_inquiry_report_pdf', [
             'inquiries' => $inquiries,
-            'start_date' => $request->start_date,
-            'end_date' => $request->end_date,
-            'coordinators' => $request->coordinatorName,
+            'start_date' => $request->input('start_date'),
+            'end_date' => $request->input('end_date'),
+            'coordinators' => $request->input('coordinatorName'),
         ])->setPaper('legal', 'landscape'); // <--- set landscape
 
-        return $pdf->download("Sample_Inquiry_Report_{$request->start_date}_to_$request->end_date.pdf");
+        return $pdf->download("Sample_Inquiry_Report_{$request->input('start_date')}_to_{$request->input('end_date')}.pdf");
     }
 
     public function generateRndReport(Request $request): object
@@ -322,8 +324,8 @@ class ReportController extends Controller
         ]);
 
         // normalize dates (avoid timezone/time issues)
-        $startDate = Carbon::parse($request->start_date)->toDateString();
-        $endDate = Carbon::parse($request->end_date)->toDateString();
+        $startDate = Carbon::parse($request->input('start_date'))->toDateString();
+        $endDate = Carbon::parse($request->input('end_date'))->toDateString();
 
         // normalize statuses (case-insensitive)
         $statuses = array_map('strtolower', (array)$request->input('status', []));
@@ -336,9 +338,9 @@ class ReportController extends Controller
             });
 
         // coordinator filter (unchanged)
-        if ($request->filled('coordinatorName') && !empty($request->coordinatorName)) {
+        if (!empty($request->coordinatorName) && $request->filled('coordinatorName')) {
             $query->whereHas('sampleInquiry', function ($sq) use ($request) {
-                $sq->whereIn('coordinatorName', $request->coordinatorName);
+                $sq->whereIn('coordinatorName', $request->input('coordinatorName'));
             });
         }
 
@@ -386,7 +388,7 @@ class ReportController extends Controller
             'reject_no' => 'required|string',
         ]);
 
-        $rejectNo = $request->reject_no;
+        $rejectNo = $request->input('reject_no');
 
         // Get all SampleInquiry records with rejectNO = $rejectNo
         $inquiries = SampleInquiry::whereNotNull('rejectNO')
@@ -435,9 +437,9 @@ class ReportController extends Controller
             'customer_name' => 'nullable|string', // not required anymore
         ]);
 
-        $start = $request->start_date;
-        $end = $request->end_date;
-        $customer = $request->customer_name;
+        $start = $request->input('start_date');
+        $end = $request->input('end_date');
+        $customer = $request->input('customer_name');
 
         // Build query
         $query = SampleInquiry::whereBetween('inquiryReceiveDate', [$start, $end])

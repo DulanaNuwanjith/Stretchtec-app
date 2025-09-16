@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\HigherOrderCollectionProxy;
 
 /**
  * --------------------------------------------------------------------------
@@ -48,6 +49,10 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @method static findOrFail(mixed $id)
  * @method static create(array $array)
  * @method static distinct()
+ * @property HigherOrderCollectionProxy|mixed $orderNo
+ * @property HigherOrderCollectionProxy|mixed $sampleInquiry
+ * @property HigherOrderCollectionProxy|mixed|null $colourMatchSentDate
+ * @property HigherOrderCollectionProxy|mixed|null $colourMatchReceiveDate
  */
 class SamplePreparationRnD extends Model
 {
@@ -87,6 +92,7 @@ class SamplePreparationRnD extends Model
         'yarnOrderedPONumber',
         'is_po_locked',
         'shade',
+        'supplierComment',
         'is_shade_locked',
         'tkt',
         'is_tkt_locked',

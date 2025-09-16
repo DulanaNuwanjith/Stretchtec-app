@@ -39,6 +39,12 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * --------------------------------------------------------------------------
  * @method static where(string $string, mixed $orderNo)
  * @method static create(array $data)
+ * @property mixed $order_image
+ * @property mixed $reference_no
+ * @property mixed $is_approved_by_locked
+ * @property mixed $is_approval_card_locked
+ * @property mixed $approval_card
+ * @property mixed $shade
  */
 class ProductCatalog extends Model
 {
@@ -81,6 +87,7 @@ class ProductCatalog extends Model
         'size',
         'colour',
         'shade',
+        'supplierComment',
         'tkt',
         'order_image',
         'approved_by',
