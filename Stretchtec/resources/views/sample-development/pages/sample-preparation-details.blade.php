@@ -903,9 +903,10 @@
                                                                             class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                                                                             Supplier Comment
                                                                         </label>
-                                                                        <input type="text" name="comment"
-                                                                               class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                                               >
+                                                                        <textarea name="comment"
+                                                                                  class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                                                  rows="2"
+                                                                                  ></textarea>
                                                                     </div>
 
                                                                     {{-- Supplier Input --}}
@@ -1182,9 +1183,10 @@
                                                                                     class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 text-left">
                                                                                     Supplier Comment
                                                                                 </label>
-                                                                                <input type="text" name="comment"
-                                                                                       class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                                                       >
+                                                                                <textarea name="comment"
+                                                                                          class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                                                          rows="2"
+                                                                                ></textarea>
                                                                             </div>
 
                                                                             {{-- Yarn Price --}}
