@@ -897,6 +897,17 @@
                                                                                required>
                                                                     </div>
 
+                                                                    {{-- Comment Input --}}
+                                                                    <div class="mb-4">
+                                                                        <label
+                                                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                                                            Supplier Comment
+                                                                        </label>
+                                                                        <input type="text" name="comment"
+                                                                               class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                                               >
+                                                                    </div>
+
                                                                     {{-- Supplier Input --}}
                                                                     <div class="mb-4">
                                                                         <label
@@ -1141,6 +1152,7 @@
                                                                                 </p>
                                                                             </div>
 
+
                                                                             {{-- Weight --}}
                                                                             <div class="mb-4">
                                                                                 <label
@@ -1162,6 +1174,17 @@
                                                                                 <input type="text" name="tkt"
                                                                                        placeholder="Enter Ticket Number"
                                                                                        class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                                            </div>
+
+                                                                            {{-- Comment Input --}}
+                                                                            <div class="mb-4">
+                                                                                <label
+                                                                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 text-left">
+                                                                                    Supplier Comment
+                                                                                </label>
+                                                                                <input type="text" name="comment"
+                                                                                       class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                                                       >
                                                                             </div>
 
                                                                             {{-- Yarn Price --}}

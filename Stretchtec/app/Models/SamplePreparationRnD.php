@@ -92,6 +92,7 @@ class SamplePreparationRnD extends Model
         'yarnOrderedPONumber',
         'is_po_locked',
         'shade',
+        'supplierComment',
         'is_shade_locked',
         'tkt',
         'is_tkt_locked',

@@ -166,6 +166,7 @@ class SamplePreparationRnDController extends Controller
             'value' => 'nullable|numeric',
             'shades' => 'nullable|array', // Accept array of shades
             'shades.*' => 'nullable|string', // Each shade as a string
+            'comment' => 'nullable|string',
             'tkt' => 'nullable|string',
             'yarnPrice' => 'nullable|string',
             'yarnSupplier' => 'required|string',
@@ -183,6 +184,7 @@ class SamplePreparationRnDController extends Controller
         $rnd->tkt = $request->input('tkt');
         $rnd->yarnPrice = $request->input('yarnPrice');
         $rnd->yarnSupplier = $yarnSupplier;
+        $rnd->supplierComment = $request->input('comment');
 
         // Lock fields after submission
         $rnd->is_po_locked = true;
@@ -569,6 +571,7 @@ class SamplePreparationRnDController extends Controller
             'id' => 'required|exists:sample_preparation_rnd,id',
             'alreadyDeveloped' => 'required|string',
             'shade' => 'nullable|string',
+            'comment' => 'nullable|string',
             'tkt' => 'nullable|string',
             'yarnSupplier' => 'nullable|string',
             'value' => 'nullable|numeric',
@@ -588,6 +591,7 @@ class SamplePreparationRnDController extends Controller
         if ($request->input('alreadyDeveloped') === 'Tape Match Pan Asia') {
             $prep->shade = $request->input('shade');
             $prep->tkt = $request->input('tkt');
+            $prep->supplierComment = $request->input('comment');
             $prep->yarnSupplier = $request->input('yarnSupplier');
             $prep->yarnOrderedWeight = $request->input('value');
             $prep->productionStatus = 'Tape Match';
