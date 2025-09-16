@@ -442,7 +442,7 @@
                                             <td class="px-4 py-3 w-32 whitespace-normal break-words border-r border-gray-300"
                                                 x-data="{ open: false, selectedShade: '{{ $catalog->shade }}' }">
                                                 @php
-                                                    $shadeList = explode(',', $catalog->shade);
+                                                        $shadeList = preg_split('/[\/,]/', $catalog->shade);
                                                 @endphp
 
                                                 @if(count($shadeList) > 1)
