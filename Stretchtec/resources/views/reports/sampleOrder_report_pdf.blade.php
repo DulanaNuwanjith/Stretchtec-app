@@ -13,60 +13,48 @@
             margin: 20px;
             color: #333;
         }
-
-        h1,
-        h2 {
+        h1, h2 {
             border-bottom: 2px solid #333;
             padding-bottom: 5px;
             margin-bottom: 15px;
             color: #222;
         }
-
         table {
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 25px;
         }
-
-        th,
-        td {
+        th, td {
             border: 1px solid #777;
             padding: 8px 10px;
             text-align: left;
         }
-
         th {
             background-color: #f0f0f0;
             font-weight: bold;
         }
-
         ul {
             list-style: none;
             padding-left: 0;
             margin-bottom: 25px;
         }
-
         ul li {
             padding: 4px 0;
         }
-
         ul li strong {
             width: 250px;
             display: inline-block;
             color: #34495E;
         }
-
         .section {
             margin-bottom: 40px;
         }
-
         .footer {
             font-size: 10px;
             text-align: center;
             color: #aaa;
             margin-top: 50px;
         }
-
         img {
             max-width: 150px;
             max-height: 150px;
@@ -74,48 +62,34 @@
             border: 1px solid #ccc;
             padding: 2px;
         }
-
         .product-catalog-images {
             display: flex;
             gap: 15px;
             flex-wrap: wrap;
             margin-top: 10px;
         }
-
         .product-catalog-images > div {
             max-width: 140px;
             text-align: center;
         }
-
-        /* Grid container for main layout */
         .grid-container,
         .bottom-row {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 40px 50px;
-
-            /* Spread columns horizontally */
             justify-content: space-between;
-
-            /* Make full width */
             width: 100%;
             margin-top: 40px;
         }
-
-        /* Nested grid for R&D + Yarn Order on right top */
         .right-top {
             display: grid;
             grid-template-rows: auto auto;
             gap: 25px;
         }
-
-        /* Padding inside columns */
         .grid-container > div,
         .bottom-row > div {
             padding: 0 10px;
         }
-
-        /* Full width container for product catalogs */
         .full-width {
             grid-column: 1 / -1;
             margin-top: 30px;
@@ -132,51 +106,40 @@
     <div class="section">
         <h2>Sample Inquiry Details</h2>
         <div style="display: flex; align-items: flex-start; gap: 40px;">
-            <!-- Left side: text details -->
             <ul style="list-style: none; padding-left: 0; margin: 0; flex: 1;">
-                <li><strong style="width: 180px; display: inline-block;">Inquiry Received Date:</strong>
-                    {{ $sampleInquiry->inquiryReceiveDate->format('Y-m-d') }}</li>
-                <li><strong style="width: 180px; display: inline-block;">Customer:</strong>
-                    {{ $sampleInquiry->customerName }}</li>
+                <li><strong>Inquiry Received Date:</strong> {{ optional($sampleInquiry->inquiryReceiveDate)->format('Y-m-d') }}</li>
+                <li><strong>Customer:</strong> {{ $sampleInquiry->customerName }}</li>
                 @if ($sampleInquiry->customerRequestDate)
-                    <li><strong style="width: 180px; display: inline-block;">Customer Requested Date:</strong>
-                        {{ $sampleInquiry->customerRequestDate->format('Y-m-d') }}</li>
+                    <li><strong>Customer Requested Date:</strong> {{ $sampleInquiry->customerRequestDate->format('Y-m-d') }}</li>
                 @endif
-                <li><strong style="width: 180px; display: inline-block;">Customer Merchandiser Name:</strong>
-                    {{ $sampleInquiry->merchandiseName ?? 'N/A' }}</li>
-                <li><strong style="width: 180px; display: inline-block;">Customer Coordinator Name:</strong>
-                    {{ $sampleInquiry->coordinatorName ?? 'N/A' }}</li>
-                <li>
-                    <strong style="width: 180px; display: inline-block;">Customer Delivery Date:</strong>
+                <li><strong>Customer Merchandiser Name:</strong> {{ $sampleInquiry->merchandiseName ?? 'N/A' }}</li>
+                <li><strong>Customer Coordinator Name:</strong> {{ $sampleInquiry->coordinatorName ?? 'N/A' }}</li>
+                <li><strong>Customer Delivery Date:</strong>
                     {{ $sampleInquiry->customerDeliveryDate ? $sampleInquiry->customerDeliveryDate->format('Y-m-d') : 'N/A' }}
                 </li>
-                <li>
-                    <strong style="width: 180px; display: inline-block;">Customer Delivery Qty:</strong>
+                <li><strong>Customer Delivery Qty:</strong>
                     @if ($rnd && $rnd->shadeOrders->isNotEmpty())
                         {{ $rnd->shadeOrders->sum('qty') }}
                     @else
                         {{ $sampleInquiry->deliveryQty ?? 'N/A' }}
                     @endif
                 </li>
-                <li><strong style="width: 180px; display: inline-block;">Customer Decision:</strong>
-                    {{ $customerDecision ?? 'N/A' }}</li>
+                <li><strong>Customer Decision:</strong> {{ $customerDecision ?? 'N/A' }}</li>
                 @if ($sampleInquiry->inquiryReceiveDate && $sampleInquiry->customerDeliveryDate)
-                    <li>
-                        <strong style="width: 180px; display: inline-block;">Days to Delivery:</strong>
-                        {{ Carbon::parse($sampleInquiry->inquiryReceiveDate)->startOfDay()->diffInDays(Carbon::parse($sampleInquiry->customerDeliveryDate)}}
-                        days
+                    <li><strong>Days to Delivery:</strong>
+                        {{ Carbon::parse($sampleInquiry->inquiryReceiveDate)->startOfDay()->diffInDays(
+                                Carbon::parse($sampleInquiry->customerDeliveryDate)
+                        ) }} days
                     </li>
                 @else
-                    <li><strong style="width: 180px; display: inline-block;">Days to Delivery:</strong> N/A</li>
+                    <li><strong>Days to Delivery:</strong> N/A</li>
                 @endif
             </ul>
 
-            <!-- Right side: order file image + download -->
+            <!-- Right side: order file image -->
             <div style="flex-shrink: 0; max-width: 250px;">
-                @if (dif; ?><?php
-if($sampleIn)
-                    <img src="{{ ?><?php
-echo e( public_path('storage/' . $sampleInqu}}" alt="Order File Image"
+                @if (!empty($sampleInquiry->orderFile))
+                    <img src="{{ asset('storage/' . $sampleInquiry->orderFile) }}" alt="Order File Image"
                          style="max-width: 100%; max-height: 150px; border: 1px solid #ccc; padding: 2px;"/>
                 @else
                     <p>No order file available.</p>
@@ -185,23 +148,16 @@ echo e( public_path('storage/' . $sampleInqu}}" alt="Order File Image"
         </div>
     </div>
 
-    <!-- Right top: R&D + Yarn Order stacked -->
+    <!-- Right top: R&D + Yarn Order -->
     <div class="right-top">
         <div class="section">
             <h2>Research & Development (R&D) Details</h2>
-            @if (dif;)
+            @if ($rnd)
                 <ul>
-                    <li><strong>Development Plan Date:</strong>
-                        {{ ?><?php
-echo e( optional($rnd->developPlannedDate)->format('Y}}</li>
-                    <li><strong>Colour Match Sent Date:</strong>
-                        {{ ?><?php
-echo e( optional($rnd->colourMatchSentDate)->format('Y-m-d}}</li>
-                    <li><strong>Colour Match Receive Date:</strong>
-                        {{ ?><?php
-echo e( optional($rnd->colourMatchReceiveDate)->format('Y-m-d}}</li>
-                    <li><strong>Yarn Ordered PO Number:</strong> {{ ?><?php
-echo e( $rnd->yarnOrderedPO}}</li>
+                    <li><strong>Development Plan Date:</strong> {{ optional($rnd->developPlannedDate)->format('Y-m-d') ?? 'N/A' }}</li>
+                    <li><strong>Colour Match Sent Date:</strong> {{ optional($rnd->colourMatchSentDate)->format('Y-m-d') ?? 'N/A' }}</li>
+                    <li><strong>Colour Match Receive Date:</strong> {{ optional($rnd->colourMatchReceiveDate)->format('Y-m-d') ?? 'N/A' }}</li>
+                    <li><strong>Yarn Ordered PO Number:</strong> {{ $rnd->yarnOrderedPO ?? 'N/A' }}</li>
                 </ul>
             @else
                 <p>No R&D data available for this order.</p>
@@ -211,37 +167,24 @@ echo e( $rnd->yarnOrderedPO}}</li>
         <div class="section">
             <h2>Yarn Order Details</h2>
             <ul>
-                <li><strong>Yarn Ordered Quantity (grams):</strong> {{ ?><?php
-echo e( $yarnOrderedQu}}</li>
-                <li><strong>Leftover Yarn Quantity (grams):</strong> {{ ?><?php
-echo e( $leftoverYarnQu}}</li>
-                <li><strong>Yarn Price:</strong> {{ ?><?php
-echo e( $yarnPrice ? number_format($yarnPr}}</li>
+                <li><strong>Yarn Ordered Quantity (grams):</strong> {{ $yarnOrderedQu ?? 'N/A' }}</li>
+                <li><strong>Leftover Yarn Quantity (grams):</strong> {{ $leftoverYarnQu ?? 'N/A' }}</li>
+                <li><strong>Yarn Price:</strong> {{ $yarnPrice ? number_format($yarnPrice, 2) : 'N/A' }}</li>
             </ul>
         </div>
     </div>
 </div>
 
-<!-- Bottom row: Production (left) and Colour Match Reject (right) -->
 <div class="bottom-row">
     <div class="section">
         <h2>Production Details</h2>
-        @if (' ); ?><?ph)
+        @if ($production)
             <ul>
-                <li><strong>Production Deadline:</strong>
-                    {{ ?><?php
-echo e( optional($production->production_deadline)->format('Y}}</li>
-                <li><strong>Order Received At:</strong>
-                    {{ ?><?php
-echo e( optional($production->order_received_at)->format('Y-m-d}}</li>
-                <li><strong>Order Start At:</strong>
-                    {{ ?><?php
-echo e( optional($production->order_start_at)->format('Y-m-d}}</li>
-                <li><strong>Operator:</strong> {{ ?><?php
-echo e( $production->operato}}</li>
-                <li><strong>Supervisor:</strong> {{ ?><?php
-echo e( $production->superviso}}</li>
-
+                <li><strong>Production Deadline:</strong> {{ optional($production->production_deadline)->format('Y-m-d') ?? 'N/A' }}</li>
+                <li><strong>Order Received At:</strong> {{ optional($production->order_received_at)->format('Y-m-d') ?? 'N/A' }}</li>
+                <li><strong>Order Start At:</strong> {{ optional($production->order_start_at)->format('Y-m-d') ?? 'N/A' }}</li>
+                <li><strong>Operator:</strong> {{ $production->operator ?? 'N/A' }}</li>
+                <li><strong>Supervisor:</strong> {{ $production->supervisor ?? 'N/A' }}</li>
             </ul>
         @else
             <p>No production data available for this order.</p>
@@ -250,8 +193,7 @@ echo e( $production->superviso}}</li>
 
     <div class="section">
         <h2>Colour Match Reject Records</h2>
-        @if (dif; ?><?php
-if($colorRejec)
+        @if (!empty($colorRejects) && $colorRejects->isNotEmpty())
             <table>
                 <thead>
                 <tr>
@@ -262,17 +204,12 @@ if($colorRejec)
                 </tr>
                 </thead>
                 <tbody>
-                @foreach (?><?php
-foreach($colorRe)
+                @foreach ($colorRejects as $reject)
                     <tr>
-                        <td>{{ ?><?php
-echo e( optional($reject->sentDate)->format('Y-m-d}}</td>
-                        <td>{{ ?><?php
-echo e( optional($reject->receiveDate)->format('Y-m-d}}</td>
-                        <td>{{ ?><?php
-echo e( optional($reject->rejectDate)->format('Y-m-d}}</td>
-                        <td>{{ ?><?php
-echo e( $rejec}}</td>
+                        <td>{{ optional($reject->sentDate)->format('Y-m-d') ?? 'N/A' }}</td>
+                        <td>{{ optional($reject->receiveDate)->format('Y-m-d') ?? 'N/A' }}</td>
+                        <td>{{ optional($reject->rejectDate)->format('Y-m-d') ?? 'N/A' }}</td>
+                        <td>{{ $reject->reason ?? 'N/A' }}</td>
                     </tr>
                 @endforeach
                 </tbody>
@@ -281,105 +218,75 @@ echo e( $rejec}}</td>
             <p>No colour match reject records found.</p>
         @endif
     </div>
-
-    <!-- Shade Wise Details -->
-    @if (dif; ?><?php
-if($rnd && $rnd->shadeOrde)
-        <div class="section full-width">
-            <h2>Shade Wise Details</h2>
-            <table>
-                <thead>
-                <tr>
-                    <th>Shade</th>
-                    <th>Yarn Receive Date</th>
-                    <th>Production Output</th>
-                    <th>Damaged Output</th>
-                    <th>Production Complete Date</th>
-                    <th>Dispatched Date</th>
-                    <th>Delivered Date</th>
-                    <th>Delivered Quantity</th>
-                </tr>
-                </thead>
-                <tbody>
-                @foreach (?><?php
-foreach($rnd->shade)
-                    <tr>
-                        <td>{{ ?><?php
-echo e}}</td>
-                        <td>{{ ?><?php
-echo e( $shade->yarn_receive_date ? Carbon::parse($shade->yarn_receive_date)}}
-                        </td>
-                        <td>{{: '–' ); ?><?php
-echo e( $shade->p}}</td>
-                        <td>{{? '–' ); ?><?php
-echo e( $shade}}</td>
-                        <td>{{? '–' ); ?><?php
-echo e( $shade->production_complete_date ? Carbon::parse($shade->production_comple}}
-                        </td>
-                        <td>{{Y-m-d') : '–' ); ?><?php
-echo e( $shade->dispatched_date ? Carbon::parse($shade->}}
-                        </td>
-                        <td>{{format('Y-m-d') : '–' ); ?><?php
-echo e( $shade->delivered_date ? Carbon::parse}}
-                        </td>
-                        <td>{{_date)->format('Y-m-}}</td>
-                    </tr>
-                @endforeach
-                </tbody>
-                <tfoot>
-                <tr>
-                    <th colspan="2">Total</th>
-                    <th>{{ty ?? '–' ); ?><?php
-endforeach; ?><?php
-echo}}</th>
-                    <th>{{ers->sum('production_output') ); ?><?php
-e}}</th>
-                    <th colspan="3"></th>
-                    <th>{{Orders->sum('damaged_output') )}}</th>
-                </tr>
-                </tfoot>
-            </table>
-        </div>
-    @endif
-
 </div>
 
-<!-- Full width Product Catalog Images -->
-@if (Orders->sum('qty') ); ?><?php
-endif; ?><?php
-if(isset($pr)
+@if ($rnd && $rnd->shadeOrders && $rnd->shadeOrders->isNotEmpty())
+    <div class="section full-width">
+        <h2>Shade Wise Details</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>Shade</th>
+                <th>Yarn Receive Date</th>
+                <th>Production Output</th>
+                <th>Damaged Output</th>
+                <th>Production Complete Date</th>
+                <th>Dispatched Date</th>
+                <th>Delivered Date</th>
+                <th>Delivered Quantity</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach ($rnd->shadeOrders as $shade)
+                <tr>
+                    <td>{{ $shade->shade ?? 'N/A' }}</td>
+                    <td>{{ $shade->yarn_receive_date ? Carbon::parse($shade->yarn_receive_date)->format('Y-m-d') : '–' }}</td>
+                    <td>{{ $shade->production_output ?? '–' }}</td>
+                    <td>{{ $shade->damaged_output ?? '–' }}</td>
+                    <td>{{ $shade->production_complete_date ? Carbon::parse($shade->production_complete_date)->format('Y-m-d') : '–' }}</td>
+                    <td>{{ $shade->dispatched_date ? Carbon::parse($shade->dispatched_date)->format('Y-m-d') : '–' }}</td>
+                    <td>{{ $shade->delivered_date ? Carbon::parse($shade->delivered_date)->format('Y-m-d') : '–' }}</td>
+                    <td>{{ $shade->delivered_quantity ?? '–' }}</td>
+                </tr>
+            @endforeach
+            </tbody>
+            <tfoot>
+            <tr>
+                <th colspan="2">Total</th>
+                <th>{{ $rnd->shadeOrders->sum('production_output') }}</th>
+                <th>{{ $rnd->shadeOrders->sum('damaged_output') }}</th>
+                <th colspan="3"></th>
+                <th>{{ $rnd->shadeOrders->sum('delivered_quantity') }}</th>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+@endif
+
+@if (!empty($productCatalogs) && $productCatalogs->isNotEmpty())
     <div class="section full-width">
         <h2>Product Catalog Images</h2>
-        @foreach (productCatalogs->isNotEmpty()
+        @foreach ($productCatalogs as $product)
             <div style="margin-bottom: 15px;">
-                <strong>Order No:</strong> {{h($productCatalogs a}} <br/>
-                <strong>Reference No:</strong> {{hp
-echo e( $product->ord}} <br/>
+                <strong>Order No:</strong> {{ $product->order_no ?? 'N/A' }} <br/>
+                <strong>Reference No:</strong> {{ $product->reference_no ?? 'N/A' }} <br/>
                 <div class="product-catalog-images">
-                    @if (hp
-echo e( $product->)
+                    @if (!empty($product->order_image))
                         <div>
                             <strong>Product Image:</strong><br/>
-                            <img src="{{<?php
-if($product->order_image): ?><?php
-echo e( public_path('}}"
-                                 alt="Order Image"/>
+                            <img src="{{ asset('storage/' . $product->order_image) }}" alt="Order Image"/>
                         </div>
                     @endif
 
-                    @if (duct->order_image) ); ?)
+                    @if (!empty($product->approval_card))
                         <div>
                             <strong>Approval Card:</strong><br/>
-                            <img src="{{php
-if($product->approval_card): ?><?php
-echo e( pu}}"
-                                 alt="Approval Card"/>
+                            <img src="{{ asset('storage/' . $product->approval_card) }}" alt="Approval Card"/>
                         </div>
                     @endif
 
                     <div>
-                        <strong>Approved By:</strong> {{approval_card) ); ?><?php
-endif;}}
+                        <strong>Approved By:</strong> {{ $product->approved_by ?? 'N/A' }}
                     </div>
                 </div>
             </div>
@@ -388,11 +295,8 @@ endif;}}
 @endif
 
 <div class="footer">
-    Report generated on {{<?php
-endforeach; ?><?php
-endi}}
+    Report generated on {{ now()->format('Y-m-d H:i:s') }}
 </div>
 
 </body>
-
 </html>
