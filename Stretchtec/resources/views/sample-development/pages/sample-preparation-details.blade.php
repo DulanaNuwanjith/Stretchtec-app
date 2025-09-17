@@ -637,7 +637,7 @@
                                                 {{-- Show Reject Number if exists --}}
                                                 @if (!empty($prep->sampleInquiry->rejectNO))
                                                     <div class="mt-2 text-xs text-red-700 font-semibold">
-                                                        Reject No: {{ $prep->sampleInquiry->rejectNO }}
+                                                        {{ $prep->sampleInquiry->rejectNO }}
                                                     </div>
                                                 @endif
 
