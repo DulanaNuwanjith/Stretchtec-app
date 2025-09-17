@@ -634,6 +634,13 @@
                                                         {{ $prep->orderNo }}
                                                     </span>
 
+                                                {{-- Show Reject Number if exists --}}
+                                                @if (!empty($prep->sampleInquiry->rejectNO))
+                                                    <div class="mt-2 text-xs text-red-700 font-semibold">
+                                                        Reject No: {{ $prep->sampleInquiry->rejectNO }}
+                                                    </div>
+                                                @endif
+
                                                 <input type="text" name="orderNo"
                                                        class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                        value="{{ $prep->orderNo }}"/>
