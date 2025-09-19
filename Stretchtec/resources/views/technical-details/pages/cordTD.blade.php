@@ -166,7 +166,7 @@
                                         <tr>
                                             <!-- Reference -->
                                             <td class="text-center px-4 py-3">
-                                                <div class="font-bold">Ref {{ $technicalCardCord->reference_number ?? '-' }}</div>
+                                                <div class="font-bold">{{ $technicalCardCord->reference_number ?? '-' }}</div>
                                             </td>
 
                                             <!-- Item Details -->
