@@ -161,33 +161,46 @@
                                         </tr>
                                     </thead>
 
-                                    <tbody id="CordTDRecords"
-                                        class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                                        <td class="text-center px-4 py-3">
-                                            <div class="font-bold">REf 1234</div>
-                                        </td>
-                                        <!-- Item Details -->
-                                        <td class="px-4 py-3 text-xs text-left break-words">
-                                            <div>Created Date: </div>
-                                            <div>Type: </div>
-                                            <div>Size: </div>
-                                            <div>Color: </div>
-                                            <div>Machine: </div>
-                                        </td>
-                                        <!-- Technical Details -->
-                                        <td class="px-4 py-3 text-xs text-left break-words">
-                                            <div>Rubber Type: </div>
-                                            <div>Yarn Count: </div>
-                                            <div>Wheel Up: </div>
-                                            <div>Wheel Down: </div>
-                                            <div>Spindles: </div>
-                                        </td>
-                                        <!-- Quality Details -->
-                                        <td class="px-4 py-3 text-xs text-left break-words">
-                                            <div>Stretchability: </div>
-                                            <div>Weight Per Yard: </div>
-                                            <div>Special Remarks: </div>
-                                        </td>
+                                    <tbody id="CordTDRecords" class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                                    @forelse($technicalCardCords as $technicalCardCord)
+                                        <tr>
+                                            <!-- Reference -->
+                                            <td class="text-center px-4 py-3">
+                                                <div class="font-bold">Ref {{ $technicalCardCord->reference_number ?? '-' }}</div>
+                                            </td>
+
+                                            <!-- Item Details -->
+                                            <td class="px-4 py-3 text-xs text-left break-words">
+                                                <div>Created Date: {{ $technicalCardCord->created_at?->format('Y-m-d') ?? '-' }}</div>
+                                                <div>Type: {{ $technicalCardCord->type ?? '-' }}</div>
+                                                <div>Size: {{ $technicalCardCord->size ?? '-' }}</div>
+                                                <div>Color: {{ $technicalCardCord->color ?? '-' }}</div>
+                                                <div>Machine: {{ $technicalCardCord->machine ?? '-' }}</div>
+                                            </td>
+
+                                            <!-- Technical Details -->
+                                            <td class="px-4 py-3 text-xs text-left break-words">
+                                                <div>Rubber Type: {{ $technicalCardCord->rubber_type ?? '-' }}</div>
+                                                <div>Yarn Count: {{ $technicalCardCord->yarn_count ?? '-' }}</div>
+                                                <div>Wheel Up: {{ $technicalCardCord->wheel_up ?? '-' }}</div>
+                                                <div>Wheel Down: {{ $technicalCardCord->wheel_down ?? '-' }}</div>
+                                                <div>Spindles: {{ $technicalCardCord->spindles ?? '-' }}</div>
+                                            </td>
+
+                                            <!-- Quality Details -->
+                                            <td class="px-4 py-3 text-xs text-left break-words">
+                                                <div>Stretchability: {{ $technicalCardCord->stretchability ?? '-' }}</div>
+                                                <div>Weight Per Yard: {{ $technicalCardCord->weight_per_yard ?? '-' }}</div>
+                                                <div>Special Remarks: {{ $technicalCardCord->special_remarks ?? '-' }}</div>
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="5" class="text-center px-4 py-3 text-gray-500">
+                                                No Cord Technical Cards found.
+                                            </td>
+                                        </tr>
+                                    @endforelse
                                     </tbody>
                                 </table>
                             </div>
