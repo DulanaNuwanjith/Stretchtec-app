@@ -30,8 +30,8 @@
             @endif
 
             @if (in_array($role, ['ADMIN', 'SUPERADMIN']))
-                <a href="{{ route('codeTD.index') }}"
-                   class="pb-2 px-3 font-semibold {{ request()->routeIs('codeTD.*') ? 'border-b-2 border-blue-500 text-blue-600' : 'text-gray-600' }}">
+                <a href="{{ route('cordTD.index') }}"
+                   class="pb-2 px-3 font-semibold {{ request()->routeIs('cordTD.*') ? 'border-b-2 border-blue-500 text-blue-600' : 'text-gray-600' }}">
                     Code Technical Details
                 </a>
             @endif

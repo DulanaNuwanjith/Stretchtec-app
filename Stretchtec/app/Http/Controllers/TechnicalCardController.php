@@ -17,9 +17,9 @@ class TechnicalCardController extends Controller
         return view('technical-details.pages.tapeTD');
     }
 
-    public function codeIndex()
+    public function cordIndex()
     {
-        return view('technical-details.pages.codeTD');
+        return view('technical-details.pages.cordTD');
     }
 
     /**

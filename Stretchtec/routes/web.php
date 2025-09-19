@@ -201,7 +201,7 @@ Route::middleware([
 
     Route::get('/elasticTD',[TechnicalCardController::class, 'elasticIndex'])->name('elasticTD.index');
     Route::get('/tapeTD',[TechnicalCardController::class, 'tapeIndex'])->name('tapeTD.index');
-    Route::get('/codeTD',[TechnicalCardController::class, 'codeIndex'])->name('codeTD.index');
+    Route::get('/cordTD',[TechnicalCardController::class, 'cordIndex'])->name('cordTD.index');
 });
 
 
