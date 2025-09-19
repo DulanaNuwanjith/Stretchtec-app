@@ -257,6 +257,13 @@
                                         @endforelse
                                     </tbody>
                                 </table>
+
+                                <!-- Pagination Links -->
+                                @if($technicalCardCords->hasPages())
+                                    <div class="py-4 flex justify-center">
+                                        {{ $technicalCardCords->links('pagination::tailwind') }}
+                                    </div>
+                                @endif
                             </div>
 
                             <div id="addCordTDModal"

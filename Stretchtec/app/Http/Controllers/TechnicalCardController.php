@@ -15,19 +15,19 @@ class TechnicalCardController extends Controller
 {
     public function elasticIndex(): Factory|View
     {
-        $technicalCardElastics = TechnicalCard::where('type', 'Elastic')->get();
+        $technicalCardElastics = TechnicalCard::where('type', 'Elastic')->paginate(10);
         return view('technical-details.pages.elasticTD', compact('technicalCardElastics'));
     }
 
     public function tapeIndex(): Factory|View
     {
-        $technicalCardTapes = TechnicalCard::where('type', 'Tape')->get();
+        $technicalCardTapes = TechnicalCard::where('type', 'Tape')->paginate(10);
         return view('technical-details.pages.tapeTD', compact('technicalCardTapes'));
     }
 
     public function cordIndex(): Factory|View
     {
-        $technicalCardCords = TechnicalCard::where('type', 'Cord')->get();
+        $technicalCardCords = TechnicalCard::where('type', 'Cord')->paginate(10);
         return view('technical-details.pages.cordTD', compact('technicalCardCords'));
     }
 

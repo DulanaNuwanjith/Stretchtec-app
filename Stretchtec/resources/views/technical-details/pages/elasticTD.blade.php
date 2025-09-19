@@ -247,7 +247,8 @@
                                                                 onsubmit="return confirm('Are you sure you want to delete this record?');">
                                                                 @csrf @method('DELETE') <button type="submit"
                                                                     class="flex items-center justify-center w-20 h-9 bg-red-500 text-white text-sm font-semibold rounded-lg shadow hover:bg-red-600 transition-all mt-3.5">
-                                                                    Delete </button> </form>
+                                                                    Delete </button>
+                                                            </form>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -261,6 +262,14 @@
                                         @endforelse
                                     </tbody>
                                 </table>
+
+                                <!-- Pagination Links -->
+                                @if($technicalCardElastics->hasPages())
+                                    <div class="py-4 flex justify-center">
+                                        {{ $technicalCardElastics->links('pagination::tailwind') }}
+                                    </div>
+                                @endif
+
                             </div>
 
                             <div id="addElasticModal"
