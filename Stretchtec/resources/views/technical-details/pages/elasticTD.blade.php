@@ -166,7 +166,7 @@
                                            class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
 
                                     @forelse($technicalCardElastics as $technicalCardElastic)
-                                        <tr>
+                                        <tr class="odd:bg-white even:bg-gray-50 border-b border-gray-200  text-left">
                                             <!-- Reference -->
                                             <td class="text-center px-4 py-3">
                                                 <div class="font-bold">Ref {{ $technicalCardElastic->reference_number ?? '-' }}</div>
@@ -271,25 +271,24 @@
                                                             class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                     </div>
                                                     <div class="w-1/2">
-                                                        <label for="size"
-                                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">Size</label>
-                                                        <input id="size" type="text" name="size" required
-                                                            class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                        <label for="machine"
+                                                               class="block text-sm font-medium text-gray-700 dark:text-gray-300">Machine</label>
+                                                        <input id="machine" type="text" name="machine"
+                                                               class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                     </div>
                                                 </div>
 
                                                 <div class="flex gap-4">
                                                     <div class="w-1/2">
-                                                        <label for="color"
-                                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">Color</label>
-                                                        <input id="color" type="text" name="color" required
+                                                        <label for="size"
+                                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">Size</label>
+                                                        <input id="size" type="text" name="size" required
                                                             class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                     </div>
                                                     <div class="w-1/2">
-                                                        <label for="rubber_type"
-                                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">Rubber
-                                                            Type</label>
-                                                        <input id="rubber_type" type="text" name="rubber_type" required
+                                                        <label for="color"
+                                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">Color</label>
+                                                        <input id="color" type="text" name="color" required
                                                             class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                     </div>
                                                 </div>
@@ -330,15 +329,16 @@
 
                                                 <div class="flex gap-4">
                                                     <div class="w-1/2">
-                                                        <label for="needles"
-                                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">Needles</label>
-                                                        <input id="needles" type="text" name="needles" required
+                                                        <label for="rubber_type"
+                                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">Rubber
+                                                            Type</label>
+                                                        <input id="rubber_type" type="text" name="rubber_type" required
                                                             class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                     </div>
                                                     <div class="w-1/2">
-                                                        <label for="stretchability"
-                                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">Stretchability</label>
-                                                        <input id="stretchability" type="text" name="stretchability"
+                                                        <label for="needles"
+                                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">Needles</label>
+                                                        <input id="needles" type="text" name="needles" required
                                                             class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                     </div>
                                                 </div>
@@ -352,10 +352,10 @@
                                                             class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                     </div>
                                                     <div class="w-1/2">
-                                                        <label for="machine"
-                                                               class="block text-sm font-medium text-gray-700 dark:text-gray-300">Machine</label>
-                                                        <input id="machine" type="text" name="machine"
-                                                               class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                        <label for="stretchability"
+                                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">Stretchability</label>
+                                                        <input id="stretchability" type="text" name="stretchability"
+                                                            class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                     </div>
                                                 </div>
 
