@@ -7,18 +7,23 @@ use Illuminate\Database\Eloquent\Model;
 class TechnicalCard extends Model
 {
     protected $fillable = [
-        'reference_note',
+        'reference_number',
+        'type',
         'size',
         'color',
+        'yarn_count',
         'rubber_type',
+        'spindles',
         'weft_yarn',
         'warp_yarn',
-        'knitting_machine',
+        'reed',
+        'machine',
         'wheel_up',
         'wheel_down',
         'needles',
-        'stretch',
-        'weight',
+        'stretchability',
+        'weight_per_yard',
+        'url',
         'special_remarks',
     ];
 

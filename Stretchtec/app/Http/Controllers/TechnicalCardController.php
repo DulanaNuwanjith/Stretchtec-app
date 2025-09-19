@@ -7,12 +7,19 @@ use Illuminate\Http\Request;
 
 class TechnicalCardController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function elasticIndex()
     {
-        //
+        return view('technical-details.pages.elasticTD');
+    }
+
+    public function tapeIndex()
+    {
+        return view('technical-details.pages.tapeTD');
+    }
+
+    public function codeIndex()
+    {
+        return view('technical-details.pages.codeTD');
     }
 
     /**

@@ -13,18 +13,23 @@ return new class extends Migration
     {
         Schema::create('technical_cards', static function (Blueprint $table) {
             $table->id();
-            $table->string('reference_note');
+            $table->string('reference_number')->unique();
+            $table->string('type');
             $table->string('size');
             $table->string('color');
-            $table->string('rubber_type');
-            $table->string('weft_yarn');
-            $table->string('warp_yarn');
-            $table->string('knitting_machine');
-            $table->string('wheel_up');
-            $table->string('wheel_down');
-            $table->string('needles');
-            $table->string('stretch');
-            $table->string('weight');
+            $table->string('rubber_type')->nullable();
+            $table->string('yarn_count')->nullable();
+            $table->string('spindles')->nullable();
+            $table->string('weft_yarn')->nullable();
+            $table->string('warp_yarn')->nullable();
+            $table->string('reed')->nullable();
+            $table->string('machine');
+            $table->string('wheel_up')->nullable();
+            $table->string('wheel_down')->nullable();
+            $table->string('needles')->nullable();
+            $table->string('stretchability')->nullable();
+            $table->string('weight_per_yard');
+            $table->string('url')->nullable();
             $table->string('special_remarks')->nullable();
             $table->timestamps();
         });

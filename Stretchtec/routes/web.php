@@ -51,6 +51,7 @@ use App\Http\Controllers\SamplePreparationProductionController;
 use App\Http\Controllers\SamplePreparationRnDController;
 use App\Http\Controllers\SampleStockController;
 use App\Http\Controllers\StoresController;
+use App\Http\Controllers\TechnicalCardController;
 use App\Http\Controllers\UserMananagementController;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -198,17 +199,9 @@ Route::middleware([
         return view('production.pages.production-order-preparation');
     })->name('production-order-preparation.index');
 
-    Route::get('elasticTD', static function () {
-        return view('technical-details.pages.elasticTD');
-    })->name('elasticTD.index');
-
-    Route::get('tapeTD', static function () {
-        return view('technical-details.pages.tapeTD');
-    })->name('tapeTD.index');
-
-    Route::get('codeTD', static function () {
-        return view('technical-details.pages.codeTD');
-    })->name('codeTD.index');
+    Route::get('/elasticTD',[TechnicalCardController::class, 'elasticIndex'])->name('elasticTD.index');
+    Route::get('/tapeTD',[TechnicalCardController::class, 'tapeIndex'])->name('tapeTD.index');
+    Route::get('/codeTD',[TechnicalCardController::class, 'codeIndex'])->name('codeTD.index');
 });
 
 
