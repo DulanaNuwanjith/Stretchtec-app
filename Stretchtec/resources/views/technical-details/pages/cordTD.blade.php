@@ -259,9 +259,9 @@
                                 </table>
 
                                 <!-- Pagination Links -->
-                                @if($technicalCardCord->hasPages())
+                                @if($technicalCardCords->hasPages())
                                     <div class="py-4 flex justify-center">
-                                        {{ $technicalCardCord->links('pagination::tailwind') }}
+                                        {{ $technicalCardCords->links('pagination::tailwind') }}
                                     </div>
                                 @endif
                             </div>
