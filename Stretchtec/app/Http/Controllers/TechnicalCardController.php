@@ -93,11 +93,18 @@ class TechnicalCardController extends Controller
             'needles' => 'nullable|integer|min:0',
             'stretchability' => 'nullable|string|max:100',
             'weight_per_yard' => 'nullable|numeric|min:0',
-            'url' => 'nullable|url',
+            'url' => 'nullable|file|mimes:jpg,jpeg,pdf|max:2048', // 🔹 2MB max
             'special_remarks' => 'nullable|string|max:500',
         ]);
 
         try {
+            // 🔹 Handle file upload
+            if ($request->hasFile('url')) {
+                $file = $request->file('url');
+                $path = $file->store('technical_cards', 'public'); // saves to storage/app/public/technicalCards
+                $validated['url'] = Storage::url($path); // /storage/technicalCards/filename.ext
+            }
+
             $validated['type'] = 'Cord';
             TechnicalCard::create($validated);
 
@@ -130,11 +137,18 @@ class TechnicalCardController extends Controller
             'needles' => 'nullable|integer|min:0',
             'stretchability' => 'nullable|string|max:100',
             'weight_per_yard' => 'nullable|numeric|min:0',
-            'url' => 'nullable|url',
+            'url' => 'nullable|file|mimes:jpg,jpeg,pdf|max:2048', // 🔹 2MB max
             'special_remarks' => 'nullable|string|max:500',
         ]);
 
         try {
+            // 🔹 Handle file upload
+            if ($request->hasFile('url')) {
+                $file = $request->file('url');
+                $path = $file->store('technical_cards', 'public'); // saves to storage/app/public/technicalCards
+                $validated['url'] = Storage::url($path); // /storage/technicalCards/filename.ext
+            }
+
             $validated['type'] = 'Tape';
             TechnicalCard::create($validated);
 
