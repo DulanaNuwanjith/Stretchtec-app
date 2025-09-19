@@ -163,32 +163,89 @@
                                     </thead>
 
                                     <tbody id="sampleInquiryRecords"
-                                        class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                                        <td class="text-center px-4 py-3">
-                                            <div class="font-bold">REf 1234</div>
-                                        </td>
-                                        <!-- Item Details -->
-                                        <td class="px-4 py-3 text-xs text-left break-words">
-                                            <div>Created Date: </div>
-                                            <div>Type: </div>
-                                            <div>Size: </div>
-                                            <div>Color: </div>
-                                        </td>
-                                        <!-- Technical Details -->
-                                        <td class="px-4 py-3 text-xs text-left break-words">
-                                            <div>Rubber Type: </div>
-                                            <div>Weft Yarn: </div>
-                                            <div>Warp Yarn: </div>
-                                            <div>Wheel Up: </div>
-                                            <div>Wheel Down: </div>
-                                            <div>Needles: </div>
-                                        </td>
-                                        <!-- Quality Details -->
-                                        <td class="px-4 py-3 text-xs text-left break-words">
-                                            <div>Stretchability: </div>
-                                            <div>Weight Per Yard: </div>
-                                            <div>Special Remarks: </div>
-                                        </td>
+                                           class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+
+                                    @forelse($technicalCardElastics as $technicalCardElastic)
+                                        <tr>
+                                            <!-- Reference -->
+                                            <td class="text-center px-4 py-3">
+                                                <div class="font-bold">Ref {{ $technicalCardElastic->reference_number ?? '-' }}</div>
+                                            </td>
+
+                                            <!-- Item Details -->
+                                            <td class="px-4 py-3 text-xs text-left break-words">
+                                                <div>Created Date: {{ $technicalCardElastic->created_at?->format('Y-m-d') ?? '-' }}</div>
+                                                <div>Type: {{ $technicalCardElastic->type ?? '-' }}</div>
+                                                <div>Size: {{ $technicalCardElastic->size ?? '-' }}</div>
+                                                <div>Color: {{ $technicalCardElastic->color ?? '-' }}</div>
+                                                <div>Machine: {{ $technicalCardElastic->machine ?? '-' }}</div>
+                                            </td>
+
+                                            <!-- Technical Details -->
+                                            <td class="px-4 py-3 text-xs text-left break-words">
+                                                <div>Rubber Type: {{ $technicalCardElastic->rubber_type ?? '-' }}</div>
+                                                <div>Weft Yarn: {{ $technicalCardElastic->weft_yarn ?? '-' }}</div>
+                                                <div>Warp Yarn: {{ $technicalCardElastic->warp_yarn ?? '-' }}</div>
+                                                <div>Wheel Up: {{ $technicalCardElastic->wheel_up ?? '-' }}</div>
+                                                <div>Wheel Down: {{ $technicalCardElastic->wheel_down ?? '-' }}</div>
+                                                <div>Needles: {{ $technicalCardElastic->needles ?? '-' }}</div>
+                                            </td>
+
+                                            <!-- Quality Details -->
+                                            <td class="px-4 py-3 text-xs text-left break-words">
+                                                <div>Stretchability: {{ $technicalCardElastic->stretchability ?? '-' }}</div>
+                                                <div>Weight Per Yard: {{ $technicalCardElastic->weight_per_yard ?? '-' }}</div>
+                                                <div>Special Remarks: {{ $technicalCardElastic->special_remarks ?? '-' }}</div>
+                                            </td>
+
+                                            <!-- Actions -->
+                                            <td class="px-4 py-3 text-center">
+                                                <div class="flex gap-2 justify-center items-center">
+
+                                                    <!-- View Button -->
+                                                    @if($technicalCardElastic->url)
+                                                        <a href="{{ $technicalCardElastic->url }}" target="_blank"
+                                                           class="flex items-center justify-center w-20 h-9 bg-blue-500 text-white text-sm font-semibold rounded-lg shadow hover:bg-blue-600 transition-all">
+                                                            View
+                                                        </a>
+                                                    @else
+                                                        <span></span>
+                                                    @endif
+
+                                                    <!-- Add Image Button (inline upload) -->
+                                                    @if(!$technicalCardElastic->url)
+                                                        <form action="{{ route('technicalCards.storeImage', $technicalCardElastic->id) }}" method="POST" enctype="multipart/form-data" class="inline-block">
+                                                            @csrf
+                                                            <label class="flex items-center justify-center w-24 h-9 bg-green-500 text-white text-sm font-semibold rounded-lg shadow hover:bg-green-600 cursor-pointer transition-all mt-3.5">
+                                                                Add Image
+                                                                <input type="file" name="url" accept=".jpg,.jpeg,.png,.pdf" class="hidden" onchange="this.form.submit()">
+                                                            </label>
+                                                        </form>
+                                                    @endif
+
+                                                    <!-- Delete Button -->
+                                                    <form action="{{ route('technicalCards.delete', $technicalCardElastic->id) }}" method="POST"
+                                                          onsubmit="return confirm('Are you sure you want to delete this record?');">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit"
+                                                                class="flex items-center justify-center w-20 h-9 bg-red-500 text-white text-sm font-semibold rounded-lg shadow hover:bg-red-600 transition-all mt-3.5">
+                                                            Delete
+                                                        </button>
+                                                    </form>
+
+                                                </div>
+                                            </td>
+
+
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="5" class="text-center px-4 py-3 text-gray-500">
+                                                No Elastic Technical Cards found.
+                                            </td>
+                                        </tr>
+                                    @endforelse
                                     </tbody>
                                 </table>
                             </div>
@@ -202,7 +259,7 @@
                                             class="text-2xl font-semibold mb-8 text-blue-900 mt-4 dark:text-gray-100 text-center">
                                             Add New Elastic Catalog Item
                                         </h2>
-                                        <form action="" method="POST" enctype="multipart/form-data">
+                                        <form action="{{route('elasticTD.create')}}" method="POST" enctype="multipart/form-data">
                                             @csrf
                                             <div class="space-y-4">
 
@@ -225,7 +282,7 @@
 
                                                 <div class="flex gap-4">
                                                     <div class="w-1/2">
-                                                        <label for="reference_added_date"
+                                                        <label for="color"
                                                             class="block text-sm font-medium text-gray-700 dark:text-gray-300">Color</label>
                                                         <input id="color" type="text" name="color" required
                                                             class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
@@ -293,11 +350,14 @@
                                                         <label for="weight_per_yard"
                                                             class="block text-sm font-medium text-gray-700 dark:text-gray-300">Weight
                                                             per Yard</label>
-                                                        <input id="weight_per_yard" type="text" name="weight_per_yard"
+                                                        <input id="weight_per_yard" type="number" name="weight_per_yard"
                                                             class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                     </div>
                                                     <div class="w-1/2">
-
+                                                        <label for="machine"
+                                                               class="block text-sm font-medium text-gray-700 dark:text-gray-300">Machine</label>
+                                                        <input id="machine" type="text" name="machine"
+                                                               class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                     </div>
                                                 </div>
 
@@ -338,7 +398,7 @@
                                                         class="hidden w-full h-full flex items-center justify-center overflow-hidden">
                                                     </div>
 
-                                                    <input id="sampleFile" name="order_file" type="file"
+                                                    <input id="sampleFile" name="url" type="file"
                                                         class="hidden" accept=".pdf,.jpg,.jpeg" />
                                                 </label>
                                             </div>
@@ -365,4 +425,106 @@
             </div>
         </div>
     </div>
+
+<script>
+    const fileInput = document.getElementById('sampleFile');
+    const previewContainer = document.getElementById('previewContainer');
+    const uploadContent = document.getElementById('uploadContent');
+    const uploadLabel = document.getElementById('uploadLabel');
+
+    // Show preview for a given file
+    function showPreview(file) {
+        previewContainer.innerHTML = ''; // Clear previous preview
+
+        if (!file) {
+            // No file: show instructions, hide preview
+            previewContainer.classList.add('hidden');
+            uploadContent.style.display = 'flex';
+            return;
+        }
+
+        // Hide instructions, show preview
+        uploadContent.style.display = 'none';
+        previewContainer.classList.remove('hidden');
+
+        const fileType = file.type;
+
+        if (fileType === 'application/pdf') {
+            // PDF preview: icon + filename
+            const pdfPreview = document.createElement('div');
+            pdfPreview.classList.add(
+                'flex',
+                'flex-col',
+                'items-center',
+                'justify-center',
+                'text-center',
+                'text-gray-800',
+                'dark:text-gray-200',
+                'p-4'
+            );
+
+            pdfPreview.innerHTML = `
+            <svg class="w-16 h-16 mb-2 text-red-600" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 0C5.371 0 0 5.371 0 12s5.371 12 12 12 12-5.371 12-12S18.629 0 12 0zm1 17h-2v-2h2v2zm1.07-7.75l-.9.92C12.45 11.9 12 12.5 12 14h-2v-.5c0-.8.45-1.5 1.07-2.18l1.2-1.2c.37-.36.58-.86.58-1.42 0-1.1-.9-2-2-2s-2 .9-2 2H7c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/>
+            </svg>
+            <p class="font-semibold break-words max-w-[90%]">${file.name}</p>
+        `;
+
+            previewContainer.appendChild(pdfPreview);
+
+        } else if (fileType.startsWith('image/')) {
+            // Image preview thumbnail
+            const img = document.createElement('img');
+            img.classList.add('max-w-full', 'max-h-full', 'object-contain', 'rounded');
+            img.alt = 'Uploaded Image Preview';
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+
+            previewContainer.appendChild(img);
+
+        } else {
+            // Unsupported file type
+            const unsupported = document.createElement('p');
+            unsupported.classList.add('text-red-600', 'font-semibold');
+            unsupported.textContent = 'File preview not available';
+            previewContainer.appendChild(unsupported);
+        }
+    }
+
+    // Handle file input change
+    fileInput.addEventListener('change', () => {
+        const file = fileInput.files[0];
+        showPreview(file);
+    });
+
+    // Drag and drop handlers
+    ['dragenter', 'dragover'].forEach(eventName => {
+        uploadLabel.addEventListener(eventName, e => {
+            e.preventDefault();
+            e.stopPropagation();
+            uploadLabel.classList.add('bg-gray-200', 'dark:bg-gray-600');
+        });
+    });
+
+    ['dragleave', 'drop'].forEach(eventName => {
+        uploadLabel.addEventListener(eventName, e => {
+            e.preventDefault();
+            e.stopPropagation();
+            uploadLabel.classList.remove('bg-gray-200', 'dark:bg-gray-600');
+        });
+    });
+
+    // Handle drop event - assign dropped files to input and show preview
+    uploadLabel.addEventListener('drop', e => {
+        const dt = e.dataTransfer;
+        if (dt.files.length) {
+            fileInput.files = dt.files;
+            showPreview(dt.files[0]);
+        }
+    });
+</script>
 @endsection
