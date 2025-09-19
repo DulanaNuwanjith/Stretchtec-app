@@ -255,6 +255,13 @@
                                         @endforelse
                                     </tbody>
                                 </table>
+
+                                <!-- Pagination Links -->
+                                @if($technicalCardTape->hasPages())
+                                    <div class="py-4 flex justify-center">
+                                        {{ $technicalCardTape->links('pagination::tailwind') }}
+                                    </div>
+                                @endif
                             </div>
 
                             <div id="addTapeTDModal"
