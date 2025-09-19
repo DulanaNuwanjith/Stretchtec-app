@@ -207,4 +207,33 @@ class TechnicalCardController extends Controller
                 ->with('error', 'Failed to delete technical card: ' . $e->getMessage());
         }
     }
+
+    public function storeImage(Request $request, TechnicalCard $technicalCard): RedirectResponse
+    {
+        $request->validate([
+            'url' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048', // max 2MB
+        ]);
+
+        try {
+            // 🔹 Delete previous file if exists
+            if ($technicalCard->url) {
+                $filePath = str_replace('/storage/', '', $technicalCard->url);
+                if (Storage::disk('public')->exists($filePath)) {
+                    Storage::disk('public')->delete($filePath);
+                }
+            }
+
+            // 🔹 Store new file
+            $file = $request->file('url');
+            $path = $file->store('technical_cards', 'public');
+            $technicalCard->url = Storage::url($path);
+
+            $technicalCard->save();
+
+            return redirect()->back()->with('success', 'Image uploaded successfully.');
+        } catch (Exception $e) {
+            Log::error($e->getMessage());
+            return redirect()->back()->with('error', 'Failed to upload image: ' . $e->getMessage());
+        }
+    }
 }
