@@ -197,6 +197,18 @@ Route::middleware([
     Route::get('production-order-preparation', static function () {
         return view('production.pages.production-order-preparation');
     })->name('production-order-preparation.index');
+
+    Route::get('elasticTD', static function () {
+        return view('technical-details.pages.elasticTD');
+    })->name('elasticTD.index');
+
+    Route::get('tapeTD', static function () {
+        return view('technical-details.pages.tapeTD');
+    })->name('tapeTD.index');
+
+    Route::get('codeTD', static function () {
+        return view('technical-details.pages.codeTD');
+    })->name('codeTD.index');
 });
 
 
@@ -371,3 +383,4 @@ Route::middleware(['auth'])->group(function () {
 
     });
 });
+
