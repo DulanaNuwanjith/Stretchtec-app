@@ -161,85 +161,100 @@
                                         </tr>
                                     </thead>
 
-                                    <tbody id="CordTDRecords" class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                                    @forelse($technicalCardCords as $technicalCardCord)
-                                        <tr>
-                                            <!-- Reference -->
-                                            <td class="text-center px-4 py-3">
-                                                <div class="font-bold">{{ $technicalCardCord->reference_number ?? '-' }}</div>
-                                            </td>
+                                    <tbody id="CordTDRecords"
+                                        class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                                        @forelse($technicalCardCords as $technicalCardCord)
+                                            <tr class="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
 
-                                            <!-- Item Details -->
-                                            <td class="px-4 py-3 text-xs text-left break-words">
-                                                <div>Created Date: {{ $technicalCardCord->created_at?->format('Y-m-d') ?? '-' }}</div>
-                                                <div>Type: {{ $technicalCardCord->type ?? '-' }}</div>
-                                                <div>Size: {{ $technicalCardCord->size ?? '-' }}</div>
-                                                <div>Color: {{ $technicalCardCord->color ?? '-' }}</div>
-                                                <div>Machine: {{ $technicalCardCord->machine ?? '-' }}</div>
-                                            </td>
+                                                <!-- Reference -->
+                                                <td class="text-center px-6 py-4">
+                                                    <span class="text-sm font-bold text-gray-800 dark:text-gray-200">
+                                                        {{ $technicalCardCord->reference_number ?? '-' }}
+                                                    </span>
+                                                </td>
 
-                                            <!-- Technical Details -->
-                                            <td class="px-4 py-3 text-xs text-left break-words">
-                                                <div>Rubber Type: {{ $technicalCardCord->rubber_type ?? '-' }}</div>
-                                                <div>Yarn Count: {{ $technicalCardCord->yarn_count ?? '-' }}</div>
-                                                <div>Wheel Up: {{ $technicalCardCord->wheel_up ?? '-' }}</div>
-                                                <div>Wheel Down: {{ $technicalCardCord->wheel_down ?? '-' }}</div>
-                                                <div>Spindles: {{ $technicalCardCord->spindles ?? '-' }}</div>
-                                            </td>
+                                                <!-- Item Details -->
+                                                <td class="px-6 py-4 text-sm text-gray-700 dark:text-gray-300 space-y-1">
+                                                    <div><span class="font-medium text-gray-600 dark:text-gray-400">Created
+                                                            Date:</span>
+                                                        {{ $technicalCardCord->created_at?->format('Y-m-d') ?? '-' }}</div>
+                                                    <div><span
+                                                            class="font-medium text-gray-600 dark:text-gray-400">Type:</span>
+                                                        {{ $technicalCardCord->type ?? '-' }}</div>
+                                                    <div><span
+                                                            class="font-medium text-gray-600 dark:text-gray-400">Size:</span>
+                                                        {{ $technicalCardCord->size ?? '-' }}</div>
+                                                    <div><span
+                                                            class="font-medium text-gray-600 dark:text-gray-400">Color:</span>
+                                                        {{ $technicalCardCord->color ?? '-' }}</div>
+                                                    <div><span
+                                                            class="font-medium text-gray-600 dark:text-gray-400">Machine:</span>
+                                                        {{ $technicalCardCord->machine ?? '-' }}</div>
+                                                </td>
 
-                                            <!-- Quality Details -->
-                                            <td class="px-4 py-3 text-xs text-left break-words">
-                                                <div>Stretchability: {{ $technicalCardCord->stretchability ?? '-' }}</div>
-                                                <div>Weight Per Yard: {{ $technicalCardCord->weight_per_yard ?? '-' }}g</div>
-                                                <div>Special Remarks: {{ $technicalCardCord->special_remarks ?? '-' }}</div>
-                                            </td>
+                                                <!-- Technical Details -->
+                                                <td class="px-6 py-4 text-sm text-gray-700 dark:text-gray-300 space-y-1">
+                                                    <div><span class="font-medium">Rubber Type:</span>
+                                                        {{ $technicalCardCord->rubber_type ?? '-' }}</div>
+                                                    <div><span class="font-medium">Yarn Count:</span>
+                                                        {{ $technicalCardCord->yarn_count ?? '-' }}</div>
+                                                    <div><span class="font-medium">Wheel Up:</span>
+                                                        {{ $technicalCardCord->wheel_up ?? '-' }}</div>
+                                                    <div><span class="font-medium">Wheel Down:</span>
+                                                        {{ $technicalCardCord->wheel_down ?? '-' }}</div>
+                                                    <div><span class="font-medium">Spindles:</span>
+                                                        {{ $technicalCardCord->spindles ?? '-' }}</div>
+                                                </td>
 
-                                            <!-- Actions -->
-                                            <td class="px-4 py-3 text-center">
-                                                <div class="flex gap-2 justify-center items-center">
+                                                <!-- Quality Details -->
+                                                <td class="px-6 py-4 text-sm text-gray-700 dark:text-gray-300 space-y-1">
+                                                    <div><span class="font-medium">Stretchability:</span>
+                                                        {{ $technicalCardCord->stretchability ?? '-' }}</div>
+                                                    <div><span class="font-medium">Weight Per Yard:</span>
+                                                        {{ $technicalCardCord->weight_per_yard ?? '-' }} g</div>
+                                                    <div><span class="font-medium">Remarks:</span>
+                                                        {{ $technicalCardCord->special_remarks ?? '-' }}</div>
+                                                </td>
 
-                                                    <!-- View Button -->
-                                                    @if($technicalCardCord->url)
-                                                        <a href="{{ $technicalCardCord->url }}" target="_blank"
-                                                           class="flex items-center justify-center w-20 h-9 bg-blue-500 text-white text-sm font-semibold rounded-lg shadow hover:bg-blue-600 transition-all">
-                                                            View
-                                                        </a>
-                                                    @else
-                                                        <span></span>
-                                                    @endif
-
-                                                    <!-- Add Image Button (inline upload) -->
-                                                    @if(!$technicalCardCord->url)
-                                                        <form action="{{ route('technicalCards.storeImage', $technicalCardCord->id) }}" method="POST" enctype="multipart/form-data" class="inline-block">
-                                                            @csrf
-                                                            <label class="flex items-center justify-center w-24 h-9 bg-green-500 text-white text-sm font-semibold rounded-lg shadow hover:bg-green-600 cursor-pointer transition-all mt-3.5">
-                                                                Add Image
-                                                                <input type="file" name="url" accept=".jpg,.jpeg,.png,.pdf" class="hidden" onchange="this.form.submit()">
-                                                            </label>
-                                                        </form>
-                                                    @endif
-
-                                                    <!-- Delete Button -->
-                                                    <form action="{{ route('technicalCards.delete', $technicalCardCord->id) }}" method="POST"
-                                                          onsubmit="return confirm('Are you sure you want to delete this record?');">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit"
-                                                                class="flex items-center justify-center w-20 h-9 bg-red-500 text-white text-sm font-semibold rounded-lg shadow hover:bg-red-600 transition-all mt-3.5">
-                                                            Delete
-                                                        </button>
-                                                    </form>
-
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    @empty
-                                        <tr>
-                                            <td colspan="5" class="text-center px-4 py-3 text-gray-500">
-                                                No Cord Technical Cards found.
-                                            </td>
-                                        </tr>
-                                    @endforelse
+                                                <!-- Actions -->
+                                                <td class="px-4 py-3 text-center">
+                                                    <div class="flex gap-2 justify-center items-center">
+                                                        <!-- View Button -->
+                                                        @if ($technicalCardCord->url)
+                                                            <a href="{{ $technicalCardCord->url }}" target="_blank"
+                                                                class="flex items-center justify-center w-20 h-9 bg-blue-500 text-white text-sm font-semibold rounded-lg shadow hover:bg-blue-600 transition-all">
+                                                                View </a>
+                                                        @else
+                                                            <span></span>
+                                                            @endif <!-- Add Image Button (inline upload) -->
+                                                            @if (!$technicalCardCord->url)
+                                                                <form
+                                                                    action="{{ route('technicalCards.storeImage', $technicalCardCord->id) }}"
+                                                                    method="POST" enctype="multipart/form-data"
+                                                                    class="inline-block"> @csrf <label
+                                                                        class="flex items-center justify-center w-24 h-9 bg-green-500 text-white text-sm font-semibold rounded-lg shadow hover:bg-green-600 cursor-pointer transition-all mt-3.5">
+                                                                        Add Image <input type="file" name="url"
+                                                                            accept=".jpg,.jpeg,.png,.pdf" class="hidden"
+                                                                            onchange="this.form.submit()"> </label> </form>
+                                                            @endif <!-- Delete Button -->
+                                                            <form
+                                                                action="{{ route('technicalCards.delete', $technicalCardCord->id) }}"
+                                                                method="POST"
+                                                                onsubmit="return confirm('Are you sure you want to delete this record?');">
+                                                                @csrf @method('DELETE') <button type="submit"
+                                                                    class="flex items-center justify-center w-20 h-9 bg-red-500 text-white text-sm font-semibold rounded-lg shadow hover:bg-red-600 transition-all mt-3.5">
+                                                                    Delete </button> </form>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="5"
+                                                    class="text-center px-6 py-6 text-gray-500 text-sm italic">
+                                                    No Cord Technical Cards found.
+                                                </td>
+                                            </tr>
+                                        @endforelse
                                     </tbody>
                                 </table>
                             </div>
@@ -253,7 +268,8 @@
                                             class="text-2xl font-semibold mb-8 text-blue-900 mt-4 dark:text-gray-100 text-center">
                                             Add New Cord Technical Detail
                                         </h2>
-                                        <form action="{{route('cordTD.create')}}" method="POST" enctype="multipart/form-data">
+                                        <form action="{{ route('cordTD.create') }}" method="POST"
+                                            enctype="multipart/form-data">
                                             @csrf
                                             <div class="space-y-4">
 
@@ -294,7 +310,8 @@
                                                         <label for="rubber_type"
                                                             class="block text-sm font-medium text-gray-700 dark:text-gray-300">Rubber
                                                             Type</label>
-                                                        <input id="rubber_type" type="text" name="rubber_type" required
+                                                        <input id="rubber_type" type="text" name="rubber_type"
+                                                            required
                                                             class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                     </div>
                                                     <div class="w-1/2">
@@ -329,7 +346,8 @@
                                                         <label for="rubber_type"
                                                             class="block text-sm font-medium text-gray-700 dark:text-gray-300">Rubber
                                                             Type</label>
-                                                        <input id="rubber_type" type="text" name="rubber_type" required
+                                                        <input id="rubber_type" type="text" name="rubber_type"
+                                                            required
                                                             class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                     </div>
                                                     <div class="w-1/2">
@@ -393,8 +411,8 @@
                                                         class="hidden w-full h-full flex items-center justify-center overflow-hidden">
                                                     </div>
 
-                                                    <input id="sampleFile" name="url" type="file"
-                                                        class="hidden" accept=".pdf,.jpg,.jpeg" />
+                                                    <input id="sampleFile" name="url" type="file" class="hidden"
+                                                        accept=".pdf,.jpg,.jpeg" />
                                                 </label>
                                             </div>
 
@@ -421,105 +439,105 @@
         </div>
     </div>
 
-<script>
-    const fileInput = document.getElementById('sampleFile');
-    const previewContainer = document.getElementById('previewContainer');
-    const uploadContent = document.getElementById('uploadContent');
-    const uploadLabel = document.getElementById('uploadLabel');
+    <script>
+        const fileInput = document.getElementById('sampleFile');
+        const previewContainer = document.getElementById('previewContainer');
+        const uploadContent = document.getElementById('uploadContent');
+        const uploadLabel = document.getElementById('uploadLabel');
 
-    // Show preview for a given file
-    function showPreview(file) {
-        previewContainer.innerHTML = ''; // Clear previous preview
+        // Show preview for a given file
+        function showPreview(file) {
+            previewContainer.innerHTML = ''; // Clear previous preview
 
-        if (!file) {
-            // No file: show instructions, hide preview
-            previewContainer.classList.add('hidden');
-            uploadContent.style.display = 'flex';
-            return;
-        }
+            if (!file) {
+                // No file: show instructions, hide preview
+                previewContainer.classList.add('hidden');
+                uploadContent.style.display = 'flex';
+                return;
+            }
 
-        // Hide instructions, show preview
-        uploadContent.style.display = 'none';
-        previewContainer.classList.remove('hidden');
+            // Hide instructions, show preview
+            uploadContent.style.display = 'none';
+            previewContainer.classList.remove('hidden');
 
-        const fileType = file.type;
+            const fileType = file.type;
 
-        if (fileType === 'application/pdf') {
-            // PDF preview: icon + filename
-            const pdfPreview = document.createElement('div');
-            pdfPreview.classList.add(
-                'flex',
-                'flex-col',
-                'items-center',
-                'justify-center',
-                'text-center',
-                'text-gray-800',
-                'dark:text-gray-200',
-                'p-4'
-            );
+            if (fileType === 'application/pdf') {
+                // PDF preview: icon + filename
+                const pdfPreview = document.createElement('div');
+                pdfPreview.classList.add(
+                    'flex',
+                    'flex-col',
+                    'items-center',
+                    'justify-center',
+                    'text-center',
+                    'text-gray-800',
+                    'dark:text-gray-200',
+                    'p-4'
+                );
 
-            pdfPreview.innerHTML = `
+                pdfPreview.innerHTML = `
             <svg class="w-16 h-16 mb-2 text-red-600" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M12 0C5.371 0 0 5.371 0 12s5.371 12 12 12 12-5.371 12-12S18.629 0 12 0zm1 17h-2v-2h2v2zm1.07-7.75l-.9.92C12.45 11.9 12 12.5 12 14h-2v-.5c0-.8.45-1.5 1.07-2.18l1.2-1.2c.37-.36.58-.86.58-1.42 0-1.1-.9-2-2-2s-2 .9-2 2H7c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/>
             </svg>
             <p class="font-semibold break-words max-w-[90%]">${file.name}</p>
         `;
 
-            previewContainer.appendChild(pdfPreview);
+                previewContainer.appendChild(pdfPreview);
 
-        } else if (fileType.startsWith('image/')) {
-            // Image preview thumbnail
-            const img = document.createElement('img');
-            img.classList.add('max-w-full', 'max-h-full', 'object-contain', 'rounded');
-            img.alt = 'Uploaded Image Preview';
+            } else if (fileType.startsWith('image/')) {
+                // Image preview thumbnail
+                const img = document.createElement('img');
+                img.classList.add('max-w-full', 'max-h-full', 'object-contain', 'rounded');
+                img.alt = 'Uploaded Image Preview';
 
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                img.src = e.target.result;
-            };
-            reader.readAsDataURL(file);
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
 
-            previewContainer.appendChild(img);
+                previewContainer.appendChild(img);
 
-        } else {
-            // Unsupported file type
-            const unsupported = document.createElement('p');
-            unsupported.classList.add('text-red-600', 'font-semibold');
-            unsupported.textContent = 'File preview not available';
-            previewContainer.appendChild(unsupported);
+            } else {
+                // Unsupported file type
+                const unsupported = document.createElement('p');
+                unsupported.classList.add('text-red-600', 'font-semibold');
+                unsupported.textContent = 'File preview not available';
+                previewContainer.appendChild(unsupported);
+            }
         }
-    }
 
-    // Handle file input change
-    fileInput.addEventListener('change', () => {
-        const file = fileInput.files[0];
-        showPreview(file);
-    });
-
-    // Drag and drop handlers
-    ['dragenter', 'dragover'].forEach(eventName => {
-        uploadLabel.addEventListener(eventName, e => {
-            e.preventDefault();
-            e.stopPropagation();
-            uploadLabel.classList.add('bg-gray-200', 'dark:bg-gray-600');
+        // Handle file input change
+        fileInput.addEventListener('change', () => {
+            const file = fileInput.files[0];
+            showPreview(file);
         });
-    });
 
-    ['dragleave', 'drop'].forEach(eventName => {
-        uploadLabel.addEventListener(eventName, e => {
-            e.preventDefault();
-            e.stopPropagation();
-            uploadLabel.classList.remove('bg-gray-200', 'dark:bg-gray-600');
+        // Drag and drop handlers
+        ['dragenter', 'dragover'].forEach(eventName => {
+            uploadLabel.addEventListener(eventName, e => {
+                e.preventDefault();
+                e.stopPropagation();
+                uploadLabel.classList.add('bg-gray-200', 'dark:bg-gray-600');
+            });
         });
-    });
 
-    // Handle drop event - assign dropped files to input and show preview
-    uploadLabel.addEventListener('drop', e => {
-        const dt = e.dataTransfer;
-        if (dt.files.length) {
-            fileInput.files = dt.files;
-            showPreview(dt.files[0]);
-        }
-    });
-</script>
+        ['dragleave', 'drop'].forEach(eventName => {
+            uploadLabel.addEventListener(eventName, e => {
+                e.preventDefault();
+                e.stopPropagation();
+                uploadLabel.classList.remove('bg-gray-200', 'dark:bg-gray-600');
+            });
+        });
+
+        // Handle drop event - assign dropped files to input and show preview
+        uploadLabel.addEventListener('drop', e => {
+            const dt = e.dataTransfer;
+            if (dt.files.length) {
+                fileInput.files = dt.files;
+                showPreview(dt.files[0]);
+            }
+        });
+    </script>
 @endsection
