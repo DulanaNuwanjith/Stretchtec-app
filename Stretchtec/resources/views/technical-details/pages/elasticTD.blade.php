@@ -216,7 +216,7 @@
                                                     @if(!$technicalCardElastic->url)
                                                         <form action="{{ route('technicalCards.storeImage', $technicalCardElastic->id) }}" method="POST" enctype="multipart/form-data" class="inline-block">
                                                             @csrf
-                                                            <label class="flex items-center justify-center w-20 h-9 bg-green-500 text-white text-sm font-semibold rounded-lg shadow hover:bg-green-600 cursor-pointer transition-all mt-3.5">
+                                                            <label class="flex items-center justify-center w-24 h-9 bg-green-500 text-white text-sm font-semibold rounded-lg shadow hover:bg-green-600 cursor-pointer transition-all mt-3.5">
                                                                 Add Image
                                                                 <input type="file" name="url" accept=".jpg,.jpeg,.png,.pdf" class="hidden" onchange="this.form.submit()">
                                                             </label>
