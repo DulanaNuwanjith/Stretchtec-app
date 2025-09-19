@@ -232,7 +232,7 @@
                                                     <!-- View Button -->
                                                     @if ($technicalCardElastic->url)
                                                         <a href="{{ $technicalCardElastic->url }}" target="_blank"
-                                                           class="flex items-center justify-center w-20 h-9 bg-blue-500 text-white text-sm font-semibold rounded-lg shadow hover:bg-blue-600 transition-all">
+                                                           class="flex items-center justify-center w-20 h-9 bg-blue-500 text-white text-sm font-semibold rounded shadow hover:bg-blue-700 transition-all">
                                                             View </a>
                                                     @else
                                                         <span></span>
@@ -243,20 +243,23 @@
                                                             action="{{ route('technicalCards.storeImage', $technicalCardElastic->id) }}"
                                                             method="POST" enctype="multipart/form-data"
                                                             class="inline-block"> @csrf <label
-                                                                class="flex items-center justify-center w-24 h-9 bg-green-500 text-white text-sm font-semibold rounded-lg shadow hover:bg-green-600 cursor-pointer transition-all mt-3.5">
+                                                                class="flex items-center justify-center w-24 h-9 bg-green-500 text-white text-sm font-semibold rounded shadow hover:bg-green-600 cursor-pointer transition-all mt-3.5">
                                                                 Add Image <input type="file" name="url"
                                                                                  accept=".jpg,.jpeg,.png,.pdf"
                                                                                  class="hidden"
                                                                                  onchange="this.form.submit()"> </label>
                                                         </form>
-                                                    @endif <!-- Delete Button -->
-                                                    <form
-                                                        action="{{ route('technicalCards.delete', $technicalCardElastic->id) }}"
-                                                        method="POST"
-                                                        onsubmit="return confirm('Are you sure you want to delete this record?');">
-                                                        @csrf @method('DELETE')
-                                                        <button type="submit"
-                                                                class="flex items-center justify-center w-20 h-9 bg-red-500 text-white text-sm font-semibold rounded-lg shadow hover:bg-red-600 transition-all mt-3.5">
+                                                    @endif
+
+                                                    <!-- Delete Button with SweetAlert Confirmation -->
+                                                    <form id="delete-form-{{ $technicalCardElastic->id }}"
+                                                          action="{{ route('technicalCards.delete', $technicalCardElastic->id) }}"
+                                                          method="POST">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="button"
+                                                                onclick="confirmDelete({{ $technicalCardElastic->id }})"
+                                                                class="flex items-center justify-center w-20 h-9 bg-red-600 text-white text-sm font-semibold rounded shadow hover:bg-red-700 transition-all mt-3.5">
                                                             Delete
                                                         </button>
                                                     </form>
