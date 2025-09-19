@@ -116,7 +116,7 @@
                 <li>
                     <a href="{{ route('elasticTD.index') }}"
                        class="flex items-center px-4 py-2 rounded hover:bg-gray-200
-                      {{ request()->routeIs('elasticTD.*') ? 'bg-gray-200' : '' }}">
+                      {{ request()->routeIs('elasticTD.*', 'cordTD.*', 'tapeTD.*') ? 'bg-gray-200' : '' }}">
                         <img src="{{ asset('icons/writing.png') }}" alt="" class="w-6 h-6 mr-5"/>
                         <span x-show="initialized && !collapsed">Technical Details</span>
                     </a>
