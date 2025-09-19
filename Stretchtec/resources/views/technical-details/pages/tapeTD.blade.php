@@ -128,13 +128,13 @@
                                     <button
                                         onclick="document.getElementById('addTapeTDModal').classList.remove('hidden')"
                                         class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded shadow">
-                                        + Add New Item
+                                        + Add New Technical Details
                                     </button>
                                 @endif
                             </div>
 
                             {{-- Main Table --}}
-                            <div id="sampleInquiryRecordsScroll"
+                            <div id="TapeTDRecordsScroll"
                                 class="overflow-x-auto max-h-[1200px] bg-white dark:bg-gray-900 shadow rounded-lg">
                                 <table class="table-fixed w-full text-sm divide-y divide-gray-200 dark:divide-gray-700">
                                     <thead class="bg-gray-200 dark:bg-gray-700 text-left">
@@ -162,7 +162,7 @@
                                         </tr>
                                     </thead>
 
-                                    <tbody id="sampleInquiryRecords"
+                                    <tbody id="TapeTDRecords"
                                         class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                                         <td class="text-center px-4 py-3">
                                             <div class="font-bold">REf 1234</div>

@@ -126,15 +126,15 @@
                                 </h1>
                                 @if (in_array(Auth::user()->role, ['ADMIN', 'SUPERADMIN']))
                                     <button
-                                        onclick="document.getElementById('addElasticCatalogModal').classList.remove('hidden')"
+                                        onclick="document.getElementById('addElasticModal').classList.remove('hidden')"
                                         class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded shadow">
-                                        + Add New Item
+                                        + Add New Technical Detail
                                     </button>
                                 @endif
                             </div>
 
                             {{-- Main Table --}}
-                            <div id="sampleInquiryRecordsScroll"
+                            <div id="ElasticTDRecordsScroll"
                                 class="overflow-x-auto max-h-[1200px] bg-white dark:bg-gray-900 shadow rounded-lg">
                                 <table class="table-fixed w-full text-sm divide-y divide-gray-200 dark:divide-gray-700">
                                     <thead class="bg-gray-200 dark:bg-gray-700 text-left">
@@ -162,7 +162,7 @@
                                         </tr>
                                     </thead>
 
-                                    <tbody id="sampleInquiryRecords"
+                                    <tbody id="ElasticTDRecords"
                                            class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
 
                                     @forelse($technicalCardElastics as $technicalCardElastic)
@@ -236,8 +236,6 @@
 
                                                 </div>
                                             </td>
-
-
                                         </tr>
                                     @empty
                                         <tr>
@@ -250,14 +248,14 @@
                                 </table>
                             </div>
 
-                            <div id="addElasticCatalogModal"
+                            <div id="addElasticModal"
                                 class="fixed inset-0 z-50 hidden bg-black bg-opacity-50 flex items-center justify-center py-5">
                                 <div class="w-full max-w-[700px] bg-white dark:bg-gray-900 rounded-2xl shadow-2xl p-4 transform transition-all scale-95 max-h-[calc(100vh-10rem)] overflow-y-auto"
                                     onclick="event.stopPropagation()">
                                     <div class="max-w-[600px] mx-auto p-8">
                                         <h2
                                             class="text-2xl font-semibold mb-8 text-blue-900 mt-4 dark:text-gray-100 text-center">
-                                            Add New Elastic Catalog Item
+                                            Add New Elastic Technical Detail
                                         </h2>
                                         <form action="{{route('elasticTD.create')}}" method="POST" enctype="multipart/form-data">
                                             @csrf
@@ -406,7 +404,7 @@
                                             <!-- Buttons -->
                                             <div class="flex justify-end gap-3 mt-12">
                                                 <button type="button"
-                                                    onclick="document.getElementById('addElasticCatalogModal').classList.add('hidden')"
+                                                    onclick="document.getElementById('addElasticModal').classList.add('hidden')"
                                                     class="px-4 py-2 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 text-sm rounded hover:bg-gray-300">
                                                     Cancel
                                                 </button>
