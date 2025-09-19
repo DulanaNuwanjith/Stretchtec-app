@@ -206,10 +206,10 @@ Route::middleware([
     Route::get('/cordTD',[TechnicalCardController::class, 'cordIndex'])->name('cordTD.index');
     Route::post('/elasticTD/create', [TechnicalCardController::class, 'createElastic'])->name('elasticTD.create');
     Route::post('/cordTD/create', [TechnicalCardController::class, 'createCord'])->name('cordTD.create');
+    Route::post('/tapeTD/create', [TechnicalCardController::class, 'createTape'])->name('tapeTD.create');
     Route::delete('/technical-card/{technicalCard}', [TechnicalCardController::class, 'destroy'])->name('technicalCards.delete');
     Route::post('/technical-card/{technicalCard}/store-image', [TechnicalCardController::class, 'storeImage'])
         ->name('technicalCards.storeImage');
-
 });
 
 
