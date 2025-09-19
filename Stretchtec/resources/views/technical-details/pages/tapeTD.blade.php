@@ -176,7 +176,7 @@
 
                                                 <!-- Item Details -->
                                                 <td
-                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300">
+                                                    class="px-8 py-3 whitespace-normal break-words border-r border-gray-300">
                                                     <div><span class="font-medium text-gray-600 dark:text-gray-400">Created
                                                             Date:</span>
                                                         {{ $technicalCardTape->created_at?->format('Y-m-d') ?? '-' }}</div>
@@ -196,7 +196,7 @@
 
                                                 <!-- Technical Details -->
                                                 <td
-                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300">
+                                                    class="px-8 py-3 whitespace-normal break-words border-r border-gray-300">
                                                     <div><span class="font-medium">Weft Yarn:</span>
                                                         {{ $technicalCardTape->weft_yarn ?? '-' }}</div>
                                                     <div><span class="font-medium">Warp Yarn:</span>
@@ -213,7 +213,11 @@
 
                                                 <!-- Quality Details -->
                                                 <td
-                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300">
+                                                    class="px-8 py-3 whitespace-normal break-words border-r border-gray-300">
+                                                    <div><span class="font-medium">Stretchability:</span>
+                                                        {{ $technicalCardTape->stretchability ?? '-' }}</div>
+                                                    <div><span class="font-medium">Weight Per Yard:</span>
+                                                        {{ $technicalCardTape->weight_per_yard ?? '-' }}</div>
                                                     <div><span class="font-medium">Remarks:</span>
                                                         {{ $technicalCardTape->special_remarks ?? '-' }}</div>
                                                 </td>
@@ -373,8 +377,7 @@
                                                     </div>
                                                     <div class="w-1/2">
                                                         <label for="machine"
-                                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">Weight
-                                                            per Yard</label>
+                                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">Machine</label>
                                                         <input id="machine" type="text" name="machine"
                                                             class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                     </div>
@@ -429,9 +432,9 @@
                                                     class="px-4 py-2 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 text-sm rounded hover:bg-gray-300">
                                                     Cancel
                                                 </button>
-                                                <button type="submit"
+                                                <button type="submit" id="createTechnicalBtn"
                                                     class="px-4 py-2 bg-blue-500 text-white text-sm rounded hover:bg-blue-600">
-                                                    Create Order
+                                                    Create Technical Detail
                                                 </button>
                                             </div>
                                         </form>
@@ -444,6 +447,19 @@
             </div>
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.querySelector('#addTapeTDModal form');
+            const submitBtn = document.getElementById('createTechnicalBtn');
+
+            form.addEventListener('submit', function() {
+                // Disable the button to prevent multiple clicks
+                submitBtn.disabled = true;
+                submitBtn.innerText = 'Submitting...';
+            });
+        });
+    </script>
 
     <script>
         const fileInput = document.getElementById('sampleFile');

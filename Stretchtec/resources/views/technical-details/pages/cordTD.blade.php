@@ -174,7 +174,7 @@
                                                 </td>
 
                                                 <!-- Item Details -->
-                                                <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300">
+                                                <td class="px-8 py-3 whitespace-normal break-words border-r border-gray-300">
                                                     <div><span class="font-medium text-gray-600 dark:text-gray-400">Created
                                                             Date:</span>
                                                         {{ $technicalCardCord->created_at?->format('Y-m-d') ?? '-' }}</div>
@@ -193,7 +193,7 @@
                                                 </td>
 
                                                 <!-- Technical Details -->
-                                                <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300">
+                                                <td class="px-8 py-3 whitespace-normal break-words border-r border-gray-300">
                                                     <div><span class="font-medium">Rubber Type:</span>
                                                         {{ $technicalCardCord->rubber_type ?? '-' }}</div>
                                                     <div><span class="font-medium">Yarn Count:</span>
@@ -207,7 +207,7 @@
                                                 </td>
 
                                                 <!-- Quality Details -->
-                                                <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300">
+                                                <td class="px-8 py-3 whitespace-normal break-words border-r border-gray-300">
                                                     <div><span class="font-medium">Stretchability:</span>
                                                         {{ $technicalCardCord->stretchability ?? '-' }}</div>
                                                     <div><span class="font-medium">Weight Per Yard:</span>
@@ -428,9 +428,9 @@
                                                     class="px-4 py-2 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 text-sm rounded hover:bg-gray-300">
                                                     Cancel
                                                 </button>
-                                                <button type="submit"
+                                                <button type="submit" id="createTechnicalBtn"
                                                     class="px-4 py-2 bg-blue-500 text-white text-sm rounded hover:bg-blue-600">
-                                                    Create Order
+                                                    Create Technical Detail
                                                 </button>
                                             </div>
                                         </form>
@@ -443,6 +443,19 @@
             </div>
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.querySelector('#addCordTDModal form');
+            const submitBtn = document.getElementById('createTechnicalBtn');
+
+            form.addEventListener('submit', function() {
+                // Disable the button to prevent multiple clicks
+                submitBtn.disabled = true;
+                submitBtn.innerText = 'Submitting...';
+            });
+        });
+    </script>
 
     <script>
         const fileInput = document.getElementById('sampleFile');
