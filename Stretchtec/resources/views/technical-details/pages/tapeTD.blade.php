@@ -167,14 +167,16 @@
                                             <tr class="odd:bg-white even:bg-gray-50 border-b border-gray-200">
 
                                                 <!-- Reference -->
-                                                <td class="text-center sticky left-0 z-10 px-4 py-3 bg-gray-100 whitespace-normal break-words border-r border-gray-300">
+                                                <td
+                                                    class="text-center sticky left-0 z-10 px-4 py-3 bg-gray-100 whitespace-normal break-words border-r border-gray-300">
                                                     <span class="text-sm font-bold text-gray-800 dark:text-gray-200">
                                                         {{ $technicalCardTape->reference_number ?? '-' }}
                                                     </span>
                                                 </td>
 
                                                 <!-- Item Details -->
-                                                <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300">
+                                                <td
+                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300">
                                                     <div><span class="font-medium text-gray-600 dark:text-gray-400">Created
                                                             Date:</span>
                                                         {{ $technicalCardTape->created_at?->format('Y-m-d') ?? '-' }}</div>
@@ -193,7 +195,8 @@
                                                 </td>
 
                                                 <!-- Technical Details -->
-                                                <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300">
+                                                <td
+                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300">
                                                     <div><span class="font-medium">Weft Yarn:</span>
                                                         {{ $technicalCardTape->weft_yarn ?? '-' }}</div>
                                                     <div><span class="font-medium">Warp Yarn:</span>
@@ -209,7 +212,8 @@
                                                 </td>
 
                                                 <!-- Quality Details -->
-                                                <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300">
+                                                <td
+                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300">
                                                     <div><span class="font-medium">Remarks:</span>
                                                         {{ $technicalCardTape->special_remarks ?? '-' }}</div>
                                                 </td>
@@ -224,24 +228,25 @@
                                                                 View </a>
                                                         @else
                                                             <span></span>
-                                                            @endif <!-- Add Image Button (inline upload) -->
-                                                            @if (!$technicalCardTape->url)
-                                                                <form
-                                                                    action="{{ route('technicalCards.storeImage', $technicalCardTape->id) }}"
-                                                                    method="POST" enctype="multipart/form-data"
-                                                                    class="inline-block"> @csrf <label
-                                                                        class="flex items-center justify-center w-24 h-9 bg-green-500 text-white text-sm font-semibold rounded-lg shadow hover:bg-green-600 cursor-pointer transition-all mt-3.5">
-                                                                        Add Image <input type="file" name="url"
-                                                                            accept=".jpg,.jpeg,.png,.pdf" class="hidden"
-                                                                            onchange="this.form.submit()"> </label> </form>
-                                                            @endif <!-- Delete Button -->
+                                                        @endif
+                                                        <!-- Add Image Button (inline upload) -->
+                                                        @if (!$technicalCardTape->url)
                                                             <form
-                                                                action="{{ route('technicalCards.delete', $technicalCardTape->id) }}"
-                                                                method="POST"
-                                                                onsubmit="return confirm('Are you sure you want to delete this record?');">
-                                                                @csrf @method('DELETE') <button type="submit"
-                                                                    class="flex items-center justify-center w-20 h-9 bg-red-500 text-white text-sm font-semibold rounded-lg shadow hover:bg-red-600 transition-all mt-3.5">
-                                                                    Delete </button> </form>
+                                                                action="{{ route('technicalCards.storeImage', $technicalCardTape->id) }}"
+                                                                method="POST" enctype="multipart/form-data"
+                                                                class="inline-block"> @csrf <label
+                                                                    class="flex items-center justify-center w-24 h-9 bg-green-500 text-white text-sm font-semibold rounded-lg shadow hover:bg-green-600 cursor-pointer transition-all mt-3.5">
+                                                                    Add Image <input type="file" name="url"
+                                                                        accept=".jpg,.jpeg,.png,.pdf" class="hidden"
+                                                                        onchange="this.form.submit()"> </label> </form>
+                                                        @endif <!-- Delete Button -->
+                                                        <form
+                                                            action="{{ route('technicalCards.delete', $technicalCardTape->id) }}"
+                                                            method="POST"
+                                                            onsubmit="return confirm('Are you sure you want to delete this record?');">
+                                                            @csrf @method('DELETE') <button type="submit"
+                                                                class="flex items-center justify-center w-20 h-9 bg-red-500 text-white text-sm font-semibold rounded-lg shadow hover:bg-red-600 transition-all mt-3.5">
+                                                                Delete </button> </form>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -255,13 +260,11 @@
                                         @endforelse
                                     </tbody>
                                 </table>
+                            </div>
 
-                                <!-- Pagination Links -->
-                                @if($technicalCardTapes->hasPages())
-                                    <div class="py-4 flex justify-center">
-                                        {{ $technicalCardTapes->links('pagination::tailwind') }}
-                                    </div>
-                                @endif
+                            <!-- Pagination Links -->
+                            <div class="py-4 flex justify-center">
+                                {{ $technicalCardTapes->links() }}
                             </div>
 
                             <div id="addTapeTDModal"
