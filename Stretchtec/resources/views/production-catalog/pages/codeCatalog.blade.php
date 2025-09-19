@@ -441,9 +441,10 @@
                                             </td>
 
                                             <td class="px-4 py-3 w-32 whitespace-normal break-words border-r border-gray-300"
-                                                x-data="{ open: false, selectedShade: '{{ $catalog->shade }}' }">
+                                                x-data="{ open: false, selectedShade: '{{ $catalog->shade }}', optionText: '' }">
+
                                                 @php
-                                                    $shadeList = explode(',', $catalog->shade);
+                                                    $shadeList = preg_split('/[\,\/]/', $catalog->shade);
                                                 @endphp
 
                                                 @if(count($shadeList) > 1)
@@ -468,22 +469,33 @@
                                                             <h2 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">
                                                                 Select Shade</h2>
 
-                                                            <form
-                                                                action="{{ route('productCatalog.updateShade', $catalog->id) }}"
-                                                                method="POST">
+                                                            <form action="{{ route('productCatalog.updateShade', $catalog->id) }}" method="POST">
                                                                 @csrf
                                                                 @method('PATCH')
 
-                                                                <div class="space-y-2">
+                                                                <div class="space-y-3">
                                                                     @foreach($shadeList as $shadeOption)
                                                                         <label class="flex items-center gap-2">
                                                                             <input type="radio" name="selected_shade"
                                                                                    value="{{ trim($shadeOption) }}"
-                                                                                   :checked="selectedShade === '{{ trim($shadeOption) }}'">
+                                                                                   @click="selectedShade = '{{ trim($shadeOption) }}'">
                                                                             <span>{{ trim($shadeOption) }}</span>
                                                                         </label>
                                                                     @endforeach
                                                                 </div>
+
+                                                                {{-- Input field only when a shade is selected --}}
+                                                                <template x-if="selectedShade">
+                                                                    <div class="mt-3">
+                                                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
+                                                                            Enter Option for <span x-text="selectedShade"></span>
+                                                                        </label>
+                                                                        <input type="text" x-model="optionText"
+                                                                               name="option_text"
+                                                                               placeholder="e.g., Option A"
+                                                                               class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:ring focus:ring-blue-200">
+                                                                    </div>
+                                                                </template>
 
                                                                 <div class="mt-4 flex justify-end gap-2">
                                                                     <button type="button" @click="open = false"
@@ -491,10 +503,14 @@
                                                                         Cancel
                                                                     </button>
                                                                     <button type="submit"
-                                                                            class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+                                                                            class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                                                                            @click="$refs.finalShade.value = selectedShade + ' - ' + optionText">
                                                                         Save
                                                                     </button>
                                                                 </div>
+
+                                                                {{-- Hidden input to hold final value --}}
+                                                                <input type="hidden" name="final_shade" x-ref="finalShade">
                                                             </form>
                                                         </div>
                                                     </div>

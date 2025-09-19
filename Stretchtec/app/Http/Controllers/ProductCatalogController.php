@@ -346,17 +346,16 @@ class ProductCatalogController extends Controller
     public function updateShade(Request $request, ProductCatalog $catalog): RedirectResponse
     {
         $request->validate([
-            'selected_shade' => 'required|string',
+            'final_shade' => 'required|string',
         ]);
 
         try {
-            $catalog->shade = $request->input('selected_shade');
+            $catalog->shade = $request->input('final_shade');
             $catalog->save();
 
-            return redirect()->back()->with('success', 'Shade updated successfully.');
+            return back()->with('success', 'Shade updated successfully.');
         } catch (Exception) {
-            return redirect()->back()->with('error', 'Failed to update shade. Please try again.');
+            return back()->with('error', 'Failed to update shade. Please try again.');
         }
     }
-
 }
