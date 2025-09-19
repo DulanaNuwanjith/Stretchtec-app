@@ -165,17 +165,17 @@
                                         class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
 
                                         @forelse($technicalCardElastics as $technicalCardElastic)
-                                            <tr class="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                                            <tr class="odd:bg-white even:bg-gray-50 border-b border-gray-200">
 
                                                 <!-- Reference -->
-                                                <td class="text-center px-6 py-4">
+                                                <td class="text-center sticky left-0 z-10 px-4 py-3 bg-gray-100 whitespace-normal break-words border-r border-gray-300">
                                                     <span class="text-sm font-bold text-gray-800 dark:text-gray-200">
                                                         {{ $technicalCardElastic->reference_number ?? '-' }}
                                                     </span>
                                                 </td>
 
                                                 <!-- Item Details -->
-                                                <td class="px-6 py-4 text-sm text-gray-700 dark:text-gray-300 space-y-1">
+                                                <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300">
                                                     <div><span class="font-medium text-gray-600 dark:text-gray-400">Created
                                                             Date:</span>
                                                         {{ $technicalCardElastic->created_at?->format('Y-m-d') ?? '-' }}
@@ -195,7 +195,7 @@
                                                 </td>
 
                                                 <!-- Technical Details -->
-                                                <td class="px-6 py-4 text-sm text-gray-700 dark:text-gray-300 space-y-1">
+                                                <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300">
                                                     <div><span class="font-medium">Rubber Type:</span>
                                                         {{ $technicalCardElastic->rubber_type ?? '-' }}</div>
                                                     <div><span class="font-medium">Weft Yarn:</span>
@@ -211,7 +211,7 @@
                                                 </td>
 
                                                 <!-- Quality Details -->
-                                                <td class="px-6 py-4 text-sm text-gray-700 dark:text-gray-300 space-y-1">
+                                                <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300">
                                                     <div><span class="font-medium">Stretchability:</span>
                                                         {{ $technicalCardElastic->stretchability ?? '-' }}</div>
                                                     <div><span class="font-medium">Weight Per Yard:</span>
