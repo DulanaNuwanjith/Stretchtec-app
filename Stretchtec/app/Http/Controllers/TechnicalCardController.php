@@ -13,11 +13,23 @@ use Illuminate\Support\Facades\Storage;
 
 class TechnicalCardController extends Controller
 {
-    public function elasticIndex(): Factory|View
+    public function elasticIndex(Request $request): Factory|View
     {
-        $technicalCardElastics = TechnicalCard::where('type', 'Elastic')->paginate(10);
+        $query = TechnicalCard::where('type', 'Elastic');
 
-        $references = TechnicalCard::where('type', 'Elastic')->pluck('reference_number');
+        // Apply filter if reference_no is selected
+        if ($request->filled('reference_no')) {
+            $query->where('reference_number', $request->input('reference_no'));
+        }
+
+        // Order by reference_number
+        $technicalCardElastics = $query->orderBy('reference_number', 'asc')->paginate(10);
+
+        // For dropdown (distinct reference numbers, ordered)
+        $references = TechnicalCard::where('type', 'Elastic')
+            ->orderBy('reference_number', 'asc')
+            ->pluck('reference_number')
+            ->unique();
 
         return view('technical-details.pages.elasticTD', compact('technicalCardElastics', 'references'));
     }
