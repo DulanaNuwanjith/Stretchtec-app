@@ -149,16 +149,54 @@
                                         <!-- SAMPLE ORDER FIELDS (Default Visible) -->
                                         <div id="sampleOrderFields" class="space-y-4">
                                             <!-- Select Reference Number -->
-                                            <div>
-                                                <label for="sampleReference" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Select Sample Reference</label>
-                                                <select id="sampleReference" name="sample_reference" onchange="fetchSampleDetails(this.value)"
-                                                        class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                                    <option value="">-- Select --</option>
-                                                    @foreach($samples as $sample)
-                                                        <option value="{{ $sample->id }}">{{ $sample->reference_no }}</option>
-                                                    @endforeach
-                                                </select>
+                                            <!-- Dropdown Button -->
+                                            <div class="relative">
+                                                <button type="button" id="sampleReferenceDropdown"
+                                                        class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm
+               ring-1 ring-gray-300 hover:bg-gray-50 h-10
+               dark:bg-gray-700 dark:text-white dark:ring-gray-600"
+                                                        onclick="toggleDropdown('sampleReference')"
+                                                        aria-haspopup="listbox"
+                                                        aria-expanded="false">
+                                                    <span id="selectedSampleReference">Select Sample Reference</span>
+                                                    <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                                                        <path fill-rule="evenodd"
+                                                              d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06
+                     1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25
+                     8.29a.75.75 0 0 1-.02-1.08z"
+                                                              clip-rule="evenodd"/>
+                                                    </svg>
+                                                </button>
+
+                                                <!-- Dropdown Menu -->
+                                                <div id="dropdownMenusampleReference"
+                                                     class="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base
+                ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none
+                hidden dark:bg-gray-700 dark:text-white sm:text-sm">
+
+                                                    <!-- Search Box -->
+                                                    <div class="sticky top-0 bg-white dark:bg-gray-700 px-2 py-1">
+                                                        <input type="text" id="sampleSearchInput"
+                                                               placeholder="Search reference..."
+                                                               onkeyup="filterSamples()"
+                                                               class="w-full px-2 py-1 text-sm border rounded-md focus:outline-none focus:ring focus:ring-indigo-500
+                          dark:bg-gray-600 dark:text-white dark:border-gray-500"/>
+                                                    </div>
+
+                                                    <!-- Options -->
+                                                    <ul id="sampleOptions" class="max-h-48 overflow-y-auto">
+                                                        @foreach($samples as $sample)
+                                                            <li class="cursor-pointer select-none px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-600"
+                                                                onclick="selectSampleReference('{{ $sample->id }}', '{{ $sample->reference_no }}')">
+                                                                {{ $sample->reference_no }}
+                                                            </li>
+                                                        @endforeach
+                                                    </ul>
+                                                </div>
                                             </div>
+
+                                            <!-- Hidden input to hold selected value -->
+                                            <input type="hidden" name="sample_reference" id="sampleReferenceHidden">
 
                                             <!-- Auto-filled fields -->
                                             <div class="flex gap-4">
@@ -286,5 +324,48 @@
             document.getElementById('tab-sample').classList.add('border-b-2', 'border-blue-500', 'text-blue-600');
         }
     }
+</script>
+
+<script>
+    function toggleDropdown(id) {
+        document.getElementById(`dropdownMenu${id}`).classList.toggle('hidden');
+    }
+
+    function selectSampleReference(id, referenceNo) {
+        document.getElementById('selectedSampleReference').textContent = referenceNo;
+        document.getElementById('sampleReferenceHidden').value = id;
+        document.getElementById('dropdownMenusampleReference').classList.add('hidden');
+
+        // If you want to trigger fetching details when selected
+        if (typeof fetchSampleDetails === "function") {
+            fetchSampleDetails(id);
+        }
+    }
+
+    function filterSamples() {
+        let input = document.getElementById('sampleSearchInput');
+        let filter = input.value.toLowerCase();
+        let options = document.getElementById("sampleOptions").getElementsByTagName("li");
+
+        for (let i = 0; i < options.length; i++) {
+            let txtValue = options[i].textContent || options[i].innerText;
+            if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                options[i].style.display = "";
+            } else {
+                options[i].style.display = "none";
+            }
+        }
+    }
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function (event) {
+        const dropdown = document.getElementById('dropdownMenusampleReference');
+        const button = document.getElementById('sampleReferenceDropdown');
+
+        if (!dropdown.contains(event.target) && !button.contains(event.target)) {
+            dropdown.classList.add('hidden');
+        }
+    });
+
 </script>
 @endsection
