@@ -45,6 +45,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LeftoverYarnController;
 use App\Http\Controllers\OperatorsandSupervisorsController;
 use App\Http\Controllers\ProductCatalogController;
+use App\Http\Controllers\ProductInquiryController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SampleInquiryController;
 use App\Http\Controllers\SamplePreparationProductionController;
@@ -191,9 +192,11 @@ Route::middleware([
      | Production Inquiry & Order Preparation Views
      |----------------------------------------------------------------------
      */
-    Route::get('production-inquery-details', static function () {
-        return view('production.pages.production-inquery-details');
-    })->name('production-inquery-details.index');
+    Route::resource('production-inquery', ProductInquiryController::class)->names([
+        'index' => 'production-inquery-details.index',
+        'store' => 'production-inquery-details.store',
+        'destroy' => 'production-inquery-details.destroy',
+    ]);
 
     Route::get('production-order-preparation', static function () {
         return view('production.pages.production-order-preparation');
@@ -201,9 +204,9 @@ Route::middleware([
 
 
     //Technical Details Routes
-    Route::get('/elasticTD',[TechnicalCardController::class, 'elasticIndex'])->name('elasticTD.index');
-    Route::get('/tapeTD',[TechnicalCardController::class, 'tapeIndex'])->name('tapeTD.index');
-    Route::get('/cordTD',[TechnicalCardController::class, 'cordIndex'])->name('cordTD.index');
+    Route::get('/elasticTD', [TechnicalCardController::class, 'elasticIndex'])->name('elasticTD.index');
+    Route::get('/tapeTD', [TechnicalCardController::class, 'tapeIndex'])->name('tapeTD.index');
+    Route::get('/cordTD', [TechnicalCardController::class, 'cordIndex'])->name('cordTD.index');
     Route::post('/elasticTD/create', [TechnicalCardController::class, 'createElastic'])->name('elasticTD.create');
     Route::post('/cordTD/create', [TechnicalCardController::class, 'createCord'])->name('cordTD.create');
     Route::post('/tapeTD/create', [TechnicalCardController::class, 'createTape'])->name('tapeTD.create');
