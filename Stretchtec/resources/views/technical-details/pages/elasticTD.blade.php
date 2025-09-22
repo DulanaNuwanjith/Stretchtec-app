@@ -121,6 +121,63 @@
                                 }
                             </script>
 
+                            {{-- Filters --}}
+                            <div class="flex justify-start">
+                                <button onclick="toggleFilterForm()"
+                                        class="bg-white border border-blue-500 text-blue-500 hover:text-blue-600 hover:border-blue-600 font-semibold py-1 px-3 rounded shadow flex items-center gap-2 mb-6">
+                                    <img src="{{ asset('icons/filter.png') }}" class="w-6 h-6" alt="Filter Icon">
+                                    Filters
+                                </button>
+                            </div>
+
+                            <div id="filterFormContainer" class="hidden mt-4">
+                                <!-- Filter Form -->
+                                <form id="filterForm" method="GET" action="{{ route('elasticTD.index') }}" class="mb-6">
+                                    <div class="flex items-center gap-4 flex-wrap">
+
+                                        {{-- Filters - Reference No Dropdown --}}
+                                        <div class="relative inline-block text-left w-64">
+                                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Reference No</label>
+                                            <input type="hidden" name="reference_no" id="refInput" value="{{ request('reference_no') }}">
+                                            <button id="refDropdown" type="button" onclick="toggleRefDropdown()"
+                                                    class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold
+                                                         text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10 dark:bg-gray-700 dark:text-white">
+                                                <span id="selectedRef">{{ request('reference_no') ?? 'Select Reference No' }}</span>
+                                                <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                                                    <path fill-rule="evenodd"
+                                                          d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24
+                                                             4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
+                                                          clip-rule="evenodd"/>
+                                                </svg>
+                                            </button>
+                                            <div id="refDropdownMenu"
+                                                 class="absolute z-40 mt-1 w-full bg-white border rounded-lg shadow-lg hidden max-h-48 overflow-y-auto p-2">
+                                                <input type="text" id="refSearchInput" onkeyup="filterRefs()" placeholder="Search..."
+                                                       class="w-full px-2 py-1 text-sm border rounded-md dark:bg-gray-600 dark:text-white dark:placeholder-gray-300"
+                                                       autocomplete="off">
+                                                @foreach ($references as $ref)
+                                                    <div onclick="selectRef('{{ $ref }}')" class="ref-option px-4 py-2 hover:bg-gray-100 cursor-pointer text-sm">
+                                                        {{ $ref }}
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                        </div>
+
+                                        {{-- Buttons --}}
+                                        <div class="flex items-end space-x-2 mt-2">
+                                            <button type="submit"
+                                                    class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                                                Apply Filters
+                                            </button>
+                                            <button type="button" onclick="clearFilters()"
+                                                    class="mt-4 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 px-4 py-2 rounded hover:bg-gray-300">
+                                                Clear
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+
                             <div class="flex justify-between items-center mb-6">
                                 <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Elastic Technical
                                     Details
@@ -574,5 +631,40 @@
             showPreview(dt.files[0]);
         }
     });
+</script>
+
+<script>
+    // Toggle form container
+    function toggleFilterForm() {
+        document.getElementById("filterFormContainer").classList.toggle("hidden");
+    }
+
+    // Toggle Reference dropdown
+    function toggleRefDropdown() {
+        document.getElementById("refDropdownMenu").classList.toggle("hidden");
+    }
+
+    // Filter references in dropdown
+    function filterRefs() {
+        const input = document.getElementById("refSearchInput").value.toLowerCase();
+        const options = document.querySelectorAll(".ref-option");
+        options.forEach(option => {
+            option.style.display = option.textContent.toLowerCase().includes(input) ? "" : "none";
+        });
+    }
+
+    // Select a reference
+    function selectRef(ref) {
+        document.getElementById("selectedRef").textContent = ref;
+        document.getElementById("refInput").value = ref;
+        document.getElementById("refDropdownMenu").classList.add("hidden");
+    }
+
+    // Clear filters
+    function clearFilters() {
+        document.getElementById("selectedRef").textContent = "Select Reference No";
+        document.getElementById("refInput").value = "";
+        document.getElementById("filterForm").submit();
+    }
 </script>
 @endsection

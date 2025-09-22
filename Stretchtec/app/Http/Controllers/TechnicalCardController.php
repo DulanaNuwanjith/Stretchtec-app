@@ -16,7 +16,10 @@ class TechnicalCardController extends Controller
     public function elasticIndex(): Factory|View
     {
         $technicalCardElastics = TechnicalCard::where('type', 'Elastic')->paginate(10);
-        return view('technical-details.pages.elasticTD', compact('technicalCardElastics'));
+
+        $references = TechnicalCard::where('type', 'Elastic')->pluck('reference_number');
+
+        return view('technical-details.pages.elasticTD', compact('technicalCardElastics', 'references'));
     }
 
     public function tapeIndex(): Factory|View

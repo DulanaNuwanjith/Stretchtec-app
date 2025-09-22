@@ -145,6 +145,7 @@
                 @endif
             </form>
         </div>
+
         <div class="overflow-x-auto bg-white dark:bg-gray-900 shadow rounded-lg">
             <table class="table-fixed w-full text-sm divide-y divide-gray-200 dark:divide-gray-700 text-center">
                 <thead class="bg-gray-100 dark:bg-gray-700">
