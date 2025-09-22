@@ -1,5 +1,6 @@
 <head>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <title>Stretchtec</title>
 </head>
 
 <div class="flex h-full w-full">
@@ -31,7 +32,7 @@
                             </h1>
                             <button onclick="document.getElementById('addSampleModal').classList.remove('hidden')"
                                 class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded shadow">
-                                + Add New Order
+                                + Add New Production Order
                             </button>
                         </div>
 
@@ -43,143 +44,184 @@
                                 <div class="max-w-[600px] mx-auto p-8">
                                     <h2
                                         class="text-2xl font-semibold mb-8 text-blue-900 mt-4 dark:text-gray-100 text-center">
-                                        Add New Sample Development
+                                        Add New Production Order
                                     </h2>
                                     <form action="" method="POST" enctype="multipart/form-data">
                                         @csrf
-                                        <div class="space-y-4">
 
-                                            <!-- File Upload -->
-                                            <div class="flex items-center justify-center w-full">
-                                                <label for="sampleFile"
-                                                    class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50
-                                                     dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
-                                                    <div class="flex flex-col items-center justify-center pt-5 pb-6 ">
-                                                        <svg class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"
-                                                            aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                                                            fill="none" viewBox="0 0 20 16">
-                                                            <path stroke="currentColor" stroke-linecap="round"
-                                                                stroke-linejoin="round" stroke-width="2"
-                                                                d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
-                                                        </svg>
-                                                        <p class="mb-2 text-sm text-gray-500 dark:text-gray-400">
-                                                            <span class="font-semibold">Upload Order soft copy</span>
-                                                            or drag and drop
-                                                        </p>
-                                                        <p class="text-xs text-gray-500 dark:text-gray-400">PDF, JPG
-                                                            (MAX. 800x400px)</p>
-                                                    </div>
-                                                    <input id="sampleFile" name="order_file" type="file"
-                                                        class="hidden" accept=".pdf,.jpg,.jpeg" />
-                                                </label>
+                                        <!-- ORDER TYPE TOGGLE -->
+                                        <div class="mb-6">
+                                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Order Type</label>
+
+                                            <!-- Tab-style toggle -->
+                                            <div class="flex space-x-4 mt-3 border-b border-gray-300 dark:border-gray-700">
+                                                <button type="button"
+                                                        onclick="setOrderType('sample')"
+                                                        id="tab-sample"
+                                                        class="pb-2 px-3 font-semibold border-b-2 border-blue-500 text-blue-600">
+                                                    From Sample
+                                                </button>
+                                                <button type="button"
+                                                        onclick="setOrderType('direct')"
+                                                        id="tab-direct"
+                                                        class="pb-2 px-3 font-semibold text-gray-600 dark:text-gray-300 hover:text-blue-500">
+                                                    Direct Order
+                                                </button>
                                             </div>
 
-                                            <!-- Oder Number -->
+                                            <!-- Hidden input to send selected type -->
+                                            <input type="hidden" name="order_type" id="order_type" value="sample">
+                                        </div>
+
+                                        <!-- DIRECT ORDER FIELDS -->
+                                        <div id="directOrderFields" class="space-y-4 hidden">
+                                            <!-- Reference Number -->
                                             <div>
-                                                <label for="sampleQuantity"
-                                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">Oder
-                                                    Number
-                                                </label>
-                                                <input id="sampleQuantity" type="text" name="sample_quantity"
-                                                    required
-                                                    class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm mb-4">
+                                                <label for="referenceNumber" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Reference Number</label>
+                                                <input id="referenceNumber" type="text" name="referenceNumber"
+                                                       class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                             </div>
 
-                                            <!-- Inquiry receive date & Customer -->
-                                            <div class="flex gap-4">
-                                                <div class="w-1/2">
-                                                    <label for="inquiryDate"
-                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Inquiry
-                                                        Receive Date</label>
-                                                    <input id="inquiryDate" type="date" name="inquiry_date"
-                                                        required
-                                                        class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                                </div>
-                                                <div class="w-1/2">
-                                                    <label for="customer"
-                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer</label>
-                                                    <input id="customer" type="text" name="customer" required
-                                                        class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                                </div>
-                                            </div>
-
-                                            <!-- Merchandiser & Item -->
-                                            <div class="flex gap-4">
-                                                <div class="w-1/2">
-                                                    <label for="merchandiser"
-                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Merchandiser</label>
-                                                    <input id="merchandiser" type="text" name="merchandiser"
-                                                        required
-                                                        class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                                </div>
-                                                <div class="w-1/2">
-                                                    <label for="item"
-                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Item</label>
-                                                    <input id="item" type="text" name="item" required
-                                                        class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                                </div>
-                                            </div>
-
-                                            <!-- Size & Colour -->
-                                            <div class="flex gap-4">
-                                                <div class="w-1/2">
-                                                    <label for="size"
-                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Size</label>
-                                                    <input id="size" type="text" name="size" required
-                                                        class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                                </div>
-                                                <div class="w-1/2">
-                                                    <label for="colour"
-                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Colour</label>
-                                                    <input id="colour" type="text" name="colour" required
-                                                        class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                                </div>
-                                            </div>
-
-                                            <!-- Sample Quantity -->
+                                            <!-- PO Number -->
                                             <div>
-                                                <label for="sampleQuantity"
-                                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">Sample
-                                                    Quantity (yds or mtr)</label>
-                                                <input id="sampleQuantity" type="text" name="sample_quantity"
-                                                    required
-                                                    class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm mb-4">
+                                                <label for="poNumber" class="block text-sm font-medium text-gray-700 dark:text-gray-300">PO Number</label>
+                                                <input id="poNumber" type="text" name="po_number"
+                                                       class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                             </div>
 
-                                            <span class="font-sans font-semibold text-m block mb-2">SPECIAL CUSTOMER
-                                                COMMENTS & REQUESTED DATES</span>
-
-                                            <!-- Customer Comments & Requested Dates -->
+                                            <!-- Shade & Colour -->
                                             <div class="flex gap-4">
                                                 <div class="w-1/2">
-                                                    <label for="customerComments"
-                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer
-                                                        Comments</label>
-                                                    <input id="customerComments" type="text"
-                                                        name="customer_comments"
-                                                        class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                    <label for="shade" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Shade</label>
+                                                    <input id="shade" type="text" name="shade"
+                                                           class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                 </div>
                                                 <div class="w-1/2">
-                                                    <label for="requestedDate"
-                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer
-                                                        Requested Date</label>
-                                                    <input id="requestedDate" type="date"
-                                                        name="customer_requested_date"
-                                                        class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                    <label for="colour" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Colour</label>
+                                                    <input id="colour" type="text" name="colour"
+                                                           class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                 </div>
                                             </div>
 
+                                            <!-- Size & Quantity -->
+                                            <div class="flex gap-4">
+                                                <div class="w-1/2">
+                                                    <label for="size" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Size</label>
+                                                    <input id="size" type="text" name="size"
+                                                           class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                </div>
+                                                <div class="w-1/2">
+                                                    <label for="qtyRequested" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Quantity Requested</label>
+                                                    <input id="qtyRequested" type="text" name="qty_requested"
+                                                           class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                </div>
+                                            </div>
+
+                                            <!-- Customer Merchandiser & TKT -->
+                                            <div class="flex gap-4">
+                                                <div class="w-1/2">
+                                                    <label for="customerMerchandiser" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer Merchandiser</label>
+                                                    <input id="customerMerchandiser" type="text" name="customer_merchandiser"
+                                                           class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                </div>
+                                                <div class="w-1/2">
+                                                    <label for="tkt" class="block text-sm font-medium text-gray-700 dark:text-gray-300">TKT</label>
+                                                    <input id="tkt" type="text" name="tkt"
+                                                           class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                </div>
+                                            </div>
+
+                                            <!-- Customer Requested Date & Notes -->
+                                            <div class="flex gap-4">
+                                                <div class="w-1/2">
+                                                    <label for="customerRequestedDate" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer Requested Date</label>
+                                                    <input id="customerRequestedDate" type="date" name="customer_requested_date"
+                                                           class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                </div>
+                                                <div class="w-1/2">
+                                                    <label for="customerNotes" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer Notes</label>
+                                                    <input id="customerNotes" type="text" name="customer_notes"
+                                                           class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- SAMPLE ORDER FIELDS (Default Visible) -->
+                                        <div id="sampleOrderFields" class="space-y-4">
+                                            <!-- Select Reference Number -->
+                                            <div>
+                                                <label for="sampleReference" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Select Sample Reference</label>
+                                                <select id="sampleReference" name="sample_reference" onchange="fetchSampleDetails(this.value)"
+                                                        class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                    <option value="">-- Select --</option>
+                                                    @foreach($samples as $sample)
+                                                        <option value="{{ $sample->id }}">{{ $sample->reference_no }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+
+                                            <!-- Auto-filled fields -->
+                                            <div class="flex gap-4">
+                                                <div class="w-1/2">
+                                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Shade</label>
+                                                    <input id="sampleShade" type="text" readonly
+                                                           class="w-full mt-1 px-3 py-2 border rounded-md bg-gray-100 dark:bg-gray-600 text-sm">
+                                                </div>
+                                                <div class="w-1/2">
+                                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Colour</label>
+                                                    <input id="sampleColour" type="text" readonly
+                                                           class="w-full mt-1 px-3 py-2 border rounded-md bg-gray-100 dark:bg-gray-600 text-sm">
+                                                </div>
+                                            </div>
+
+                                            <div class="flex gap-4">
+                                                <div class="w-1/2">
+                                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">TKT</label>
+                                                    <input id="sampleTKT" type="text" readonly
+                                                           class="w-full mt-1 px-3 py-2 border rounded-md bg-gray-100 dark:bg-gray-600 text-sm">
+                                                </div>
+                                                <div class="w-1/2">
+                                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Size</label>
+                                                    <input id="sampleSize" type="text" readonly
+                                                           class="w-full mt-1 px-3 py-2 border rounded-md bg-gray-100 dark:bg-gray-600 text-sm">
+                                                </div>
+                                            </div>
+
+                                            <div>
+                                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Supplier</label>
+                                                <input id="sampleSupplier" type="text" readonly
+                                                       class="w-full mt-1 px-3 py-2 border rounded-md bg-gray-100 dark:bg-gray-600 text-sm">
+                                            </div>
+
+                                            <!-- Editable fields -->
+                                            <div class="flex gap-4">
+                                                <div class="w-1/2">
+                                                    <label for="sampleQty" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Quantity</label>
+                                                    <input id="sampleQty" type="text" name="qty"
+                                                           class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                </div>
+                                                <div class="w-1/2">
+                                                    <label for="samplePoNumber" class="block text-sm font-medium text-gray-700 dark:text-gray-300">PO Number</label>
+                                                    <input id="samplePoNumber" type="text" name="po_number_sample"
+                                                           class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                </div>
+                                            </div>
+
+                                            <div>
+                                                <label for="sampleCustomerRequestedDate" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer Requested Date</label>
+                                                <input id="sampleCustomerRequestedDate" type="date" name="customer_requested_date_sample"
+                                                       class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                            </div>
                                         </div>
 
                                         <!-- Buttons -->
                                         <div class="flex justify-end gap-3 mt-12">
-                                            <button type="button"
-                                                onclick="document.getElementById('addSampleModal').classList.add('hidden')"
-                                                class="px-4 py-2 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 text-sm rounded hover:bg-gray-300">
+                                            <button type="button" onclick="document.getElementById('addSampleModal').classList.add('hidden')"
+                                                    class="px-4 py-2 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 text-sm rounded hover:bg-gray-300">
                                                 Cancel
                                             </button>
                                             <button type="submit"
-                                                class="px-4 py-2 bg-blue-500 text-white text-sm rounded hover:bg-blue-600">
+                                                    class="px-4 py-2 bg-blue-500 text-white text-sm rounded hover:bg-blue-600">
                                                 Create Order
                                             </button>
                                         </div>
@@ -195,4 +237,54 @@
     </div>
 </div>
 
+<script>
+    function toggleOrderType(type) {
+        document.getElementById('directOrderFields').classList.toggle('hidden', type !== 'direct');
+        document.getElementById('sampleOrderFields').classList.toggle('hidden', type !== 'sample');
+    }
+
+    function fetchSampleDetails(sampleId) {
+        if (!sampleId) return;
+
+        fetch(`/product-catalog/${sampleId}/details`)
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById('sampleShade').value = data.shade ?? '';
+                document.getElementById('sampleColour').value = data.colour ?? '';
+                document.getElementById('sampleTKT').value = data.tkt ?? '';
+                document.getElementById('sampleSize').value = data.size ?? '';
+                document.getElementById('sampleSupplier').value = data.supplier ?? '';
+            })
+            .catch(err => {
+                console.error("Error fetching sample details:", err);
+            });
+    }
+</script>
+
+<script>
+    function setOrderType(type) {
+        const directFields = document.getElementById('directOrderFields');
+        const sampleFields = document.getElementById('sampleOrderFields');
+        const orderTypeInput = document.getElementById('order_type');
+
+        // reset tab styles
+        document.getElementById('tab-direct').classList.remove('border-b-2', 'border-blue-500', 'text-blue-600');
+        document.getElementById('tab-direct').classList.add('text-gray-600', 'dark:text-gray-300');
+
+        document.getElementById('tab-sample').classList.remove('border-b-2', 'border-blue-500', 'text-blue-600');
+        document.getElementById('tab-sample').classList.add('text-gray-600', 'dark:text-gray-300');
+
+        if (type === 'direct') {
+            directFields.classList.remove('hidden');
+            sampleFields.classList.add('hidden');
+            orderTypeInput.value = 'direct';
+            document.getElementById('tab-direct').classList.add('border-b-2', 'border-blue-500', 'text-blue-600');
+        } else {
+            sampleFields.classList.remove('hidden');
+            directFields.classList.add('hidden');
+            orderTypeInput.value = 'sample';
+            document.getElementById('tab-sample').classList.add('border-b-2', 'border-blue-500', 'text-blue-600');
+        }
+    }
+</script>
 @endsection

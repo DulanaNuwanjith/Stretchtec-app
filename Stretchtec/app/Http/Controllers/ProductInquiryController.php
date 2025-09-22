@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ProductCatalog;
 use App\Models\ProductInquiry;
 use Illuminate\Http\Request;
 
@@ -12,7 +13,23 @@ class ProductInquiryController extends Controller
      */
     public function index()
     {
-        return view('production.pages.production-inquery-details');
+        $samples = ProductCatalog::all();
+
+        return view('production.pages.production-inquery-details', compact('samples'));
+    }
+
+
+    public function getSampleDetails($id)
+    {
+        $sample = ProductCatalog::findOrFail($id);
+
+        return response()->json([
+            'shade'    => $sample->shade,
+            'colour'   => $sample->colour,
+            'tkt'      => $sample->tkt,
+            'size'     => $sample->size,
+            'supplier' => $sample->supplier,
+        ]);
     }
 
     /**

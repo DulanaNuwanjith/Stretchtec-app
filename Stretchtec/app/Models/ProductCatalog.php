@@ -39,6 +39,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * --------------------------------------------------------------------------
  * @method static where(string $string, mixed $orderNo)
  * @method static create(array $data)
+ * @method static findOrFail($id)
  * @property mixed $order_image
  * @property mixed $reference_no
  * @property mixed $is_approved_by_locked
