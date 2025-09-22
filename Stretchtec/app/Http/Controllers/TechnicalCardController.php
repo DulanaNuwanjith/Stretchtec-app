@@ -34,16 +34,46 @@ class TechnicalCardController extends Controller
         return view('technical-details.pages.elasticTD', compact('technicalCardElastics', 'references'));
     }
 
-    public function tapeIndex(): Factory|View
+    public function tapeIndex(Request $request): Factory|View
     {
-        $technicalCardTapes = TechnicalCard::where('type', 'Tape')->paginate(10);
-        return view('technical-details.pages.tapeTD', compact('technicalCardTapes'));
+        $query = TechnicalCard::where('type', 'Tape');
+
+        // Apply filter if reference_no is selected
+        if ($request->filled('reference_no')) {
+            $query->where('reference_number', $request->input('reference_no'));
+        }
+
+        // Order by reference_number
+        $technicalCardTapes = $query->orderBy('reference_number', 'asc')->paginate(10);
+
+        // For dropdown (distinct reference numbers, ordered)
+        $references = TechnicalCard::where('type', 'Tape')
+            ->orderBy('reference_number', 'asc')
+            ->pluck('reference_number')
+            ->unique();
+
+        return view('technical-details.pages.tapeTD', compact('technicalCardTapes', 'references'));
     }
 
-    public function cordIndex(): Factory|View
+    public function cordIndex(Request $request): Factory|View
     {
-        $technicalCardCords = TechnicalCard::where('type', 'Cord')->paginate(10);
-        return view('technical-details.pages.cordTD', compact('technicalCardCords'));
+        $query = TechnicalCard::where('type', 'Cord');
+
+        // Apply filter if reference_no is selected
+        if ($request->filled('reference_no')) {
+            $query->where('reference_number', $request->input('reference_no'));
+        }
+
+        // Order by reference_number
+        $technicalCardCords = $query->orderBy('reference_number', 'asc')->paginate(10);
+
+        // For dropdown (distinct reference numbers, ordered)
+        $references = TechnicalCard::where('type', 'Cord')
+            ->orderBy('reference_number', 'asc')
+            ->pluck('reference_number')
+            ->unique();
+
+        return view('technical-details.pages.cordTD', compact('technicalCardCords', 'references'));
     }
 
     /**
