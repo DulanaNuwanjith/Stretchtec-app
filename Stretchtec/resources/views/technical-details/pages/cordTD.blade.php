@@ -132,7 +132,7 @@
 
                             <div id="filterFormContainer" class="hidden mt-4">
                                 <!-- Filter Form -->
-                                <form id="filterForm" method="GET" action="{{ route('tapeTD.index') }}" class="mb-6">
+                                <form id="filterForm" method="GET" action="{{ route('cordTD.index') }}" class="mb-6">
                                     <div class="flex items-center gap-4 flex-wrap">
 
                                         {{-- Filters - Reference No Dropdown --}}
@@ -179,12 +179,11 @@
                             </div>
 
                             <div class="flex justify-between items-center mb-6">
-                                <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Twill Tape Technical
-                                    Details
+                                <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Cord Technical Details
                                 </h1>
                                 @if (in_array(Auth::user()->role, ['ADMIN', 'SUPERADMIN']))
                                     <button
-                                        onclick="document.getElementById('addTapeTDModal').classList.remove('hidden')"
+                                        onclick="document.getElementById('addCordTDModal').classList.remove('hidden')"
                                         class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded shadow">
                                         + Add New Technical Details
                                     </button>
@@ -192,7 +191,7 @@
                             </div>
 
                             {{-- Main Table --}}
-                            <div id="TapeTDRecordsScroll"
+                            <div id="CordTDRecordsScroll"
                                  class="overflow-x-auto max-h-[1200px] bg-white dark:bg-gray-900 shadow rounded-lg">
                                 <table class="table-fixed w-full text-sm divide-y divide-gray-200 dark:divide-gray-700">
                                     <thead class="bg-gray-200 dark:bg-gray-700 text-left">
@@ -220,82 +219,76 @@
                                     </tr>
                                     </thead>
 
-                                    <tbody id="TapeTDRecords"
+                                    <tbody id="CordTDRecords"
                                            class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                                    @forelse($technicalCardTapes as $technicalCardTape)
+                                    @forelse($technicalCardCords as $technicalCardCord)
                                         <tr class="odd:bg-white even:bg-gray-50 border-b border-gray-200">
 
                                             <!-- Reference -->
-                                            <td
-                                                class="text-center sticky left-0 z-10 px-4 py-3 bg-gray-100 whitespace-normal break-words border-r border-gray-300">
+                                            <td class="text-center sticky left-0 z-10 px-4 py-3 bg-gray-100 whitespace-normal break-words border-r border-gray-300">
                                                     <span class="text-sm font-bold text-gray-800 dark:text-gray-200">
-                                                        {{ $technicalCardTape->reference_number ?? '-' }}
+                                                        {{ $technicalCardCord->reference_number ?? '-' }}
                                                     </span>
                                             </td>
 
                                             <!-- Item Details -->
-                                            <td
-                                                class="px-8 py-3 whitespace-normal break-words border-r border-gray-300">
+                                            <td class="px-8 py-3 whitespace-normal break-words border-r border-gray-300">
                                                 <div><span class="font-medium text-gray-600 dark:text-gray-400">Created
                                                             Date:</span>
-                                                    {{ $technicalCardTape->created_at?->format('Y-m-d') ?? '-' }}</div>
+                                                    {{ $technicalCardCord->created_at?->format('Y-m-d') ?? '-' }}</div>
                                                 <div><span
                                                         class="font-medium text-gray-600 dark:text-gray-400">Type:</span>
-                                                    {{ $technicalCardTape->type ?? '-' }}</div>
+                                                    {{ $technicalCardCord->type ?? '-' }}</div>
                                                 <div><span
                                                         class="font-medium text-gray-600 dark:text-gray-400">Size:</span>
-                                                    {{ $technicalCardTape->size ?? '-' }}</div>
+                                                    {{ $technicalCardCord->size ?? '-' }}</div>
                                                 <div><span
                                                         class="font-medium text-gray-600 dark:text-gray-400">Color:</span>
-                                                    {{ $technicalCardTape->color ?? '-' }}</div>
+                                                    {{ $technicalCardCord->color ?? '-' }}</div>
                                                 <div><span
                                                         class="font-medium text-gray-600 dark:text-gray-400">Machine:</span>
-                                                    {{ $technicalCardTape->machine ?? '-' }}</div>
+                                                    {{ $technicalCardCord->machine ?? '-' }}</div>
                                             </td>
 
                                             <!-- Technical Details -->
-                                            <td
-                                                class="px-8 py-3 whitespace-normal break-words border-r border-gray-300">
-                                                <div><span class="font-medium">Weft Yarn:</span>
-                                                    {{ $technicalCardTape->weft_yarn ?? '-' }}</div>
-                                                <div><span class="font-medium">Warp Yarn:</span>
-                                                    {{ $technicalCardTape->warp_yarn ?? '-' }}</div>
-                                                <div><span class="font-medium">Wheel Up:</span>
-                                                    {{ $technicalCardTape->wheel_up ?? '-' }}</div>
-                                                <div><span class="font-medium">Wheel Down:</span>
-                                                    {{ $technicalCardTape->wheel_down ?? '-' }}</div>
-                                                <div><span class="font-medium">Reed:</span>
-                                                    {{ $technicalCardTape->reed ?? '-' }}</div>
+                                            <td class="px-8 py-3 whitespace-normal break-words border-r border-gray-300">
                                                 <div><span class="font-medium">Rubber Type:</span>
-                                                    {{ $technicalCardTape->rubber_type ?? '-' }}</div>
+                                                    {{ $technicalCardCord->rubber_type ?? '-' }}</div>
+                                                <div><span class="font-medium">Yarn Count:</span>
+                                                    {{ $technicalCardCord->yarn_count ?? '-' }}</div>
+                                                <div><span class="font-medium">Wheel Up:</span>
+                                                    {{ $technicalCardCord->wheel_up ?? '-' }}</div>
+                                                <div><span class="font-medium">Wheel Down:</span>
+                                                    {{ $technicalCardCord->wheel_down ?? '-' }}</div>
+                                                <div><span class="font-medium">Spindles:</span>
+                                                    {{ $technicalCardCord->spindles ?? '-' }}</div>
                                             </td>
 
                                             <!-- Quality Details -->
-                                            <td
-                                                class="px-8 py-3 whitespace-normal break-words border-r border-gray-300">
+                                            <td class="px-8 py-3 whitespace-normal break-words border-r border-gray-300">
                                                 <div><span class="font-medium">Stretchability:</span>
-                                                    {{ $technicalCardTape->stretchability ?? '-' }}</div>
+                                                    {{ $technicalCardCord->stretchability ?? '-' }}</div>
                                                 <div><span class="font-medium">Weight Per Yard:</span>
-                                                    {{ $technicalCardTape->weight_per_yard ?? '-' }}</div>
+                                                    {{ $technicalCardCord->weight_per_yard ?? '-' }} g
+                                                </div>
                                                 <div><span class="font-medium">Remarks:</span>
-                                                    {{ $technicalCardTape->special_remarks ?? '-' }}</div>
+                                                    {{ $technicalCardCord->special_remarks ?? '-' }}</div>
                                             </td>
 
                                             <!-- Actions -->
                                             <td class="px-4 py-3 text-center">
                                                 <div class="flex gap-2 justify-center items-center">
                                                     <!-- View Button -->
-                                                    @if ($technicalCardTape->url)
-                                                        <a href="{{ $technicalCardTape->url }}" target="_blank"
+                                                    @if ($technicalCardCord->url)
+                                                        <a href="{{ $technicalCardCord->url }}" target="_blank"
                                                            class="flex items-center justify-center w-20 h-9 bg-blue-500 text-white text-sm font-semibold rounded shadow hover:bg-blue-700 transition-all">
                                                             View </a>
                                                     @else
                                                         <span></span>
-                                                    @endif
-                                                    <!-- Add Image Button (inline upload) -->
-                                                    @if (!$technicalCardTape->url)
+                                                    @endif <!-- Add Image Button (inline upload) -->
+                                                    @if (!$technicalCardCord->url)
                                                         <form
-                                                            action="{{ route('technicalCards.storeImage', $technicalCardTape->id) }}"
+                                                            action="{{ route('technicalCards.storeImage', $technicalCardCord->id) }}"
                                                             method="POST" enctype="multipart/form-data"
                                                             class="inline-block"> @csrf <label
                                                                 class="flex items-center justify-center w-24 h-9 bg-green-500 text-white text-sm font-semibold rounded shadow hover:bg-green-600 cursor-pointer transition-all mt-3.5">
@@ -305,14 +298,15 @@
                                                                                  onchange="this.form.submit()"> </label>
                                                         </form>
                                                     @endif
+
                                                     <!-- Delete Button with SweetAlert Confirmation -->
-                                                    <form id="delete-form-{{ $technicalCardTape->id }}"
-                                                          action="{{ route('technicalCards.delete', $technicalCardTape->id) }}"
+                                                    <form id="delete-form-{{ $technicalCardCord->id }}"
+                                                          action="{{ route('technicalCards.delete', $technicalCardCord->id) }}"
                                                           method="POST">
                                                         @csrf
                                                         @method('DELETE')
                                                         <button type="button"
-                                                                onclick="confirmDelete({{ $technicalCardTape->id }})"
+                                                                onclick="confirmDelete({{ $technicalCardCord->id }})"
                                                                 class="flex items-center justify-center w-20 h-9 bg-red-600 text-white text-sm font-semibold rounded shadow hover:bg-red-700 transition-all mt-3.5">
                                                             Delete
                                                         </button>
@@ -325,7 +319,7 @@
                                         <tr>
                                             <td colspan="5"
                                                 class="text-center px-6 py-6 text-gray-500 text-sm italic">
-                                                No Tape Technical Cards found.
+                                                No Cord Technical Cards found.
                                             </td>
                                         </tr>
                                     @endforelse
@@ -335,10 +329,10 @@
 
                             <!-- Pagination Links -->
                             <div class="py-4 flex justify-center">
-                                {{ $technicalCardTapes->links() }}
+                                {{ $technicalCardCords->links() }}
                             </div>
 
-                            <div id="addTapeTDModal"
+                            <div id="addCordTDModal"
                                  class="fixed inset-0 z-50 hidden bg-black bg-opacity-50 flex items-center justify-center py-5">
                                 <div
                                     class="w-full max-w-[700px] bg-white dark:bg-gray-900 rounded-2xl shadow-2xl p-4 transform transition-all scale-95 max-h-[calc(100vh-10rem)] overflow-y-auto"
@@ -346,9 +340,9 @@
                                     <div class="max-w-[600px] mx-auto p-8">
                                         <h2
                                             class="text-2xl font-semibold mb-8 text-blue-900 mt-4 dark:text-gray-100 text-center">
-                                            Add New Twill Tape Technical Detail
+                                            Add New Cord Technical Detail
                                         </h2>
-                                        <form action="{{ route('tapeTD.create') }}" method="POST"
+                                        <form action="{{ route('cordTD.create') }}" method="POST"
                                               enctype="multipart/form-data">
                                             @csrf
                                             <div class="space-y-4">
@@ -363,20 +357,29 @@
                                                                class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                     </div>
                                                     <div class="w-1/2">
-                                                        <label for="size"
-                                                               class="block text-sm font-medium text-gray-700 dark:text-gray-300">Size</label>
-                                                        <input id="size" type="text" name="size" required
+                                                        <label for="machine"
+                                                               class="block text-sm font-medium text-gray-700 dark:text-gray-300">Machine</label>
+                                                        <input id="machine" type="text" name="machine" required
                                                                class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                     </div>
                                                 </div>
 
                                                 <div class="flex gap-4">
                                                     <div class="w-1/2">
+                                                        <label for="size"
+                                                               class="block text-sm font-medium text-gray-700 dark:text-gray-300">Size</label>
+                                                        <input id="size" type="text" name="size" required
+                                                               class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                    </div>
+                                                    <div class="w-1/2">
                                                         <label for="reference_added_date"
                                                                class="block text-sm font-medium text-gray-700 dark:text-gray-300">Color</label>
                                                         <input id="color" type="text" name="color" required
                                                                class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                     </div>
+                                                </div>
+
+                                                <div class="flex gap-4">
                                                     <div class="w-1/2">
                                                         <label for="rubber_type"
                                                                class="block text-sm font-medium text-gray-700 dark:text-gray-300">Rubber
@@ -385,23 +388,14 @@
                                                                required
                                                                class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                     </div>
-                                                </div>
+                                                    <div class="w-1/2">
+                                                        <label for="yarn_count"
+                                                               class="block text-sm font-medium text-gray-700 dark:text-gray-300">Yarn
+                                                            Count</label>
+                                                        <input id="yarn_count" type="text" name="yarn_count" required
+                                                               class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                    </div>
 
-                                                <div class="flex gap-4">
-                                                    <div class="w-1/2">
-                                                        <label for="weft_yarn"
-                                                               class="block text-sm font-medium text-gray-700 dark:text-gray-300">Weft
-                                                            Yarn</label>
-                                                        <input id="weft_yarn" type="text" name="weft_yarn" required
-                                                               class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                                    </div>
-                                                    <div class="w-1/2">
-                                                        <label for="warp_yarn"
-                                                               class="block text-sm font-medium text-gray-700 dark:text-gray-300">Warp
-                                                            Yarn</label>
-                                                        <input id="warp_yarn" type="text" name="warp_yarn" required
-                                                               class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                                    </div>
                                                 </div>
 
                                                 <div class="flex gap-4">
@@ -423,18 +417,21 @@
 
                                                 <div class="flex gap-4">
                                                     <div class="w-1/2">
-                                                        <label for="reed"
-                                                               class="block text-sm font-medium text-gray-700 dark:text-gray-300">Reed</label>
-                                                        <input id="reed" type="text" name="reed" required
+                                                        <label for="rubber_type"
+                                                               class="block text-sm font-medium text-gray-700 dark:text-gray-300">Rubber
+                                                            Type</label>
+                                                        <input id="rubber_type" type="text" name="rubber_type"
+                                                               required
                                                                class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                     </div>
                                                     <div class="w-1/2">
-                                                        <label for="stretchability"
-                                                               class="block text-sm font-medium text-gray-700 dark:text-gray-300">Stretchability</label>
-                                                        <input id="stretchability" type="text" name="stretchability"
+                                                        <label for="spindles"
+                                                               class="block text-sm font-medium text-gray-700 dark:text-gray-300">Spindles</label>
+                                                        <input id="spindles" type="text" name="spindles"
                                                                class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                     </div>
                                                 </div>
+
                                                 <div class="flex gap-4">
                                                     <div class="w-1/2">
                                                         <label for="weight_per_yard"
@@ -444,9 +441,9 @@
                                                                class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                     </div>
                                                     <div class="w-1/2">
-                                                        <label for="machine"
-                                                               class="block text-sm font-medium text-gray-700 dark:text-gray-300">Machine</label>
-                                                        <input id="machine" type="text" name="machine"
+                                                        <label for="stretchability"
+                                                               class="block text-sm font-medium text-gray-700 dark:text-gray-300">Stretchability</label>
+                                                        <input id="stretchability" type="text" name="stretchability"
                                                                class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                     </div>
                                                 </div>
@@ -496,7 +493,7 @@
                                             <!-- Buttons -->
                                             <div class="flex justify-end gap-3 mt-12">
                                                 <button type="button"
-                                                        onclick="document.getElementById('addTapeTDModal').classList.add('hidden')"
+                                                        onclick="document.getElementById('addCordTDModal').classList.add('hidden')"
                                                         class="px-4 py-2 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 text-sm rounded hover:bg-gray-300">
                                                     Cancel
                                                 </button>
@@ -518,7 +515,7 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        const form = document.querySelector('#addTapeTDModal form');
+        const form = document.querySelector('#addCordTDModal form');
         const submitBtn = document.getElementById('createTechnicalBtn');
 
         form.addEventListener('submit', function () {
