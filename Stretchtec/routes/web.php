@@ -46,6 +46,7 @@ use App\Http\Controllers\LeftoverYarnController;
 use App\Http\Controllers\OperatorsandSupervisorsController;
 use App\Http\Controllers\ProductCatalogController;
 use App\Http\Controllers\ProductInquiryController;
+use App\Http\Controllers\ProductOrderPreperationController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SampleInquiryController;
 use App\Http\Controllers\SamplePreparationProductionController;
@@ -198,9 +199,11 @@ Route::middleware([
         'destroy' => 'production-inquery-details.destroy',
     ]);
 
-    Route::get('production-order-preparation', static function () {
-        return view('production.pages.production-order-preparation');
-    })->name('production-order-preparation.index');
+    Route::resource('production-order-preparation', ProductOrderPreperationController::class)->names([
+        'index' => 'production-order-preparation.index',
+        'store' => 'production-order-preparation.store',
+        'destroy' => 'production-order-preparation.destroy',
+    ]);
 
 
     //Technical Details Routes
