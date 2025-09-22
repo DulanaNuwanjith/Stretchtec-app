@@ -102,8 +102,18 @@ class TechnicalCardController extends Controller
             // 🔹 Handle file upload
             if ($request->hasFile('url')) {
                 $file = $request->file('url');
-                $path = $file->store('technical_cards', 'public'); // saves to storage/app/public/technicalCards
-                $validated['url'] = Storage::url($path); // /storage/technicalCards/filename.ext
+                $extension = $file->getClientOriginalExtension(); // get file extension
+                $refNumber = $request->input('reference_number'); // assuming ref number comes from form
+                $type = 'elastic';
+
+                // Build a custom file name
+                $fileName = 'tech_card_' . $type . '_' . $refNumber . '.' . $extension;
+
+                // Store with custom name in public/technical_cards
+                $path = $file->storeAs('technical_cards', $fileName, 'public');
+
+                // Save accessible URL
+                $validated['url'] = Storage::url($path); // /storage/technical_cards/tech_card_{ref}.ext
             }
 
             $validated['type'] = 'Elastic';
@@ -144,8 +154,18 @@ class TechnicalCardController extends Controller
             // 🔹 Handle file upload
             if ($request->hasFile('url')) {
                 $file = $request->file('url');
-                $path = $file->store('technical_cards', 'public'); // saves to storage/app/public/technicalCards
-                $validated['url'] = Storage::url($path); // /storage/technicalCards/filename.ext
+                $extension = $file->getClientOriginalExtension(); // get file extension
+                $refNumber = $request->input('reference_number'); // assuming ref number comes from form
+                $type = 'cord';
+
+                // Build a custom file name
+                $fileName = 'tech_card_' . $type . '_' . $refNumber . '.' . $extension;
+
+                // Store with custom name in public/technical_cards
+                $path = $file->storeAs('technical_cards', $fileName, 'public');
+
+                // Save accessible URL
+                $validated['url'] = Storage::url($path); // /storage/technical_cards/tech_card_{ref}.ext
             }
 
             $validated['type'] = 'Cord';
@@ -185,8 +205,18 @@ class TechnicalCardController extends Controller
             // 🔹 Handle file upload
             if ($request->hasFile('url')) {
                 $file = $request->file('url');
-                $path = $file->store('technical_cards', 'public'); // saves to storage/app/public/technicalCards
-                $validated['url'] = Storage::url($path); // /storage/technicalCards/filename.ext
+                $extension = $file->getClientOriginalExtension(); // get file extension
+                $refNumber = $request->input('reference_number'); // assuming ref number comes from form
+                $type = 'tape';
+
+                // Build a custom file name
+                $fileName = 'tech_card_' . $type . '_' . $refNumber . '.' . $extension;
+
+                // Store with custom name in public/technical_cards
+                $path = $file->storeAs('technical_cards', $fileName, 'public');
+
+                // Save accessible URL
+                $validated['url'] = Storage::url($path); // /storage/technical_cards/tech_card_{ref}.ext
             }
 
             $validated['type'] = 'Tape';
@@ -242,9 +272,9 @@ class TechnicalCardController extends Controller
     public function destroy(TechnicalCard $technicalCard): RedirectResponse
     {
         try {
-            // 🔹 Delete associated file if exists
+            // 🔹 Delete an associated file if exists
             if ($technicalCard->url) {
-                $filePath = str_replace('/storage/', '', $technicalCard->url); // convert URL to storage path
+                $filePath = str_replace('/storage/', '', $technicalCard->url); // convert URL to a storage path
                 if (Storage::disk('public')->exists($filePath)) {
                     Storage::disk('public')->delete($filePath);
                 }
@@ -277,9 +307,18 @@ class TechnicalCardController extends Controller
                 }
             }
 
-            // 🔹 Store new file
+            // 🔹 Store new file with meaningful name
             $file = $request->file('url');
-            $path = $file->store('technical_cards', 'public');
+            $extension = $file->getClientOriginalExtension();
+            $refNumber = $technicalCard->reference_number; // take ref no from a model
+
+            // build custom file name
+            $fileName = 'tech_card_' . $refNumber . '.' . $extension;
+
+            // save with custom name
+            $path = $file->storeAs('technical_cards', $fileName, 'public');
+
+            // set public URL
             $technicalCard->url = Storage::url($path);
 
             $technicalCard->save();
