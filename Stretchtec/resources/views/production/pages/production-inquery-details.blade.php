@@ -147,6 +147,23 @@
                                                     </div>
                                                 </div>
 
+                                                <!-- Customer name & TKT -->
+                                                <div class="flex gap-4">
+                                                    <div class="w-1/2">
+                                                        <label for="item"
+                                                               class="block text-sm font-medium text-gray-700 dark:text-gray-300">Item</label>
+                                                        <input id="item" type="text" name="item"
+                                                               class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                    </div>
+                                                    <div class="w-1/2">
+                                                        <label for="tkt"
+                                                               class="block text-sm font-medium text-gray-700 dark:text-gray-300">TKT</label>
+                                                        <input id="tkt" type="text" name="tkt"
+                                                               class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                    </div>
+                                                </div>
+
+
                                                 <!-- Customer Merchandiser & TKT -->
                                                 <div class="flex gap-4">
                                                     <div class="w-1/2">
@@ -158,15 +175,23 @@
                                                                class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                     </div>
                                                     <div class="w-1/2">
-                                                        <label for="tkt"
-                                                               class="block text-sm font-medium text-gray-700 dark:text-gray-300">TKT</label>
-                                                        <input id="tkt" type="text" name="tkt"
+                                                        <label for="customerName"
+                                                               class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer
+                                                            Name</label>
+                                                        <input id="customerName" type="text"
+                                                               name="customerName"
                                                                class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                     </div>
                                                 </div>
 
                                                 <!-- Customer Requested Date & Notes -->
                                                 <div class="flex gap-4">
+                                                    <div class="w-1/2">
+                                                        <label for="totalValue"
+                                                               class="block text-sm font-medium text-gray-700 dark:text-gray-300">PO Value</label>
+                                                        <input id="totalValue" type="text" name="totalValue"
+                                                               class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                    </div>
                                                     <div class="w-1/2">
                                                         <label for="customerRequestedDate"
                                                                class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer
@@ -175,6 +200,9 @@
                                                                name="customer_requested_date"
                                                                class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                     </div>
+                                                </div>
+
+                                                <div class="flex gap-4">
                                                     <div class="w-1/2">
                                                         <label for="customerNotes"
                                                                class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer
@@ -364,7 +392,7 @@
                                     <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs uppercase text-gray-600 dark:text-gray-300">
                                         Colour
                                     </th>
-                                    
+
                                     <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs uppercase text-gray-600 dark:text-gray-300">
                                         Size
                                     </th>
