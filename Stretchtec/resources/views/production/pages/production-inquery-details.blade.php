@@ -301,10 +301,20 @@
                                                 <div class="flex gap-4">
                                                     <div class="w-1/2">
                                                         <label
+                                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">Item</label>
+                                                        <input id="sampleItem" type="text" readonly
+                                                               class="w-full mt-1 px-3 py-2 border rounded-md bg-gray-100 dark:bg-gray-600 text-sm">
+                                                    </div>
+
+                                                    <div class="w-1/2">
+                                                        <label
                                                             class="block text-sm font-medium text-gray-700 dark:text-gray-300">Supplier</label>
                                                         <input id="sampleSupplier" type="text" readonly
                                                                class="w-full mt-1 px-3 py-2 border rounded-md bg-gray-100 dark:bg-gray-600 text-sm">
                                                     </div>
+                                                </div>
+
+                                                <div class="flex gap-4">
                                                     <div class="w-1/2">
                                                         <label
                                                             class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer
@@ -328,6 +338,22 @@
                                                                class="block text-sm font-medium text-gray-700 dark:text-gray-300">PO
                                                             Number</label>
                                                         <input id="samplePoNumber" type="text" name="po_number_sample"
+                                                               class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                    </div>
+                                                </div>
+
+                                                <div class="flex gap-4">
+                                                    <div class="w-1/2">
+                                                        <label for="customerName"
+                                                               class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer Name</label>
+                                                        <input id="customerName" type="text" name="customerName"
+                                                               class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                    </div>
+                                                    <div class="w-1/2">
+                                                        <label for="customerMerchandiser"
+                                                               class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer
+                                                            Merchandiser</label>
+                                                        <input id="customerMerchandiser" type="text" name="customerMerchandiser"
                                                                class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                     </div>
                                                 </div>
@@ -526,10 +552,12 @@
         fetch(`/product-catalog/${sampleId}/details`)
             .then(res => res.json())
             .then(data => {
+                console.log(data);
                 document.getElementById('sampleShade').value = data.shade ?? '';
                 document.getElementById('sampleColour').value = data.colour ?? '';
                 document.getElementById('sampleTKT').value = data.tkt ?? '';
                 document.getElementById('sampleSize').value = data.size ?? '';
+                document.getElementById('sampleItem').value = data.item ?? '';
                 document.getElementById('sampleSupplier').value = data.supplier ?? '';
             })
             .catch(err => {

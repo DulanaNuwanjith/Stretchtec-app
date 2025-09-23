@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ProductCatalog;
 use App\Models\ProductInquiry;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class ProductInquiryController extends Controller
@@ -19,15 +20,16 @@ class ProductInquiryController extends Controller
     }
 
 
-    public function getSampleDetails($id)
+    public function getSampleDetails($id): JsonResponse
     {
         $sample = ProductCatalog::findOrFail($id);
 
         return response()->json([
-            'shade'    => $sample->shade,
-            'colour'   => $sample->colour,
-            'tkt'      => $sample->tkt,
-            'size'     => $sample->size,
+            'shade' => $sample->shade,
+            'colour' => $sample->colour,
+            'item' => $sample->item,
+            'tkt' => $sample->tkt,
+            'size' => $sample->size,
             'supplier' => $sample->supplier,
         ]);
     }
