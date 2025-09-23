@@ -98,11 +98,11 @@
                                                 <!-- PO Number -->
                                                 <div class="flex gap-4">
                                                     <div class="w-1/2">
-                                                    <label for="poNumber"
-                                                           class="block text-sm font-medium text-gray-700 dark:text-gray-300">PO
-                                                        Number</label>
-                                                    <input id="poNumber" type="text" name="po_number"
-                                                           class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                        <label for="poNumber"
+                                                               class="block text-sm font-medium text-gray-700 dark:text-gray-300">PO
+                                                            Number</label>
+                                                        <input id="poNumber" type="text" name="po_number"
+                                                               class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                     </div>
                                                     <div class="w-1/2">
                                                         <label
@@ -141,7 +141,7 @@
                                                     <div class="w-1/2">
                                                         <label for="qtyRequested"
                                                                class="block text-sm font-medium text-gray-700 dark:text-gray-300">Quantity
-                                                            </label>
+                                                        </label>
                                                         <input id="qtyRequested" type="text" name="qty_requested"
                                                                class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                     </div>
@@ -188,7 +188,8 @@
                                                 <div class="flex gap-4">
                                                     <div class="w-1/2">
                                                         <label for="totalValue"
-                                                               class="block text-sm font-medium text-gray-700 dark:text-gray-300">PO Value</label>
+                                                               class="block text-sm font-medium text-gray-700 dark:text-gray-300">PO
+                                                            Value</label>
                                                         <input id="totalValue" type="text" name="totalValue"
                                                                class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                     </div>
@@ -345,7 +346,8 @@
                                                 <div class="flex gap-4">
                                                     <div class="w-1/2">
                                                         <label for="customerName"
-                                                               class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer Name</label>
+                                                               class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer
+                                                            Name</label>
                                                         <input id="customerName" type="text" name="customerName"
                                                                class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                     </div>
@@ -353,12 +355,20 @@
                                                         <label for="customerMerchandiser"
                                                                class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer
                                                             Merchandiser</label>
-                                                        <input id="customerMerchandiser" type="text" name="customerMerchandiser"
+                                                        <input id="customerMerchandiser" type="text"
+                                                               name="customerMerchandiser"
                                                                class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                     </div>
                                                 </div>
 
                                                 <div class="flex gap-4">
+                                                    <div class="w-1/2">
+                                                        <label for="totalValue"
+                                                               class="block text-sm font-medium text-gray-700 dark:text-gray-300">PO
+                                                            Value</label>
+                                                        <input id="totalValue" type="text" name="totalValue"
+                                                               class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                    </div>
                                                     <div class="w-1/2">
                                                         <label for="sampleCustomerRequestedDate"
                                                                class="block text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -370,6 +380,9 @@
                                                                placeholder="Select a date"
                                                                class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm focus:ring focus:ring-indigo-500">
                                                     </div>
+                                                </div>
+
+                                                <div class="flex gap-4">
                                                     <div class="w-1/2">
                                                         <label for="customerNotes"
                                                                class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer
@@ -399,140 +412,184 @@
                             </div>
 
                             <div id="productionDetailsScroll"
-                            class="overflow-x-auto max-h-[1200px] bg-white dark:bg-gray-900 shadow rounded-lg">
-                            <table class="table-fixed w-full text-sm divide-y divide-gray-200 dark:divide-gray-700">
-                                <thead class="bg-gray-200 dark:bg-gray-700 text-left">
-                                <tr class="text-center">
-                                    <th class="font-bold sticky top-0  bg-white dark:bg-gray-700 px-4 py-3 w-40 text-xs uppercase text-gray-600 dark:text-gray-300">
-                                        Reference Number
-                                    </th>
-                                    <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs uppercase text-gray-600 dark:text-gray-300">
-                                        PO Number
-                                    </th>
-                                    <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-40 text-xs uppercase text-gray-600 dark:text-gray-300">
-                                        Customer Coordinator
-                                    </th>
-                                    <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs uppercase text-gray-600 dark:text-gray-300">
-                                        Shade
-                                    </th>
-                                    <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs uppercase text-gray-600 dark:text-gray-300">
-                                        Colour
-                                    </th>
+                                 class="overflow-x-auto max-h-[1200px] bg-white dark:bg-gray-900 shadow rounded-lg relative">
+                                <table
+                                    class="table-fixed min-w-[1400px] text-sm divide-y divide-gray-200 dark:divide-gray-700">
+                                    <thead class="bg-gray-200 dark:bg-gray-700 text-left">
+                                    <tr class="text-center">
+                                        <th
+                                            class="font-bold sticky left-0 top-0 z-20 bg-white px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                            Order No
+                                        </th>
+                                        <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 text-xs uppercase text-gray-600 dark:text-gray-300">
+                                            Reference Number
+                                        </th>
+                                        <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 text-xs uppercase text-gray-600 dark:text-gray-300">
+                                            PO Number
+                                        </th>
+                                        <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 text-xs uppercase text-gray-600 dark:text-gray-300">
+                                            Customer Coordinator
+                                        </th>
+                                        <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 text-xs uppercase text-gray-600 dark:text-gray-300">
+                                            Quantity
+                                        </th>
+                                        <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 text-xs uppercase text-gray-600 dark:text-gray-300">
+                                            Customer Name
+                                        </th>
+                                        <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 text-xs uppercase text-gray-600 dark:text-gray-300">
+                                            Customer Merchandiser
+                                        </th>
+                                        <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 text-xs uppercase text-gray-600 dark:text-gray-300">
+                                            PO Value
+                                        </th>
+                                        <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 text-xs uppercase text-gray-600 dark:text-gray-300">
+                                            Customer Requested Date
+                                        </th>
+                                        <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 text-xs uppercase text-gray-600 dark:text-gray-300">
+                                            Customer Notes
+                                        </th>
 
-                                    <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs uppercase text-gray-600 dark:text-gray-300">
-                                        Size
-                                    </th>
-                                    <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs uppercase text-gray-600 dark:text-gray-300">
-                                        Quantity
-                                    </th>
-                                    <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs uppercase text-gray-600 dark:text-gray-300">
-                                        TKT
-                                    </th>
-                                    <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-40 text-xs uppercase text-gray-600 dark:text-gray-300">
-                                        Supplier
-                                    </th>
-                                    <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-48 text-xs uppercase text-gray-600 dark:text-gray-300">
-                                        Customer Requested Date
-                                    </th>
-                                    <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-48 text-xs uppercase text-gray-600 dark:text-gray-300">
-                                        Customer Notes
-                                    </th>
-                                    <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-48 text-xs uppercase text-gray-600 dark:text-gray-300">
-                                        Action
-                                    </th>
-                                </tr>
-                                </thead>
-                                <tbody id="productionDetailsRecords"
-                                class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                                        <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 text-xs uppercase text-gray-600 dark:text-gray-300">
+                                            Send to Stock
+                                        </th>
 
-                                <tr id="row1"
-                                    class="odd:bg-white even:bg-gray-50 border-b border-gray-200 text-center">
+                                        <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 text-xs uppercase text-gray-600 dark:text-gray-300">
+                                            Send to Production
+                                        </th>
 
-                                    <!-- Reference Number -->
-                                    <td class="px-4 py-3 border-r border-gray-300">
-                                        <span class="readonly font-bold text-blue-600">REF-001</span>
-                                    </td>
+                                        <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 text-xs uppercase text-gray-600 dark:text-gray-300">
+                                            Status
+                                        </th>
+                                        <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 text-xs uppercase text-gray-600 dark:text-gray-300">
+                                            Action
+                                        </th>
+                                    </tr>
+                                    </thead>
 
-                                    <!-- PO Number -->
-                                    <td class="px-4 py-3 border-r border-gray-300">
-                                        <span class="readonly">PO-789</span>
-                                    </td>
+                                    <tbody id="productionDetailsRecords"
+                                           class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
 
-                                    <!-- Customer Coordinator -->
-                                    <td class="px-4 py-3 border-r border-gray-300">
-                                        <span class="readonly">John Doe</span>
-                                    </td>
+                                    <tr id="row1"
+                                        class="odd:bg-white even:bg-gray-50 border-b border-gray-200 text-center">
 
-                                    <!-- Shade -->
-                                    <td class="px-4 py-3 border-r border-gray-300">
-                                        <span class="readonly">Light Blue</span>
-                                    </td>
+                                        <!-- Production ID -->
+                                        <td class="sticky left-0 z-10 px-4 py-3 bg-gray-100 whitespace-normal break-words border-r border-gray-300">
+                                            <span class="readonly font-bold">ST-PD-001</span>
+                                        </td>
 
-                                    <!-- Colour -->
-                                    <td class="px-4 py-3 border-r border-gray-300">
-                                        <span class="readonly">Navy</span>
-                                    </td>
-
-                                    <!-- Size -->
-                                    <td class="px-4 py-3 border-r border-gray-300">
-                                        <span class="readonly">M</span>
-                                    </td>
-
-                                    <!-- Quantity -->
-                                    <td class="px-4 py-3 border-r border-gray-300">
-                                        <span class="readonly">100</span>
-                                    </td>
-
-                                    <!-- TKT -->
-                                    <td class="px-4 py-3 border-r border-gray-300">
-                                        <span class="readonly">TKT-45</span>
-                                    </td>
-
-                                    <!-- Supplier -->
-                                    <td class="px-4 py-3 border-r border-gray-300">
-                                        <span class="readonly">ABC Textiles</span>
-                                    </td>
-
-                                    <!-- Customer Requested Date -->
-                                    <td class="px-4 py-3 border-r border-gray-300">
-                                        <span class="readonly">2025-09-30</span>
-                                    </td>
-
-                                    <!-- Customer Notes -->
-                                    <td class="px-4 py-3 border-r border-gray-300">
-                                        <span class="readonly">Urgent delivery</span>
-                                    </td>
-
-                                    <!-- Action -->
-                                    <td class="px-4 py-3 border-r border-gray-300">
-                                        <div class="flex justify-center gap-2">
-                                            <!-- Edit Button -->
+                                        <!-- Reference Number (Clickable for modal) -->
+                                        <td class="px-4 py-3 border-r border-gray-300">
                                             <button type="button"
-                                                    onclick="enableEdit('row1')"
-                                                    class="bg-yellow-500 hover:bg-yellow-600 text-white h-10 w-20 rounded text-sm">
-                                                Edit
+                                                    class="text-blue-600 font-bold underline"
+                                                    onclick="openDetailsModal(this)"
+                                                    data-ref-no="REF-001"
+                                                    data-shade="Light Blue"
+                                                    data-colour="Navy"
+                                                    data-item="Twill Tape"
+                                                    data-tkt="TKT-45"
+                                                    data-size="M"
+                                                    data-supplier="ABC Textiles">
+                                                REF-001
                                             </button>
+                                        </td>
 
-                                            <!-- Delete Button -->
-                                            <form id="delete-form-1" method="POST" class="flex items-center">
-                                                @csrf
-                                                @method('DELETE')
+                                        <!-- PO Number -->
+                                        <td class="px-4 py-3 border-r border-gray-300">
+                                            <span class="readonly">PO-789</span>
+                                        </td>
+
+                                        <!-- Customer Coordinator -->
+                                        <td class="px-4 py-3 border-r border-gray-300">
+                                            <span class="readonly">John Doe</span>
+                                        </td>
+
+                                        <!-- Quantity -->
+                                        <td class="px-4 py-3 border-r border-gray-300">
+                                            <span class="readonly">100</span>
+                                        </td>
+
+                                        <!-- Customer Name -->
+                                        <td class="px-4 py-3 border-r border-gray-300">
+                                            <span class="readonly">XYZ Garments</span>
+                                        </td>
+
+                                        <!-- Customer Merchandiser -->
+                                        <td class="px-4 py-3 border-r border-gray-300">
+                                            <span class="readonly">Jane Smith</span>
+                                        </td>
+
+                                        <!-- PO Value -->
+                                        <td class="px-4 py-3 border-r border-gray-300">
+                                            <span class="readonly">$2500</span>
+                                        </td>
+
+                                        <!-- Customer Requested Date -->
+                                        <td class="px-4 py-3 border-r border-gray-300">
+                                            <span class="readonly">2025-09-30</span>
+                                        </td>
+
+                                        <!-- Customer Notes -->
+                                        <td class="px-4 py-3 border-r border-gray-300">
+                                            <span class="readonly">Urgent delivery</span>
+                                        </td>
+
+                                        <!-- Send to Stock -->
+                                        <td class="px-4 py-3 border-r border-gray-300">
+
+                                        </td>
+
+                                        <!-- Send to Production -->
+                                        <td class="px-4 py-3 border-r border-gray-300">
+
+                                        </td>
+
+                                        <!-- Status -->
+                                        <td class="px-4 py-3 border-r border-gray-300">
+
+                                        </td>
+
+                                        <!-- Action -->
+                                        <td class="px-4 py-3 border-r border-gray-300">
+                                            <div class="flex justify-center gap-2">
+                                                <!-- Edit Button -->
                                                 <button type="button"
-                                                        onclick="confirmDelete('1')"
-                                                        class="bg-red-600 hover:bg-red-700 text-white h-10 w-20 rounded text-sm">
-                                                    Delete
+                                                        onclick="enableEdit('row1')"
+                                                        class="bg-yellow-500 hover:bg-yellow-600 text-white h-10 w-20 rounded text-sm">
+                                                    Edit
                                                 </button>
-                                            </form>
+
+                                                <!-- Delete Button -->
+                                                <form id="delete-form-1" method="POST" class="flex items-center">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="button"
+                                                            onclick="confirmDelete('1')"
+                                                            class="bg-red-600 hover:bg-red-700 text-white h-10 w-20 rounded text-sm">
+                                                        Delete
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                                <!-- Details Modal -->
+                                <div id="detailsModal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50">
+                                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg w-1/3 p-6">
+                                        <h2 class="text-xl font-bold mb-4">Order Details</h2>
+                                        <div id="modalContent" class="space-y-2">
+                                            <!-- Details will be injected dynamically -->
                                         </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-
-
-                            </table>
-                        </div>
-
-
+                                        <div class="mt-4 flex justify-end">
+                                            <button onclick="closeDetailsModal()"
+                                                    class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded">
+                                                Close
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
                         </div>
                     </div>
                 </div>
@@ -545,24 +602,33 @@
         document.getElementById('directOrderFields').classList.toggle('hidden', type !== 'direct');
         document.getElementById('sampleOrderFields').classList.toggle('hidden', type !== 'sample');
     }
+</script>
 
-    function fetchSampleDetails(sampleId) {
-        if (!sampleId) return;
+<script>
+    function openDetailsModal(button) {
+        const refNumber = button.dataset.refNo;
+        const shade = button.dataset.shade;
+        const colour = button.dataset.colour;
+        const item = button.dataset.item;
+        const tkt = button.dataset.tkt;
+        const size = button.dataset.size;
+        const supplier = button.dataset.supplier;
 
-        fetch(`/product-catalog/${sampleId}/details`)
-            .then(res => res.json())
-            .then(data => {
-                console.log(data);
-                document.getElementById('sampleShade').value = data.shade ?? '';
-                document.getElementById('sampleColour').value = data.colour ?? '';
-                document.getElementById('sampleTKT').value = data.tkt ?? '';
-                document.getElementById('sampleSize').value = data.size ?? '';
-                document.getElementById('sampleItem').value = data.item ?? '';
-                document.getElementById('sampleSupplier').value = data.supplier ?? '';
-            })
-            .catch(err => {
-                console.error("Error fetching sample details:", err);
-            });
+        document.getElementById("modalContent").innerHTML = `
+        <p><strong>Ref No:</strong> ${refNumber}</p>
+        <p><strong>Shade:</strong> ${shade}</p>
+        <p><strong>Colour:</strong> ${colour}</p>
+        <p><strong>Item:</strong> ${item}</p>
+        <p><strong>TKT:</strong> ${tkt}</p>
+        <p><strong>Size:</strong> ${size}</p>
+        <p><strong>Supplier:</strong> ${supplier}</p>
+    `;
+
+        document.getElementById("detailsModal").classList.remove("hidden");
+    }
+
+    function closeDetailsModal() {
+        document.getElementById("detailsModal").classList.add("hidden");
     }
 </script>
 
