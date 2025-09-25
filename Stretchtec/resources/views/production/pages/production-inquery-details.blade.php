@@ -43,217 +43,179 @@
                                 </button>
                             </div>
 
-                            <!-- Add Sample Modal -->
-                            <div id="addSampleModal"
-                                 class="fixed inset-0 z-50 hidden bg-black bg-opacity-50 flex items-center justify-center py-5">
-                                <div
-                                    class="w-full max-w-[700px] bg-white dark:bg-gray-900 rounded-2xl shadow-2xl p-4 transform transition-all scale-95 max-h-[calc(100vh-10rem)] overflow-y-auto"
-                                    onclick="event.stopPropagation()">
-                                    <div class="max-w-[600px] mx-auto p-8">
-                                        <h2
-                                            class="text-2xl font-semibold mb-8 text-blue-900 mt-4 dark:text-gray-100 text-center">
-                                            Add New Production Order
-                                        </h2>
-                                        <form action="" method="POST" enctype="multipart/form-data">
-                                            @csrf
+                                <!-- Add Sample Modal -->
+                                <div id="addSampleModal" class="fixed inset-0 z-50 hidden bg-black bg-opacity-50 flex items-center justify-center py-5">
+                                    <div class="w-full max-w-[700px] bg-white dark:bg-gray-900 rounded-2xl shadow-2xl p-4 transform transition-all scale-95 max-h-[calc(100vh-10rem)] overflow-y-auto"
+                                         onclick="event.stopPropagation()">
+                                        <div class="max-w-[600px] mx-auto p-8">
+                                            <h2 class="text-2xl font-semibold mb-8 text-blue-900 mt-4 dark:text-gray-100 text-center">
+                                                Add New Production Order
+                                            </h2>
 
-                                            <!-- ORDER TYPE TOGGLE -->
+                                            <!-- TABS -->
                                             <div class="mb-6">
-                                                <label
-                                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">Order
-                                                    Type</label>
-
-                                                <!-- Tab-style toggle -->
-                                                <div
-                                                    class="flex space-x-4 mt-3 border-b border-gray-300 dark:border-gray-700">
-                                                    <button type="button"
-                                                            onclick="setOrderType('sample')"
-                                                            id="tab-sample"
-                                                            class="pb-2 px-3 font-semibold border-b-2 border-blue-500 text-blue-600">
+                                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Order Type</label>
+                                                <div class="flex space-x-4 mt-3 border-b border-gray-300 dark:border-gray-700">
+                                                    <button type="button" onclick="setOrderType('sample')" id="tab-sample"
+                                                            class="pb-2 px-3 font-semibold">
                                                         From Sample
                                                     </button>
-                                                    <button type="button"
-                                                            onclick="setOrderType('direct')"
-                                                            id="tab-direct"
-                                                            class="pb-2 px-3 font-semibold text-gray-600 dark:text-gray-300 hover:text-blue-500">
+                                                    <button type="button" onclick="setOrderType('direct')" id="tab-direct"
+                                                            class="pb-2 px-3 font-semibold">
                                                         Direct Order
                                                     </button>
                                                 </div>
-
-                                                <!-- Hidden input to send selected type -->
-                                                <input type="hidden" name="order_type" id="order_type" value="sample">
                                             </div>
 
-                                            <!-- DIRECT ORDER FIELDS -->
-                                            <div id="directOrderFields" class="space-y-4 hidden">
+                                            <!-- ================= Direct ORDER FORM ================= -->
+                                            <form id="directForm" class="space-y-4 hidden"
+                                                  action="{{ route('production-inquery-details.store') }}" method="POST" enctype="multipart/form-data">
+                                                @csrf
+                                                <input type="hidden" name="order_type" value="direct">
+
                                                 <!-- Reference Number -->
                                                 <div>
-                                                    <label for="referenceNumber"
-                                                           class="block text-sm font-medium text-gray-700 dark:text-gray-300">Reference
-                                                        Number</label>
-                                                    <input id="referenceNumber" type="text" name="referenceNumber"
+                                                    <label for="direct_reference_no" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Reference Number</label>
+                                                    <input id="direct_reference_no" type="text" name="reference_no"
                                                            class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                 </div>
 
-                                                <!-- PO Number -->
+                                                <!-- PO Number & Coordinator -->
                                                 <div class="flex gap-4">
                                                     <div class="w-1/2">
-                                                        <label for="poNumber"
-                                                               class="block text-sm font-medium text-gray-700 dark:text-gray-300">PO
-                                                            Number</label>
-                                                        <input id="poNumber" type="text" name="po_number"
+                                                        <label for="direct_po_number" class="block text-sm font-medium text-gray-700 dark:text-gray-300">PO Number</label>
+                                                        <input id="direct_po_number" type="text" name="po_number"
                                                                class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                     </div>
                                                     <div class="w-1/2">
-                                                        <label
-                                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer
-                                                            Coordinator</label>
-                                                        <input id="customerCoordinator" type="text" readonly
-                                                               class="w-full mt-1 px-3 py-2 border rounded-md bg-gray-100 dark:bg-gray-600 text-sm"
-                                                               value="{{Auth::user()->name}}">
+                                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer Coordinator</label>
+                                                        <input id="direct_customer_coordinator" type="text" readonly name="customer_coordinator"
+                                                               value="{{ Auth::user()->name }}"
+                                                               class="w-full mt-1 px-3 py-2 border rounded-md bg-gray-100 dark:bg-gray-600 text-sm">
                                                     </div>
                                                 </div>
 
                                                 <!-- Shade & Colour -->
                                                 <div class="flex gap-4">
                                                     <div class="w-1/2">
-                                                        <label for="shade"
-                                                               class="block text-sm font-medium text-gray-700 dark:text-gray-300">Shade</label>
-                                                        <input id="shade" type="text" name="shade"
+                                                        <label for="direct_shade" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Shade</label>
+                                                        <input id="direct_shade" type="text" name="shade"
                                                                class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                     </div>
                                                     <div class="w-1/2">
-                                                        <label for="colour"
-                                                               class="block text-sm font-medium text-gray-700 dark:text-gray-300">Colour</label>
-                                                        <input id="colour" type="text" name="colour"
+                                                        <label for="direct_color" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Colour</label>
+                                                        <input id="direct_color" type="text" name="color"
                                                                class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                     </div>
                                                 </div>
 
-                                                <!-- Size & Quantity -->
+                                                <!-- Size, Qty, UoM -->
+                                                <div class="flex gap-4">
+                                                    <div class="w-1/3">
+                                                        <label for="direct_size" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Size</label>
+                                                        <input id="direct_size" type="text" name="size"
+                                                               class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                    </div>
+                                                    <div class="w-1/3">
+                                                        <label for="direct_qty" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Quantity</label>
+                                                        <input id="direct_qty" type="number" name="qty" min="0"
+                                                               class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                    </div>
+                                                    <div class="w-1/3">
+                                                        <label for="direct_uom" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Unit</label>
+                                                        <select id="direct_uom" name="uom"
+                                                                class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                            <option value="meters">Meters</option>
+                                                            <option value="yards">Yards</option>
+                                                            <option value="pieces">Pieces</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Item & TKT -->
                                                 <div class="flex gap-4">
                                                     <div class="w-1/2">
-                                                        <label for="size"
-                                                               class="block text-sm font-medium text-gray-700 dark:text-gray-300">Size</label>
-                                                        <input id="size" type="text" name="size"
+                                                        <label for="direct_item" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Item</label>
+                                                        <input id="direct_item" type="text" name="item"
                                                                class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                     </div>
                                                     <div class="w-1/2">
-                                                        <label for="qtyRequested"
-                                                               class="block text-sm font-medium text-gray-700 dark:text-gray-300">Quantity
-                                                        </label>
-                                                        <input id="qtyRequested" type="text" name="qty_requested"
+                                                        <label for="direct_tkt" class="block text-sm font-medium text-gray-700 dark:text-gray-300">TKT</label>
+                                                        <input id="direct_tkt" type="text" name="tkt"
                                                                class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                     </div>
                                                 </div>
 
-                                                <!-- Customer name & TKT -->
+                                                <!-- Merchandiser & Customer -->
                                                 <div class="flex gap-4">
                                                     <div class="w-1/2">
-                                                        <label for="item"
-                                                               class="block text-sm font-medium text-gray-700 dark:text-gray-300">Item</label>
-                                                        <input id="item" type="text" name="item"
+                                                        <label for="direct_merchandiser_name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer Merchandiser</label>
+                                                        <input id="direct_merchandiser_name" type="text" name="merchandiser_name"
                                                                class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                     </div>
                                                     <div class="w-1/2">
-                                                        <label for="tkt"
-                                                               class="block text-sm font-medium text-gray-700 dark:text-gray-300">TKT</label>
-                                                        <input id="tkt" type="text" name="tkt"
+                                                        <label for="direct_customer_name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer Name</label>
+                                                        <input id="direct_customer_name" type="text" name="customer_name"
                                                                class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                     </div>
                                                 </div>
 
-
-                                                <!-- Customer Merchandiser & TKT -->
+                                                <!-- Price & Requested Date -->
                                                 <div class="flex gap-4">
                                                     <div class="w-1/2">
-                                                        <label for="customerMerchandiser"
-                                                               class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer
-                                                            Merchandiser</label>
-                                                        <input id="customerMerchandiser" type="text"
-                                                               name="customer_merchandiser"
+                                                        <label for="direct_price" class="block text-sm font-medium text-gray-700 dark:text-gray-300">PO Value</label>
+                                                        <input id="direct_price" type="number" step="0.01" name="price"
                                                                class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                     </div>
                                                     <div class="w-1/2">
-                                                        <label for="customerName"
-                                                               class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer
-                                                            Name</label>
-                                                        <input id="customerName" type="text"
-                                                               name="customerName"
+                                                        <label for="direct_customer_req_date" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer Requested Date</label>
+                                                        <input id="direct_customer_req_date" type="date" name="customer_req_date"
                                                                class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                     </div>
                                                 </div>
 
-                                                <!-- Customer Requested Date & Notes -->
-                                                <div class="flex gap-4">
-                                                    <div class="w-1/2">
-                                                        <label for="totalValue"
-                                                               class="block text-sm font-medium text-gray-700 dark:text-gray-300">PO
-                                                            Value</label>
-                                                        <input id="totalValue" type="text" name="totalValue"
-                                                               class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                                    </div>
-                                                    <div class="w-1/2">
-                                                        <label for="customerRequestedDate"
-                                                               class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer
-                                                            Requested Date</label>
-                                                        <input id="customerRequestedDate" type="date"
-                                                               name="customer_requested_date"
-                                                               class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                                    </div>
+                                                <!-- Remarks -->
+                                                <div>
+                                                    <label for="direct_remarks" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer Notes</label>
+                                                    <input id="direct_remarks" type="text" name="remarks"
+                                                           class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                 </div>
 
-                                                <div class="flex gap-4">
-                                                    <div class="w-1/2">
-                                                        <label for="customerNotes"
-                                                               class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer
-                                                            Notes</label>
-                                                        <input id="customerNotes" type="text" name="customer_notes"
-                                                               class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                                    </div>
+                                                <div class="flex justify-end gap-3 mt-6">
+                                                    <button type="button" onclick="document.getElementById('addSampleModal').classList.add('hidden')"
+                                                            class="px-4 py-2 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 text-sm rounded hover:bg-gray-300">
+                                                        Cancel
+                                                    </button>
+                                                    <button type="submit"
+                                                            class="px-4 py-2 bg-blue-500 text-white text-sm rounded hover:bg-blue-600">
+                                                        Create Direct Order
+                                                    </button>
                                                 </div>
-                                            </div>
+                                            </form>
 
-                                            <!-- SAMPLE ORDER FIELDS (Default Visible) -->
-                                            <div id="sampleOrderFields" class="space-y-4">
-                                                <!-- Select Reference Number -->
-                                                <!-- Dropdown Button -->
+                                            <!-- ================= Sample ORDER FORM ================= -->
+                                            <form id="sampleForm" class="space-y-4"
+                                                  action="{{ route('production-inquery-details.store') }}" method="POST" enctype="multipart/form-data">
+                                                @csrf
+                                                <input type="hidden" name="order_type" value="sample">
+
+                                                <!-- SAMPLE REFERENCE DROPDOWN -->
                                                 <div class="relative">
                                                     <button type="button" id="sampleReferenceDropdown"
-                                                            class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm
-                                                               ring-1 ring-gray-300 hover:bg-gray-50 h-10
-                                                               dark:bg-gray-700 dark:text-white dark:ring-gray-600"
-                                                            onclick="toggleDropdown('sampleReference')"
-                                                            aria-haspopup="listbox"
-                                                            aria-expanded="false">
-                                                        <span
-                                                            id="selectedSampleReference">Select Sample Reference</span>
-                                                        <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20"
-                                                             fill="currentColor">
-                                                            <path fill-rule="evenodd"
-                                                                  d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06
-                                                                 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25
-                                                                 8.29a.75.75 0 0 1-.02-1.08z"
-                                                                  clip-rule="evenodd"/>
+                                                            class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10 dark:bg-gray-700 dark:text-white dark:ring-gray-600"
+                                                            onclick="toggleDropdown('sampleReference')" aria-haspopup="listbox" aria-expanded="false">
+                                                        <span id="selectedSampleReference">Select Sample Reference</span>
+                                                        <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                                                            <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z" clip-rule="evenodd"/>
                                                         </svg>
                                                     </button>
 
-                                                    <!-- Dropdown Menu -->
-                                                    <div id="dropdownMenusampleReference"
-                                                         class="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base
-                                                            ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none
-                                                            hidden dark:bg-gray-700 dark:text-white sm:text-sm">
-
-                                                        <!-- Search Box -->
+                                                    <div id="dropdownMenusampleReference" class="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto hidden dark:bg-gray-700 dark:text-white sm:text-sm">
                                                         <div class="sticky top-0 bg-white dark:bg-gray-700 px-2 py-1">
-                                                            <input type="text" id="sampleSearchInput"
-                                                                   placeholder="Search reference..."
+                                                            <input type="text" id="sampleSearchInput" placeholder="Search reference..."
                                                                    onkeyup="filterSamples()"
-                                                                   class="w-full px-2 py-1 text-sm border rounded-md focus:outline-none focus:ring focus:ring-indigo-500
-                                                                     dark:bg-gray-600 dark:text-white dark:border-gray-500"/>
+                                                                   class="w-full px-2 py-1 text-sm border rounded-md focus:outline-none focus:ring focus:ring-indigo-500 dark:bg-gray-600 dark:text-white dark:border-gray-500"/>
                                                         </div>
-
-                                                        <!-- Options -->
                                                         <ul id="sampleOptions" class="max-h-48 overflow-y-auto">
                                                             @foreach($samples as $sample)
                                                                 <li class="cursor-pointer select-none px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-600"
@@ -265,151 +227,113 @@
                                                     </div>
                                                 </div>
 
-                                                <!-- Hidden input to hold selected value -->
-                                                <input type="hidden" name="sample_reference" id="sampleReferenceHidden">
+                                                <!-- Hidden ref value (will be sent as reference_no) -->
+                                                <input type="hidden" name="reference_no" id="sampleReferenceHidden">
 
-                                                <!-- Auto-filled fields -->
+                                                <!-- Auto-filled fields (unique IDs for sample form) -->
                                                 <div class="flex gap-4">
                                                     <div class="w-1/2">
-                                                        <label
-                                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">Shade</label>
-                                                        <input id="sampleShade" type="text" readonly
-                                                               class="w-full mt-1 px-3 py-2 border rounded-md bg-gray-100 dark:bg-gray-600 text-sm">
+                                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Shade</label>
+                                                        <input id="sampleShade" type="text" name="shade" readonly class="w-full mt-1 px-3 py-2 border rounded-md bg-gray-100 dark:bg-gray-600 text-sm">
                                                     </div>
                                                     <div class="w-1/2">
-                                                        <label
-                                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">Colour</label>
-                                                        <input id="sampleColour" type="text" readonly
-                                                               class="w-full mt-1 px-3 py-2 border rounded-md bg-gray-100 dark:bg-gray-600 text-sm">
+                                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Colour</label>
+                                                        <input id="sampleColour" type="text" name="color" readonly class="w-full mt-1 px-3 py-2 border rounded-md bg-gray-100 dark:bg-gray-600 text-sm">
                                                     </div>
                                                 </div>
 
                                                 <div class="flex gap-4">
                                                     <div class="w-1/2">
-                                                        <label
-                                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">TKT</label>
-                                                        <input id="sampleTKT" type="text" readonly
-                                                               class="w-full mt-1 px-3 py-2 border rounded-md bg-gray-100 dark:bg-gray-600 text-sm">
+                                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">TKT</label>
+                                                        <input id="sampleTKT" type="text" name="tkt" readonly class="w-full mt-1 px-3 py-2 border rounded-md bg-gray-100 dark:bg-gray-600 text-sm">
                                                     </div>
                                                     <div class="w-1/2">
-                                                        <label
-                                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">Size</label>
-                                                        <input id="sampleSize" type="text" readonly
-                                                               class="w-full mt-1 px-3 py-2 border rounded-md bg-gray-100 dark:bg-gray-600 text-sm">
+                                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Size</label>
+                                                        <input id="sampleSize" type="text" name="size" readonly class="w-full mt-1 px-3 py-2 border rounded-md bg-gray-100 dark:bg-gray-600 text-sm">
                                                     </div>
                                                 </div>
 
                                                 <div class="flex gap-4">
                                                     <div class="w-1/2">
-                                                        <label
-                                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">Item</label>
-                                                        <input id="sampleItem" type="text" readonly
-                                                               class="w-full mt-1 px-3 py-2 border rounded-md bg-gray-100 dark:bg-gray-600 text-sm">
+                                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Item</label>
+                                                        <input id="sampleItem" type="text" name="item" readonly class="w-full mt-1 px-3 py-2 border rounded-md bg-gray-100 dark:bg-gray-600 text-sm">
                                                     </div>
-
                                                     <div class="w-1/2">
-                                                        <label
-                                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">Supplier</label>
-                                                        <input id="sampleSupplier" type="text" readonly
-                                                               class="w-full mt-1 px-3 py-2 border rounded-md bg-gray-100 dark:bg-gray-600 text-sm">
+                                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Supplier</label>
+                                                        <input id="sampleSupplier" type="text" name="supplier" readonly class="w-full mt-1 px-3 py-2 border rounded-md bg-gray-100 dark:bg-gray-600 text-sm">
+                                                    </div>
+                                                </div>
+
+                                                <!-- Coordinator (auto-filled) -->
+                                                <div class="flex gap-4">
+                                                    <div class="w-1/2">
+                                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer Coordinator</label>
+                                                        <input id="sample_customer_coordinator" type="text" name="customer_coordinator" readonly value="{{ Auth::user()->name }}" class="w-full mt-1 px-3 py-2 border rounded-md bg-gray-100 dark:bg-gray-600 text-sm">
+                                                    </div>
+                                                </div>
+
+                                                <!-- Editable sample fields -->
+                                                <div class="flex gap-4">
+                                                    <div class="w-1/3">
+                                                        <label for="sampleQty" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Quantity</label>
+                                                        <input id="sampleQty" type="number" name="qty" min="0" required class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                    </div>
+                                                    <div class="w-1/3">
+                                                        <label for="direct_uom" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Unit</label>
+                                                        <select id="direct_uom" name="uom"
+                                                                class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                            <option value="meters">Meters</option>
+                                                            <option value="yards">Yards</option>
+                                                            <option value="pieces">Pieces</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="w-1/3">
+                                                        <label for="samplePoNumber" class="block text-sm font-medium text-gray-700 dark:text-gray-300">PO Number</label>
+                                                        <input id="samplePoNumber" type="text" name="po_number" required class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                     </div>
                                                 </div>
 
                                                 <div class="flex gap-4">
                                                     <div class="w-1/2">
-                                                        <label
-                                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer
-                                                            Coordinator</label>
-                                                        <input id="customerCoordinator" type="text" readonly
-                                                               class="w-full mt-1 px-3 py-2 border rounded-md bg-gray-100 dark:bg-gray-600 text-sm"
-                                                               value="{{Auth::user()->name}}">
-                                                    </div>
-                                                </div>
-
-                                                <!-- Editable fields -->
-                                                <div class="flex gap-4">
-                                                    <div class="w-1/2">
-                                                        <label for="sampleQty"
-                                                               class="block text-sm font-medium text-gray-700 dark:text-gray-300">Quantity</label>
-                                                        <input id="sampleQty" type="text" name="qty"
-                                                               class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                        <label for="customerName" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer Name</label>
+                                                        <input id="customerName" type="text" name="customer_name" required class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                     </div>
                                                     <div class="w-1/2">
-                                                        <label for="samplePoNumber"
-                                                               class="block text-sm font-medium text-gray-700 dark:text-gray-300">PO
-                                                            Number</label>
-                                                        <input id="samplePoNumber" type="text" name="po_number_sample"
-                                                               class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                        <label for="customerMerchandiser" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer Merchandiser</label>
+                                                        <input id="customerMerchandiser" type="text" name="merchandiser_name" required class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                     </div>
                                                 </div>
 
                                                 <div class="flex gap-4">
                                                     <div class="w-1/2">
-                                                        <label for="customerName"
-                                                               class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer
-                                                            Name</label>
-                                                        <input id="customerName" type="text" name="customerName"
-                                                               class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                        <label for="totalValue" class="block text-sm font-medium text-gray-700 dark:text-gray-300">PO Value</label>
+                                                        <input id="totalValue" type="number" step="0.01" name="price" required class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                     </div>
                                                     <div class="w-1/2">
-                                                        <label for="customerMerchandiser"
-                                                               class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer
-                                                            Merchandiser</label>
-                                                        <input id="customerMerchandiser" type="text"
-                                                               name="customerMerchandiser"
-                                                               class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                        <label for="sampleCustomerRequestedDate" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer Requested Date</label>
+                                                        <input id="sampleCustomerRequestedDate" type="date" name="customer_req_date" required class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm focus:ring focus:ring-indigo-500">
                                                     </div>
                                                 </div>
 
-                                                <div class="flex gap-4">
-                                                    <div class="w-1/2">
-                                                        <label for="totalValue"
-                                                               class="block text-sm font-medium text-gray-700 dark:text-gray-300">PO
-                                                            Value</label>
-                                                        <input id="totalValue" type="text" name="totalValue"
-                                                               class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                                    </div>
-                                                    <div class="w-1/2">
-                                                        <label for="sampleCustomerRequestedDate"
-                                                               class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                                                            Customer Requested Date
-                                                        </label>
-                                                        <input id="sampleCustomerRequestedDate"
-                                                               type="text"
-                                                               name="customer_requested_date_sample"
-                                                               placeholder="Select a date"
-                                                               class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm focus:ring focus:ring-indigo-500">
-                                                    </div>
+                                                <div>
+                                                    <label for="customerNotes" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer Notes</label>
+                                                    <input id="customerNotes" type="text" name="remarks" class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                 </div>
 
-                                                <div class="flex gap-4">
-                                                    <div class="w-1/2">
-                                                        <label for="customerNotes"
-                                                               class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer
-                                                            Notes</label>
-                                                        <input id="customerNotes" type="text" name="customer_notes"
-                                                               class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                                    </div>
+                                                <div class="flex justify-end gap-3 mt-6">
+                                                    <button type="button" onclick="document.getElementById('addSampleModal').classList.add('hidden')"
+                                                            class="px-4 py-2 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 text-sm rounded hover:bg-gray-300">
+                                                        Cancel
+                                                    </button>
+                                                    <button type="submit" class="px-4 py-2 bg-blue-500 text-white text-sm rounded hover:bg-blue-600">
+                                                        Create Sample Order
+                                                    </button>
                                                 </div>
+                                            </form>
 
-                                            </div>
-
-                                            <!-- Buttons -->
-                                            <div class="flex justify-end gap-3 mt-12">
-                                                <button type="button"
-                                                        onclick="document.getElementById('addSampleModal').classList.add('hidden')"
-                                                        class="px-4 py-2 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 text-sm rounded hover:bg-gray-300">
-                                                    Cancel
-                                                </button>
-                                                <button type="submit"
-                                                        class="px-4 py-2 bg-blue-500 text-white text-sm rounded hover:bg-blue-600">
-                                                    Create Order
-                                                </button>
-                                            </div>
-                                        </form>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
 
                             <div id="productionDetailsScroll"
                                  class="overflow-x-auto max-h-[1200px] bg-white dark:bg-gray-900 shadow rounded-lg relative">
@@ -575,34 +499,28 @@
                                 </table>
                             </div>
 
-                                <!-- Details Modal -->
-                                <div id="detailsModal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50">
-                                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg w-1/3 p-6">
-                                        <h2 class="text-xl font-bold mb-4">Order Details</h2>
-                                        <div id="modalContent" class="space-y-2">
-                                            <!-- Details will be injected dynamically -->
-                                        </div>
-                                        <div class="mt-4 flex justify-end">
-                                            <button onclick="closeDetailsModal()"
-                                                    class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded">
-                                                Close
-                                            </button>
-                                        </div>
+                            <!-- Details Modal -->
+                            <div id="detailsModal"
+                                 class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50">
+                                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg w-1/3 p-6">
+                                    <h2 class="text-xl font-bold mb-4">Order Details</h2>
+                                    <div id="modalContent" class="space-y-2">
+                                        <!-- Details will be injected dynamically -->
+                                    </div>
+                                    <div class="mt-4 flex justify-end">
+                                        <button onclick="closeDetailsModal()"
+                                                class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded">
+                                            Close
+                                        </button>
                                     </div>
                                 </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 </div>
-
-<script>
-    function toggleOrderType(type) {
-        document.getElementById('directOrderFields').classList.toggle('hidden', type !== 'direct');
-        document.getElementById('sampleOrderFields').classList.toggle('hidden', type !== 'sample');
-    }
-</script>
 
 <script>
     function openDetailsModal(button) {
@@ -629,33 +547,6 @@
 
     function closeDetailsModal() {
         document.getElementById("detailsModal").classList.add("hidden");
-    }
-</script>
-
-<script>
-    function setOrderType(type) {
-        const directFields = document.getElementById('directOrderFields');
-        const sampleFields = document.getElementById('sampleOrderFields');
-        const orderTypeInput = document.getElementById('order_type');
-
-        // reset tab styles
-        document.getElementById('tab-direct').classList.remove('border-b-2', 'border-blue-500', 'text-blue-600');
-        document.getElementById('tab-direct').classList.add('text-gray-600', 'dark:text-gray-300');
-
-        document.getElementById('tab-sample').classList.remove('border-b-2', 'border-blue-500', 'text-blue-600');
-        document.getElementById('tab-sample').classList.add('text-gray-600', 'dark:text-gray-300');
-
-        if (type === 'direct') {
-            directFields.classList.remove('hidden');
-            sampleFields.classList.add('hidden');
-            orderTypeInput.value = 'direct';
-            document.getElementById('tab-direct').classList.add('border-b-2', 'border-blue-500', 'text-blue-600');
-        } else {
-            sampleFields.classList.remove('hidden');
-            directFields.classList.add('hidden');
-            orderTypeInput.value = 'sample';
-            document.getElementById('tab-sample').classList.add('border-b-2', 'border-blue-500', 'text-blue-600');
-        }
     }
 </script>
 
@@ -722,4 +613,87 @@
         }
     });
 </script>
+
+<!-- ========= SCRIPTS: tabs, dropdown, sample fetch ========= -->
+<script>
+    // initialize tabs on page load
+    document.addEventListener('DOMContentLoaded', function () {
+        setOrderType('sample'); // default
+        // close sample dropdown if clicked outside
+        document.addEventListener('click', function(e){
+            if (!e.target.closest('#dropdownMenusampleReference') && !e.target.closest('#sampleReferenceDropdown')) {
+                const dd = document.getElementById('dropdownMenusampleReference');
+                if (dd) dd.classList.add('hidden');
+            }
+        });
+    });
+
+    function setOrderType(type) {
+        const sampleForm = document.getElementById('sampleForm');
+        const directForm = document.getElementById('directForm');
+        const tabSample = document.getElementById('tab-sample');
+        const tabDirect = document.getElementById('tab-direct');
+
+        if (type === 'sample') {
+            sampleForm.classList.remove('hidden');
+            directForm.classList.add('hidden');
+            tabSample.classList.add('border-b-2', 'border-blue-500', 'text-blue-600');
+            tabDirect.classList.remove('border-b-2', 'border-blue-500', 'text-blue-600');
+        } else {
+            directForm.classList.remove('hidden');
+            sampleForm.classList.add('hidden');
+            tabDirect.classList.add('border-b-2', 'border-blue-500', 'text-blue-600');
+            tabSample.classList.remove('border-b-2', 'border-blue-500', 'text-blue-600');
+        }
+    }
+
+    // Simple dropdown toggle (for sample references)
+    function toggleDropdown(name) {
+        // We only have sampleReference dropdown here
+        const el = document.getElementById('dropdownMenusampleReference');
+        if (!el) return;
+        el.classList.toggle('hidden');
+    }
+
+    // Filter list of sample options
+    function filterSamples() {
+        const q = (document.getElementById('sampleSearchInput').value || '').toLowerCase();
+        document.querySelectorAll('#sampleOptions li').forEach(li => {
+            li.style.display = li.textContent.toLowerCase().includes(q) ? '' : 'none';
+        });
+    }
+
+    // Called when a sample reference is clicked
+    function selectSampleReference(id, referenceNo) {
+        // label + hidden ref id
+        document.getElementById('selectedSampleReference').innerText = referenceNo;
+        document.getElementById('sampleReferenceHidden').value = id;
+        // close dropdown
+        document.getElementById('dropdownMenusampleReference').classList.add('hidden');
+
+        // fetch details from backend and populate fields
+        const base = "{{ url('product-catalog') }}";
+        fetch(`${base}/${id}/details`)
+            .then(resp => {
+                if (!resp.ok) throw new Error('Network response was not ok');
+                return resp.json();
+            })
+            .then(data => {
+                // These must match the sample-form IDs above
+                document.getElementById('sampleShade').value = data.shade || data.colour || '';
+                document.getElementById('sampleColour').value = data.colour || '';
+                document.getElementById('sampleTKT').value = data.tkt || '';
+                document.getElementById('sampleSize').value = data.size || '';
+                document.getElementById('sampleItem').value = data.item || '';
+                document.getElementById('sampleSupplier').value = data.supplier || '';
+                // optional: prefill PO or other fields if returned
+                if (data.preferred_po) document.getElementById('samplePoNumber').value = data.preferred_po;
+            })
+            .catch(err => {
+                console.error('Error fetching sample details:', err);
+                // optionally show a toast/error in UI
+            });
+    }
+</script>
+
 @endsection

@@ -4,6 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @method static create(array $validatedData)
+ */
 class ProductInquiry extends Model
 {
     protected $fillable = [
@@ -11,6 +14,7 @@ class ProductInquiry extends Model
         'po_received_date',
         'customer_name',
         'merchandiser_name',
+        'customer_coordinator',
         'po_number',
         'size',
         'item',

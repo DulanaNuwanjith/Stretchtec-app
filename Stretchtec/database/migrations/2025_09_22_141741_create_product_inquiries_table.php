@@ -15,6 +15,7 @@ return new class extends Migration {
             $table->string('prod_order_no');
             $table->dateTime('po_received_date');
             $table->string('customer_name');
+            $table->string('customer_coordinator');
             $table->string('merchandiser_name');
             $table->string('po_number');
             $table->string('size');
@@ -27,7 +28,7 @@ return new class extends Migration {
             $table->string('uom');
             $table->decimal('price');
             $table->date('customer_req_date');
-            $table->date('our_prod_date');
+            $table->date('our_prod_date')->nullable();
             $table->decimal('stock_qty')->nullable();
             $table->decimal('to_make_qty')->nullable();
             $table->decimal('delivered_qty')->nullable();
@@ -35,7 +36,7 @@ return new class extends Migration {
             $table->decimal('balance_qty')->nullable();
             $table->string('invoice_no')->nullable();
             $table->date('invoice_date')->nullable();
-            $table->boolean('isSentToStock')->nullable();
+            $table->boolean('isSentToStock')->nullable()->default(false);
             $table->boolean('isSentToProduction')->default(false);
             $table->string('status')->default('Pending');
             $table->string('remarks')->nullable();
