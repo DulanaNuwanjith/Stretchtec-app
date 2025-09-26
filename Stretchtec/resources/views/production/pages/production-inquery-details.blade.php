@@ -335,171 +335,138 @@
                                     </div>
                                 </div>
 
-                            <div id="productionDetailsScroll"
-                                 class="overflow-x-auto max-h-[1200px] bg-white dark:bg-gray-900 shadow rounded-lg relative">
-                                <table
-                                    class="table-fixed min-w-[1400px] text-sm divide-y divide-gray-200 dark:divide-gray-700">
-                                    <thead class="bg-gray-200 dark:bg-gray-700 text-left">
-                                    <tr class="text-center">
-                                        <th
-                                            class="font-bold sticky left-0 top-0 z-20 bg-white px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                            Order No
-                                        </th>
-                                        <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 text-xs uppercase text-gray-600 dark:text-gray-300">
-                                            Reference Number
-                                        </th>
-                                        <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 text-xs uppercase text-gray-600 dark:text-gray-300">
-                                            PO Number
-                                        </th>
-                                        <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 text-xs uppercase text-gray-600 dark:text-gray-300">
-                                            Customer Coordinator
-                                        </th>
-                                        <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 text-xs uppercase text-gray-600 dark:text-gray-300">
-                                            Quantity
-                                        </th>
-                                        <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 text-xs uppercase text-gray-600 dark:text-gray-300">
-                                            Customer Name
-                                        </th>
-                                        <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 text-xs uppercase text-gray-600 dark:text-gray-300">
-                                            Customer Merchandiser
-                                        </th>
-                                        <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 text-xs uppercase text-gray-600 dark:text-gray-300">
-                                            PO Value
-                                        </th>
-                                        <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 text-xs uppercase text-gray-600 dark:text-gray-300">
-                                            Customer Requested Date
-                                        </th>
-                                        <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 text-xs uppercase text-gray-600 dark:text-gray-300">
-                                            Customer Notes
-                                        </th>
+                                <div id="productionDetailsScroll"
+                                     class="overflow-x-auto max-h-[1200px] bg-white dark:bg-gray-900 shadow-md rounded-xl relative border border-gray-200 dark:border-gray-700">
 
-                                        <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 text-xs uppercase text-gray-600 dark:text-gray-300">
-                                            Send to Stock
-                                        </th>
+                                    <table class="min-w-[1400px] w-full text-sm text-left text-gray-700 dark:text-gray-300 border-collapse">
+                                        <thead class="bg-gray-100 dark:bg-gray-800 sticky top-0 z-10 shadow-sm">
+                                        <tr class="text-center text-xs font-semibold uppercase tracking-wider text-gray-600 dark:text-gray-300 divide-x divide-gray-300 dark:divide-gray-600">
+                                            <th class="px-4 py-3 sticky left-0 z-20 bg-gray-100 dark:bg-gray-800 w-32">
+                                                Order No
+                                            </th>
+                                            <th class="px-4 py-3">Reference Number</th>
+                                            <th class="px-4 py-3">PO Number</th>
+                                            <th class="px-4 py-3">Customer Coordinator</th>
+                                            <th class="px-4 py-3">Quantity</th>
+                                            <th class="px-4 py-3">Customer Name</th>
+                                            <th class="px-4 py-3">Customer Merchandiser</th>
+                                            <th class="px-4 py-3">PO Value</th>
+                                            <th class="px-4 py-3">Requested Date</th>
+                                            <th class="px-4 py-3">Notes</th>
+                                            <th class="px-4 py-3">Send to Stock</th>
+                                            <th class="px-4 py-3">Send to Production</th>
+                                            <th class="px-4 py-3">Status</th>
+                                            <th class="px-4 py-3">Action</th>
+                                        </tr>
+                                        </thead>
 
-                                        <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 text-xs uppercase text-gray-600 dark:text-gray-300">
-                                            Send to Production
-                                        </th>
+                                        <tbody id="productionDetailsRecords" class="divide-y divide-gray-200 dark:divide-gray-700">
+                                        @forelse($productInquiries as $inquiry)
+                                            <tr class="text-center hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-200 divide-x divide-gray-200 dark:divide-gray-700">
+                                                <!-- Production ID -->
+                                                <td class="px-4 py-3 font-semibold sticky left-0 z-10 bg-gray-50 dark:bg-gray-900">
+                                                    {{ $inquiry->prod_order_no ?? 'N/A' }}
+                                                </td>
 
-                                        <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 text-xs uppercase text-gray-600 dark:text-gray-300">
-                                            Status
-                                        </th>
-                                        <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 text-xs uppercase text-gray-600 dark:text-gray-300">
-                                            Action
-                                        </th>
-                                    </tr>
-                                    </thead>
-
-                                    <tbody id="productionDetailsRecords"
-                                           class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-
-                                    <tr id="row1"
-                                        class="odd:bg-white even:bg-gray-50 border-b border-gray-200 text-center">
-
-                                        <!-- Production ID -->
-                                        <td class="sticky left-0 z-10 px-4 py-3 bg-gray-100 whitespace-normal break-words border-r border-gray-300">
-                                            <span class="readonly font-bold">ST-PD-001</span>
-                                        </td>
-
-                                        <!-- Reference Number (Clickable for modal) -->
-                                        <td class="px-4 py-3 border-r border-gray-300">
-                                            <button type="button"
-                                                    class="text-blue-600 font-bold underline"
-                                                    onclick="openDetailsModal(this)"
-                                                    data-ref-no="REF-001"
-                                                    data-shade="Light Blue"
-                                                    data-colour="Navy"
-                                                    data-item="Twill Tape"
-                                                    data-tkt="TKT-45"
-                                                    data-size="M"
-                                                    data-supplier="ABC Textiles">
-                                                REF-001
-                                            </button>
-                                        </td>
-
-                                        <!-- PO Number -->
-                                        <td class="px-4 py-3 border-r border-gray-300">
-                                            <span class="readonly">PO-789</span>
-                                        </td>
-
-                                        <!-- Customer Coordinator -->
-                                        <td class="px-4 py-3 border-r border-gray-300">
-                                            <span class="readonly">John Doe</span>
-                                        </td>
-
-                                        <!-- Quantity -->
-                                        <td class="px-4 py-3 border-r border-gray-300">
-                                            <span class="readonly">100</span>
-                                        </td>
-
-                                        <!-- Customer Name -->
-                                        <td class="px-4 py-3 border-r border-gray-300">
-                                            <span class="readonly">XYZ Garments</span>
-                                        </td>
-
-                                        <!-- Customer Merchandiser -->
-                                        <td class="px-4 py-3 border-r border-gray-300">
-                                            <span class="readonly">Jane Smith</span>
-                                        </td>
-
-                                        <!-- PO Value -->
-                                        <td class="px-4 py-3 border-r border-gray-300">
-                                            <span class="readonly">$2500</span>
-                                        </td>
-
-                                        <!-- Customer Requested Date -->
-                                        <td class="px-4 py-3 border-r border-gray-300">
-                                            <span class="readonly">2025-09-30</span>
-                                        </td>
-
-                                        <!-- Customer Notes -->
-                                        <td class="px-4 py-3 border-r border-gray-300">
-                                            <span class="readonly">Urgent delivery</span>
-                                        </td>
-
-                                        <!-- Send to Stock -->
-                                        <td class="px-4 py-3 border-r border-gray-300">
-
-                                        </td>
-
-                                        <!-- Send to Production -->
-                                        <td class="px-4 py-3 border-r border-gray-300">
-
-                                        </td>
-
-                                        <!-- Status -->
-                                        <td class="px-4 py-3 border-r border-gray-300">
-
-                                        </td>
-
-                                        <!-- Action -->
-                                        <td class="px-4 py-3 border-r border-gray-300">
-                                            <div class="flex justify-center gap-2">
-                                                <!-- Edit Button -->
-                                                <button type="button"
-                                                        onclick="enableEdit('row1')"
-                                                        class="bg-yellow-500 hover:bg-yellow-600 text-white h-10 w-20 rounded text-sm">
-                                                    Edit
-                                                </button>
-
-                                                <!-- Delete Button -->
-                                                <form id="delete-form-1" method="POST" class="flex items-center">
-                                                    @csrf
-                                                    @method('DELETE')
+                                                <!-- Reference Number -->
+                                                <td class="px-4 py-3">
                                                     <button type="button"
-                                                            onclick="confirmDelete('1')"
-                                                            class="bg-red-600 hover:bg-red-700 text-white h-10 w-20 rounded text-sm">
-                                                        Delete
+                                                            class="text-blue-600 dark:text-blue-400 font-medium underline hover:text-blue-800"
+                                                            onclick="openDetailsModal(this)"
+                                                            data-ref-no="{{ $inquiry->reference_no ?? '' }}"
+                                                            data-shade="{{ $inquiry->shade ?? '' }}"
+                                                            data-colour="{{ $inquiry->color ?? '' }}"
+                                                            data-item="{{ $inquiry->item ?? '' }}"
+                                                            data-tkt="{{ $inquiry->tkt ?? '' }}"
+                                                            data-size="{{ $inquiry->size ?? '' }}"
+                                                            data-supplier="{{ $inquiry->supplier ?? '' }}">
+                                                        {{ $inquiry->reference_no ?? 'N/A' }}
                                                     </button>
-                                                </form>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+                                                </td>
 
-                            <!-- Details Modal -->
+                                                <!-- PO Number -->
+                                                <td class="px-4 py-3">{{ $inquiry->po_number ?? 'N/A' }}</td>
+
+                                                <!-- Customer Coordinator -->
+                                                <td class="px-4 py-3">{{ $inquiry->customer_coordinator ?? 'N/A' }}</td>
+
+                                                <!-- Quantity -->
+                                                <td class="px-4 py-3">{{ $inquiry->quantity ?? '0' }}</td>
+
+                                                <!-- Customer Name -->
+                                                <td class="px-4 py-3">{{ $inquiry->customer_name ?? 'N/A' }}</td>
+
+                                                <!-- Customer Merchandiser -->
+                                                <td class="px-4 py-3">{{ $inquiry->customer_merchandiser ?? 'N/A' }}</td>
+
+                                                <!-- PO Value -->
+                                                <td class="px-4 py-3 text-green-600 font-medium">
+                                                    {{ $inquiry->po_value ? '$' . number_format($inquiry->po_value, 2) : '0' }}
+                                                </td>
+
+                                                <!-- Requested Date -->
+                                                <td class="px-4 py-3">{{ $inquiry->customer_requested_date ?? 'N/A' }}</td>
+
+                                                <!-- Notes -->
+                                                <td class="px-4 py-3 text-gray-500 italic">
+                                                    {{ $inquiry->customer_notes ?? '-' }}
+                                                </td>
+
+                                                <!-- Send to Stock -->
+                                                <td class="px-4 py-3">
+                                                    <button class="px-3 py-1 text-xs rounded-lg bg-blue-100 text-blue-700 hover:bg-blue-200">
+                                                        Stock
+                                                    </button>
+                                                </td>
+
+                                                <!-- Send to Production -->
+                                                <td class="px-4 py-3">
+                                                    <button class="px-3 py-1 text-xs rounded-lg bg-indigo-100 text-indigo-700 hover:bg-indigo-200">
+                                                        Production
+                                                    </button>
+                                                </td>
+
+                                                <!-- Status -->
+                                                <td class="px-4 py-3">
+                                                <span class="px-2 py-1 text-xs rounded-full
+                                                    {{ $inquiry->status === 'Completed' ? 'bg-green-100 text-green-700' :
+                                                       ($inquiry->status === 'Pending' ? 'bg-yellow-100 text-yellow-700' : 'bg-gray-100 text-gray-600') }}">
+                                                    {{ $inquiry->status ?? 'Pending' }}
+                                                </span>
+                                                </td>
+
+                                                <!-- Action -->
+                                                <td class="px-4 py-3">
+                                                    <form id="delete-form-{{ $inquiry->id }}"
+                                                          method="POST"
+                                                          action="{{ route('production-inquery-details.destroy', $inquiry->id) }}"
+                                                          class="flex justify-center">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="button"
+                                                                onclick="confirmDelete('{{ $inquiry->id }}')"
+                                                                class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg text-xs shadow-sm my-2">
+                                                            Delete
+                                                        </button>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="14" class="px-4 py-6 text-center text-gray-500 dark:text-gray-400">
+                                                    No inquiries found.
+                                                </td>
+                                            </tr>
+                                        @endforelse
+                                        </tbody>
+                                    </table>
+
+                                    <div class="p-4 border-t border-gray-200 dark:border-gray-700">
+                                        {{ $productInquiries->links() }}
+                                    </div>
+                                </div>
+
+                                <!-- Details Modal -->
                             <div id="detailsModal"
                                  class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50">
                                 <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg w-1/3 p-6">

@@ -5,21 +5,25 @@ namespace App\Http\Controllers;
 use App\Models\ProductCatalog;
 use App\Models\ProductInquiry;
 use Exception;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Http\RedirectResponse;
 
 class ProductInquiryController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): Factory|View
     {
         $samples = ProductCatalog::all();
+        $productInquiries = ProductInquiry::simplePaginate(10);
 
-        return view('production.pages.production-inquery-details', compact('samples'));
+        return view('production.pages.production-inquery-details', compact('samples', 'productInquiries'));
     }
 
 
@@ -40,7 +44,7 @@ class ProductInquiryController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(): void
     {
         //
     }
@@ -48,7 +52,7 @@ class ProductInquiryController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request): ?RedirectResponse
     {
         try {
             // ✅ Step 1: Validate input
@@ -60,6 +64,7 @@ class ProductInquiryController extends Controller
                 'size' => 'required|string|max:255',
                 'item' => 'required|string|max:255',
                 'color' => 'required|string|max:255',
+                'supplier' => 'required|string|max:255',
                 'reference_no' => 'required|string|max:255',
                 'shade' => 'required|string|max:255',
                 'tkt' => 'required|string|max:255',
@@ -74,7 +79,7 @@ class ProductInquiryController extends Controller
             if ($validator->fails()) {
                 Log::warning('Product Inquiry Validation Failed', [
                     'errors' => $validator->errors()->toArray(),
-                    'input'  => $request->all()
+                    'input' => $request->all()
                 ]);
 
                 return redirect()->back()
@@ -88,7 +93,7 @@ class ProductInquiryController extends Controller
             // Generate automatic product order number
             $lastOrder = ProductInquiry::orderBy('id', 'desc')->value('prod_order_no');
             if ($lastOrder) {
-                $lastNumber = (int) str_replace('PO', '', $lastOrder);
+                $lastNumber = (int)str_replace('PO', '', $lastOrder);
                 $nextNumber = $lastNumber + 1;
             } else {
                 $nextNumber = 1;
@@ -103,7 +108,7 @@ class ProductInquiryController extends Controller
 
             Log::info('Product inquiry created successfully', [
                 'po_number' => $request->po_number,
-                'customer'  => $request->customer_name,
+                'customer' => $request->customer_name,
             ]);
 
             return redirect()->back()->with('success', 'Product inquiry created successfully.');
@@ -111,7 +116,7 @@ class ProductInquiryController extends Controller
         } catch (Exception $e) {
             Log::error('Unexpected error while creating Product Inquiry', [
                 'message' => $e->getMessage(),
-                'trace'   => $e->getTraceAsString(),
+                'trace' => $e->getTraceAsString(),
             ]);
 
             return redirect()->back()

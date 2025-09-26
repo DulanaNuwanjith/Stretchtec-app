@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * @method static create(array $validatedData)
+ * @method static simplePaginate(int $int)
  */
 class ProductInquiry extends Model
 {
@@ -20,6 +21,7 @@ class ProductInquiry extends Model
         'item',
         'color',
         'reference_no',
+        'supplier',
         'shade',
         'tkt',
         'qty',
