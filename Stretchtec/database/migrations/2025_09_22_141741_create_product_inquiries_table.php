@@ -26,7 +26,7 @@ return new class extends Migration {
             $table->string('tkt');
             $table->decimal('qty');
             $table->string('uom');
-            $table->string('supplier');
+            $table->string('supplier')->nullable();
             $table->decimal('price');
             $table->date('customer_req_date');
             $table->date('our_prod_date')->nullable();

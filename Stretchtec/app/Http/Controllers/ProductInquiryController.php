@@ -64,7 +64,7 @@ class ProductInquiryController extends Controller
                 'size' => 'required|string|max:255',
                 'item' => 'required|string|max:255',
                 'color' => 'required|string|max:255',
-                'supplier' => 'required|string|max:255',
+                'supplier' => 'nullable|string|max:255',
                 'reference_no' => 'required|string|max:255',
                 'shade' => 'required|string|max:255',
                 'tkt' => 'required|string|max:255',
