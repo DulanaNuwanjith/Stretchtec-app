@@ -272,74 +272,76 @@
                                             <!-- Auto-filled fields (unique IDs for sample form) -->
                                             <div class="flex gap-4">
                                                 <div class="w-1/2">
-                                                    <label
-                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Shade</label>
+                                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Shade</label>
                                                     <input id="sampleShade" type="text" name="shade" readonly
-                                                           class="w-full mt-1 px-3 py-2 border rounded-md bg-gray-100 dark:bg-gray-600 text-sm">
+                                                           class="editable w-full mt-1 px-3 py-2 border rounded-md bg-gray-100 dark:bg-gray-600 text-sm">
                                                 </div>
                                                 <div class="w-1/2">
-                                                    <label
-                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Colour</label>
+                                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Colour</label>
                                                     <input id="sampleColour" type="text" name="color" readonly
-                                                           class="w-full mt-1 px-3 py-2 border rounded-md bg-gray-100 dark:bg-gray-600 text-sm">
+                                                           class="editable w-full mt-1 px-3 py-2 border rounded-md bg-gray-100 dark:bg-gray-600 text-sm">
                                                 </div>
                                             </div>
 
                                             <div class="flex gap-4">
                                                 <div class="w-1/2">
-                                                    <label
-                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">TKT</label>
+                                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">TKT</label>
                                                     <input id="sampleTKT" type="text" name="tkt" readonly
-                                                           class="w-full mt-1 px-3 py-2 border rounded-md bg-gray-100 dark:bg-gray-600 text-sm">
+                                                           class="editable w-full mt-1 px-3 py-2 border rounded-md bg-gray-100 dark:bg-gray-600 text-sm">
                                                 </div>
                                                 <div class="w-1/2">
-                                                    <label
-                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Size</label>
+                                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Size</label>
                                                     <input id="sampleSize" type="text" name="size" readonly
-                                                           class="w-full mt-1 px-3 py-2 border rounded-md bg-gray-100 dark:bg-gray-600 text-sm">
+                                                           class="editable w-full mt-1 px-3 py-2 border rounded-md bg-gray-100 dark:bg-gray-600 text-sm">
                                                 </div>
                                             </div>
 
                                             <div class="flex gap-4">
                                                 <div class="w-1/2">
-                                                    <label
-                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Item</label>
+                                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Item</label>
                                                     <input id="sampleItem" type="text" name="item" readonly
-                                                           class="w-full mt-1 px-3 py-2 border rounded-md bg-gray-100 dark:bg-gray-600 text-sm">
+                                                           class="editable w-full mt-1 px-3 py-2 border rounded-md bg-gray-100 dark:bg-gray-600 text-sm">
                                                 </div>
                                                 <div class="w-1/2">
-                                                    <label
-                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Supplier</label>
+                                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Supplier</label>
                                                     <input id="sampleSupplier" type="text" name="supplier" readonly
-                                                           class="w-full mt-1 px-3 py-2 border rounded-md bg-gray-100 dark:bg-gray-600 text-sm">
+                                                           class="editable w-full mt-1 px-3 py-2 border rounded-md bg-gray-100 dark:bg-gray-600 text-sm">
                                                 </div>
                                             </div>
 
                                             <div class="flex gap-4">
                                                 <div class="w-1/2">
-                                                    <label
-                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">PST No</label>
+                                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">PST No</label>
                                                     <input id="samplePSTNo" type="text" name="pst_no" readonly
-                                                           class="w-full mt-1 px-3 py-2 border rounded-md bg-gray-100 dark:bg-gray-600 text-sm">
+                                                           class="editable w-full mt-1 px-3 py-2 border rounded-md bg-gray-100 dark:bg-gray-600 text-sm">
                                                 </div>
                                                 <div class="w-1/2">
-                                                    <label
-                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Supplier Comment</label>
+                                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Supplier Comment</label>
                                                     <input id="sampleSupplierComment" type="text" name="supplier_comment" readonly
-                                                           class="w-full mt-1 px-3 py-2 border rounded-md bg-gray-100 dark:bg-gray-600 text-sm">
+                                                           class="editable w-full mt-1 px-3 py-2 border rounded-md bg-gray-100 dark:bg-gray-600 text-sm">
                                                 </div>
                                             </div>
 
-                                            <!-- Coordinator (auto-filled) -->
+                                            <!-- Coordinator (always readonly) -->
                                             <div class="flex gap-4">
                                                 <div class="w-1/2">
-                                                    <label
-                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer
-                                                        Coordinator</label>
-                                                    <input id="sample_customer_coordinator" type="text"
-                                                           name="customer_coordinator" readonly
+                                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                                        Customer Coordinator
+                                                    </label>
+                                                    <input id="sample_customer_coordinator" type="text" name="customer_coordinator" readonly
                                                            value="{{ Auth::user()->name }}"
                                                            class="w-full mt-1 px-3 py-2 border rounded-md bg-gray-100 dark:bg-gray-600 text-sm">
+                                                </div>
+
+                                                <!-- Centered Edit Button -->
+                                                <div class="w-1/2 flex flex-col justify-center items-center">
+                                                    <p class="mt-1 text-xs text-gray-500">
+                                                        Edit the item details if the customer is asking for a customized order
+                                                    </p>
+                                                    <button type="button" id="editButton"
+                                                            class="px-4 py-1 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+                                                        Edit
+                                                    </button>
                                                 </div>
                                             </div>
 
@@ -783,6 +785,18 @@
                 // optionally show a toast/error in UI
             });
     }
+</script>
+
+<script>
+    document.getElementById("editButton").addEventListener("click", function () {
+        // Select all editable fields
+        const fields = document.querySelectorAll(".editable");
+        fields.forEach(field => {
+            field.removeAttribute("readonly");
+            field.classList.remove("bg-gray-100", "dark:bg-gray-600"); // remove gray background
+            field.classList.add("bg-white", "dark:bg-gray-800"); // make editable background
+        });
+    });
 </script>
 
 @endsection
