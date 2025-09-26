@@ -33,6 +33,105 @@
                                 </div>
                             @endif
 
+                            <!-- Filters Section -->
+                            <div class="flex flex-wrap items-center justify-between mb-4 gap-3">
+
+                                <!-- Left: Filter Toggle -->
+                                <div class="flex items-center gap-2">
+                                    <button type="button"
+                                            onclick="toggleFilterPanel()"
+                                            class="inline-flex items-center px-4 py-2 bg-white border border-blue-500 text-blue-500 hover:text-blue-600 hover:border-blue-600 font-semibold rounded-md shadow">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none"
+                                            viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2l-6 7v5l-4 2v-7L3 6V4z"/>
+                                        </svg>
+                                        Filters
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Collapsible Filter Panel -->
+                            <div id="filterPanel" class="hidden mb-4 bg-gray-100 dark:bg-gray-800 p-4 rounded-lg shadow">
+                                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+
+                                    <!-- Filter: Reference Number -->
+                                    <div>
+                                        <label class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                            Reference Number
+                                        </label>
+                                        <input type="text"
+                                            id="filterReference"
+                                            placeholder="Enter reference..."
+                                            class="w-full px-2 py-1 border rounded-md text-sm dark:bg-gray-700 dark:text-white">
+                                    </div>
+
+                                    <!-- Filter: PO Number -->
+                                    <div>
+                                        <label class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                            PO Number
+                                        </label>
+                                        <input type="text"
+                                            id="filterPO"
+                                            placeholder="Enter PO..."
+                                            class="w-full px-2 py-1 border rounded-md text-sm dark:bg-gray-700 dark:text-white">
+                                    </div>
+
+                                    <!-- Filter: Customer Name -->
+                                    <div>
+                                        <label class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                            Customer Name
+                                        </label>
+                                        <input type="text"
+                                            id="filterCustomer"
+                                            placeholder="Enter customer..."
+                                            class="w-full px-2 py-1 border rounded-md text-sm dark:bg-gray-700 dark:text-white">
+                                    </div>
+
+                                    <!-- Filter: Status -->
+                                    <div>
+                                        <label class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                            Status
+                                        </label>
+                                        <select id="filterStatus"
+                                                class="w-full px-2 py-1 border rounded-md text-sm dark:bg-gray-700 dark:text-white">
+                                            <option value="">All</option>
+                                            <option value="Pending">Pending</option>
+                                            <option value="Sent to Stock">Sent to Stock</option>
+                                            <option value="Sent to Production">Sent to Production</option>
+                                            <option value="Completed">Completed</option>
+                                        </select>
+                                    </div>
+
+                                    <!-- Filter: Requested Date -->
+                                    <div>
+                                        <label class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                            Requested Date
+                                        </label>
+                                        <input type="date"
+                                            id="filterDate"
+                                            class="w-full px-2 py-1 border rounded-md text-sm dark:bg-gray-700 dark:text-white">
+                                    </div>
+                                </div>
+
+                                <!-- Apply / Reset Buttons -->
+                                <div class="flex justify-end mt-4 gap-2">
+                                    <button type="button"
+                                            onclick="resetFilters()"
+                                            class="px-3 py-1 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 rounded text-sm">
+                                        Reset
+                                    </button>
+                                    <button type="button"
+                                            onclick="applyFilters()"
+                                            class="px-3 py-1 bg-blue-500 hover:bg-blue-600 text-white rounded text-sm">
+                                        Apply
+                                    </button>
+                                </div>
+                            </div>
+
+
+
+
                             <div class="flex justify-between items-center mb-6">
                                 <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Production Inquiry
                                     Records
