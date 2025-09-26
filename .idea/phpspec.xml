@@ -8,9 +8,6 @@
       <PhpSpecSuiteConfiguration>
         <option name="myPath" value="$PROJECT_DIR$/Stretchtec" />
       </PhpSpecSuiteConfiguration>
-      <PhpSpecSuiteConfiguration>
-        <option name="myPath" value="$PROJECT_DIR$/Stretchtec" />
-      </PhpSpecSuiteConfiguration>
     </suites>
   </component>
 </project>
