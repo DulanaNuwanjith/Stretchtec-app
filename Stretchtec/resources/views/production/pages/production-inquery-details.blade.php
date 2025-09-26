@@ -364,14 +364,21 @@
                                         @forelse($productInquiries as $inquiry)
                                             <tr class="text-center hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-200 divide-x divide-gray-200 dark:divide-gray-700">
                                                 <!-- Production ID -->
-                                                <td class="px-4 py-3 font-semibold sticky left-0 z-10 bg-gray-50 dark:bg-gray-900">
-                                                    {{ $inquiry->prod_order_no ?? 'N/A' }}
-                                                </td>
+
+                                                @if ($inquiry->supplier === null)
+                                                    <td class="px-4 py-3 font-semibold sticky left-0 z-10 bg-gray-50 dark:bg-gray-900 text-blue-500">
+                                                        {{ $inquiry->prod_order_no ?? 'N/A' }}
+                                                    </td>
+                                                @else
+                                                    <td class="px-4 py-3 font-semibold sticky left-0 z-10 bg-gray-50 dark:bg-gray-900">
+                                                        {{ $inquiry->prod_order_no ?? 'N/A' }}
+                                                    </td>
+                                                @endif
 
                                                 <!-- Reference Number -->
                                                 <td class="px-4 py-3">
                                                     <button type="button"
-                                                            class="text-blue-600 dark:text-blue-400 font-medium underline hover:text-blue-800"
+                                                            class="text-blue-600 dark:text-blue-400 font-medium hover:text-blue-800"
                                                             onclick="openDetailsModal(this)"
                                                             data-ref-no="{{ $inquiry->reference_no ?? '' }}"
                                                             data-shade="{{ $inquiry->shade ?? '' }}"
@@ -391,25 +398,25 @@
                                                 <td class="px-4 py-3">{{ $inquiry->customer_coordinator ?? 'N/A' }}</td>
 
                                                 <!-- Quantity -->
-                                                <td class="px-4 py-3">{{ $inquiry->quantity ?? '0' }}</td>
+                                                <td class="px-4 py-3">{{ $inquiry->qty ?? '0' }}</td>
 
                                                 <!-- Customer Name -->
                                                 <td class="px-4 py-3">{{ $inquiry->customer_name ?? 'N/A' }}</td>
 
                                                 <!-- Customer Merchandiser -->
-                                                <td class="px-4 py-3">{{ $inquiry->customer_merchandiser ?? 'N/A' }}</td>
+                                                <td class="px-4 py-3">{{ $inquiry->merchandiser_name ?? 'N/A' }}</td>
 
                                                 <!-- PO Value -->
                                                 <td class="px-4 py-3 text-green-600 font-medium">
-                                                    {{ $inquiry->po_value ? '$' . number_format($inquiry->po_value, 2) : '0' }}
+                                                    {{ $inquiry->price ? '$' . number_format($inquiry->price, 2) : '0' }}
                                                 </td>
 
                                                 <!-- Requested Date -->
-                                                <td class="px-4 py-3">{{ $inquiry->customer_requested_date ?? 'N/A' }}</td>
+                                                <td class="px-4 py-3">{{ $inquiry->customer_req_date ?? 'N/A' }}</td>
 
                                                 <!-- Notes -->
                                                 <td class="px-4 py-3 text-gray-500 italic">
-                                                    {{ $inquiry->customer_notes ?? '-' }}
+                                                    {{ $inquiry->remarks ?? '-' }}
                                                 </td>
 
                                                 <!-- Send to Stock -->
@@ -430,7 +437,7 @@
                                                 <td class="px-4 py-3">
                                                 <span class="px-2 py-1 text-xs rounded-full
                                                     {{ $inquiry->status === 'Completed' ? 'bg-green-100 text-green-700' :
-                                                       ($inquiry->status === 'Pending' ? 'bg-yellow-100 text-yellow-700' : 'bg-gray-100 text-gray-600') }}">
+                                                      ($inquiry->status === 'Pending' ? 'bg-yellow-100 text-yellow-700' : 'bg-gray-100 text-gray-600') }}">
                                                     {{ $inquiry->status ?? 'Pending' }}
                                                 </span>
                                                 </td>
