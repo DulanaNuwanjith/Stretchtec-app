@@ -485,7 +485,9 @@
                                                         data-item="{{ $inquiry->item ?? '' }}"
                                                         data-tkt="{{ $inquiry->tkt ?? '' }}"
                                                         data-size="{{ $inquiry->size ?? '' }}"
-                                                        data-supplier="{{ $inquiry->supplier ?? '' }}">
+                                                        data-supplier="{{ $inquiry->supplier ?? '' }}"
+                                                        data-pstno="{{ $inquiry->pst_no ?? '' }}"
+                                                        data-suppliercomment="{{ $inquiry->supplier_comment ?? '' }}">
                                                     {{ $inquiry->reference_no ?? 'N/A' }}
                                                 </button>
                                             </td>
@@ -600,23 +602,27 @@
 
 <script>
     function openDetailsModal(button) {
-        const refNumber = button.dataset.refNo;
-        const shade = button.dataset.shade;
-        const colour = button.dataset.colour;
-        const item = button.dataset.item;
-        const tkt = button.dataset.tkt;
-        const size = button.dataset.size;
-        const supplier = button.dataset.supplier;
+        const fields = {
+            "Ref No": button.dataset.refNo,
+            "Shade": button.dataset.shade,
+            "Colour": button.dataset.colour,
+            "Item": button.dataset.item,
+            "TKT": button.dataset.tkt,
+            "Size": button.dataset.size,
+            "Supplier": button.dataset.supplier,
+            "PST No": button.dataset.pstno,
+            "Supplier Comment": button.dataset.suppliercomment
+        };
 
-        document.getElementById("modalContent").innerHTML = `
-        <p><strong>Ref No:</strong> ${refNumber}</p>
-        <p><strong>Shade:</strong> ${shade}</p>
-        <p><strong>Colour:</strong> ${colour}</p>
-        <p><strong>Item:</strong> ${item}</p>
-        <p><strong>TKT:</strong> ${tkt}</p>
-        <p><strong>Size:</strong> ${size}</p>
-        <p><strong>Supplier:</strong> ${supplier}</p>
-    `;
+        let html = "";
+
+        Object.entries(fields).forEach(([label, value]) => {
+            if (value && value !== "null" && value.trim() !== "") {
+                html += `<p><strong>${label}:</strong> ${value}</p>`;
+            }
+        });
+
+        document.getElementById("modalContent").innerHTML = html || "<p>No details available.</p>";
 
         document.getElementById("detailsModal").classList.remove("hidden");
     }
