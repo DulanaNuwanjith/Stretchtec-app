@@ -22,6 +22,8 @@ class ProductInquiry extends Model
         'color',
         'reference_no',
         'supplier',
+        'pst_no',
+        'supplier_comment',
         'shade',
         'tkt',
         'qty',

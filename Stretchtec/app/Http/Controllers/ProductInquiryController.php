@@ -38,6 +38,8 @@ class ProductInquiryController extends Controller
             'tkt' => $sample->tkt,
             'size' => $sample->size,
             'supplier' => $sample->supplier,
+            'pst_no' => $sample->pst_no,
+            'supplier_comments' => $sample->supplierComment,
         ]);
     }
 
@@ -65,6 +67,8 @@ class ProductInquiryController extends Controller
                 'item' => 'required|string|max:255',
                 'color' => 'required|string|max:255',
                 'supplier' => 'nullable|string|max:255',
+                'pst_no' => 'nullable|string|max:255',
+                'supplier_comment' => 'nullable|string',
                 'reference_no' => 'required|string|max:255',
                 'shade' => 'required|string|max:255',
                 'tkt' => 'required|string|max:255',
