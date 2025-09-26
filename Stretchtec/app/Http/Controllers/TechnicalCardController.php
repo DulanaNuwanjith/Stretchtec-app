@@ -88,6 +88,8 @@ class TechnicalCardController extends Controller
             'yarn_count' => 'nullable|string|max:100',
             'rubber_type' => 'nullable|string|max:100',
             'spindles' => 'nullable|string|min:0',
+            'weft_yarn' => 'nullable|string|max:100',
+            'warp_yarn' => 'nullable|string|max:100',
             'machine' => 'nullable|string|max:100',
             'wheel_up' => 'nullable|string|max:100',
             'wheel_down' => 'nullable|string|max:100',
