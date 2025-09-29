@@ -121,7 +121,7 @@ class ProductInquiryController extends Controller
             return redirect()->back()->with('success', 'PO with multiple items created successfully.');
 
         } catch (Exception $e) {
-            Log::error('Exception occurred: '.$e->getMessage(), [
+            Log::error('Exception occurred: ' . $e->getMessage(), [
                 'exception' => $e,
                 'file' => $e->getFile(),
                 'line' => $e->getLine(),
