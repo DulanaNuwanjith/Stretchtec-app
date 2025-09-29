@@ -347,221 +347,97 @@
                                             </div>
                                         </form>
 
-                                        <form id="sampleForm" class="space-y-4"
-                                            action="{{ route('production-inquery-details.store') }}" method="POST"
-                                            enctype="multipart/form-data">
+                                        <form id="sampleForm" action="{{ route('production-inquery-details.store') }}" method="POST" enctype="multipart/form-data">
                                             @csrf
                                             <input type="hidden" name="order_type" value="sample">
 
-                                            <!-- SAMPLE REFERENCE DROPDOWN -->
-                                            <div class="relative">
-                                                <button type="button" id="sampleReferenceDropdown"
-                                                    class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10 dark:bg-gray-700 dark:text-white dark:ring-gray-600"
-                                                    onclick="toggleDropdown('sampleReference')" aria-haspopup="listbox"
-                                                    aria-expanded="false">
-                                                    <span id="selectedSampleReference">Select Sample Reference</span>
-                                                    <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20"
-                                                        fill="currentColor">
-                                                        <path fill-rule="evenodd"
-                                                            d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
-                                                            clip-rule="evenodd" />
-                                                    </svg>
-                                                </button>
+                                            <div id="itemsContainer">
+                                                <!-- Item Template -->
+                                                <div class="item-group border rounded p-4 mb-4 bg-gray-50 dark:bg-gray-800">
+                                                    <!-- SAMPLE REFERENCE DROPDOWN -->
+                                                    <div class="relative mb-3">
+                                                        <button type="button" class="sampleReferenceDropdown inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10 dark:bg-gray-700 dark:text-white dark:ring-gray-600"
+                                                                onclick="toggleDropdown(this)" aria-haspopup="listbox">
+                                                            <span class="selectedSampleReference">Select Sample Reference</span>
+                                                            <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                                                                <path fill-rule="evenodd"
+                                                                      d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
+                                                                      clip-rule="evenodd"/>
+                                                            </svg>
+                                                        </button>
 
-                                                <div id="dropdownMenusampleReference"
-                                                    class="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto hidden dark:bg-gray-700 dark:text-white sm:text-sm">
-                                                    <div class="sticky top-0 bg-white dark:bg-gray-700 px-2 py-1">
-                                                        <input type="text" id="sampleSearchInput"
-                                                            placeholder="Search reference..." onkeyup="filterSamples()"
-                                                            class="w-full px-2 py-1 text-sm border rounded-md focus:outline-none focus:ring focus:ring-indigo-500 dark:bg-gray-600 dark:text-white dark:border-gray-500" />
+                                                        <div class="dropdownMenu absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto hidden dark:bg-gray-700 dark:text-white sm:text-sm">
+                                                            <div class="sticky top-0 bg-white dark:bg-gray-700 px-2 py-1">
+                                                                <input type="text" placeholder="Search reference..."
+                                                                       onkeyup="filterSamples(this)"
+                                                                       class="w-full px-2 py-1 text-sm border rounded-md focus:outline-none focus:ring focus:ring-indigo-500 dark:bg-gray-600 dark:text-white dark:border-gray-500"/>
+                                                            </div>
+                                                            <ul class="sampleOptions max-h-48 overflow-y-auto">
+                                                                @foreach ($samples as $sample)
+                                                                    <li class="cursor-pointer select-none px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-600"
+                                                                        onclick="selectSampleReference(this, '{{ $sample->id }}', '{{ $sample->reference_no }}')">
+                                                                        {{ $sample->reference_no }}
+                                                                    </li>
+                                                                @endforeach
+                                                            </ul>
+                                                        </div>
                                                     </div>
-                                                    <ul id="sampleOptions" class="max-h-48 overflow-y-auto">
-                                                        @foreach ($samples as $sample)
-                                                            <li class="cursor-pointer select-none px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-600"
-                                                                onclick="selectSampleReference('{{ $sample->id }}', '{{ $sample->reference_no }}')">
-                                                                {{ $sample->reference_no }}
-                                                            </li>
-                                                        @endforeach
-                                                    </ul>
+
+                                                    <!-- Hidden input for sample id -->
+                                                    <input type="hidden" name="items[0][sample_id]" class="sampleReferenceHidden">
+
+                                                    <!-- Auto filled fields -->
+                                                    <div class="grid grid-cols-2 gap-4">
+                                                        <input type="text" name="items[0][shade]" class="sampleShade editable border rounded-md px-3 py-2 bg-gray-100 dark:bg-gray-600" readonly placeholder="Shade">
+                                                        <input type="text" name="items[0][color]" class="sampleColour editable border rounded-md px-3 py-2 bg-gray-100 dark:bg-gray-600" readonly placeholder="Color">
+                                                        <input type="text" name="items[0][tkt]" class="sampleTKT editable border rounded-md px-3 py-2 bg-gray-100 dark:bg-gray-600" readonly placeholder="TKT">
+                                                        <input type="text" name="items[0][size]" class="sampleSize editable border rounded-md px-3 py-2 bg-gray-100 dark:bg-gray-600" readonly placeholder="Size">
+                                                        <input type="text" name="items[0][item]" class="sampleItem editable border rounded-md px-3 py-2 bg-gray-100 dark:bg-gray-600" readonly placeholder="Item">
+                                                        <input type="text" name="items[0][supplier]" class="sampleSupplier editable border rounded-md px-3 py-2 bg-gray-100 dark:bg-gray-600" readonly placeholder="Supplier">
+                                                    </div>
+
+                                                    <!-- Editable fields -->
+                                                    <div class="grid grid-cols-3 gap-4 mt-4">
+                                                        <input type="number" name="items[0][qty]" class="sampleQty border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white" placeholder="Qty">
+                                                        <select name="items[0][uom]" class="sampleUom border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white">
+                                                            <option value="meters">Meters</option>
+                                                            <option value="yards">Yards</option>
+                                                            <option value="pieces">Pieces</option>
+                                                        </select>
+                                                        <input type="number" step="0.01" name="items[0][price]" class="samplePrice border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white" placeholder="PO Value">
+                                                    </div>
+
+                                                    <button type="button" class="removeItem mt-3 text-red-600 text-sm">Remove Item</button>
                                                 </div>
                                             </div>
 
-                                            <!-- Hidden input to send sample ID -->
-                                            <input type="hidden" name="sample_id" id="sampleReferenceHidden">
+                                            <button type="button" id="addItem" class="mt-4 px-4 py-2 bg-green-500 text-white rounded">+ Add Another Item</button>
 
-                                            <!-- Auto-filled fields (unique IDs for sample form) -->
-                                            <div class="flex gap-4">
-                                                <div class="w-1/2">
-                                                    <label
-                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Shade</label>
-                                                    <input id="sampleShade" type="text" name="shade" readonly
-                                                        class="editable w-full mt-1 px-3 py-2 border rounded-md bg-gray-100 dark:bg-gray-600 text-sm">
-                                                </div>
-                                                <div class="w-1/2">
-                                                    <label
-                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Colour</label>
-                                                    <input id="sampleColour" type="text" name="color" readonly
-                                                        class="editable w-full mt-1 px-3 py-2 border rounded-md bg-gray-100 dark:bg-gray-600 text-sm">
-                                                </div>
+                                            <!-- Master PO fields -->
+                                            <div class="mt-6">
+                                                <label>PO Number</label>
+                                                <input type="text" name="po_number" required class="w-full border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white">
+                                            </div>
+                                            <div class="mt-3">
+                                                <label>Customer Name</label>
+                                                <input type="text" name="customer_name" required class="w-full border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white">
+                                            </div>
+                                            <div class="mt-3">
+                                                <label>Merchandiser Name</label>
+                                                <input type="text" name="merchandiser_name" required class="w-full border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white">
+                                            </div>
+                                            <div class="mt-3">
+                                                <label>Customer Coordinator</label>
+                                                <input type="text" name="customer_coordinator" readonly value="{{Auth::user()->name}}" class="w-full border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white">
+                                            </div>
+                                            <div class="mt-3">
+                                                <label>Customer Requested Date</label>
+                                                <input type="date" name="customer_req_date" required class="w-full border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white">
                                             </div>
 
-                                            <div class="flex gap-4">
-                                                <div class="w-1/2">
-                                                    <label
-                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">TKT</label>
-                                                    <input id="sampleTKT" type="text" name="tkt" readonly
-                                                        class="editable w-full mt-1 px-3 py-2 border rounded-md bg-gray-100 dark:bg-gray-600 text-sm">
-                                                </div>
-                                                <div class="w-1/2">
-                                                    <label
-                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Size</label>
-                                                    <input id="sampleSize" type="text" name="size" readonly
-                                                        class="editable w-full mt-1 px-3 py-2 border rounded-md bg-gray-100 dark:bg-gray-600 text-sm">
-                                                </div>
-                                            </div>
-
-                                            <div class="flex gap-4">
-                                                <div class="w-1/2">
-                                                    <label
-                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Item</label>
-                                                    <input id="sampleItem" type="text" name="item" readonly
-                                                        class="editable w-full mt-1 px-3 py-2 border rounded-md bg-gray-100 dark:bg-gray-600 text-sm">
-                                                </div>
-                                                <div class="w-1/2">
-                                                    <label
-                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Supplier</label>
-                                                    <input id="sampleSupplier" type="text" name="supplier" readonly
-                                                        class="editable w-full mt-1 px-3 py-2 border rounded-md bg-gray-100 dark:bg-gray-600 text-sm">
-                                                </div>
-                                            </div>
-
-                                            <div class="flex gap-4">
-                                                <div class="w-1/2">
-                                                    <label
-                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">PST
-                                                        No</label>
-                                                    <input id="samplePSTNo" type="text" name="pst_no" readonly
-                                                        class="editable w-full mt-1 px-3 py-2 border rounded-md bg-gray-100 dark:bg-gray-600 text-sm">
-                                                </div>
-                                                <div class="w-1/2">
-                                                    <label
-                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Supplier
-                                                        Comment</label>
-                                                    <input id="sampleSupplierComment" type="text"
-                                                        name="supplier_comment" readonly
-                                                        class="editable w-full mt-1 px-3 py-2 border rounded-md bg-gray-100 dark:bg-gray-600 text-sm">
-                                                </div>
-                                            </div>
-
-                                            <!-- Coordinator (always readonly) -->
-                                            <div class="flex gap-4">
-                                                <div class="w-1/2">
-                                                    <label
-                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                                                        Customer Coordinator
-                                                    </label>
-                                                    <input id="sample_customer_coordinator" type="text"
-                                                        name="customer_coordinator" readonly
-                                                        value="{{ Auth::user()->name }}"
-                                                        class="w-full mt-1 px-3 py-2 border rounded-md bg-gray-100 dark:bg-gray-600 text-sm">
-                                                </div>
-
-                                                <!-- Centered Edit Button -->
-                                                <div class="w-1/2">
-                                                    <label
-                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                                                        For customized order
-                                                    </label>
-                                                    <button type="button" id="editButton"
-                                                        class="px-4 py-1 mt-1 bg-blue-600 text-white rounded-md hover:bg-blue-700">
-                                                        Edit
-                                                    </button>
-                                                </div>
-                                            </div>
-
-                                            <!-- Editable sample fields -->
-                                            <div class="flex gap-4">
-                                                <div class="w-1/3">
-                                                    <label for="sampleQty"
-                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Quantity</label>
-                                                    <input id="sampleQty" type="number" name="qty" min="0"
-                                                        required
-                                                        class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                                </div>
-                                                <div class="w-1/3">
-                                                    <label for="direct_uom"
-                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Unit</label>
-                                                    <select id="direct_uom" name="uom"
-                                                        class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                                        <option value="meters">Meters</option>
-                                                        <option value="yards">Yards</option>
-                                                        <option value="pieces">Pieces</option>
-                                                    </select>
-                                                </div>
-                                                <div class="w-1/3">
-                                                    <label for="samplePoNumber"
-                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">PO
-                                                        Number</label>
-                                                    <input id="samplePoNumber" type="text" name="po_number" required
-                                                        class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                                </div>
-                                            </div>
-
-                                            <div class="flex gap-4">
-                                                <div class="w-1/2">
-                                                    <label for="customerName"
-                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer
-                                                        Name</label>
-                                                    <input id="customerName" type="text" name="customer_name" required
-                                                        class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                                </div>
-                                                <div class="w-1/2">
-                                                    <label for="customerMerchandiser"
-                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer
-                                                        Merchandiser</label>
-                                                    <input id="customerMerchandiser" type="text"
-                                                        name="merchandiser_name" required
-                                                        class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                                </div>
-                                            </div>
-
-                                            <div class="flex gap-4">
-                                                <div class="w-1/2">
-                                                    <label for="totalValue"
-                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">PO
-                                                        Value</label>
-                                                    <input id="totalValue" type="number" step="0.01" name="price"
-                                                        required
-                                                        class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                                </div>
-                                                <div class="w-1/2">
-                                                    <label for="sampleCustomerRequestedDate"
-                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer
-                                                        Requested Date</label>
-                                                    <input id="sampleCustomerRequestedDate" type="date"
-                                                        name="customer_req_date"
-                                                        class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm focus:ring focus:ring-indigo-500">
-                                                </div>
-                                            </div>
-
-                                            <div>
-                                                <label for="customerNotes"
-                                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer
-                                                    Notes</label>
-                                                <input id="customerNotes" type="text" name="remarks"
-                                                    class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                            </div>
-
-                                            <div class="flex justify-end gap-3 mt-6">
-                                                <button type="button"
-                                                    onclick="document.getElementById('addSampleModal').classList.add('hidden')"
-                                                    class="px-4 py-2 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 text-sm rounded hover:bg-gray-300">
-                                                    Cancel
-                                                </button>
-                                                <button type="submit"
-                                                    class="px-4 py-2 bg-blue-500 text-white text-sm rounded hover:bg-blue-600">
-                                                    Create Sample Order
-                                                </button>
+                                            <div class="flex justify-end mt-6 space-x-3">
+                                                <button type="button" id="cancelForm" class="px-4 py-2 bg-gray-500 text-white rounded">Cancel</button>
+                                                <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded">Create Sample Order</button>
                                             </div>
                                         </form>
                                     </div>
@@ -740,7 +616,7 @@
                                                 <!-- Customer Delivery Status -->
                                                 <td
                                                     class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center text-gray-500 italic">
-                                                    
+
                                                 </td>
 
                                                 <!-- Action -->
@@ -927,59 +803,38 @@
             }
         }
 
-        // Simple dropdown toggle (for sample references)
-        function toggleDropdown(name) {
-            // We only have sampleReference dropdown here
-            const el = document.getElementById('dropdownMenusampleReference');
-            if (!el) return;
-            el.classList.toggle('hidden');
+        function toggleDropdown(button) {
+            const dropdown = button.parentElement.querySelector(".dropdownMenu");
+            dropdown.classList.toggle("hidden");
         }
 
-        // Filter list of sample options
-        function filterSamples() {
-            const q = (document.getElementById('sampleSearchInput').value || '').toLowerCase();
-            document.querySelectorAll('#sampleOptions li').forEach(li => {
-                li.style.display = li.textContent.toLowerCase().includes(q) ? '' : 'none';
-            });
-        }
+        function selectSampleReference(element, id, referenceNo) {
+            const group = element.closest(".item-group");
+            group.querySelector(".selectedSampleReference").innerText = referenceNo;
+            group.querySelector(".sampleReferenceHidden").value = id;
+            group.querySelector(".dropdownMenu").classList.add("hidden");
 
-        // Called when a sample reference is clicked
-        function selectSampleReference(id, referenceNo) {
-            // label + hidden ref id
-            document.getElementById('selectedSampleReference').innerText = referenceNo;
-            document.getElementById('sampleReferenceHidden').value = id;
-            // close dropdown
-            document.getElementById('dropdownMenusampleReference').classList.add('hidden');
-
-            // fetch details from backend and populate fields
+            // fetch details for this sample
             const base = "{{ url('product-catalog') }}";
             fetch(`${base}/${id}/details`)
-                .then(resp => {
-                    if (!resp.ok) throw new Error('Network response was not ok');
-                    return resp.json();
-                })
+                .then(resp => resp.json())
                 .then(data => {
-                    // These must match the sample-form IDs above
-                    document.getElementById('sampleShade').value = data.shade || data.colour || '';
-                    document.getElementById('sampleColour').value = data.colour || '';
-                    document.getElementById('sampleTKT').value = data.tkt || '';
-                    document.getElementById('sampleSize').value = data.size || '';
-                    document.getElementById('sampleItem').value = data.item || '';
-                    document.getElementById('sampleSupplier').value = data.supplier || '';
-                    if (document.getElementById('samplePSTNo')) {
-                        document.getElementById('samplePSTNo').value = data.pst_no || '';
-                    }
-                    if (document.getElementById('sampleSupplierComment')) {
-                        document.getElementById('sampleSupplierComment').value = data.supplier_comments || '';
-                    }
-
-                    // optional: prefill PO or other fields if returned
-                    if (data.preferred_po) document.getElementById('samplePoNumber').value = data.preferred_po;
+                    group.querySelector(".sampleShade").value = data.shade || '';
+                    group.querySelector(".sampleColour").value = data.colour || '';
+                    group.querySelector(".sampleTKT").value = data.tkt || '';
+                    group.querySelector(".sampleSize").value = data.size || '';
+                    group.querySelector(".sampleItem").value = data.item || '';
+                    group.querySelector(".sampleSupplier").value = data.supplier || '';
                 })
-                .catch(err => {
-                    console.error('Error fetching sample details:', err);
-                    // optionally show a toast/error in UI
-                });
+                .catch(err => console.error('Error fetching sample details:', err));
+        }
+
+        function filterSamples(input) {
+            const filter = input.value.toLowerCase();
+            const options = input.closest(".dropdownMenu").querySelectorAll("ul li");
+            options.forEach(option => {
+                option.style.display = option.textContent.toLowerCase().includes(filter) ? "" : "none";
+            });
         }
     </script>
 
@@ -1005,5 +860,41 @@
             const form = document.getElementById('reportFormContainer');
             form.classList.toggle('hidden');
         }
+    </script>
+
+    <script>
+        // Add item (already fine)
+        let itemIndex = 1;
+        document.getElementById('addItem').addEventListener('click', () => {
+            let container = document.getElementById('itemsContainer');
+            let clone = container.firstElementChild.cloneNode(true);
+            clone.querySelectorAll('input, select').forEach(el => {
+                let name = el.getAttribute('name');
+                if (name) {
+                    el.setAttribute('name', name.replace(/\d+/, itemIndex));
+                    el.value = '';
+                }
+            });
+            itemIndex++;
+            container.appendChild(clone);
+        });
+
+        // Remove item
+        document.addEventListener("click", function (e) {
+            const btn = e.target.closest(".removeItem");
+            if (btn) {
+                btn.closest(".item-group").remove();
+            }
+        });
+
+        // Cancel button hides whole modal
+        document.getElementById("cancelForm").addEventListener("click", () => {
+            document.getElementById("addSampleModal").classList.add("hidden");
+        });
+
+        // Click outside modal to close
+        document.getElementById("addSampleModal").addEventListener("click", () => {
+            document.getElementById("addSampleModal").classList.add("hidden");
+        });
     </script>
 @endsection
