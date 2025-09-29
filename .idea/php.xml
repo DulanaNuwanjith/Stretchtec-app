@@ -62,17 +62,13 @@
       <path value="$PROJECT_DIR$/Stretchtec/vendor/ramsey/uuid" />
       <path value="$PROJECT_DIR$/Stretchtec/vendor/league/uri-interfaces" />
       <path value="$PROJECT_DIR$/Stretchtec/vendor/nesbot/carbon" />
-      <path value="$PROJECT_DIR$/Stretchtec/vendor/dasprid/enum" />
       <path value="$PROJECT_DIR$/Stretchtec/vendor/dflydev/dot-access-data" />
       <path value="$PROJECT_DIR$/Stretchtec/vendor/vlucas/phpdotenv" />
-      <path value="$PROJECT_DIR$/Stretchtec/vendor/laravel/framework" />
       <path value="$PROJECT_DIR$/Stretchtec/vendor/laravel/jetstream" />
       <path value="$PROJECT_DIR$/Stretchtec/vendor/egulias/email-validator" />
       <path value="$PROJECT_DIR$/Stretchtec/vendor/laravel/fortify" />
-      <path value="$PROJECT_DIR$/Stretchtec/vendor/laravel/prompts" />
       <path value="$PROJECT_DIR$/Stretchtec/vendor/laravel/tinker" />
       <path value="$PROJECT_DIR$/Stretchtec/vendor/laravel/sanctum" />
-      <path value="$PROJECT_DIR$/Stretchtec/vendor/laravel/serializable-closure" />
       <path value="$PROJECT_DIR$/Stretchtec/vendor/monolog/monolog" />
       <path value="$PROJECT_DIR$/Stretchtec/vendor/myclabs/deep-copy" />
       <path value="$PROJECT_DIR$/Stretchtec/vendor/symfony/clock" />
@@ -183,6 +179,11 @@
       <path value="$PROJECT_DIR$/Stretchtec/vendor/phpunit/phpunit" />
       <path value="$PROJECT_DIR$/Stretchtec/vendor/phpunit/phpunit" />
       <path value="$PROJECT_DIR$/Stretchtec/vendor/phpunit/phpunit" />
+      <path value="$PROJECT_DIR$/Stretchtec/vendor/phiki/phiki" />
+      <path value="$PROJECT_DIR$/Stretchtec/vendor/laravel/serializable-closure" />
+      <path value="$PROJECT_DIR$/Stretchtec/vendor/laravel/framework" />
+      <path value="$PROJECT_DIR$/Stretchtec/vendor/laravel/prompts" />
+      <path value="$PROJECT_DIR$/Stretchtec/vendor/dasprid/enum" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="8.2" />

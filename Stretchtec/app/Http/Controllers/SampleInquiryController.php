@@ -223,7 +223,6 @@ class SampleInquiryController extends Controller
         //
     }
 
-
     /**
      * Remove the specified resource from storage.
      */
@@ -237,7 +236,6 @@ class SampleInquiryController extends Controller
             return redirect()->back()->with('error', 'Failed to delete the inquiry.');
         }
     }
-
 
     /**
      * Function to update developed status (alreadyDeveloped)
