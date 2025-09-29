@@ -12,7 +12,11 @@ class ProductOrderPreperationController extends Controller
      */
     public function index()
     {
-        return view('production.pages.production-order-preparation');
+        // Fetch all records with pagination (adjust number per page as needed)
+        $orderPreparations = ProductOrderPreperation::latest()->paginate(10);
+
+        // Pass data to the blade
+        return view('production.pages.production-order-preparation', compact('orderPreparations'));
     }
 
     /**

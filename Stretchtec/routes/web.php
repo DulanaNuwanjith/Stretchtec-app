@@ -201,8 +201,6 @@ Route::middleware([
 
     Route::resource('production-order-preparation', ProductOrderPreperationController::class)->names([
         'index' => 'production-order-preparation.index',
-        'store' => 'production-order-preparation.store',
-        'destroy' => 'production-order-preparation.destroy',
     ]);
     Route::get('/product-catalog/{id}/details', [ProductInquiryController::class, 'getSampleDetails'])
         ->name('product-catalog.details');
