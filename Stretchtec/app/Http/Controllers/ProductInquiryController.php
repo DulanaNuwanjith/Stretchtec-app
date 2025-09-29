@@ -95,14 +95,12 @@ class ProductInquiryController extends Controller
             $data = $validator->validated();
 
             // Generate automatic product order number
-            $lastOrder = ProductInquiry::orderBy('id', 'desc')->value('prod_order_no');
-            if ($lastOrder) {
-                $lastNumber = (int)str_replace('PO', '', $lastOrder);
-                $nextNumber = $lastNumber + 1;
-            } else {
-                $nextNumber = 1;
-            }
-            $data['prod_order_no'] = 'PO' . str_pad($nextNumber, 6, '0', STR_PAD_LEFT);
+            $lastOrderNo = ProductInquiry::selectRaw("MAX(CAST(SUBSTRING(prod_order_no, 4) AS UNSIGNED)) as max_number")
+                ->value('max_number');
+
+            $nextNumber = $lastOrderNo ? $lastOrderNo + 1 : 1;
+
+            $data['prod_order_no'] = 'PO-' . str_pad($nextNumber, 6, '0', STR_PAD_LEFT);
 
             // Set PO received date
             $data['po_received_date'] = now();
