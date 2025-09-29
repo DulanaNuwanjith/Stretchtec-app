@@ -21,7 +21,7 @@ class ProductInquiryController extends Controller
     public function index(): Factory|View
     {
         $samples = ProductCatalog::all();
-        $productInquiries = ProductInquiry::simplePaginate(10);
+        $productInquiries = ProductInquiry::Paginate(10);
 
         return view('production.pages.production-inquery-details', compact('samples', 'productInquiries'));
     }

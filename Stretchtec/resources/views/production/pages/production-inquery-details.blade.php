@@ -16,7 +16,7 @@
     @extends('layouts.production-tabs')
 
     @section('content')
-        <div class="flex-1 overflow-y-hidden mb-20">
+        <div class="flex-1 overflow-y-hidden">
             <div class="">
                 <div class="w-full px-6 lg:px-2">
                     <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
@@ -206,7 +206,7 @@
                                                     class="block text-sm font-medium text-gray-700 dark:text-gray-300">Reference
                                                     Number</label>
                                                 <input id="direct_reference_no" type="text" name="reference_no" value="Direct Bulk" readonly
-                                                    class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                    class="w-full mt-1 px-3 py-2 border rounded-md bg-gray-100 dark:bg-gray-700 dark:text-white text-sm">
                                             </div>
 
                                             <!-- PO Number & Coordinator -->
@@ -615,6 +615,9 @@
                                                 Status</th>
                                             <th
                                                 class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                Customer Delivery Status</th>
+                                            <th
+                                                class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Action</th>
                                         </tr>
                                     </thead>
@@ -734,6 +737,12 @@
                                                     </span>
                                                 </td>
 
+                                                <!-- Customer Delivery Status -->
+                                                <td
+                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center text-gray-500 italic">
+                                                    
+                                                </td>
+
                                                 <!-- Action -->
                                                 <td
                                                     class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
@@ -761,7 +770,8 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <div class="p-4 border-t border-gray-200 dark:border-gray-700">
+
+                            <div class="py-6 flex justify-center">
                                 {{ $productInquiries->links() }}
                             </div>
 
