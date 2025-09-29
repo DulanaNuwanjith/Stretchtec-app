@@ -434,7 +434,8 @@
                                                                placeholder="PO Value">
                                                     </div>
 
-                                                    <button type="button" class="removeItem mt-3 text-red-600 text-sm">
+                                                    <button type="button" onclick="removeItem(this)"
+                                                            class="removeItem mt-3 text-red-600 text-sm">
                                                         Remove Item
                                                     </button>
                                                 </div>
@@ -937,14 +938,14 @@
         let firstItem = container.firstElementChild;
         let clone = firstItem.cloneNode(true);
 
-        // Reset input values and update names with new index
+        // Reset all input/select values and update indexes
         clone.querySelectorAll('input, select').forEach(el => {
             let name = el.getAttribute('name');
             if (name) {
-                el.setAttribute('name', name.replace(/\d+/, itemIndex)); // update index
+                el.setAttribute('name', name.replace(/\d+/, itemIndex));
             }
 
-            // Reset values
+            // Clear values
             if (el.type === "hidden" || el.type === "text" || el.type === "number" || el.type === "date") {
                 el.value = '';
             }
@@ -953,38 +954,39 @@
             }
         });
 
-        // Reset the "Select Sample Reference" text
-        clone.querySelector(".selectedSampleReference").textContent = "Select Sample Reference";
+        // Reset sample reference text
+        let ref = clone.querySelector(".selectedSampleReference");
+        if (ref) ref.textContent = "Select Sample Reference";
 
+        // Append new item
         itemIndex++;
         container.appendChild(clone);
     });
 
-    // Remove item
-    document.addEventListener("click", function (e) {
-        const btn = e.target.closest(".removeItem");
-        if (btn) {
-            const allItems = document.querySelectorAll("#itemsContainer .item-group");
-
-            // Prevent removing the last item (must have at least one)
-            if (allItems.length > 1) {
-                btn.closest(".item-group").remove();
-            } else {
-                alert("You must keep at least one item.");
-            }
-        }
-    });
-
-    // Cancel button hides whole modal
+    // Cancel button hides modal
     document.getElementById("cancelForm").addEventListener("click", () => {
         document.getElementById("addSampleModal").classList.add("hidden");
     });
 
-    // Click outside modal to close (only if clicked directly on overlay, not form)
+    // Close modal when clicking overlay
     document.getElementById("addSampleModal").addEventListener("click", (e) => {
         if (e.target.id === "addSampleModal") {
             document.getElementById("addSampleModal").classList.add("hidden");
         }
     });
 </script>
+
+<script>
+    function removeItem(button) {
+        const container = document.getElementById('itemsContainer');
+        const allItems = container.querySelectorAll('.item-group');
+
+        if (allItems.length > 1) {
+            button.closest('.item-group').remove();
+        } else {
+            alert("You must keep at least one item.");
+        }
+    }
+</script>
+
 @endsection
