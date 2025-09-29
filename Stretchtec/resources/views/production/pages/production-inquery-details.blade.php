@@ -588,7 +588,7 @@
                                     </tbody>
                                 </table>
 
-                                <div class="p-4 border-t border-gray-200 dark:border-gray-700">
+                                <div class=" border-t border-gray-200 dark:border-gray-700">
                                     {{ $productInquiries->links() }}
                                 </div>
                             </div>
