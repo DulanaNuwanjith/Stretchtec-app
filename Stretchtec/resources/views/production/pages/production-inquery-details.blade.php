@@ -449,49 +449,48 @@
                             </div>
 
                             <div id="productionDetailsScroll"
-                                 class="overflow-x-auto max-h-[1200px] bg-white dark:bg-gray-900 shadow-md rounded-xl relative border border-gray-200 dark:border-gray-700">
-
+                                 class="overflow-x-auto max-h-[1200px] bg-white dark:bg-gray-900 shadow rounded-lg">
                                 <table
-                                    class="min-w-[1400px] w-full text-sm text-left text-gray-700 dark:text-gray-300 border-collapse">
-                                    <thead class="bg-gray-100 dark:bg-gray-800 sticky top-0 z-10 shadow-sm">
-                                    <tr class="text-center text-xs font-semibold uppercase tracking-wider text-gray-600 dark:text-gray-300 divide-x divide-gray-300 dark:divide-gray-600">
-                                        <th class="px-4 py-3 sticky left-0 z-20 bg-gray-100 dark:bg-gray-800 w-32">
+                                    class="table-fixed w-full text-sm divide-y divide-gray-200 dark:divide-gray-700">
+                                    <thead class="bg-gray-200 dark:bg-gray-700 text-left">
+                                    <tr class="text-center">
+                                        <th class="font-bold sticky left-0 top-0 z-20 bg-white px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                             Order No
                                         </th>
-                                        <th class="px-4 py-3">Reference Number</th>
-                                        <th class="px-4 py-3">PO Number</th>
-                                        <th class="px-4 py-3">Customer Coordinator</th>
-                                        <th class="px-4 py-3">Quantity</th>
-                                        <th class="px-4 py-3">Customer Name</th>
-                                        <th class="px-4 py-3">Customer Merchandiser</th>
-                                        <th class="px-4 py-3">PO Value</th>
-                                        <th class="px-4 py-3">Requested Date</th>
-                                        <th class="px-4 py-3">Notes</th>
-                                        <th class="px-4 py-3">Send to Stock</th>
-                                        <th class="px-4 py-3">Send to Production</th>
-                                        <th class="px-4 py-3">Status</th>
-                                        <th class="px-4 py-3">Action</th>
+                                        <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">Reference Number</th>
+                                        <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">PO Number</th>
+                                        <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">Customer Coordinator</th>
+                                        <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">Quantity</th>
+                                        <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">Customer Name</th>
+                                        <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">Customer Merchandiser</th>
+                                        <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">PO Value</th>
+                                        <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">Requested Date</th>
+                                        <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">Notes</th>
+                                        <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">Send to Stock</th>
+                                        <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">Send to Production</th>
+                                        <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">Status</th>
+                                        <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">Action</th>
                                     </tr>
                                     </thead>
 
                                     <tbody id="productionDetailsRecords"
-                                           class="divide-y divide-gray-200 dark:divide-gray-700">
+                                           class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                                     @forelse($productInquiries as $inquiry)
-                                        <tr class="text-center hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-200 divide-x divide-gray-200 dark:divide-gray-700">
+                                        <tr class="odd:bg-white even:bg-gray-50 border-b border-gray-200  text-left">
                                             <!-- Production ID -->
 
                                             @if ($inquiry->supplier === null)
-                                                <td class="px-4 py-3 font-semibold sticky left-0 z-10 bg-gray-50 dark:bg-gray-900 text-blue-500">
+                                                <td class="px-4 py-3 font-semibold sticky left-0 z-10 bg-gray-100 whitespace-normal break-words border-r border-gray-300 text-blue-500">
                                                     {{ $inquiry->prod_order_no ?? 'N/A' }}
                                                 </td>
                                             @else
-                                                <td class="px-4 py-3 font-semibold sticky left-0 z-10 bg-gray-50 dark:bg-gray-900">
+                                                <td class="px-4 py-3 font-semibold sticky left-0 z-10 bg-gray-100 whitespace-normal break-words border-r border-gray-300">
                                                     {{ $inquiry->prod_order_no ?? 'N/A' }}
                                                 </td>
                                             @endif
 
                                             <!-- Reference Number -->
-                                            <td class="px-4 py-3">
+                                            <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
                                                 <button type="button"
                                                         class="text-blue-600 dark:text-blue-400 font-medium hover:text-blue-800"
                                                         onclick="openDetailsModal(this)"
@@ -509,35 +508,35 @@
                                             </td>
 
                                             <!-- PO Number -->
-                                            <td class="px-4 py-3">{{ $inquiry->po_number ?? 'N/A' }}</td>
+                                            <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">{{ $inquiry->po_number ?? 'N/A' }}</td>
 
                                             <!-- Customer Coordinator -->
-                                            <td class="px-4 py-3">{{ $inquiry->customer_coordinator ?? 'N/A' }}</td>
+                                            <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">{{ $inquiry->customer_coordinator ?? 'N/A' }}</td>
 
                                             <!-- Quantity -->
-                                            <td class="px-4 py-3">{{ $inquiry->qty ?? '0' }}</td>
+                                            <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">{{ $inquiry->qty ?? '0' }}</td>
 
                                             <!-- Customer Name -->
-                                            <td class="px-4 py-3">{{ $inquiry->customer_name ?? 'N/A' }}</td>
+                                            <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">{{ $inquiry->customer_name ?? 'N/A' }}</td>
 
                                             <!-- Customer Merchandiser -->
-                                            <td class="px-4 py-3">{{ $inquiry->merchandiser_name ?? 'N/A' }}</td>
+                                            <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">{{ $inquiry->merchandiser_name ?? 'N/A' }}</td>
 
                                             <!-- PO Value -->
-                                            <td class="px-4 py-3 text-green-600 font-medium">
+                                            <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center text-green-600 font-medium">
                                                 {{ $inquiry->price ? '$' . number_format($inquiry->price, 2) : '0' }}
                                             </td>
 
                                             <!-- Requested Date -->
-                                            <td class="px-4 py-3">{{ $inquiry->customer_req_date ?? 'N/A' }}</td>
+                                            <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">{{ $inquiry->customer_req_date ?? 'N/A' }}</td>
 
                                             <!-- Notes -->
-                                            <td class="px-4 py-3 text-gray-500 italic">
+                                            <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center text-gray-500 italic">
                                                 {{ $inquiry->remarks ?? '-' }}
                                             </td>
 
                                             <!-- Send to Stock -->
-                                            <td class="px-4 py-3">
+                                            <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
                                                 <button
                                                     class="px-3 py-1 text-xs rounded-lg bg-blue-100 text-blue-700 hover:bg-blue-200">
                                                     Stock
@@ -545,7 +544,7 @@
                                             </td>
 
                                             <!-- Send to Production -->
-                                            <td class="px-4 py-3">
+                                            <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
                                                 <button
                                                     class="px-3 py-1 text-xs rounded-lg bg-indigo-100 text-indigo-700 hover:bg-indigo-200">
                                                     Production
@@ -553,7 +552,7 @@
                                             </td>
 
                                             <!-- Status -->
-                                            <td class="px-4 py-3">
+                                            <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
                                                 <span class="px-2 py-1 text-xs rounded-full
                                                     {{ $inquiry->status === 'Completed' ? 'bg-green-100 text-green-700' :
                                                       ($inquiry->status === 'Pending' ? 'bg-yellow-100 text-yellow-700' : 'bg-gray-100 text-gray-600') }}">
@@ -562,7 +561,7 @@
                                             </td>
 
                                             <!-- Action -->
-                                            <td class="px-4 py-3">
+                                            <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
                                                 <form id="delete-form-{{ $inquiry->id }}"
                                                       method="POST"
                                                       action="{{ route('production-inquery-details.destroy', $inquiry->id) }}"
