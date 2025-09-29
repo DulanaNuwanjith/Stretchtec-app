@@ -154,8 +154,17 @@ class ProductInquiryController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(ProductInquiry $productInquiry)
+    public function destroy($id): ?RedirectResponse
     {
-        //
+        try {
+            $productInquiry = ProductInquiry::findOrFail($id);
+            $productInquiry->delete();
+
+            return redirect()->back()->with('success', 'Product Inquiry deleted successfully.');
+        } catch (Exception $e) {
+            Log::error('Product Inquiry Delete Error: ' . $e->getMessage(), ['id' => $id]);
+            return redirect()->back()->with('error', 'Failed to delete the product inquiry.');
+        }
     }
+
 }
