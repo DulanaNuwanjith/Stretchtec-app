@@ -207,6 +207,10 @@ Route::middleware([
     Route::get('/product-catalog/{id}/details', [ProductInquiryController::class, 'getSampleDetails'])
         ->name('product-catalog.details');
 
+    Route::patch('/production-inquiry/{id}/send-to-production', [ProductInquiryController::class, 'sendToProduction'])
+        ->name('production-inquiry.sendToProduction');
+
+
 
     //Technical Details Routes
     Route::get('/elasticTD', [TechnicalCardController::class, 'elasticIndex'])->name('elasticTD.index');
@@ -389,7 +393,5 @@ Route::middleware(['auth'])->group(function () {
             ->name('reports.rejectReportPdf');
         Route::get('/reports/customer-reject-pdf', [ReportController::class, 'generateCustomerRejectReportPdf'])
             ->name('reports.customerRejectReportPdf');
-
     });
 });
-

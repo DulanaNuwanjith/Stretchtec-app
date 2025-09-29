@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
+use Illuminate\Http\Request;
 use App\Models\ProductCatalog;
 use App\Models\ProductInquiry;
-use Exception;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
+use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Contracts\View\Factory;
+use App\Models\ProductOrderPreperation;
 use Illuminate\Support\Facades\Validator;
 
 class ProductInquiryController extends Controller
@@ -114,7 +115,6 @@ class ProductInquiryController extends Controller
             ]);
 
             return redirect()->back()->with('success', 'Product inquiry created successfully.');
-
         } catch (Exception $e) {
             Log::error('Unexpected error while creating Product Inquiry', [
                 'message' => $e->getMessage(),
@@ -167,4 +167,46 @@ class ProductInquiryController extends Controller
         }
     }
 
+    /**
+     * Send product inquiry to production order preparations
+     */
+    public function sendToProduction($id): RedirectResponse
+    {
+        try {
+            $productInquiry = ProductInquiry::findOrFail($id);
+
+            if ($productInquiry->isSentToProduction) {
+                return redirect()->back()->with('info', 'This inquiry has already been sent to production.');
+            }
+
+            // 1️⃣ Update the inquiry status
+            $productInquiry->update([
+                'isSentToProduction' => true,
+                'status' => 'Sent to Production',
+            ]);
+
+            // 2️⃣ Create a record in production orders
+            ProductOrderPreperation::create([
+                'product_inquiry_id' => $productInquiry->id,
+                'prod_order_no' => $productInquiry->prod_order_no,
+                'customer_name' => $productInquiry->customer_name,
+                'item' => $productInquiry->item,
+                'size' => $productInquiry->size,
+                'color' => $productInquiry->color,
+                'shade' => $productInquiry->shade,
+                'tkt' => $productInquiry->tkt,
+                'qty' => $productInquiry->qty,
+                'uom' => $productInquiry->uom,
+                'supplier' => $productInquiry->supplier,
+                'pst_no' => $productInquiry->pst_no,
+                'supplier_comment' => $productInquiry->supplier_comment,
+                'status' => 'Pending', // initial production status
+            ]);
+
+            return redirect()->back()->with('success', 'Inquiry sent to production successfully.');
+        } catch (Exception $e) {
+            Log::error('Send to Production Error: ' . $e->getMessage(), ['id' => $id]);
+            return redirect()->back()->with('error', 'Failed to send inquiry to production.');
+        }
+    }
 }

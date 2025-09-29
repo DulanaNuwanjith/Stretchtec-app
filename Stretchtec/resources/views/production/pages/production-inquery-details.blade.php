@@ -684,14 +684,25 @@
                                                     </button>
                                                 </td>
 
-                                                <!-- Send to Production -->
-                                                <td
-                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
-                                                    <button
-                                                        class="px-3 py-1 text-xs rounded-lg bg-indigo-100 text-indigo-700 hover:bg-indigo-200">
-                                                        Production
-                                                    </button>
+                                               <!-- Send to Production -->
+                                               <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                                    @if($inquiry->isSentToProduction)
+                                                        <button class="px-3 py-1 text-xs rounded-lg bg-gray-200 text-gray-500 cursor-not-allowed" disabled>
+                                                            Sent
+                                                        </button>
+                                                    @else
+                                                        <form action="{{ route('production-inquiry.sendToProduction', $inquiry->id) }}" method="POST">
+                                                            @csrf
+                                                            @method('PATCH')
+                                                            <button type="submit"
+                                                                class="px-3 py-1 text-xs rounded-lg bg-indigo-100 text-indigo-700 hover:bg-indigo-200"
+                                                                onclick="return confirm('Are you sure you want to send this inquiry to production?')">
+                                                                Send to Production
+                                                            </button>
+                                                        </form>
+                                                    @endif
                                                 </td>
+
 
                                                 <!-- Status -->
                                                 <td
