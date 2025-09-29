@@ -57,7 +57,7 @@ class ProductInquiryController extends Controller
     public function store(Request $request): ?RedirectResponse
     {
         try {
-            // ✅ Step 1: Validate input
+            // Step 1: Validate input
             $validator = Validator::make($request->all(), [
                 'customer_name' => 'required|string|max:255',
                 'merchandiser_name' => 'required|string|max:255',
@@ -69,7 +69,7 @@ class ProductInquiryController extends Controller
                 'supplier' => 'nullable|string|max:255',
                 'pst_no' => 'nullable|string|max:255',
                 'supplier_comment' => 'nullable|string',
-                'reference_no' => 'required|string|max:255',
+                'sample_id' => 'required|integer', // <-- send sample ID
                 'shade' => 'required|string|max:255',
                 'tkt' => 'required|string|max:255',
                 'qty' => 'required|numeric',
@@ -81,46 +81,34 @@ class ProductInquiryController extends Controller
             ]);
 
             if ($validator->fails()) {
-                Log::warning('Product Inquiry Validation Failed', [
-                    'errors' => $validator->errors()->toArray(),
-                    'input' => $request->all()
-                ]);
-
                 return redirect()->back()
                     ->withErrors($validator)
                     ->withInput();
             }
 
-            // ✅ Step 2: Build data
+            // Step 2: Build data
             $data = $validator->validated();
+
+            // Get reference_no from ProductCatalog using sample_id
+            $sample = ProductCatalog::findOrFail($data['sample_id']);
+            $data['reference_no'] = $sample->reference_no;
 
             // Generate automatic product order number
             $lastOrderNo = ProductInquiry::selectRaw("MAX(CAST(SUBSTRING(prod_order_no, 4) AS UNSIGNED)) as max_number")
                 ->value('max_number');
 
             $nextNumber = $lastOrderNo ? $lastOrderNo + 1 : 1;
-
-            $data['prod_order_no'] = 'PO-' . str_pad($nextNumber, 6, '0', STR_PAD_LEFT);
+            $data['prod_order_no'] = 'ST-PO-' . str_pad($nextNumber, 5, '0', STR_PAD_LEFT);
 
             // Set PO received date
             $data['po_received_date'] = now();
 
-            // ✅ Step 3: Create a record
+            // Step 3: Create a record
             ProductInquiry::create($data);
-
-            Log::info('Product inquiry created successfully', [
-                'po_number' => $request->po_number,
-                'customer' => $request->customer_name,
-            ]);
 
             return redirect()->back()->with('success', 'Product inquiry created successfully.');
 
         } catch (Exception $e) {
-            Log::error('Unexpected error while creating Product Inquiry', [
-                'message' => $e->getMessage(),
-                'trace' => $e->getTraceAsString(),
-            ]);
-
             return redirect()->back()
                 ->with('error', 'Something went wrong. Please contact support.')
                 ->withInput();

@@ -62,49 +62,49 @@
                             <script>
                                 document.addEventListener('DOMContentLoaded', () => {
                                     @if (session('success'))
-                                    Swal.fire({
-                                        toast: true,
-                                        position: 'top-end',
-                                        icon: 'success',
-                                        title: '{{ session('success') }}',
-                                        showConfirmButton: false,
-                                        timer: 2000,
-                                        timerProgressBar: true,
-                                        customClass: {
-                                            popup: 'swal2-toast swal2-shadow'
-                                        },
-                                    });
+                                        Swal.fire({
+                                            toast: true,
+                                            position: 'top-end',
+                                            icon: 'success',
+                                            title: '{{ session('success') }}',
+                                            showConfirmButton: false,
+                                            timer: 2000,
+                                            timerProgressBar: true,
+                                            customClass: {
+                                                popup: 'swal2-toast swal2-shadow'
+                                            },
+                                        });
                                     @endif
 
                                     @if (session('error'))
-                                    Swal.fire({
-                                        toast: true,
-                                        position: 'top-end',
-                                        icon: 'error',
-                                        title: '{{ session('error') }}',
-                                        showConfirmButton: false,
-                                        timer: 2000,
-                                        timerProgressBar: true,
-                                        customClass: {
-                                            popup: 'swal2-toast swal2-shadow'
-                                        },
-                                    });
+                                        Swal.fire({
+                                            toast: true,
+                                            position: 'top-end',
+                                            icon: 'error',
+                                            title: '{{ session('error') }}',
+                                            showConfirmButton: false,
+                                            timer: 2000,
+                                            timerProgressBar: true,
+                                            customClass: {
+                                                popup: 'swal2-toast swal2-shadow'
+                                            },
+                                        });
                                     @endif
 
                                     @if ($errors->any())
-                                    Swal.fire({
-                                        toast: true,
-                                        position: 'top-end',
-                                        icon: 'warning',
-                                        title: 'Validation Errors',
-                                        html: `{!! implode('<br>', $errors->all()) !!}`,
-                                        showConfirmButton: false,
-                                        timer: 3000,
-                                        timerProgressBar: true,
-                                        customClass: {
-                                            popup: 'swal2-toast swal2-shadow'
-                                        },
-                                    });
+                                        Swal.fire({
+                                            toast: true,
+                                            position: 'top-end',
+                                            icon: 'warning',
+                                            title: 'Validation Errors',
+                                            html: `{!! implode('<br>', $errors->all()) !!}`,
+                                            showConfirmButton: false,
+                                            timer: 3000,
+                                            timerProgressBar: true,
+                                            customClass: {
+                                                popup: 'swal2-toast swal2-shadow'
+                                            },
+                                        });
                                     @endif
                                 });
                             </script>
@@ -131,6 +131,30 @@
                                     });
                                 }
                             </script>
+
+                            {{-- Filters --}}
+                            <div class="flex justify-start">
+                                <button onclick="toggleFilterForm()"
+                                    class="bg-white border border-blue-500 text-blue-500 hover:text-blue-600 hover:border-blue-600 font-semibold py-1 px-3 rounded shadow flex items-center gap-2 mb-6">
+                                    <img src="{{ asset('icons/filter.png') }}" class="w-6 h-6" alt="Filter Icon">
+                                    Filters
+                                </button>
+                                <button onclick="toggleReportForm()"
+                                    class="bg-white border border-blue-500 text-blue-500 hover:text-blue-600 hover:border-blue-600 font-semibold py-1 px-3 rounded shadow flex items-center gap-2 mb-6 ml-2">
+                                    Generate Report
+                                </button>
+                            </div>
+
+                            <div id="filterFormContainer" class="hidden mt-4">
+                                <!-- Filter Form -->
+                                <form id="filterForm1" method="GET" action="{{ route('sample-inquery-details.index') }}"
+                                    class="mb-6 sticky top-0 z-40 flex gap-6 items-center">
+                                    <div class="flex items-center gap-4 flex-wrap">
+
+
+                                    </div>
+                                </form>
+                            </div>
 
                             <div class="flex justify-between items-center mb-6">
                                 <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Production Inquiry
@@ -362,8 +386,8 @@
                                                 </div>
                                             </div>
 
-                                            <!-- Hidden ref value (will be sent as reference_no) -->
-                                            <input type="hidden" name="reference_no" id="sampleReferenceHidden">
+                                            <!-- Hidden input to send sample ID -->
+                                            <input type="hidden" name="sample_id" id="sampleReferenceHidden">
 
                                             <!-- Auto-filled fields (unique IDs for sample form) -->
                                             <div class="flex gap-4">
@@ -515,7 +539,7 @@
                                                         class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer
                                                         Requested Date</label>
                                                     <input id="sampleCustomerRequestedDate" type="date"
-                                                        name="customer_req_date" 
+                                                        name="customer_req_date"
                                                         class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm focus:ring focus:ring-indigo-500">
                                                 </div>
                                             </div>
@@ -555,7 +579,7 @@
                                                 Order No
                                             </th>
                                             <th
-                                                class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-48 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Reference Number</th>
                                             <th
                                                 class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
@@ -604,12 +628,12 @@
 
                                                 @if ($inquiry->supplier === null)
                                                     <td
-                                                        class="px-4 py-3 font-semibold sticky left-0 z-10 bg-gray-100 whitespace-normal break-words border-r border-gray-300 text-blue-500">
+                                                        class="px-4 py-3 font-bold sticky left-0 z-10 bg-gray-100 whitespace-normal break-words border-r border-gray-300 text-blue-500">
                                                         {{ $inquiry->prod_order_no ?? 'N/A' }}
                                                     </td>
                                                 @else
                                                     <td
-                                                        class="px-4 py-3 font-semibold sticky left-0 z-10 bg-gray-100 whitespace-normal break-words border-r border-gray-300">
+                                                        class="px-4 py-3 font-bold sticky left-0 z-10 bg-gray-100 whitespace-normal break-words border-r border-gray-300">
                                                         {{ $inquiry->prod_order_no ?? 'N/A' }}
                                                     </td>
                                                 @endif
@@ -661,7 +685,7 @@
                                                 <!-- PO Value -->
                                                 <td
                                                     class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center text-green-600 font-medium">
-                                                    {{ $inquiry->price ? '$' . number_format($inquiry->price, 2) : '0' }}
+                                                    {{ $inquiry->price ? 'LKR  ' . number_format($inquiry->price, 2) : '0' }}
                                                 </td>
 
                                                 <!-- Requested Date -->
@@ -956,5 +980,17 @@
                 field.classList.add("bg-white", "dark:bg-gray-800"); // make editable background
             });
         });
+    </script>
+
+    <script>
+        function toggleFilterForm() {
+            const form = document.getElementById('filterFormContainer');
+            form.classList.toggle('hidden');
+        }
+
+        function toggleReportForm() {
+            const form = document.getElementById('reportFormContainer');
+            form.classList.toggle('hidden');
+        }
     </script>
 @endsection
