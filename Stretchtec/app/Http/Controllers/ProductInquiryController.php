@@ -75,7 +75,7 @@ class ProductInquiryController extends Controller
                 'qty' => 'required|numeric',
                 'uom' => 'required|string|max:50',
                 'price' => 'required|numeric',
-                'customer_req_date' => 'required|date',
+                'customer_req_date' => 'nullable|date',
                 'order_type' => 'required|string|max:255',
                 'remarks' => 'nullable|string',
             ]);
@@ -126,7 +126,6 @@ class ProductInquiryController extends Controller
                 ->withInput();
         }
     }
-
 
     /**
      * Display the specified resource.

@@ -323,7 +323,6 @@
                                             </div>
                                         </form>
 
-                                        <!-- ================= Sample ORDER FORM ================= -->
                                         <form id="sampleForm" class="space-y-4"
                                             action="{{ route('production-inquery-details.store') }}" method="POST"
                                             enctype="multipart/form-data">
@@ -516,7 +515,7 @@
                                                         class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer
                                                         Requested Date</label>
                                                     <input id="sampleCustomerRequestedDate" type="date"
-                                                        name="customer_req_date" required
+                                                        name="customer_req_date" 
                                                         class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm focus:ring focus:ring-indigo-500">
                                                 </div>
                                             </div>

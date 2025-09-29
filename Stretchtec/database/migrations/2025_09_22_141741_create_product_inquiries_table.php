@@ -30,7 +30,7 @@ return new class extends Migration {
             $table->string('pst_no')->nullable();
             $table->string('supplier_comment')->nullable();
             $table->decimal('price');
-            $table->date('customer_req_date');
+            $table->date('customer_req_date')->nullable();
             $table->date('our_prod_date')->nullable();
             $table->decimal('stock_qty')->nullable();
             $table->decimal('to_make_qty')->nullable();
