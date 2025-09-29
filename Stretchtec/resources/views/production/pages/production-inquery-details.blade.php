@@ -452,25 +452,25 @@
                                  class="overflow-x-auto max-h-[1200px] bg-white dark:bg-gray-900 shadow-md rounded-xl relative border border-gray-200 dark:border-gray-700">
 
                                 <table
-                                    class="min-w-[1400px] w-full text-sm text-left text-gray-700 dark:text-gray-300 border-collapse">
-                                    <thead class="bg-gray-100 dark:bg-gray-800 sticky top-0 z-10 shadow-sm">
-                                    <tr class="text-center text-xs font-semibold uppercase tracking-wider text-gray-600 dark:text-gray-300 divide-x divide-gray-300 dark:divide-gray-600">
-                                        <th class="px-4 py-3 sticky left-0 z-20 bg-gray-100 dark:bg-gray-800 w-32">
+                                    class="table-fixed w-full text-sm divide-y divide-gray-200 dark:divide-gray-700">
+                                    <thead class="bg-gray-200 dark:bg-gray-700 text-left">
+                                    <tr class="text-center ">
+                                        <th class="font-bold sticky left-0 top-0 z-20 bg-white px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                             Order No
                                         </th>
-                                        <th class="px-4 py-3">Reference Number</th>
-                                        <th class="px-4 py-3">PO Number</th>
-                                        <th class="px-4 py-3">Customer Coordinator</th>
-                                        <th class="px-4 py-3">Quantity</th>
-                                        <th class="px-4 py-3">Customer Name</th>
-                                        <th class="px-4 py-3">Customer Merchandiser</th>
-                                        <th class="px-4 py-3">PO Value</th>
-                                        <th class="px-4 py-3">Requested Date</th>
-                                        <th class="px-4 py-3">Notes</th>
-                                        <th class="px-4 py-3">Send to Stock</th>
-                                        <th class="px-4 py-3">Send to Production</th>
-                                        <th class="px-4 py-3">Status</th>
-                                        <th class="px-4 py-3">Action</th>
+                                        <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">Reference Number</th>
+                                        <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">PO Number</th>
+                                        <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">Customer Coordinator</th>
+                                        <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">Quantity</th>
+                                        <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">Customer Name</th>
+                                        <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">Customer Merchandiser</th>
+                                        <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">PO Value</th>
+                                        <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">Requested Date</th>
+                                        <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">Notes</th>
+                                        <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">Send to Stock</th>
+                                        <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">Send to Production</th>
+                                        <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">Status</th>
+                                        <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">Action</th>
                                     </tr>
                                     </thead>
 
