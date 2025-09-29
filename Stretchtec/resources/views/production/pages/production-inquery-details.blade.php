@@ -205,7 +205,7 @@
                                                 <label for="direct_reference_no"
                                                     class="block text-sm font-medium text-gray-700 dark:text-gray-300">Reference
                                                     Number</label>
-                                                <input id="direct_reference_no" type="text" name="reference_no"
+                                                <input id="direct_reference_no" type="text" name="reference_no" value="Direct Bulk" readonly
                                                     class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                             </div>
 
@@ -564,7 +564,6 @@
                                                 </button>
                                             </div>
                                         </form>
-
                                     </div>
                                 </div>
                             </div>
@@ -575,7 +574,7 @@
                                     <thead class="bg-gray-200 dark:bg-gray-700 text-left">
                                         <tr class="text-center">
                                             <th
-                                                class="font-bold sticky left-0 top-0 z-20 bg-white px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold sticky left-0 top-0 z-20 bg-white px-4 py-3 w-36 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Order No
                                             </th>
                                             <th
@@ -624,17 +623,21 @@
                                         class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                                         @forelse($productInquiries as $inquiry)
                                             <tr class="odd:bg-white even:bg-gray-50 border-b border-gray-200  text-left">
-                                                <!-- Production ID -->
-
                                                 @if ($inquiry->supplier === null)
                                                     <td
                                                         class="px-4 py-3 font-bold sticky left-0 z-10 bg-gray-100 whitespace-normal break-words border-r border-gray-300 text-blue-500">
                                                         {{ $inquiry->prod_order_no ?? 'N/A' }}
+                                                        <div class="text-xs font-normal text-gray-500">
+                                                            ({{ $inquiry->po_received_date ? \Carbon\Carbon::parse($inquiry->po_received_date)->format('Y-m-d') : '' }})
+                                                        </div>
                                                     </td>
                                                 @else
                                                     <td
                                                         class="px-4 py-3 font-bold sticky left-0 z-10 bg-gray-100 whitespace-normal break-words border-r border-gray-300">
                                                         {{ $inquiry->prod_order_no ?? 'N/A' }}
+                                                        <div class="text-xs font-normal text-gray-500">
+                                                            ({{ $inquiry->po_received_date ? \Carbon\Carbon::parse($inquiry->po_received_date)->format('Y-m-d') : '' }})
+                                                        </div>
                                                     </td>
                                                 @endif
 

@@ -69,7 +69,7 @@ class ProductInquiryController extends Controller
                 'supplier' => 'nullable|string|max:255',
                 'pst_no' => 'nullable|string|max:255',
                 'supplier_comment' => 'nullable|string',
-                'sample_id' => 'required|integer', // <-- send sample ID
+                'sample_id' => 'required_if:order_type,sample|integer', // <-- only required if order_type is 'sample'
                 'shade' => 'required|string|max:255',
                 'tkt' => 'required|string|max:255',
                 'qty' => 'required|numeric',
@@ -89,15 +89,23 @@ class ProductInquiryController extends Controller
             // Step 2: Build data
             $data = $validator->validated();
 
-            // Get reference_no from ProductCatalog using sample_id
-            $sample = ProductCatalog::findOrFail($data['sample_id']);
-            $data['reference_no'] = $sample->reference_no;
+            if ($data['order_type'] === 'direct') {
+                $data['reference_no'] = 'Direct Bulk';
+                unset($data['sample_id']); // Not needed
+            } else {
+                $sample = ProductCatalog::findOrFail($data['sample_id']);
+                $data['reference_no'] = $sample->reference_no;
+            }
+
 
             // Generate automatic product order number
-            $lastOrderNo = ProductInquiry::selectRaw("MAX(CAST(SUBSTRING(prod_order_no, 4) AS UNSIGNED)) as max_number")
+            $lastOrderNo = ProductInquiry::selectRaw("MAX(CAST(SUBSTRING(prod_order_no, 7) AS UNSIGNED)) as max_number")
                 ->value('max_number');
 
+            // increment
             $nextNumber = $lastOrderNo ? $lastOrderNo + 1 : 1;
+
+            // Format: ST-PO-00001
             $data['prod_order_no'] = 'ST-PO-' . str_pad($nextNumber, 5, '0', STR_PAD_LEFT);
 
             // Set PO received date
