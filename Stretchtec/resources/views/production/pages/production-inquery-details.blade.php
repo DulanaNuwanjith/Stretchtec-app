@@ -475,9 +475,9 @@
                                     </thead>
 
                                     <tbody id="productionDetailsRecords"
-                                           class="divide-y divide-gray-200 dark:divide-gray-700">
+                                           class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                                     @forelse($productInquiries as $inquiry)
-                                        <tr class="text-center hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-200 divide-x divide-gray-200 dark:divide-gray-700">
+                                        <tr class="text-center odd:bg-white even:bg-gray-50 border-b border-gray-200">
                                             <!-- Production ID -->
 
                                             @if ($inquiry->supplier === null)
