@@ -666,7 +666,7 @@
                                                             method="POST">
                                                             @csrf
                                                             <button type="submit"
-                                                                    class="px-3 py-1 text-xs rounded-lg bg-blue-100 text-blue-700 hover:bg-blue-200">
+                                                                    class="px-3 py-1 text-xs rounded-lg bg-blue-100 text-blue-700 hover:bg-blue-200 mt-4">
                                                                 Send to Stores
                                                             </button>
                                                         </form>
