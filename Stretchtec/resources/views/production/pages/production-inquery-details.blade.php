@@ -658,7 +658,7 @@
                                                 {{ $inquiry->remarks ?? '-' }}
                                             </td>
 
-                                            <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                            <td class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
                                                 <div class="colour-match-stock">
                                                     @if(!$inquiry->isSentToStock)
                                                         <form
@@ -688,7 +688,7 @@
                                             </td>
 
                                             <!-- Send to Production -->
-                                            <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                            <td class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
                                                 <div class="colour-match-production">
                                                     @if($inquiry->isSentToProduction)
                                                         <!-- Show timestamp if already sent -->
