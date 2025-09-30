@@ -552,7 +552,7 @@
                                         </th>
                                         <th
                                             class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                            Send to Stock
+                                            Send to Stores
                                         </th>
                                         <th
                                             class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
@@ -658,13 +658,16 @@
                                                 {{ $inquiry->remarks ?? '-' }}
                                             </td>
 
-                                            <!-- Send to Stock -->
+                                            <!-- Send to Stores -->
                                             <td
                                                 class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
-                                                <button
-                                                    class="px-3 py-1 text-xs rounded-lg bg-blue-100 text-blue-700 hover:bg-blue-200">
-                                                    Stock
-                                                </button>
+                                                <form action="{{ route('production.sendToStore', $inquiry->id) }}" method="POST">
+                                                    @csrf
+                                                    <button type="submit"
+                                                            class="px-3 py-1 text-xs rounded-lg bg-blue-100 text-blue-700 hover:bg-blue-200 mt-4">
+                                                        Stores
+                                                    </button>
+                                                </form>
                                             </td>
 
                                             <!-- Send to Production -->

@@ -52,6 +52,7 @@ use App\Http\Controllers\SampleInquiryController;
 use App\Http\Controllers\SamplePreparationProductionController;
 use App\Http\Controllers\SamplePreparationRnDController;
 use App\Http\Controllers\SampleStockController;
+use App\Http\Controllers\StockController;
 use App\Http\Controllers\StoresController;
 use App\Http\Controllers\TechnicalCardController;
 use App\Http\Controllers\UserMananagementController;
@@ -181,13 +182,15 @@ Route::middleware([
     ]);
     Route::post('/sample-stock/{id}/borrow', [SampleStockController::class, 'borrow'])->name('sampleStock.borrow');
 
+    Route::resource('stockManagement', StockController::class)->names([
+        'index' => 'stockManagement.index',
+        'store' => 'stockManagement.store',
+        'destroy' => 'stockManagement.destroy'
+    ]);
 
-    /* ----------------------------------------------------------------------
-     | Stores Management (Inventory)
-     |----------------------------------------------------------------------
-     */
-    Route::get('storeManagement', [StoresController::class, 'index'])->name('storeManagement.index');
-
+    Route::get('stockAvailabilityCheck', static function () {
+        return view('store-management.pages.storeAvailabilityCheck');
+    })->name('stockAvailabilityCheck.index');
 
     /* ----------------------------------------------------------------------
      | Production Inquiry & Order Preparation Views
@@ -206,6 +209,9 @@ Route::middleware([
     ]);
     Route::get('/product-catalog/{id}/details', [ProductInquiryController::class, 'getSampleDetails'])
         ->name('product-catalog.details');
+
+    // web.php
+    Route::post('/production-orders/{id}/send-to-store', [ProductInquiryController::class, 'sendToStore'])->name('production.sendToStore');
 
 
     //Technical Details Routes

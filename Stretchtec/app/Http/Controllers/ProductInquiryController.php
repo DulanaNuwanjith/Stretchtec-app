@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\ProductCatalog;
 use App\Models\ProductInquiry;
+use App\Models\Stock;
+use App\Models\Stores;
 use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -192,6 +194,43 @@ class ProductInquiryController extends Controller
         } catch (Exception $e) {
             Log::error('Product Inquiry Delete Error: ' . $e->getMessage(), ['id' => $id]);
             return redirect()->back()->with('error', 'Failed to delete the product inquiry.');
+        }
+    }
+
+    public function sendToStore($id)
+    {
+        try {
+            // 1. Get production order
+            $productionOrder = ProductInquiry::findOrFail($id);
+
+            // 2. Find the item from the product catalog using reference_no
+            $catalogItem = ProductCatalog::where('reference_no', $productionOrder->reference_no)->first();
+
+            $storesItem = Stock::where('reference_no', $productionOrder->reference_no)->first();
+
+            if (!$catalogItem) {
+                return redirect()->back()->with('error', 'No item found in product catalog for this reference number.');
+            }
+
+            if (!$storesItem){
+                return redirect()->back()->with('error', 'No item found in stores for this reference number.');
+            }
+
+            // 3. Create a new store record
+            $store = new Stores();
+            $store->order_no = $productionOrder->id;
+            $store->reference_no = $productionOrder->reference_no;
+            $store->shade = $catalogItem->shade ?? null;
+            $store->qty_available = $storesItem->qty_available ?? 0;
+            $store->qty_allocated = 0;
+            $store->assigned_by = auth()->user()->name; // whoever assigns
+            $store->is_qty_assigned = false;
+            $store->save();
+
+            return redirect()->back()->with('success', 'Order successfully sent to store.');
+
+        } catch (Exception $e) {
+            return redirect()->back()->with('error', 'Error sending to store: ' . $e->getMessage());
         }
     }
 

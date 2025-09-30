@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static create(array $validatedData)
  * @method static simplePaginate(int $int)
  * @method static selectRaw(string $string)
+ * @method static findOrFail($id)
  */
 class ProductInquiry extends Model
 {

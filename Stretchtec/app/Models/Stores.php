@@ -24,6 +24,7 @@ use Illuminate\Database\Eloquent\Model;
  *       'location' => 'Colombo',
  *   ]);
  * --------------------------------------------------------------------------
+ * @method static where(string $string, $reference_no)
  */
 class Stores extends Model
 {
