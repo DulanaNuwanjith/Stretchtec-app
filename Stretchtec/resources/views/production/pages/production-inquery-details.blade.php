@@ -658,19 +658,26 @@
                                                 {{ $inquiry->remarks ?? '-' }}
                                             </td>
 
-                                            <!-- Send to Stores -->
-                                            <td
-                                                class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
-                                                <form action="{{ route('production.sendToStore', $inquiry->id) }}" method="POST">
-                                                    @csrf
-                                                    <button type="submit"
-                                                            class="px-3 py-1 text-xs rounded-lg bg-blue-100 text-blue-700 hover:bg-blue-200 mt-4">
-                                                        Stores
-                                                    </button>
-                                                </form>
-                                            </td>
+                                                <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                                    @if (!$inquiry->isSentToStock)
+                                                        <form action="{{ route('production.sendToStore', $inquiry->id) }}" method="POST">
+                                                            @csrf
+                                                            <button type="submit"
+                                                                    class="px-3 py-1 text-xs rounded-lg bg-blue-100 text-blue-700 hover:bg-blue-200 mt-4">
+                                                                Send to Stores
+                                                            </button>
+                                                        </form>
+                                                    @else
+                                                        <div class="px-3 py-2 text-xs rounded-lg bg-green-100 text-green-800">
+                                                            Sent to Stock<br>
+                                                            <span class="text-xs text-gray-600">
+                                                                {{ \Carbon\Carbon::parse($inquiry->sent_to_stock_at)->format('d M Y, h:i A') }}
+                                                            </span>
+                                                        </div>
+                                                    @endif
+                                                </td>
 
-                                            <!-- Send to Production -->
+                                                <!-- Send to Production -->
                                             <td
                                                 class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
                                                 <button

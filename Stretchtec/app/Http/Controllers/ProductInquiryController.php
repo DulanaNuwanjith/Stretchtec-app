@@ -216,6 +216,10 @@ class ProductInquiryController extends Controller
                 return redirect()->back()->with('error', 'No item found in stores for this reference number.');
             }
 
+            $productionOrder->isSentToStock = true;
+            $productionOrder->sent_to_stock_at = now();
+            $productionOrder->save();
+
             // 3. Create a new store record
             $store = new Stores();
             $store->order_no = $productionOrder->id;
