@@ -197,7 +197,7 @@ class ProductInquiryController extends Controller
         }
     }
 
-    public function sendToStore($id)
+    public function sendToStore($id): ?RedirectResponse
     {
         try {
             // 1. Get production order
