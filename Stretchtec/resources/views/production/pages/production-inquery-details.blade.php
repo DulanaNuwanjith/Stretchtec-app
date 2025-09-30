@@ -251,24 +251,24 @@
 
                                                     <!-- Remove Button -->
                                                     <div id="optionsWrapper" class="space-y-2 my-4 flex justify-end">
-                                                            <button type="button"
-                                                                    onclick="removeDirectItem(this)"
-                                                                    class="text-blue-500 hover:text-blue-700">
-                                                                <svg
-                                                                    xmlns="http://www.w3.org/2000/svg"
-                                                                    fill="none"
-                                                                    viewBox="0 0 24 24"
-                                                                    stroke-width="2"
-                                                                    stroke="currentColor"
-                                                                    class="w-5 h-5">
-                                                                    <path
-                                                                        stroke-linecap="round"
-                                                                        stroke-linejoin="round"
-                                                                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0
+                                                        <button type="button"
+                                                                onclick="removeDirectItem(this)"
+                                                                class="text-blue-500 hover:text-blue-700">
+                                                            <svg
+                                                                xmlns="http://www.w3.org/2000/svg"
+                                                                fill="none"
+                                                                viewBox="0 0 24 24"
+                                                                stroke-width="2"
+                                                                stroke="currentColor"
+                                                                class="w-5 h-5">
+                                                                <path
+                                                                    stroke-linecap="round"
+                                                                    stroke-linejoin="round"
+                                                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0
                                                                                                                                                                01-1.995-1.858L5 7m5 4v6m4-6v6M9 7V4a1 1 0
                                                                                                                                                                011-1h4a1 1 0 011 1v3m-9 0h10"/>
-                                                                </svg>
-                                                            </button>
+                                                            </svg>
+                                                        </button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -377,7 +377,7 @@
                                                            class="sampleReferenceHidden">
 
                                                     <!-- Auto filled fields -->
-                                                    <div class="grid grid-cols-2 gap-4">
+                                                    <div class="grid grid-cols-2 gap-4 autoFields">
                                                         <input type="text" name="items[0][shade]"
                                                                class="sampleShade editable border rounded-md px-3 py-2 bg-gray-100 dark:bg-gray-600"
                                                                readonly placeholder="Shade">
@@ -414,24 +414,29 @@
                                                                placeholder="PO Value">
                                                     </div>
 
-                                                    <!-- Remove Button -->
-                                                    <div id="optionsWrapper" class="space-y-2 my-4 flex justify-end">
+                                                    <!-- Options: Remove + Edit Button -->
+                                                    <div id="optionsWrapper"
+                                                         class="space-y-2 my-4 flex justify-between">
+                                                        <!-- Edit Button -->
+                                                        <button type="button"
+                                                                onclick="toggleEdit(this)"
+                                                                class="flex items-center px-3 py-1 text-sm bg-gray-200 rounded-md hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-500">
+                                                            <span>Edit</span>
+                                                        </button>
+
+                                                        <!-- Remove Button -->
                                                         <button type="button"
                                                                 onclick="removeItem(this)"
                                                                 class="text-blue-500 hover:text-blue-700">
-                                                            <svg
-                                                                xmlns="http://www.w3.org/2000/svg"
-                                                                fill="none"
-                                                                viewBox="0 0 24 24"
-                                                                stroke-width="2"
-                                                                stroke="currentColor"
-                                                                class="w-5 h-5">
-                                                                <path
-                                                                    stroke-linecap="round"
-                                                                    stroke-linejoin="round"
-                                                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0
-                                                                                                                                                               01-1.995-1.858L5 7m5 4v6m4-6v6M9 7V4a1 1 0
-                                                                                                                                                               011-1h4a1 1 0 011 1v3m-9 0h10"/>
+                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                 fill="none" viewBox="0 0 24 24"
+                                                                 stroke-width="2" stroke="currentColor"
+                                                                 class="w-5 h-5">
+                                                                <path stroke-linecap="round"
+                                                                      stroke-linejoin="round"
+                                                                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0
+                                                                         01-1.995-1.858L5 7m5 4v6m4-6v6M9 7V4a1 1 0
+                                                                         011-1h4a1 1 0 011 1v3m-9 0h10"/>
                                                             </svg>
                                                         </button>
                                                     </div>
@@ -1020,6 +1025,30 @@
         } else {
             alert("You must keep at least one item.");
         }
+    }
+</script>
+
+<script>
+    function toggleEdit(button) {
+        const itemGroup = button.closest('.item-group');
+        const autoFields = itemGroup.querySelectorAll('.editable');
+        const btnText = button.querySelector('span');
+
+        let isReadOnly = autoFields[0].hasAttribute('readonly');
+
+        autoFields.forEach(field => {
+            if (isReadOnly) {
+                field.removeAttribute('readonly');
+                field.classList.remove('bg-gray-100', 'dark:bg-gray-600');
+                field.classList.add('bg-white', 'dark:bg-gray-700');
+            } else {
+                field.setAttribute('readonly', true);
+                field.classList.remove('bg-white', 'dark:bg-gray-700');
+                field.classList.add('bg-gray-100', 'dark:bg-gray-600');
+            }
+        });
+
+        btnText.textContent = isReadOnly ? "Lock" : "Edit";
     }
 </script>
 
