@@ -715,7 +715,7 @@
                                                                 @csrf
                                                                 @method('PATCH')
                                                                 <button type="submit"
-                                                                        class="px-3 py-1 text-xs rounded-lg bg-indigo-100 text-indigo-700 hover:bg-indigo-200"
+                                                                        class="px-3 py-1 mt-4 text-xs rounded-lg bg-indigo-100 text-indigo-700 hover:bg-indigo-200"
                                                                 >
                                                                     Send to Production
                                                                 </button>
