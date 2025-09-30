@@ -970,7 +970,7 @@
         const fields = document.querySelectorAll(".editable");
         fields.forEach(field => {
             field.removeAttribute("readonly");
-            field.classList.remove("bg-gray-100", "dark:bg-gray-600"); // remove gray background
+            field.classList.remove("bg-gray-100", "dark:bg-gray-600"); // remove the gray background
             field.classList.add("bg-white", "dark:bg-gray-800"); // make editable background
         });
     });
