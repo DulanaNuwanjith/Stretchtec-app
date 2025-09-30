@@ -203,5 +203,4 @@
                 </table>
                 {{ $stores->links() }}
             </div>
-
 @endsection
