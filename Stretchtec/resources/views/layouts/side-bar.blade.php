@@ -125,7 +125,7 @@
                 <li>
                     <a href="{{ route('stockManagement.index') }}"
                        class="flex items-center px-4 py-2 rounded hover:bg-gray-200
-                      {{ request()->routeIs('stockManagement.*') ? 'bg-gray-200' : '' }}">
+                      {{ request()->routeIs('stockManagement.*', 'stockAvailabilityCheck.*') ? 'bg-gray-200' : '' }}">
                         <img src="{{ asset('icons/inventory.png') }}" alt="" class="w-6 h-6 mr-5"/>
                         <span x-show="initialized && !collapsed">Store Management</span>
                     </a>

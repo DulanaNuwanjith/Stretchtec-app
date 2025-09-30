@@ -53,7 +53,6 @@ use App\Http\Controllers\SamplePreparationProductionController;
 use App\Http\Controllers\SamplePreparationRnDController;
 use App\Http\Controllers\SampleStockController;
 use App\Http\Controllers\StockController;
-use App\Http\Controllers\StoresController;
 use App\Http\Controllers\TechnicalCardController;
 use App\Http\Controllers\UserMananagementController;
 use App\Models\User;
