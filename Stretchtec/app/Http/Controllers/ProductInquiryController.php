@@ -231,7 +231,7 @@ class ProductInquiryController extends Controller
             $store->shade = $catalogItem->shade ?? null;
             $store->qty_available = $storesItem->qty_available ?? 0;
             $store->qty_allocated = 0;
-            $store->assigned_by = auth()->user()->name; // whoever assigns
+            $store->assigned_by = auth()->user()->name;
             $store->is_qty_assigned = false;
             $store->save();
 
