@@ -42,6 +42,7 @@ class ProductInquiry extends Model
         'invoice_date',
         'isSentToStock',
         'sent_to_stock_at',
+        'canSendToProduction',
         'isSentToProduction',
         'sent_to_production_at',
         'status',
