@@ -114,7 +114,8 @@
             </script>
 
             <div class="flex justify-between items-center mb-6">
-                <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Production Inquiries for Quantity Checks</h1>
+                <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Production Inquiries for Quantity
+                    Checks</h1>
             </div>
 
             <!-- Stock / Stores Records Table -->
