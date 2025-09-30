@@ -187,9 +187,7 @@ Route::middleware([
         'destroy' => 'stockManagement.destroy'
     ]);
 
-    Route::get('stockAvailabilityCheck', static function () {
-        return view('store-management.pages.storeAvailabilityCheck');
-    })->name('stockAvailabilityCheck.index');
+    Route::get('stockAvailabilityCheck', [StockController::class, 'storeManageIndex'])->name('stockAvailabilityCheck.index');
 
     /* ----------------------------------------------------------------------
      | Production Inquiry & Order Preparation Views

@@ -112,4 +112,91 @@
                     });
                 }
             </script>
+
+            <!-- Stock / Stores Records Table -->
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
+                <table class="min-w-full border-collapse">
+                    <thead class="bg-gray-100 dark:bg-gray-700">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-600 dark:text-gray-300 uppercase">
+                            #
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-600 dark:text-gray-300 uppercase">
+                            Order No
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-600 dark:text-gray-300 uppercase">
+                            Reference No
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-600 dark:text-gray-300 uppercase">
+                            Shade
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-600 dark:text-gray-300 uppercase">
+                            Qty Available
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-600 dark:text-gray-300 uppercase">
+                            Qty Allocated
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-600 dark:text-gray-300 uppercase">
+                            Qty for Production
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-600 dark:text-gray-300 uppercase">
+                            Assigned By
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-600 dark:text-gray-300 uppercase">
+                            Is Assigned
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-600 dark:text-gray-300 uppercase">
+                            Reason for Reject
+                        </th>
+                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-600 dark:text-gray-300 uppercase">
+                            Actions
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200 dark:divide-gray-600">
+                    @forelse ($stores as $store)
+                        <tr class="hover:bg-gray-50 dark:hover:bg-gray-700">
+                            <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200">{{ $store->id }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200">{{ $store->prod_order_no }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200">{{ $store->reference_no }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200">{{ $store->shade }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200">{{ $store->qty_available }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200">{{ $store->qty_allocated ?? '-' }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200">{{ $store->qty_for_production ?? '-' }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200">{{ $store->assigned_by }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200">
+                                @if($store->is_qty_assigned)
+                                    <span class="px-2 py-1 text-xs bg-green-100 text-green-800 rounded">Yes</span>
+                                @else
+                                    <span class="px-2 py-1 text-xs bg-red-100 text-red-800 rounded">No</span>
+                                @endif
+                            </td>
+                            <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200">{{ $store->reason_for_reject ?? '-' }}</td>
+                            <td class="px-6 py-4 text-sm text-right">
+                                <div class="flex justify-end space-x-2">
+                                    <form id="delete-form-{{ $store->id }}"
+                                          {{--                                          action="{{ route('stores.destroy', $store->id) }}" method="POST"--}}
+                                          class="inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="button" onclick="confirmDelete({{ $store->id }})"
+                                                class="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 text-xs">
+                                            Delete
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="11" class="px-6 py-4 text-center text-gray-500 dark:text-gray-300">No store
+                                records found.
+                            </td>
+                        </tr>
+                    @endforelse
+                    </tbody>
+                </table>
+                {{ $stores->links() }}
+            </div>
+
 @endsection

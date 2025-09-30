@@ -219,6 +219,7 @@ class ProductInquiryController extends Controller
             // 3. Create a new store record
             $store = new Stores();
             $store->order_no = $productionOrder->id;
+            $store->prod_order_no = $productionOrder->prod_order_no;
             $store->reference_no = $productionOrder->reference_no;
             $store->shade = $catalogItem->shade ?? null;
             $store->qty_available = $storesItem->qty_available ?? 0;
