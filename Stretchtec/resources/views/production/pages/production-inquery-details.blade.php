@@ -691,9 +691,9 @@
                                                             <!-- Show timestamp if already sent -->
                                                             <span class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-yellow-100 dark:bg-gray-800 px-3 py-1 rounded">
                                                                 Sent on <br>
-                                                                {{ Carbon\Carbon::parse($inquiry->sentToProductionDate)->format('Y-m-d') }}
+                                                                {{ Carbon\Carbon::parse($inquiry->sent_to_production_at)->format('Y-m-d') }}
                                                                 at
-                                                                {{ Carbon\Carbon::parse($inquiry->sentToProductionDate)->format('H:i') }}
+                                                                {{ Carbon\Carbon::parse($inquiry->sent_to_production_at)->format('H:i') }}
                                                             </span>
                                                         @else
                                                             @if(Auth::user()->role === 'ADMIN')
@@ -718,8 +718,6 @@
                                                         @endif
                                                     </div>
                                                 </td>
-
-
 
                                                 <!-- Status -->
                                                 <td

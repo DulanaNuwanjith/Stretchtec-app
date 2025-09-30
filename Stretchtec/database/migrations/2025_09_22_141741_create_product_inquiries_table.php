@@ -43,6 +43,7 @@ return new class extends Migration {
             $table->boolean('isSentToProduction')->default(false);
             $table->string('status')->default('Pending');
             $table->string('remarks')->nullable();
+            $table->dateTime('sent_to_production_at')->nullable();
             $table->timestamps();
         });
     }

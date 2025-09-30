@@ -42,5 +42,6 @@ class ProductInquiry extends Model
         'isSentToProduction',
         'status',
         'remarks',
+        'sent_to_production_at',
     ];
 }

@@ -150,7 +150,7 @@ class ProductInquiryController extends Controller
             $productInquiry->update([
                 'isSentToProduction' => true,
                 'status' => 'Sent to Production',
-                'sentToProductionDate' => now(),
+                'sent_to_production_at' => now(),
             ]);
 
             // Create a production order preparation record

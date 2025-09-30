@@ -88,10 +88,7 @@
                                         class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-28 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                         Status
                                     </th>
-                                    <th
-                                        class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-28 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                        Action
-                                    </th>
+                                    
                                 </tr>
                             </thead>
 
@@ -126,18 +123,7 @@
                                                 {{ $order->status ?? 'Pending' }}
                                             </span>
                                         </td>
-                                        <td class="px-4 py-3 text-center">
-                                            <form method="POST"
-                                                action="{{ route('production-order-preparation.destroy', $order->id) }}">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit"
-                                                    onclick="return confirm('Are you sure you want to delete this order preparation?')"
-                                                    class="px-3 py-1 text-xs rounded-lg bg-red-600 text-white hover:bg-red-700 shadow-sm">
-                                                    Delete
-                                                </button>
-                                            </form>
-                                        </td>
+                                       
                                     </tr>
                                 @empty
                                     <tr>
