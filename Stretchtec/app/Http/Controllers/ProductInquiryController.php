@@ -21,7 +21,7 @@ class ProductInquiryController extends Controller
     public function index(): Factory|View
     {
         $samples = ProductCatalog::all();
-        $productInquiries = ProductInquiry::simplePaginate(10);
+        $productInquiries = ProductInquiry::Paginate(10);
 
         return view('production.pages.production-inquery-details', compact('samples', 'productInquiries'));
     }
@@ -57,75 +57,80 @@ class ProductInquiryController extends Controller
     public function store(Request $request): ?RedirectResponse
     {
         try {
-            // ✅ Step 1: Validate input
+            // Validate master fields
             $validator = Validator::make($request->all(), [
-                'customer_name' => 'required|string|max:255',
-                'merchandiser_name' => 'required|string|max:255',
-                'customer_coordinator' => 'required|string|max:255',
                 'po_number' => 'required|string|max:255',
-                'size' => 'required|string|max:255',
-                'item' => 'required|string|max:255',
-                'color' => 'required|string|max:255',
-                'supplier' => 'nullable|string|max:255',
-                'pst_no' => 'nullable|string|max:255',
-                'supplier_comment' => 'nullable|string',
-                'reference_no' => 'required|string|max:255',
-                'shade' => 'required|string|max:255',
-                'tkt' => 'required|string|max:255',
-                'qty' => 'required|numeric',
-                'uom' => 'required|string|max:50',
-                'price' => 'required|numeric',
-                'customer_req_date' => 'nullable|date',
-                'order_type' => 'required|string|max:255',
+                'customer_name' => 'required|string|max:255',
+                'merchandiser_name' => 'nullable|string|max:255',
+                'customer_coordinator' => 'required|string|max:255',
+                'customer_req_date' => 'required|date',
+                'order_type' => 'required|string',
                 'remarks' => 'nullable|string',
+                'items' => 'required|array|min:1',
+                'items.*.sample_id' => 'required|integer|exists:product_catalogs,id',
+                'items.*.shade' => 'required|string|max:255',
+                'items.*.color' => 'required|string|max:255',
+                'items.*.tkt' => 'required|string|max:255',
+                'items.*.size' => 'required|string|max:255',
+                'items.*.item' => 'required|string|max:255',
+                'items.*.supplier' => 'nullable|string|max:255',
+                'items.*.qty' => 'required|numeric|min:1',
+                'items.*.uom' => 'required|string|max:50',
+                'items.*.price' => 'required|numeric|min:0',
             ]);
 
             if ($validator->fails()) {
-                Log::warning('Product Inquiry Validation Failed', [
-                    'errors' => $validator->errors()->toArray(),
-                    'input' => $request->all()
-                ]);
-
-                return redirect()->back()
-                    ->withErrors($validator)
-                    ->withInput();
+                return redirect()->back()->withErrors($validator)->withInput();
             }
 
-            // ✅ Step 2: Build data
             $data = $validator->validated();
 
-            // Generate automatic product order number
-            $lastOrderNo = ProductInquiry::selectRaw("MAX(CAST(SUBSTRING(prod_order_no, 4) AS UNSIGNED)) as max_number")
+            // Generate "master" PO number once
+            $lastOrderNo = ProductInquiry::selectRaw("MAX(CAST(SUBSTRING(prod_order_no, 7) AS UNSIGNED)) as max_number")
                 ->value('max_number');
-
             $nextNumber = $lastOrderNo ? $lastOrderNo + 1 : 1;
+            $prodOrderNo = 'ST-PO-' . str_pad($nextNumber, 5, '0', STR_PAD_LEFT);
 
-            $data['prod_order_no'] = 'PO-' . str_pad($nextNumber, 6, '0', STR_PAD_LEFT);
+            foreach ($data['items'] as $item) {
+                $sample = ProductCatalog::findOrFail($item['sample_id']);
 
-            // Set PO received date
-            $data['po_received_date'] = now();
+                ProductInquiry::create([
+                    'prod_order_no' => $prodOrderNo,
+                    'po_received_date' => now(),
+                    'po_number' => $data['po_number'],
+                    'customer_name' => $data['customer_name'],
+                    'merchandiser_name' => $data['merchandiser_name'] ?? null,
+                    'customer_coordinator' => $data['customer_coordinator'],
+                    'customer_req_date' => $data['customer_req_date'],
+                    'order_type' => $data['order_type'],
+                    'remarks' => $data['remarks'] ?? null,
+                    'reference_no' => $sample->reference_no,
+                    'sample_id' => $item['sample_id'],
+                    'shade' => $item['shade'],
+                    'color' => $item['color'],
+                    'tkt' => $item['tkt'],
+                    'size' => $item['size'],
+                    'item' => $item['item'],
+                    'supplier' => $item['supplier'] ?? null,
+                    'qty' => $item['qty'],
+                    'uom' => $item['uom'],
+                    'price' => $item['price'],
+                ]);
+            }
 
-            // ✅ Step 3: Create a record
-            ProductInquiry::create($data);
-
-            Log::info('Product inquiry created successfully', [
-                'po_number' => $request->po_number,
-                'customer' => $request->customer_name,
-            ]);
-
-            return redirect()->back()->with('success', 'Product inquiry created successfully.');
+            return redirect()->back()->with('success', 'PO with multiple items created successfully.');
 
         } catch (Exception $e) {
-            Log::error('Unexpected error while creating Product Inquiry', [
-                'message' => $e->getMessage(),
+            Log::error('Exception occurred: ' . $e->getMessage(), [
+                'exception' => $e,
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
                 'trace' => $e->getTraceAsString(),
             ]);
-
-            return redirect()->back()
-                ->with('error', 'Something went wrong. Please contact support.')
-                ->withInput();
+            return redirect()->back()->with('error', 'Something went wrong.')->withInput();
         }
     }
+
 
     /**
      * Display the specified resource.
