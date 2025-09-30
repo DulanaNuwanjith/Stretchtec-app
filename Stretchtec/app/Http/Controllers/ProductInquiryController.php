@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ProductCatalog;
 use App\Models\ProductInquiry;
+use App\Models\ProductOrderPreperation;
 use App\Models\Stock;
 use App\Models\Stores;
 use Exception;
@@ -239,6 +240,50 @@ class ProductInquiryController extends Controller
 
         } catch (Exception $e) {
             return redirect()->back()->with('error', 'Error sending to store: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Send a product inquiry to production.
+     */
+    public function sendToProduction($id): RedirectResponse
+    {
+        try {
+            $productInquiry = ProductInquiry::findOrFail($id);
+
+            if ($productInquiry->isSentToProduction) {
+                return redirect()->back()->with('info', 'This inquiry has already been sent to production.');
+            }
+
+            // Update the inquiry status and timestamp
+            $productInquiry->update([
+                'isSentToProduction' => true,
+                'status' => 'Sent to Production',
+                'sent_to_production_at' => now(),
+            ]);
+
+            // Create a production order preparation record
+            ProductOrderPreperation::create([
+                'product_inquiry_id' => $productInquiry->id,
+                'prod_order_no' => $productInquiry->prod_order_no,
+                'customer_name' => $productInquiry->customer_name,
+                'item' => $productInquiry->item,
+                'size' => $productInquiry->size,
+                'color' => $productInquiry->color,
+                'shade' => $productInquiry->shade,
+                'tkt' => $productInquiry->tkt,
+                'qty' => $productInquiry->qty,
+                'uom' => $productInquiry->uom,
+                'supplier' => $productInquiry->supplier,
+                'pst_no' => $productInquiry->pst_no,
+                'supplier_comment' => $productInquiry->supplier_comment,
+                'status' => 'Pending', // initial production status
+            ]);
+
+            return redirect()->back()->with('success', 'Inquiry sent to production successfully.');
+        } catch (Exception $e) {
+            Log::error('Send to Production Error: ' . $e->getMessage(), ['id' => $id]);
+            return redirect()->back()->with('error', 'Failed to send inquiry to production.');
         }
     }
 

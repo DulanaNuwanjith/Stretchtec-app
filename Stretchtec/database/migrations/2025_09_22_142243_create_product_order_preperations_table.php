@@ -11,9 +11,25 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('product_order_preperations', function (Blueprint $table) {
+        Schema::create('product_order_preperations', static function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('product_inquiry_id');
+            $table->string('prod_order_no');
+            $table->string('customer_name');
+            $table->string('item');
+            $table->string('size');
+            $table->string('color');
+            $table->string('shade');
+            $table->string('tkt');
+            $table->decimal('qty');
+            $table->string('uom');
+            $table->string('supplier')->nullable();
+            $table->string('pst_no')->nullable();
+            $table->string('supplier_comment')->nullable();
+            $table->string('status')->default('Pending');
             $table->timestamps();
+
+            $table->foreign('product_inquiry_id')->references('id')->on('product_inquiries')->onDelete('cascade');
         });
     }
 
