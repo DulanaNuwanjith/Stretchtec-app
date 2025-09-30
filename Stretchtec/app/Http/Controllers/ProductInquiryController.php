@@ -208,15 +208,18 @@ class ProductInquiryController extends Controller
 
             $storesItem = Stock::where('reference_no', $productionOrder->reference_no)->first();
 
-            if (!$catalogItem) {
-                return redirect()->back()->with('error', 'No item found in product catalog for this reference number.');
-            }
-
-            if (!$storesItem){
-                return redirect()->back()->with('error', 'No item found in stores for this reference number.');
-            }
-
             $productionOrder->isSentToStock = true;
+
+            if (!$catalogItem) {
+                $productionOrder->save();
+                return redirect()->back()->with('success', 'This is a direct order sent directly to the production');
+            }
+
+            if (!$storesItem) {
+                $productionOrder->save();
+                return redirect()->back()->with('success', 'No Available Stock. Sent Directly to Production');
+            }
+
             $productionOrder->sent_to_stock_at = now();
             $productionOrder->save();
 
