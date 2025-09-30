@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\ProductOrderPreperation;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 
 class ProductOrderPreperationController extends Controller
@@ -10,9 +12,13 @@ class ProductOrderPreperationController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): Factory|View
     {
-        return view('production.pages.production-order-preparation');
+        // Fetch all records with pagination (adjust number per page as needed)
+        $orderPreparations = ProductOrderPreperation::latest()->paginate(10);
+
+        // Pass data to the blade
+        return view('production.pages.production-order-preparation', compact('orderPreparations'));
     }
 
     /**

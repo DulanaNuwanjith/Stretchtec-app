@@ -202,139 +202,119 @@
                                             @csrf
                                             <input type="hidden" name="order_type" value="direct">
 
-                                            <!-- Reference Number -->
-                                            <div>
-                                                <label for="direct_reference_no"
-                                                       class="block text-sm font-medium text-gray-700 dark:text-gray-300">Reference
-                                                    Number</label>
-                                                <input id="direct_reference_no" type="text" name="reference_no"
-                                                       value="Direct Bulk" readonly
-                                                       class="w-full mt-1 px-3 py-2 border rounded-md bg-gray-100 dark:bg-gray-700 dark:text-white text-sm">
-                                            </div>
+                                            <div id="directItemsContainer">
+                                                <!-- One Item Template -->
+                                                <div
+                                                    class="item-group border rounded p-4 mb-4 bg-gray-50 dark:bg-gray-800">
+                                                    <!-- Shade & Colour -->
+                                                    <div class="flex gap-4">
+                                                        <input type="text" name="items[0][shade]"
+                                                               class="w-1/2 border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white"
+                                                               placeholder="Shade">
+                                                        <input type="text" name="items[0][color]"
+                                                               class="w-1/2 border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white"
+                                                               placeholder="Colour">
+                                                    </div>
 
-                                            <!-- PO Number & Coordinator -->
-                                            <div class="flex gap-4">
-                                                <div class="w-1/2">
-                                                    <label for="direct_po_number"
-                                                           class="block text-sm font-medium text-gray-700 dark:text-gray-300">PO
-                                                        Number</label>
-                                                    <input id="direct_po_number" type="text" name="po_number"
-                                                           class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                                </div>
-                                                <div class="w-1/2">
-                                                    <label
-                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer
-                                                        Coordinator</label>
-                                                    <input id="direct_customer_coordinator" type="text" readonly
-                                                           name="customer_coordinator" value="{{ Auth::user()->name }}"
-                                                           class="w-full mt-1 px-3 py-2 border rounded-md bg-gray-100 dark:bg-gray-600 text-sm">
-                                                </div>
-                                            </div>
+                                                    <!-- Size, Qty, UoM -->
+                                                    <div class="flex gap-4 mt-3">
+                                                        <input type="text" name="items[0][size]"
+                                                               class="w-1/3 border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white"
+                                                               placeholder="Size">
+                                                        <input type="number" name="items[0][qty]" min="0"
+                                                               class="w-1/3 border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white"
+                                                               placeholder="Quantity">
+                                                        <select name="items[0][uom]"
+                                                                class="w-1/3 border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white">
+                                                            <option value="meters">Meters</option>
+                                                            <option value="yards">Yards</option>
+                                                            <option value="pieces">Pieces</option>
+                                                        </select>
+                                                    </div>
 
-                                            <!-- Shade & Colour -->
-                                            <div class="flex gap-4">
-                                                <div class="w-1/2">
-                                                    <label for="direct_shade"
-                                                           class="block text-sm font-medium text-gray-700 dark:text-gray-300">Shade</label>
-                                                    <input id="direct_shade" type="text" name="shade"
-                                                           class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                                </div>
-                                                <div class="w-1/2">
-                                                    <label for="direct_color"
-                                                           class="block text-sm font-medium text-gray-700 dark:text-gray-300">Colour</label>
-                                                    <input id="direct_color" type="text" name="color"
-                                                           class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                                </div>
-                                            </div>
+                                                    <!-- Item & TKT -->
+                                                    <div class="flex gap-4 mt-3">
+                                                        <input type="text" name="items[0][item]"
+                                                               class="w-1/2 border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white"
+                                                               placeholder="Item">
+                                                        <input type="text" name="items[0][tkt]"
+                                                               class="w-1/2 border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white"
+                                                               placeholder="TKT">
+                                                    </div>
 
-                                            <!-- Size, Qty, UoM -->
-                                            <div class="flex gap-4">
-                                                <div class="w-1/3">
-                                                    <label for="direct_size"
-                                                           class="block text-sm font-medium text-gray-700 dark:text-gray-300">Size</label>
-                                                    <input id="direct_size" type="text" name="size"
-                                                           class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                                </div>
-                                                <div class="w-1/3">
-                                                    <label for="direct_qty"
-                                                           class="block text-sm font-medium text-gray-700 dark:text-gray-300">Quantity</label>
-                                                    <input id="direct_qty" type="number" name="qty" min="0"
-                                                           class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                                </div>
-                                                <div class="w-1/3">
-                                                    <label for="direct_uom"
-                                                           class="block text-sm font-medium text-gray-700 dark:text-gray-300">Unit</label>
-                                                    <select id="direct_uom" name="uom"
-                                                            class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                                        <option value="meters">Meters</option>
-                                                        <option value="yards">Yards</option>
-                                                        <option value="pieces">Pieces</option>
-                                                    </select>
-                                                </div>
-                                            </div>
+                                                    <!-- Price -->
+                                                    <div class="mt-3">
+                                                        <input type="number" step="0.01" name="items[0][price]"
+                                                               class="w-full border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white"
+                                                               placeholder="PO Value">
+                                                    </div>
 
-                                            <!-- Item & TKT -->
-                                            <div class="flex gap-4">
-                                                <div class="w-1/2">
-                                                    <label for="direct_item"
-                                                           class="block text-sm font-medium text-gray-700 dark:text-gray-300">Item</label>
-                                                    <input id="direct_item" type="text" name="item"
-                                                           class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                                </div>
-                                                <div class="w-1/2">
-                                                    <label for="direct_tkt"
-                                                           class="block text-sm font-medium text-gray-700 dark:text-gray-300">TKT</label>
-                                                    <input id="direct_tkt" type="text" name="tkt"
-                                                           class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                    <!-- Remove Button -->
+                                                    <div id="optionsWrapper" class="space-y-2 my-4 flex justify-end">
+                                                        <button type="button"
+                                                                onclick="removeDirectItem(this)"
+                                                                class="text-blue-500 hover:text-blue-700">
+                                                            <svg
+                                                                xmlns="http://www.w3.org/2000/svg"
+                                                                fill="none"
+                                                                viewBox="0 0 24 24"
+                                                                stroke-width="2"
+                                                                stroke="currentColor"
+                                                                class="w-5 h-5">
+                                                                <path
+                                                                    stroke-linecap="round"
+                                                                    stroke-linejoin="round"
+                                                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0
+                                                                                                                                                               01-1.995-1.858L5 7m5 4v6m4-6v6M9 7V4a1 1 0
+                                                                                                                                                               011-1h4a1 1 0 011 1v3m-9 0h10"/>
+                                                            </svg>
+                                                        </button>
+                                                    </div>
                                                 </div>
                                             </div>
 
-                                            <!-- Merchandiser & Customer -->
-                                            <div class="flex gap-4">
-                                                <div class="w-1/2">
-                                                    <label for="direct_merchandiser_name"
-                                                           class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer
-                                                        Merchandiser</label>
-                                                    <input id="direct_merchandiser_name" type="text"
-                                                           name="merchandiser_name"
-                                                           class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                                </div>
-                                                <div class="w-1/2">
-                                                    <label for="direct_customer_name"
-                                                           class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer
-                                                        Name</label>
-                                                    <input id="direct_customer_name" type="text" name="customer_name"
-                                                           class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                                </div>
-                                            </div>
+                                            <!-- Add More Items -->
+                                            <button type="button" id="addDirectItem"
+                                                    class="mt-4 px-4 py-2 bg-green-500 text-white rounded">
+                                                + Add Another Item
+                                            </button>
 
-                                            <!-- Price & Requested Date -->
-                                            <div class="flex gap-4">
-                                                <div class="w-1/2">
-                                                    <label for="direct_price"
-                                                           class="block text-sm font-medium text-gray-700 dark:text-gray-300">PO
-                                                        Value</label>
-                                                    <input id="direct_price" type="number" step="0.01"
-                                                           name="price"
-                                                           class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                                </div>
-                                                <div class="w-1/2">
-                                                    <label for="direct_customer_req_date"
-                                                           class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer
-                                                        Requested Date</label>
-                                                    <input id="direct_customer_req_date" type="date"
-                                                           name="customer_req_date"
-                                                           class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                                </div>
+                                            <!-- Master Order fields -->
+                                            <div class="mt-6">
+                                                <label>Reference Number</label>
+                                                <input type="text" name="reference_no" value="Direct Bulk" readonly
+                                                       class="w-full border rounded-md px-3 py-2 bg-gray-100 dark:bg-gray-700 dark:text-white">
                                             </div>
-
-                                            <!-- Remarks -->
-                                            <div>
-                                                <label for="direct_remarks"
-                                                       class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer
-                                                    Notes</label>
-                                                <input id="direct_remarks" type="text" name="remarks"
-                                                       class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                            <div class="mt-3">
+                                                <label>PO Number</label>
+                                                <input type="text" name="po_number"
+                                                       class="w-full border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white">
+                                            </div>
+                                            <div class="mt-3">
+                                                <label>Customer Coordinator</label>
+                                                <input type="text" name="customer_coordinator" readonly
+                                                       value="{{ Auth::user()->name }}"
+                                                       class="w-full border rounded-md px-3 py-2 bg-gray-100 dark:bg-gray-600">
+                                            </div>
+                                            <div class="mt-3">
+                                                <label>Customer Name</label>
+                                                <input type="text" name="customer_name"
+                                                       class="w-full border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white">
+                                            </div>
+                                            <div class="mt-3">
+                                                <label>Customer Merchandiser</label>
+                                                <input type="text" name="merchandiser_name"
+                                                       class="w-full border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white">
+                                            </div>
+                                            <div class="mt-3">
+                                                <label>Customer Requested Date</label>
+                                                <input type="date" name="customer_req_date"
+                                                       class="w-full border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white">
+                                            </div>
+                                            <div class="mt-3">
+                                                <label>Customer Notes</label>
+                                                <input type="text" name="remarks"
+                                                       class="w-full border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white">
                                             </div>
 
                                             <div class="flex justify-end gap-3 mt-6">
@@ -397,7 +377,7 @@
                                                            class="sampleReferenceHidden">
 
                                                     <!-- Auto filled fields -->
-                                                    <div class="grid grid-cols-2 gap-4">
+                                                    <div class="grid grid-cols-2 gap-4 autoFields">
                                                         <input type="text" name="items[0][shade]"
                                                                class="sampleShade editable border rounded-md px-3 py-2 bg-gray-100 dark:bg-gray-600"
                                                                readonly placeholder="Shade">
@@ -434,10 +414,40 @@
                                                                placeholder="PO Value">
                                                     </div>
 
-                                                    <button type="button" onclick="removeItem(this)"
-                                                            class="removeItem mt-3 text-red-600 text-sm">
-                                                        Remove Item
-                                                    </button>
+                                                    <!-- Options: Remove + Edit Button -->
+                                                    <div id="optionsWrapper"
+                                                         class="space-y-2 mt-4 flex justify-between">
+                                                        <!-- Edit Button -->
+                                                        <button type="button"
+                                                                onclick="toggleEdit(this)"
+                                                                class="text-blue-500 hover:text-blue-700">
+                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                 fill="none" viewBox="0 0 24 24"
+                                                                 stroke-width="2" stroke="currentColor"
+                                                                 class="w-5 h-5 edit-icon">
+                                                                <!-- Pencil Icon (default) -->
+                                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                                      d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0
+                                                                         113.536 3.536L7.5 21H3v-4.5L16.732 3.732z"/>
+                                                            </svg>
+                                                        </button>
+
+                                                        <!-- Remove Button -->
+                                                        <button type="button"
+                                                                onclick="removeItem(this)"
+                                                                class="text-blue-500 hover:text-blue-700">
+                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                 fill="none" viewBox="0 0 24 24"
+                                                                 stroke-width="2" stroke="currentColor"
+                                                                 class="w-5 h-5">
+                                                                <path stroke-linecap="round"
+                                                                      stroke-linejoin="round"
+                                                                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0
+                                                                         01-1.995-1.858L5 7m5 4v6m4-6v6M9 7V4a1 1 0
+                                                                         011-1h4a1 1 0 011 1v3m-9 0h10"/>
+                                                            </svg>
+                                                        </button>
+                                                    </div>
                                                 </div>
                                             </div>
 
@@ -541,11 +551,11 @@
                                             Notes
                                         </th>
                                         <th
-                                            class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                            Send to Stock
+                                            class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-48 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                            Send to Stores
                                         </th>
                                         <th
-                                            class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                            class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-48 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                             Send to Production
                                         </th>
                                         <th
@@ -648,22 +658,71 @@
                                                 {{ $inquiry->remarks ?? '-' }}
                                             </td>
 
-                                            <!-- Send to Stock -->
-                                            <td
-                                                class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
-                                                <button
-                                                    class="px-3 py-1 text-xs rounded-lg bg-blue-100 text-blue-700 hover:bg-blue-200">
-                                                    Stock
-                                                </button>
+                                            <td class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                                <div class="colour-match-stock">
+                                                    @if(!$inquiry->isSentToStock)
+                                                        <form
+                                                            action="{{ route('production.sendToStore', $inquiry->id) }}"
+                                                            method="POST">
+                                                            @csrf
+                                                            <button type="submit"
+                                                                    class="px-3 py-1 text-xs rounded-lg bg-blue-100 text-blue-700 hover:bg-blue-200 mt-4">
+                                                                Send to Stores
+                                                            </button>
+                                                        </form>
+                                                    @elseif($inquiry->isSentToStock && is_null($inquiry->sent_to_stock_at))
+                                                        <span
+                                                            class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-red-100 dark:bg-gray-800 px-3 py-1 rounded">
+                                                            No Stock Available
+                                                        </span>
+                                                    @else
+                                                        <span
+                                                            class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-green-100 dark:bg-gray-800 px-3 py-1 rounded">
+                                                            Sent on <br>
+                                                            {{ Carbon::parse($inquiry->sent_to_stock_at)->format('Y-m-d') }}
+                                                            at
+                                                            {{ Carbon::parse($inquiry->sent_to_stock_at)->format('H:i') }}
+                                                        </span>
+                                                    @endif
+                                                </div>
                                             </td>
 
                                             <!-- Send to Production -->
-                                            <td
-                                                class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
-                                                <button
-                                                    class="px-3 py-1 text-xs rounded-lg bg-indigo-100 text-indigo-700 hover:bg-indigo-200">
-                                                    Production
-                                                </button>
+                                            <td class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                                <div class="colour-match-production">
+                                                    @if($inquiry->isSentToProduction)
+                                                        <!-- Show timestamp if already sent -->
+                                                        <span
+                                                            class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-yellow-100 dark:bg-gray-800 px-3 py-1 rounded">
+                                                                Sent on <br>
+                                                                {{ Carbon::parse($inquiry->sent_to_production_at)->format('Y-m-d') }}
+                                                                at
+                                                                {{ Carbon::parse($inquiry->sent_to_production_at)->format('H:i') }}
+                                                            </span>
+                                                    @else
+                                                        @if(Auth::user()->role === 'ADMIN')
+                                                            <!-- Admin sees read-only button -->
+                                                            <button type="button"
+                                                                    class="px-3 py-1 text-xs rounded-lg bg-gray-200 text-gray-500 cursor-not-allowed"
+                                                                    disabled>
+                                                                Pending
+                                                            </button>
+                                                        @else
+                                                            <!-- Form for other users -->
+                                                            <form
+                                                                action="{{ route('production-inquiry.sendToProduction', $inquiry->id) }}"
+                                                                method="POST">
+                                                                @csrf
+                                                                @method('PATCH')
+                                                                <button type="submit"
+                                                                        class="px-3 py-1 mt-4 text-xs rounded-lg bg-indigo-100 text-indigo-700 hover:bg-indigo-200"
+                                                                >
+                                                                    Send to Production
+                                                                </button>
+                                                            </form>
+                                                        @endif
+                                                    @endif
+                                                </div>
                                             </td>
 
                                             <!-- Status -->
@@ -911,7 +970,7 @@
         const fields = document.querySelectorAll(".editable");
         fields.forEach(field => {
             field.removeAttribute("readonly");
-            field.classList.remove("bg-gray-100", "dark:bg-gray-600"); // remove gray background
+            field.classList.remove("bg-gray-100", "dark:bg-gray-600"); // remove the gray background
             field.classList.add("bg-white", "dark:bg-gray-800"); // make editable background
         });
     });
@@ -988,5 +1047,75 @@
         }
     }
 </script>
+
+<script>
+    let directItemIndex = 1;
+
+    document.getElementById('addDirectItem').addEventListener('click', () => {
+        const container = document.getElementById('directItemsContainer');
+        const firstItem = container.firstElementChild;
+        const clone = firstItem.cloneNode(true);
+
+        // Reset all inputs and update names
+        clone.querySelectorAll('input, select').forEach(el => {
+            let name = el.getAttribute('name');
+            if (name) {
+                el.setAttribute('name', name.replace(/\d+/, directItemIndex));
+            }
+            if (el.type === "text" || el.type === "number" || el.type === "date") {
+                el.value = '';
+            }
+            if (el.tagName === "SELECT") {
+                el.selectedIndex = 0;
+            }
+        });
+
+        directItemIndex++;
+        container.appendChild(clone);
+    });
+
+    function removeDirectItem(button) {
+        const container = document.getElementById('directItemsContainer');
+        const allItems = container.querySelectorAll('.item-group');
+        if (allItems.length > 1) {
+            button.closest('.item-group').remove();
+        } else {
+            alert("You must keep at least one item.");
+        }
+    }
+</script>
+
+<script>
+    function toggleEdit(button) {
+        const itemGroup = button.closest('.item-group');
+        const autoFields = itemGroup.querySelectorAll('.editable');
+        const icon = button.querySelector('svg');
+
+        let isReadOnly = autoFields[0].hasAttribute('readonly');
+
+        autoFields.forEach(field => {
+            if (isReadOnly) {
+                field.removeAttribute('readonly');
+                field.classList.remove('bg-gray-100', 'dark:bg-gray-600');
+                field.classList.add('bg-white', 'dark:bg-gray-700');
+            } else {
+                field.setAttribute('readonly', true);
+                field.classList.remove('bg-white', 'dark:bg-gray-700');
+                field.classList.add('bg-gray-100', 'dark:bg-gray-600');
+            }
+        });
+
+        // Toggle icon between pencil and lock
+        if (isReadOnly) {
+            icon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round"
+                            d="M5 11h14v10H5zM9 11V7a3 3 0
+                               116 0v4"/>`; // Lock icon
+        } else {
+            icon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round"
+                            d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0
+                               113.536 3.536L7.5 21H3v-4.5L16.732 3.732z"/>`; // Pencil icon
+        }
+    }
+</script
 
 @endsection

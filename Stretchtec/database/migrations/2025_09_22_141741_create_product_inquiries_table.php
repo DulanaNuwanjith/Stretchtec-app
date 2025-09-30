@@ -40,7 +40,10 @@ return new class extends Migration {
             $table->string('invoice_no')->nullable();
             $table->date('invoice_date')->nullable();
             $table->boolean('isSentToStock')->nullable()->default(false);
+            $table->timestamp('sent_to_stock_at')->nullable();
+            $table->boolean('canSendToProduction')->default(false);
             $table->boolean('isSentToProduction')->default(false);
+            $table->dateTime('sent_to_production_at')->nullable();
             $table->string('status')->default('Pending');
             $table->string('remarks')->nullable();
             $table->timestamps();

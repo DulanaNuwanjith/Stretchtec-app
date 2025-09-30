@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static create(array $validatedData)
  * @method static simplePaginate(int $int)
  * @method static selectRaw(string $string)
+ * @method static findOrFail($id)
  */
 class ProductInquiry extends Model
 {
@@ -40,7 +41,10 @@ class ProductInquiry extends Model
         'invoice_no',
         'invoice_date',
         'isSentToStock',
+        'sent_to_stock_at',
+        'canSendToProduction',
         'isSentToProduction',
+        'sent_to_production_at',
         'status',
         'remarks',
     ];

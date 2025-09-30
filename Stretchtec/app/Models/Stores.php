@@ -24,6 +24,8 @@ use Illuminate\Database\Eloquent\Model;
  *       'location' => 'Colombo',
  *   ]);
  * --------------------------------------------------------------------------
+ * @method static where(string $string, $reference_no)
+ * @method static orderBy(string $string, string $string1)
  */
 class Stores extends Model
 {

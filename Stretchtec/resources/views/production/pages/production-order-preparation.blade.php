@@ -5,13 +5,13 @@
 <div class="flex h-full w-full">
     @extends('layouts.production-tabs')
 
-@section('content')
-<div class="flex-1 overflow-y-hidden mb-20">
-        <div class="">
+    @section('content')
+        <div class="flex-1 overflow-y-hidden mb-20">
             <div class="w-full px-6 lg:px-2">
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-4 text-gray-900 dark:text-gray-100  mb-20">
+                    <div class="p-4 text-gray-900 dark:text-gray-100 mb-20">
 
+                        {{-- Success & Error Messages --}}
                         @if (session('success'))
                             <div
                                 class="mb-4 p-4 text-green-800 bg-green-100 border border-green-300 rounded-md dark:text-green-200 dark:bg-green-900 dark:border-green-800">
@@ -27,17 +27,126 @@
                         @endif
 
                         <div class="flex justify-between items-center mb-6">
-                            <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Production Order Preparation
-                                Records
+                            <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">
+                                Production Order Preparation Records
                             </h1>
                         </div>
-                        
+
+                        {{-- Data Table --}}
+                        <div id="orderPreparationScroll"
+                             class="overflow-x-auto max-h-[1200px] bg-white dark:bg-gray-900 shadow rounded-lg">
+                            <table class="table-fixed w-full text-sm divide-y divide-gray-200 dark:divide-gray-700">
+                                <thead class="bg-gray-200 dark:bg-gray-700 text-center">
+                                <tr class="text-center">
+                                    <th
+                                        class="font-bold sticky left-0 top-0 z-20 bg-white px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                        Order No
+                                    </th>
+                                    <th
+                                        class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                        Customer
+                                    </th>
+                                    <th
+                                        class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                        Item
+                                    </th>
+                                    <th
+                                        class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-24 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                        Size
+                                    </th>
+                                    <th
+                                        class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-24 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                        Color
+                                    </th>
+                                    <th
+                                        class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-24 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                        Shade
+                                    </th>
+                                    <th
+                                        class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-24 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                        TKT
+                                    </th>
+                                    <th
+                                        class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-24 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                        Quantity
+                                    </th>
+                                    <th
+                                        class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-28 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                        UOM
+                                    </th>
+                                    <th
+                                        class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                        Supplier
+                                    </th>
+                                    <th
+                                        class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-28 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                        PST No
+                                    </th>
+                                    <th
+                                        class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-36 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                        Supplier Comment
+                                    </th>
+                                    <th
+                                        class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-28 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                        Status
+                                    </th>
+
+                                </tr>
+                                </thead>
+
+                                <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                                @forelse($orderPreparations as $order)
+                                    <tr
+                                        class="odd:bg-white even:bg-gray-50 border-b border-gray-200 text-center">
+                                        <!-- Sticky first column -->
+                                        <td
+                                            class="px-4 py-3 font-semibold sticky left-0 z-10 bg-gray-100 whitespace-normal break-words border-r border-gray-300">
+                                            {{ $order->prod_order_no ?? 'N/A' }}
+                                        </td>
+                                        <td class="px-4 py-3 border-r">{{ $order->customer_name ?? 'N/A' }}</td>
+                                        <td class="px-4 py-3 border-r">{{ $order->item ?? 'N/A' }}</td>
+                                        <td class="px-4 py-3 border-r">{{ $order->size ?? 'N/A' }}</td>
+                                        <td class="px-4 py-3 border-r">{{ $order->color ?? 'N/A' }}</td>
+                                        <td class="px-4 py-3 border-r">{{ $order->shade ?? 'N/A' }}</td>
+                                        <td class="px-4 py-3 border-r">{{ $order->tkt ?? 'N/A' }}</td>
+                                        <td class="px-4 py-3 border-r">{{ $order->qty ?? 0 }}</td>
+                                        <td class="px-4 py-3 border-r">{{ $order->uom ?? '-' }}</td>
+                                        <td class="px-4 py-3 border-r">{{ $order->supplier ?? 'N/A' }}</td>
+                                        <td class="px-4 py-3 border-r">{{ $order->pst_no ?? 'N/A' }}</td>
+                                        <td class="px-4 py-3 text-gray-500 italic border-r">{{ $order->supplier_comment ?? '-' }}</td>
+                                        <td class="px-4 py-3 text-center border-r">
+                                            <span
+                                                class="px-2 py-1 text-xs rounded-full
+                                                {{ $order->status === 'Completed'
+                                                    ? 'bg-green-100 text-green-700'
+                                                    : ($order->status === 'Pending'
+                                                        ? 'bg-yellow-100 text-yellow-700'
+                                                        : 'bg-gray-100 text-gray-600') }}">
+                                                {{ $order->status ?? 'Pending' }}
+                                            </span>
+                                        </td>
+
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="14"
+                                            class="px-4 py-6 text-center text-gray-500 dark:text-gray-400">
+                                            No records found.
+                                        </td>
+                                    </tr>
+                                @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+
+
+                        {{-- Pagination --}}
+                        <div class="p-2 border-t border-gray-200 dark:border-gray-700">
+                            {{ $orderPreparations->links() }}
+                        </div>
+
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
-
 @endsection
-    
