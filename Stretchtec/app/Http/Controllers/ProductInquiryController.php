@@ -57,17 +57,18 @@ class ProductInquiryController extends Controller
     public function store(Request $request): ?RedirectResponse
     {
         try {
-            // Validate master fields
-            $validator = Validator::make($request->all(), [
+            // Common validation rules
+            $rules = [
                 'po_number' => 'required|string|max:255',
                 'customer_name' => 'required|string|max:255',
                 'merchandiser_name' => 'nullable|string|max:255',
                 'customer_coordinator' => 'required|string|max:255',
                 'customer_req_date' => 'required|date',
-                'order_type' => 'required|string',
+                'order_type' => 'required|string|in:sample,direct',
                 'remarks' => 'nullable|string',
                 'items' => 'required|array|min:1',
-                'items.*.sample_id' => 'required|integer|exists:product_catalogs,id',
+
+                // Item fields
                 'items.*.shade' => 'required|string|max:255',
                 'items.*.color' => 'required|string|max:255',
                 'items.*.tkt' => 'required|string|max:255',
@@ -77,7 +78,16 @@ class ProductInquiryController extends Controller
                 'items.*.qty' => 'required|numeric|min:1',
                 'items.*.uom' => 'required|string|max:50',
                 'items.*.price' => 'required|numeric|min:0',
-            ]);
+            ];
+
+            // Sample orders must have sample_id
+            if ($request->input('order_type') === 'sample') {
+                $rules['items.*.sample_id'] = 'required|integer|exists:product_catalogs,id';
+            } else {
+                $rules['items.*.sample_id'] = 'nullable|integer';
+            }
+
+            $validator = Validator::make($request->all(), $rules);
 
             if ($validator->fails()) {
                 return redirect()->back()->withErrors($validator)->withInput();
@@ -85,14 +95,26 @@ class ProductInquiryController extends Controller
 
             $data = $validator->validated();
 
-            // Generate "master" PO number once
+            // Generate the next PO number
             $lastOrderNo = ProductInquiry::selectRaw("MAX(CAST(SUBSTRING(prod_order_no, 7) AS UNSIGNED)) as max_number")
                 ->value('max_number');
             $nextNumber = $lastOrderNo ? $lastOrderNo + 1 : 1;
             $prodOrderNo = 'ST-PO-' . str_pad($nextNumber, 5, '0', STR_PAD_LEFT);
 
+            // Save each item
             foreach ($data['items'] as $item) {
-                $sample = ProductCatalog::findOrFail($item['sample_id']);
+                $referenceNo = null;
+                $sampleId = null;
+
+                if (!empty($item['sample_id'])) {
+                    // Sample order → fetch reference from catalog
+                    $sample = ProductCatalog::find($item['sample_id']);
+                    $referenceNo = $sample?->reference_no;
+                    $sampleId = $item['sample_id'];
+                } else {
+                    // Direct order → use "Direct Bulk" or value from a hidden field
+                    $referenceNo = $data['reference_no'] ?? 'Direct Bulk';
+                }
 
                 ProductInquiry::create([
                     'prod_order_no' => $prodOrderNo,
@@ -104,8 +126,8 @@ class ProductInquiryController extends Controller
                     'customer_req_date' => $data['customer_req_date'],
                     'order_type' => $data['order_type'],
                     'remarks' => $data['remarks'] ?? null,
-                    'reference_no' => $sample->reference_no,
-                    'sample_id' => $item['sample_id'],
+                    'reference_no' => $referenceNo,
+                    'sample_id' => $sampleId,
                     'shade' => $item['shade'],
                     'color' => $item['color'],
                     'tkt' => $item['tkt'],
@@ -127,6 +149,7 @@ class ProductInquiryController extends Controller
                 'line' => $e->getLine(),
                 'trace' => $e->getTraceAsString(),
             ]);
+
             return redirect()->back()->with('error', 'Something went wrong.')->withInput();
         }
     }

@@ -202,139 +202,102 @@
                                             @csrf
                                             <input type="hidden" name="order_type" value="direct">
 
-                                            <!-- Reference Number -->
-                                            <div>
-                                                <label for="direct_reference_no"
-                                                       class="block text-sm font-medium text-gray-700 dark:text-gray-300">Reference
-                                                    Number</label>
-                                                <input id="direct_reference_no" type="text" name="reference_no"
-                                                       value="Direct Bulk" readonly
-                                                       class="w-full mt-1 px-3 py-2 border rounded-md bg-gray-100 dark:bg-gray-700 dark:text-white text-sm">
-                                            </div>
+                                            <div id="directItemsContainer">
+                                                <!-- One Item Template -->
+                                                <div class="item-group border rounded p-4 mb-4 bg-gray-50 dark:bg-gray-800">
+                                                    <!-- Shade & Colour -->
+                                                    <div class="flex gap-4">
+                                                        <input type="text" name="items[0][shade]"
+                                                               class="w-1/2 border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white"
+                                                               placeholder="Shade">
+                                                        <input type="text" name="items[0][color]"
+                                                               class="w-1/2 border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white"
+                                                               placeholder="Colour">
+                                                    </div>
 
-                                            <!-- PO Number & Coordinator -->
-                                            <div class="flex gap-4">
-                                                <div class="w-1/2">
-                                                    <label for="direct_po_number"
-                                                           class="block text-sm font-medium text-gray-700 dark:text-gray-300">PO
-                                                        Number</label>
-                                                    <input id="direct_po_number" type="text" name="po_number"
-                                                           class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                                </div>
-                                                <div class="w-1/2">
-                                                    <label
-                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer
-                                                        Coordinator</label>
-                                                    <input id="direct_customer_coordinator" type="text" readonly
-                                                           name="customer_coordinator" value="{{ Auth::user()->name }}"
-                                                           class="w-full mt-1 px-3 py-2 border rounded-md bg-gray-100 dark:bg-gray-600 text-sm">
-                                                </div>
-                                            </div>
+                                                    <!-- Size, Qty, UoM -->
+                                                    <div class="flex gap-4 mt-3">
+                                                        <input type="text" name="items[0][size]"
+                                                               class="w-1/3 border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white"
+                                                               placeholder="Size">
+                                                        <input type="number" name="items[0][qty]" min="0"
+                                                               class="w-1/3 border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white"
+                                                               placeholder="Quantity">
+                                                        <select name="items[0][uom]"
+                                                                class="w-1/3 border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white">
+                                                            <option value="meters">Meters</option>
+                                                            <option value="yards">Yards</option>
+                                                            <option value="pieces">Pieces</option>
+                                                        </select>
+                                                    </div>
 
-                                            <!-- Shade & Colour -->
-                                            <div class="flex gap-4">
-                                                <div class="w-1/2">
-                                                    <label for="direct_shade"
-                                                           class="block text-sm font-medium text-gray-700 dark:text-gray-300">Shade</label>
-                                                    <input id="direct_shade" type="text" name="shade"
-                                                           class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                                </div>
-                                                <div class="w-1/2">
-                                                    <label for="direct_color"
-                                                           class="block text-sm font-medium text-gray-700 dark:text-gray-300">Colour</label>
-                                                    <input id="direct_color" type="text" name="color"
-                                                           class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                                </div>
-                                            </div>
+                                                    <!-- Item & TKT -->
+                                                    <div class="flex gap-4 mt-3">
+                                                        <input type="text" name="items[0][item]"
+                                                               class="w-1/2 border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white"
+                                                               placeholder="Item">
+                                                        <input type="text" name="items[0][tkt]"
+                                                               class="w-1/2 border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white"
+                                                               placeholder="TKT">
+                                                    </div>
 
-                                            <!-- Size, Qty, UoM -->
-                                            <div class="flex gap-4">
-                                                <div class="w-1/3">
-                                                    <label for="direct_size"
-                                                           class="block text-sm font-medium text-gray-700 dark:text-gray-300">Size</label>
-                                                    <input id="direct_size" type="text" name="size"
-                                                           class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                                </div>
-                                                <div class="w-1/3">
-                                                    <label for="direct_qty"
-                                                           class="block text-sm font-medium text-gray-700 dark:text-gray-300">Quantity</label>
-                                                    <input id="direct_qty" type="number" name="qty" min="0"
-                                                           class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                                </div>
-                                                <div class="w-1/3">
-                                                    <label for="direct_uom"
-                                                           class="block text-sm font-medium text-gray-700 dark:text-gray-300">Unit</label>
-                                                    <select id="direct_uom" name="uom"
-                                                            class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                                        <option value="meters">Meters</option>
-                                                        <option value="yards">Yards</option>
-                                                        <option value="pieces">Pieces</option>
-                                                    </select>
+                                                    <!-- Price -->
+                                                    <div class="mt-3">
+                                                        <input type="number" step="0.01" name="items[0][price]"
+                                                               class="w-full border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white"
+                                                               placeholder="PO Value">
+                                                    </div>
+
+                                                    <!-- Remove Button -->
+                                                    <button type="button" onclick="removeDirectItem(this)"
+                                                            class="mt-3 text-red-600 text-sm">
+                                                        Remove Item
+                                                    </button>
                                                 </div>
                                             </div>
 
-                                            <!-- Item & TKT -->
-                                            <div class="flex gap-4">
-                                                <div class="w-1/2">
-                                                    <label for="direct_item"
-                                                           class="block text-sm font-medium text-gray-700 dark:text-gray-300">Item</label>
-                                                    <input id="direct_item" type="text" name="item"
-                                                           class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                                </div>
-                                                <div class="w-1/2">
-                                                    <label for="direct_tkt"
-                                                           class="block text-sm font-medium text-gray-700 dark:text-gray-300">TKT</label>
-                                                    <input id="direct_tkt" type="text" name="tkt"
-                                                           class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                                </div>
-                                            </div>
+                                            <!-- Add More Items -->
+                                            <button type="button" id="addDirectItem"
+                                                    class="mt-4 px-4 py-2 bg-green-500 text-white rounded">
+                                                + Add Another Item
+                                            </button>
 
-                                            <!-- Merchandiser & Customer -->
-                                            <div class="flex gap-4">
-                                                <div class="w-1/2">
-                                                    <label for="direct_merchandiser_name"
-                                                           class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer
-                                                        Merchandiser</label>
-                                                    <input id="direct_merchandiser_name" type="text"
-                                                           name="merchandiser_name"
-                                                           class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                                </div>
-                                                <div class="w-1/2">
-                                                    <label for="direct_customer_name"
-                                                           class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer
-                                                        Name</label>
-                                                    <input id="direct_customer_name" type="text" name="customer_name"
-                                                           class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                                </div>
+                                            <!-- Master Order fields -->
+                                            <div class="mt-6">
+                                                <label>Reference Number</label>
+                                                <input type="text" name="reference_no" value="Direct Bulk" readonly
+                                                       class="w-full border rounded-md px-3 py-2 bg-gray-100 dark:bg-gray-700 dark:text-white">
                                             </div>
-
-                                            <!-- Price & Requested Date -->
-                                            <div class="flex gap-4">
-                                                <div class="w-1/2">
-                                                    <label for="direct_price"
-                                                           class="block text-sm font-medium text-gray-700 dark:text-gray-300">PO
-                                                        Value</label>
-                                                    <input id="direct_price" type="number" step="0.01"
-                                                           name="price"
-                                                           class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                                </div>
-                                                <div class="w-1/2">
-                                                    <label for="direct_customer_req_date"
-                                                           class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer
-                                                        Requested Date</label>
-                                                    <input id="direct_customer_req_date" type="date"
-                                                           name="customer_req_date"
-                                                           class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                                </div>
+                                            <div class="mt-3">
+                                                <label>PO Number</label>
+                                                <input type="text" name="po_number"
+                                                       class="w-full border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white">
                                             </div>
-
-                                            <!-- Remarks -->
-                                            <div>
-                                                <label for="direct_remarks"
-                                                       class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer
-                                                    Notes</label>
-                                                <input id="direct_remarks" type="text" name="remarks"
-                                                       class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                            <div class="mt-3">
+                                                <label>Customer Coordinator</label>
+                                                <input type="text" name="customer_coordinator" readonly
+                                                       value="{{ Auth::user()->name }}"
+                                                       class="w-full border rounded-md px-3 py-2 bg-gray-100 dark:bg-gray-600">
+                                            </div>
+                                            <div class="mt-3">
+                                                <label>Customer Name</label>
+                                                <input type="text" name="customer_name"
+                                                       class="w-full border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white">
+                                            </div>
+                                            <div class="mt-3">
+                                                <label>Customer Merchandiser</label>
+                                                <input type="text" name="merchandiser_name"
+                                                       class="w-full border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white">
+                                            </div>
+                                            <div class="mt-3">
+                                                <label>Customer Requested Date</label>
+                                                <input type="date" name="customer_req_date"
+                                                       class="w-full border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white">
+                                            </div>
+                                            <div class="mt-3">
+                                                <label>Customer Notes</label>
+                                                <input type="text" name="remarks"
+                                                       class="w-full border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white">
                                             </div>
 
                                             <div class="flex justify-end gap-3 mt-6">
@@ -988,5 +951,43 @@
         }
     }
 </script>
+
+<script>
+    let directItemIndex = 1;
+
+    document.getElementById('addDirectItem').addEventListener('click', () => {
+        const container = document.getElementById('directItemsContainer');
+        const firstItem = container.firstElementChild;
+        const clone = firstItem.cloneNode(true);
+
+        // Reset all inputs and update names
+        clone.querySelectorAll('input, select').forEach(el => {
+            let name = el.getAttribute('name');
+            if (name) {
+                el.setAttribute('name', name.replace(/\d+/, directItemIndex));
+            }
+            if (el.type === "text" || el.type === "number" || el.type === "date") {
+                el.value = '';
+            }
+            if (el.tagName === "SELECT") {
+                el.selectedIndex = 0;
+            }
+        });
+
+        directItemIndex++;
+        container.appendChild(clone);
+    });
+
+    function removeDirectItem(button) {
+        const container = document.getElementById('directItemsContainer');
+        const allItems = container.querySelectorAll('.item-group');
+        if (allItems.length > 1) {
+            button.closest('.item-group').remove();
+        } else {
+            alert("You must keep at least one item.");
+        }
+    }
+</script>
+
 
 @endsection
