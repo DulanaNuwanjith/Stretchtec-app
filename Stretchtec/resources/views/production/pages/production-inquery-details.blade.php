@@ -416,12 +416,20 @@
 
                                                     <!-- Options: Remove + Edit Button -->
                                                     <div id="optionsWrapper"
-                                                         class="space-y-2 my-4 flex justify-between">
+                                                         class="space-y-2 mt-4 flex justify-between">
                                                         <!-- Edit Button -->
                                                         <button type="button"
                                                                 onclick="toggleEdit(this)"
-                                                                class="flex items-center px-3 py-1 text-sm bg-gray-200 rounded-md hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-500">
-                                                            <span>Edit</span>
+                                                                class="text-blue-500 hover:text-blue-700">
+                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                 fill="none" viewBox="0 0 24 24"
+                                                                 stroke-width="2" stroke="currentColor"
+                                                                 class="w-5 h-5 edit-icon">
+                                                                <!-- Pencil Icon (default) -->
+                                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                                      d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0
+                                                                         113.536 3.536L7.5 21H3v-4.5L16.732 3.732z"/>
+                                                            </svg>
                                                         </button>
 
                                                         <!-- Remove Button -->
@@ -1032,7 +1040,7 @@
     function toggleEdit(button) {
         const itemGroup = button.closest('.item-group');
         const autoFields = itemGroup.querySelectorAll('.editable');
-        const btnText = button.querySelector('span');
+        const icon = button.querySelector('svg');
 
         let isReadOnly = autoFields[0].hasAttribute('readonly');
 
@@ -1048,9 +1056,17 @@
             }
         });
 
-        btnText.textContent = isReadOnly ? "Lock" : "Edit";
+        // Toggle icon between pencil and lock
+        if (isReadOnly) {
+            icon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round"
+                            d="M5 11h14v10H5zM9 11V7a3 3 0
+                               116 0v4"/>`; // Lock icon
+        } else {
+            icon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round"
+                            d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0
+                               113.536 3.536L7.5 21H3v-4.5L16.732 3.732z"/>`; // Pencil icon
+        }
     }
-</script>
-
+</script
 
 @endsection
