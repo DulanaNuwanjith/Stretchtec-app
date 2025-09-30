@@ -659,28 +659,32 @@
                                             </td>
 
                                             <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
-                                                @if (!$inquiry->isSentToStock)
-                                                    <form action="{{ route('production.sendToStore', $inquiry->id) }}"
-                                                          method="POST">
-                                                        @csrf
-                                                        <button type="submit"
-                                                                class="px-3 py-1 text-xs rounded-lg bg-blue-100 text-blue-700 hover:bg-blue-200 mt-4">
-                                                            Send to Stores
-                                                        </button>
-                                                    </form>
-                                                @elseif ($inquiry->isSentToStock && is_null($inquiry->sent_to_stock_at))
-                                                    <div class="px-3 py-2 text-xs rounded-lg bg-red-100 text-red-800">
-                                                        No Stock Available
-                                                    </div>
-                                                @else
-                                                    <div
-                                                        class="px-3 py-2 text-xs rounded-lg bg-green-100 text-green-800">
-                                                        Sent to Stock<br>
-                                                        <span class="text-xs text-gray-600">
-                                                                {{ Carbon::parse($inquiry->sent_to_stock_at)->format('d M Y, h:i A') }}
-                                                            </span>
-                                                    </div>
-                                                @endif
+                                                <div class="colour-match-stock">
+                                                    @if(!$inquiry->isSentToStock)
+                                                        <form
+                                                            action="{{ route('production.sendToStore', $inquiry->id) }}"
+                                                            method="POST">
+                                                            @csrf
+                                                            <button type="submit"
+                                                                    class="px-3 py-1 text-xs rounded-lg bg-blue-100 text-blue-700 hover:bg-blue-200">
+                                                                Send to Stores
+                                                            </button>
+                                                        </form>
+                                                    @elseif($inquiry->isSentToStock && is_null($inquiry->sent_to_stock_at))
+                                                        <span
+                                                            class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-red-100 dark:bg-gray-800 px-3 py-1 rounded">
+                                                            No Stock Available
+                                                        </span>
+                                                    @else
+                                                        <span
+                                                            class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-green-100 dark:bg-gray-800 px-3 py-1 rounded">
+                                                            Sent on <br>
+                                                            {{ Carbon::parse($inquiry->sent_to_stock_at)->format('Y-m-d') }}
+                                                            at
+                                                            {{ Carbon::parse($inquiry->sent_to_stock_at)->format('H:i') }}
+                                                        </span>
+                                                    @endif
+                                                </div>
                                             </td>
 
                                             <!-- Send to Production -->
