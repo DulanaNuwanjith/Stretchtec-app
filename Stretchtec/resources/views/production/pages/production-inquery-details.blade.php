@@ -204,7 +204,8 @@
 
                                             <div id="directItemsContainer">
                                                 <!-- One Item Template -->
-                                                <div class="item-group border rounded p-4 mb-4 bg-gray-50 dark:bg-gray-800">
+                                                <div
+                                                    class="item-group border rounded p-4 mb-4 bg-gray-50 dark:bg-gray-800">
                                                     <!-- Shade & Colour -->
                                                     <div class="flex gap-4">
                                                         <input type="text" name="items[0][shade]"
