@@ -189,6 +189,10 @@ Route::middleware([
 
     Route::get('stockAvailabilityCheck', [StockController::class, 'storeManageIndex'])->name('stockAvailabilityCheck.index');
 
+    Route::get('mail-booking', static function () {
+            return view('production.pages.mail-booking');
+        })->name('mail-booking.index');
+
     /* ----------------------------------------------------------------------
      | Production Inquiry & Order Preparation Views
      |----------------------------------------------------------------------
@@ -205,7 +209,6 @@ Route::middleware([
     Route::get('/product-catalog/{id}/details', [ProductInquiryController::class, 'getSampleDetails'])
         ->name('product-catalog.details');
 
-    // web.php
     Route::post('/production-orders/{id}/send-to-store', [ProductInquiryController::class, 'sendToStore'])->name('production.sendToStore');
 
     Route::patch('production-inquiry/{id}/send-to-production', [ProductInquiryController::class, 'sendToProduction'])->name('production-inquiry.sendToProduction');
