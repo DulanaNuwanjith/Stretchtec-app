@@ -10,5 +10,20 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Stock extends Model
 {
-    //
+    /**
+     * The attributes that are mass assignable.
+     */
+    protected $fillable = [
+        'reference_no',
+        'shade',
+        'qty_available',
+        'notes',
+    ];
+
+    /**
+     * Cast attributes to native types.
+     */
+    protected $casts = [
+        'qty_available' => 'integer',
+    ];
 }
