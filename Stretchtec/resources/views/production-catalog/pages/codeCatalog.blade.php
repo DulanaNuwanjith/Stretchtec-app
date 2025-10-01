@@ -762,7 +762,7 @@
                                                         class="px-4 py-2 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 text-sm rounded hover:bg-gray-300">
                                                     Cancel
                                                 </button>
-                                                <button type="submit"
+                                                <button type="submit" id="createCodeBtn"
                                                         class="px-4 py-2 bg-blue-500 text-white text-sm rounded hover:bg-blue-600">
                                                     Create Order
                                                 </button>
@@ -872,5 +872,18 @@
             document.getElementById('file-upload-' + id).click();
         }
     }
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const form = document.querySelector('#addCodeCatalogModal form');
+        const submitBtn = document.getElementById('createCodeBtn');
+
+        form.addEventListener('submit', function() {
+            // Disable the button to prevent multiple clicks
+            submitBtn.disabled = true;
+            submitBtn.innerText = 'Submitting...';
+        });
+    });
 </script>
 @endsection
