@@ -785,6 +785,7 @@
                                                         {{ $inquiry->productionStatus === 'Dispatched to RnD' ? 'text-blue-500' : '' }}">
                                                         {{ $inquiry->orderNo }}
                                                     </span>
+                                                <span class="mt-2 text-xs text-gray-700 font-semibold">{{ $inquiry->po_identification }}</span>
                                                 <input type="text"
                                                        class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                        value="{{ $inquiry->orderNo }}"/>
@@ -1967,20 +1968,28 @@
                                                 </div>
 
                                                 <div class="flex gap-4">
-                                                    <div class="w-1/2">
+                                                    <div class="w-1/3">
                                                         <label for="colour"
                                                                class="block text-sm font-medium text-gray-700 dark:text-gray-300">Colour</label>
                                                         <input id="colour" type="text" name="colour" required
                                                                class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                     </div>
-                                                    <div class="w-1/2">
+                                                    <div class="w-1/3">
                                                         <label for="sampleQuantity"
                                                                class="block text-sm font-medium text-gray-700 dark:text-gray-300">Sample
-                                                            Quantity (yds or mtr)</label>
+                                                            Quantity</label>
                                                         <input id="sampleQuantity" type="text" name="sample_quantity"
                                                                required
                                                                class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm mb-4"
-                                                               placeholder="Eg. Meters 100M or Yards 100Y">
+                                                               placeholder="Eg. 100M or Yards 100Y">
+                                                    </div>
+                                                    <div class="w-1/3">
+                                                        <label for="po_identification"
+                                                               class="block text-sm font-medium text-gray-700 dark:text-gray-300">PO
+                                                            Identification</label>
+                                                        <input id="po_identification" type="text"
+                                                               name="po_identification" placeholder="(Optional)"
+                                                               class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                     </div>
                                                 </div>
 
@@ -2094,7 +2103,7 @@
         const form = document.querySelector('#addSampleModal form');
         const submitBtn = document.getElementById('createSampleBtn');
 
-        form.addEventListener('submit', function() {
+        form.addEventListener('submit', function () {
             // Disable the button to prevent multiple clicks
             submitBtn.disabled = true;
             submitBtn.innerText = 'Submitting...';

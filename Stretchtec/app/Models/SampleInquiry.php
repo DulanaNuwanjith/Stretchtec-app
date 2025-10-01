@@ -64,6 +64,7 @@ class SampleInquiry extends Model
         'orderFile',
         'orderNo',
         'inquiryReceiveDate',
+        'po_identification',
         'customerName',
         'merchandiseName',
         'coordinatorName',

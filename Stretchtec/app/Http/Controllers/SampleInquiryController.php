@@ -126,6 +126,7 @@ class SampleInquiryController extends Controller
             $validated = $request->validate([
                 'order_file' => 'nullable|file|mimes:pdf,jpg,jpeg',
                 'inquiry_date' => 'required|date',
+                'po_identification' => 'nullable|string',
                 'customer' => 'required|string|max:255',
                 'merchandiser' => 'required|string|max:255',
                 'coordinator' => 'string|max:255',
@@ -168,6 +169,7 @@ class SampleInquiryController extends Controller
                 'orderFile' => $orderFilePath,
                 'orderNo' => $orderNo,
                 'inquiryReceiveDate' => $validated['inquiry_date'],
+                'po_identification' => $validated['po_identification'] ?? null,
                 'customerName' => $validated['customer'],
                 'merchandiseName' => $validated['merchandiser'],
                 'coordinatorName' => $validated['coordinator'],
