@@ -468,9 +468,10 @@
                                                             <h2 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">
                                                                 Select Shade</h2>
 
-                                                            <form action="{{ route('productCatalog.updateShade', $catalog->id) }}"
-                                                                  method="POST"
-                                                                  @submit.prevent="$refs.finalShade.value = selectedShade + (optionText ? ' - ' + optionText : ''); $el.submit();">
+                                                            <form
+                                                                action="{{ route('productCatalog.updateShade', $catalog->id) }}"
+                                                                method="POST"
+                                                                @submit.prevent="$refs.finalShade.value = selectedShade + (optionText ? ' - ' + optionText : ''); $el.submit();">
                                                                 @csrf
                                                                 @method('PATCH')
 
@@ -489,8 +490,10 @@
                                                                 {{-- Input field only when a shade is selected --}}
                                                                 <template x-if="selectedShade">
                                                                     <div class="mt-3">
-                                                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
-                                                                            Enter Option for <span x-text="selectedShade"></span>
+                                                                        <label
+                                                                            class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
+                                                                            Enter Option for <span
+                                                                                x-text="selectedShade"></span>
                                                                         </label>
                                                                         <input type="text" x-model="optionText"
                                                                                placeholder="e.g., Option A"
@@ -510,7 +513,8 @@
                                                                 </div>
 
                                                                 {{-- Hidden input to hold final value --}}
-                                                                <input type="hidden" name="final_shade" x-ref="finalShade">
+                                                                <input type="hidden" name="final_shade"
+                                                                       x-ref="finalShade">
                                                             </form>
 
                                                         </div>
@@ -880,7 +884,7 @@
         const form = document.querySelector('#addTapeCatalogModal form');
         const submitBtn = document.getElementById('createTapeBtn');
 
-        form.addEventListener('submit', function() {
+        form.addEventListener('submit', function () {
             // Disable the button to prevent multiple clicks
             submitBtn.disabled = true;
             submitBtn.innerText = 'Submitting...';
