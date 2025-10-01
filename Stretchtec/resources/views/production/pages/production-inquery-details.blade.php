@@ -868,27 +868,6 @@
         });
     </script>
 
-    <script>
-        flatpickr("#sampleCustomerRequestedDate", {
-            minDate: "today",
-            dateFormat: "Y-m-d",
-            onDayCreate: function(dObj, dStr, fp, dayElem) {
-                const today = new Date();
-                const dayDate = new Date(dayElem.dateObj);
-                const diffDays = Math.floor((dayDate - today) / (1000 * 60 * 60 * 24));
-
-                // Style based on range
-                if (diffDays >= 0 && diffDays <= 10) {
-                    dayElem.classList.add("bg-red-200", "text-red-800", "rounded-md");
-                } else if (diffDays > 10 && diffDays <= 20) {
-                    dayElem.classList.add("bg-yellow-200", "text-yellow-800", "rounded-md");
-                } else if (diffDays > 20) {
-                    dayElem.classList.add("bg-green-200", "text-green-800", "rounded-md");
-                }
-            }
-        });
-    </script>
-
     <!-- ========= SCRIPTS: tabs, dropdown, sample fetch ========= -->
     <script>
         // initialize tabs on page load
