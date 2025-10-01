@@ -226,7 +226,8 @@
                                                                placeholder="Size">
                                                         <input type="number" name="items[0][qty]" min="0"
                                                                class="sampleQty border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white text-sm"
-                                                               placeholder="Quantity">
+                                                               placeholder="Quantity"
+                                                               oninput="updateDirectPOValue(this)">
                                                         <select name="items[0][uom]"
                                                                 class="sampleUom border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white text-sm">
                                                             <option value="meters">Meters</option>
@@ -245,11 +246,17 @@
                                                                placeholder="TKT">
                                                     </div>
 
-                                                    <!-- Price -->
-                                                    <div class="mt-3">
+                                                    <!-- Unit Price & PO Value -->
+                                                    <div class="grid grid-cols-2 gap-4 mt-3">
+                                                        <input type="number" step="0.01" name="items[0][unitPrice]"
+                                                               class="sampleUnitPrice w-full border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white text-sm"
+                                                               placeholder="Unit Price"
+                                                               oninput="updateDirectPOValue(this)">
+
                                                         <input type="number" step="0.01" name="items[0][price]"
-                                                               class="samplePrice w-full border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white text-sm"
-                                                               placeholder="PO Value">
+                                                               class="samplePOValue w-full border rounded-md px-3 py-2 bg-gray-100 dark:bg-gray-600 text-sm"
+                                                               placeholder="PO Value" readonly>
+                                                        <div></div>
                                                     </div>
 
                                                     <!-- Remove Button -->
@@ -415,16 +422,16 @@
                                                                class="sampleQty w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                                placeholder="Qty" oninput="updatePOValue(this)">
 
-                                                        <input type="number" step="0.01" name="items[0][unitPrice]"
-                                                               class="sampleUnitPrice w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                               placeholder="Unit Price" oninput="updatePOValue(this)">
-
                                                         <select name="items[0][uom]"
                                                                 class="sampleUom w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                             <option value="meters">Meters</option>
                                                             <option value="yards">Yards</option>
                                                             <option value="pieces">Pieces</option>
                                                         </select>
+
+                                                        <input type="number" step="0.01" name="items[0][unitPrice]"
+                                                               class="sampleUnitPrice w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                               placeholder="Unit Price" oninput="updatePOValue(this)">
 
                                                         <input type="number" step="0.01" name="items[0][price]"
                                                                class="samplePOValue w-full mt-1 px-3 py-2 border rounded-md bg-gray-100 dark:bg-gray-600 text-sm"
@@ -1148,6 +1155,17 @@
 
 <script>
     function updatePOValue(element) {
+        const itemGroup = element.closest('.item-group');
+        const qty = parseFloat(itemGroup.querySelector('.sampleQty').value) || 0;
+        const unitPrice = parseFloat(itemGroup.querySelector('.sampleUnitPrice').value) || 0;
+
+        const poValueField = itemGroup.querySelector('.samplePOValue');
+        poValueField.value = (qty * unitPrice).toFixed(2);
+    }
+</script>
+
+<script>
+    function updateDirectPOValue(element) {
         const itemGroup = element.closest('.item-group');
         const qty = parseFloat(itemGroup.querySelector('.sampleQty').value) || 0;
         const unitPrice = parseFloat(itemGroup.querySelector('.sampleUnitPrice').value) || 0;
