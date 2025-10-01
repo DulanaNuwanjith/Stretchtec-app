@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static simplePaginate(int $int)
  * @method static selectRaw(string $string)
  * @method static findOrFail($id)
+ * @method static where(string $string, $prod_order_no)
  */
 class ProductInquiry extends Model
 {

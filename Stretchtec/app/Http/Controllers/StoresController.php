@@ -9,6 +9,7 @@ use App\Models\Stores;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
 
 class StoresController extends Controller
 {
@@ -94,7 +95,7 @@ class StoresController extends Controller
         //
     }
 
-    public function assign(Request $request, $id)
+    public function assign(Request $request, $id): RedirectResponse
     {
         // validate qty_allocated before updating
         $validated = $request->validate([
