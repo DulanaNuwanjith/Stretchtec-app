@@ -727,7 +727,7 @@
 
                                             <!-- Status -->
                                             <td
-                                                class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
+                                                class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
                                                     <span
                                                         class="px-2 py-1 text-xs rounded-full
                                                     {{ $inquiry->status === 'Completed'
