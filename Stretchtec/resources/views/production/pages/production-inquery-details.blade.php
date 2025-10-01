@@ -340,7 +340,7 @@
                                                         class="px-4 py-2 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 text-sm rounded hover:bg-gray-300">
                                                     Cancel
                                                 </button>
-                                                <button type="submit"
+                                                <button type="submit" id="directFormCreateBtn"
                                                         class="px-4 py-2 bg-blue-500 text-white text-sm rounded hover:bg-blue-600">
                                                     Create Direct Order
                                                 </button>
@@ -469,7 +469,8 @@
                                             </div>
 
                                             <button type="button" id="addItem"
-                                                    class="mt-4 px-4 py-2 bg-green-500 text-white rounded text-sm">+ Add Another
+                                                    class="mt-4 px-4 py-2 bg-green-500 text-white rounded text-sm">+ Add
+                                                Another
                                                 Item
                                             </button>
 
@@ -524,7 +525,7 @@
                                                         class="px-4 py-2 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 text-sm rounded hover:bg-gray-300">
                                                     Cancel
                                                 </button>
-                                                <button type="submit"
+                                                <button type="submit" id="sampleFormCreateBtn"
                                                         class="px-4 py-2 bg-blue-500 text-white text-sm rounded hover:bg-blue-600">
                                                     Create Sample Order
                                                 </button>
@@ -1173,6 +1174,32 @@
         const poValueField = itemGroup.querySelector('.samplePOValue');
         poValueField.value = (qty * unitPrice).toFixed(2);
     }
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const form = document.querySelector('#sampleForm');
+        const submitBtn = document.getElementById('sampleFormCreateBtn');
+
+        form.addEventListener('submit', function () {
+            // Disable the button to prevent multiple clicks
+            submitBtn.disabled = true;
+            submitBtn.innerText = 'Submitting...';
+        });
+    });
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const form = document.querySelector('#directForm');
+        const submitBtn = document.getElementById('directFormCreateBtn');
+
+        form.addEventListener('submit', function () {
+            // Disable the button to prevent multiple clicks
+            submitBtn.disabled = true;
+            submitBtn.innerText = 'Submitting...';
+        });
+    });
 </script>
 
 @endsection
