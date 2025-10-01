@@ -154,7 +154,7 @@
                                     @empty
                                         <tr>
                                             <td colspan="14"
-                                                class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
+                                                class="px-4 py-6 text-center text-gray-500 dark:text-gray-400">
                                                 No records found.
                                             </td>
                                         </tr>
