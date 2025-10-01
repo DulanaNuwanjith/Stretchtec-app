@@ -53,6 +53,7 @@ use App\Http\Controllers\SamplePreparationProductionController;
 use App\Http\Controllers\SamplePreparationRnDController;
 use App\Http\Controllers\SampleStockController;
 use App\Http\Controllers\StockController;
+use App\Http\Controllers\StoresController;
 use App\Http\Controllers\TechnicalCardController;
 use App\Http\Controllers\UserMananagementController;
 use App\Models\User;
@@ -212,6 +213,8 @@ Route::middleware([
     Route::post('/production-orders/{id}/send-to-store', [ProductInquiryController::class, 'sendToStore'])->name('production.sendToStore');
 
     Route::patch('production-inquiry/{id}/send-to-production', [ProductInquiryController::class, 'sendToProduction'])->name('production-inquiry.sendToProduction');
+
+    Route::post('/stores/{id}/assign', [StoresController::class, 'assign'])->name('stores.assign');
 
 
     //Technical Details Routes

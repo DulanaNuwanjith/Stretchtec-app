@@ -139,9 +139,6 @@
                             Qty Allocated
                         </th>
                         <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                            Qty for Production
-                        </th>
-                        <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                             Assigned By
                         </th>
                         <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
@@ -150,43 +147,103 @@
                         <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                             Reason for Reject
                         </th>
-                        <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                            Actions
-                        </th>
                     </tr>
                     </thead>
                     <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                     @forelse ($stores as $store)
                         <tr class="odd:bg-white even:bg-gray-50 border-b border-gray-200 text-center">
-                            <td class="sticky left-0 z-10 bg-white px-4 py-3 bg-gray-100 border-r border-gray-300 text-left whitespace-normal break-words">{{ $store->prod_order_no }}</td>
-                            <td class="px-4 py-3 w-48 whitespace-normal break-words border-r border-gray-300">{{ $store->reference_no }}</td>
+                            <td class="sticky left-0 z-10 bg-white px-4 py-3 bg-gray-100 border-r border-gray-300 text-left whitespace-normal break-words font-bold">{{ $store->prod_order_no }}</td>
+                            <td class="px-4 py-3 w-48 whitespace-normal break-words border-r border-gray-300 ">{{ $store->reference_no }}</td>
                             <td class="px-4 py-3 w-48 whitespace-normal break-words border-r border-gray-300">{{ $store->shade }}</td>
                             <td class="px-4 py-3 w-48 whitespace-normal break-words border-r border-gray-300">{{ $store->qty_available }}</td>
                             <td class="px-4 py-3 w-48 whitespace-normal break-words border-r border-gray-300">{{ $store->qty_allocated ?? '-' }}</td>
-                            <td class="px-4 py-3 w-48 whitespace-normal break-words border-r border-gray-300">{{ $store->qty_for_production ?? '-' }}</td>
                             <td class="px-4 py-3 w-48 whitespace-normal break-words border-r border-gray-300">{{ $store->assigned_by }}</td>
-                            <td class="px-4 py-3 w-48 whitespace-normal break-words border-r border-gray-300">
+                            <td class="px-4 py-3 w-48 whitespace-normal break-words border-r border-gray-300 text-center">
                                 @if($store->is_qty_assigned)
-                                    <span class="px-2 py-1 text-xs bg-green-100 text-green-800 rounded">Yes</span>
+                                    {{-- Already assigned --}}
+                                    <span
+                                        class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-green-200 dark:bg-gray-800 px-3 py-1 rounded">
+                                        Assigned ({{ $store->qty_allocated }})
+                                    </span>
                                 @else
-                                    <span class="px-2 py-1 text-xs bg-red-100 text-red-800 rounded">No</span>
+                                    {{-- Alpine component --}}
+                                    <div x-data="{ open: false }" class="relative">
+                                        {{-- Trigger Button --}}
+                                        <button type="button"
+                                                class="px-3 py-1 text-xs rounded transition-all duration-200 bg-blue-100 text-blue-700 hover:bg-blue-200"
+                                                @click="open = true">
+                                            Assign
+                                        </button>
+
+                                        {{-- Modal --}}
+                                        <div x-show="open" x-transition
+                                             class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+                                             style="display: none;">
+                                            <div
+                                                class="bg-white dark:bg-gray-800 rounded-lg shadow-lg w-full max-w-md relative max-h-[90vh] overflow-y-auto p-8">
+
+                                                {{-- Close button --}}
+                                                <button @click="open = false"
+                                                        class="absolute top-2 right-2 text-gray-600 hover:text-gray-900">
+                                                    ✕
+                                                </button>
+
+                                                {{-- Title --}}
+                                                <h2 class="text-lg font-semibold text-gray-800 dark:text-white mb-2 text-left">
+                                                    Assign Quantity
+                                                </h2>
+
+                                                <p class="mb-5 text-sm text-gray-600 dark:text-gray-300 text-left">
+                                                    Please provide the quantity allocated and reason for reject (if
+                                                    any).
+                                                </p>
+
+                                                {{-- Form --}}
+                                                <form action="{{ route('stores.assign', $store->id) }}" method="POST">
+                                                    @csrf
+
+                                                    {{-- Quantity Allocated --}}
+                                                    <div class="mb-4">
+                                                        <label
+                                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 text-left">
+                                                            Quantity Allocated
+                                                        </label>
+                                                        <input type="number" name="qty_allocated" required
+                                                               placeholder="Enter quantity"
+                                                               class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                    </div>
+
+                                                    {{-- Reason for Reject --}}
+                                                    <div class="mb-4">
+                                                        <label
+                                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 text-left">
+                                                            Reason for Reject
+                                                        </label>
+                                                        <input type="text" name="reason_for_reject"
+                                                               placeholder="Enter reason (optional)"
+                                                               class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                    </div>
+
+                                                    {{-- Form Buttons --}}
+                                                    <div class="flex justify-end gap-3">
+                                                        <button type="button"
+                                                                @click="open = false"
+                                                                class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400 transition">
+                                                            Cancel
+                                                        </button>
+                                                        <button type="submit"
+                                                                class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
+                                                            Save
+                                                        </button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
                                 @endif
                             </td>
+
                             <td class="px-4 py-3 w-48 whitespace-normal break-words border-r border-gray-300">{{ $store->reason_for_reject ?? '-' }}</td>
-                            <td class="px-6 py-4 text-sm text-right">
-                                <div class="flex justify-end space-x-2">
-                                    <form id="delete-form-{{ $store->id }}"
-                                          {{--                                          action="{{ route('stores.destroy', $store->id) }}" method="POST"--}}
-                                          class="inline">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="button" onclick="confirmDelete({{ $store->id }})"
-                                                class="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 text-xs">
-                                            Delete
-                                        </button>
-                                    </form>
-                                </div>
-                            </td>
                         </tr>
                     @empty
                         <tr>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\SampleStock;
+use App\Models\Stock;
 use App\Models\Stores;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -91,4 +92,45 @@ class StoresController extends Controller
     {
         //
     }
+
+    public function assign(Request $request, $id)
+    {
+        // validate qty_allocated before updating
+        $validated = $request->validate([
+            'qty_allocated' => 'required|integer|min:0',
+            'reason_for_reject' => 'nullable|string'
+        ]);
+
+        // find the store record
+        $store = Stores::findOrFail($id);
+
+        //Find the stock record
+        $stock = Stock::where('reference_no', $store->reference_no)->firstOrFail();
+
+        // Decrease the stock qty
+        if ($stock->qty_available >= $request->qty_allocated) {
+            $stock->qty_available -= $request->qty_allocated;
+            $stock->save();
+        } else {
+            return back()->withErrors(['qty_allocated' => 'Not enough stock available to allocate.']);
+        }
+
+        // update fields
+        $store->qty_allocated = $validated['qty_allocated'];
+        $store->reason_for_reject = $validated['reason_for_reject'] ?? null;
+        $store->is_qty_assigned = true;
+        $store->assigned_by = auth()->user()->name ?? 'System';
+
+        // optionally reduce available qty
+        if ($store->qty_available >= $store->qty_allocated) {
+            $store->qty_available = $store->qty_available - $store->qty_allocated;
+        } else {
+            return back()->withErrors(['qty_allocated' => 'Allocated qty cannot exceed available qty']);
+        }
+
+        $store->save();
+
+        return redirect()->back()->with('success', 'Quantity assigned successfully!');
+    }
+
 }

@@ -141,7 +141,7 @@
                     <tbody class="divide-y divide-gray-200 dark:divide-gray-600">
                     @forelse ($stock as $item)
                         <tr class="odd:bg-white even:bg-gray-50 border-b border-gray-200 text-center">
-                            <td class="sticky left-0 z-10 bg-white px-4 py-3 bg-gray-100 border-r border-gray-300 text-left whitespace-normal break-words">{{ $item->reference_no }}</td>
+                            <td class="sticky left-0 z-10 bg-white px-4 py-3 text-sm bg-gray-100 border-r border-gray-300 text-left whitespace-normal break-words font-bold">{{ $item->reference_no }}</td>
                             <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">{{ $item->shade }}</td>
                             <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">{{ $item->qty_available }}</td>
                             <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">{{ $item->notes ?? '-' }}</td>
