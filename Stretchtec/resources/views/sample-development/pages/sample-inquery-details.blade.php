@@ -881,6 +881,7 @@
                                                         {{ $inquiry->productionStatus === 'Dispatched to RnD' ? 'text-blue-500' : '' }}">
                                                         {{ $inquiry->orderNo }}
                                                     </span>
+                                                    <br>
                                                     <span
                                                         class="mt-2 text-xs text-gray-700 font-semibold">{{ $inquiry->po_identification }}</span>
                                                     <input type="text"
@@ -1655,7 +1656,7 @@
                                                         setDecision(decision) {
                                                             this.selectedDecision = decision;
                                                             this.selectedColor = decision;
-                                                    
+
                                                             if (decision === 'Order Rejected') {
                                                                 this.openModal = true;
                                                                 this.openDropdown = false;
