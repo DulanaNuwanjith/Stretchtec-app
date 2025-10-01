@@ -123,22 +123,22 @@
                                         <tr class="odd:bg-white even:bg-gray-50 border-b border-gray-200 text-center">
                                             <!-- Sticky first column -->
                                             <td
-                                                class="px-4 py-3 font-semibold sticky left-0 z-10 bg-gray-100 whitespace-normal break-words border-r border-gray-300">
+                                                class="px-4 py-3 font-bold sticky left-0 z-10 bg-gray-100 whitespace-normal break-words border-r border-gray-300 text-blue-500">
                                                 {{ $order->prod_order_no ?? 'N/A' }}
                                             </td>
-                                            <td class="px-4 py-3 border-r">{{ $order->customer_name ?? 'N/A' }}</td>
-                                            <td class="px-4 py-3 border-r">{{ $order->item ?? 'N/A' }}</td>
-                                            <td class="px-4 py-3 border-r">{{ $order->size ?? 'N/A' }}</td>
-                                            <td class="px-4 py-3 border-r">{{ $order->color ?? 'N/A' }}</td>
-                                            <td class="px-4 py-3 border-r">{{ $order->shade ?? 'N/A' }}</td>
-                                            <td class="px-4 py-3 border-r">{{ $order->tkt ?? 'N/A' }}</td>
-                                            <td class="px-4 py-3 border-r">{{ $order->qty ?? 0 }}</td>
-                                            <td class="px-4 py-3 border-r">{{ $order->uom ?? '-' }}</td>
-                                            <td class="px-4 py-3 border-r">{{ $order->supplier ?? 'N/A' }}</td>
-                                            <td class="px-4 py-3 border-r">{{ $order->pst_no ?? 'N/A' }}</td>
-                                            <td class="px-4 py-3 text-gray-500 italic border-r">
+                                            <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">{{ $order->customer_name ?? 'N/A' }}</td>
+                                            <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">{{ $order->item ?? 'N/A' }}</td>
+                                            <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">{{ $order->size ?? 'N/A' }}</td>
+                                            <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">{{ $order->color ?? 'N/A' }}</td>
+                                            <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">{{ $order->shade ?? 'N/A' }}</td>
+                                            <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">{{ $order->tkt ?? 'N/A' }}</td>
+                                            <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">{{ $order->qty ?? 0 }}</td>
+                                            <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">{{ $order->uom ?? '-' }}</td>
+                                            <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">{{ $order->supplier ?? 'N/A' }}</td>
+                                            <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">{{ $order->pst_no ?? 'N/A' }}</td>
+                                            <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
                                                 {{ $order->supplier_comment ?? '-' }}</td>
-                                            <td class="px-4 py-3 text-center border-r">
+                                            <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
                                                 <span
                                                     class="px-2 py-1 text-xs rounded-full
                                                 {{ $order->status === 'Completed'
@@ -154,7 +154,7 @@
                                     @empty
                                         <tr>
                                             <td colspan="14"
-                                                class="px-4 py-6 text-center text-gray-500 dark:text-gray-400">
+                                                class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
                                                 No records found.
                                             </td>
                                         </tr>

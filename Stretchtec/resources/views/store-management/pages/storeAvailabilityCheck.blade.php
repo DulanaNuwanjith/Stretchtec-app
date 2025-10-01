@@ -158,8 +158,8 @@
                     <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                     @forelse ($stores as $store)
                         <tr class="odd:bg-white even:bg-gray-50 border-b border-gray-200 text-center">
-                            <td class="sticky left-0 z-10 bg-white px-4 py-3 bg-gray-100 border-r border-gray-300 text-left whitespace-normal break-words">{{ $store->prod_order_no }}</td>
-                            <td class="px-4 py-3 w-48 whitespace-normal break-words border-r border-gray-300">{{ $store->reference_no }}</td>
+                            <td class="sticky left-0 z-10 bg-white px-4 py-3 bg-gray-100 border-r border-gray-300 text-left whitespace-normal break-words font-bold">{{ $store->prod_order_no }}</td>
+                            <td class="px-4 py-3 w-48 whitespace-normal break-words border-r border-gray-300 ">{{ $store->reference_no }}</td>
                             <td class="px-4 py-3 w-48 whitespace-normal break-words border-r border-gray-300">{{ $store->shade }}</td>
                             <td class="px-4 py-3 w-48 whitespace-normal break-words border-r border-gray-300">{{ $store->qty_available }}</td>
                             <td class="px-4 py-3 w-48 whitespace-normal break-words border-r border-gray-300">{{ $store->qty_allocated ?? '-' }}</td>
