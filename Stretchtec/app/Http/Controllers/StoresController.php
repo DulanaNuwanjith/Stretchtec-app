@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ProductInquiry;
 use App\Models\SampleStock;
 use App\Models\Stock;
 use App\Models\Stores;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
 
 class StoresController extends Controller
 {
@@ -93,7 +95,7 @@ class StoresController extends Controller
         //
     }
 
-    public function assign(Request $request, $id)
+    public function assign(Request $request, $id): RedirectResponse
     {
         // validate qty_allocated before updating
         $validated = $request->validate([
@@ -106,6 +108,9 @@ class StoresController extends Controller
 
         //Find the stock record
         $stock = Stock::where('reference_no', $store->reference_no)->firstOrFail();
+
+        //Find the Product inquiry record
+        $productInquiry = ProductInquiry::where('prod_order_no', $store->prod_order_no)->firstOrFail();
 
         // Decrease the stock qty
         if ($stock->qty_available >= $request->qty_allocated) {
@@ -129,6 +134,9 @@ class StoresController extends Controller
         }
 
         $store->save();
+
+        $productInquiry->canSendToProduction = true;
+        $productInquiry->save();
 
         return redirect()->back()->with('success', 'Quantity assigned successfully!');
     }
