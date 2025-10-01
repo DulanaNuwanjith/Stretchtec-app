@@ -207,25 +207,27 @@
 
                                             <div id="directItemsContainer">
                                                 <!-- One Item Template -->
-                                                <div class="item-group border rounded p-4 mb-4 bg-gray-50 dark:bg-gray-800">
+                                                <div
+                                                    class="item-group border rounded p-4 mb-4 bg-gray-50 dark:bg-gray-800">
                                                     <!-- Shade & Colour -->
                                                     <div class="grid grid-cols-2 gap-4">
                                                         <input type="text" name="items[0][shade]"
-                                                            class="sampleShade border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white text-sm"
-                                                            placeholder="Shade">
+                                                               class="sampleShade border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white text-sm"
+                                                               placeholder="Shade">
                                                         <input type="text" name="items[0][color]"
-                                                            class="sampleColour border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white text-sm"
-                                                            placeholder="Colour">
+                                                               class="sampleColour border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white text-sm"
+                                                               placeholder="Colour">
                                                     </div>
 
                                                     <!-- Size, Qty, UoM -->
                                                     <div class="grid grid-cols-3 gap-4 mt-3">
                                                         <input type="text" name="items[0][size]"
-                                                            class="sampleSize border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white text-sm"
-                                                            placeholder="Size">
+                                                               class="sampleSize border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white text-sm"
+                                                               placeholder="Size">
                                                         <input type="number" name="items[0][qty]" min="0"
-                                                            class="sampleQty border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white text-sm"
-                                                            placeholder="Quantity">
+                                                               class="sampleQty border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white text-sm"
+                                                               placeholder="Quantity"
+                                                               oninput="updateDirectPOValue(this)">
                                                         <select name="items[0][uom]"
                                                                 class="sampleUom border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white text-sm">
                                                             <option value="meters">Meters</option>
@@ -237,18 +239,24 @@
                                                     <!-- Item & TKT -->
                                                     <div class="grid grid-cols-2 gap-4 mt-3">
                                                         <input type="text" name="items[0][item]"
-                                                            class="sampleItem border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white text-sm"
-                                                            placeholder="Item">
+                                                               class="sampleItem border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white text-sm"
+                                                               placeholder="Item">
                                                         <input type="text" name="items[0][tkt]"
-                                                            class="sampleTKT border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white text-sm"
-                                                            placeholder="TKT">
+                                                               class="sampleTKT border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white text-sm"
+                                                               placeholder="TKT">
                                                     </div>
 
-                                                    <!-- Price -->
-                                                    <div class="mt-3">
+                                                    <!-- Unit Price & PO Value -->
+                                                    <div class="grid grid-cols-2 gap-4 mt-3">
+                                                        <input type="number" step="0.01" name="items[0][unitPrice]"
+                                                               class="sampleUnitPrice w-full border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white text-sm"
+                                                               placeholder="Unit Price"
+                                                               oninput="updateDirectPOValue(this)">
+
                                                         <input type="number" step="0.01" name="items[0][price]"
-                                                            class="samplePrice w-full border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white text-sm"
-                                                            placeholder="PO Value">
+                                                               class="samplePOValue w-full border rounded-md px-3 py-2 bg-gray-100 dark:bg-gray-600 text-sm"
+                                                               placeholder="PO Value" readonly>
+                                                        <div></div>
                                                     </div>
 
                                                     <!-- Remove Button -->
@@ -256,10 +264,10 @@
                                                         <button type="button" onclick="removeDirectItem(this)"
                                                                 class="text-blue-500 hover:text-blue-700">
                                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                                viewBox="0 0 24 24" stroke-width="2"
-                                                                stroke="currentColor" class="w-5 h-5">
+                                                                 viewBox="0 0 24 24" stroke-width="2"
+                                                                 stroke="currentColor" class="w-5 h-5">
                                                                 <path stroke-linecap="round" stroke-linejoin="round"
-                                                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0
+                                                                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0
                                                                         01-1.995-1.858L5 7m5 4v6m4-6v6M9 7V4a1 1 0
                                                                         011-1h4a1 1 0 011 1v3m-9 0h10"/>
                                                             </svg>
@@ -276,40 +284,54 @@
 
                                             <!-- Master Order fields -->
                                             <div class="mt-6">
-                                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Reference Number</label>
+                                                <label
+                                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">Reference
+                                                    Number</label>
                                                 <input type="text" name="reference_no" value="Direct Bulk" readonly
-                                                    class="w-full mt-1 px-3 py-2 border rounded-md bg-gray-100 dark:bg-gray-600 text-sm">
+                                                       class="w-full mt-1 px-3 py-2 border rounded-md bg-gray-100 dark:bg-gray-600 text-sm">
                                             </div>
                                             <div class="mt-3">
-                                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">PO Number</label>
+                                                <label
+                                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">PO
+                                                    Number</label>
                                                 <input type="text" name="po_number"
-                                                    class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                       class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                             </div>
                                             <div class="mt-3">
-                                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer Coordinator</label>
+                                                <label
+                                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer
+                                                    Coordinator</label>
                                                 <input type="text" name="customer_coordinator" readonly
-                                                    value="{{ Auth::user()->name }}"
-                                                    class="w-full mt-1 px-3 py-2 border rounded-md bg-gray-100 dark:bg-gray-600 text-sm">
+                                                       value="{{ Auth::user()->name }}"
+                                                       class="w-full mt-1 px-3 py-2 border rounded-md bg-gray-100 dark:bg-gray-600 text-sm">
                                             </div>
                                             <div class="mt-3">
-                                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer Name</label>
+                                                <label
+                                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer
+                                                    Name</label>
                                                 <input type="text" name="customer_name"
-                                                    class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                       class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                             </div>
                                             <div class="mt-3">
-                                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer Merchandiser</label>
+                                                <label
+                                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer
+                                                    Merchandiser</label>
                                                 <input type="text" name="merchandiser_name"
-                                                    class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                       class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                             </div>
                                             <div class="mt-3">
-                                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer Requested Date</label>
+                                                <label
+                                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer
+                                                    Requested Date</label>
                                                 <input type="date" name="customer_req_date"
-                                                    class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                       class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                             </div>
                                             <div class="mt-3">
-                                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer Notes</label>
+                                                <label
+                                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer
+                                                    Notes</label>
                                                 <input type="text" name="remarks"
-                                                    class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                       class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                             </div>
 
                                             <div class="flex justify-end gap-3 mt-6">
@@ -400,16 +422,16 @@
                                                                class="sampleQty w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                                placeholder="Qty" oninput="updatePOValue(this)">
 
-                                                        <input type="number" step="0.01" name="items[0][unitPrice]"
-                                                               class="sampleUnitPrice w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                               placeholder="Unit Price" oninput="updatePOValue(this)">
-
                                                         <select name="items[0][uom]"
                                                                 class="sampleUom w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                             <option value="meters">Meters</option>
                                                             <option value="yards">Yards</option>
                                                             <option value="pieces">Pieces</option>
                                                         </select>
+
+                                                        <input type="number" step="0.01" name="items[0][unitPrice]"
+                                                               class="sampleUnitPrice w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                                               placeholder="Unit Price" oninput="updatePOValue(this)">
 
                                                         <input type="number" step="0.01" name="items[0][price]"
                                                                class="samplePOValue w-full mt-1 px-3 py-2 border rounded-md bg-gray-100 dark:bg-gray-600 text-sm"
@@ -453,28 +475,38 @@
 
                                             <!-- Master PO fields -->
                                             <div class="mt-6">
-                                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">PO Number</label>
+                                                <label
+                                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">PO
+                                                    Number</label>
                                                 <input type="text" name="po_number" required
                                                        class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                             </div>
                                             <div class="mt-3">
-                                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer Name</label>
+                                                <label
+                                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer
+                                                    Name</label>
                                                 <input type="text" name="customer_name" required
                                                        class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                             </div>
                                             <div class="mt-3">
-                                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Merchandiser Name</label>
+                                                <label
+                                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">Merchandiser
+                                                    Name</label>
                                                 <input type="text" name="merchandiser_name" required
                                                        class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                             </div>
                                             <div class="mt-3">
-                                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer Coordinator</label>
+                                                <label
+                                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer
+                                                    Coordinator</label>
                                                 <input type="text" name="customer_coordinator" readonly
                                                        value="{{ Auth::user()->name }}"
                                                        class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                             </div>
                                             <div class="mt-3">
-                                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer Requested Date</label>
+                                                <label
+                                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer
+                                                    Requested Date</label>
                                                 <input type="date" name="customer_req_date" required
                                                        class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                             </div>
@@ -489,9 +521,11 @@
 
                                             <div class="flex justify-end mt-6 space-x-3">
                                                 <button type="button" id="cancelForm"
-                                                        class="px-4 py-2 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 text-sm rounded hover:bg-gray-300">Cancel
+                                                        class="px-4 py-2 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 text-sm rounded hover:bg-gray-300">
+                                                    Cancel
                                                 </button>
-                                                <button type="submit" class="px-4 py-2 bg-blue-500 text-white text-sm rounded hover:bg-blue-600">
+                                                <button type="submit"
+                                                        class="px-4 py-2 bg-blue-500 text-white text-sm rounded hover:bg-blue-600">
                                                     Create Sample Order
                                                 </button>
                                             </div>
@@ -534,7 +568,7 @@
                                             Customer Merchandiser
                                         </th>
                                         <th
-                                            class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                            class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-48 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                             PO Value
                                         </th>
                                         <th
@@ -640,6 +674,8 @@
                                             <td
                                                 class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center text-green-600 font-medium">
                                                 {{ $inquiry->price ? 'LKR  ' . number_format($inquiry->price, 2) : '0' }}
+                                                <br>
+                                                <span class="mt-2 text-xs text-blue-700 font-semibold">(Rs. {{$inquiry->unitPrice}} X {{$inquiry->qty}})</span>
                                             </td>
 
                                             <!-- Requested Date -->
@@ -1119,6 +1155,17 @@
 
 <script>
     function updatePOValue(element) {
+        const itemGroup = element.closest('.item-group');
+        const qty = parseFloat(itemGroup.querySelector('.sampleQty').value) || 0;
+        const unitPrice = parseFloat(itemGroup.querySelector('.sampleUnitPrice').value) || 0;
+
+        const poValueField = itemGroup.querySelector('.samplePOValue');
+        poValueField.value = (qty * unitPrice).toFixed(2);
+    }
+</script>
+
+<script>
+    function updateDirectPOValue(element) {
         const itemGroup = element.closest('.item-group');
         const qty = parseFloat(itemGroup.querySelector('.sampleQty').value) || 0;
         const unitPrice = parseFloat(itemGroup.querySelector('.sampleUnitPrice').value) || 0;
