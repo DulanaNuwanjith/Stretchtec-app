@@ -562,6 +562,10 @@
                                         </th>
                                         <th
                                             class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                            Unit
+                                        </th>
+                                        <th
+                                            class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                             Customer Name
                                         </th>
                                         <th
@@ -661,6 +665,11 @@
                                                 class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
                                                 {{ $inquiry->qty ?? '0' }}</td>
 
+                                            <!-- UOM -->
+                                            <td
+                                                class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
+                                                {{ $inquiry->uom ?? 'N/A' }}</td>
+
                                             <!-- Customer Name -->
                                             <td
                                                 class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
@@ -736,7 +745,8 @@
                                                 @if($inquiry->isSentToStock && $inquiry->canSendToProduction && $inquiry->sent_to_stock_at)
                                                     <ul class="mt-2 text-xs text-green-700 font-semibold">
                                                         @forelse($inquiry->stores as $store)
-                                                            <li>{{ $store->reference_no }} → {{ $store->qty_allocated ?? 0 }}</li>
+                                                            <li>{{ $store->reference_no }}
+                                                                → {{ $store->qty_allocated ?? 0 }}</li>
                                                         @empty
                                                             <li>No allocations yet</li>
                                                         @endforelse
