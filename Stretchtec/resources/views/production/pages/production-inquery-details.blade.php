@@ -691,15 +691,16 @@
                                             </td>
 
                                             <td class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
-                                                <div class="colour-match-stock">
+                                                <div class="colour-match-stock flex justify-center items-center">
                                                     @if(!$inquiry->isSentToStock && !$inquiry->canSendToProduction)
                                                         {{-- Show button if neither is true --}}
                                                         <form
                                                             action="{{ route('production.sendToStore', $inquiry->id) }}"
-                                                            method="POST">
+                                                            method="POST" onsubmit="handleSubmit(this)">
                                                             @csrf
                                                             <button type="submit"
-                                                                    class="px-3 py-1 text-xs rounded-lg bg-blue-100 text-blue-700 hover:bg-blue-200 mt-4">
+                                                                    class="px-3 py-1 text-xs rounded-lg bg-blue-100 text-blue-700 hover:bg-blue-200 mt-4 flex items-center justify-center"
+                                                                    id="sendToStoreBtn-{{ $inquiry->id }}">
                                                                 Send to Stores
                                                             </button>
                                                         </form>
@@ -735,8 +736,7 @@
                                             </td>
 
                                             <!-- Send to Production -->
-                                            <td
-                                                class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                            <td class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
                                                 @if ($inquiry->canSendToProduction === 1)
                                                     <div class="colour-match-production">
                                                         @if ($inquiry->isSentToProduction)
@@ -757,17 +757,20 @@
                                                                     Pending
                                                                 </button>
                                                             @else
-                                                                <!-- Form for other users -->
-                                                                <form
-                                                                    action="{{ route('production-inquiry.sendToProduction', $inquiry->id) }}"
-                                                                    method="POST">
-                                                                    @csrf
-                                                                    @method('PATCH')
-                                                                    <button type="submit"
-                                                                            class="px-3 py-1 mt-4 text-xs rounded-lg bg-indigo-100 text-indigo-700 hover:bg-indigo-200">
-                                                                        Send to Production
-                                                                    </button>
-                                                                </form>
+                                                                <div class="flex justify-center items-center">
+                                                                    <!-- Form for other users -->
+                                                                    <form
+                                                                        action="{{ route('production-inquiry.sendToProduction', $inquiry->id) }}"
+                                                                        method="POST" onsubmit="handleSubmit(this)">
+                                                                        @csrf
+                                                                        @method('PATCH')
+                                                                        <button type="submit"
+                                                                                class="px-3 py-1 mt-4 text-xs rounded-lg bg-indigo-100 text-indigo-700 hover:bg-indigo-200 flex items-center justify-center"
+                                                                                id="sendToProductionBtn-{{ $inquiry->id }}">
+                                                                            Send to Production
+                                                                        </button>
+                                                                    </form>
+                                                                </div>
                                                             @endif
                                                         @endif
                                                     </div>
@@ -1200,6 +1203,47 @@
             submitBtn.innerText = 'Submitting...';
         });
     });
+</script>
+
+<script>
+    function handleSubmit(form) {
+        let btn = form.querySelector("button[type='submit']");
+        btn.disabled = true;
+
+        // Replace text with loading spinner
+        btn.innerHTML = `
+            <svg class="animate-spin h-4 w-4 mr-2 text-blue-700" xmlns="http://www.w3.org/2000/svg" fill="none"
+                 viewBox="0 0 24 24">
+                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                 <path class="opacity-75" fill="currentColor"
+                       d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+            </svg>
+            Processing...
+        `;
+
+        // Allow form to continue submitting
+        return true;
+    }
+</script>
+
+<script>
+    function handleSubmit(form) {
+        let btn = form.querySelector("button[type='submit']");
+        btn.disabled = true;
+
+        // Replace button content with loading spinner
+        btn.innerHTML = `
+            <svg class="animate-spin h-4 w-4 mr-2 text-indigo-700" xmlns="http://www.w3.org/2000/svg" fill="none"
+                 viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor"
+                      d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+            </svg>
+            Processing...
+        `;
+
+        return true; // allow form to submit
+    }
 </script>
 
 @endsection
