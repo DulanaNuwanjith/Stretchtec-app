@@ -153,7 +153,7 @@
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="14"
+                                            <td colspan="13"
                                                 class="px-4 py-6 text-center text-gray-500 dark:text-gray-400">
                                                 No records found.
                                             </td>
