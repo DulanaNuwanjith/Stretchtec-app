@@ -207,25 +207,25 @@
                                                 <!-- One Item Template -->
                                                 <div class="item-group border rounded p-4 mb-4 bg-gray-50 dark:bg-gray-800">
                                                     <!-- Shade & Colour -->
-                                                    <div class="flex gap-4">
+                                                    <div class="grid grid-cols-2 gap-4">
                                                         <input type="text" name="items[0][shade]"
-                                                            class="w-1/2 border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white"
+                                                            class="sampleShade border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white text-sm"
                                                             placeholder="Shade">
                                                         <input type="text" name="items[0][color]"
-                                                            class="w-1/2 border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white"
+                                                            class="sampleColour border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white text-sm"
                                                             placeholder="Colour">
                                                     </div>
 
                                                     <!-- Size, Qty, UoM -->
-                                                    <div class="flex gap-4 mt-3">
+                                                    <div class="grid grid-cols-3 gap-4 mt-3">
                                                         <input type="text" name="items[0][size]"
-                                                            class="w-1/3 border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white"
+                                                            class="sampleSize border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white text-sm"
                                                             placeholder="Size">
                                                         <input type="number" name="items[0][qty]" min="0"
-                                                            class="w-1/3 border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white"
+                                                            class="sampleQty border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white text-sm"
                                                             placeholder="Quantity">
                                                         <select name="items[0][uom]"
-                                                            class="w-1/3 border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white">
+                                                            class="sampleUom border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white text-sm">
                                                             <option value="meters">Meters</option>
                                                             <option value="yards">Yards</option>
                                                             <option value="pieces">Pieces</option>
@@ -233,19 +233,19 @@
                                                     </div>
 
                                                     <!-- Item & TKT -->
-                                                    <div class="flex gap-4 mt-3">
+                                                    <div class="grid grid-cols-2 gap-4 mt-3">
                                                         <input type="text" name="items[0][item]"
-                                                            class="w-1/2 border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white"
+                                                            class="sampleItem border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white text-sm"
                                                             placeholder="Item">
                                                         <input type="text" name="items[0][tkt]"
-                                                            class="w-1/2 border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white"
+                                                            class="sampleTKT border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white text-sm"
                                                             placeholder="TKT">
                                                     </div>
 
                                                     <!-- Price -->
                                                     <div class="mt-3">
                                                         <input type="number" step="0.01" name="items[0][price]"
-                                                            class="w-full border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white"
+                                                            class="samplePrice w-full border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white text-sm"
                                                             placeholder="PO Value">
                                                     </div>
 
@@ -268,46 +268,46 @@
 
                                             <!-- Add More Items -->
                                             <button type="button" id="addDirectItem"
-                                                class="mt-4 px-4 py-2 bg-green-500 text-white rounded">
+                                                class="mt-4 px-4 py-2 bg-green-500 text-white rounded text-sm">
                                                 + Add Another Item
                                             </button>
 
                                             <!-- Master Order fields -->
                                             <div class="mt-6">
-                                                <label>Reference Number</label>
+                                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Reference Number</label>
                                                 <input type="text" name="reference_no" value="Direct Bulk" readonly
-                                                    class="w-full border rounded-md px-3 py-2 bg-gray-100 dark:bg-gray-700 dark:text-white">
+                                                    class="w-full mt-1 border rounded-md px-3 py-2 bg-gray-100 dark:bg-gray-700 dark:text-white text-sm">
                                             </div>
                                             <div class="mt-3">
-                                                <label>PO Number</label>
+                                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">PO Number</label>
                                                 <input type="text" name="po_number"
-                                                    class="w-full border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white">
+                                                    class="w-full mt-1 border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white text-sm">
                                             </div>
                                             <div class="mt-3">
-                                                <label>Customer Coordinator</label>
+                                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer Coordinator</label>
                                                 <input type="text" name="customer_coordinator" readonly
                                                     value="{{ Auth::user()->name }}"
-                                                    class="w-full border rounded-md px-3 py-2 bg-gray-100 dark:bg-gray-600">
+                                                    class="w-full mt-1 border rounded-md px-3 py-2 bg-gray-100 dark:bg-gray-600 text-sm">
                                             </div>
                                             <div class="mt-3">
-                                                <label>Customer Name</label>
+                                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer Name</label>
                                                 <input type="text" name="customer_name"
-                                                    class="w-full border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white">
+                                                    class="w-full mt-1 border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white text-sm">
                                             </div>
                                             <div class="mt-3">
-                                                <label>Customer Merchandiser</label>
+                                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer Merchandiser</label>
                                                 <input type="text" name="merchandiser_name"
-                                                    class="w-full border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white">
+                                                    class="w-full mt-1 border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white text-sm">
                                             </div>
                                             <div class="mt-3">
-                                                <label>Customer Requested Date</label>
+                                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer Requested Date</label>
                                                 <input type="date" name="customer_req_date"
-                                                    class="w-full border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white">
+                                                    class="w-full mt-1 border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white text-sm">
                                             </div>
                                             <div class="mt-3">
-                                                <label>Customer Notes</label>
+                                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer Notes</label>
                                                 <input type="text" name="remarks"
-                                                    class="w-full border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white">
+                                                    class="w-full mt-1 border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white text-sm">
                                             </div>
 
                                             <div class="flex justify-end gap-3 mt-6">
@@ -370,38 +370,38 @@
                                                     <!-- Auto filled fields -->
                                                     <div class="grid grid-cols-2 gap-4 autoFields">
                                                         <input type="text" name="items[0][shade]"
-                                                            class="sampleShade editable border rounded-md px-3 py-2 bg-gray-100 dark:bg-gray-600"
+                                                            class="sampleShade editable border rounded-md px-3 py-2 bg-gray-100 dark:bg-gray-600 text-sm"
                                                             readonly placeholder="Shade">
                                                         <input type="text" name="items[0][color]"
-                                                            class="sampleColour editable border rounded-md px-3 py-2 bg-gray-100 dark:bg-gray-600"
+                                                            class="sampleColour editable border rounded-md px-3 py-2 bg-gray-100 dark:bg-gray-600 text-sm"
                                                             readonly placeholder="Color">
                                                         <input type="text" name="items[0][tkt]"
-                                                            class="sampleTKT editable border rounded-md px-3 py-2 bg-gray-100 dark:bg-gray-600"
+                                                            class="sampleTKT editable border rounded-md px-3 py-2 bg-gray-100 dark:bg-gray-600 text-sm"
                                                             readonly placeholder="TKT">
                                                         <input type="text" name="items[0][size]"
-                                                            class="sampleSize editable border rounded-md px-3 py-2 bg-gray-100 dark:bg-gray-600"
+                                                            class="sampleSize editable border rounded-md px-3 py-2 bg-gray-100 dark:bg-gray-600 text-sm"
                                                             readonly placeholder="Size">
                                                         <input type="text" name="items[0][item]"
-                                                            class="sampleItem editable border rounded-md px-3 py-2 bg-gray-100 dark:bg-gray-600"
+                                                            class="sampleItem editable border rounded-md px-3 py-2 bg-gray-100 dark:bg-gray-600 text-sm"
                                                             readonly placeholder="Item">
                                                         <input type="text" name="items[0][supplier]"
-                                                            class="sampleSupplier editable border rounded-md px-3 py-2 bg-gray-100 dark:bg-gray-600"
+                                                            class="sampleSupplier editable border rounded-md px-3 py-2 bg-gray-100 dark:bg-gray-600 text-sm"
                                                             readonly placeholder="Supplier">
                                                     </div>
 
                                                     <!-- Editable fields -->
                                                     <div class="grid grid-cols-3 gap-4 mt-4">
                                                         <input type="number" name="items[0][qty]"
-                                                            class="sampleQty border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white"
+                                                            class="sampleQty border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white text-sm"
                                                             placeholder="Qty">
                                                         <select name="items[0][uom]"
-                                                            class="sampleUom border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white">
+                                                            class="sampleUom border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white text-sm">
                                                             <option value="meters">Meters</option>
                                                             <option value="yards">Yards</option>
                                                             <option value="pieces">Pieces</option>
                                                         </select>
                                                         <input type="number" step="0.01" name="items[0][price]"
-                                                            class="samplePrice border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white"
+                                                            class="samplePrice border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white text-sm"
                                                             placeholder="PO Value">
                                                     </div>
 
@@ -436,36 +436,36 @@
                                             </div>
 
                                             <button type="button" id="addItem"
-                                                class="mt-4 px-4 py-2 bg-green-500 text-white rounded">+ Add Another
+                                                class="mt-4 px-4 py-2 bg-green-500 text-white rounded text-sm">+ Add Another
                                                 Item
                                             </button>
 
                                             <!-- Master PO fields -->
                                             <div class="mt-6">
-                                                <label>PO Number</label>
+                                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">PO Number</label>
                                                 <input type="text" name="po_number" required
-                                                    class="w-full border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white">
+                                                    class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                             </div>
                                             <div class="mt-3">
-                                                <label>Customer Name</label>
+                                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer Name</label>
                                                 <input type="text" name="customer_name" required
-                                                    class="w-full border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white">
+                                                    class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                             </div>
                                             <div class="mt-3">
-                                                <label>Merchandiser Name</label>
+                                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Merchandiser Name</label>
                                                 <input type="text" name="merchandiser_name" required
-                                                    class="w-full border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white">
+                                                    class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                             </div>
                                             <div class="mt-3">
-                                                <label>Customer Coordinator</label>
+                                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer Coordinator</label>
                                                 <input type="text" name="customer_coordinator" readonly
                                                     value="{{ Auth::user()->name }}"
-                                                    class="w-full border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white">
+                                                    class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                             </div>
                                             <div class="mt-3">
-                                                <label>Customer Requested Date</label>
+                                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer Requested Date</label>
                                                 <input type="date" name="customer_req_date" required
-                                                    class="w-full border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white">
+                                                    class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                             </div>
                                             <div class="mt-3">
                                                 <label for="direct_remarks"

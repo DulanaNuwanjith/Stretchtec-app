@@ -247,7 +247,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="11" class="px-6 py-4 text-center text-gray-500 dark:text-gray-300">No store
+                            <td colspan="8" class="px-6 py-4 text-center text-gray-500 dark:text-gray-300">No store
                                 records found.
                             </td>
                         </tr>

@@ -270,7 +270,7 @@
 
                                             <!-- Add More Items -->
                                             <button type="button" id="addDirectItem"
-                                                    class="mt-4 px-4 py-2 bg-green-500 text-white rounded">
+                                                    class="mt-4 px-4 py-2 bg-green-500 text-white rounded text-sm">
                                                 + Add Another Item
                                             </button>
 
@@ -447,7 +447,7 @@
                                             </div>
 
                                             <button type="button" id="addItem"
-                                                    class="mt-4 px-4 py-2 bg-green-500 text-white rounded">+ Add Another
+                                                    class="mt-4 px-4 py-2 bg-green-500 text-white rounded text-sm">+ Add Another
                                                 Item
                                             </button>
 
