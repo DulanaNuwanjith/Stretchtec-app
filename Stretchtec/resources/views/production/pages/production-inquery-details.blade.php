@@ -689,40 +689,49 @@
 
                                             <!-- Send to Production -->
                                             <td class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
-                                                <div class="colour-match-production">
-                                                    @if($inquiry->isSentToProduction)
-                                                        <!-- Show timestamp if already sent -->
-                                                        <span
-                                                            class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-yellow-100 dark:bg-gray-800 px-3 py-1 rounded">
-                                                                Sent on <br>
-                                                                {{ Carbon::parse($inquiry->sent_to_production_at)->format('Y-m-d') }}
-                                                                at
-                                                                {{ Carbon::parse($inquiry->sent_to_production_at)->format('H:i') }}
-                                                            </span>
-                                                    @else
-                                                        @if(Auth::user()->role === 'ADMIN')
-                                                            <!-- Admin sees read-only button -->
-                                                            <button type="button"
-                                                                    class="px-3 py-1 text-xs rounded-lg bg-gray-200 text-gray-500 cursor-not-allowed"
-                                                                    disabled>
-                                                                Pending
-                                                            </button>
+                                                @if($inquiry->canSendToProduction === 1)
+                                                    <div class="colour-match-production">
+                                                        @if($inquiry->isSentToProduction)
+                                                            <!-- Show timestamp if already sent -->
+                                                            <span
+                                                                class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-yellow-100 dark:bg-gray-800 px-3 py-1 rounded">
+                                                                    Sent on <br>
+                                                                    {{ Carbon::parse($inquiry->sent_to_production_at)->format('Y-m-d') }}
+                                                                    at
+                                                                    {{ Carbon::parse($inquiry->sent_to_production_at)->format('H:i') }}
+                                                                </span>
                                                         @else
-                                                            <!-- Form for other users -->
-                                                            <form
-                                                                action="{{ route('production-inquiry.sendToProduction', $inquiry->id) }}"
-                                                                method="POST">
-                                                                @csrf
-                                                                @method('PATCH')
-                                                                <button type="submit"
-                                                                        class="px-3 py-1 mt-4 text-xs rounded-lg bg-indigo-100 text-indigo-700 hover:bg-indigo-200"
-                                                                >
-                                                                    Send to Production
+                                                            @if(Auth::user()->role === 'ADMIN')
+                                                                <!-- Admin sees read-only button -->
+                                                                <button type="button"
+                                                                        class="px-3 py-1 text-xs rounded-lg bg-gray-200 text-gray-500 cursor-not-allowed"
+                                                                        disabled>
+                                                                    Pending
                                                                 </button>
-                                                            </form>
+                                                            @else
+                                                                <!-- Form for other users -->
+                                                                <form
+                                                                    action="{{ route('production-inquiry.sendToProduction', $inquiry->id) }}"
+                                                                    method="POST">
+                                                                    @csrf
+                                                                    @method('PATCH')
+                                                                    <button type="submit"
+                                                                            class="px-3 py-1 mt-4 text-xs rounded-lg bg-indigo-100 text-indigo-700 hover:bg-indigo-200"
+                                                                    >
+                                                                        Send to Production
+                                                                    </button>
+                                                                </form>
+                                                            @endif
                                                         @endif
-                                                    @endif
-                                                </div>
+                                                    </div>
+                                                @else
+                                                    <!-- Admin sees read-only button -->
+                                                    <button type="button"
+                                                            class="px-3 py-1 text-xs rounded-lg bg-gray-200 text-gray-500 cursor-not-allowed"
+                                                            disabled>
+                                                        Send to Production
+                                                    </button>
+                                                @endif
                                             </td>
 
                                             <!-- Status -->
