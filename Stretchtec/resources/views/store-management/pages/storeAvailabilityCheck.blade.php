@@ -133,6 +133,9 @@
                             Shade
                         </th>
                         <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                            Cust Requested Qty
+                        </th>
+                        <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                             Qty Available
                         </th>
                         <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
@@ -155,6 +158,7 @@
                             <td class="sticky left-0 z-10 bg-white px-4 py-3 bg-gray-100 border-r border-gray-300 text-left whitespace-normal break-words font-bold">{{ $store->prod_order_no }}</td>
                             <td class="px-4 py-3 w-48 whitespace-normal break-words border-r border-gray-300 ">{{ $store->reference_no }}</td>
                             <td class="px-4 py-3 w-48 whitespace-normal break-words border-r border-gray-300">{{ $store->shade }}</td>
+                            <td class="px-4 py-3 w-48 whitespace-normal break-words border-r border-gray-300">{{ $store->productInquiry->qty ?? 0 }} {{ $store->productInquiry->uom  }}</td>
                             <td class="px-4 py-3 w-48 whitespace-normal break-words border-r border-gray-300">{{ $store->qty_available }}</td>
                             <td class="px-4 py-3 w-48 whitespace-normal break-words border-r border-gray-300">{{ $store->qty_allocated ?? '-' }}</td>
                             <td class="px-4 py-3 w-48 whitespace-normal break-words border-r border-gray-300">{{ $store->assigned_by }}</td>
