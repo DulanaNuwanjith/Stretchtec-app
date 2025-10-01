@@ -19,7 +19,6 @@ return new class extends Migration {
             $table->integer('qty_available');
             $table->integer('qty_allocated')->nullable();
             $table->longText('reason_for_reject')->nullable();
-            $table->integer('qty_for_production')->nullable();
             $table->string('assigned_by');
             $table->boolean('is_qty_assigned')->default(false);
             $table->timestamps();

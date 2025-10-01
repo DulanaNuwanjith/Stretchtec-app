@@ -27,6 +27,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * --------------------------------------------------------------------------
  * @method static where(string $string, $reference_no)
  * @method static orderBy(string $string, string $string1)
+ * @method static findOrFail($id)
  * @property mixed $order_no
  * @property mixed $prod_order_no
  * @property mixed $reference_no
@@ -49,7 +50,6 @@ class Stores extends Model
         'qty_available',
         'qty_allocated',
         'reason_for_reject',
-        'qty_for_production',
         'assigned_by',
         'is_qty_assigned',
     ];
