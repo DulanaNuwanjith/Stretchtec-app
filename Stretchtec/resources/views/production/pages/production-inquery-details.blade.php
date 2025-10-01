@@ -658,7 +658,7 @@
                                                 {{ $inquiry->remarks ?? '-' }}
                                             </td>
 
-                                            <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                            <td class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
                                                 <div class="colour-match-stock">
                                                     @if(!$inquiry->isSentToStock)
                                                         <form
@@ -666,7 +666,7 @@
                                                             method="POST">
                                                             @csrf
                                                             <button type="submit"
-                                                                    class="px-3 py-1 text-xs rounded-lg bg-blue-100 text-blue-700 hover:bg-blue-200">
+                                                                    class="px-3 py-1 text-xs rounded-lg bg-blue-100 text-blue-700 hover:bg-blue-200 mt-4">
                                                                 Send to Stores
                                                             </button>
                                                         </form>
@@ -688,7 +688,7 @@
                                             </td>
 
                                             <!-- Send to Production -->
-                                            <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                            <td class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
                                                 <div class="colour-match-production">
                                                     @if($inquiry->isSentToProduction)
                                                         <!-- Show timestamp if already sent -->
@@ -970,7 +970,7 @@
         const fields = document.querySelectorAll(".editable");
         fields.forEach(field => {
             field.removeAttribute("readonly");
-            field.classList.remove("bg-gray-100", "dark:bg-gray-600"); // remove gray background
+            field.classList.remove("bg-gray-100", "dark:bg-gray-600"); // remove the gray background
             field.classList.add("bg-white", "dark:bg-gray-800"); // make editable background
         });
     });
