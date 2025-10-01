@@ -47,6 +47,10 @@ class SampleInquiryController extends Controller
             $query->whereIn('coordinatorName', (array)$request->input('coordinator'));
         }
 
+        if ($request->filled('po_identification')) {
+            $query->where('po_identification', $request->input('po_identification'));
+        }
+
         // Filter by delivery status using customerDeliveryDate
         if ($request->filled('deliveryStatus')) {
             $validStatuses = ['Delivered', 'Pending'];
@@ -80,13 +84,19 @@ class SampleInquiryController extends Controller
         $coordinators = SampleInquiry::select('coordinatorName')->distinct()->orderBy('coordinatorName')->pluck('coordinatorName');
         $orderNos = SampleInquiry::select('orderNo')->distinct()->orderBy('orderNo')->pluck('orderNo');
 
+        $poIdentifications = SampleInquiry::select('po_identification')
+            ->whereNotNull('po_identification')
+            ->distinct()
+            ->orderBy('po_identification')
+            ->pluck('po_identification');
+
         $distinctRejectNumbers = SampleInquiry::select('rejectNO')
             ->whereNotNull('rejectNO')
             ->distinct()
             ->orderBy('rejectNO')
             ->pluck('rejectNO');
 
-        return view('sample-development.pages.sample-inquery-details', compact('inquiries', 'customers', 'merchandisers', 'items', 'coordinators', 'orderNos', 'distinctRejectNumbers'));
+        return view('sample-development.pages.sample-inquery-details', compact('inquiries', 'customers', 'merchandisers', 'items', 'coordinators', 'orderNos', 'poIdentifications', 'distinctRejectNumbers'));
     }
 
 
@@ -126,6 +136,7 @@ class SampleInquiryController extends Controller
             $validated = $request->validate([
                 'order_file' => 'nullable|file|mimes:pdf,jpg,jpeg',
                 'inquiry_date' => 'required|date',
+                'po_identification' => 'nullable|string',
                 'customer' => 'required|string|max:255',
                 'merchandiser' => 'required|string|max:255',
                 'coordinator' => 'string|max:255',
@@ -168,6 +179,7 @@ class SampleInquiryController extends Controller
                 'orderFile' => $orderFilePath,
                 'orderNo' => $orderNo,
                 'inquiryReceiveDate' => $validated['inquiry_date'],
+                'po_identification' => $validated['po_identification'] ?? null,
                 'customerName' => $validated['customer'],
                 'merchandiseName' => $validated['merchandiser'],
                 'coordinatorName' => $validated['coordinator'],
