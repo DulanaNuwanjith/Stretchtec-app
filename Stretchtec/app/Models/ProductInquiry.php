@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @method static create(array $validatedData)
@@ -50,4 +51,11 @@ class ProductInquiry extends Model
         'status',
         'remarks',
     ];
+
+    public function stores(): HasMany
+    {
+        return $this->hasMany(Stores::class, 'order_no');
+    }
+
+
 }

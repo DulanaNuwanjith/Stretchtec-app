@@ -733,6 +733,15 @@
                                                         </span>
                                                     @endif
                                                 </div>
+                                                @if($inquiry->isSentToStock && $inquiry->canSendToProduction && $inquiry->sent_to_stock_at)
+                                                    <ul class="mt-2 text-xs text-green-700 font-semibold">
+                                                        @forelse($inquiry->stores as $store)
+                                                            <li>{{ $store->reference_no }} → {{ $store->qty_allocated ?? 0 }}</li>
+                                                        @empty
+                                                            <li>No allocations yet</li>
+                                                        @endforelse
+                                                    </ul>
+                                                @endif
                                             </td>
 
                                             <!-- Send to Production -->

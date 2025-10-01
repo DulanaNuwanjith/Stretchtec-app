@@ -66,6 +66,6 @@ class Stores extends Model
      */
     public function productInquiry(): BelongsTo
     {
-        return $this->belongsTo(ProductInquiry::class, 'prod_order_no');
+        return $this->belongsTo(ProductInquiry::class, 'order_no');
     }
 }
