@@ -3,7 +3,7 @@
 <div class="flex h-full w-full">
     @extends('layouts.stores-tabs')
 
-@section('content')
+    @section('content')
         <div class="flex-1 overflow-y-auto p-8 bg-white">
             <style>
                 .swal2-toast {
@@ -44,49 +44,49 @@
             <script>
                 document.addEventListener('DOMContentLoaded', () => {
                     @if (session('success'))
-                        Swal.fire({
-                            toast: true,
-                            position: 'top-end',
-                            icon: 'success',
-                            title: '{{ session('success') }}',
-                            showConfirmButton: false,
-                            timer: 2000,
-                            timerProgressBar: true,
-                            customClass: {
-                                popup: 'swal2-toast swal2-shadow'
-                            },
-                        });
+                    Swal.fire({
+                        toast: true,
+                        position: 'top-end',
+                        icon: 'success',
+                        title: '{{ session('success') }}',
+                        showConfirmButton: false,
+                        timer: 2000,
+                        timerProgressBar: true,
+                        customClass: {
+                            popup: 'swal2-toast swal2-shadow'
+                        },
+                    });
                     @endif
 
                     @if (session('error'))
-                        Swal.fire({
-                            toast: true,
-                            position: 'top-end',
-                            icon: 'error',
-                            title: '{{ session('error') }}',
-                            showConfirmButton: false,
-                            timer: 2000,
-                            timerProgressBar: true,
-                            customClass: {
-                                popup: 'swal2-toast swal2-shadow'
-                            },
-                        });
+                    Swal.fire({
+                        toast: true,
+                        position: 'top-end',
+                        icon: 'error',
+                        title: '{{ session('error') }}',
+                        showConfirmButton: false,
+                        timer: 2000,
+                        timerProgressBar: true,
+                        customClass: {
+                            popup: 'swal2-toast swal2-shadow'
+                        },
+                    });
                     @endif
 
                     @if ($errors->any())
-                        Swal.fire({
-                            toast: true,
-                            position: 'top-end',
-                            icon: 'warning',
-                            title: 'Validation Errors',
-                            html: `{!! implode('<br>', $errors->all()) !!}`,
-                            showConfirmButton: false,
-                            timer: 3000,
-                            timerProgressBar: true,
-                            customClass: {
-                                popup: 'swal2-toast swal2-shadow'
-                            },
-                        });
+                    Swal.fire({
+                        toast: true,
+                        position: 'top-end',
+                        icon: 'warning',
+                        title: 'Validation Errors',
+                        html: `{!! implode('<br>', $errors->all()) !!}`,
+                        showConfirmButton: false,
+                        timer: 3000,
+                        timerProgressBar: true,
+                        customClass: {
+                            popup: 'swal2-toast swal2-shadow'
+                        },
+                    });
                     @endif
                 });
             </script>
@@ -131,11 +131,21 @@
                 <table class="min-w-full border-collapse">
                     <thead class="bg-gray-100 dark:bg-gray-700">
                     <tr class="text-center">
-                        <th class="font-bold sticky left-0 z-10 bg-white px-4 py-3 w-36 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">Reference No</th>
-                        <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">Shade</th>
-                        <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">Available Stock</th>
-                        <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">Special Note</th>
-                        <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">Actions</th>
+                        <th class="font-bold sticky left-0 z-10 bg-white px-4 py-3 w-36 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                            Reference No
+                        </th>
+                        <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                            Shade
+                        </th>
+                        <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                            Available Stock
+                        </th>
+                        <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                            Special Note
+                        </th>
+                        <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                            Actions
+                        </th>
                     </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-200 dark:divide-gray-600">
@@ -148,7 +158,9 @@
                             <td class="px-6 py-4 text-sm text-right">
                                 <div class="flex justify-end space-x-2">
                                     <!-- Delete button -->
-                                    <form id="delete-form-{{ $item->id }}" action="{{ route('stockManagement.destroy', $item->id) }}" method="POST" class="inline">
+                                    <form id="delete-form-{{ $item->id }}"
+                                          action="{{ route('stockManagement.destroy', $item->id) }}" method="POST"
+                                          class="inline">
                                         @csrf
                                         @method('DELETE')
                                         <button type="button" onclick="confirmDelete({{ $item->id }})"
@@ -161,7 +173,9 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="px-6 py-4 text-center text-gray-500 dark:text-gray-300">No stock records found.</td>
+                            <td colspan="6" class="px-6 py-4 text-center text-gray-500 dark:text-gray-300">No stock
+                                records found.
+                            </td>
                         </tr>
                     @endforelse
                     </tbody>
@@ -171,8 +185,9 @@
 
             <!-- Add Sample Modal -->
             <div id="addItemSampleStock"
-                class="fixed inset-0 z-50 hidden bg-black bg-opacity-50 flex items-center justify-center py-5">
-                <div class="w-full max-w-[700px] bg-white dark:bg-gray-900 rounded-2xl shadow-2xl p-4 transform transition-all scale-95 max-h-[calc(100vh-10rem)] overflow-y-auto"
+                 class="fixed inset-0 z-50 hidden bg-black bg-opacity-50 flex items-center justify-center py-5">
+                <div
+                    class="w-full max-w-[700px] bg-white dark:bg-gray-900 rounded-2xl shadow-2xl p-4 transform transition-all scale-95 max-h-[calc(100vh-10rem)] overflow-y-auto"
                     onclick="event.stopPropagation()">
                     <div class="max-w-[600px] mx-auto p-8">
                         <h2 class="text-2xl font-semibold mb-8 text-blue-900 mt-4 dark:text-gray-100 text-center">
@@ -184,10 +199,10 @@
                                 <div class="flex gap-4">
                                     <div class="w-1/2">
                                         <label for="reference_no"
-                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">Reference
+                                               class="block text-sm font-medium text-gray-700 dark:text-gray-300">Reference
                                             No</label>
                                         <input id="reference_no" type="text" name="reference_no" required
-                                            class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                               class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                     </div>
                                     <div class="w-1/2">
                                     </div>
@@ -196,26 +211,26 @@
                                 <div class="flex gap-4">
                                     <div class="w-1/2">
                                         <label for="shade"
-                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">Shade</label>
+                                               class="block text-sm font-medium text-gray-700 dark:text-gray-300">Shade</label>
                                         <input id="shade" type="text" name="shade" required
-                                            class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                               class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                     </div>
                                     <div class="w-1/2">
                                         <label for="available_stock"
-                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">Available
+                                               class="block text-sm font-medium text-gray-700 dark:text-gray-300">Available
                                             Stock</label>
                                         <input id="available_stock" type="number" name="available_stock" required
-                                            class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                               class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                     </div>
                                 </div>
 
                                 <div class="flex gap-4">
                                     <div class="w-full">
                                         <label for="special_note"
-                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">Special
+                                               class="block text-sm font-medium text-gray-700 dark:text-gray-300">Special
                                             note</label>
                                         <input id="special_note" type="text" name="special_note"
-                                            class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                               class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                     </div>
                                 </div>
                             </div>
@@ -223,12 +238,12 @@
                             <!-- Buttons -->
                             <div class="flex justify-end gap-3 mt-12">
                                 <button type="button"
-                                    onclick="document.getElementById('addItemSampleStock').classList.add('hidden')"
-                                    class="px-4 py-2 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 text-sm rounded hover:bg-gray-300">
+                                        onclick="document.getElementById('addItemSampleStock').classList.add('hidden')"
+                                        class="px-4 py-2 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 text-sm rounded hover:bg-gray-300">
                                     Cancel
                                 </button>
-                                <button type="submit"
-                                    class="px-4 py-2 bg-blue-500 text-white text-sm rounded hover:bg-blue-600">
+                                <button type="submit" id="createStockItemBtn"
+                                        class="px-4 py-2 bg-blue-500 text-white text-sm rounded hover:bg-blue-600">
                                     Create Stock Item
                                 </button>
                             </div>
@@ -239,5 +254,18 @@
 
         </div>
 
-    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const form = document.querySelector('#addItemSampleStock form');
+        const submitBtn = document.getElementById('createStockItemBtn');
+
+        form.addEventListener('submit', function () {
+            // Disable the button to prevent multiple clicks
+            submitBtn.disabled = true;
+            submitBtn.innerText = 'Submitting...';
+        });
+    });
+</script>
 @endsection
