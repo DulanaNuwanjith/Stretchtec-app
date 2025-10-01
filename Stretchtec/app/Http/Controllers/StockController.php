@@ -43,7 +43,7 @@ class StockController extends Controller
     {
         // Validate inputs
         $validated = $request->validate([
-            'reference_no' => 'required|string|max:255',
+            'reference_no' => 'required|string|max:255|unique:stocks,reference_no',
             'shade' => 'required|string|max:255',
             'available_stock' => 'required|integer|min:0',
             'special_note' => 'nullable|string|max:500',
