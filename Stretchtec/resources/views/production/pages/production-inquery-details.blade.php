@@ -785,18 +785,18 @@
                                             </td>
 
                                             <!-- Status -->
-                                            <td
-                                                class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
-                                                    <span
-                                                        class="px-2 py-1 text-xs rounded-full
+                                            <td class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                                <span
+                                                    class="inline-flex items-center px-3 py-1 text-xs font-semibold rounded-full shadow-sm
                                                     {{ $inquiry->status === 'Completed'
-                                                        ? 'bg-green-100 text-green-700'
+                                                        ? 'bg-green-100 text-green-700 border border-green-300'
                                                         : ($inquiry->status === 'Pending'
-                                                            ? 'bg-yellow-100 text-yellow-700'
-                                                            : 'bg-gray-100 text-gray-600') }}">
-                                                        {{ $inquiry->status ?? 'Pending' }}
-                                                    </span>
+                                                            ? 'bg-yellow-100 text-yellow-700 border border-yellow-300'
+                                                            : 'bg-gray-100 text-gray-600 border border-gray-300') }}">
+                                                    {{ $inquiry->status ?? 'Pending' }}
+                                                </span>
                                             </td>
+
 
                                             <!-- Customer Delivery Status -->
                                             <td
