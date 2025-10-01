@@ -690,6 +690,51 @@
                                             </div>
                                         </div>
 
+                                        <!-- PO Identification Filter -->
+                                        <div class="relative inline-block text-left w-56 ml-3">
+                                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                                PO Identification
+                                            </label>
+
+                                            <button type="button" id="poDropdownReport"
+                                                class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10 dark:bg-gray-700 dark:text-white"
+                                                aria-haspopup="listbox" aria-expanded="false">
+                                                <span
+                                                    id="selectedPOReport">{{ request('po_identification') ?? 'Select PO' }}</span>
+                                                <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20"
+                                                    fill="currentColor">
+                                                    <path fill-rule="evenodd"
+                                                        d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
+                                                        clip-rule="evenodd" />
+                                                </svg>
+                                            </button>
+
+                                            <div id="poDropdownMenuReport"
+                                                class="hidden absolute z-40 mt-2 w-full rounded-md bg-white shadow-lg ring-1 ring-black/5 dark:bg-gray-700 max-h-48 overflow-y-auto">
+                                                <div class="p-2 sticky top-0 bg-white dark:bg-gray-700 z-10">
+                                                    <input type="text" id="poSearchInputReport"
+                                                        placeholder="Search PO..."
+                                                        class="w-full px-2 py-1 text-sm border rounded-md dark:bg-gray-600 dark:text-white dark:placeholder-gray-300" />
+                                                </div>
+
+                                                <div class="py-1">
+                                                    <button type="button"
+                                                        class="po-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600">Select
+                                                        PO</button>
+                                                    @foreach ($poIdentifications as $po)
+                                                        <button type="button"
+                                                            class="po-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600">
+                                                            {{ $po }}
+                                                        </button>
+                                                    @endforeach
+                                                </div>
+                                            </div>
+
+                                            <input type="hidden" name="po_identification" id="poInputReport"
+                                                value="{{ request('po_identification') }}">
+                                        </div>
+
+
                                         <!-- Submit Button -->
                                         <div>
                                             <button type="submit"
@@ -2279,7 +2324,9 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", () => {
-            const filters = ['customer', 'merchandiser', 'item', 'deliveryStatus', 'customerDecision', 'orderNo', 'po_identification'];
+            const filters = ['customer', 'merchandiser', 'item', 'deliveryStatus', 'customerDecision', 'orderNo',
+                'po_identification'
+            ];
             const multiSelectFilters = ['coordinator']; // Currently only coordinator is multi-select
 
             [...filters, ...multiSelectFilters].forEach(type => {
@@ -2944,4 +2991,48 @@
         }
     </script>
 
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const poDropdownBtn = document.getElementById("poDropdownReport");
+            const poDropdownMenu = document.getElementById("poDropdownMenuReport");
+            const poOptions = document.querySelectorAll(".po-option");
+            const selectedPO = document.getElementById("selectedPOReport");
+            const poInput = document.getElementById("poInputReport");
+            const poSearchInput = document.getElementById("poSearchInputReport");
+
+            // Toggle dropdown open/close
+            poDropdownBtn.addEventListener("click", (e) => {
+                poDropdownMenu.classList.toggle("hidden");
+            });
+
+            // Close dropdown if clicked outside
+            document.addEventListener("click", (e) => {
+                if (!poDropdownBtn.contains(e.target) && !poDropdownMenu.contains(e.target)) {
+                    poDropdownMenu.classList.add("hidden");
+                }
+            });
+
+            // Select PO
+            poOptions.forEach(option => {
+                option.addEventListener("click", () => {
+                    const value = option.textContent.trim() === "Select PO" ? "" : option
+                        .textContent.trim();
+                    selectedPO.textContent = value || "Select PO";
+                    if (poInput) poInput.value = value;
+                    poDropdownMenu.classList.add("hidden");
+                });
+            });
+
+            // Search/filter
+            if (poSearchInput) {
+                poSearchInput.addEventListener("input", () => {
+                    const query = poSearchInput.value.toLowerCase();
+                    poOptions.forEach(option => {
+                        const text = option.textContent.toLowerCase();
+                        option.style.display = text.includes(query) ? "block" : "none";
+                    });
+                });
+            }
+        });
+    </script>
 @endsection
