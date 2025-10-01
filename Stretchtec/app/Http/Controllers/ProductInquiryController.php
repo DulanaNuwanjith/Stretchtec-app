@@ -80,6 +80,7 @@ class ProductInquiryController extends Controller
                 'items.*.supplier' => 'nullable|string|max:255',
                 'items.*.qty' => 'required|numeric|min:1',
                 'items.*.uom' => 'required|string|max:50',
+                'items.*.unitPrice' => 'required|numeric|min:0',
                 'items.*.price' => 'required|numeric|min:0',
             ];
 
@@ -139,6 +140,7 @@ class ProductInquiryController extends Controller
                     'supplier' => $item['supplier'] ?? null,
                     'qty' => $item['qty'],
                     'uom' => $item['uom'],
+                    'unitPrice' => $item['unitPrice'],
                     'price' => $item['price'],
                 ]);
             }

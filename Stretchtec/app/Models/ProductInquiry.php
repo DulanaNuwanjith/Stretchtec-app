@@ -31,6 +31,7 @@ class ProductInquiry extends Model
         'tkt',
         'qty',
         'uom',
+        'unitPrice',
         'price',
         'customer_req_date',
         'our_prod_date',
