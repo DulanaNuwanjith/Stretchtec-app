@@ -562,10 +562,6 @@
                                         </th>
                                         <th
                                             class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                            Unit
-                                        </th>
-                                        <th
-                                            class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                             Customer Name
                                         </th>
                                         <th
@@ -663,12 +659,7 @@
                                             <!-- Quantity -->
                                             <td
                                                 class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
-                                                {{ $inquiry->qty ?? '0' }}</td>
-
-                                            <!-- UOM -->
-                                            <td
-                                                class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
-                                                {{ $inquiry->uom ?? 'N/A' }}</td>
+                                                {{ $inquiry->qty ?? '0' }} {{ $inquiry->uom ?? 'N/A' }}</td>
 
                                             <!-- Customer Name -->
                                             <td
