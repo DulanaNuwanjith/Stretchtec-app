@@ -285,6 +285,7 @@ class ReportController extends Controller
             'start_date' => 'required|date',
             'end_date' => 'required|date|after_or_equal:start_date',
             'coordinatorName' => 'required|array',
+            'po_identification' => 'nullable|string', // ✅ single select
         ]);
 
         $inquiries = SampleInquiry::with('samplePreparationRnD')
@@ -298,18 +299,20 @@ class ReportController extends Controller
                 } elseif (in_array('Delivered', $request->input('status'), true) && !in_array('Pending', $request->input('status'), true)) {
                     $q->whereNotNull('customerDeliveryDate');
                 }
-                // If both selected or none selected, show all
+            })
+            ->when($request->input('po_identification'), function ($q) use ($request) {
+                $q->where('po_identification', $request->input('po_identification'));
             })
             ->orderBy('id', 'desc')
             ->get();
 
-        // Generate PDF in landscape orientation
         $pdf = Pdf::loadView('reports.sample_inquiry_report_pdf', [
             'inquiries' => $inquiries,
             'start_date' => $request->input('start_date'),
             'end_date' => $request->input('end_date'),
             'coordinators' => $request->input('coordinatorName'),
-        ])->setPaper('legal', 'landscape'); // <--- set landscape
+            'po_identification' => $request->input('po_identification'),
+        ])->setPaper('legal', 'landscape');
 
         return $pdf->download("Sample_Inquiry_Report_{$request->input('start_date')}_to_{$request->input('end_date')}.pdf");
     }
