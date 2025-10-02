@@ -262,8 +262,8 @@
                                                                 viewBox="0 0 24 24" stroke-width="2"
                                                                 stroke="currentColor" class="w-5 h-5">
                                                                 <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0
-                                                                            01-1.995-1.858L5 7m5 4v6m4-6v6M9 7V4a1 1 0
-                                                                            011-1h4a1 1 0 011 1v3m-9 0h10" />
+                                                                                01-1.995-1.858L5 7m5 4v6m4-6v6M9 7V4a1 1 0
+                                                                                011-1h4a1 1 0 011 1v3m-9 0h10" />
                                                             </svg>
                                                         </button>
                                                     </div>
@@ -452,8 +452,8 @@
                                                                 viewBox="0 0 24 24" stroke-width="2"
                                                                 stroke="currentColor" class="w-5 h-5">
                                                                 <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0
-                                                                                 01-1.995-1.858L5 7m5 4v6m4-6v6M9 7V4a1 1 0
-                                                                                 011-1h4a1 1 0 011 1v3m-9 0h10" />
+                                                                                     01-1.995-1.858L5 7m5 4v6m4-6v6M9 7V4a1 1 0
+                                                                                     011-1h4a1 1 0 011 1v3m-9 0h10" />
                                                             </svg>
                                                         </button>
                                                     </div>
@@ -604,7 +604,7 @@
                                                         class="px-4 py-3 font-bold sticky left-0 z-10 bg-gray-100 whitespace-normal break-words border-r border-gray-300 text-blue-500">
                                                         {{ $inquiry->prod_order_no ?? 'N/A' }}
                                                         <div class="text-xs font-normal text-gray-500">
-                                                            ({{ $inquiry->po_received_date ? Carbon::parse($inquiry->po_received_date)->format('Y-m-d') : '' }})
+                                                            Date: {{ $inquiry->po_received_date ? Carbon::parse($inquiry->po_received_date)->format('Y-m-d') : '' }} <br> Time: {{ $inquiry->po_received_date ? Carbon::parse($inquiry->po_received_date)->format('H:i') : '' }}
                                                         </div>
                                                     </td>
                                                 @else
@@ -612,8 +612,7 @@
                                                         class="px-4 py-3 font-bold sticky left-0 z-10 bg-gray-100 whitespace-normal break-words border-r border-gray-300">
                                                         {{ $inquiry->prod_order_no ?? 'N/A' }}
                                                         <div class="text-xs font-normal text-gray-500">
-                                                            ({{ $inquiry->po_received_date ? Carbon::parse($inquiry->po_received_date)->format('Y-m-d') : '' }}
-                                                            )
+                                                            Date: {{ $inquiry->po_received_date ? Carbon::parse($inquiry->po_received_date)->format('Y-m-d') : '' }} <br> Time: {{ $inquiry->po_received_date ? Carbon::parse($inquiry->po_received_date)->format('H:i') : '' }}
                                                         </div>
                                                     </td>
                                                 @endif
