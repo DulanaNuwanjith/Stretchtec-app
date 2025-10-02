@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ProductInquiry;
 use App\Models\SampleStock;
+use App\Models\Stock;
 use App\Models\Stores;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class StoresController extends Controller
@@ -90,5 +93,71 @@ class StoresController extends Controller
     public function destroy(Stores $stores): void
     {
         //
+    }
+
+    public function assign(Request $request, $id): RedirectResponse
+    {
+        // validate qty_allocated before updating
+        $validated = $request->validate([
+            'qty_allocated' => 'required|integer|min:0',
+            'allocated_uom' => 'required|string|in:m,y,p',
+            'reason_for_reject' => 'nullable|string'
+        ]);
+
+        // find the store record
+        $store = Stores::findOrFail($id);
+
+        // Find the stock record
+        $stock = Stock::where('reference_no', $store->reference_no)->firstOrFail();
+
+        // Find the Product inquiry record
+        $productInquiry = ProductInquiry::where('prod_order_no', $store->prod_order_no)->firstOrFail();
+
+        // Convert qty_allocated into yards (if necessary)
+        $allocatedQtyInYards = $validated['qty_allocated'];
+        $requestedUom = $validated['allocated_uom'];
+
+        if ($requestedUom === 'm') {
+            // Convert meters → yards
+            $allocatedQtyInYards = $validated['qty_allocated'] * 1.09361;
+        } elseif ($requestedUom === 'y') {
+            // Already in yards, no conversion
+            $allocatedQtyInYards = $validated['qty_allocated'];
+        } elseif ($requestedUom === 'p') {
+            // Pieces must only be deducted if stock is also in pieces
+            if ($stock->uom !== 'p') {
+                return back()->withErrors(['qty_allocated' => 'Cannot allocate pieces from stock measured in ' . $stock->uom]);
+            }
+            $allocatedQtyInYards = $validated['qty_allocated']; // in this case it's pieces, not yards
+        }
+
+        // Decrease the stock qty
+        if ($stock->qty_available >= $allocatedQtyInYards) {
+            $stock->qty_available -= $allocatedQtyInYards;
+            $stock->save();
+        } else {
+            return back()->withErrors(['qty_allocated' => 'Not enough stock available to allocate.']);
+        }
+
+        // update store fields
+        $store->qty_allocated = $validated['qty_allocated'];
+        $store->reason_for_reject = $validated['reason_for_reject'] ?? null;
+        $store->is_qty_assigned = true;
+        $store->assigned_by = auth()->user()->name ?? 'System';
+        $store->allocated_uom = $validated['allocated_uom'];
+
+        // optionally reduce available qty in store (track in the same UOM user requested)
+        if ($store->qty_available >= $store->qty_allocated) {
+            $store->qty_available = $store->qty_available - $store->qty_allocated;
+        } else {
+            return back()->withErrors(['qty_allocated' => 'Allocated qty cannot exceed available qty']);
+        }
+
+        $store->save();
+
+        $productInquiry->canSendToProduction = true;
+        $productInquiry->save();
+
+        return redirect()->back()->with('success', 'Quantity assigned successfully!');
     }
 }

@@ -1,4 +1,7 @@
-@php use Carbon\Carbon;use Illuminate\Support\Facades\Auth; @endphp
+@php
+    use Carbon\Carbon;
+    use Illuminate\Support\Facades\Auth;
+@endphp
 
 <head>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
@@ -170,334 +173,79 @@
                             <div id="addSampleModal"
                                  class="fixed inset-0 z-50 hidden bg-black bg-opacity-50 flex items-center justify-center py-5">
                                 <div
-                                    class="w-full max-w-[700px] bg-white dark:bg-gray-900 rounded-2xl shadow-2xl p-4 transform transition-all scale-95 max-h-[calc(100vh-10rem)] overflow-y-auto"
+                                    class="w-full max-w-[900px] bg-white dark:bg-gray-900 rounded-2xl shadow-2xl p-4 transform transition-all scale-95 max-h-[calc(100vh-10rem)] overflow-y-auto"
                                     onclick="event.stopPropagation()">
-                                    <div class="max-w-[600px] mx-auto p-8">
-                                        <h2
-                                            class="text-2xl font-semibold mb-8 text-blue-900 mt-4 dark:text-gray-100 text-center">
+                                    <div class="max-w-[800px] mx-auto p-8">
+                                        <h2 class="text-2xl font-semibold mb-8 text-blue-900 mt-4 dark:text-gray-100 text-center">
                                             Add New Production Order
                                         </h2>
 
-                                        <!-- TABS -->
-                                        <div class="mb-6">
-                                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Order
-                                                Type</label>
-                                            <div
-                                                class="flex space-x-4 mt-3 border-b border-gray-300 dark:border-gray-700">
-                                                <button type="button" onclick="setOrderType('sample')" id="tab-sample"
-                                                        class="pb-2 px-3 font-semibold">
-                                                    From Sample
-                                                </button>
-                                                <button type="button" onclick="setOrderType('direct')" id="tab-direct"
-                                                        class="pb-2 px-3 font-semibold">
-                                                    Direct Order
-                                                </button>
-                                            </div>
-                                        </div>
-
-                                        <!-- ================= Direct ORDER FORM ================= -->
-                                        <form id="directForm" class="space-y-4 hidden"
+                                        <!-- Unified Form -->
+                                        <form id="unifiedOrderForm"
                                               action="{{ route('production-inquery-details.store') }}" method="POST"
                                               enctype="multipart/form-data">
                                             @csrf
-                                            <input type="hidden" name="order_type" value="direct">
+                                            <div id="itemsContainer"></div>
 
-                                            <div id="directItemsContainer">
-                                                <!-- One Item Template -->
-                                                <div
-                                                    class="item-group border rounded p-4 mb-4 bg-gray-50 dark:bg-gray-800">
-                                                    <!-- Shade & Colour -->
-                                                    <div class="flex gap-4">
-                                                        <input type="text" name="items[0][shade]"
-                                                               class="w-1/2 border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white"
-                                                               placeholder="Shade">
-                                                        <input type="text" name="items[0][color]"
-                                                               class="w-1/2 border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white"
-                                                               placeholder="Colour">
-                                                    </div>
-
-                                                    <!-- Size, Qty, UoM -->
-                                                    <div class="flex gap-4 mt-3">
-                                                        <input type="text" name="items[0][size]"
-                                                               class="w-1/3 border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white"
-                                                               placeholder="Size">
-                                                        <input type="number" name="items[0][qty]" min="0"
-                                                               class="w-1/3 border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white"
-                                                               placeholder="Quantity">
-                                                        <select name="items[0][uom]"
-                                                                class="w-1/3 border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white">
-                                                            <option value="meters">Meters</option>
-                                                            <option value="yards">Yards</option>
-                                                            <option value="pieces">Pieces</option>
-                                                        </select>
-                                                    </div>
-
-                                                    <!-- Item & TKT -->
-                                                    <div class="flex gap-4 mt-3">
-                                                        <input type="text" name="items[0][item]"
-                                                               class="w-1/2 border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white"
-                                                               placeholder="Item">
-                                                        <input type="text" name="items[0][tkt]"
-                                                               class="w-1/2 border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white"
-                                                               placeholder="TKT">
-                                                    </div>
-
-                                                    <!-- Price -->
-                                                    <div class="mt-3">
-                                                        <input type="number" step="0.01" name="items[0][price]"
-                                                               class="w-full border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white"
-                                                               placeholder="PO Value">
-                                                    </div>
-
-                                                    <!-- Remove Button -->
-                                                    <div id="optionsWrapper" class="space-y-2 my-4 flex justify-end">
-                                                        <button type="button"
-                                                                onclick="removeDirectItem(this)"
-                                                                class="text-blue-500 hover:text-blue-700">
-                                                            <svg
-                                                                xmlns="http://www.w3.org/2000/svg"
-                                                                fill="none"
-                                                                viewBox="0 0 24 24"
-                                                                stroke-width="2"
-                                                                stroke="currentColor"
-                                                                class="w-5 h-5">
-                                                                <path
-                                                                    stroke-linecap="round"
-                                                                    stroke-linejoin="round"
-                                                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0
-                                                                                                                                                               01-1.995-1.858L5 7m5 4v6m4-6v6M9 7V4a1 1 0
-                                                                                                                                                               011-1h4a1 1 0 011 1v3m-9 0h10"/>
-                                                            </svg>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <!-- Add More Items -->
-                                            <button type="button" id="addDirectItem"
-                                                    class="mt-4 px-4 py-2 bg-green-500 text-white rounded">
-                                                + Add Another Item
+                                            <button type="button" id="addItemBtn"
+                                                    class="mt-4 px-4 py-2 bg-green-500 text-white rounded text-sm">
+                                                + Add Item
                                             </button>
 
                                             <!-- Master Order fields -->
                                             <div class="mt-6">
-                                                <label>Reference Number</label>
-                                                <input type="text" name="reference_no" value="Direct Bulk" readonly
-                                                       class="w-full border rounded-md px-3 py-2 bg-gray-100 dark:bg-gray-700 dark:text-white">
+                                                <label
+                                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">PO
+                                                    Number</label>
+                                                <input type="text" name="po_number" required
+                                                       class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                             </div>
                                             <div class="mt-3">
-                                                <label>PO Number</label>
-                                                <input type="text" name="po_number"
-                                                       class="w-full border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white">
+                                                <label
+                                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer
+                                                    Name</label>
+                                                <input type="text" name="customer_name" required
+                                                       class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                             </div>
                                             <div class="mt-3">
-                                                <label>Customer Coordinator</label>
+                                                <label
+                                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">Merchandiser
+                                                    Name</label>
+                                                <input type="text" name="merchandiser_name" required
+                                                       class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                            </div>
+                                            <div class="mt-3">
+                                                <label
+                                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer
+                                                    Coordinator</label>
                                                 <input type="text" name="customer_coordinator" readonly
                                                        value="{{ Auth::user()->name }}"
-                                                       class="w-full border rounded-md px-3 py-2 bg-gray-100 dark:bg-gray-600">
+                                                       class="w-full mt-1 px-3 py-2 border rounded-md bg-gray-100 dark:bg-gray-600 dark:text-white text-sm">
                                             </div>
                                             <div class="mt-3">
-                                                <label>Customer Name</label>
-                                                <input type="text" name="customer_name"
-                                                       class="w-full border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white">
+                                                <label
+                                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer
+                                                    Requested Date</label>
+                                                <input type="date" name="customer_req_date" required
+                                                       class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                             </div>
                                             <div class="mt-3">
-                                                <label>Customer Merchandiser</label>
-                                                <input type="text" name="merchandiser_name"
-                                                       class="w-full border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white">
-                                            </div>
-                                            <div class="mt-3">
-                                                <label>Customer Requested Date</label>
-                                                <input type="date" name="customer_req_date"
-                                                       class="w-full border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white">
-                                            </div>
-                                            <div class="mt-3">
-                                                <label>Customer Notes</label>
+                                                <label
+                                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer
+                                                    Notes</label>
                                                 <input type="text" name="remarks"
-                                                       class="w-full border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white">
+                                                       class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                             </div>
 
-                                            <div class="flex justify-end gap-3 mt-6">
-                                                <button type="button"
+                                            <div class="flex justify-end mt-6 space-x-3">
+                                                <button type="button" id="cancelForm"
                                                         onclick="document.getElementById('addSampleModal').classList.add('hidden')"
                                                         class="px-4 py-2 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 text-sm rounded hover:bg-gray-300">
                                                     Cancel
                                                 </button>
                                                 <button type="submit"
                                                         class="px-4 py-2 bg-blue-500 text-white text-sm rounded hover:bg-blue-600">
-                                                    Create Direct Order
-                                                </button>
-                                            </div>
-                                        </form>
-
-                                        <form id="sampleForm" action="{{ route('production-inquery-details.store') }}"
-                                              method="POST" enctype="multipart/form-data">
-                                            @csrf
-                                            <input type="hidden" name="order_type" value="sample">
-
-                                            <div id="itemsContainer">
-                                                <!-- Item Template -->
-                                                <div
-                                                    class="item-group border rounded p-4 mb-4 bg-gray-50 dark:bg-gray-800">
-                                                    <!-- SAMPLE REFERENCE DROPDOWN -->
-                                                    <div class="relative mb-3">
-                                                        <button type="button"
-                                                                class="sampleReferenceDropdown inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10 dark:bg-gray-700 dark:text-white dark:ring-gray-600"
-                                                                onclick="toggleDropdown(this)" aria-haspopup="listbox">
-                                                            <span class="selectedSampleReference">Select Sample Reference</span>
-                                                            <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20"
-                                                                 fill="currentColor">
-                                                                <path fill-rule="evenodd"
-                                                                      d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
-                                                                      clip-rule="evenodd"/>
-                                                            </svg>
-                                                        </button>
-
-                                                        <div
-                                                            class="dropdownMenu absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto hidden dark:bg-gray-700 dark:text-white sm:text-sm">
-                                                            <div
-                                                                class="sticky top-0 bg-white dark:bg-gray-700 px-2 py-1">
-                                                                <input type="text" placeholder="Search reference..."
-                                                                       onkeyup="filterSamples(this)"
-                                                                       class="w-full px-2 py-1 text-sm border rounded-md focus:outline-none focus:ring focus:ring-indigo-500 dark:bg-gray-600 dark:text-white dark:border-gray-500"/>
-                                                            </div>
-                                                            <ul class="sampleOptions max-h-48 overflow-y-auto">
-                                                                @foreach ($samples as $sample)
-                                                                    <li class="cursor-pointer select-none px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-600"
-                                                                        onclick="selectSampleReference(this, '{{ $sample->id }}', '{{ $sample->reference_no }}')">
-                                                                        {{ $sample->reference_no }}
-                                                                    </li>
-                                                                @endforeach
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-
-                                                    <!-- Hidden input for sample id -->
-                                                    <input type="hidden" name="items[0][sample_id]"
-                                                           class="sampleReferenceHidden">
-
-                                                    <!-- Auto filled fields -->
-                                                    <div class="grid grid-cols-2 gap-4 autoFields">
-                                                        <input type="text" name="items[0][shade]"
-                                                               class="sampleShade editable border rounded-md px-3 py-2 bg-gray-100 dark:bg-gray-600"
-                                                               readonly placeholder="Shade">
-                                                        <input type="text" name="items[0][color]"
-                                                               class="sampleColour editable border rounded-md px-3 py-2 bg-gray-100 dark:bg-gray-600"
-                                                               readonly placeholder="Color">
-                                                        <input type="text" name="items[0][tkt]"
-                                                               class="sampleTKT editable border rounded-md px-3 py-2 bg-gray-100 dark:bg-gray-600"
-                                                               readonly placeholder="TKT">
-                                                        <input type="text" name="items[0][size]"
-                                                               class="sampleSize editable border rounded-md px-3 py-2 bg-gray-100 dark:bg-gray-600"
-                                                               readonly placeholder="Size">
-                                                        <input type="text" name="items[0][item]"
-                                                               class="sampleItem editable border rounded-md px-3 py-2 bg-gray-100 dark:bg-gray-600"
-                                                               readonly placeholder="Item">
-                                                        <input type="text" name="items[0][supplier]"
-                                                               class="sampleSupplier editable border rounded-md px-3 py-2 bg-gray-100 dark:bg-gray-600"
-                                                               readonly placeholder="Supplier">
-                                                    </div>
-
-                                                    <!-- Editable fields -->
-                                                    <div class="grid grid-cols-3 gap-4 mt-4">
-                                                        <input type="number" name="items[0][qty]"
-                                                               class="sampleQty border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white"
-                                                               placeholder="Qty">
-                                                        <select name="items[0][uom]"
-                                                                class="sampleUom border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white">
-                                                            <option value="meters">Meters</option>
-                                                            <option value="yards">Yards</option>
-                                                            <option value="pieces">Pieces</option>
-                                                        </select>
-                                                        <input type="number" step="0.01" name="items[0][price]"
-                                                               class="samplePrice border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white"
-                                                               placeholder="PO Value">
-                                                    </div>
-
-                                                    <!-- Options: Remove + Edit Button -->
-                                                    <div id="optionsWrapper"
-                                                         class="space-y-2 mt-4 flex justify-between">
-                                                        <!-- Edit Button -->
-                                                        <button type="button"
-                                                                onclick="toggleEdit(this)"
-                                                                class="text-blue-500 hover:text-blue-700">
-                                                            <svg xmlns="http://www.w3.org/2000/svg"
-                                                                 fill="none" viewBox="0 0 24 24"
-                                                                 stroke-width="2" stroke="currentColor"
-                                                                 class="w-5 h-5 edit-icon">
-                                                                <!-- Pencil Icon (default) -->
-                                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                                      d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0
-                                                                         113.536 3.536L7.5 21H3v-4.5L16.732 3.732z"/>
-                                                            </svg>
-                                                        </button>
-
-                                                        <!-- Remove Button -->
-                                                        <button type="button"
-                                                                onclick="removeItem(this)"
-                                                                class="text-blue-500 hover:text-blue-700">
-                                                            <svg xmlns="http://www.w3.org/2000/svg"
-                                                                 fill="none" viewBox="0 0 24 24"
-                                                                 stroke-width="2" stroke="currentColor"
-                                                                 class="w-5 h-5">
-                                                                <path stroke-linecap="round"
-                                                                      stroke-linejoin="round"
-                                                                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0
-                                                                         01-1.995-1.858L5 7m5 4v6m4-6v6M9 7V4a1 1 0
-                                                                         011-1h4a1 1 0 011 1v3m-9 0h10"/>
-                                                            </svg>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <button type="button" id="addItem"
-                                                    class="mt-4 px-4 py-2 bg-green-500 text-white rounded">+ Add Another
-                                                Item
-                                            </button>
-
-                                            <!-- Master PO fields -->
-                                            <div class="mt-6">
-                                                <label>PO Number</label>
-                                                <input type="text" name="po_number" required
-                                                       class="w-full border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white">
-                                            </div>
-                                            <div class="mt-3">
-                                                <label>Customer Name</label>
-                                                <input type="text" name="customer_name" required
-                                                       class="w-full border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white">
-                                            </div>
-                                            <div class="mt-3">
-                                                <label>Merchandiser Name</label>
-                                                <input type="text" name="merchandiser_name" required
-                                                       class="w-full border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white">
-                                            </div>
-                                            <div class="mt-3">
-                                                <label>Customer Coordinator</label>
-                                                <input type="text" name="customer_coordinator" readonly
-                                                       value="{{Auth::user()->name}}"
-                                                       class="w-full border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white">
-                                            </div>
-                                            <div class="mt-3">
-                                                <label>Customer Requested Date</label>
-                                                <input type="date" name="customer_req_date" required
-                                                       class="w-full border rounded-md px-3 py-2 dark:bg-gray-700 dark:text-white">
-                                            </div>
-                                            <div class="mt-3">
-                                                <label for="direct_remarks"
-                                                       class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer
-                                                    Notes</label>
-                                                <input id="direct_remarks" type="text" name="remarks"
-                                                       class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                            </div>
-
-
-                                            <div class="flex justify-end mt-6 space-x-3">
-                                                <button type="button" id="cancelForm"
-                                                        class="px-4 py-2 bg-gray-500 text-white rounded">Cancel
-                                                </button>
-                                                <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded">
-                                                    Create Sample Order
+                                                    Create Order
                                                 </button>
                                             </div>
                                         </form>
@@ -531,15 +279,11 @@
                                             Quantity
                                         </th>
                                         <th
-                                            class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                            class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-40 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                             Customer Name
                                         </th>
                                         <th
-                                            class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                            Customer Merchandiser
-                                        </th>
-                                        <th
-                                            class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                            class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-48 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                             PO Value
                                         </th>
                                         <th
@@ -582,8 +326,9 @@
                                                     class="px-4 py-3 font-bold sticky left-0 z-10 bg-gray-100 whitespace-normal break-words border-r border-gray-300 text-blue-500">
                                                     {{ $inquiry->prod_order_no ?? 'N/A' }}
                                                     <div class="text-xs font-normal text-gray-500">
-                                                        ({{ $inquiry->po_received_date ? Carbon::parse($inquiry->po_received_date)->format('Y-m-d') : '' }}
-                                                        )
+                                                        Date: {{ $inquiry->po_received_date ? Carbon::parse($inquiry->po_received_date)->format('Y-m-d') : '' }}
+                                                        <br>
+                                                        Time: {{ $inquiry->po_received_date ? Carbon::parse($inquiry->po_received_date)->format('H:i') : '' }}
                                                     </div>
                                                 </td>
                                             @else
@@ -591,8 +336,9 @@
                                                     class="px-4 py-3 font-bold sticky left-0 z-10 bg-gray-100 whitespace-normal break-words border-r border-gray-300">
                                                     {{ $inquiry->prod_order_no ?? 'N/A' }}
                                                     <div class="text-xs font-normal text-gray-500">
-                                                        ({{ $inquiry->po_received_date ? Carbon::parse($inquiry->po_received_date)->format('Y-m-d') : '' }}
-                                                        )
+                                                        Date: {{ $inquiry->po_received_date ? Carbon::parse($inquiry->po_received_date)->format('Y-m-d') : '' }}
+                                                        <br>
+                                                        Time: {{ $inquiry->po_received_date ? Carbon::parse($inquiry->po_received_date)->format('H:i') : '' }}
                                                     </div>
                                                 </td>
                                             @endif
@@ -629,22 +375,20 @@
                                             <!-- Quantity -->
                                             <td
                                                 class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
-                                                {{ $inquiry->qty ?? '0' }}</td>
+                                                {{ $inquiry->qty ?? '0' }} {{ $inquiry->uom ?? 'N/A' }}</td>
 
                                             <!-- Customer Name -->
                                             <td
                                                 class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
-                                                {{ $inquiry->customer_name ?? 'N/A' }}</td>
-
-                                            <!-- Customer Merchandiser -->
-                                            <td
-                                                class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
-                                                {{ $inquiry->merchandiser_name ?? 'N/A' }}</td>
+                                                {{ $inquiry->customer_name ?? 'N/A' }}<br><span class="text-xs text-gray-500">{{ $inquiry->merchandiser_name ?? 'N/A' }}</span></td>
 
                                             <!-- PO Value -->
                                             <td
                                                 class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center text-green-600 font-medium">
                                                 {{ $inquiry->price ? 'LKR  ' . number_format($inquiry->price, 2) : '0' }}
+                                                <br>
+                                                <span class="mt-2 text-xs text-blue-700 font-semibold">(Rs.
+                                                        {{ $inquiry->unitPrice }} X {{ $inquiry->qty }})</span>
                                             </td>
 
                                             <!-- Requested Date -->
@@ -658,86 +402,123 @@
                                                 {{ $inquiry->remarks ?? '-' }}
                                             </td>
 
-                                            <td class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
-                                                <div class="colour-match-stock">
-                                                    @if(!$inquiry->isSentToStock)
+                                            <td
+                                                class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                                <div class="colour-match-stock flex justify-center items-center">
+                                                    @if (!$inquiry->isSentToStock && !$inquiry->canSendToProduction)
+                                                        {{-- Show button if neither is true --}}
                                                         <form
                                                             action="{{ route('production.sendToStore', $inquiry->id) }}"
-                                                            method="POST">
+                                                            method="POST" onsubmit="handleSubmit(this)">
                                                             @csrf
                                                             <button type="submit"
-                                                                    class="px-3 py-1 text-xs rounded-lg bg-blue-100 text-blue-700 hover:bg-blue-200 mt-4">
+                                                                    class="px-3 py-1 text-xs rounded-lg bg-blue-100 text-blue-700 hover:bg-blue-200 mt-4 flex items-center justify-center"
+                                                                    id="sendToStoreBtn-{{ $inquiry->id }}">
                                                                 Send to Stores
                                                             </button>
                                                         </form>
-                                                    @elseif($inquiry->isSentToStock && is_null($inquiry->sent_to_stock_at))
+                                                    @elseif($inquiry->isSentToStock && $inquiry->canSendToProduction && !$inquiry->sent_to_stock_at)
+                                                        {{-- No stock available (red) --}}
                                                         <span
-                                                            class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-red-100 dark:bg-gray-800 px-3 py-1 rounded">
-                                                            No Stock Available
-                                                        </span>
-                                                    @else
+                                                            class="inline-block m-1 text-sm font-semibold text-red-700 bg-red-100 dark:bg-gray-800 px-3 py-1 rounded">
+                                                                No Stock Available
+                                                            </span>
+                                                    @elseif($inquiry->isSentToStock && !$inquiry->canSendToProduction)
+                                                        {{-- Sent to stock only (blue) --}}
                                                         <span
-                                                            class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-green-100 dark:bg-gray-800 px-3 py-1 rounded">
-                                                            Sent on <br>
-                                                            {{ Carbon::parse($inquiry->sent_to_stock_at)->format('Y-m-d') }}
-                                                            at
-                                                            {{ Carbon::parse($inquiry->sent_to_stock_at)->format('H:i') }}
-                                                        </span>
+                                                            class="inline-block m-1 text-sm font-semibold text-blue-700 bg-blue-100 dark:bg-gray-800 px-3 py-1 rounded">
+                                                                Sent on <br>
+                                                                {{ Carbon::parse($inquiry->sent_to_stock_at)->format('Y-m-d') }}
+                                                                at
+                                                                {{ Carbon::parse($inquiry->sent_to_stock_at)->format('H:i') }}
+                                                            </span>
+                                                    @elseif($inquiry->isSentToStock && $inquiry->canSendToProduction)
+                                                        {{-- Both conditions true (green) --}}
+                                                        <span
+                                                            class="inline-block m-1 text-sm font-semibold text-green-700 bg-green-100 dark:bg-gray-800 px-3 py-1 rounded">
+                                                                Ready for Production <br>
+                                                                {{ Carbon::parse($inquiry->sent_to_stock_at)->format('Y-m-d') }}
+                                                                at
+                                                                {{ Carbon::parse($inquiry->sent_to_stock_at)->format('H:i') }}
+                                                            </span>
                                                     @endif
                                                 </div>
+                                                @if ($inquiry->isSentToStock && $inquiry->canSendToProduction && $inquiry->sent_to_stock_at)
+                                                    <ul class="mt-2 text-xs text-green-700 font-semibold">
+                                                        @forelse($inquiry->stores as $store)
+                                                            <li>{{ $store->reference_no }}
+                                                                → {{ $store->qty_allocated ?? 0 }} {{ $store->allocated_uom ?? 'NA'}}</li>
+                                                        @empty
+                                                            <li>No allocations yet</li>
+                                                        @endforelse
+                                                    </ul>
+                                                @endif
                                             </td>
 
                                             <!-- Send to Production -->
-                                            <td class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
-                                                <div class="colour-match-production">
-                                                    @if($inquiry->isSentToProduction)
-                                                        <!-- Show timestamp if already sent -->
-                                                        <span
-                                                            class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-yellow-100 dark:bg-gray-800 px-3 py-1 rounded">
-                                                                Sent on <br>
-                                                                {{ Carbon::parse($inquiry->sent_to_production_at)->format('Y-m-d') }}
-                                                                at
-                                                                {{ Carbon::parse($inquiry->sent_to_production_at)->format('H:i') }}
-                                                            </span>
-                                                    @else
-                                                        @if(Auth::user()->role === 'ADMIN')
-                                                            <!-- Admin sees read-only button -->
-                                                            <button type="button"
-                                                                    class="px-3 py-1 text-xs rounded-lg bg-gray-200 text-gray-500 cursor-not-allowed"
-                                                                    disabled>
-                                                                Pending
-                                                            </button>
+                                            <td
+                                                class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                                @if ($inquiry->canSendToProduction === 1)
+                                                    <div class="colour-match-production">
+                                                        @if ($inquiry->isSentToProduction)
+                                                            <!-- Show timestamp if already sent -->
+                                                            <span
+                                                                class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-yellow-100 dark:bg-gray-800 px-3 py-1 rounded">
+                                                                    Sent on <br>
+                                                                    {{ Carbon::parse($inquiry->sent_to_production_at)->format('Y-m-d') }}
+                                                                    at
+                                                                    {{ Carbon::parse($inquiry->sent_to_production_at)->format('H:i') }}
+                                                                </span>
                                                         @else
-                                                            <!-- Form for other users -->
-                                                            <form
-                                                                action="{{ route('production-inquiry.sendToProduction', $inquiry->id) }}"
-                                                                method="POST">
-                                                                @csrf
-                                                                @method('PATCH')
-                                                                <button type="submit"
-                                                                        class="px-3 py-1 mt-4 text-xs rounded-lg bg-indigo-100 text-indigo-700 hover:bg-indigo-200"
-                                                                >
-                                                                    Send to Production
+                                                            @if (Auth::user()->role === 'ADMIN')
+                                                                <!-- Admin sees read-only button -->
+                                                                <button type="button"
+                                                                        class="px-3 py-1 text-xs rounded-lg bg-gray-200 text-gray-500 cursor-not-allowed"
+                                                                        disabled>
+                                                                    Pending
                                                                 </button>
-                                                            </form>
+                                                            @else
+                                                                <div class="flex justify-center items-center">
+                                                                    <!-- Form for other users -->
+                                                                    <form
+                                                                        action="{{ route('production-inquiry.sendToProduction', $inquiry->id) }}"
+                                                                        method="POST" onsubmit="handleSubmit(this)">
+                                                                        @csrf
+                                                                        @method('PATCH')
+                                                                        <button type="submit"
+                                                                                class="px-3 py-1 mt-4 text-xs rounded-lg bg-indigo-100 text-indigo-700 hover:bg-indigo-200 flex items-center justify-center"
+                                                                                id="sendToProductionBtn-{{ $inquiry->id }}">
+                                                                            Send to Production
+                                                                        </button>
+                                                                    </form>
+                                                                </div>
+                                                            @endif
                                                         @endif
-                                                    @endif
-                                                </div>
+                                                    </div>
+                                                @else
+                                                    <!-- Admin sees read-only button -->
+                                                    <button type="button"
+                                                            class="px-3 py-1 text-xs rounded-lg bg-gray-200 text-gray-500 cursor-not-allowed"
+                                                            disabled>
+                                                        Send to Production
+                                                    </button>
+                                                @endif
                                             </td>
 
                                             <!-- Status -->
                                             <td
-                                                class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
+                                                class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
                                                     <span
-                                                        class="px-2 py-1 text-xs rounded-full
+                                                        class="inline-flex items-center px-3 py-1 text-xs font-semibold rounded-full shadow-sm
                                                     {{ $inquiry->status === 'Completed'
-                                                        ? 'bg-green-100 text-green-700'
+                                                        ? 'bg-green-100 text-green-700 border border-green-300'
                                                         : ($inquiry->status === 'Pending'
-                                                            ? 'bg-yellow-100 text-yellow-700'
-                                                            : 'bg-gray-100 text-gray-600') }}">
+                                                            ? 'bg-yellow-100 text-yellow-700 border border-yellow-300'
+                                                            : 'bg-gray-100 text-gray-600 border border-gray-300') }}">
                                                         {{ $inquiry->status ?? 'Pending' }}
                                                     </span>
                                             </td>
+
 
                                             <!-- Customer Delivery Status -->
                                             <td
@@ -833,116 +614,296 @@
 </script>
 
 <script>
-    function toggleDropdown(id) {
-        document.getElementById(`dropdownMenu${id}`).classList.toggle('hidden');
+    function handleSubmit(form) {
+        let btn = form.querySelector("button[type='submit']");
+        btn.disabled = true;
+
+        // Replace text with loading spinner
+        btn.innerHTML = `
+            <svg class="animate-spin h-4 w-4 mr-2 text-blue-700" xmlns="http://www.w3.org/2000/svg" fill="none"
+                 viewBox="0 0 24 24">
+                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                 <path class="opacity-75" fill="currentColor"
+                       d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+            </svg>
+            Processing...
+        `;
+
+        // Allow form to continue submitting
+        return true;
     }
-
-    function selectSampleReference(id, referenceNo) {
-        document.getElementById('selectedSampleReference').textContent = referenceNo;
-        document.getElementById('sampleReferenceHidden').value = id;
-        document.getElementById('dropdownMenusampleReference').classList.add('hidden');
-
-        // If you want to trigger fetching details when selected
-        if (typeof fetchSampleDetails === "function") {
-            fetchSampleDetails(id);
-        }
-    }
-
-    function filterSamples() {
-        let input = document.getElementById('sampleSearchInput');
-        let filter = input.value.toLowerCase();
-        let options = document.getElementById("sampleOptions").getElementsByTagName("li");
-
-        for (let i = 0; i < options.length; i++) {
-            let txtValue = options[i].textContent || options[i].innerText;
-            if (txtValue.toLowerCase().indexOf(filter) > -1) {
-                options[i].style.display = "";
-            } else {
-                options[i].style.display = "none";
-            }
-        }
-    }
-
-    // Close dropdown when clicking outside
-    document.addEventListener('click', function (event) {
-        const dropdown = document.getElementById('dropdownMenusampleReference');
-        const button = document.getElementById('sampleReferenceDropdown');
-
-        if (!dropdown.contains(event.target) && !button.contains(event.target)) {
-            dropdown.classList.add('hidden');
-        }
-    });
 </script>
 
 <script>
-    flatpickr("#sampleCustomerRequestedDate", {
-        minDate: "today",
-        dateFormat: "Y-m-d",
-        onDayCreate: function (dObj, dStr, fp, dayElem) {
-            const today = new Date();
-            const dayDate = new Date(dayElem.dateObj);
-            const diffDays = Math.floor((dayDate - today) / (1000 * 60 * 60 * 24));
+    function handleSubmit(form) {
+        let btn = form.querySelector("button[type='submit']");
+        btn.disabled = true;
 
-            // Style based on range
-            if (diffDays >= 0 && diffDays <= 10) {
-                dayElem.classList.add("bg-red-200", "text-red-800", "rounded-md");
-            } else if (diffDays > 10 && diffDays <= 20) {
-                dayElem.classList.add("bg-yellow-200", "text-yellow-800", "rounded-md");
-            } else if (diffDays > 20) {
-                dayElem.classList.add("bg-green-200", "text-green-800", "rounded-md");
-            }
-        }
-    });
+        // Replace button content with loading spinner
+        btn.innerHTML = `
+            <svg class="animate-spin h-4 w-4 mr-2 text-indigo-700" xmlns="http://www.w3.org/2000/svg" fill="none"
+                 viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor"
+                      d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+            </svg>
+            Processing...
+        `;
+
+        return true; // allow form to submit
+    }
 </script>
 
-<!-- ========= SCRIPTS: tabs, dropdown, sample fetch ========= -->
 <script>
-    // initialize tabs on page load
-    document.addEventListener('DOMContentLoaded', function () {
-        setOrderType('sample'); // default
-        // close sample dropdown if clicked outside
-        document.addEventListener('click', function (e) {
-            if (!e.target.closest('#dropdownMenusampleReference') && !e.target.closest(
-                '#sampleReferenceDropdown')) {
-                const dd = document.getElementById('dropdownMenusampleReference');
-                if (dd) dd.classList.add('hidden');
-            }
+    let itemIndex = 0;
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const form = document.querySelector('#unifiedOrderForm');
+        const submitBtn = form.querySelector("button[type='submit']");
+        document.getElementById("addItemBtn").addEventListener("click", addItem);
+
+        form.addEventListener('submit', function () {
+            submitBtn.disabled = true;
+
+            submitBtn.innerHTML = `
+            <span class="flex items-center justify-center">
+                <svg class="animate-spin h-4 w-4 mr-2 text-blue-700" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+                </svg>
+                <span>Processing...</span>
+            </span>
+        `;
         });
     });
 
-    function setOrderType(type) {
-        const sampleForm = document.getElementById('sampleForm');
-        const directForm = document.getElementById('directForm');
-        const tabSample = document.getElementById('tab-sample');
-        const tabDirect = document.getElementById('tab-direct');
+    function addItem() {
+        const container = document.getElementById("itemsContainer");
 
-        if (type === 'sample') {
-            sampleForm.classList.remove('hidden');
-            directForm.classList.add('hidden');
-            tabSample.classList.add('border-b-2', 'border-blue-500', 'text-blue-600');
-            tabDirect.classList.remove('border-b-2', 'border-blue-500', 'text-blue-600');
+        const itemHTML = `
+    <div class="item-group border rounded-md p-4 mb-4 bg-gray-50 dark:bg-gray-800" data-index="${itemIndex}">
+
+        <!-- Order Type -->
+        <div class="mt-3">
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Order Type</label>
+            <select name="items[${itemIndex}][order_type]" onchange="renderFields(this)"
+                class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                <option value="">Select Order Type</option>
+                <option value="sample">Sample</option>
+                <option value="direct">Direct</option>
+            </select>
+        </div>
+
+        <!-- Field container -->
+        <div class="item-fields mt-3"></div>
+
+        <!-- Remove button -->
+        <div class="flex justify-end mt-4">
+            <button type="button" onclick="removeItem(this)"
+                class="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 text-sm">
+                Remove
+            </button>
+        </div>
+    </div>
+    `;
+
+        container.insertAdjacentHTML("beforeend", itemHTML);
+        itemIndex++;
+    }
+
+    function removeItem(button) {
+        const container = document.getElementById("itemsContainer");
+        const allItems = container.querySelectorAll('.item-group');
+        if (allItems.length > 1) {
+            button.closest(".item-group").remove();
         } else {
-            directForm.classList.remove('hidden');
-            sampleForm.classList.add('hidden');
-            tabDirect.classList.add('border-b-2', 'border-blue-500', 'text-blue-600');
-            tabSample.classList.remove('border-b-2', 'border-blue-500', 'text-blue-600');
+            alert("You must keep at least one item.");
         }
     }
 
-    function toggleDropdown(button) {
-        const dropdown = button.parentElement.querySelector(".dropdownMenu");
-        dropdown.classList.toggle("hidden");
+    function renderFields(select) {
+        const type = select.value;
+        const index = select.closest(".item-group").dataset.index;
+        const fieldsContainer = select.closest(".item-group").querySelector(".item-fields");
+
+        if (!type) {
+            fieldsContainer.innerHTML = "";
+            return;
+        }
+
+        if (type === "sample") {
+            fieldsContainer.innerHTML = getSampleFieldsHTML(index);
+        } else if (type === "direct") {
+            fieldsContainer.innerHTML = getDirectFieldsHTML(index);
+        }
     }
 
-    function selectSampleReference(element, id, referenceNo) {
-        const group = element.closest(".item-group");
+    function getSampleFieldsHTML(index) {
+        return `
+    <div class="mt-3">
+        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Sample Reference</label>
+        <div class="relative">
+            <button type="button" class="sampleReferenceDropdown w-full inline-flex justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10"
+                    onclick="toggleDropdown(this)" aria-haspopup="listbox">
+                <span class="selectedSampleReference">Select Sample Reference</span>
+                <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.25 8.29a.75.75 0 01-.02-1.08z" clip-rule="evenodd"/>
+                </svg>
+            </button>
+            <div class="dropdownMenu absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto hidden">
+                <div class="sticky top-0 bg-white px-2 py-1">
+                    <input type="text" placeholder="Search reference..." onkeyup="filterSamples(this)"
+                           class="w-full px-2 py-1 text-sm border rounded-md focus:outline-none"/>
+                </div>
+                <ul class="sampleOptions max-h-48 overflow-y-auto">
+                    @foreach ($samples as $sample)
+        <li class="cursor-pointer select-none px-3 py-2 hover:bg-gray-100"
+            onclick="selectSampleReference(this, '{{ $sample->id }}', '{{ $sample->reference_no }}', ${index})">
+                            {{ $sample->reference_no }}
+        </li>
+@endforeach
+        </ul>
+    </div>
+</div>
+<input type="hidden" name="items[${index}][sample_id]" class="sampleReferenceHidden">
+    </div>
+
+    <div class="grid grid-cols-2 gap-4 mt-3">
+        <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Shade</label>
+            <input type="text" name="items[${index}][shade]" readonly class="sampleShade w-full mt-1 px-3 py-2 border rounded-md bg-gray-100 dark:bg-gray-600 dark:text-white text-sm">
+        </div>
+        <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Color</label>
+            <input type="text" name="items[${index}][color]" readonly class="sampleColour w-full mt-1 px-3 py-2 border rounded-md bg-gray-100 dark:bg-gray-600 dark:text-white text-sm">
+        </div>
+    </div>
+
+    <div class="grid grid-cols-2 gap-4 mt-3">
+        <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">TKT</label>
+            <input type="text" name="items[${index}][tkt]" readonly class="sampleTKT w-full mt-1 px-3 py-2 border rounded-md bg-gray-100 dark:bg-gray-600 dark:text-white text-sm">
+        </div>
+        <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Size</label>
+            <input type="text" name="items[${index}][size]" readonly class="sampleSize w-full mt-1 px-3 py-2 border rounded-md bg-gray-100 dark:bg-gray-600 dark:text-white text-sm">
+        </div>
+    </div>
+
+    <div class="grid grid-cols-2 gap-4 mt-3">
+        <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Item</label>
+            <input type="text" name="items[${index}][item]" readonly class="sampleItem w-full mt-1 px-3 py-2 border rounded-md bg-gray-100 dark:bg-gray-600 dark:text-white text-sm">
+        </div>
+        <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Supplier</label>
+            <input type="text" name="items[${index}][supplier]" readonly class="sampleSupplier w-full mt-1 px-3 py-2 border rounded-md bg-gray-100 dark:bg-gray-600 dark:text-white text-sm">
+        </div>
+    </div>
+
+    <div class="grid grid-cols-4 gap-4 mt-3">
+        <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Qty</label>
+            <input type="number" name="items[${index}][qty]" class="sampleQty w-full mt-1 px-3 py-2 border rounded-md text-sm" placeholder="Qty" oninput="updatePOValue(this)">
+        </div>
+        <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">UOM</label>
+            <select name="items[${index}][uom]" class="sampleUom w-full mt-1 px-3 py-2 border rounded-md text-sm">
+                <option value="meters">Meters</option>
+                <option value="yards">Yards</option>
+                <option value="pieces">Pieces</option>
+            </select>
+        </div>
+        <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Unit Price</label>
+            <input type="number" step="0.01" name="items[${index}][unitPrice]" class="sampleUnitPrice w-full mt-1 px-3 py-2 border rounded-md text-sm" placeholder="Unit Price" oninput="updatePOValue(this)">
+        </div>
+        <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">PO Value</label>
+            <input type="text" name="items[${index}][price]" readonly placeholder="PO Value" class="samplePOValue w-full mt-1 px-3 py-2 border rounded-md bg-gray-100 dark:bg-gray-600 dark:text-white text-sm">
+        </div>
+    </div>
+    `;
+    }
+
+    function getDirectFieldsHTML(index) {
+        return `
+    <div class="grid grid-cols-2 gap-4 mt-3">
+        <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Shade</label>
+            <input type="text" name="items[${index}][shade]" placeholder="Shade"
+                class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
+        </div>
+        <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Color</label>
+            <input type="text" name="items[${index}][color]" placeholder="Color"
+                class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
+        </div>
+    </div>
+
+    <div class="grid grid-cols-3 gap-4 mt-3">
+        <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Size</label>
+            <input type="text" name="items[${index}][size]" placeholder="Size"
+                class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
+        </div>
+        <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Quantity</label>
+            <input type="number" name="items[${index}][qty]" placeholder="Quantity"
+                class="w-full mt-1 px-3 py-2 border rounded-md text-sm" oninput="updatePOValue(this)">
+        </div>
+        <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">UOM</label>
+            <select name="items[${index}][uom]"
+                class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                <option value="meters">Meters</option>
+                <option value="yards">Yards</option>
+                <option value="pieces">Pieces</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="mt-3">
+        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Item</label>
+        <input type="text" name="items[${index}][item]" placeholder="Item"
+            class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
+    </div>
+
+    <div class="grid grid-cols-2 gap-4 mt-3">
+        <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Unit Price</label>
+            <input type="number" step="0.01" name="items[${index}][unitPrice]" placeholder="Unit Price"
+                class="w-full mt-1 px-3 py-2 border rounded-md text-sm" oninput="updatePOValue(this)">
+        </div>
+        <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">PO Value</label>
+            <input type="text" name="items[${index}][price]" readonly placeholder="PO Value"
+                class="w-full mt-1 px-3 py-2 border rounded-md bg-gray-100 dark:bg-gray-600 dark:text-white text-sm">
+        </div>
+    </div>
+    `;
+    }
+
+    function toggleDropdown(button) {
+        button.nextElementSibling.classList.toggle("hidden");
+    }
+
+    function filterSamples(input) {
+        const filter = input.value.toLowerCase();
+        const options = input.closest(".dropdownMenu").querySelectorAll("li");
+        options.forEach(option => {
+            option.style.display = option.textContent.toLowerCase().includes(filter) ? "" : "none";
+        });
+    }
+
+    function selectSampleReference(element, sampleId, referenceNo, index) {
+        const group = document.querySelector(`.item-group[data-index="${index}"]`);
         group.querySelector(".selectedSampleReference").innerText = referenceNo;
-        group.querySelector(".sampleReferenceHidden").value = id;
+        group.querySelector(".sampleReferenceHidden").value = sampleId;
         group.querySelector(".dropdownMenu").classList.add("hidden");
 
-        // fetch details for this sample
         const base = "{{ url('product-catalog') }}";
-        fetch(`${base}/${id}/details`)
+        fetch(`${base}/${sampleId}/details`)
             .then(resp => resp.json())
             .then(data => {
                 group.querySelector(".sampleShade").value = data.shade || '';
@@ -955,167 +916,27 @@
             .catch(err => console.error('Error fetching sample details:', err));
     }
 
-    function filterSamples(input) {
-        const filter = input.value.toLowerCase();
-        const options = input.closest(".dropdownMenu").querySelectorAll("ul li");
-        options.forEach(option => {
-            option.style.display = option.textContent.toLowerCase().includes(filter) ? "" : "none";
-        });
-    }
-</script>
-
-<script>
-    document.getElementById("editButton").addEventListener("click", function () {
-        // Select all editable fields
-        const fields = document.querySelectorAll(".editable");
-        fields.forEach(field => {
-            field.removeAttribute("readonly");
-            field.classList.remove("bg-gray-100", "dark:bg-gray-600"); // remove the gray background
-            field.classList.add("bg-white", "dark:bg-gray-800"); // make editable background
-        });
-    });
-</script>
-
-<script>
-    function toggleFilterForm() {
-        const form = document.getElementById('filterFormContainer');
-        form.classList.toggle('hidden');
-    }
-
-    function toggleReportForm() {
-        const form = document.getElementById('reportFormContainer');
-        form.classList.toggle('hidden');
-    }
-</script>
-
-<script>
-    let itemIndex = 1;
-
-    // Add new item
-    document.getElementById('addItem').addEventListener('click', () => {
-        let container = document.getElementById('itemsContainer');
-        let firstItem = container.firstElementChild;
-        let clone = firstItem.cloneNode(true);
-
-        // Reset all input/select values and update indexes
-        clone.querySelectorAll('input, select').forEach(el => {
-            let name = el.getAttribute('name');
-            if (name) {
-                el.setAttribute('name', name.replace(/\d+/, itemIndex));
-            }
-
-            // Clear values
-            if (el.type === "hidden" || el.type === "text" || el.type === "number" || el.type === "date") {
-                el.value = '';
-            }
-            if (el.tagName === "SELECT") {
-                el.selectedIndex = 0;
-            }
-        });
-
-        // Reset sample reference text
-        let ref = clone.querySelector(".selectedSampleReference");
-        if (ref) ref.textContent = "Select Sample Reference";
-
-        // Append new item
-        itemIndex++;
-        container.appendChild(clone);
-    });
-
-    // Cancel button hides modal
-    document.getElementById("cancelForm").addEventListener("click", () => {
-        document.getElementById("addSampleModal").classList.add("hidden");
-    });
-
-    // Close modal when clicking overlay
-    document.getElementById("addSampleModal").addEventListener("click", (e) => {
-        if (e.target.id === "addSampleModal") {
-            document.getElementById("addSampleModal").classList.add("hidden");
-        }
-    });
-</script>
-
-<script>
-    function removeItem(button) {
-        const container = document.getElementById('itemsContainer');
-        const allItems = container.querySelectorAll('.item-group');
-
-        if (allItems.length > 1) {
-            button.closest('.item-group').remove();
-        } else {
-            alert("You must keep at least one item.");
+    function updatePOValue(element) {
+        const itemGroup = element.closest('.item-group');
+        const qty = parseFloat(itemGroup.querySelector('input[name*="[qty]"]')?.value) || 0;
+        const unitPrice = parseFloat(itemGroup.querySelector('input[name*="[unitPrice]"]')?.value) || 0;
+        const poValueField = itemGroup.querySelector('input[name*="[price]"]');
+        if (poValueField) {
+            poValueField.value = (qty * unitPrice).toFixed(2);
         }
     }
 </script>
 
-<script>
-    let directItemIndex = 1;
-
-    document.getElementById('addDirectItem').addEventListener('click', () => {
-        const container = document.getElementById('directItemsContainer');
-        const firstItem = container.firstElementChild;
-        const clone = firstItem.cloneNode(true);
-
-        // Reset all inputs and update names
-        clone.querySelectorAll('input, select').forEach(el => {
-            let name = el.getAttribute('name');
-            if (name) {
-                el.setAttribute('name', name.replace(/\d+/, directItemIndex));
-            }
-            if (el.type === "text" || el.type === "number" || el.type === "date") {
-                el.value = '';
-            }
-            if (el.tagName === "SELECT") {
-                el.selectedIndex = 0;
-            }
-        });
-
-        directItemIndex++;
-        container.appendChild(clone);
-    });
-
-    function removeDirectItem(button) {
-        const container = document.getElementById('directItemsContainer');
-        const allItems = container.querySelectorAll('.item-group');
-        if (allItems.length > 1) {
-            button.closest('.item-group').remove();
-        } else {
-            alert("You must keep at least one item.");
+    <script>
+        function toggleFilterForm() {
+            const form = document.getElementById('filterFormContainer');
+            form.classList.toggle('hidden');
         }
-    }
-</script>
 
-<script>
-    function toggleEdit(button) {
-        const itemGroup = button.closest('.item-group');
-        const autoFields = itemGroup.querySelectorAll('.editable');
-        const icon = button.querySelector('svg');
-
-        let isReadOnly = autoFields[0].hasAttribute('readonly');
-
-        autoFields.forEach(field => {
-            if (isReadOnly) {
-                field.removeAttribute('readonly');
-                field.classList.remove('bg-gray-100', 'dark:bg-gray-600');
-                field.classList.add('bg-white', 'dark:bg-gray-700');
-            } else {
-                field.setAttribute('readonly', true);
-                field.classList.remove('bg-white', 'dark:bg-gray-700');
-                field.classList.add('bg-gray-100', 'dark:bg-gray-600');
-            }
-        });
-
-        // Toggle icon between pencil and lock
-        if (isReadOnly) {
-            icon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round"
-                            d="M5 11h14v10H5zM9 11V7a3 3 0
-                               116 0v4"/>`; // Lock icon
-        } else {
-            icon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round"
-                            d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0
-                               113.536 3.536L7.5 21H3v-4.5L16.732 3.732z"/>`; // Pencil icon
+        function toggleReportForm() {
+            const form = document.getElementById('reportFormContainer');
+            form.classList.toggle('hidden');
         }
-    }
-</script
+    </script>
 
 @endsection

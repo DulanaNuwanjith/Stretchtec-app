@@ -3,12 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @method static create(array $validatedData)
  * @method static simplePaginate(int $int)
  * @method static selectRaw(string $string)
  * @method static findOrFail($id)
+ * @method static where(string $string, $prod_order_no)
  */
 class ProductInquiry extends Model
 {
@@ -30,6 +32,7 @@ class ProductInquiry extends Model
         'tkt',
         'qty',
         'uom',
+        'unitPrice',
         'price',
         'customer_req_date',
         'our_prod_date',
@@ -48,4 +51,11 @@ class ProductInquiry extends Model
         'status',
         'remarks',
     ];
+
+    public function stores(): HasMany
+    {
+        return $this->hasMany(Stores::class, 'order_no');
+    }
+
+
 }

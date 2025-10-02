@@ -469,7 +469,9 @@
                                                             <h2 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">
                                                                 Select Shade</h2>
 
-                                                            <form action="{{ route('productCatalog.updateShade', $catalog->id) }}" method="POST">
+                                                            <form
+                                                                action="{{ route('productCatalog.updateShade', $catalog->id) }}"
+                                                                method="POST">
                                                                 @csrf
                                                                 @method('PATCH')
 
@@ -487,8 +489,10 @@
                                                                 {{-- Input field only when a shade is selected --}}
                                                                 <template x-if="selectedShade">
                                                                     <div class="mt-3">
-                                                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
-                                                                            Enter Option for <span x-text="selectedShade"></span>
+                                                                        <label
+                                                                            class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
+                                                                            Enter Option for <span
+                                                                                x-text="selectedShade"></span>
                                                                         </label>
                                                                         <input type="text" x-model="optionText"
                                                                                name="option_text"
@@ -510,7 +514,8 @@
                                                                 </div>
 
                                                                 {{-- Hidden input to hold final value --}}
-                                                                <input type="hidden" name="final_shade" x-ref="finalShade">
+                                                                <input type="hidden" name="final_shade"
+                                                                       x-ref="finalShade">
                                                             </form>
                                                         </div>
                                                     </div>
@@ -762,7 +767,7 @@
                                                         class="px-4 py-2 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 text-sm rounded hover:bg-gray-300">
                                                     Cancel
                                                 </button>
-                                                <button type="submit"
+                                                <button type="submit" id="createCodeBtn"
                                                         class="px-4 py-2 bg-blue-500 text-white text-sm rounded hover:bg-blue-600">
                                                     Create Order
                                                 </button>
@@ -872,5 +877,18 @@
             document.getElementById('file-upload-' + id).click();
         }
     }
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const form = document.querySelector('#addCodeCatalogModal form');
+        const submitBtn = document.getElementById('createCodeBtn');
+
+        form.addEventListener('submit', function () {
+            // Disable the button to prevent multiple clicks
+            submitBtn.disabled = true;
+            submitBtn.innerText = 'Submitting...';
+        });
+    });
 </script>
 @endsection

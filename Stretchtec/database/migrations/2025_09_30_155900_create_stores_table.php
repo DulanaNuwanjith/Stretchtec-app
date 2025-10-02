@@ -16,12 +16,12 @@ return new class extends Migration {
             $table->string('prod_order_no')->nullable();
             $table->string('reference_no')->nullable();
             $table->string('shade')->nullable();
-            $table->integer('qty_available');
-            $table->integer('qty_allocated')->nullable();
+            $table->decimal('qty_available');
+            $table->decimal('qty_allocated')->nullable();
             $table->longText('reason_for_reject')->nullable();
-            $table->integer('qty_for_production')->nullable();
             $table->string('assigned_by');
             $table->boolean('is_qty_assigned')->default(false);
+            $table->string('allocated_uom', 5)->default('N/A');
             $table->timestamps();
 
             //Foreign Key for po_number and reference_number

@@ -53,6 +53,7 @@ use App\Http\Controllers\SamplePreparationProductionController;
 use App\Http\Controllers\SamplePreparationRnDController;
 use App\Http\Controllers\SampleStockController;
 use App\Http\Controllers\StockController;
+use App\Http\Controllers\StoresController;
 use App\Http\Controllers\TechnicalCardController;
 use App\Http\Controllers\UserMananagementController;
 use App\Models\User;
@@ -189,6 +190,10 @@ Route::middleware([
 
     Route::get('stockAvailabilityCheck', [StockController::class, 'storeManageIndex'])->name('stockAvailabilityCheck.index');
 
+    Route::get('mail-booking', static function () {
+        return view('production.pages.mail-booking');
+    })->name('mail-booking.index');
+
     /* ----------------------------------------------------------------------
      | Production Inquiry & Order Preparation Views
      |----------------------------------------------------------------------
@@ -205,11 +210,13 @@ Route::middleware([
     Route::get('/product-catalog/{id}/details', [ProductInquiryController::class, 'getSampleDetails'])
         ->name('product-catalog.details');
 
-    // web.php
     Route::post('/production-orders/{id}/send-to-store', [ProductInquiryController::class, 'sendToStore'])->name('production.sendToStore');
 
     Route::patch('production-inquiry/{id}/send-to-production', [ProductInquiryController::class, 'sendToProduction'])->name('production-inquiry.sendToProduction');
 
+    Route::post('/stores/{id}/assign', [StoresController::class, 'assign'])->name('stores.assign');
+
+    Route::get('/stock/add/{id}', [StockController::class, 'addStock'])->name('stockManagement.addStock');
 
     //Technical Details Routes
     Route::get('/elasticTD', [TechnicalCardController::class, 'elasticIndex'])->name('elasticTD.index');

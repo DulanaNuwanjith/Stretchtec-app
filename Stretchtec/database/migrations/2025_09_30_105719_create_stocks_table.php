@@ -13,10 +13,11 @@ return new class extends Migration
     {
         Schema::create('stocks', static function (Blueprint $table) {
             $table->id();
-            $table->string('reference_no');
+            $table->string('reference_no')->unique();
             $table->string('shade');
-            $table->integer('qty_available');
+            $table->decimal('qty_available');
             $table->string('notes');
+            $table->string('uom', 5);
             $table->timestamps();
         });
     }

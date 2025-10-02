@@ -785,12 +785,8 @@
                                                 Inquiry Receive Date
                                             </th>
                                             <th
-                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-40 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Customer
-                                            </th>
-                                            <th
-                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-36 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                                Customer Merchandiser
                                             </th>
                                             <th
                                                 class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-36 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
@@ -881,6 +877,7 @@
                                                         {{ $inquiry->productionStatus === 'Dispatched to RnD' ? 'text-blue-500' : '' }}">
                                                         {{ $inquiry->orderNo }}
                                                     </span>
+                                                    <br>
                                                     <span
                                                         class="mt-2 text-xs text-gray-700 font-semibold">{{ $inquiry->po_identification }}</span>
                                                     <input type="text"
@@ -902,19 +899,10 @@
                                                 <!-- Customer -->
                                                 <td
                                                     class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
-                                                    <span class="readonly">{{ $inquiry->customerName }}</span>
+                                                    <span class="readonly">{{ $inquiry->customerName }}</span> <br> <span class="readonly text-xs text-gray-500">{{ $inquiry->merchandiseName }}</span>
                                                     <input type="text"
                                                         class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                         value="{{ $inquiry->customerName }}" />
-                                                </td>
-
-                                                <!-- Merchandiser -->
-                                                <td
-                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
-                                                    <span class="readonly">{{ $inquiry->merchandiseName }}</span>
-                                                    <input type="text"
-                                                        class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
-                                                        value="{{ $inquiry->merchandiseName }}" />
                                                 </td>
 
                                                 <!-- Coordinator -->
@@ -1655,7 +1643,7 @@
                                                         setDecision(decision) {
                                                             this.selectedDecision = decision;
                                                             this.selectedColor = decision;
-                                                    
+
                                                             if (decision === 'Order Rejected') {
                                                                 this.openModal = true;
                                                                 this.openDropdown = false;
