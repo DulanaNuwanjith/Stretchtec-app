@@ -300,14 +300,6 @@
                                             <div class="mt-3">
                                                 <label
                                                     class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer
-                                                    Coordinator</label>
-                                                <input type="text" name="customer_coordinator" readonly
-                                                       value="{{ Auth::user()->name }}"
-                                                       class="w-full mt-1 px-3 py-2 border rounded-md bg-gray-100 dark:bg-gray-600 text-sm">
-                                            </div>
-                                            <div class="mt-3">
-                                                <label
-                                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer
                                                     Name</label>
                                                 <input type="text" name="customer_name"
                                                        class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
@@ -318,6 +310,14 @@
                                                     Merchandiser</label>
                                                 <input type="text" name="merchandiser_name"
                                                        class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                            </div>
+                                            <div class="mt-3">
+                                                <label
+                                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer
+                                                    Coordinator</label>
+                                                <input type="text" name="customer_coordinator" readonly
+                                                       value="{{ Auth::user()->name }}"
+                                                       class="w-full mt-1 px-3 py-2 border rounded-md bg-gray-100 dark:bg-gray-600 text-sm">
                                             </div>
                                             <div class="mt-3">
                                                 <label
@@ -440,9 +440,9 @@
 
                                                     <!-- Options: Remove + Edit Button -->
                                                     <div id="optionsWrapper"
-                                                         class="space-y-2 mt-4 flex justify-between">
+                                                         class="space-y-2 mt-4 flex justify-end">
                                                         <!-- Edit Button -->
-                                                        <button type="button" onclick="toggleEdit(this)"
+                                                        {{-- <button type="button" onclick="toggleEdit(this)"
                                                                 class="text-blue-500 hover:text-blue-700">
                                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                                  viewBox="0 0 24 24" stroke-width="2"
@@ -451,7 +451,7 @@
                                                                 <path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0
                                                                              113.536 3.536L7.5 21H3v-4.5L16.732 3.732z"/>
                                                             </svg>
-                                                        </button>
+                                                        </button> --}}
 
                                                         <!-- Remove Button -->
                                                         <button type="button" onclick="removeItem(this)"
@@ -502,7 +502,7 @@
                                                     Coordinator</label>
                                                 <input type="text" name="customer_coordinator" readonly
                                                        value="{{ Auth::user()->name }}"
-                                                       class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                       class="w-full mt-1 px-3 py-2 border bg-gray-100 rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                             </div>
                                             <div class="mt-3">
                                                 <label
@@ -1134,7 +1134,7 @@
     }
 </script>
 
-<script>
+{{-- <script>
     function toggleEdit(button) {
         const itemGroup = button.closest('.item-group');
         const autoFields = itemGroup.querySelectorAll('.editable');
@@ -1165,7 +1165,7 @@
                                    113.536 3.536L7.5 21H3v-4.5L16.732 3.732z"/>`; // Pencil icon
         }
     }
-</script>
+</script> --}}
 
 <script>
     function updatePOValue(element) {
