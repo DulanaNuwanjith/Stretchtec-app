@@ -217,6 +217,20 @@
                                                                class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                     </div>
 
+                                                    {{-- Allocated UOM --}}
+                                                    <div class="mb-4">
+                                                        <label
+                                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 text-left">
+                                                            Allocated UOM
+                                                        </label>
+                                                        <select name="allocated_uom" required
+                                                                class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                            <option value="y">Yards</option>
+                                                            <option value="m">Meters</option>
+                                                            <option value="p">Pieces</option>
+                                                        </select>
+                                                    </div>
+
                                                     {{-- Reason for Reject --}}
                                                     <div class="mb-4">
                                                         <label
