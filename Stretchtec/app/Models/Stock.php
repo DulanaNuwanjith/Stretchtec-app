@@ -18,6 +18,7 @@ class Stock extends Model
         'shade',
         'qty_available',
         'notes',
+        'uom'
     ];
 
     /**

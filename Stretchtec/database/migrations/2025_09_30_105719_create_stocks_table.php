@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('shade');
             $table->integer('qty_available');
             $table->string('notes');
+            $table->string('uom', 5);
             $table->timestamps();
         });
     }
