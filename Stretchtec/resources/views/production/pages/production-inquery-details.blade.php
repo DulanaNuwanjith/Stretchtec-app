@@ -300,14 +300,6 @@
                                             <div class="mt-3">
                                                 <label
                                                     class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer
-                                                    Coordinator</label>
-                                                <input type="text" name="customer_coordinator" readonly
-                                                       value="{{ Auth::user()->name }}"
-                                                       class="w-full mt-1 px-3 py-2 border rounded-md bg-gray-100 dark:bg-gray-600 text-sm">
-                                            </div>
-                                            <div class="mt-3">
-                                                <label
-                                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer
                                                     Name</label>
                                                 <input type="text" name="customer_name"
                                                        class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
@@ -318,6 +310,14 @@
                                                     Merchandiser</label>
                                                 <input type="text" name="merchandiser_name"
                                                        class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                            </div>
+                                            <div class="mt-3">
+                                                <label
+                                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer
+                                                    Coordinator</label>
+                                                <input type="text" name="customer_coordinator" readonly
+                                                       value="{{ Auth::user()->name }}"
+                                                       class="w-full mt-1 px-3 py-2 border rounded-md bg-gray-100 dark:bg-gray-600 text-sm">
                                             </div>
                                             <div class="mt-3">
                                                 <label
@@ -502,7 +502,7 @@
                                                     Coordinator</label>
                                                 <input type="text" name="customer_coordinator" readonly
                                                        value="{{ Auth::user()->name }}"
-                                                       class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                       class="w-full mt-1 px-3 py-2 border bg-gray-100 rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                             </div>
                                             <div class="mt-3">
                                                 <label
