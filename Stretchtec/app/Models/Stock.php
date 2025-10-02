@@ -20,11 +20,4 @@ class Stock extends Model
         'notes',
         'uom'
     ];
-
-    /**
-     * Cast attributes to native types.
-     */
-    protected $casts = [
-        'qty_available' => 'integer',
-    ];
 }

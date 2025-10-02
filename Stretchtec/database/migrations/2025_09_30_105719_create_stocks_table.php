@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('reference_no')->unique();
             $table->string('shade');
-            $table->integer('qty_available');
+            $table->decimal('qty_available');
             $table->string('notes');
             $table->string('uom', 5);
             $table->timestamps();
