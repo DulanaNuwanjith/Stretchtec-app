@@ -116,6 +116,7 @@
 
             <div class="flex justify-between items-center mb-6">
                 <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Stock Records</h1>
+                <span class="text-xs text-gray-500">Increment Stock only in Yards or Pieces</span>
                 <div class="flex space-x-3">
                     @if (Auth::user()->role !== 'ADMIN')
                         <button onclick="document.getElementById('addItemSampleStock').classList.remove('hidden')"
