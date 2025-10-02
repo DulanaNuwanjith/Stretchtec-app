@@ -52,6 +52,7 @@ class Stores extends Model
         'reason_for_reject',
         'assigned_by',
         'is_qty_assigned',
+        'allocated_uom'
     ];
 
     /**
@@ -61,11 +62,16 @@ class Stores extends Model
         'is_qty_assigned' => 'boolean',
     ];
 
-    /**
-     * Relationship: Store belongs to a ProductInquiry (foreign key: order_no).
-     */
     public function productInquiry(): BelongsTo
     {
         return $this->belongsTo(ProductInquiry::class, 'order_no');
+    }
+
+    /**
+     * Relationship: Store belongs to a Stock via reference_no
+     */
+    public function stock(): BelongsTo
+    {
+        return $this->belongsTo(Stock::class, 'reference_no', 'reference_no');
     }
 }

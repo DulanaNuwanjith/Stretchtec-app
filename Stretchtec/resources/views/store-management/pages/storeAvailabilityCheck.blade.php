@@ -159,15 +159,15 @@
                             <td class="px-4 py-3 w-48 whitespace-normal break-words border-r border-gray-300 ">{{ $store->reference_no }}</td>
                             <td class="px-4 py-3 w-48 whitespace-normal break-words border-r border-gray-300">{{ $store->shade }}</td>
                             <td class="px-4 py-3 w-48 whitespace-normal break-words border-r border-gray-300">{{ $store->productInquiry->qty ?? 0 }} {{ $store->productInquiry->uom  }}</td>
-                            <td class="px-4 py-3 w-48 whitespace-normal break-words border-r border-gray-300">{{ $store->qty_available }}</td>
-                            <td class="px-4 py-3 w-48 whitespace-normal break-words border-r border-gray-300">{{ $store->qty_allocated ?? '-' }}</td>
+                            <td class="px-4 py-3 w-48 whitespace-normal break-words border-r border-gray-300">{{ $store->stock->qty_available ?? 'N/A' }}</td>
+                            <td class="px-4 py-3 w-48 whitespace-normal break-words border-r border-gray-300">{{ $store->qty_allocated ?? '-' }} {{$store->allocated_uom}}</td>
                             <td class="px-4 py-3 w-48 whitespace-normal break-words border-r border-gray-300">{{ $store->assigned_by }}</td>
                             <td class="px-4 py-3 w-48 whitespace-normal break-words border-r border-gray-300 text-center">
                                 @if($store->is_qty_assigned)
                                     {{-- Already assigned --}}
                                     <span
                                         class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-green-200 dark:bg-gray-800 px-3 py-1 rounded">
-                                        Assigned ({{ $store->qty_allocated }})
+                                        Assigned ({{ $store->qty_allocated }} {{$store->allocated_uom}})
                                     </span>
                                 @else
                                     {{-- Alpine component --}}

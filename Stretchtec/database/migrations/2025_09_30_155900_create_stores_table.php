@@ -21,6 +21,7 @@ return new class extends Migration {
             $table->longText('reason_for_reject')->nullable();
             $table->string('assigned_by');
             $table->boolean('is_qty_assigned')->default(false);
+            $table->string('allocated_uom', 5)->default('N/A');
             $table->timestamps();
 
             //Foreign Key for po_number and reference_number

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @method static orderBy(string $string, string $string1)
@@ -20,4 +21,10 @@ class Stock extends Model
         'notes',
         'uom'
     ];
+
+
+    public function stores(): HasMany
+    {
+        return $this->hasMany(Stores::class, 'reference_no', 'reference_no');
+    }
 }
