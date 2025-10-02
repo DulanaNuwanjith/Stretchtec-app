@@ -191,8 +191,8 @@ Route::middleware([
     Route::get('stockAvailabilityCheck', [StockController::class, 'storeManageIndex'])->name('stockAvailabilityCheck.index');
 
     Route::get('mail-booking', static function () {
-            return view('production.pages.mail-booking');
-        })->name('mail-booking.index');
+        return view('production.pages.mail-booking');
+    })->name('mail-booking.index');
 
     /* ----------------------------------------------------------------------
      | Production Inquiry & Order Preparation Views
@@ -216,6 +216,7 @@ Route::middleware([
 
     Route::post('/stores/{id}/assign', [StoresController::class, 'assign'])->name('stores.assign');
 
+    Route::get('/stock/add/{id}', [StockController::class, 'addStock'])->name('stockManagement.addStock');
 
     //Technical Details Routes
     Route::get('/elasticTD', [TechnicalCardController::class, 'elasticIndex'])->name('elasticTD.index');

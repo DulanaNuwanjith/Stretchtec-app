@@ -105,4 +105,20 @@ class StockController extends Controller
     {
         //
     }
+
+    public function addStock(Request $request, $id): RedirectResponse
+    {
+        $request->validate([
+            'stock_increment' => 'required|integer|min:1',
+        ]);
+
+        $stock = Stock::findOrFail($id);
+
+        // Increase available stock
+        $stock->qty_available += $request->stock_increment;
+        $stock->save();
+
+        return back()->with('success', 'Stock increased by ' . $request->stock_increment);
+    }
+
 }

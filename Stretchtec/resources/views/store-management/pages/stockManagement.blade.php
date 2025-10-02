@@ -158,15 +158,33 @@
                             </td>
                             <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">{{ $item->notes ?? '-' }}</td>
                             <td class="px-6 py-4 text-sm text-right">
-                                <div class="flex justify-end space-x-2">
+                                <div class="flex justify-center gap-2 items-center">
+                                    <!-- Quantity input field -->
+                                    <form action="{{ route('stockManagement.addStock', $item->id) }}" method="GET"
+                                          class="inline flex items-center gap-2">
+                                        <input type="number"
+                                               name="stock_increment"
+                                               min="1"
+                                               placeholder="Qty"
+                                               class="w-24 px-2 py-1 border rounded text-sm"
+                                               required>
+
+                                        <button type="submit"
+                                                class="px-4 py-1 bg-green-500 text-white rounded hover:bg-green-600 text-xs font-medium">
+                                            Add Stock
+                                        </button>
+                                    </form>
+
                                     <!-- Delete button -->
                                     <form id="delete-form-{{ $item->id }}"
-                                          action="{{ route('stockManagement.destroy', $item->id) }}" method="POST"
+                                          action="{{ route('stockManagement.destroy', $item->id) }}"
+                                          method="POST"
                                           class="inline">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="button" onclick="confirmDelete({{ $item->id }})"
-                                                class="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 text-xs">
+                                        <button type="button"
+                                                onclick="confirmDelete({{ $item->id }})"
+                                                class="px-4 py-1 bg-red-500 text-white rounded hover:bg-red-600 text-xs font-medium">
                                             Delete
                                         </button>
                                     </form>
