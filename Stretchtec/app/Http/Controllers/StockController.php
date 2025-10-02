@@ -101,9 +101,26 @@ class StockController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Stock $stock)
+    public function destroy($id): RedirectResponse
     {
-        //
+        // Find the stock item by ID
+        $stockItem = Stock::find($id);
+
+        if (!$stockItem) {
+            // If the item doesn't exist, redirect back with an error
+            return redirect()->route('stockManagement.index')
+                ->with('error', 'Stock item not found.');
+        }
+
+        try {
+            $stockItem->delete(); // Delete the item
+            return redirect()->route('stockManagement.index')
+                ->with('success', 'Stock item deleted successfully.');
+        } catch (Exception $e) {
+            // Handle any exception that occurs
+            return redirect()->route('stockManagement.index')
+                ->with('error', 'Failed to delete stock item. Please try again.');
+        }
     }
 
     public function addStock(Request $request, $id): RedirectResponse

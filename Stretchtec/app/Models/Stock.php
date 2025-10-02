@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static orderBy(string $string, string $string1)
  * @method static where(string $string, $reference_no)
  * @method static findOrFail($id)
+ * @method static find($id)
  */
 class Stock extends Model
 {
