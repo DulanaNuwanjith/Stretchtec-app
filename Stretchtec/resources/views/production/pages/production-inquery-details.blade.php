@@ -559,12 +559,8 @@
                                             Quantity
                                         </th>
                                         <th
-                                            class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                            class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-40 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                             Customer Name
-                                        </th>
-                                        <th
-                                            class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                            Customer Merchandiser
                                         </th>
                                         <th
                                             class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-48 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
@@ -664,12 +660,7 @@
                                             <!-- Customer Name -->
                                             <td
                                                 class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
-                                                {{ $inquiry->customer_name ?? 'N/A' }}</td>
-
-                                            <!-- Customer Merchandiser -->
-                                            <td
-                                                class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
-                                                {{ $inquiry->merchandiser_name ?? 'N/A' }}</td>
+                                                {{ $inquiry->customer_name ?? 'N/A' }}<br><span class="text-xs text-gray-500">{{ $inquiry->merchandiser_name ?? 'N/A' }}</span></td>
 
                                             <!-- PO Value -->
                                             <td
