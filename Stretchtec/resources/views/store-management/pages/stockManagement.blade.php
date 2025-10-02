@@ -209,18 +209,29 @@
                                 </div>
 
                                 <div class="flex gap-4">
-                                    <div class="w-1/2">
+                                    <div class="w-1/3">
                                         <label for="shade"
                                                class="block text-sm font-medium text-gray-700 dark:text-gray-300">Shade</label>
                                         <input id="shade" type="text" name="shade" required
                                                class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                     </div>
-                                    <div class="w-1/2">
+                                    <div class="w-1/3">
                                         <label for="available_stock"
                                                class="block text-sm font-medium text-gray-700 dark:text-gray-300">Available
                                             Stock</label>
                                         <input id="available_stock" type="number" name="available_stock" required
                                                class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                    </div>
+                                    <div class="w-1/3">
+                                        <label for="uom"
+                                               class="block text-sm font-medium text-gray-700 dark:text-gray-300">Unit
+                                            of Measure</label>
+                                        <select id="uom" name="uom"
+                                                class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                            <option value="m">Meters</option>
+                                            <option value="y">Yards</option>
+                                            <option value="p">Pieces</option>
+                                        </select>
                                     </div>
                                 </div>
 
