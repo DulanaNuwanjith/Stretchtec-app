@@ -927,4 +927,16 @@
     }
 </script>
 
+    <script>
+        function toggleFilterForm() {
+            const form = document.getElementById('filterFormContainer');
+            form.classList.toggle('hidden');
+        }
+
+        function toggleReportForm() {
+            const form = document.getElementById('reportFormContainer');
+            form.classList.toggle('hidden');
+        }
+    </script>
+
 @endsection
