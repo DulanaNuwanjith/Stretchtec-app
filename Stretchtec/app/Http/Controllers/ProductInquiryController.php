@@ -218,13 +218,13 @@ class ProductInquiryController extends Controller
             if (!$catalogItem) {
                 $productionOrder->canSendToProduction = true;
                 $productionOrder->save();
-                return redirect()->back()->with('success', 'This is a direct order sent directly to the production');
+                return redirect()->back()->with('success', 'This is a direct order send directly to the production');
             }
 
             if (!$storesItem) {
                 $productionOrder->canSendToProduction = true;
                 $productionOrder->save();
-                return redirect()->back()->with('success', 'No Available Stock. Sent Directly to Production');
+                return redirect()->back()->with('success', 'No Available Stock. Send Directly to Production');
             }
 
             $productionOrder->sent_to_stock_at = now();

@@ -225,9 +225,9 @@
                                                         </label>
                                                         <select name="allocated_uom" required
                                                                 class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                                            <option value="y">Yards</option>
-                                                            <option value="m">Meters</option>
-                                                            <option value="p">Pieces</option>
+                                                            <option value="yards">Yards</option>
+                                                            <option value="meters">Meters</option>
+                                                            <option value="pieces">Pieces</option>
                                                         </select>
                                                     </div>
 
