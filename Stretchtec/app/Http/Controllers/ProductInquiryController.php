@@ -278,7 +278,7 @@ class ProductInquiryController extends Controller
                 'color' => $productInquiry->color,
                 'shade' => $productInquiry->shade,
                 'tkt' => $productInquiry->tkt,
-                'qty' => $productInquiry->qty,
+                'qty' => $productInquiry->qty - $productInquiry->stores->sum('qty_allocated'),
                 'uom' => $productInquiry->uom,
                 'supplier' => $productInquiry->supplier,
                 'pst_no' => $productInquiry->pst_no,
