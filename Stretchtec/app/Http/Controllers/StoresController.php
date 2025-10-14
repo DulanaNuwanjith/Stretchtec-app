@@ -97,64 +97,73 @@ class StoresController extends Controller
 
     public function assign(Request $request, $id): RedirectResponse
     {
-        // validate qty_allocated before updating
+        // Validate request
         $validated = $request->validate([
-            'qty_allocated' => 'required|integer|min:0',
-            'allocated_uom' => 'required|string|in:m,y,p',
+            'qty_allocated' => 'required|numeric|min:0',
+            'allocated_uom' => 'required|string|in:meters,yards,pieces',
             'reason_for_reject' => 'nullable|string'
         ]);
 
-        // find the store record
+        // Find the store, stock, and product inquiry records
         $store = Stores::findOrFail($id);
-
-        // Find the stock record
         $stock = Stock::where('reference_no', $store->reference_no)->firstOrFail();
-
-        // Find the Product inquiry record
         $productInquiry = ProductInquiry::where('prod_order_no', $store->prod_order_no)->firstOrFail();
 
-        // Convert qty_allocated into yards (if necessary)
-        $allocatedQtyInYards = $validated['qty_allocated'];
         $requestedUom = $validated['allocated_uom'];
+        $allocatedQtyInYards = $validated['qty_allocated'];
 
-        if ($requestedUom === 'm') {
-            // Convert meters → yards
-            $allocatedQtyInYards = $validated['qty_allocated'] * 1.09361;
-        } elseif ($requestedUom === 'y') {
-            // Already in yards, no conversion
-            $allocatedQtyInYards = $validated['qty_allocated'];
-        } elseif ($requestedUom === 'p') {
-            // Pieces must only be deducted if stock is also in pieces
-            if ($stock->uom !== 'p') {
-                return back()->withErrors(['qty_allocated' => 'Cannot allocate pieces from stock measured in ' . $stock->uom]);
-            }
-            $allocatedQtyInYards = $validated['qty_allocated']; // in this case it's pieces, not yards
+        // ✅ Step 1: Ensure allocated UOM matches the customer's requested UOM
+        if ($productInquiry->uom !== $requestedUom) {
+            return back()->withErrors([
+                'allocated_uom' => "Allocated UOM must match the customer's requested UOM ({$productInquiry->uom})."
+            ]);
         }
 
-        // Decrease the stock qty
+        // ✅ Step 2: Convert allocated qty into yards (if necessary)
+        if ($requestedUom === 'meters') {
+            // Convert meters → yards
+            $allocatedQtyInYards = $validated['qty_allocated'] * 1.09361;
+        } elseif ($requestedUom === 'yards') {
+            // Already in yards
+            $allocatedQtyInYards = $validated['qty_allocated'];
+        } elseif ($requestedUom === 'pieces') {
+            // Pieces: must only be deducted if stock is also in pieces
+            if ($stock->uom !== 'pieces') {
+                return back()->withErrors([
+                    'qty_allocated' => 'Cannot allocate pieces from stock measured in ' . $stock->uom
+                ]);
+            }
+            $allocatedQtyInYards = $validated['qty_allocated'];
+        }
+
+        // ✅ Step 3: Decrease the stock qty
         if ($stock->qty_available >= $allocatedQtyInYards) {
             $stock->qty_available -= $allocatedQtyInYards;
             $stock->save();
         } else {
-            return back()->withErrors(['qty_allocated' => 'Not enough stock available to allocate.']);
+            return back()->withErrors([
+                'qty_allocated' => 'Not enough stock available to allocate.'
+            ]);
         }
 
-        // update store fields
+        // ✅ Step 4: Update store fields
         $store->qty_allocated = $validated['qty_allocated'];
         $store->reason_for_reject = $validated['reason_for_reject'] ?? null;
         $store->is_qty_assigned = true;
         $store->assigned_by = auth()->user()->name ?? 'System';
-        $store->allocated_uom = $validated['allocated_uom'];
+        $store->allocated_uom = substr(strtolower($requestedUom), 0, 1);
 
-        // optionally reduce available qty in store (track in the same UOM user requested)
         if ($store->qty_available >= $store->qty_allocated) {
-            $store->qty_available = $store->qty_available - $store->qty_allocated;
+            $store->qty_available -= $store->qty_allocated;
         } else {
-            return back()->withErrors(['qty_allocated' => 'Allocated qty cannot exceed available qty']);
+            return back()->withErrors([
+                'qty_allocated' => 'Allocated qty cannot exceed available qty.'
+            ]);
         }
 
         $store->save();
 
+        // ✅ Step 5: Allow sending to production
         $productInquiry->canSendToProduction = true;
         $productInquiry->save();
 
