@@ -64,7 +64,7 @@
             @endphp
 
             @foreach ($cards as $card)
-                <div class="bg-white dark:bg-gray-800 rounded-xl transition-shadow duration-300 p-6 flex flex-col items-center space-y-6 border border-gray-100 dark:border-gray-700"
+                <div class="bg-white dark:bg-gray-800 rounded-xl transition-shadow duration-300 p-6 flex flex-col items-center space-y-6 border border-gray-100 dark:border-gray-700 break-words"
                     style="box-shadow: 0 4px 15px 0 {{ $shadowColors[$card['color']] ?? 'rgba(0,0,0,0.1)' }};">
                     <h3 class="text-lg font-semibold text-gray-800 dark:text-white text-center">
                         {{ $card['title'] }}
@@ -89,7 +89,7 @@
             @endforeach
 
             <!-- Yarn Ordered but Not Received - Single Card with Supplier List -->
-            <div class="bg-white dark:bg-gray-800 rounded-xl transition-shadow duration-300 p-6 flex flex-col items-center space-y-6 border border-gray-100 dark:border-gray-700"
+            <div class="bg-white dark:bg-gray-800 rounded-xl transition-shadow duration-300 p-6 flex flex-col items-center space-y-6 border border-gray-100 dark:border-gray-700 break-words"
                 style="box-shadow: 0 4px 15px 0 {{ $yellowShadow }};">
                 <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-6 text-center">
                     Yarn Ordered But Not Received
@@ -136,7 +136,7 @@
             </div> --}}
 
             <!-- Total Yarn Price Card -->
-            <div class="bg-white dark:bg-gray-800 rounded-xl transition-shadow duration-300 p-6 flex flex-col items-center space-y-6 border border-gray-100 dark:border-gray-700"
+            <div class="bg-white dark:bg-gray-800 rounded-xl transition-shadow duration-300 p-6 flex flex-col items-center space-y-6 border border-gray-100 dark:border-gray-700 break-words"
                 style="box-shadow: 0 4px 15px 0 rgba(234, 88, 12, 0.5);"> <!-- orange shadow -->
                 <h3 class="text-lg font-semibold text-gray-800 dark:text-white text-center">
                     Total Price Spent on Yarn
@@ -164,7 +164,7 @@
 
         <!-- Charts Section -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 p-6 flex flex-col"
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 p-6 flex flex-col break-words"
                 style="border-top: 3px solid #3b82f6;">
                 <h3 class="text-xl font-semibold mb-4 text-gray-700 dark:text-gray-200">
                     Sample Overview by Customer Coordinators
