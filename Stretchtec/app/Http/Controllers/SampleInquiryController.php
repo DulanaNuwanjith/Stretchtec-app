@@ -312,20 +312,19 @@ class SampleInquiryController extends Controller
 
         $deliveredShades = [];
 
-        // Handle Need to Develop (existing behavior)
+        // =============================
+        // CASE 1: Need to Develop
+        // =============================
         if ($prepRnd->alreadyDeveloped === 'Need to Develop') {
             $request->validate(['shades' => 'required|array']);
             $dispatchedShades = $prepRnd->shadeOrders->where('status', 'Dispatched to RnD');
             $totalDelivered = 0;
 
             foreach ($request->input('shades') as $shadeId => $shadeData) {
-                if (!isset($shadeData['selected'])) {
-                    continue;
-                }
+                if (!isset($shadeData['selected'])) continue;
+
                 $shade = $dispatchedShades->where('id', $shadeId)->first();
-                if (!$shade) {
-                    continue;
-                }
+                if (!$shade) continue;
 
                 $quantity = (int)$shadeData['quantity'];
                 $stock = SampleStock::where('reference_no', $inquiry->referenceNo)
@@ -342,7 +341,6 @@ class SampleInquiryController extends Controller
                     $shade->save();
 
                     $totalDelivered += $quantity;
-
                     $deliveredShades[] = [
                         'shade' => $shade->shade,
                         'quantity' => $quantity
@@ -354,68 +352,77 @@ class SampleInquiryController extends Controller
 
             $inquiry->deliveryQty = $totalDelivered;
 
-            // ✅ Update prepRnd->productionStatus ONLY if all shades are delivered
+            // Update prepRnd->productionStatus if all shades delivered
             $allDelivered = $prepRnd->shadeOrders->every(fn($s) => $s->status === 'Delivered');
             if ($allDelivered) {
                 $prepRnd->productionStatus = 'Order Delivered';
                 $inquiry->productionStatus = 'Delivered';
             }
 
-        } else if ($prepRnd->alreadyDeveloped === 'No Need to Develop') {
-            // For Tape Match & No Need to Develop: just mark delivered without shades
-            $deliveredQty = (int)($request->input('sampleQty') ?? $inquiry->sampleQty ?? 1);
-            $deliveredShades[] = [
-                'quantity' => $deliveredQty,
-            ];
-            $inquiry->productionStatus = 'Delivered';
-            $inquiry->deliveryQty = $deliveredQty;
+        // =============================
+        // CASE 2: No Need to Develop / Tape Match
+        // =============================
+        } else if ($prepRnd->alreadyDeveloped === 'No Need to Develop' || $prepRnd->alreadyDeveloped === 'Tape Match Pan Asia') {
 
-            // ✅ Directly set as Delivered since no shades exist
-            $prepRnd->productionStatus = 'Order Delivered';
+            $refsInput = $request->input('refs'); // refs[i][ref], refs[i][shade], refs[i][quantity]
+            $totalDelivered = 0;
 
-            if ($inquiry->referenceNo && $deliveredQty > 0) {
-                $refNo = $inquiry->referenceNo;
-                $shade = null;
+            if (!empty($refsInput)) {
+                foreach ($refsInput as $refData) {
+                    $ref = trim($refData['ref']);
+                    $shade = isset($refData['shade']) && $refData['shade'] !== '-' ? trim($refData['shade']) : null;
+                    $quantity = (int)$refData['quantity'];
 
-                if (str_contains($refNo, '|')) {
-                    [$refNo, $shade] = explode('|', $refNo);
-                    $refNo = trim($refNo);
-                    $shade = trim($shade);
-                }
+                    $stockQuery = SampleStock::where('reference_no', $ref);
+                    if ($shade) $stockQuery->where('shade', $shade);
+                    $stock = $stockQuery->first();
 
-                // Ensure both refNo + shade are used
-                $stockQuery = SampleStock::where('reference_no', $refNo);
-                if ($shade) {
-                    $stockQuery->where('shade', $shade);
-                }
+                    if ($stock && $quantity > 0) {
+                        $qtyToDeliver = min($quantity, $stock->available_stock);
 
-                $stock = $stockQuery->first();
+                        // Deduct stock
+                        $stock->available_stock -= $qtyToDeliver;
+                        $stock->available_stock <= 0 ? $stock->delete() : $stock->save();
 
-                if ($stock && $deliveredQty <= $stock->available_stock) {
-                    // decrease stock
-                    $stock->available_stock -= $deliveredQty;
+                        $deliveredShades[] = [
+                            'reference_no' => $ref,
+                            'shade' => $shade ?? '-',
+                            'quantity' => $qtyToDeliver,
+                        ];
 
-                    if ($stock->available_stock <= 0) {
-                        $stock->delete();
-                    } else {
-                        $stock->save();
+                        $totalDelivered += $qtyToDeliver;
                     }
                 }
+            } else {
+                // If no refs sent, fallback to sampleQty
+                $deliveredQty = (int)($request->input('sampleQty') ?? $inquiry->sampleQty ?? 1);
+                $deliveredShades[] = [
+                    'quantity' => $deliveredQty,
+                ];
+                $totalDelivered = $deliveredQty;
             }
+
+            // Update inquiry & prepRnd
+            $inquiry->productionStatus = 'Delivered';
+            $inquiry->deliveryQty = $totalDelivered;
+            $prepRnd->productionStatus = 'Order Delivered';
+
+        // =============================
+        // CASE 3: Fallback / Other
+        // =============================
         } else {
             $inquiry->productionStatus = 'Delivered';
             $inquiry->deliveryQty = 0;
             $prepRnd->productionStatus = 'Order Delivered';
         }
 
-        $totalDeliveredQty = array_sum(array_column($deliveredShades, 'quantity'));
-
-        // Update delivery info
         $inquiry->customerDeliveryDate = now();
         $prepRnd->save();
         $inquiry->save();
 
-        // Generate Dispatch Note (same as before)
+        // =============================
+        // Generate Dispatch Note
+        // =============================
         try {
             $dispatchCode = 'DISP-' . now()->timestamp;
             $now = now();
@@ -432,14 +439,9 @@ class SampleInquiryController extends Controller
             $sheet->setCellValue('B13', $inquiry->referenceNo ?? '-');
             $sheet->setCellValue('F12', $inquiry->color);
 
-            /** @var User $user */
             $user = Auth::user();
-            if ($user) {
-                $sheet->setCellValue('B16', $user->name);
-            } else {
-                $sheet->setCellValue('B16', 'Guest');
-            }
-            $sheet->setCellValue('H12', $totalDeliveredQty);
+            $sheet->setCellValue('B16', $user?->name ?? 'Guest');
+            $sheet->setCellValue('H12', $totalDelivered);
             $sheet->setCellValue('D24', $now->format('Y-m-d H:i:s'));
             $sheet->setCellValue('D25', $dispatchCode);
             $sheet->setCellValue('B27', $inquiry->customerName);
@@ -448,15 +450,9 @@ class SampleInquiryController extends Controller
             $sheet->setCellValue('B31', $inquiry->item . ' / ' . $inquiry->size);
             $sheet->setCellValue('B32', $inquiry->referenceNo ?? '-');
             $sheet->setCellValue('F31', $inquiry->color);
+            $sheet->setCellValue('B35', $user?->name ?? 'Guest');
+            $sheet->setCellValue('H31', $totalDelivered);
 
-            /** @var User $user */
-            $user = Auth::user();
-            if ($user) {
-                $sheet->setCellValue('B35', $user->name);
-            } else {
-                $sheet->setCellValue('B16', 'Guest');
-            }
-            $sheet->setCellValue('H31', $totalDeliveredQty);
             $fileName = 'dispatch_note_' . $dispatchCode . '.xlsx';
             $savePath = storage_path('app/public/dispatches/' . $fileName);
             IOFactory::createWriter($spreadsheet, 'Xlsx')->save($savePath);
@@ -470,6 +466,7 @@ class SampleInquiryController extends Controller
 
         return back()->with('success', 'Delivered successfully. Latest dispatch note generated.');
     }
+
 
 
     /**
