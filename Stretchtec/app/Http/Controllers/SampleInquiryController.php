@@ -468,7 +468,6 @@ class SampleInquiryController extends Controller
     }
 
 
-
     /**
      * Function to update customer decision (customerDecision and rejectNO)
      */

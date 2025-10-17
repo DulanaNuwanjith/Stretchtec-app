@@ -1448,7 +1448,7 @@
                                                                                                 class="font-medium text-gray-900 dark:text-gray-100">
                                                                                                 {{ $ref['ref'] }}
                                                                                                 @if ($ref['shade'])
-                                                                                                    | 
+                                                                                                    |
                                                                                                     {{ $ref['shade'] }}
                                                                                                 @endif
                                                                                             </p>
@@ -1668,7 +1668,6 @@
                                                             @endif
                                                         @endif
                                                     @endif
-
                                                 </td>
 
                                                 <td

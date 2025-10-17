@@ -494,6 +494,7 @@ class SamplePreparationRnDController extends Controller
 
         // --- Dynamic validation ---
         if (in_array($prep->alreadyDeveloped, ['Need to Develop', 'Tape Match Pan Asia'])) {
+            // For these, yarnPrice is NOT required
             $request->validate([
                 'id' => 'required|exists:sample_preparation_rnd,id',
                 'referenceNo' => 'required|string',
@@ -501,7 +502,7 @@ class SamplePreparationRnDController extends Controller
             $referenceNos = [$request->input('referenceNo')]; // wrap single value as array
             $shades = [];
         } else {
-            // No Need to Develop
+            // --- No Need to Develop ---
             $request->validate([
                 'id' => 'required|exists:sample_preparation_rnd,id',
                 'referenceNo' => 'required|array',
@@ -510,13 +511,15 @@ class SamplePreparationRnDController extends Controller
                 'shade.*' => 'string',
                 'yarnPrice' => 'required|numeric|min:0',
             ]);
+
             $referenceNos = $request->input('referenceNo');
             $shades = $request->input('shade', []);
             $yarnPrice = $request->input('yarnPrice');
+
+            // ✅ Save yarn price only for "No Need to Develop"
+            $prep->yarnPrice = $yarnPrice;
         }
 
-        $prep->yarnPrice = $yarnPrice;
-        
         // --- Duplicate check only for single reference types ---
         if (in_array($prep->alreadyDeveloped, ['Need to Develop', 'Tape Match Pan Asia'])) {
             foreach ($referenceNos as $ref) {
