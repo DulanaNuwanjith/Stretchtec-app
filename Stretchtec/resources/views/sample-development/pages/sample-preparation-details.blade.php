@@ -3438,8 +3438,19 @@
             });
         }
 
-        // === Close dropdowns when clicking outside ===
-        document.addEventListener('click', () => {
+        // === Close dropdowns when clicking outside (fixed) ===
+        document.addEventListener('click', (event) => {
+            // If the click is *inside* a reference or shade dropdown, do nothing
+            if (
+                event.target.closest('.referenceDropdown') ||
+                event.target.closest('.referenceDropdownMenu') ||
+                event.target.closest('.shadeDropdown') ||
+                event.target.closest('.shadeDropdownMenu')
+            ) {
+                return; // prevent closing
+            }
+
+            // Otherwise, close all dropdowns
             closeAllDropdownsDynamic();
         });
     </script>
