@@ -513,6 +513,20 @@
                             {{-- Main Table --}}
                             <div id="ResearchAndDevelopmentRecordsScroll"
                                 class="overflow-x-auto max-h-[1200px] bg-white dark:bg-gray-900 shadow rounded-lg">
+
+                                <!-- Spinner -->
+                                <div id="pageLoadingSpinner"
+                                    class="fixed inset-0 z-50 bg-white bg-opacity-80 flex flex-col items-center justify-center">
+                                    <svg class="animate-spin h-10 w-10 text-blue-600" xmlns="http://www.w3.org/2000/svg"
+                                        fill="none" viewBox="0 0 24 24">
+                                        <circle class="opacity-25" cx="12" cy="12" r="10"
+                                            stroke="currentColor" stroke-width="4"></circle>
+                                        <path class="opacity-75" fill="currentColor"
+                                            d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+                                    </svg>
+                                    <p class="mt-3 text-gray-700 font-semibold">Loading data...</p>
+                                </div>
+
                                 <table class="table-fixed w-full text-sm divide-y divide-gray-200 dark:divide-gray-700">
                                     <thead class="bg-gray-100 dark:bg-gray-700 text-left">
                                         <tr class="text-center">
@@ -1139,8 +1153,8 @@
                                                                                                         stroke-linecap="round"
                                                                                                         stroke-linejoin="round"
                                                                                                         d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0
-                                                                                                                                                                               01-1.995-1.858L5 7m5 4v6m4-6v6M9 7V4a1 1 0
-                                                                                                                                                                               011-1h4a1 1 0 011 1v3m-9 0h10" />
+                                                                                                                                                                                   01-1.995-1.858L5 7m5 4v6m4-6v6M9 7V4a1 1 0
+                                                                                                                                                                                   011-1h4a1 1 0 011 1v3m-9 0h10" />
                                                                                                 </svg>
                                                                                             </button>
                                                                                         </div>
@@ -2505,6 +2519,20 @@
             </div>
         </div>
     </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const spinner = document.getElementById("pageLoadingSpinner");
+
+            // Show spinner immediately
+            spinner.classList.remove("hidden");
+
+            // Wait for table to render completely
+            window.requestAnimationFrame(() => {
+                spinner.classList.add("hidden"); // hide spinner after rendering
+            });
+        });
+    </script>
 
     <script>
         function toggleDropdownItemAdd(button, type) {
