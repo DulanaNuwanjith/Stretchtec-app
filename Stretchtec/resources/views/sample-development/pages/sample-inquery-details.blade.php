@@ -719,8 +719,10 @@
 
                                                 <div class="py-1">
                                                     <button type="button"
-                                                        class="po-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600">Select
-                                                        PO</button>
+                                                        class="po-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600">
+                                                        Select
+                                                        PO
+                                                    </button>
                                                     @foreach ($poIdentifications as $po)
                                                         <button type="button"
                                                             class="po-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600">
@@ -733,7 +735,6 @@
                                             <input type="hidden" name="po_identification" id="poInputReport"
                                                 value="{{ request('po_identification') }}">
                                         </div>
-
 
                                         <!-- Submit Button -->
                                         <div>
@@ -773,6 +774,19 @@
                             {{-- Main Table --}}
                             <div id="sampleInquiryRecordsScroll"
                                 class="overflow-x-auto max-h-[1200px] bg-white dark:bg-gray-900 shadow rounded-lg">
+                                <!-- Spinner -->
+                                <div id="pageLoadingSpinner"
+                                    class="fixed inset-0 z-50 bg-white bg-opacity-80 flex flex-col items-center justify-center">
+                                    <svg class="animate-spin h-10 w-10 text-blue-600" xmlns="http://www.w3.org/2000/svg"
+                                        fill="none" viewBox="0 0 24 24">
+                                        <circle class="opacity-25" cx="12" cy="12" r="10"
+                                            stroke="currentColor" stroke-width="4"></circle>
+                                        <path class="opacity-75" fill="currentColor"
+                                            d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+                                    </svg>
+                                    <p class="mt-3 text-gray-700 font-semibold">Loading data...</p>
+                                </div>
+
                                 <table class="table-fixed w-full text-sm divide-y divide-gray-200 dark:divide-gray-700">
                                     <thead class="bg-gray-200 dark:bg-gray-700 text-left">
                                         <tr class="text-center">
@@ -845,6 +859,10 @@
                                                 Reference No
                                             </th>
                                             <th
+                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-48 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                Shade Details
+                                            </th>
+                                            <th
                                                 class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-52 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Customer Delivery Status
                                             </th>
@@ -899,7 +917,8 @@
                                                 <!-- Customer -->
                                                 <td
                                                     class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
-                                                    <span class="readonly">{{ $inquiry->customerName }}</span> <br> <span class="readonly text-xs text-gray-500">{{ $inquiry->merchandiseName }}</span>
+                                                    <span class="readonly">{{ $inquiry->customerName }}</span> <br> <span
+                                                        class="readonly text-xs text-gray-500">{{ $inquiry->merchandiseName }}</span>
                                                     <input type="text"
                                                         class="hidden editable w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                                         value="{{ $inquiry->customerName }}" />
@@ -1148,6 +1167,17 @@
                                                         value="{{ $inquiry->referenceNo ?? '—' }}" />
                                                 </td>
 
+                                                <!-- Shade Details -->
+                                                <td
+                                                    class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-left">
+                                                    <span class="readonly"><b>Shade:</b>
+                                                        {{ $inquiry->samplePreparationRnD->shade ?? '—' }}</span>
+                                                    <br>
+                                                    <br>
+                                                    <span class="readonly"><b>TKT: </b>
+                                                        {{ $inquiry->samplePreparationRnD->tkt ?? '—' }}</span>
+                                                </td>
+
                                                 <td class="px-4 py-3 border-r border-gray-300 text-center">
                                                     @php
                                                         $prepRnd = $inquiry->samplePreparationRnD;
@@ -1360,28 +1390,35 @@
                                                     @php
                                                         $isNoDevelopment =
                                                             $prepRnd?->alreadyDeveloped === 'No Need to Develop';
-                                                        $sampleStockQty = 0;
+                                                        $refs = [];
 
                                                         if ($isNoDevelopment && !empty($inquiry->referenceNo)) {
-                                                            if (str_contains($inquiry->referenceNo, '|')) {
-                                                                [$refPart, $shadePart] = explode(
-                                                                    '|',
-                                                                    $inquiry->referenceNo,
-                                                                );
+                                                            // Handle multiple references separated by comma
+                                                            $refEntries = explode(',', $inquiry->referenceNo);
+                                                            foreach ($refEntries as $entry) {
+                                                                if (str_contains($entry, '|')) {
+                                                                    [$refPart, $shadePart] = explode('|', $entry);
+                                                                } else {
+                                                                    $refPart = $entry;
+                                                                    $shadePart = null;
+                                                                }
                                                                 $refPart = trim($refPart);
-                                                                $shadePart = trim($shadePart);
+                                                                $shadePart = $shadePart ? trim($shadePart) : null;
 
-                                                                $sampleStockQty = SampleStock::where(
+                                                                $availableStock = SampleStock::where(
                                                                     'reference_no',
                                                                     $refPart,
-                                                                )
-                                                                    ->where('shade', $shadePart)
-                                                                    ->sum('available_stock');
-                                                            } else {
-                                                                $sampleStockQty = SampleStock::where(
-                                                                    'reference_no',
-                                                                    $inquiry->referenceNo,
-                                                                )->sum('available_stock');
+                                                                );
+                                                                if ($shadePart) {
+                                                                    $availableStock->where('shade', $shadePart);
+                                                                }
+                                                                $refs[] = [
+                                                                    'ref' => $refPart,
+                                                                    'shade' => $shadePart,
+                                                                    'available' => $availableStock->sum(
+                                                                        'available_stock',
+                                                                    ),
+                                                                ];
                                                             }
                                                         }
                                                     @endphp
@@ -1389,7 +1426,7 @@
                                                     @if ($isNoDevelopment)
                                                         @if (!empty($inquiry->referenceNo))
                                                             @if ($inquiry->productionStatus !== 'Delivered')
-                                                                <div x-data="{ openDeliverModal: false, sampleQty: 1, maxQty: @js($sampleStockQty) }">
+                                                                <div x-data="{ openDeliverModal: false }">
                                                                     <button @click="openDeliverModal = true"
                                                                         class="px-3 py-1 rounded text-white bg-green-600 hover:bg-green-700 transition duration-200">
                                                                         Deliver
@@ -1398,10 +1435,9 @@
                                                                     <div x-show="openDeliverModal" x-transition x-cloak
                                                                         class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
                                                                         <div
-                                                                            class="relative p-6 bg-white dark:bg-gray-800 w-11/12 max-w-md rounded-2xl shadow-xl">
+                                                                            class="relative p-6 bg-white dark:bg-gray-800 w-11/12 max-w-md rounded-2xl shadow-xl max-h-[80vh] overflow-y-auto">
                                                                             <button @click="openDeliverModal = false"
-                                                                                class="absolute top-3 right-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
-                                                                                ✕
+                                                                                class="absolute top-3 right-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">✕
                                                                             </button>
 
                                                                             <h2
@@ -1415,21 +1451,45 @@
                                                                                 <input type="hidden" name="id"
                                                                                     value="{{ $inquiry->id }}">
 
-                                                                                <div class="mb-4">
-                                                                                    <label for="sampleQty"
-                                                                                        class="block text-sm font-medium text-gray-700 dark:text-gray-200">
-                                                                                        Quantity (Available: <span
-                                                                                            x-text="maxQty"></span>)
-                                                                                    </label>
-                                                                                    <input type="number" id="sampleQty"
-                                                                                        name="sampleQty"
-                                                                                        x-model="sampleQty"
-                                                                                        :max="maxQty"
-                                                                                        min="1" required
-                                                                                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                                                                <div
+                                                                                    class="space-y-3 max-h-[400px] overflow-y-auto">
+                                                                                    @foreach ($refs as $i => $ref)
+                                                                                        <div
+                                                                                            class="p-3 border rounded-lg bg-gray-50 dark:bg-gray-700/50">
+                                                                                            <p
+                                                                                                class="font-medium text-gray-900 dark:text-gray-100">
+                                                                                                {{ $ref['ref'] }}
+                                                                                                @if ($ref['shade'])
+                                                                                                    |
+                                                                                                    {{ $ref['shade'] }}
+                                                                                                @endif
+                                                                                            </p>
+                                                                                            <p
+                                                                                                class="text-sm text-gray-600 dark:text-gray-300">
+                                                                                                Available: <span
+                                                                                                    class="font-semibold">{{ $ref['available'] }}</span>
+                                                                                            </p>
+
+                                                                                            <input type="number"
+                                                                                                min="1"
+                                                                                                max="{{ $ref['available'] }}"
+                                                                                                name="refs[{{ $i }}][quantity]"
+                                                                                                placeholder="Quantity"
+                                                                                                required
+                                                                                                class="mt-2 w-full px-2 py-1 border rounded text-sm dark:bg-gray-800 dark:text-white">
+
+                                                                                            <input type="hidden"
+                                                                                                name="refs[{{ $i }}][ref]"
+                                                                                                value="{{ $ref['ref'] }}">
+                                                                                            <input type="hidden"
+                                                                                                name="refs[{{ $i }}][shade]"
+                                                                                                value="{{ $ref['shade'] }}">
+                                                                                        </div>
+                                                                                    @endforeach
                                                                                 </div>
 
-                                                                                <div class="flex justify-end space-x-2">
+                                                                                <div
+                                                                                    class="flex justify-end space-x-2 mt-4">
                                                                                     <button type="button"
                                                                                         @click="openDeliverModal = false"
                                                                                         class="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-700">
@@ -1462,8 +1522,7 @@
                                                                         <div
                                                                             class="relative p-6 bg-white dark:bg-gray-800 w-11/12 max-w-md rounded-2xl shadow-xl max-h-[80vh] overflow-y-auto">
                                                                             <button @click="openDelivered = false"
-                                                                                class="absolute top-3 right-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
-                                                                                ✕
+                                                                                class="absolute top-3 right-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">✕
                                                                             </button>
                                                                             <h2
                                                                                 class="text-xl text-left font-semibold mb-4 text-blue-900 dark:text-white">
@@ -1561,8 +1620,7 @@
                                                                         <div
                                                                             class="relative p-6 bg-white dark:bg-gray-800 w-11/12 max-w-md rounded-2xl shadow-xl max-h-[80vh] overflow-y-auto">
                                                                             <button @click="openDelivered = false"
-                                                                                class="absolute top-3 right-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
-                                                                                ✕
+                                                                                class="absolute top-3 right-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">✕
                                                                             </button>
                                                                             <h2
                                                                                 class="text-xl text-left font-semibold mb-4 text-blue-900 dark:text-white">
@@ -1610,7 +1668,6 @@
                                                                         </div>
                                                                     </div>
 
-                                                                    {{-- (Reuse your Delivered details modal + dispatch note logic here if needed) --}}
                                                                     {{-- Dispatch Note --}}
                                                                     @if ($inquiry->dNoteNumber)
                                                                         <a href="{{ asset('storage/dispatches/' . $inquiry->dNoteNumber) }}"
@@ -1643,7 +1700,7 @@
                                                         setDecision(decision) {
                                                             this.selectedDecision = decision;
                                                             this.selectedColor = decision;
-
+                                                    
                                                             if (decision === 'Order Rejected') {
                                                                 this.openModal = true;
                                                                 this.openDropdown = false;
@@ -2177,6 +2234,20 @@
             </div>
         </div>
     </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const spinner = document.getElementById("pageLoadingSpinner");
+
+            // Show spinner immediately
+            spinner.classList.remove("hidden");
+
+            // Wait for table to render completely
+            window.requestAnimationFrame(() => {
+                spinner.classList.add("hidden"); // hide spinner after rendering
+            });
+        });
+    </script>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {

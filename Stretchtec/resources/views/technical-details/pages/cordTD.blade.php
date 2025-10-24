@@ -424,22 +424,11 @@
 
                                                 <div class="flex gap-4">
                                                     <div class="w-1/2">
-                                                        <label for="rubber_type"
-                                                               class="block text-sm font-medium text-gray-700 dark:text-gray-300">Rubber
-                                                            Type</label>
-                                                        <input id="rubber_type" type="text" name="rubber_type"
-                                                               required
-                                                               class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                                    </div>
-                                                    <div class="w-1/2">
                                                         <label for="spindles"
                                                                class="block text-sm font-medium text-gray-700 dark:text-gray-300">Spindles</label>
                                                         <input id="spindles" type="text" name="spindles"
                                                                class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                     </div>
-                                                </div>
-
-                                                <div class="flex gap-4">
                                                     <div class="w-1/2">
                                                         <label for="weight_per_yard"
                                                                class="block text-sm font-medium text-gray-700 dark:text-gray-300">Weight
@@ -447,11 +436,16 @@
                                                         <input id="weight_per_yard" type="number" name="weight_per_yard"
                                                                class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                     </div>
+                                                </div>
+
+                                                <div class="flex gap-4">
                                                     <div class="w-1/2">
                                                         <label for="stretchability"
                                                                class="block text-sm font-medium text-gray-700 dark:text-gray-300">Stretchability</label>
                                                         <input id="stretchability" type="text" name="stretchability"
                                                                class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                                    </div>
+                                                    <div class="w-1/2">
                                                     </div>
                                                 </div>
 

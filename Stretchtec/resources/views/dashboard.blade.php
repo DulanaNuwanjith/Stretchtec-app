@@ -1,6 +1,6 @@
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="UTF-8" />
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Stretchtec Dashboard</title>
 </head>
@@ -26,46 +26,45 @@
             <!-- Default Sample Inquiry Cards -->
             @php
                 $cards = [
-                     [
-                         'title' => 'All Samples',
-                         'allTime' => $allSamplesReceived ?? 0,
-                         'last30' => $allSamplesReceivedWithin30Days ?? 0,
-                         'color' => 'indigo', // Neutral overview
-                     ],
-                     [
-                         'title' => 'Bulk Received',
-                         'allTime' => $acceptedSamples ?? 0,
-                         'last30' => $acceptedSamplesWithin30Days ?? 0,
-                         'color' => 'green', // Positive
-                     ],
-                     [
-                         'title' => 'Orders Delivered',
-                         'allTime' => $ordersDelivered ?? 0,
-                         'last30' => $ordersDeliveredWithin30Days ?? 0,
-                         'color' => 'emerald', // Completion/Success
-                     ],
-                     [
-                         'title' => 'Rejected',
-                         'allTime' => $rejectedSamples ?? 0,
-                         'last30' => $rejectedSamplesWithin30Days ?? 0,
-                         'color' => 'red', // Negative
-                     ],
-                 ];
+                    [
+                        'title' => 'All Samples',
+                        'allTime' => $allSamplesReceived ?? 0,
+                        'last30' => $allSamplesReceivedWithin30Days ?? 0,
+                        'color' => 'indigo', // Neutral overview
+                    ],
+                    [
+                        'title' => 'Bulk Received',
+                        'allTime' => $acceptedSamples ?? 0,
+                        'last30' => $acceptedSamplesWithin30Days ?? 0,
+                        'color' => 'green', // Positive
+                    ],
+                    [
+                        'title' => 'Orders Delivered',
+                        'allTime' => $ordersDelivered ?? 0,
+                        'last30' => $ordersDeliveredWithin30Days ?? 0,
+                        'color' => 'emerald', // Completion/Success
+                    ],
+                    [
+                        'title' => 'Rejected',
+                        'allTime' => $rejectedSamples ?? 0,
+                        'last30' => $rejectedSamplesWithin30Days ?? 0,
+                        'color' => 'red', // Negative
+                    ],
+                ];
 
-                 $shadowColors = [
-                     'indigo'  => 'rgba(99, 102, 241, 0.5)',   // indigo-500
-                     'green'   => 'rgba(34, 197, 94, 0.5)',    // green-500
-                     'emerald' => 'rgba(16, 185, 129, 0.5)',   // emerald-500
-                     'red'     => 'rgba(239, 68, 68, 0.5)',    // red-500
-                 ];
+                $shadowColors = [
+                    'indigo' => 'rgba(99, 102, 241, 0.5)', // indigo-500
+                    'green' => 'rgba(34, 197, 94, 0.5)', // green-500
+                    'emerald' => 'rgba(16, 185, 129, 0.5)', // emerald-500
+                    'red' => 'rgba(239, 68, 68, 0.5)', // red-500
+                ];
 
-                 $yellowShadow = 'rgba(234, 179, 8, 0.5)'; // yellow-500
-                 $blueShadow   = 'rgba(59, 130, 246, 0.5)'; // blue-500
+                $yellowShadow = 'rgba(234, 179, 8, 0.5)'; // yellow-500
+                $blueShadow = 'rgba(59, 130, 246, 0.5)'; // blue-500
             @endphp
 
             @foreach ($cards as $card)
-                <div
-                    class="bg-white dark:bg-gray-800 rounded-xl transition-shadow duration-300 p-6 flex flex-col items-center space-y-6 border border-gray-100 dark:border-gray-700"
+                <div class="bg-white dark:bg-gray-800 rounded-xl transition-shadow duration-300 p-6 flex flex-col items-center space-y-6 border border-gray-100 dark:border-gray-700 break-words"
                     style="box-shadow: 0 4px 15px 0 {{ $shadowColors[$card['color']] ?? 'rgba(0,0,0,0.1)' }};">
                     <h3 class="text-lg font-semibold text-gray-800 dark:text-white text-center">
                         {{ $card['title'] }}
@@ -78,7 +77,7 @@
                         <div class="text-gray-400 text-xs">Samples</div>
                     </div>
 
-                    <hr class="w-full border-gray-200 dark:border-gray-700"/>
+                    <hr class="w-full border-gray-200 dark:border-gray-700" />
 
                     <!-- Last 30 days data -->
                     <div class="text-center w-full">
@@ -90,8 +89,7 @@
             @endforeach
 
             <!-- Yarn Ordered but Not Received - Single Card with Supplier List -->
-            <div
-                class="bg-white dark:bg-gray-800 rounded-xl transition-shadow duration-300 p-6 flex flex-col items-center space-y-6 border border-gray-100 dark:border-gray-700"
+            <div class="bg-white dark:bg-gray-800 rounded-xl transition-shadow duration-300 p-6 flex flex-col items-center space-y-6 border border-gray-100 dark:border-gray-700 break-words"
                 style="box-shadow: 0 4px 15px 0 {{ $yellowShadow }};">
                 <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-6 text-center">
                     Yarn Ordered But Not Received
@@ -115,8 +113,7 @@
             </div>
 
             <!-- Other Information-->
-            <div
-                class="bg-white dark:bg-gray-800 rounded-xl transition-shadow duration-300 p-6 flex flex-col items-center space-y-6 border border-gray-100 dark:border-gray-700"
+            {{-- <div class="bg-white dark:bg-gray-800 rounded-xl transition-shadow duration-300 p-6 flex flex-col items-center space-y-6 border border-gray-100 dark:border-gray-700"
                 style="box-shadow: 0 4px 15px 0 {{ $blueShadow }};">
                 <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-6 text-center">
                     Sample Production Details
@@ -136,15 +133,38 @@
                         <!-- Green -->
                     </li>
                 </ul>
-            </div>
+            </div> --}}
 
+            <!-- Total Yarn Price Card -->
+            <div class="bg-white dark:bg-gray-800 rounded-xl transition-shadow duration-300 p-6 flex flex-col items-center space-y-6 border border-gray-100 dark:border-gray-700 break-words"
+                style="box-shadow: 0 4px 15px 0 rgba(234, 88, 12, 0.5);"> <!-- orange shadow -->
+                <h3 class="text-lg font-semibold text-gray-800 dark:text-white text-center">
+                    Total Price Spent on Yarn
+                </h3>
+
+                <!-- All-time total -->
+                <div class="text-center w-full">
+                    <h4 class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">All Time</h4>
+                    <div class="text-3xl font-bold text-orange-500">Rs. {{ $totalYarnPrice }}</div>
+                    <div class="text-gray-400 text-xs">Based on all Yarn Price entries</div>
+                </div>
+
+                <hr class="w-full border-gray-200 dark:border-gray-700" />
+
+                <!-- Last 30 days total -->
+                <div class="text-center w-full">
+                    <h4 class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Last 30 Days</h4>
+                    <div class="text-3xl font-bold text-orange-400">Rs.
+                        {{ number_format($totalYarnPriceLast30Days, 2) }}</div>
+                    <div class="text-gray-400 text-xs">Yarn cost within past 30 days</div>
+                </div>
+            </div>
         </div>
 
 
         <!-- Charts Section -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <div
-                class="bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 p-6 flex flex-col"
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 p-6 flex flex-col break-words"
                 style="border-top: 3px solid #3b82f6;">
                 <h3 class="text-xl font-semibold mb-4 text-gray-700 dark:text-gray-200">
                     Sample Overview by Customer Coordinators
@@ -152,8 +172,7 @@
                 <canvas id="ordersChart" class="flex-grow w-full"></canvas>
             </div>
 
-            <div
-                class="bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 p-6 flex flex-col"
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 p-6 flex flex-col"
                 style="border-bottom: 3px solid #3b82f6;">
                 <h3 class="text-xl font-semibold mb-4 text-gray-700 dark:text-gray-200">
                     Sample Overview by Customers
@@ -174,7 +193,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function() {
         const ctx = document.getElementById('ordersChart').getContext('2d');
 
         // These variables will be injected from the controller as JSON encoded data
@@ -187,10 +206,10 @@
             data: {
                 labels: labels,
                 datasets: [{
-                    label: 'Accepted Samples',
-                    data: acceptedSamples,
-                    backgroundColor: 'rgba(34, 197, 94, 0.7)', // greenish
-                },
+                        label: 'Accepted Samples',
+                        data: acceptedSamples,
+                        backgroundColor: 'rgba(34, 197, 94, 0.7)', // greenish
+                    },
                     {
                         label: 'Rejected Samples',
                         data: rejectedSamples,
@@ -225,10 +244,10 @@
             data: {
                 labels: @json($customerNames), // e.g. ["Customer A", "Customer B", "Customer C"]
                 datasets: [{
-                    label: 'Accepted Samples',
-                    data: @json($acceptedSamplesCount2), // e.g. [10, 15, 7]
-                    backgroundColor: 'rgba(34, 197, 94, 0.7)', // green-ish
-                },
+                        label: 'Accepted Samples',
+                        data: @json($acceptedSamplesCount2), // e.g. [10, 15, 7]
+                        backgroundColor: 'rgba(34, 197, 94, 0.7)', // green-ish
+                    },
                     {
                         label: 'Rejected Samples',
                         data: @json($rejectedSamplesCount2), // e.g. [2, 3, 1]

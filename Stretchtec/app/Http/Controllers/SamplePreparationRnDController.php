@@ -490,45 +490,71 @@ class SamplePreparationRnDController extends Controller
      */
     public function lockReferenceField(Request $request): RedirectResponse
     {
-        $request->validate([
-            'id' => 'required|exists:sample_preparation_rnd,id',
-            'referenceNo' => 'required|string',
-            'shade' => 'nullable|string',
-        ]);
-
         $prep = SamplePreparationRnD::findOrFail($request->input('id'));
-        $referenceNo = $request->input('referenceNo');
-        $shadeRef = $request->input('shade');
 
-        // Only check for duplicates if the type is 'Need to Develop' or 'Tape Match Pan Asia'
+        // --- Dynamic validation ---
         if (in_array($prep->alreadyDeveloped, ['Need to Develop', 'Tape Match Pan Asia'])) {
-            $exists = SamplePreparationRnD::where('referenceNo', $referenceNo)
-                ->where('id', '!=', $prep->id)
-                ->exists();
+            // For these, yarnPrice is NOT required
+            $request->validate([
+                'id' => 'required|exists:sample_preparation_rnd,id',
+                'referenceNo' => 'required|string',
+            ]);
+            $referenceNos = [$request->input('referenceNo')]; // wrap single value as array
+            $shades = [];
+        } else {
+            // --- No Need to Develop ---
+            $request->validate([
+                'id' => 'required|exists:sample_preparation_rnd,id',
+                'referenceNo' => 'required|array',
+                'referenceNo.*' => 'string',
+                'shade' => 'nullable|array',
+                'shade.*' => 'string',
+                'yarnPrice' => 'required|numeric|min:0',
+            ]);
 
-            if ($exists) {
-                return back()->withErrors(['referenceNo' => 'Reference No already exists.'])->withInput();
+            $referenceNos = $request->input('referenceNo');
+            $shades = $request->input('shade', []);
+            $yarnPrice = $request->input('yarnPrice');
+
+            // ✅ Save yarn price only for "No Need to Develop"
+            $prep->yarnPrice = $yarnPrice;
+        }
+
+        // --- Duplicate check only for single reference types ---
+        if (in_array($prep->alreadyDeveloped, ['Need to Develop', 'Tape Match Pan Asia'])) {
+            foreach ($referenceNos as $ref) {
+                $exists = SamplePreparationRnD::where('referenceNo', $ref)
+                    ->where('id', '!=', $prep->id)
+                    ->exists();
+
+                if ($exists) {
+                    return back()->withErrors(['referenceNo' => "Reference No '{$ref}' already exists."])
+                        ->withInput();
+                }
             }
         }
 
         $isFirstTime = !$prep->is_reference_locked;
 
-        // --- Handle "No Need to Develop" differently ---
+        // --- Set final reference ---
         if ($prep->alreadyDeveloped === 'No Need to Develop') {
-            $finalReference = $shadeRef
-                ? "$referenceNo|$shadeRef"
-                : $referenceNo;
+            $pairs = collect($referenceNos)
+                ->zip($shades)
+                ->map(fn($pair) => trim($pair[0]) . (!empty($pair[1]) ? '|' . trim($pair[1]) : ''))
+                ->implode(', ');
+            $finalReference = $pairs;
         } else {
-            $finalReference = $referenceNo;
+            $finalReference = $referenceNos[0] ?? null; // single reference
         }
 
         $prep->referenceNo = $finalReference;
+
         if ($isFirstTime) {
             $prep->is_reference_locked = true;
         }
         $prep->save();
 
-        // Fetch shades dispatched to RnD but not yet in stock
+        // --- Handle sample stock creation ---
         $dispatchedShades = $prep->shadeOrders
             ->where('status', 'Dispatched to RnD')
             ->filter(fn($shade) => !SampleStock::where('reference_no', $prep->referenceNo)
@@ -550,7 +576,7 @@ class SamplePreparationRnDController extends Controller
             }
         }
 
-        // Sync reference to SampleInquiry
+        // --- Sync reference to SampleInquiry ---
         $inquiry = $prep->sampleInquiry;
         if ($inquiry) {
             $inquiry->referenceNo = $prep->referenceNo;
@@ -558,9 +584,10 @@ class SamplePreparationRnDController extends Controller
         }
 
         return back()->with('success', $isFirstTime
-            ? 'Reference No saved and Sample Stock(s) created for dispatched shades.'
-            : 'Reference No updated and new dispatched shades added to Sample Stock.');
+            ? 'Reference No(s) saved and Sample Stock(s) created for dispatched shades.'
+            : 'Reference No(s) updated and new dispatched shades added to Sample Stock.');
     }
+
 
     /**
      * Update the Developed Status and related fields, locking them as necessary.

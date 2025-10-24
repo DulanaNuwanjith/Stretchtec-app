@@ -134,6 +134,13 @@ class DashboardController extends Controller
             $rejectedSamplesCount2[] = $rejectedCount2;
         }
 
+        // Calculate total yarn price (sum of yarnPrice from all R&D records)
+        $totalYarnPrice = SamplePreparationRnD::whereNotNull('yarnPrice')->sum('yarnPrice');
+        $totalYarnPrice = number_format($totalYarnPrice, 2);
+
+        $totalYarnPriceLast30Days = SamplePreparationRnD::whereNotNull('yarnPrice')
+            ->where('created_at', '>=', now()->subDays(30))
+            ->sum('yarnPrice');
 
         return view('dashboard', compact(
             'allSamplesReceived',
@@ -156,7 +163,9 @@ class DashboardController extends Controller
             'acceptedSamplesCount2',
             'rejectedSamplesCount2',
             'ordersDelivered',
-            'ordersDeliveredWithin30Days'
+            'ordersDeliveredWithin30Days',
+            'totalYarnPrice',
+            'totalYarnPriceLast30Days'
         ));
     }
 }
