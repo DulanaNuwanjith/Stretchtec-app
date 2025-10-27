@@ -23,7 +23,7 @@ class LeftoverYarnController extends Controller
                     ->orWhere('yarn_supplier', 'like', "%$search%");
                 // Add other searchable columns here if needed
             })
-            ->paginate(10) // Adjust pagination size as needed
+            ->paginate(20) // Adjust pagination size as needed
             ->withQueryString(); // Keeps search query param on pagination links
 
         return view('sample-development.leftover-yarn-details', compact('leftoverYarns', 'search'));
