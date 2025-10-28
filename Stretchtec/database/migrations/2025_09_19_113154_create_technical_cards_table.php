@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('technical_cards', static function (Blueprint $table) {
             $table->id();
-            $table->string('reference_number')->unique();
+            $table->string('reference_number');
             $table->string('type');
             $table->string('size');
             $table->string('color');

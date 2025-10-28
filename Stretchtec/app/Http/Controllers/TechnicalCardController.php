@@ -82,7 +82,7 @@ class TechnicalCardController extends Controller
     public function createElastic(Request $request): ?RedirectResponse
     {
         $validated = $request->validate([
-            'reference_number' => 'required|string|max:255|unique:technical_cards,reference_number',
+            'reference_number' => 'required|string|max:255',
             'size' => 'nullable|string|max:100',
             'color' => 'nullable|string|max:100',
             'yarn_count' => 'nullable|string|max:100',
@@ -134,7 +134,7 @@ class TechnicalCardController extends Controller
     public function createCord(Request $request): ?RedirectResponse
     {
         $validated = $request->validate([
-            'reference_number' => 'required|string|max:255|unique:technical_cards,reference_number',
+            'reference_number' => 'required|string|max:255',
             'size' => 'nullable|string|max:100',
             'color' => 'nullable|string|max:100',
             'yarn_count' => 'nullable|string|max:100',
@@ -187,7 +187,7 @@ class TechnicalCardController extends Controller
     public function createTape(Request $request): ?RedirectResponse
     {
         $validated = $request->validate([
-            'reference_number' => 'required|string|max:255|unique:technical_cards,reference_number',
+            'reference_number' => 'required|string|max:255',
             'size' => 'nullable|string|max:100',
             'color' => 'nullable|string|max:100',
             'rubber_type' => 'nullable|string|max:100',
