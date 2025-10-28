@@ -47,6 +47,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property mixed $is_approval_card_locked
  * @property mixed $approval_card
  * @property mixed $shade
+ * @property mixed|true $isShadeSelected
  */
 class ProductCatalog extends Model
 {
