@@ -23,7 +23,7 @@ class ProductInquiryController extends Controller
      */
     public function index(): Factory|View
     {
-        $samples = ProductCatalog::all();
+        $samples = ProductCatalog::where('isShadeSelected', true)->get();
         $productInquiries = ProductInquiry::orderBy('prod_order_no', 'DESC')
         ->orderBy('po_received_date', 'DESC')
         ->paginate(10);
