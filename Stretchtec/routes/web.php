@@ -194,14 +194,21 @@ Route::middleware([
      | Mail Booking Management Routes
      |----------------------------------------------------------------------
      */
-
     Route::get('mail-booking', static function () {
         return view('production.pages.mail-booking');
     })->name('mail-booking.index');
 
-     Route::get('mail-booking-approval', static function () {
+    Route::get('mail-booking-approval', static function () {
         return view('production.pages.mail-booking-approval');
     })->name('mail-booking-approval.index');
+
+    /* ----------------------------------------------------------------------
+     | Packing Management Routes
+     |----------------------------------------------------------------------
+     */
+     Route::get('packing', static function () {
+        return view('production.pages.packing');
+    })->name('packing.index');
 
     /* ----------------------------------------------------------------------
      | Production Inquiry & Order Preparation Views
@@ -226,6 +233,18 @@ Route::middleware([
     Route::post('/stores/{id}/assign', [StoresController::class, 'assign'])->name('stores.assign');
 
     Route::get('/stock/add/{id}', [StockController::class, 'addStock'])->name('stockManagement.addStock');
+
+    Route::get('knitted', static function () {
+        return view('production.pages.knitted');
+    })->name('knitted.index');
+
+    Route::get('loom', static function () {
+        return view('production.pages.loom');
+    })->name('loom.index');
+
+    Route::get('braiding', static function () {
+        return view('production.pages.braiding');
+    })->name('braiding.index');
 
     //Technical Details Routes
     Route::get('/elasticTD', [TechnicalCardController::class, 'elasticIndex'])->name('elasticTD.index');
