@@ -189,7 +189,7 @@
                                 <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Elastic Technical
                                     Details
                                 </h1>
-                                @if (in_array(Auth::user()->role, ['PRODUCTIONOFFICER', 'SUPERADMIN', 'SAMPLEDEVELOPER']))
+                                @if (in_array(Auth::user()->role, ['PRODUCTIONOFFICER', 'SUPERADMIN', 'SAMPLEDEVELOPER', 'PRODUCTIONASSISTANT', 'PRODUCTIONKNITTED']))
                                     <button onclick="document.getElementById('addElasticModal').classList.remove('hidden')"
                                         class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded shadow">
                                         + Add New Technical Details

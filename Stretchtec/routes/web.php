@@ -341,7 +341,7 @@ Route::middleware(['auth'])->group(function () {
  */
 Route::middleware(['auth'])->group(function () {
     Route::group(['middleware' => function ($request, $next) {
-        $allowedRoles = ['PRODUCTIONOFFICER', 'ADMIN', 'SUPERADMIN'];
+        $allowedRoles = ['PRODUCTIONOFFICER', 'ADMIN', 'SUPERADMIN', 'PRODUCTIONASSISTANT', 'PRODUCTIONKNITTED', 'PRODUCTIONLOOM', 'PRODUCTIONBRAIDING'];
         if (!Auth::check() || !in_array(Auth::user()?->role ?? '', $allowedRoles, true)) {
             abort(403, 'Unauthorized access.');
         }

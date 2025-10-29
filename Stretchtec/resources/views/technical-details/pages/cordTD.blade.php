@@ -188,7 +188,7 @@
                             <div class="flex justify-between items-center mb-6">
                                 <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Cord Technical Details
                                 </h1>
-                                @if (in_array(Auth::user()->role, ['PRODUCTIONOFFICER', 'SUPERADMIN', 'SAMPLEDEVELOPER']))
+                                @if (in_array(Auth::user()->role, ['PRODUCTIONOFFICER', 'SUPERADMIN', 'SAMPLEDEVELOPER', 'PRODUCTIONBRAIDING', 'PRODUCTIONASSISTANT']))
                                     <button onclick="document.getElementById('addCordTDModal').classList.remove('hidden')"
                                         class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded shadow">
                                         + Add New Technical Details

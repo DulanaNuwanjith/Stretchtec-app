@@ -38,7 +38,7 @@
             @endif
 
             {{-- Sample Preparation Production Tab: visible to Production Officer, Admin, Superadmin --}}
-            @if (in_array($role, ['PRODUCTIONOFFICER', 'ADMIN', 'SUPERADMIN']))
+            @if (in_array($role, ['PRODUCTIONOFFICER', 'ADMIN', 'SUPERADMIN', 'PRODUCTIONKNITTED', 'PRODUCTIONLOOM', 'PRODUCTIONBRAIDING', 'PRODUCTIONASSISTANT']))
                 <a href="{{ route('sample-preparation-production.index') }}"
                    class="pb-2 px-3 font-semibold {{ request()->routeIs('sample-preparation-production.*') ? 'border-b-2 border-blue-500 text-blue-600' : 'text-gray-600' }}">
                     Sample Production Development
