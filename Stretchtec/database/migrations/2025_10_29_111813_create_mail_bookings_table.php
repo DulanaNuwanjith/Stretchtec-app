@@ -17,6 +17,7 @@ return new class extends Migration {
             $table->string('customer_name');
             $table->string('customer_coordinator');
             $table->string('merchandiser_name');
+            $table->string('email');
             $table->string('size');
             $table->string('item');
             $table->string('color');

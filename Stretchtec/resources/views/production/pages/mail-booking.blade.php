@@ -181,23 +181,6 @@
                                             Add New Mail Booking Order
                                         </h2>
 
-                                        <!-- TABS -->
-                                        <div class="mb-6">
-                                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Order
-                                                Type</label>
-                                            <div
-                                                class="flex space-x-4 mt-3 border-b border-gray-300 dark:border-gray-700">
-                                                <button type="button" onclick="setOrderType('sample')" id="tab-sample"
-                                                        class="pb-2 px-3 font-semibold">
-                                                    From Sample
-                                                </button>
-                                                <button type="button" onclick="setOrderType('direct')" id="tab-direct"
-                                                        class="pb-2 px-3 font-semibold">
-                                                    Direct Order
-                                                </button>
-                                            </div>
-                                        </div>
-
                                         <!-- Unified Form -->
                                         <form id="unifiedOrderForm"
                                               action="{{ route('production-inquery-details.store') }}"
@@ -211,13 +194,6 @@
                                             </button>
 
                                             <!-- Master Order fields -->
-                                            <div class="mt-6">
-                                                <label
-                                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">PO
-                                                    Number</label>
-                                                <input type="text" name="po_number" required
-                                                       class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                            </div>
                                             <div class="mt-3">
                                                 <label
                                                     class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer
@@ -230,6 +206,12 @@
                                                     class="block text-sm font-medium text-gray-700 dark:text-gray-300">Merchandiser
                                                     Name</label>
                                                 <input type="text" name="merchandiser_name" required
+                                                       class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                            </div>
+                                            <div class="mt-3">
+                                                <label
+                                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">Email Address</label>
+                                                <input type="email" name="email" required
                                                        class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                             </div>
                                             <div class="mt-3">
