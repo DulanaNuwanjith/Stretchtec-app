@@ -156,7 +156,7 @@
                             </div>
 
                             <div class="flex justify-between items-center mb-6">
-                                <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Mail Booking Inquiry
+                                <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Mail Booking Approval
                                     Records
                                 </h1>
                             </div>
