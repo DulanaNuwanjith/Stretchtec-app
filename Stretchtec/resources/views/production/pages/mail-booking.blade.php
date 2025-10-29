@@ -183,7 +183,7 @@
 
                                         <!-- Unified Form -->
                                         <form id="unifiedOrderForm"
-                                              action="{{ route('production-inquery-details.store') }}"
+                                              action="{{ route('mailBooking.store') }}"
                                               method="POST" enctype="multipart/form-data">
                                             @csrf
                                             <div id="itemsContainer"></div>
@@ -210,7 +210,8 @@
                                             </div>
                                             <div class="mt-3">
                                                 <label
-                                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">Email Address</label>
+                                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">Email
+                                                    Address</label>
                                                 <input type="email" name="email" required
                                                        class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                             </div>
@@ -260,7 +261,7 @@
                                     <tr class="text-center">
                                         <th
                                             class="font-bold sticky left-0 top-0 z-20 bg-white px-4 py-3 w-36 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                            Order No
+                                            Mail Booking No
                                         </th>
                                         <th
                                             class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-48 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
@@ -268,7 +269,7 @@
                                         </th>
                                         <th
                                             class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                            PO Number
+                                            Email Received
                                         </th>
                                         <th
                                             class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
@@ -322,11 +323,252 @@
                                     </thead>
 
 
+                                    <tbody id="productionDetailsRecords"
+                                           class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                                    @forelse($mailBookings as $inquiry)
+                                        <tr class="odd:bg-white even:bg-gray-50 border-b border-gray-200  text-left">
+                                            @if ($inquiry->supplier === null)
+                                                <td
+                                                    class="px-4 py-3 font-bold sticky left-0 z-10 bg-gray-100 whitespace-normal break-words border-r border-gray-300 text-blue-500">
+                                                    {{ $inquiry->mail_booking_number ?? 'N/A' }}
+                                                    <div class="text-xs font-normal text-gray-500">
+                                                        Date:
+                                                        {{ $inquiry->order_received_date ? Carbon::parse($inquiry->order_received_date)->format('Y-m-d') : '' }}
+                                                        <br>
+                                                        Time:
+                                                        {{ $inquiry->order_received_date ? Carbon::parse($inquiry->order_received_date)->format('H:i') : '' }}
+                                                    </div>
+                                                </td>
+                                            @else
+                                                <td
+                                                    class="px-4 py-3 font-bold sticky left-0 z-10 bg-gray-100 whitespace-normal break-words border-r border-gray-300">
+                                                    {{ $inquiry->mail_booking_number ?? 'N/A' }}
+                                                    <div class="text-xs font-normal text-gray-500">
+                                                        Date:
+                                                        {{ $inquiry->order_received_date ? Carbon::parse($inquiry->order_received_date)->format('Y-m-d') : '' }}
+                                                        <br>
+                                                        Time:
+                                                        {{ $inquiry->order_received_date ? Carbon::parse($inquiry->order_received_date)->format('H:i') : '' }}
+                                                    </div>
+                                                </td>
+                                            @endif
+
+                                            <!-- Reference Number -->
+                                            <td
+                                                class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
+                                                <button type="button"
+                                                        class="text-blue-600 dark:text-blue-400 font-medium hover:text-blue-800"
+                                                        onclick="openDetailsModal(this)"
+                                                        data-ref-no="{{ $inquiry->reference_no ?? '' }}"
+                                                        data-shade="{{ $inquiry->shade ?? '' }}"
+                                                        data-colour="{{ $inquiry->color ?? '' }}"
+                                                        data-item="{{ $inquiry->item ?? '' }}"
+                                                        data-tkt="{{ $inquiry->tkt ?? '' }}"
+                                                        data-size="{{ $inquiry->size ?? '' }}"
+                                                        data-supplier="{{ $inquiry->supplier ?? '' }}"
+                                                        data-pstno="{{ $inquiry->pst_no ?? '' }}"
+                                                        data-suppliercomment="{{ $inquiry->supplier_comment ?? '' }}">
+                                                    {{ $inquiry->reference_no ?? 'N/A' }}
+                                                </button>
+                                            </td>
+
+                                            <!-- Email -->
+                                            <td
+                                                class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
+                                                {{ $inquiry->email ?? 'N/A' }}</td>
+
+                                            <!-- Customer Coordinator -->
+                                            <td
+                                                class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
+                                                {{ $inquiry->customer_coordinator ?? 'N/A' }}</td>
+
+                                            <!-- Quantity -->
+                                            <td
+                                                class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
+                                                {{ $inquiry->qty ?? '0' }} {{ $inquiry->uom ?? 'N/A' }}</td>
+
+                                            <!-- Customer Name -->
+                                            <td
+                                                class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
+                                                {{ $inquiry->customer_name ?? 'N/A' }}<br><span
+                                                    class="text-xs text-gray-500">{{ $inquiry->merchandiser_name ?? 'N/A' }}</span>
+                                            </td>
+
+                                            <!-- PO Value -->
+                                            <td
+                                                class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center text-green-600 font-medium">
+                                                {{ $inquiry->price ? 'LKR  ' . number_format($inquiry->price, 2) : '0' }}
+                                                <br>
+                                                <span class="mt-2 text-xs text-blue-700 font-semibold">(Rs.
+                                                        {{ $inquiry->unitPrice }} X {{ $inquiry->qty }})</span>
+                                            </td>
+
+                                            <!-- Requested Date -->
+                                            <td
+                                                class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
+                                                {{ $inquiry->customer_req_date ?? 'N/A' }}</td>
+
+                                            <!-- Notes -->
+                                            <td
+                                                class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center text-gray-500 italic">
+                                                {{ $inquiry->remarks ?? '-' }}
+                                            </td>
+
+                                            <td
+                                                class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                                <div class="colour-match-stock flex justify-center items-center">
+                                                    @if (!$inquiry->isSentToStock && !$inquiry->canSendToProduction)
+                                                        {{-- Show button if neither is true --}}
+                                                        <form
+                                                            action="{{ route('production.sendToStore', $inquiry->id) }}"
+                                                            method="POST" onsubmit="handleSubmit(this)">
+                                                            @csrf
+                                                            <button type="submit"
+                                                                    class="px-3 py-1 text-xs rounded-lg bg-blue-100 text-blue-700 hover:bg-blue-200 mt-4 flex items-center justify-center"
+                                                                    id="sendToStoreBtn-{{ $inquiry->id }}">
+                                                                Send to Stores
+                                                            </button>
+                                                        </form>
+                                                    @elseif($inquiry->isSentToStock && $inquiry->canSendToProduction && !$inquiry->sent_to_stock_at)
+                                                        {{-- No stock available (red) --}}
+                                                        <span
+                                                            class="inline-block m-1 text-sm font-semibold text-red-700 bg-red-100 dark:bg-gray-800 px-3 py-1 rounded">
+                                                                No Stock Available
+                                                            </span>
+                                                    @elseif($inquiry->isSentToStock && !$inquiry->canSendToProduction)
+                                                        {{-- Sent to stock only (blue) --}}
+                                                        <span
+                                                            class="inline-block m-1 text-sm font-semibold text-blue-700 bg-blue-100 dark:bg-gray-800 px-3 py-1 rounded">
+                                                                Sent on <br>
+                                                                {{ Carbon::parse($inquiry->sent_to_stock_at)->format('Y-m-d') }}
+                                                                at
+                                                                {{ Carbon::parse($inquiry->sent_to_stock_at)->format('H:i') }}
+                                                            </span>
+                                                    @elseif($inquiry->isSentToStock && $inquiry->canSendToProduction)
+                                                        {{-- Both conditions true (green) --}}
+                                                        <span
+                                                            class="inline-block m-1 text-sm font-semibold text-green-700 bg-green-100 dark:bg-gray-800 px-3 py-1 rounded">
+                                                                Ready for Production <br>
+                                                                {{ Carbon::parse($inquiry->sent_to_stock_at)->format('Y-m-d') }}
+                                                                at
+                                                                {{ Carbon::parse($inquiry->sent_to_stock_at)->format('H:i') }}
+                                                            </span>
+                                                    @endif
+                                                </div>
+                                                @if ($inquiry->isSentToStock && $inquiry->canSendToProduction && $inquiry->sent_to_stock_at)
+                                                    <ul class="mt-2 text-xs text-green-700 font-semibold">
+                                                        @forelse($inquiry->stores as $store)
+                                                            <li>{{ $store->reference_no }}
+                                                                → {{ $store->qty_allocated ?? 0 }}
+                                                                {{ $store->allocated_uom ?? 'NA' }}</li>
+                                                        @empty
+                                                            <li>No allocations yet</li>
+                                                        @endforelse
+                                                    </ul>
+                                                @endif
+                                            </td>
+
+                                            <!-- Send to Production -->
+                                            <td
+                                                class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                                @if ($inquiry->canSendToProduction === 1)
+                                                    <div class="colour-match-production">
+                                                        @if ($inquiry->isSentToProduction)
+                                                            <!-- Show timestamp if already sent -->
+                                                            <span
+                                                                class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-yellow-100 dark:bg-gray-800 px-3 py-1 rounded">
+                                                                    Sent on <br>
+                                                                    {{ Carbon::parse($inquiry->sent_to_production_at)->format('Y-m-d') }}
+                                                                    at
+                                                                    {{ Carbon::parse($inquiry->sent_to_production_at)->format('H:i') }}
+                                                                </span>
+                                                        @else
+                                                            @if (Auth::user()->role === 'ADMIN')
+                                                                <!-- Admin sees read-only button -->
+                                                                <button type="button"
+                                                                        class="px-3 py-1 text-xs rounded-lg bg-gray-200 text-gray-500 cursor-not-allowed"
+                                                                        disabled>
+                                                                    Pending
+                                                                </button>
+                                                            @else
+                                                                <div class="flex justify-center items-center">
+                                                                    <!-- Form for other users -->
+                                                                    <form
+                                                                        action="{{ route('production-inquiry.sendToProduction', $inquiry->id) }}"
+                                                                        method="POST" onsubmit="handleSubmit(this)">
+                                                                        @csrf
+                                                                        @method('PATCH')
+                                                                        <button type="submit"
+                                                                                class="px-3 py-1 mt-4 text-xs rounded-lg bg-indigo-100 text-indigo-700 hover:bg-indigo-200 flex items-center justify-center"
+                                                                                id="sendToProductionBtn-{{ $inquiry->id }}">
+                                                                            Send to Production
+                                                                        </button>
+                                                                    </form>
+                                                                </div>
+                                                            @endif
+                                                        @endif
+                                                    </div>
+                                                @else
+                                                    <!-- Admin sees read-only button -->
+                                                    <button type="button"
+                                                            class="px-3 py-1 text-xs rounded-lg bg-gray-200 text-gray-500 cursor-not-allowed"
+                                                            disabled>
+                                                        Send to Production
+                                                    </button>
+                                                @endif
+                                            </td>
+
+                                            <!-- Status -->
+                                            <td
+                                                class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                                    <span
+                                                        class="inline-flex items-center px-3 py-1 text-xs font-semibold rounded-full shadow-sm
+                                                    {{ $inquiry->status === 'Completed'
+                                                        ? 'bg-green-100 text-green-700 border border-green-300'
+                                                        : ($inquiry->status === 'Pending'
+                                                            ? 'bg-yellow-100 text-yellow-700 border border-yellow-300'
+                                                            : 'bg-gray-100 text-gray-600 border border-gray-300') }}">
+                                                        {{ $inquiry->status ?? 'Pending' }}
+                                                    </span>
+                                            </td>
+
+
+                                            <!-- Customer Delivery Status -->
+                                            <td
+                                                class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center text-gray-500 italic">
+
+                                            </td>
+
+                                            <!-- Action -->
+                                            <td
+                                                class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
+                                                <form id="delete-form-{{ $inquiry->id }}" method="POST"
+                                                      action="{{ route('production-inquery-details.destroy', $inquiry->id) }}"
+                                                      class="flex justify-center">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="button"
+                                                            onclick="confirmDelete('{{ $inquiry->id }}')"
+                                                            class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg text-xs shadow-sm my-2">
+                                                        Delete
+                                                    </button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="14"
+                                                class="px-4 py-6 text-center text-gray-500 dark:text-gray-400">
+                                                No inquiries found.
+                                            </td>
+                                        </tr>
+                                    @endforelse
+                                    </tbody>
                                 </table>
                             </div>
 
                             <div class="py-6 flex justify-center">
-
+                                {{ $mailBookings->links() }}
                             </div>
 
                             <!-- Details Modal -->

@@ -4,6 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @method static orderBy(string $string, string $string1)
+ * @method static selectRaw(string $string)
+ * @method static create(array $array)
+ */
 class MailBooking extends Model
 {
     protected $fillable = [
@@ -12,6 +17,7 @@ class MailBooking extends Model
         'customer_name',
         'customer_coordinator',
         'merchandiser_name',
+        'email',
         'size',
         'item',
         'color',
