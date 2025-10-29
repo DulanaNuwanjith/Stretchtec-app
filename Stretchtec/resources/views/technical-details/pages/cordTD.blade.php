@@ -298,7 +298,7 @@
                                                     <div class="flex gap-2 justify-center items-center">
                                                         <!-- View Button -->
                                                         @if ($technicalCardCord->url)
-                                                            <a href="{{ $technicalCardCord->url ? asset('storage/' . $technicalCardCord->url) : '#' }}"
+                                                            <a href="{{ $technicalCardCord->url ? asset('' . $technicalCardCord->url) : '#' }}"
                                                                 target="_blank"
                                                                 class="inline-block px-3 py-1 rounded text-sm bg-green-600 hover:bg-green-700 text-white transition">
                                                                 View

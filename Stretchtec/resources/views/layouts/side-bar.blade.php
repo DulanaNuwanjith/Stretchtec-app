@@ -18,8 +18,8 @@
 <body class="flex h-screen bg-gray-100">
 
     @php
+        $role = auth()->user()->role;
         $userRole = Auth::user()->role;
-
         if (in_array($userRole, ['SUPERADMIN', 'ADMIN', 'CUSTOMERCOORDINATOR'])) {
             $sampleRoute = route('sample-inquery-details.index');
         } elseif ($userRole === 'SAMPLEDEVELOPER') {
