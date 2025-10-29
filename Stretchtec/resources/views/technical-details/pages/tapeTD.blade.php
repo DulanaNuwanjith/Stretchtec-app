@@ -149,8 +149,9 @@
                                                     id="selectedRef">{{ request('reference_no') ?? 'Select Reference No' }}</span>
                                                 <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20"
                                                     fill="currentColor">
-                                                    <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24
-                                                                 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
+                                                    <path fill-rule="evenodd"
+                                                        d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24
+                                                                         4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
                                                         clip-rule="evenodd" />
                                                 </svg>
                                             </button>
@@ -199,6 +200,18 @@
                             {{-- Main Table --}}
                             <div id="TapeTDRecordsScroll"
                                 class="overflow-x-auto max-h-[1200px] bg-white dark:bg-gray-900 shadow rounded-lg">
+                                <!-- Spinner -->
+                                <div id="pageLoadingSpinner"
+                                    class="fixed inset-0 z-50 bg-white bg-opacity-80 flex flex-col items-center justify-center">
+                                    <svg class="animate-spin h-10 w-10 text-blue-600" xmlns="http://www.w3.org/2000/svg"
+                                        fill="none" viewBox="0 0 24 24">
+                                        <circle class="opacity-25" cx="12" cy="12" r="10"
+                                            stroke="currentColor" stroke-width="4"></circle>
+                                        <path class="opacity-75" fill="currentColor"
+                                            d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+                                    </svg>
+                                    <p class="mt-3 text-gray-700 font-semibold">Loading data...</p>
+                                </div>
                                 <table class="table-fixed w-full text-sm divide-y divide-gray-200 dark:divide-gray-700">
                                     <thead class="bg-gray-200 dark:bg-gray-700 text-left">
                                         <tr class="text-center">
@@ -244,17 +257,13 @@
                                                     <div><span class="font-medium">Created
                                                             Date:</span>
                                                         {{ $technicalCardTape->created_at?->format('Y-m-d') ?? '-' }}</div>
-                                                    <div><span
-                                                            class="font-medium">Type:</span>
+                                                    <div><span class="font-medium">Type:</span>
                                                         {{ $technicalCardTape->type ?? '-' }}</div>
-                                                    <div><span
-                                                            class="font-medium">Size:</span>
+                                                    <div><span class="font-medium">Size:</span>
                                                         {{ $technicalCardTape->size ?? '-' }}</div>
-                                                    <div><span
-                                                            class="font-medium">Color:</span>
+                                                    <div><span class="font-medium">Color:</span>
                                                         {{ $technicalCardTape->color ?? '-' }}</div>
-                                                    <div><span
-                                                            class="font-medium">Machine:</span>
+                                                    <div><span class="font-medium">Machine:</span>
                                                         {{ $technicalCardTape->machine ?? '-' }}</div>
                                                 </td>
 
@@ -291,9 +300,11 @@
                                                     <div class="flex gap-2 justify-center items-center">
                                                         <!-- View Button -->
                                                         @if ($technicalCardTape->url)
-                                                            <a href="{{ $technicalCardTape->url }}" target="_blank"
-                                                                class="flex items-center justify-center w-20 h-9 bg-blue-500 text-white text-sm font-semibold rounded shadow hover:bg-blue-700 transition-all">
-                                                                View </a>
+                                                            <a href="{{ $technicalCardTape->url ? asset('storage/' . $technicalCardTape->url) : '#' }}"
+                                                                target="_blank"
+                                                                class="inline-block px-3 py-1 rounded text-sm bg-green-600 hover:bg-green-700 text-white transition">
+                                                                View
+                                                            </a>
                                                         @else
                                                             <span></span>
                                                         @endif
@@ -519,6 +530,20 @@
             </div>
         </div>
     </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const spinner = document.getElementById("pageLoadingSpinner");
+
+            // Show spinner immediately
+            spinner.classList.remove("hidden");
+
+            // Wait for table to render completely
+            window.requestAnimationFrame(() => {
+                spinner.classList.add("hidden"); // hide spinner after rendering
+            });
+        });
+    </script>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
