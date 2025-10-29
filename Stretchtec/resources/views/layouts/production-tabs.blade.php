@@ -29,6 +29,10 @@
                class="pb-2 px-3 font-semibold {{ request()->routeIs('production-order-preparation.*') ? 'border-b-2 border-blue-500 text-blue-600' : 'text-gray-600' }}">
                 Production Order Preparations
             </a>
+            <a href="{{ route('mail-booking-approval.index') }}"
+               class="pb-2 px-3 font-semibold {{ request()->routeIs('mail-booking-approval.*') ? 'border-b-2 border-blue-500 text-blue-600' : 'text-gray-600' }}">
+                Mail Booking Approvals
+            </a>
         </div>
 
         <!-- ✅ PAGE CONTENT -->

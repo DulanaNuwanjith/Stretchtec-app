@@ -190,9 +190,18 @@ Route::middleware([
 
     Route::get('stockAvailabilityCheck', [StockController::class, 'storeManageIndex'])->name('stockAvailabilityCheck.index');
 
+    /* ----------------------------------------------------------------------
+     | Mail Booking Management Routes
+     |----------------------------------------------------------------------
+     */
+
     Route::get('mail-booking', static function () {
         return view('production.pages.mail-booking');
     })->name('mail-booking.index');
+
+     Route::get('mail-booking-approval', static function () {
+        return view('production.pages.mail-booking-approval');
+    })->name('mail-booking-approval.index');
 
     /* ----------------------------------------------------------------------
      | Production Inquiry & Order Preparation Views

@@ -351,6 +351,7 @@ class ProductCatalogController extends Controller
 
         try {
             $catalog->shade = $request->input('final_shade');
+            $catalog->isShadeSelected = true;
             $catalog->save();
 
             return back()->with('success', 'Shade updated successfully.');
