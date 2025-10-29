@@ -301,6 +301,10 @@
                                         </th>
                                         <th
                                             class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-48 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                            Approval
+                                        </th>
+                                        <th
+                                            class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-48 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                             Send to Stores
                                         </th>
                                         <th
@@ -413,6 +417,35 @@
                                                 class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center text-gray-500 italic">
                                                 {{ $inquiry->remarks ?? '-' }}
                                             </td>
+
+                                            <td
+                                                class="px-2 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                                <div class="approval-status flex justify-center items-center">
+                                                    @if (!$inquiry->isApproved)
+                                                        {{-- Show button when not approved --}}
+                                                        <form
+                                                            action="#"
+                                                            method="POST" onsubmit="handleSubmit(this)">
+                                                            @csrf
+                                                            <button type="submit"
+                                                                    class="px-3 py-1 text-xs rounded-lg bg-red-100 text-red-700 hover:bg-red-200 mt-4 flex items-center justify-center"
+                                                                    id="sendForApprovalBtn-{{ $inquiry->id }}">
+                                                                Send for Approval
+                                                            </button>
+                                                        </form>
+                                                    @else
+                                                        {{-- Show approved info --}}
+                                                        <span
+                                                            class="inline-block m-1 text-sm font-semibold text-green-700 bg-green-100 dark:bg-gray-800 px-3 py-1 rounded">
+                                                            Approved by {{ $inquiry->approved_by ?? 'N/A' }} <br>
+                                                            {{ \Carbon\Carbon::parse($inquiry->approved_at)->format('Y-m-d') }}
+                                                            at
+                                                            {{ \Carbon\Carbon::parse($inquiry->approved_at)->format('H:i') }}
+                                                        </span>
+                                                    @endif
+                                                </div>
+                                            </td>
+
 
                                             <td
                                                 class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
