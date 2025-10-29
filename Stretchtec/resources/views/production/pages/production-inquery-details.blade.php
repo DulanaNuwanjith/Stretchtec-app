@@ -401,9 +401,9 @@
                                                 <!-- PO Value -->
                                                 <td
                                                     class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center text-green-600 font-medium">
-                                                    {{ $inquiry->price ? 'LKR  ' . number_format($inquiry->price, 2) : '0' }}
+                                                    {{ $inquiry->price ? '$  ' . number_format($inquiry->price, 2) : '0' }}
                                                     <br>
-                                                    <span class="mt-2 text-xs text-blue-700 font-semibold">(Rs.
+                                                    <span class="mt-2 text-xs text-blue-700 font-semibold">($
                                                         {{ $inquiry->unitPrice }} X {{ $inquiry->qty }})</span>
                                                 </td>
 
