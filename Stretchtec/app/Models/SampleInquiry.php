@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
+use Illuminate\Support\Facades\Log;
 
 /**
  * --------------------------------------------------------------------------
@@ -168,34 +169,44 @@ class SampleInquiry extends Model
                 !$inquiry->productCatalog &&
                 $inquiry->isDirty('referenceNo')
             ) {
-                $rnd = $inquiry->samplePreparationRnD;
+                try {
+                    $rnd = $inquiry->samplePreparationRnD;
 
-                // Ensure the RnD entry exists and requires development
-                if ($rnd && $rnd->alreadyDeveloped !== 'No Need to Develop') {
+                    if ($rnd && $rnd->alreadyDeveloped !== 'No Need to Develop') {
 
-                    // 🔹 Count existing shades for this inquiry
-                    $shadeCount = ProductCatalog::where('sample_inquiry_id', $inquiry->id)->count();
+                        // --- Shade Selection Logic ---
+                        $shade = trim($rnd->shade ?? '');
+                        if ($shade === '') {
+                            $isShadeSelected = false; // empty shade
+                        } elseif (strpos($shade, ',') !== false) {
+                            $isShadeSelected = false; // multiple shades
+                        } else {
+                            $isShadeSelected = true; // single shade
+                        }
 
-                    // 🔹 Determine if this shade should be selected
-                    $isShadeSelected = $shadeCount === 0 ? 1 : 0;
+                        ProductCatalog::create([
+                            'order_no' => $inquiry->orderNo,
+                            'reference_no' => $inquiry->referenceNo,
+                            'reference_added_date' => now(),
+                            'coordinator_name' => $inquiry->coordinatorName,
+                            'item' => $inquiry->item,
+                            'size' => $inquiry->size,
+                            'colour' => $inquiry->color,
+                            'shade' => $rnd->shade,
+                            'supplierComment' => $rnd->supplierComment,
+                            'tkt' => $rnd->tkt,
+                            'sample_inquiry_id' => $inquiry->id,
+                            'sample_preparation_rnd_id' => $rnd->id,
+                            'supplier' => $rnd->yarnSupplier,
+                            'pst_no' => $rnd->pst_no,
+                            'isShadeSelected' => $isShadeSelected,
+                        ]);
+                    }
 
-                    // 🔹 Create new Product Catalog record
-                    ProductCatalog::create([
-                        'order_no' => $inquiry->orderNo,
-                        'reference_no' => $inquiry->referenceNo,
-                        'reference_added_date' => now(),
-                        'coordinator_name' => $inquiry->coordinatorName,
-                        'item' => $inquiry->item,
-                        'size' => $inquiry->size,
-                        'colour' => $inquiry->color,
-                        'shade' => $rnd->shade,
-                        'supplierComment' => $rnd->supplierComment,
-                        'tkt' => $rnd->tkt,
-                        'sample_inquiry_id' => $inquiry->id,
-                        'sample_preparation_rnd_id' => $rnd->id,
-                        'supplier' => $rnd->yarnSupplier,
-                        'pst_no' => $rnd->pst_no,
-                        'isShadeSelected' => $isShadeSelected,
+                } catch (\Throwable $e) {
+                    Log::error('Error creating ProductCatalog: ' . $e->getMessage(), [
+                        'inquiry_id' => $inquiry->id,
+                        'referenceNo' => $inquiry->referenceNo,
                     ]);
                 }
             }
