@@ -33,17 +33,13 @@
                     </a>
                 @endif
                 @if (in_array($role, ['PRODUCTIONOFFICER', 'ADMIN', 'SUPERADMIN']))
-                    <a href="{{ route('production-order-preparation.index') }}"
-                        class="pb-2 px-3 font-semibold {{ request()->routeIs('production-order-preparation.*') ? 'border-b-2 border-blue-500 text-blue-600' : 'text-gray-600' }}">
-                        Production Order Preparations
-                    </a>
-                    <a href="{{ route('packing.index') }}"
-                        class="pb-2 px-3 font-semibold {{ request()->routeIs('packing.*') ? 'border-b-2 border-blue-500 text-blue-600' : 'text-gray-600' }}">
-                        Order Packing Details
-                    </a>
                     <a href="{{ route('mail-booking-approval.index') }}"
                         class="pb-2 px-3 font-semibold {{ request()->routeIs('mail-booking-approval.*') ? 'border-b-2 border-blue-500 text-blue-600' : 'text-gray-600' }}">
                         Mail Booking Approvals
+                    </a>
+                    <a href="{{ route('production-order-preparation.index') }}"
+                        class="pb-2 px-3 font-semibold {{ request()->routeIs('production-order-preparation.*') ? 'border-b-2 border-blue-500 text-blue-600' : 'text-gray-600' }}">
+                        Production Order Preparations
                     </a>
                     <a href="{{ route('knitted.index') }}"
                         class="pb-2 px-3 font-semibold {{ request()->routeIs('knitted.*') ? 'border-b-2 border-blue-500 text-blue-600' : 'text-gray-600' }}">
@@ -56,6 +52,10 @@
                     <a href="{{ route('braiding.index') }}"
                         class="pb-2 px-3 font-semibold {{ request()->routeIs('braiding.*') ? 'border-b-2 border-blue-500 text-blue-600' : 'text-gray-600' }}">
                         Braiding Section Orders
+                    </a>
+                    <a href="{{ route('packing.index') }}"
+                        class="pb-2 px-3 font-semibold {{ request()->routeIs('packing.*') ? 'border-b-2 border-blue-500 text-blue-600' : 'text-gray-600' }}">
+                        Order Packing Details
                     </a>
                 @endif
             </div>
