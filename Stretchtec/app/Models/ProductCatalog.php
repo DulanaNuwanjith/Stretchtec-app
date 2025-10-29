@@ -99,6 +99,7 @@ class ProductCatalog extends Model
         'is_approval_card_locked',
         'supplier',
         'pst_no',
+        'isShadeSelected'
     ];
 
     /**

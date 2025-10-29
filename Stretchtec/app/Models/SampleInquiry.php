@@ -172,6 +172,14 @@ class SampleInquiry extends Model
 
                 // Ensure the RnD entry exists and requires development
                 if ($rnd && $rnd->alreadyDeveloped !== 'No Need to Develop') {
+
+                    // 🔹 Count existing shades for this inquiry
+                    $shadeCount = ProductCatalog::where('sample_inquiry_id', $inquiry->id)->count();
+
+                    // 🔹 Determine if this shade should be selected
+                    $isShadeSelected = $shadeCount === 0 ? 1 : 0;
+
+                    // 🔹 Create new Product Catalog record
                     ProductCatalog::create([
                         'order_no' => $inquiry->orderNo,
                         'reference_no' => $inquiry->referenceNo,
@@ -180,13 +188,14 @@ class SampleInquiry extends Model
                         'item' => $inquiry->item,
                         'size' => $inquiry->size,
                         'colour' => $inquiry->color,
-                        'shade' => $rnd->shade . ',',
+                        'shade' => $rnd->shade,
                         'supplierComment' => $rnd->supplierComment,
                         'tkt' => $rnd->tkt,
                         'sample_inquiry_id' => $inquiry->id,
                         'sample_preparation_rnd_id' => $rnd->id,
                         'supplier' => $rnd->yarnSupplier,
                         'pst_no' => $rnd->pst_no,
+                        'isShadeSelected' => $isShadeSelected,
                     ]);
                 }
             }
