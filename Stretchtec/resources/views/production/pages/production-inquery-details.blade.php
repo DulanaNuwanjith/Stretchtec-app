@@ -169,7 +169,7 @@
                                 </button>
                             </div>
 
-                            <!-- Add Sample Modal -->
+                            <!-- Add Order Modal -->
                             <div id="addSampleModal"
                                 class="fixed inset-0 z-50 hidden bg-black bg-opacity-50 flex items-center justify-center py-5">
                                 <div class="w-full max-w-[900px] bg-white dark:bg-gray-900 rounded-2xl shadow-2xl p-4 transform transition-all scale-95 max-h-[calc(100vh-10rem)] overflow-y-auto"

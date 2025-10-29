@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\MailBooking;
+use App\Models\ProductCatalog;
+use App\Models\ProductInquiry;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 
 class MailBookingController extends Controller
@@ -10,9 +14,14 @@ class MailBookingController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): Factory|View
     {
-        //
+        $samples = ProductCatalog::where('isShadeSelected', true)->get();
+        $productInquiries = ProductInquiry::orderBy('prod_order_no', 'DESC')
+            ->orderBy('po_received_date', 'DESC')
+            ->paginate(10);
+
+        return view('production.pages.mail-booking', compact('samples', 'productInquiries'));
     }
 
     /**
