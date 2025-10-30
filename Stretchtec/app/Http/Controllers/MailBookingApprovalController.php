@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\MailBooking;
 use App\Models\MailBookingApproval;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -36,6 +37,13 @@ class MailBookingApprovalController extends Controller
      */
     public function store($id): RedirectResponse
     {
+        //get the related mail booking record
+        $mailBooking = MailBooking::findOrFail($id);
+
+        //Update isSentForApproval field
+        $mailBooking->isSentForApproval = true;
+        $mailBooking->save();
+
         MailBookingApproval::create([
             'mail_booking_id' => $id,
         ]);
