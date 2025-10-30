@@ -455,10 +455,10 @@
                                                                 <button type="submit"
                                                                         @if(!$inquiry->isApproved) disabled @endif
                                                                         class="px-3 py-1 text-xs rounded-lg
-                           {{ !$inquiry->isApproved
-                                ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
-                                : 'bg-blue-100 text-blue-700 hover:bg-blue-200' }}
-                           mt-4 flex items-center justify-center"
+                                                                               {{ !$inquiry->isApproved
+                                                                                    ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                                                                                    : 'bg-blue-100 text-blue-700 hover:bg-blue-200' }}
+                                                                               mt-4 flex items-center justify-center"
                                                                         id="sendToStoreBtn-{{ $inquiry->id }}">
                                                                     Send to Stores
                                                                 </button>
@@ -467,34 +467,34 @@
                                                             {{-- Show note BELOW the button --}}
                                                             @if(!$inquiry->isApproved)
                                                                 <span class="text-xs text-red-500 italic block">
-                Requires approval first
-            </span>
+                                                                    Requires approval first
+                                                                </span>
                                                             @endif
 
                                                         @elseif($inquiry->isSentToStock && $inquiry->canSendToProduction && !$inquiry->sent_to_stock_at)
                                                             {{-- No stock available (red) --}}
                                                             <span
                                                                 class="inline-block m-1 text-sm font-semibold text-red-700 bg-red-100 dark:bg-gray-800 px-3 py-1 rounded">
-            No Stock Available
-        </span>
+                                                                No Stock Available
+                                                            </span>
                                                         @elseif($inquiry->isSentToStock && !$inquiry->canSendToProduction)
                                                             {{-- Sent to stock only (blue) --}}
                                                             <span
                                                                 class="inline-block m-1 text-sm font-semibold text-blue-700 bg-blue-100 dark:bg-gray-800 px-3 py-1 rounded text-center">
-            Sent on <br>
-            {{ Carbon::parse($inquiry->sent_to_stock_at)->format('Y-m-d') }}
-            at
-            {{ Carbon::parse($inquiry->sent_to_stock_at)->format('H:i') }}
-        </span>
+                                                                Sent on <br>
+                                                                {{ Carbon::parse($inquiry->sent_to_stock_at)->format('Y-m-d') }}
+                                                                at
+                                                                {{ Carbon::parse($inquiry->sent_to_stock_at)->format('H:i') }}
+                                                            </span>
                                                         @elseif($inquiry->isSentToStock && $inquiry->canSendToProduction)
                                                             {{-- Both conditions true (green) --}}
                                                             <span
                                                                 class="inline-block m-1 text-sm font-semibold text-green-700 bg-green-100 dark:bg-gray-800 px-3 py-1 rounded text-center">
-            Ready for Production <br>
-            {{ Carbon::parse($inquiry->sent_to_stock_at)->format('Y-m-d') }}
-            at
-            {{ Carbon::parse($inquiry->sent_to_stock_at)->format('H:i') }}
-        </span>
+                                                                Ready for Production <br>
+                                                                {{ Carbon::parse($inquiry->sent_to_stock_at)->format('Y-m-d') }}
+                                                                at
+                                                                {{ Carbon::parse($inquiry->sent_to_stock_at)->format('H:i') }}
+                                                            </span>
                                                         @endif
                                                     </div>
 
