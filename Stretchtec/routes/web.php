@@ -203,7 +203,7 @@ Route::middleware([
         'destroy' => 'mailBooking.destroy',
     ]);
     Route::get('mailBookingApproval/{id}', [MailBookingApprovalController::class, 'store'])->name('mailBookingApproval.store');
-    Route::get('mailBookingApproval/approve/{id}', [MailBookingApprovalController::class, 'approve'])->name('mailBookingApproval.approve');
+    Route::post('mailBookingApproval/approve/{id}', [MailBookingApprovalController::class, 'approve'])->name('mailBookingApproval.approve');
 
     Route::get('mailBookingApproval', [MailBookingApprovalController::class, 'index'])->name('mail-booking-approval.index');
 

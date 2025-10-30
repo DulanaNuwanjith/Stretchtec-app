@@ -51,9 +51,17 @@ class MailBookingApprovalController extends Controller
         return redirect()->back()->with('success', 'Sent For approval');
     }
 
-    public function approve($id): RedirectResponse
+    public function approve(Request $request, $id): RedirectResponse
     {
+        $request->validate([
+            'remarks' => 'nullable|string|max:255',
+        ]);
+
         $mailBookingApproval = MailBookingApproval::findOrFail($id);
+
+        $mailBookingApproval->remarks = $request->input('remarks');
+        $mailBookingApproval->save();
+
         $mailBooking = $mailBookingApproval->mailBooking;
 
         // Update the mail booking approval status
@@ -68,7 +76,7 @@ class MailBookingApprovalController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(MailBookingApproval $mailBookingApproval)
+    public function show(MailBookingApproval $mailBookingApproval): void
     {
         //
     }
@@ -76,7 +84,7 @@ class MailBookingApprovalController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(MailBookingApproval $mailBookingApproval)
+    public function edit(MailBookingApproval $mailBookingApproval): void
     {
         //
     }
@@ -84,7 +92,7 @@ class MailBookingApprovalController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, MailBookingApproval $mailBookingApproval)
+    public function update(Request $request, MailBookingApproval $mailBookingApproval): void
     {
         //
     }
@@ -92,7 +100,7 @@ class MailBookingApprovalController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(MailBookingApproval $mailBookingApproval)
+    public function destroy(MailBookingApproval $mailBookingApproval): void
     {
         //
     }
