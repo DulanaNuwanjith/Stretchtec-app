@@ -43,6 +43,7 @@
 use App\Http\Controllers\ColorMatchRejectController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LeftoverYarnController;
+use App\Http\Controllers\MailBookingApprovalController;
 use App\Http\Controllers\MailBookingController;
 use App\Http\Controllers\OperatorsandSupervisorsController;
 use App\Http\Controllers\ProductCatalogController;
@@ -201,6 +202,8 @@ Route::middleware([
         'update' => 'mailBooking.update',
         'destroy' => 'mailBooking.destroy',
     ]);
+    Route::get('mailBookingApproval/{id}', [MailBookingApprovalController::class, 'store'])->name('mailBookingApproval.store');
+    Route::get('mailBookingApproval/approve/{id}', [MailBookingApprovalController::class, 'approve'])->name('mailBookingApproval.approve');
 
     Route::get('mail-booking-approval', static function () {
         return view('production.pages.mail-booking-approval');
@@ -210,7 +213,7 @@ Route::middleware([
      | Packing Management Routes
      |----------------------------------------------------------------------
      */
-     Route::get('packing', static function () {
+    Route::get('packing', static function () {
         return view('production.pages.packing');
     })->name('packing.index');
 

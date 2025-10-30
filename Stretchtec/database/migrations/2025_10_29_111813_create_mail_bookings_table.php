@@ -40,6 +40,7 @@ return new class extends Migration {
             $table->decimal('balance_qty')->nullable();
             $table->string('invoice_no')->nullable();
             $table->date('invoice_date')->nullable();
+            $table->boolean('isSentForApproval')->nullable()->default(false);
             $table->boolean('isApproved')->nullable()->default(false);
             $table->string('approved_by')->nullable();
             $table->timestamp('approved_at')->nullable();

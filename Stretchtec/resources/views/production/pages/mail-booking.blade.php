@@ -414,34 +414,42 @@
                                                 {{ $inquiry->remarks ?? '-' }}
                                             </td>
 
-                                            <td
-                                                class="px-2 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
-                                                <div class="approval-status flex justify-center items-center">
-                                                    @if (!$inquiry->isApproved)
-                                                        {{-- Show button when not approved --}}
-                                                        <form
-                                                            action="#"
-                                                            method="POST" onsubmit="handleSubmit(this)">
-                                                            @csrf
-                                                            <button type="submit"
-                                                                    class="px-3 py-1 text-xs rounded-lg bg-red-100 text-red-700 hover:bg-red-200 mt-4 flex items-center justify-center"
-                                                                    id="sendForApprovalBtn-{{ $inquiry->id }}">
-                                                                Send for Approval
-                                                            </button>
-                                                        </form>
-                                                    @else
-                                                        {{-- Show approved info --}}
-                                                        <span
-                                                            class="inline-block m-1 text-sm font-semibold text-green-700 bg-green-100 dark:bg-gray-800 px-3 py-1 rounded">
-                                                            Approved by {{ $inquiry->approved_by ?? 'N/A' }} <br>
-                                                            {{ \Carbon\Carbon::parse($inquiry->approved_at)->format('Y-m-d') }}
-                                                            at
-                                                            {{ \Carbon\Carbon::parse($inquiry->approved_at)->format('H:i') }}
-                                                        </span>
-                                                    @endif
-                                                </div>
-                                            </td>
+                                                <td class="px-2 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                                    <div class="approval-status flex flex-col justify-center items-center">
 
+                                                        {{-- Case 1: Not sent for approval yet --}}
+                                                        @if (!$inquiry->isSentForApproval && !$inquiry->isApproved)
+                                                            <form
+                                                                action="{{ route('mailBookingApproval.store', $inquiry->id) }}"
+                                                                method="GET"
+                                                                onsubmit="handleSubmit(this)">
+                                                                @csrf
+                                                                <button type="submit"
+                                                                        class="px-3 py-1 mt-2 text-xs rounded-lg bg-red-100 text-red-700 hover:bg-red-200 flex items-center justify-center"
+                                                                        id="sendForApprovalBtn-{{ $inquiry->id }}">
+                                                                    Send for Approval
+                                                                </button>
+                                                            </form>
+
+                                                            {{-- Case 2: Sent for approval but not yet approved --}}
+                                                        @elseif ($inquiry->isSentForApproval && !$inquiry->isApproved)
+                                                            <span
+                                                                class="inline-block m-1 text-sm font-semibold text-yellow-700 bg-yellow-100 dark:bg-gray-800 px-3 py-1 rounded">
+                                                                Sent for Approval
+                                                            </span>
+
+                                                            {{-- Case 3: Sent for approval and approved --}}
+                                                        @elseif ($inquiry->isSentForApproval && $inquiry->isApproved)
+                                                            <span
+                                                                class="inline-block m-1 text-sm font-semibold text-green-700 bg-green-100 dark:bg-gray-800 px-3 py-1 rounded">
+                                                                Approved by {{ $inquiry->approved_by ?? 'N/A' }} <br>
+                                                                {{ \Carbon\Carbon::parse($inquiry->approved_at)->format('Y-m-d') }}
+                                                                at
+                                                                {{ \Carbon\Carbon::parse($inquiry->approved_at)->format('H:i') }}
+                                                            </span>
+                                                        @endif
+                                                    </div>
+                                                </td>
 
                                                 <td
                                                     class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
