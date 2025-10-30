@@ -263,8 +263,27 @@
                                                 class="px-4 py-3 text-gray-800 dark:text-gray-100 whitespace-normal break-words">
                                                 {{ $approval->mailBooking->status }}
                                             </td>
-                                            <td>
-
+                                            <td class="px-4 py-3 text-center">
+                                                @if (!$approval->mailBooking->isApproved)
+                                                    {{-- Show Approve button when not yet approved --}}
+                                                    <form
+                                                        action="{{ route('mailBookingApproval.approve', $approval->id) }}"
+                                                        method="GET" onsubmit="handleSubmit(this)">
+                                                        @csrf
+                                                        <button type="submit"
+                                                                class="px-3 py-1 mt-2 text-xs rounded-lg bg-green-100 text-green-700 hover:bg-green-200 flex items-center justify-center"
+                                                                id="approveBtn-{{ $approval->id }}">
+                                                            Approve
+                                                        </button>
+                                                    </form>
+                                                @else
+                                                    {{-- Show Approved banner when already approved --}}
+                                                    <span
+                                                        class="inline-block m-1 text-sm font-semibold text-green-700 bg-green-100 dark:bg-gray-800 px-3 py-1 rounded">
+                                                        Approved on {{ \Carbon\Carbon::parse($approval->mailBooking->approved_at)->format('Y-m-d') }}
+                                                        at {{ \Carbon\Carbon::parse($approval->mailBooking->approved_at)->format('H:i') }}
+                                                    </span>
+                                                @endif
                                             </td>
                                         </tr>
                                     @endforeach
@@ -288,6 +307,26 @@
     function toggleFilterForm() {
         const form = document.getElementById('filterFormContainer');
         form.classList.toggle('hidden');
+    }
+</script>
+
+<script>
+    function handleSubmit(form) {
+        let btn = form.querySelector("button[type='submit']");
+        btn.disabled = true;
+
+        // Replace button content with loading spinner
+        btn.innerHTML = `
+            <svg class="animate-spin h-4 w-4 mr-2 text-indigo-700" xmlns="http://www.w3.org/2000/svg" fill="none"
+                 viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor"
+                      d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+            </svg>
+            Processing...
+        `;
+
+        return true; // allow form to submit
     }
 </script>
 @endsection

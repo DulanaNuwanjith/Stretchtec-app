@@ -22,4 +22,5 @@ class MailBookingApproval extends Model
     {
         return $this->belongsTo(MailBooking::class);
     }
+
 }

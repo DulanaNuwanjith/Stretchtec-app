@@ -442,7 +442,7 @@
                                                         @elseif ($inquiry->isSentForApproval && $inquiry->isApproved)
                                                             <span
                                                                 class="inline-block m-1 text-sm font-semibold text-green-700 bg-green-100 dark:bg-gray-800 px-3 py-1 rounded">
-                                                                Approved by {{ $inquiry->approved_by ?? 'N/A' }} <br>
+                                                                Approved by {{ $inquiry->approvedBy?->name ?? 'N/A' }} <br>
                                                                 {{ \Carbon\Carbon::parse($inquiry->approved_at)->format('Y-m-d') }}
                                                                 at
                                                                 {{ \Carbon\Carbon::parse($inquiry->approved_at)->format('H:i') }}
