@@ -65,49 +65,49 @@
                             <script>
                                 document.addEventListener('DOMContentLoaded', () => {
                                     @if (session('success'))
-                                        Swal.fire({
-                                            toast: true,
-                                            position: 'top-end',
-                                            icon: 'success',
-                                            title: '{{ session('success') }}',
-                                            showConfirmButton: false,
-                                            timer: 2000,
-                                            timerProgressBar: true,
-                                            customClass: {
-                                                popup: 'swal2-toast swal2-shadow'
-                                            },
-                                        });
+                                    Swal.fire({
+                                        toast: true,
+                                        position: 'top-end',
+                                        icon: 'success',
+                                        title: '{{ session('success') }}',
+                                        showConfirmButton: false,
+                                        timer: 2000,
+                                        timerProgressBar: true,
+                                        customClass: {
+                                            popup: 'swal2-toast swal2-shadow'
+                                        },
+                                    });
                                     @endif
 
                                     @if (session('error'))
-                                        Swal.fire({
-                                            toast: true,
-                                            position: 'top-end',
-                                            icon: 'error',
-                                            title: '{{ session('error') }}',
-                                            showConfirmButton: false,
-                                            timer: 2000,
-                                            timerProgressBar: true,
-                                            customClass: {
-                                                popup: 'swal2-toast swal2-shadow'
-                                            },
-                                        });
+                                    Swal.fire({
+                                        toast: true,
+                                        position: 'top-end',
+                                        icon: 'error',
+                                        title: '{{ session('error') }}',
+                                        showConfirmButton: false,
+                                        timer: 2000,
+                                        timerProgressBar: true,
+                                        customClass: {
+                                            popup: 'swal2-toast swal2-shadow'
+                                        },
+                                    });
                                     @endif
 
                                     @if ($errors->any())
-                                        Swal.fire({
-                                            toast: true,
-                                            position: 'top-end',
-                                            icon: 'warning',
-                                            title: 'Validation Errors',
-                                            html: `{!! implode('<br>', $errors->all()) !!}`,
-                                            showConfirmButton: false,
-                                            timer: 3000,
-                                            timerProgressBar: true,
-                                            customClass: {
-                                                popup: 'swal2-toast swal2-shadow'
-                                            },
-                                        });
+                                    Swal.fire({
+                                        toast: true,
+                                        position: 'top-end',
+                                        icon: 'warning',
+                                        title: 'Validation Errors',
+                                        html: `{!! implode('<br>', $errors->all()) !!}`,
+                                        showConfirmButton: false,
+                                        timer: 3000,
+                                        timerProgressBar: true,
+                                        customClass: {
+                                            popup: 'swal2-toast swal2-shadow'
+                                        },
+                                    });
                                     @endif
                                 });
                             </script>
@@ -138,7 +138,7 @@
                             {{-- Filters --}}
                             <div class="flex justify-start">
                                 <button onclick="toggleFilterForm()"
-                                    class="bg-white border border-blue-500 text-blue-500 hover:text-blue-600 hover:border-blue-600 font-semibold py-1 px-3 rounded shadow flex items-center gap-2 mb-6">
+                                        class="bg-white border border-blue-500 text-blue-500 hover:text-blue-600 hover:border-blue-600 font-semibold py-1 px-3 rounded shadow flex items-center gap-2 mb-6">
                                     <img src="{{ asset('icons/filter.png') }}" class="w-6 h-6" alt="Filter Icon">
                                     Filters
                                 </button>
@@ -147,7 +147,7 @@
                             <div id="filterFormContainer" class="hidden mt-4">
                                 <!-- Filter Form -->
                                 <form id="filterForm1" method="GET" action="{{ route('sample-inquery-details.index') }}"
-                                    class="mb-6 sticky top-0 z-40 flex gap-6 items-center">
+                                      class="mb-6 sticky top-0 z-40 flex gap-6 items-center">
                                     <div class="flex items-center gap-4 flex-wrap">
 
 
@@ -162,89 +162,132 @@
                             </div>
 
                             <div id="productionDetailsScroll"
-                                class="overflow-x-auto max-h-[1200px] bg-white dark:bg-gray-900 shadow rounded-lg">
+                                 class="overflow-x-auto max-h-[1200px] bg-white dark:bg-gray-900 shadow rounded-lg">
                                 <table class="table-fixed w-full text-sm divide-y divide-gray-200 dark:divide-gray-700">
                                     <thead class="bg-gray-200 dark:bg-gray-700 text-left">
-                                        <tr class="text-center">
-                                            <th
-                                                class="font-bold sticky left-0 top-0 z-20 bg-white px-4 py-3 w-36 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                                Order No
-                                            </th>
-                                            <th
-                                                class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-48 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                                Reference Number
-                                            </th>
-                                            <th
-                                                class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                                PO Number
-                                            </th>
-                                            <th
-                                                class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                                Customer Coordinator
-                                            </th>
-                                            <th
-                                                class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                                Quantity
-                                            </th>
-                                            <th
-                                                class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                                Customer Name
-                                            </th>
-                                            <th
-                                                class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                                Customer Merchandiser
-                                            </th>
-                                            <th
-                                                class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                                PO Value
-                                            </th>
-                                            <th
-                                                class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                                Requested Date
-                                            </th>
-                                            <th
-                                                class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                                Notes
-                                            </th>
-                                            <th
-                                                class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-48 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                                Send to Stores
-                                            </th>
-                                            <th
-                                                class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-48 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                                Send to Production
-                                            </th>
-                                            <th
-                                                class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                                Status
-                                            </th>
-                                            <th
-                                                class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                                Customer Delivery Status
-                                            </th>
-                                            <th
-                                                class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                                Action
-                                            </th>
-                                        </tr>
+                                    <tr class="text-center">
+                                        <th
+                                            class="font-bold sticky left-0 top-0 z-20 bg-white px-4 py-3 w-36 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                            Order No
+                                        </th>
+                                        <th
+                                            class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-48 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                            Reference Number
+                                        </th>
+                                        <th
+                                            class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                            Received Email
+                                        </th>
+                                        <th
+                                            class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                            Customer Coordinator
+                                        </th>
+                                        <th
+                                            class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                            Quantity
+                                        </th>
+                                        <th
+                                            class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                            Customer Name
+                                        </th>
+                                        <th
+                                            class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                            Customer Merchandiser
+                                        </th>
+                                        <th
+                                            class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                            PO Value
+                                        </th>
+                                        <th
+                                            class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                            Requested Date
+                                        </th>
+                                        <th
+                                            class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                            Notes
+                                        </th>
+                                        <th
+                                            class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                            Status
+                                        </th>
+                                        <th
+                                            class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                            Action
+                                        </th>
+                                    </tr>
                                     </thead>
+                                    <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+                                    @foreach ($mailBookingApprovals as $approval)
+                                        <tr class="text-center hover:bg-gray-100 dark:hover:bg-gray-700">
+                                            <td
+                                                class="sticky left-0 bg-white dark:bg-gray-900 px-4 py-3 text-gray-800 dark:text-gray-100 whitespace-normal break-words">
+                                                {{ $approval->mailBooking->mail_booking_number }}
+                                            </td>
+                                            <td
+                                                class="px-4 py-3 text-gray-800 dark:text-gray-100 whitespace-normal break-words">
+                                                {{ $approval->mailBooking->reference_no ?? 'N/A' }}
+                                            </td>
+                                            <td
+                                                class="px-4 py-3 text-gray-800 dark:text-gray-100 whitespace-normal break-words">
+                                                {{ $approval->mailBooking->email }}
+                                            </td>
+                                            <td
+                                                class="px-4 py-3 text-gray-800 dark:text-gray-100 whitespace-normal break-words">
+                                                {{ $approval->mailBooking->customer_coordinator }}
+                                            </td>
+                                            <td
+                                                class="px-4 py-3 text-gray-800 dark:text-gray-100 whitespace-normal break-words">
+                                                {{ $approval->mailBooking->qty }}
+                                            </td>
+                                            <td
+                                                class="px-4 py-3 text-gray-800 dark:text-gray-100 whitespace-normal break-words">
+                                                {{ $approval->mailBooking->customer_name }}
+                                            </td>
+                                            <td
+                                                class="px-4 py-3 text-gray-800 dark:text-gray-100 whitespace-normal break-words">
+                                                {{ $approval->mailBooking->merchandiser_name }}
+                                            </td>
+                                            <td
+                                                class="px-4 py-3 text-gray-800 dark:text-gray-100 whitespace-normal break-words">
+                                                {{ $approval->mailBooking->price }}
+                                            </td>
+                                            <td
+                                                class="px-4 py-3 text-gray-800 dark:text-gray-100 whitespace-normal break-words">
+                                                {{ $approval->mailBooking->customer_req_date ? Carbon::parse($approval->customer_req_date)->format('d M Y') : '' }}
+                                            </td>
+                                            <td
+                                                class="px-4 py-3 text-gray-800 dark:text-gray-100 whitespace-normal break-words">
+                                                {{ $approval->mailBooking->supplier_comment }}
+                                            </td>
+                                            <td
+                                                class="px-4 py-3 text-gray-800 dark:text-gray-100 whitespace-normal break-words">
+                                                {{ $approval->mailBooking->status }}
+                                            </td>
+                                            <td>
+
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                    </tbody>
                                 </table>
                             </div>
 
                             <div class="py-6 flex justify-center">
-
+                                <div>
+                                    {{ $mailBookingApprovals->links() }}
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+</div>
 
-    <script>
-        function toggleFilterForm() {
-            const form = document.getElementById('filterFormContainer');
-            form.classList.toggle('hidden');
-        }
-    </script>
+<script>
+    function toggleFilterForm() {
+        const form = document.getElementById('filterFormContainer');
+        form.classList.toggle('hidden');
+    }
+</script>
 @endsection

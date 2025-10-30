@@ -18,7 +18,7 @@ class MailBookingApprovalController extends Controller
         // Fetch approvals with their related mail booking details
         $mailBookingApprovals = MailBookingApproval::with('mailBooking')
             ->orderBy('created_at', 'DESC')
-            ->get();
+            ->paginate(10);
 
         return view('production.pages.mail-booking-approval', compact('mailBookingApprovals'));
     }

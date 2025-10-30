@@ -205,9 +205,7 @@ Route::middleware([
     Route::get('mailBookingApproval/{id}', [MailBookingApprovalController::class, 'store'])->name('mailBookingApproval.store');
     Route::get('mailBookingApproval/approve/{id}', [MailBookingApprovalController::class, 'approve'])->name('mailBookingApproval.approve');
 
-    Route::get('mail-booking-approval', static function () {
-        return view('production.pages.mail-booking-approval');
-    })->name('mail-booking-approval.index');
+    Route::get('mailBookingApproval', [MailBookingApprovalController::class, 'index'])->name('mail-booking-approval.index');
 
     /* ----------------------------------------------------------------------
      | Packing Management Routes
