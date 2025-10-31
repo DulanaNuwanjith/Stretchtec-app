@@ -1727,9 +1727,11 @@
                                                                                         <span
                                                                                             class="block mb-1"><strong>Shade:</strong>
                                                                                             {{ $shade->shade }}</span>
-                                                                                        <span class="block mb-1"><strong>PST
-                                                                                                No:</strong>
-                                                                                            {{ $shade->pst_no }}</span>
+                                                                                        @if(!empty($shade->pst_no))
+                                                                                            <span class="block mb-1"><strong>PST
+                                                                                                    No:</strong>
+                                                                                                {{ $shade->pst_no }}</span>
+                                                                                        @endif
                                                                                         <span
                                                                                             class="block"><strong>Status:</strong>
                                                                                             {{ $shade->status }}</span>

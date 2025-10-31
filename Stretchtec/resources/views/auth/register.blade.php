@@ -32,6 +32,10 @@
                     <option value="CUSTOMERCOORDINATOR">Customer Coordinator</option>
                     <option value="SAMPLEDEVELOPER">Sample Developers</option>
                     <option value="PRODUCTIONOFFICER">Production Officer</option>
+                    <option value="PRODUCTIONASSISTANT">Production Assistant</option>
+                    <option value="PRODUCTIONKNITTED">Production Knitted</option>
+                    <option value="PRODUCTIONLOOM">Production Loom</option>
+                    <option value="PRODUCTIONBRAIDING">Production Braiding</option>
                 </select>
             </div>
 

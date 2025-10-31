@@ -189,7 +189,7 @@
                                 <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Twill Tape Technical
                                     Details
                                 </h1>
-                                @if (in_array(Auth::user()->role, ['PRODUCTIONOFFICER', 'SUPERADMIN', 'SAMPLEDEVELOPER']))
+                                @if (in_array(Auth::user()->role, ['PRODUCTIONOFFICER', 'SUPERADMIN', 'SAMPLEDEVELOPER', 'PRODUCTIONLOOM', 'PRODUCTIONASSISTANT']))
                                     <button onclick="document.getElementById('addTapeTDModal').classList.remove('hidden')"
                                         class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded shadow">
                                         + Add New Technical Details
@@ -300,7 +300,7 @@
                                                     <div class="flex gap-2 justify-center items-center">
                                                         <!-- View Button -->
                                                         @if ($technicalCardTape->url)
-                                                            <a href="{{ $technicalCardTape->url ? asset('storage/' . $technicalCardTape->url) : '#' }}"
+                                                            <a href="{{ $technicalCardTape->url ? asset('' . $technicalCardTape->url) : '#' }}"
                                                                 target="_blank"
                                                                 class="inline-block px-3 py-1 rounded text-sm bg-green-600 hover:bg-green-700 text-white transition">
                                                                 View

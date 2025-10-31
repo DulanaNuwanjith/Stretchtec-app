@@ -450,10 +450,17 @@
 
                                                     @php
                                                         $shadeList = preg_split('/[\,\/]/', $catalog->shade);
+                                                        $userRole = Auth::user()->role;
+                                                        $allowedRoles = [
+                                                            'SAMPLEDEVELOPER',
+                                                            'CUSTOMERCOORDINATOR',
+                                                            'SUPERADMIN',
+                                                        ];
                                                     @endphp
 
-                                                    @if (count($shadeList) > 1)
-                                                        {{-- Multiple shades: show button --}}
+                                                    {{-- Check role and shade count --}}
+                                                    @if (count($shadeList) > 1 && in_array($userRole, $allowedRoles))
+                                                        {{-- Multiple shades: show selection button --}}
                                                         <button type="button" @click="open = true"
                                                             class="px-2 py-1 rounded bg-gray-300 text-black hover:bg-gray-400 text-sm">
                                                             Select Shade
@@ -467,22 +474,19 @@
                                                                 class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 w-full max-w-sm relative">
                                                                 {{-- Close button --}}
                                                                 <button @click="open = false"
-                                                                    class="absolute top-2 right-2 text-gray-600 hover:text-gray-900">
-                                                                    ✕
-                                                                </button>
+                                                                    class="absolute top-2 right-2 text-gray-600 hover:text-gray-900">✕</button>
 
                                                                 <h2
                                                                     class="text-lg font-semibold text-gray-800 dark:text-white mb-4">
-                                                                    Select Shade</h2>
+                                                                    Select Shade
+                                                                </h2>
 
                                                                 <form
                                                                     action="{{ route('productCatalog.updateShade', $catalog->id) }}"
-                                                                    method="POST"
-                                                                    @submit.prevent="$refs.finalShade.value = selectedShade + (optionText ? ' - ' + optionText : ''); $el.submit();">
+                                                                    method="POST">
                                                                     @csrf
                                                                     @method('PATCH')
 
-                                                                    {{-- Shade radio buttons --}}
                                                                     <div class="space-y-3">
                                                                         @foreach ($shadeList as $shadeOption)
                                                                             <label class="flex items-center gap-2">
@@ -495,7 +499,6 @@
                                                                         @endforeach
                                                                     </div>
 
-                                                                    {{-- Input field only when a shade is selected --}}
                                                                     <template x-if="selectedShade">
                                                                         <div class="mt-3">
                                                                             <label
@@ -504,6 +507,7 @@
                                                                                     x-text="selectedShade"></span>
                                                                             </label>
                                                                             <input type="text" x-model="optionText"
+                                                                                name="option_text"
                                                                                 placeholder="e.g., Option A"
                                                                                 class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:ring focus:ring-blue-200">
                                                                         </div>
@@ -515,20 +519,19 @@
                                                                             Cancel
                                                                         </button>
                                                                         <button type="submit"
-                                                                            class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+                                                                            class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                                                                            @click="$refs.finalShade.value = selectedShade + ' - ' + optionText">
                                                                             Save
                                                                         </button>
                                                                     </div>
 
-                                                                    {{-- Hidden input to hold final value --}}
                                                                     <input type="hidden" name="final_shade"
                                                                         x-ref="finalShade">
                                                                 </form>
-
                                                             </div>
                                                         </div>
                                                     @else
-                                                        {{-- Single shade: show as readonly --}}
+                                                        {{-- Read-only display (single shade OR unauthorized role) --}}
                                                         <span class="readonly">{{ $catalog->shade }}</span>
                                                     @endif
                                                 </td>

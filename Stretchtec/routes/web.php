@@ -43,6 +43,8 @@
 use App\Http\Controllers\ColorMatchRejectController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LeftoverYarnController;
+use App\Http\Controllers\MailBookingApprovalController;
+use App\Http\Controllers\MailBookingController;
 use App\Http\Controllers\OperatorsandSupervisorsController;
 use App\Http\Controllers\ProductCatalogController;
 use App\Http\Controllers\ProductInquiryController;
@@ -194,14 +196,24 @@ Route::middleware([
      | Mail Booking Management Routes
      |----------------------------------------------------------------------
      */
+    Route::resource('mailBookingManagement', MailBookingController::class)->names([
+        'index' => 'mailBooking.index',
+        'store' => 'mailBooking.store',
+        'update' => 'mailBooking.update',
+        'destroy' => 'mailBooking.destroy',
+    ]);
+    Route::get('mailBookingApproval/{id}', [MailBookingApprovalController::class, 'store'])->name('mailBookingApproval.store');
+    Route::post('mailBookingApproval/approve/{id}', [MailBookingApprovalController::class, 'approve'])->name('mailBookingApproval.approve');
 
-    Route::get('mail-booking', static function () {
-        return view('production.pages.mail-booking');
-    })->name('mail-booking.index');
+    Route::get('mailBookingApproval', [MailBookingApprovalController::class, 'index'])->name('mail-booking-approval.index');
 
-     Route::get('mail-booking-approval', static function () {
-        return view('production.pages.mail-booking-approval');
-    })->name('mail-booking-approval.index');
+    /* ----------------------------------------------------------------------
+     | Packing Management Routes
+     |----------------------------------------------------------------------
+     */
+    Route::get('packing', static function () {
+        return view('production.pages.packing');
+    })->name('packing.index');
 
     /* ----------------------------------------------------------------------
      | Production Inquiry & Order Preparation Views
@@ -226,6 +238,18 @@ Route::middleware([
     Route::post('/stores/{id}/assign', [StoresController::class, 'assign'])->name('stores.assign');
 
     Route::get('/stock/add/{id}', [StockController::class, 'addStock'])->name('stockManagement.addStock');
+
+    Route::get('knitted', static function () {
+        return view('production.pages.knitted');
+    })->name('knitted.index');
+
+    Route::get('loom', static function () {
+        return view('production.pages.loom');
+    })->name('loom.index');
+
+    Route::get('braiding', static function () {
+        return view('production.pages.braiding');
+    })->name('braiding.index');
 
     //Technical Details Routes
     Route::get('/elasticTD', [TechnicalCardController::class, 'elasticIndex'])->name('elasticTD.index');
@@ -322,7 +346,7 @@ Route::middleware(['auth'])->group(function () {
  */
 Route::middleware(['auth'])->group(function () {
     Route::group(['middleware' => function ($request, $next) {
-        $allowedRoles = ['PRODUCTIONOFFICER', 'ADMIN', 'SUPERADMIN'];
+        $allowedRoles = ['PRODUCTIONOFFICER', 'ADMIN', 'SUPERADMIN', 'PRODUCTIONASSISTANT', 'PRODUCTIONKNITTED', 'PRODUCTIONLOOM', 'PRODUCTIONBRAIDING'];
         if (!Auth::check() || !in_array(Auth::user()?->role ?? '', $allowedRoles, true)) {
             abort(403, 'Unauthorized access.');
         }
