@@ -192,6 +192,20 @@ Route::middleware([
 
     Route::get('stockAvailabilityCheck', [StockController::class, 'storeManageIndex'])->name('stockAvailabilityCheck.index');
 
+    Route::get('rawMaterial', static function () {
+        return view('store-management.pages.rawMaterial');
+    })->name('rawMaterial.index');
+
+    /* ----------------------------------------------------------------------
+     | Purchasing Department Management Routes
+     |----------------------------------------------------------------------
+     */
+
+    Route::get('purchasing', static function () {
+        return view('purchasingDepartment.purchasing');
+    })->name('purchasing.index');
+
+
     /* ----------------------------------------------------------------------
      | Mail Booking Management Routes
      |----------------------------------------------------------------------

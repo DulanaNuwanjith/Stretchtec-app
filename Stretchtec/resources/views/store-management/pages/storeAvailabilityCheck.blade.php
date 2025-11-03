@@ -304,17 +304,18 @@
                 </table>
                 {{ $stores->links() }}
             </div>
-            <script>
-                document.addEventListener("DOMContentLoaded", function() {
-                    const spinner = document.getElementById("pageLoadingSpinner");
+        </div>
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const spinner = document.getElementById("pageLoadingSpinner");
 
-                    // Show spinner immediately
-                    spinner.classList.remove("hidden");
+                // Show spinner immediately
+                spinner.classList.remove("hidden");
 
-                    // Wait for table to render completely
-                    window.requestAnimationFrame(() => {
-                        spinner.classList.add("hidden"); // hide spinner after rendering
-                    });
+                // Wait for table to render completely
+                window.requestAnimationFrame(() => {
+                    spinner.classList.add("hidden"); // hide spinner after rendering
                 });
-            </script>
-        @endsection
+            });
+        </script>
+    @endsection
