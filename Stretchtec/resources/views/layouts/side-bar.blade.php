@@ -130,10 +130,19 @@
                     </li>
 
                     <li>
+                        <a href="{{ route('purchasing.index') }}"
+                            class="flex items-center px-4 py-2 rounded hover:bg-gray-200
+                      {{ request()->routeIs('purchasing.*') ? 'bg-gray-200' : '' }}">
+                            <img src="{{ asset('icons/purchasing.png') }}" alt="" class="w-6 h-6 mr-5" />
+                            <span x-show="initialized && !collapsed">Purchasing Department</span>
+                        </a>
+                    </li>
+
+                    <li>
                         <a href="{{ route('stockAvailabilityCheck.index') }}"
                             class="flex items-center px-4 py-2 rounded hover:bg-gray-200
                       {{ request()->routeIs('stockManagement.*', 'stockAvailabilityCheck.*') ? 'bg-gray-200' : '' }}">
-                            <img src="{{ asset('icons/inventory.png') }}" alt="" class="w-6 h-6 mr-5" />
+                            <img src="{{ asset('icons/stores.png') }}" alt="" class="w-6 h-6 mr-5" />
                             <span x-show="initialized && !collapsed">Store Management</span>
                         </a>
                     </li>

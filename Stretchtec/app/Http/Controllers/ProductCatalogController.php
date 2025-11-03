@@ -141,7 +141,12 @@ class ProductCatalogController extends Controller
             'pst_no' => 'nullable|string|max:255',
         ]);
 
-        ProductCatalog::create($request->all());
+
+        // Merge an additional field before creating the record
+        $data = $request->all();
+        $data['isShadeSelected'] = true;
+
+        ProductCatalog::create($data);
 
         return redirect()->route('product-catalog.index')->with('success', 'Catalog entry created.');
     }
@@ -166,6 +171,7 @@ class ProductCatalogController extends Controller
 
         $data = $request->all();
         $data['item'] = 'Elastic'; // force item
+        $data['isShadeSelected'] = true;
 
         ProductCatalog::create($data);
 
@@ -192,6 +198,7 @@ class ProductCatalogController extends Controller
 
         $data = $request->all();
         $data['item'] = 'Cord'; // force item
+        $data['isShadeSelected'] = true;
 
         ProductCatalog::create($data);
 
@@ -218,6 +225,7 @@ class ProductCatalogController extends Controller
 
         $data = $request->all();
         $data['item'] = 'Twill Tape'; // force item
+        $data['isShadeSelected'] = true;
 
         ProductCatalog::create($data);
 
