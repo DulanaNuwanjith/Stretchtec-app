@@ -196,6 +196,10 @@ Route::middleware([
         return view('store-management.pages.rawMaterial');
     })->name('rawMaterial.index');
 
+    Route::get('orderRawMaterial', static function () {
+        return view('store-management.pages.orderRawMaterial');
+    })->name('orderRawMaterial.index');
+
     /* ----------------------------------------------------------------------
      | Purchasing Department Management Routes
      |----------------------------------------------------------------------
