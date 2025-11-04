@@ -211,7 +211,7 @@
                                             Status
                                         </th>
                                         <th
-                                            class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                            class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-48 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                             Action
                                         </th>
                                     </tr>
@@ -224,43 +224,43 @@
                                                 {{ $approval->mailBooking->mail_booking_number }}
                                             </td>
                                             <td
-                                                class="px-4 py-3 text-gray-800 dark:text-gray-100 whitespace-normal break-words border-r">
+                                                class="px-4 py-3 text-gray-800 dark:text-gray-100 whitespace-normal break-words border-r text-center">
                                                 {{ $approval->mailBooking->reference_no ?? 'N/A' }}
                                             </td>
                                             <td
-                                                class="px-4 py-3 text-gray-800 dark:text-gray-100 whitespace-normal break-words border-r">
+                                                class="px-4 py-3 text-gray-800 dark:text-gray-100 whitespace-normal break-words border-r text-center">
                                                 {{ $approval->mailBooking->email }}
                                             </td>
                                             <td
-                                                class="px-4 py-3 text-gray-800 dark:text-gray-100 whitespace-normal break-words border-r">
+                                                class="px-4 py-3 text-gray-800 dark:text-gray-100 whitespace-normal break-words border-r text-center">
                                                 {{ $approval->mailBooking->customer_coordinator }}
                                             </td>
                                             <td
-                                                class="px-4 py-3 text-gray-800 dark:text-gray-100 whitespace-normal break-words border-r">
+                                                class="px-4 py-3 text-gray-800 dark:text-gray-100 whitespace-normal break-words border-r text-center">
                                                 {{ $approval->mailBooking->qty }}
                                             </td>
                                             <td
-                                                class="px-4 py-3 text-gray-800 dark:text-gray-100 whitespace-normal break-words border-r">
+                                                class="px-4 py-3 text-gray-800 dark:text-gray-100 whitespace-normal break-words border-r text-center">
                                                 {{ $approval->mailBooking->customer_name }}
                                             </td>
                                             <td
-                                                class="px-4 py-3 text-gray-800 dark:text-gray-100 whitespace-normal break-words border-r">
+                                                class="px-4 py-3 text-gray-800 dark:text-gray-100 whitespace-normal break-words border-r text-center">
                                                 {{ $approval->mailBooking->merchandiser_name }}
                                             </td>
                                             <td
-                                                class="px-4 py-3 text-gray-800 dark:text-gray-100 whitespace-normal break-words border-r">
+                                                class="px-4 py-3 text-gray-800 dark:text-gray-100 whitespace-normal break-words border-r text-center">
                                                 {{ $approval->mailBooking->price }}
                                             </td>
                                             <td
-                                                class="px-4 py-3 text-gray-800 dark:text-gray-100 whitespace-normal break-words border-r">
+                                                class="px-4 py-3 text-gray-800 dark:text-gray-100 whitespace-normal break-words border-r text-center">
                                                 {{ $approval->mailBooking->customer_req_date ? Carbon::parse($approval->customer_req_date)->format('d M Y') : '' }}
                                             </td>
                                             <td
-                                                class="px-4 py-3 text-gray-800 dark:text-gray-100 whitespace-normal break-words border-r">
+                                                class="px-4 py-3 text-gray-800 dark:text-gray-100 whitespace-normal break-words border-r text-center">
                                                 {{ $approval->mailBooking->remarks }}
                                             </td>
                                             <td
-                                                class="px-4 py-3 text-gray-800 dark:text-gray-100 whitespace-normal break-words border-r">
+                                                class="px-4 py-3 text-gray-800 dark:text-gray-100 whitespace-normal break-words border-r text-center">
                                                 {{ $approval->mailBooking->status }}
                                             </td>
                                             <td class="px-4 py-3">
