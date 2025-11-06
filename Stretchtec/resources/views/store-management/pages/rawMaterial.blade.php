@@ -317,6 +317,17 @@
                             </tr>
                         @endforeach
                     </tbody>
+
+                    <!-- Pagination Footer -->
+                    <tfoot class="bg-gray-200 dark:bg-gray-700">
+                        <tr>
+                            <td colspan="9" class="px-4 py-3">
+                                <div class="flex justify-end">
+                                    {{ $rawMaterials->links() }}
+                                </div>
+                            </td>
+                        </tr>
+                    </tfoot>
                 </table>
 
             </div>
