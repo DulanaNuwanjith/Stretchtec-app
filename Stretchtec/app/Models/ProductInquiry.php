@@ -58,5 +58,10 @@ class ProductInquiry extends Model
         return $this->hasMany(Stores::class, 'order_no');
     }
 
+    public function mailBooking(): HasMany
+    {
+        return $this->hasMany(Stores::class, 'mail_no');
+    }
+
 
 }
