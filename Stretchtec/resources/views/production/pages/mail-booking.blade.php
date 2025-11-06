@@ -457,7 +457,7 @@
                                                         @if (!$inquiry->isSentToStock && !$inquiry->canSendToProduction)
                                                             {{-- Show button if neither is true --}}
                                                             <form
-                                                                action="{{ route('production.sendToStore', $inquiry->id) }}"
+                                                                action="{{ route('production.sendToStoreMail', $inquiry->id) }}"
                                                                 method="POST" onsubmit="handleSubmit(this)">
                                                                 @csrf
                                                                 <button type="submit"
@@ -545,7 +545,7 @@
                                                                 <div class="flex justify-center items-center">
                                                                     <!-- Form for other users -->
                                                                     <form
-                                                                        action="{{ route('production-inquiry.sendToProduction', $inquiry->id) }}"
+                                                                        action="{{ route('production-inquiry.sendToProductionMail', $inquiry->id) }}"
                                                                         method="POST" onsubmit="handleSubmit(this)">
                                                                         @csrf
                                                                         @method('PATCH')

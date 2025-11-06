@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\MailBooking;
 use App\Models\ProductCatalog;
+use App\Models\ProductInquiry;
+use App\Models\ProductOrderPreperation;
+use App\Models\Stock;
+use App\Models\Stores;
 use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -170,5 +174,98 @@ class MailBookingController extends Controller
     public function destroy(MailBooking $mailBooking)
     {
         //
+    }
+
+    /**
+     * Send a Mail Booking inquiry to production.
+     */
+    public function sendToProductionMail($id): RedirectResponse
+    {
+        try {
+            $productInquiry = MailBooking::findOrFail($id);
+
+            if ($productInquiry->isSentToProduction) {
+                return redirect()->back()->with('info', 'This inquiry has already been sent to production.');
+            }
+
+            // Update the inquiry status and timestamp
+            $productInquiry->update([
+                'isSentToProduction' => true,
+                'status' => 'Sent to Production',
+                'sent_to_production_at' => now(),
+            ]);
+
+            // Create a production order preparation record
+            ProductOrderPreperation::create([
+                'product_inquiry_id' => $productInquiry->id,
+                'prod_order_no' => $productInquiry->mail_booking_number,
+                'customer_name' => $productInquiry->customer_name,
+                'item' => $productInquiry->item,
+                'size' => $productInquiry->size,
+                'color' => $productInquiry->color,
+                'shade' => $productInquiry->shade,
+                'tkt' => $productInquiry->tkt,
+                'qty' => $productInquiry->qty - optional($productInquiry->stores)->sum(function ($store) {
+                        return $store->qty_allocated ?? 0;
+                    }) ?? 0,
+                'uom' => $productInquiry->uom,
+                'supplier' => $productInquiry->supplier,
+                'pst_no' => $productInquiry->pst_no,
+                'supplier_comment' => $productInquiry->supplier_comment,
+                'status' => 'Pending',
+            ]);
+
+            return redirect()->back()->with('success', 'Inquiry sent to production successfully.');
+        } catch (Exception $e) {
+            Log::error('Send to Production Error: ' . $e->getMessage(), ['id' => $id]);
+            return redirect()->back()->with('error', 'Failed to send inquiry to production.');
+        }
+    }
+
+    public function sendToStoreMail($id): ?RedirectResponse
+    {
+        try {
+            // 1. Get production order
+            $productionOrder = MailBooking::findOrFail($id);
+
+            // 2. Find the item from the product catalog using reference_no
+            $catalogItem = ProductCatalog::where('reference_no', $productionOrder->reference_no)->first();
+
+            $storesItem = Stock::where('reference_no', $productionOrder->reference_no)->first();
+
+            $productionOrder->isSentToStock = true;
+
+            if (!$catalogItem) {
+                $productionOrder->canSendToProduction = true;
+                $productionOrder->save();
+                return redirect()->back()->with('success', 'This is a direct order send directly to the production');
+            }
+
+            if (!$storesItem) {
+                $productionOrder->canSendToProduction = true;
+                $productionOrder->save();
+                return redirect()->back()->with('success', 'No Available Stock. Send Directly to Production');
+            }
+
+            $productionOrder->sent_to_stock_at = now();
+            $productionOrder->save();
+
+            // 3. Create a new store record
+            $store = new Stores();
+            $store->order_no = $productionOrder->id;
+            $store->prod_order_no = $productionOrder->mail_booking_number;
+            $store->reference_no = $productionOrder->reference_no;
+            $store->shade = $catalogItem->shade ?? null;
+            $store->qty_available = $storesItem->qty_available ?? 0;
+            $store->qty_allocated = 0;
+            $store->assigned_by = auth()->user()->name;
+            $store->is_qty_assigned = false;
+            $store->save();
+
+            return redirect()->back()->with('success', 'Order successfully sent to store.');
+
+        } catch (Exception $e) {
+            return redirect()->back()->with('error', 'Error sending to store: ' . $e->getMessage());
+        }
     }
 }
