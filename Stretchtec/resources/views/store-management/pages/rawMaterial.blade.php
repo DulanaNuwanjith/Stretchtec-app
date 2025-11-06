@@ -266,7 +266,7 @@
                         </th>
                         <th
                             class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                            Quantity Available
+                            Supplier Comment
                         </th>
                         <th
                             class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
@@ -286,7 +286,7 @@
                                 {{ $material->shade }}
                             </td>
                             <td class="px-4 py-3 text-gray-700 dark:text-gray-300 whitespace-normal break-words">
-                                {{ $material->shade }}
+                                {{ $material->date }}
                             </td>
                             <td class="px-4 py-3 text-gray-700 dark:text-gray-300 whitespace-normal break-words">
                                 {{ $material->color }}
@@ -299,6 +299,9 @@
                             </td>
                             <td class="px-4 py-3 text-gray-700 dark:text-gray-300 whitespace-normal break-words">
                                 {{ $material->supplier }}
+                            </td>
+                            <td class="px-4 py-3 text-gray-700 dark:text-gray-300 whitespace-normal break-words">
+                                {{ $material->supplier_comment }}
                             </td>
                             <td class="px-4 py-3 text-gray-700 dark:text-gray-300 whitespace-normal break-words">
                                 {{ $material->available_quantity }} {{ $material->unit }}
