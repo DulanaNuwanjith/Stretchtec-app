@@ -141,6 +141,11 @@
                             <!-- Row 1 -->
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
+                                    <label class="block text-sm font-medium">Date</label>
+                                    <input name="date" type="date" required
+                                           class="w-full mt-1 px-3 py-2 border rounded-md text-sm">
+                                </div>
+                                <div>
                                     <label class="block text-sm font-medium">Color</label>
                                     <input name="color" type="text" required
                                            class="w-full mt-1 px-3 py-2 border rounded-md text-sm">
@@ -148,6 +153,11 @@
                                 <div>
                                     <label class="block text-sm font-medium">Shade</label>
                                     <input name="shade" type="text" required
+                                           class="w-full mt-1 px-3 py-2 border rounded-md text-sm">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium">Supplier Comment</label>
+                                    <input name="supplier_comment" type="text" required
                                            class="w-full mt-1 px-3 py-2 border rounded-md text-sm">
                                 </div>
                             </div>

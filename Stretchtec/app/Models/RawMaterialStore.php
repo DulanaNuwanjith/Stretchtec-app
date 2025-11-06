@@ -12,11 +12,13 @@ use Illuminate\Database\Eloquent\Model;
 class RawMaterialStore extends Model
 {
     protected $fillable = [
+        'date',
         'color',
         'shade',
         'tkt',
         'pst_no',
         'supplier',
+        'supplier_comment',
         'available_quantity',
         'unit',
         'remarks',
