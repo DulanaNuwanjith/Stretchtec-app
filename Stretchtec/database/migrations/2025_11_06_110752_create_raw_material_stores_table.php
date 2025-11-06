@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('color');
             $table->string('shade');
+            $table->string('pst_no')->nullable();
             $table->string('tkt');
             $table->string('supplier');
             $table->integer('available_quantity');

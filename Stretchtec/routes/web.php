@@ -40,28 +40,29 @@
  * --------------------------------------------------------------------------
  */
 
+use App\Http\Controllers\ColorMatchRejectController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\LeftoverYarnController;
+use App\Http\Controllers\MailBookingApprovalController;
+use App\Http\Controllers\MailBookingController;
+use App\Http\Controllers\OperatorsandSupervisorsController;
+use App\Http\Controllers\ProductCatalogController;
+use App\Http\Controllers\ProductInquiryController;
+use App\Http\Controllers\ProductOrderPreperationController;
+use App\Http\Controllers\RawMaterialOrderController;
+use App\Http\Controllers\RawMaterialStoreController;
+use App\Http\Controllers\ReportController;
+use App\Http\Controllers\SampleInquiryController;
+use App\Http\Controllers\SamplePreparationProductionController;
+use App\Http\Controllers\SamplePreparationRnDController;
+use App\Http\Controllers\SampleStockController;
+use App\Http\Controllers\StockController;
+use App\Http\Controllers\StoresController;
+use App\Http\Controllers\TechnicalCardController;
+use App\Http\Controllers\UserMananagementController;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\StockController;
-use App\Http\Controllers\ReportController;
-use App\Http\Controllers\StoresController;
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\MailBookingController;
-use App\Http\Controllers\SampleStockController;
-use App\Http\Controllers\LeftoverYarnController;
-use App\Http\Controllers\SampleInquiryController;
-use App\Http\Controllers\TechnicalCardController;
-use App\Http\Controllers\ProductCatalogController;
-use App\Http\Controllers\ProductInquiryController;
-use App\Http\Controllers\ColorMatchRejectController;
-use App\Http\Controllers\RawMaterialOrderController;
-use App\Http\Controllers\UserMananagementController;
-use App\Http\Controllers\MailBookingApprovalController;
-use App\Http\Controllers\SamplePreparationRnDController;
-use App\Http\Controllers\OperatorsandSupervisorsController;
-use App\Http\Controllers\ProductOrderPreperationController;
-use App\Http\Controllers\SamplePreparationProductionController;
 
 /* ==========================================================================
  |  AUTHENTICATION & ENTRY POINT
@@ -193,10 +194,6 @@ Route::middleware([
 
     Route::get('stockAvailabilityCheck', [StockController::class, 'storeManageIndex'])->name('stockAvailabilityCheck.index');
 
-    Route::get('rawMaterial', static function () {
-        return view('store-management.pages.rawMaterial');
-    })->name('rawMaterial.index');
-
     Route::resource('orderRawMaterial', RawMaterialOrderController::class)->names([
         'index' => 'orderRawMaterial.index',
         'store' => 'orderRawMaterial.store'
@@ -226,6 +223,17 @@ Route::middleware([
     Route::post('mailBookingApproval/approve/{id}', [MailBookingApprovalController::class, 'approve'])->name('mailBookingApproval.approve');
 
     Route::get('mailBookingApproval', [MailBookingApprovalController::class, 'index'])->name('mail-booking-approval.index');
+
+    /* ----------------------------------------------------------------------
+    | Raw Material Management Routes
+    |----------------------------------------------------------------------
+    */
+    Route::resource('rawMaterial', RawMaterialStoreController::class)->names([
+        'index' => 'rawMaterial.index',
+        'store' => 'rawMaterial.store',
+        'update' => 'rawMaterial.update',
+        'destroy' => 'rawMaterial.destroy',
+    ]);
 
     /* ----------------------------------------------------------------------
      | Packing Management Routes

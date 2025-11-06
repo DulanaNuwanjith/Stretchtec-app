@@ -12,7 +12,8 @@ class RawMaterialStoreController extends Controller
      */
     public function index()
     {
-        //
+        $rawMaterials = RawMaterialStore::paginate(10);
+        return view('store-management.pages.rawMaterial', compact('rawMaterials'));
     }
 
     /**

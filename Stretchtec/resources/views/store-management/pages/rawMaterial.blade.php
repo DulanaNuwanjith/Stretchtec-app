@@ -142,11 +142,7 @@
                         <tr class="text-center">
                             <th
                                 class="font-bold sticky left-0 z-10 bg-white px-4 py-3 w-36 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                Order No
-                            </th>
-                            <th
-                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                Reference No
+                                ID
                             </th>
                             <th
                                 class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
@@ -154,30 +150,78 @@
                             </th>
                             <th
                                 class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                Cust Requested Qty
+                                Color
                             </th>
                             <th
                                 class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                Qty Available
+                                TKT
                             </th>
                             <th
                                 class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                Qty Allocated
+                                PST Number
                             </th>
                             <th
                                 class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                Assigned By
+                                Supplier
                             </th>
                             <th
                                 class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                Is Assigned
+                                Quantity Available
                             </th>
                             <th
                                 class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                Reason for Reject
+                                Unit Price
+                            </th>
+                            <th
+                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                Action
                             </th>
                         </tr>
                     </thead>
+                    <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+                        @foreach ($rawMaterials as $material)
+                            <tr class="hover:bg-gray-100 dark:hover:bg-gray-800 text-center">
+                                <td
+                                    class="sticky left-0 z-10 bg-white px-4 py-3 text-gray-700 dark:text-gray-300 whitespace-normal break-words">
+                                    {{ $material->id }}
+                                </td>
+                                <td class="px-4 py-3 text-gray-700 dark:text-gray-300 whitespace-normal break-words">
+                                    {{ $material->shade }}
+                                </td>
+                                <td class="px-4 py-3 text-gray-700 dark:text-gray-300 whitespace-normal break-words">
+                                    {{ $material->color }}
+                                </td>
+                                <td class="px-4 py-3 text-gray-700 dark:text-gray-300 whitespace-normal break-words">
+                                    {{ $material->tkt }}
+                                </td>
+                                <td class="px-4 py-3 text-gray-700 dark:text-gray-300 whitespace-normal break-words">
+                                    {{ $material->pst_number }}
+                                </td>
+                                <td class="px-4 py-3 text-gray-700 dark:text-gray-300 whitespace-normal break-words">
+                                    {{ $material->supplier }}
+                                </td>
+                                <td class="px-4 py-3 text-gray-700 dark:text-gray-300 whitespace-normal break-words">
+                                    {{ $material->quantity_available }}
+                                </td>
+                                <td class="px-4 py-3 text-gray-700 dark:text-gray-300 whitespace-normal break-words">
+                                    {{ $material->unit_price }}
+                                </td>
+                                <td class="px-4 py-3 text-gray-700 dark:text-gray-300 whitespace-normal break-words">
+                                    <button
+                                        class="bg-red-500 hover:bg-red-600 text-white font-semibold py-1 px-2 rounded shadow"
+                                        onclick="confirmDelete({{ $material->id }})">
+                                        Delete
+                                    </button>
+                                    <form id="delete-form-{{ $material->id }}"
+                                        action="{{ route('rawMaterial.destroy', $material->id) }}" method="POST"
+                                        class="hidden">
+                                        @csrf
+                                        @method('DELETE')
+                                    </form>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
                 </table>
 
             </div>
