@@ -115,6 +115,14 @@
 
             <div class="flex justify-between items-center mb-6">
                 <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Purchasing Records</h1>
+
+                <div class="flex space-x-3">
+                    <button
+                        onclick="document.getElementById('newPurchaseModel').classList.remove('hidden')"
+                        class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded shadow">
+                        + Add New Purchasing
+                    </button>
+                </div>
             </div>
 
             <!-- Stock / Stores Records Table -->
@@ -139,7 +147,7 @@
                             </th>
                             <th
                                 class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                Reference No
+                                Color
                             </th>
                             <th
                                 class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
@@ -147,34 +155,178 @@
                             </th>
                             <th
                                 class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                Cust Requested Qty
+                                PST No
                             </th>
                             <th
                                 class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                Qty Available
+                                TKT
                             </th>
                             <th
                                 class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                Qty Allocated
+                                Supplier Comment
                             </th>
                             <th
                                 class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                Assigned By
+                                Kg or Cone
                             </th>
                             <th
                                 class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                Is Assigned
+                                Price
                             </th>
                             <th
                                 class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                Reason for Reject
+                                Description
                             </th>
                         </tr>
                     </thead>
+                    <tbody>
+                     @forelse($purchasings ?? [] as $purchase)
+                        <tr class="text-center border-b dark:border-gray-700">
+                            <td class="px-4 py-2">{{ $purchase->order_no }}</td>
+                            <td class="px-4 py-2">{{ $purchase->color }}</td>
+                            <td class="px-4 py-2">{{ $purchase->shade }}</td>
+                            <td class="px-4 py-2">{{ $purchase->pst_no }}</td>
+                            <td class="px-4 py-2">{{ $purchase->tkt }}</td>
+                            <td class="px-4 py-2">{{ $purchase->supplier_comment }}</td>
+                            <td class="px-4 py-2">{{ $purchase->type }}</td>
+                            <td class="px-4 py-2">{{ $purchase->price }}</td>
+                            <td class="px-4 py-2">{{ $purchase->description }}</td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="9" class="text-center text-gray-500 py-4">No purchase records found.</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+
                 </table>
 
             </div>
+
+            <!-- Purchase Model -->
+            <div id="newPurchaseModel"
+                class="fixed inset-0 z-50 hidden bg-black bg-opacity-50 flex items-center justify-center py-5">
+                <div
+                    class="w-full max-w-[700px] bg-white dark:bg-gray-900 rounded-2xl shadow-2xl p-4 transform transition-all scale-95 max-h-[calc(100vh-10rem)] overflow-y-auto"
+                    onclick="event.stopPropagation()">
+                    <div class="max-w-[600px] mx-auto p-8">
+                        <h2 class="text-2xl font-semibold mb-8 text-blue-900 mt-4 dark:text-gray-100 text-center">
+                            Add New Purchase Order
+                        </h2>
+
+                        <form action="{{ route('purchasings.store') }}" method="POST">
+                            @csrf
+                            <div class="space-y-4">
+
+                                <!-- Row 1 -->
+                                <div class="flex gap-4">
+                                    <div class="w-1/2">
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Order No.</label>
+                                        <input type="text" class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm" name="order_no">
+                                    </div>
+                                    <div class="w-1/2">
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Color</label>
+                                        <input type="text" class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm" name="color">
+                                    </div>
+                                </div>
+
+                                <!-- Row 2 -->
+                                <div class="flex gap-4">
+                                    <div class="w-1/2">
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Shade</label>
+                                        <input type="text" class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm" name="shade">
+                                    </div>
+                                    <div class="w-1/2">
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">PST No.</label>
+                                        <input type="text" class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm" name="pst_no">
+                                    </div>
+                                </div>
+
+                                <!-- Row 3 -->
+                                <div class="flex gap-4">
+                                    <div class="w-1/2">
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">TKT</label>
+                                        <input type="text" class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm" name="tkt">
+                                    </div>
+                                    <div class="w-1/2">
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Supplier Comment</label>
+                                        <input type="text" class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm" name="supplier_comment">
+                                    </div>
+                                </div>
+
+                                <!-- Row 4 -->
+                                <div class="flex gap-4">
+                                    <div class="relative inline-block text-left w-1/2">
+                                        <label for="KgOrConetypeDropdown" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                            KG or Cone
+                                        </label>
+                                        <div>
+                                            <button type="button" id="KgOrConetypeDropdown"
+                                                class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10 dark:bg-gray-700 dark:text-white"
+                                                onclick="toggleDropdown('type')" aria-haspopup="listbox" aria-expanded="false">
+                                                <span id="selectedType">Select Type</span>
+                                                <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                                                    <path fill-rule="evenodd"
+                                                        d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
+                                                        clip-rule="evenodd" />
+                                                </svg>
+                                            </button>
+                                        </div>
+
+                                        <!-- Dropdown Menu -->
+                                        <div id="typeDropdownMenu"
+                                            class="absolute mt-1 w-full rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 hidden z-10">
+                                            <ul tabindex="-1" role="listbox" class="max-h-60 overflow-auto py-1 text-sm text-gray-700">
+                                                <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer" onclick="selectType('KG')">KG</li>
+                                                <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer" onclick="selectType('Cone')">Cone</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                    <div class="w-1/2">
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                            Quantity
+                                        </label>
+                                        <input type="text"
+                                            class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm" name="quantity">
+                                    </div>
+                                    <input type="hidden" name="type" id="typeInput">
+                                </div>
+
+                                <!-- Row 5 -->
+                                <div class="flex gap-4">
+                                    <div class="w-1/2">
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Price</label>
+                                        <input type="text" class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm" name="price">
+                                    </div>
+                                    <div class="w-1/2">
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Description</label>
+                                        <input type="text" class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md 
+                                            dark:bg-gray-700 dark:text-white text-sm" name="description">
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <!-- Buttons -->
+                            <div class="flex justify-end gap-3 mt-12">
+                                <button type="button"
+                                        onclick="document.getElementById('newPurchaseModel').classList.add('hidden')"
+                                        class="px-4 py-2 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 text-sm rounded hover:bg-gray-300">
+                                    Cancel
+                                </button>
+                                <button type="submit"
+                                        class="px-4 py-2 bg-blue-500 text-white text-sm rounded hover:bg-blue-600">
+                                    Save
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
         </div>
+
         <script>
             document.addEventListener("DOMContentLoaded", function() {
                 const spinner = document.getElementById("pageLoadingSpinner");
@@ -187,5 +339,20 @@
                     spinner.classList.add("hidden"); // hide spinner after rendering
                 });
             });
+        </script>
+
+        {{-- ModelDropDown --}}
+        <script>
+            function toggleDropdown(type) {
+                const menu = document.getElementById(`${type}DropdownMenu`);
+                menu.classList.toggle('hidden');
+            }
+
+            function selectType(value) {
+            document.getElementById('selectedType').textContent = value;
+            document.getElementById('typeInput').value = value;
+            document.getElementById('typeDropdownMenu').classList.add('hidden');
+}
+
         </script>
     @endsection

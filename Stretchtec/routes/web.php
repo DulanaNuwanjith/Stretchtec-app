@@ -58,6 +58,7 @@ use App\Http\Controllers\StockController;
 use App\Http\Controllers\StoresController;
 use App\Http\Controllers\TechnicalCardController;
 use App\Http\Controllers\UserMananagementController;
+use App\Http\Controllers\PurchasingController;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -453,4 +454,10 @@ Route::middleware(['auth'])->group(function () {
 
     });
 });
+
+
+// Purchasing Routes
+Route::post('/purchases', [PurchasingController::class, 'store'])->name('purchasings.store');
+Route::get('/purchasing', [PurchasingController::class, 'index'])->name('purchasing.index');
+
 
