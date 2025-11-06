@@ -75,8 +75,11 @@ class RawMaterialStoreController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(RawMaterialStore $rawMaterialStore)
+    public function destroy($id)
     {
-        //
+        $rawMaterial = RawMaterialStore::findOrFail($id);
+        $rawMaterial->delete();
+
+        return redirect()->route('rawMaterial.index')->with('success', 'Raw material deleted successfully!');
     }
 }
