@@ -11,8 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('raw_material_stores', function (Blueprint $table) {
+        Schema::create('raw_material_stores', static function (Blueprint $table) {
             $table->id();
+            $table->string('color');
+            $table->string('shade');
+            $table->string('tkt');
+            $table->string('supplier');
+            $table->integer('available_quantity');
+            $table->string('unit');
+            $table->string('unit_price');
+            $table->string('remarks')->nullable();
             $table->timestamps();
         });
     }
