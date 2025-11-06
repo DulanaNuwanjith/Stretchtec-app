@@ -15,7 +15,7 @@
     </style>
 </head>
 
-<body class="flex h-screen bg-gray-100">
+<body class="flex flex-col md:flex-row h-screen bg-gray-100">
 
     @php
         $role = auth()->user()->role;
@@ -46,12 +46,31 @@
         document.documentElement.style.setProperty('--sidebar-width', initialCollapsed ? '5rem' : '18rem');
     </script>
 
-    <aside x-data="{ collapsed: window.__initialCollapsed, initialized: false }" x-init="initialized = true" :class="collapsed ? 'w-20' : 'w-72'"
-        class="relative bg-gradient-to-b from-white to-blue-500 min-h-screen shadow-md flex flex-col transition-all duration-300"
+    <!-- Responsive Sidebar -->
+    <aside x-data="{ collapsed: window.__initialCollapsed, initialized: false, open: false }"
+        x-init="initialized = true"
+        :class="collapsed ? 'md:w-20' : 'md:w-72'"
+        class="fixed md:relative z-40 inset-y-0 left-0 w-64 md:w-auto transform md:translate-x-0 transition-transform duration-300 ease-in-out bg-gradient-to-b from-white to-blue-500 shadow-md flex flex-col min-h-screen"
+        x-bind:class="{ '-translate-x-full': !open, 'translate-x-0': open }"
         style="width: var(--sidebar-width);">
 
-        <!-- Toggle Button (always visible) -->
-        <div class="flex justify-end p-6">
+        <!-- Mobile Toggle (visible only on small screens) -->
+        <div class="flex justify-between items-center md:hidden p-4 bg-white border-b">
+            <a href="{{ route('dashboard') }}">
+                <img src="{{ asset('images/logo.png') }}" alt="Logo" class="h-10 w-auto" />
+            </a>
+            <button @click="open = !open"
+                class="p-2 bg-blue-100 rounded-md hover:bg-blue-200 transition">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-900" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+            </button>
+        </div>
+
+        <!-- Toggle Button -->
+        <div class="hidden md:flex justify-end p-6">
             <button
                 @click="collapsed = !collapsed; localStorage.setItem('sidebarCollapsed', JSON.stringify(collapsed)); document.documentElement.style.setProperty('--sidebar-width', collapsed ? '5rem' : '18rem');"
                 class="bg-white border border-gray-300 rounded-full w-8 p-1 shadow hover:bg-gray-200 transition">
@@ -64,14 +83,14 @@
         </div>
 
         <!-- Sidebar Header -->
-        <div class="flex items-center justify-between p-4 border-b mt-4 mb-4" x-cloak>
+        <div class="hidden md:flex items-center justify-between p-4 border-b mt-4 mb-4" x-cloak>
             <a href="{{ route('dashboard') }}" :class="collapsed ? 'hidden' : 'block'">
                 <img src="{{ asset('images/logo.png') }}" alt="Logo" class="h-18 w-64" />
             </a>
         </div>
 
         <!-- Navigation -->
-        <nav class="flex flex-col justify-between flex-1 p-3 text-base font-bold text-blue-900" x-cloak>
+        <nav class="flex flex-col justify-between flex-1 p-3 text-base font-bold text-blue-900 overflow-y-auto" x-cloak>
             <ul class="space-y-2">
 
                 <li>
@@ -123,7 +142,7 @@
                     <li>
                         <a href="{{ route('production-inquery-details.index') }}"
                             class="flex items-center px-4 py-2 rounded hover:bg-gray-200
-                      {{ request()->routeIs('production-inquery-details.*', 'production-order-preparation.*', 'mail-booking.*', 'mail-booking-approval.*', 'packing.*', 'knitted.*', 'loom.*', 'braiding.*') ? 'bg-gray-200' : '' }}">
+                      {{ request()->routeIs('production-inquery-details.*', 'production-order-preparation.*', 'mail-booking.*', 'mail-booking-approval.*', 'packing.*', 'knitted.*', 'loom.*', 'braiding.*', 'mailBooking.index') ? 'bg-gray-200' : '' }}">
                             <img src="{{ asset('icons/factory.png') }}" alt="" class="w-6 h-6 mr-5" />
                             <span x-show="initialized && !collapsed">Production</span>
                         </a>
@@ -141,7 +160,7 @@
                     <li>
                         <a href="{{ route('stockAvailabilityCheck.index') }}"
                             class="flex items-center px-4 py-2 rounded hover:bg-gray-200
-                      {{ request()->routeIs('stockManagement.*', 'stockAvailabilityCheck.*') ? 'bg-gray-200' : '' }}">
+                      {{ request()->routeIs('stockManagement.*', 'stockAvailabilityCheck.*', 'rawMaterial.*') ? 'bg-gray-200' : '' }}">
                             <img src="{{ asset('icons/stores.png') }}" alt="" class="w-6 h-6 mr-5" />
                             <span x-show="initialized && !collapsed">Store Management</span>
                         </a>
@@ -177,7 +196,6 @@
                         </a>
                     </li>
                 @endif
-
             </ul>
 
             <!-- Profile & Logout -->
@@ -202,7 +220,6 @@
                 </li>
             </ul>
         </nav>
-
     </aside>
 
 </body>

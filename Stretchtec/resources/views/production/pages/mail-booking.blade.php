@@ -268,7 +268,7 @@
                                             Reference Number
                                         </th>
                                         <th
-                                            class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                            class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-36 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                             Email Received
                                         </th>
                                         <th
@@ -457,7 +457,7 @@
                                                         @if (!$inquiry->isSentToStock && !$inquiry->canSendToProduction)
                                                             {{-- Show button if neither is true --}}
                                                             <form
-                                                                action="{{ route('production.sendToStore', $inquiry->id) }}"
+                                                                action="{{ route('production.sendToStoreMail', $inquiry->id) }}"
                                                                 method="POST" onsubmit="handleSubmit(this)">
                                                                 @csrf
                                                                 <button type="submit"
@@ -545,7 +545,7 @@
                                                                 <div class="flex justify-center items-center">
                                                                     <!-- Form for other users -->
                                                                     <form
-                                                                        action="{{ route('production-inquiry.sendToProduction', $inquiry->id) }}"
+                                                                        action="{{ route('production-inquiry.sendToProductionMail', $inquiry->id) }}"
                                                                         method="POST" onsubmit="handleSubmit(this)">
                                                                         @csrf
                                                                         @method('PATCH')

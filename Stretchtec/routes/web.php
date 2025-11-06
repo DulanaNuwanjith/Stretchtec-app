@@ -196,6 +196,10 @@ Route::middleware([
         return view('store-management.pages.rawMaterial');
     })->name('rawMaterial.index');
 
+    Route::get('orderRawMaterial', static function () {
+        return view('store-management.pages.orderRawMaterial');
+    })->name('orderRawMaterial.index');
+
     /* ----------------------------------------------------------------------
      | Purchasing Department Management Routes
      |----------------------------------------------------------------------
@@ -246,8 +250,10 @@ Route::middleware([
         ->name('product-catalog.details');
 
     Route::post('/production-orders/{id}/send-to-store', [ProductInquiryController::class, 'sendToStore'])->name('production.sendToStore');
+    Route::post('/production-orders/{id}/send-to-store-mail', [MailBookingController::class, 'sendToStoreMail'])->name('production.sendToStoreMail');
 
     Route::patch('production-inquiry/{id}/send-to-production', [ProductInquiryController::class, 'sendToProduction'])->name('production-inquiry.sendToProduction');
+    Route::patch('production-inquiry/{id}/send-to-production-mail', [MailBookingController::class, 'sendToProductionMail'])->name('production-inquiry.sendToProductionMail');
 
     Route::post('/stores/{id}/assign', [StoresController::class, 'assign'])->name('stores.assign');
 

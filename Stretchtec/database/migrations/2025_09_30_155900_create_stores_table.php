@@ -13,7 +13,9 @@ return new class extends Migration {
         Schema::create('stores', static function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('order_no')->nullable();
+            $table->unsignedBigInteger('mail_no')->nullable();
             $table->string('prod_order_no')->nullable();
+            $table->string('mail_booking_no')->nullable();
             $table->string('reference_no')->nullable();
             $table->string('shade')->nullable();
             $table->decimal('qty_available');

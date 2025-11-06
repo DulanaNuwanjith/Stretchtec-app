@@ -177,13 +177,13 @@
                             <tr class="odd:bg-white even:bg-gray-50 border-b border-gray-200 text-center">
                                 <td
                                     class="sticky left-0 z-10 bg-white px-4 py-3 bg-gray-100 border-r border-gray-300 text-left whitespace-normal break-words font-bold">
-                                    {{ $store->prod_order_no }}</td>
+                                    {{ $store->mail_booking_no ?? $store->prod_order_no }}</td>
                                 <td class="px-4 py-3 w-48 whitespace-normal break-words border-r border-gray-300 ">
                                     {{ $store->reference_no }}</td>
                                 <td class="px-4 py-3 w-48 whitespace-normal break-words border-r border-gray-300">
                                     {{ $store->shade }}</td>
                                 <td class="px-4 py-3 w-48 whitespace-normal break-words border-r border-gray-300">
-                                    {{ $store->productInquiry->qty ?? 0 }} {{ $store->productInquiry->uom }}</td>
+                                    {{ $store->mailBooking->qty ?? $store->productInquiry->qty  }} {{ $store->mailBooking->uom ?? $store->productInquiry->uom}}
                                 <td class="px-4 py-3 w-48 whitespace-normal break-words border-r border-gray-300">
                                     {{ $store->stock->qty_available ?? 'N/A' }}</td>
                                 <td class="px-4 py-3 w-48 whitespace-normal break-words border-r border-gray-300">

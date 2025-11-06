@@ -4,12 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @method static orderBy(string $string, string $string1)
  * @method static selectRaw(string $string)
  * @method static create(array $array)
  * @method static findOrFail($id)
+ * @method static where(string $string, $mail_booking_no)
  */
 class MailBooking extends Model
 {
@@ -57,5 +59,10 @@ class MailBooking extends Model
     public function approvedBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'approved_by');
+    }
+
+    public function stores(): HasMany
+    {
+        return $this->hasMany(Stores::class, 'mail_no', 'id');
     }
 }

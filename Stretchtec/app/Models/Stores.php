@@ -44,7 +44,9 @@ class Stores extends Model
      */
     protected $fillable = [
         'order_no',
+        'mail_no',
         'prod_order_no',
+        'mail_booking_no',
         'reference_no',
         'shade',
         'qty_available',
@@ -65,6 +67,11 @@ class Stores extends Model
     public function productInquiry(): BelongsTo
     {
         return $this->belongsTo(ProductInquiry::class, 'order_no');
+    }
+
+    public function mailBooking(): BelongsTo
+    {
+        return $this->belongsTo(MailBooking::class, 'mail_no');
     }
 
     /**

@@ -25,8 +25,8 @@ class ProductInquiryController extends Controller
     {
         $samples = ProductCatalog::where('isShadeSelected', true)->get();
         $productInquiries = ProductInquiry::orderBy('prod_order_no', 'DESC')
-        ->orderBy('po_received_date', 'DESC')
-        ->paginate(10);
+            ->orderBy('po_received_date', 'DESC')
+            ->paginate(10);
 
         return view('production.pages.production-inquery-details', compact('samples', 'productInquiries'));
     }
@@ -102,50 +102,50 @@ class ProductInquiryController extends Controller
             $data = $validator->validated();
 
             // Save each item separately with unique order number
-        foreach ($data['items'] as $item) {
-            $referenceNo = null;
-            $sampleId = null;
+            foreach ($data['items'] as $item) {
+                $referenceNo = null;
+                $sampleId = null;
 
-            if (!empty($item['sample_id'])) {
-                // Sample order → fetch reference from catalog
-                $sample = ProductCatalog::find($item['sample_id']);
-                $referenceNo = $sample?->reference_no;
-                $sampleId = $item['sample_id'];
-            } else {
-                // Direct order → use "Direct Bulk" or value from a hidden field
-                $referenceNo = $data['reference_no'] ?? 'Direct Bulk';
+                if (!empty($item['sample_id'])) {
+                    // Sample order → fetch reference from catalog
+                    $sample = ProductCatalog::find($item['sample_id']);
+                    $referenceNo = $sample?->reference_no;
+                    $sampleId = $item['sample_id'];
+                } else {
+                    // Direct order → use "Direct Bulk" or value from a hidden field
+                    $referenceNo = $data['reference_no'] ?? 'Direct Bulk';
+                }
+
+                // 👉 Generate unique prod_order_no per item
+                $lastOrderNo = ProductInquiry::selectRaw("MAX(CAST(SUBSTRING(prod_order_no, 7) AS UNSIGNED)) as max_number")
+                    ->value('max_number');
+                $nextNumber = $lastOrderNo ? $lastOrderNo + 1 : 1;
+                $prodOrderNo = 'ST-PO-' . str_pad($nextNumber, 5, '0', STR_PAD_LEFT);
+
+                ProductInquiry::create([
+                    'prod_order_no' => $prodOrderNo,
+                    'po_received_date' => now(),
+                    'po_number' => $data['po_number'],
+                    'customer_name' => $data['customer_name'],
+                    'merchandiser_name' => $data['merchandiser_name'] ?? null,
+                    'customer_coordinator' => $data['customer_coordinator'],
+                    'customer_req_date' => $data['customer_req_date'],
+                    'order_type' => $item['order_type'],
+                    'remarks' => $data['remarks'] ?? null,
+                    'reference_no' => $referenceNo,
+                    'sample_id' => $sampleId,
+                    'shade' => $item['shade'],
+                    'color' => $item['color'],
+                    'tkt' => $item['tkt'] ?? 'N/A',
+                    'size' => $item['size'],
+                    'item' => $item['item'],
+                    'supplier' => $item['supplier'] ?? null,
+                    'qty' => $item['qty'],
+                    'uom' => $item['uom'],
+                    'unitPrice' => $item['unitPrice'],
+                    'price' => $item['price'],
+                ]);
             }
-
-            // 👉 Generate unique prod_order_no per item
-            $lastOrderNo = ProductInquiry::selectRaw("MAX(CAST(SUBSTRING(prod_order_no, 7) AS UNSIGNED)) as max_number")
-                ->value('max_number');
-            $nextNumber = $lastOrderNo ? $lastOrderNo + 1 : 1;
-            $prodOrderNo = 'ST-PO-' . str_pad($nextNumber, 5, '0', STR_PAD_LEFT);
-
-            ProductInquiry::create([
-                'prod_order_no' => $prodOrderNo,
-                'po_received_date' => now(),
-                'po_number' => $data['po_number'],
-                'customer_name' => $data['customer_name'],
-                'merchandiser_name' => $data['merchandiser_name'] ?? null,
-                'customer_coordinator' => $data['customer_coordinator'],
-                'customer_req_date' => $data['customer_req_date'],
-                'order_type' => $item['order_type'],
-                'remarks' => $data['remarks'] ?? null,
-                'reference_no' => $referenceNo,
-                'sample_id' => $sampleId,
-                'shade' => $item['shade'],
-                'color' => $item['color'],
-                'tkt' => $item['tkt'] ?? 'N/A',
-                'size' => $item['size'],
-                'item' => $item['item'],
-                'supplier' => $item['supplier'] ?? null,
-                'qty' => $item['qty'],
-                'uom' => $item['uom'],
-                'unitPrice' => $item['unitPrice'],
-                'price' => $item['price'],
-            ]);
-        }
 
             return redirect()->back()->with('success', 'PO with multiple items created successfully.');
 
@@ -261,6 +261,16 @@ class ProductInquiryController extends Controller
                 return redirect()->back()->with('info', 'This inquiry has already been sent to production.');
             }
 
+            $qtyForProduction = $productInquiry->qty - $productInquiry->stores->sum('qty_allocated');
+
+            if ($qtyForProduction <= 0) {
+                $productInquiry->update([
+                    'isSentToProduction' => true,
+                    'status' => 'Ready For Delivery',
+                ]);
+                return redirect()->back()->with('error', 'No quantity available to send to production.');
+            }
+
             // Update the inquiry status and timestamp
             $productInquiry->update([
                 'isSentToProduction' => true,
@@ -292,5 +302,4 @@ class ProductInquiryController extends Controller
             return redirect()->back()->with('error', 'Failed to send inquiry to production.');
         }
     }
-
 }
