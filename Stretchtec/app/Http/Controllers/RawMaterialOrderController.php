@@ -30,7 +30,6 @@ class RawMaterialOrderController extends Controller
             'supplier_comment' => 'nullable|string|max:255',
             'qty' => 'required|integer|min:1',
             'kg_or_cone' => 'required|in:kg,cone',
-            'price' => 'required|numeric|min:0',
             'description' => 'nullable|string',
         ]);
 

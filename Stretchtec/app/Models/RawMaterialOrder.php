@@ -18,7 +18,6 @@ class RawMaterialOrder extends Model
         'supplier_comment',
         'qty',
         'kg_or_cone',
-        'price',
         'description',
     ];
 }

@@ -102,7 +102,6 @@
                             <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">Supplier Comment</th>
                             <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">Quantity</th>
                             <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">Measurement</th>
-                            <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">Price</th>
                             <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">Description</th>
                             <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">Actions</th>
                         </tr>
@@ -118,7 +117,6 @@
                                 <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">{{ $order->supplier_comment ?? '-' }}</td>
                                 <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">{{ $order->qty }}</td>
                                 <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r capitalize">{{ $order->kg_or_cone ?? 'kg' }}</td>
-                                <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">{{ $order->price ?? '-' }}</td>
                                 <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">{{ $order->description ?? '-' }}</td>
                                 <td class="px-4 py-3">
                                     <form id="delete-form-{{ $order->id }}" method="POST"
@@ -206,9 +204,6 @@
                                     </select>
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-medium">Price</label>
-                                    <input name="price" type="number" step="0.01"
-                                        class="w-full mt-1 px-3 py-2 border rounded-md text-sm">
                                 </div>
                             </div>
 

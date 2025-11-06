@@ -21,7 +21,6 @@ return new class extends Migration
             $table->string('supplier_comment')->nullable();
             $table->integer('qty');
             $table->enum('kg_or_cone', ['kg', 'cone'])->default('kg');
-            $table->decimal('price', 10, 2)->nullable();
             $table->text('description')->nullable();
             $table->timestamps();
         });
