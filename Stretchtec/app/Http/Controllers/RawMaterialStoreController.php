@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\RawMaterialStore;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class RawMaterialStoreController extends Controller
@@ -75,7 +76,7 @@ class RawMaterialStoreController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id)
+    public function destroy($id): RedirectResponse
     {
         $rawMaterial = RawMaterialStore::findOrFail($id);
         $rawMaterial->delete();

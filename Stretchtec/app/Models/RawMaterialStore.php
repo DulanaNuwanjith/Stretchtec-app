@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * @method static paginate(int $int)
  * @method static create(array $validated)
+ * @method static findOrFail($id)
  */
 class RawMaterialStore extends Model
 {
