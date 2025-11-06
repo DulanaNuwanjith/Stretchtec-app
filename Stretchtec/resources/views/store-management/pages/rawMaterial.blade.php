@@ -43,49 +43,49 @@
             <script>
                 document.addEventListener('DOMContentLoaded', () => {
                     @if (session('success'))
-                        Swal.fire({
-                            toast: true,
-                            position: 'top-end',
-                            icon: 'success',
-                            title: '{{ session('success') }}',
-                            showConfirmButton: false,
-                            timer: 2000,
-                            timerProgressBar: true,
-                            customClass: {
-                                popup: 'swal2-toast swal2-shadow'
-                            },
-                        });
+                    Swal.fire({
+                        toast: true,
+                        position: 'top-end',
+                        icon: 'success',
+                        title: '{{ session('success') }}',
+                        showConfirmButton: false,
+                        timer: 2000,
+                        timerProgressBar: true,
+                        customClass: {
+                            popup: 'swal2-toast swal2-shadow'
+                        },
+                    });
                     @endif
 
                     @if (session('error'))
-                        Swal.fire({
-                            toast: true,
-                            position: 'top-end',
-                            icon: 'error',
-                            title: '{{ session('error') }}',
-                            showConfirmButton: false,
-                            timer: 2000,
-                            timerProgressBar: true,
-                            customClass: {
-                                popup: 'swal2-toast swal2-shadow'
-                            },
-                        });
+                    Swal.fire({
+                        toast: true,
+                        position: 'top-end',
+                        icon: 'error',
+                        title: '{{ session('error') }}',
+                        showConfirmButton: false,
+                        timer: 2000,
+                        timerProgressBar: true,
+                        customClass: {
+                            popup: 'swal2-toast swal2-shadow'
+                        },
+                    });
                     @endif
 
                     @if ($errors->any())
-                        Swal.fire({
-                            toast: true,
-                            position: 'top-end',
-                            icon: 'warning',
-                            title: 'Validation Errors',
-                            html: `{!! implode('<br>', $errors->all()) !!}`,
-                            showConfirmButton: false,
-                            timer: 3000,
-                            timerProgressBar: true,
-                            customClass: {
-                                popup: 'swal2-toast swal2-shadow'
-                            },
-                        });
+                    Swal.fire({
+                        toast: true,
+                        position: 'top-end',
+                        icon: 'warning',
+                        title: 'Validation Errors',
+                        html: `{!! implode('<br>', $errors->all()) !!}`,
+                        showConfirmButton: false,
+                        timer: 3000,
+                        timerProgressBar: true,
+                        customClass: {
+                            popup: 'swal2-toast swal2-shadow'
+                        },
+                    });
                     @endif
                 });
             </script>
@@ -223,117 +223,117 @@
             <div class="overflow-x-auto max-h-[1200px] bg-white dark:bg-gray-900 shadow rounded-lg">
                 <!-- Spinner -->
                 <div id="pageLoadingSpinner"
-                    class="fixed inset-0 z-50 bg-white bg-opacity-80 flex flex-col items-center justify-center">
+                     class="fixed inset-0 z-50 bg-white bg-opacity-80 flex flex-col items-center justify-center">
                     <svg class="animate-spin h-10 w-10 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none"
-                        viewBox="0 0 24 24">
+                         viewBox="0 0 24 24">
                         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
-                            stroke-width="4"></circle>
+                                stroke-width="4"></circle>
                         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
                     </svg>
                     <p class="mt-3 text-gray-700 font-semibold">Loading data...</p>
                 </div>
                 <table class="table-fixed w-full text-sm divide-y divide-gray-200 dark:divide-gray-700">
                     <thead class="bg-gray-200 dark:bg-gray-700 text-left">
-                        <tr class="text-center">
-                            <th
-                                class="font-bold sticky left-0 z-10 bg-white px-4 py-3 w-36 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                ID
-                            </th>
-                            <th
-                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                Shade
-                            </th>
-                            <th
-                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                Color
-                            </th>
-                            <th
-                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                TKT
-                            </th>
-                            <th
-                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                PST Number
-                            </th>
-                            <th
-                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                Supplier
-                            </th>
-                            <th
-                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                Quantity Available
-                            </th>
-                            <th
-                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                Unit Price
-                            </th>
-                            <th
-                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                Action
-                            </th>
-                        </tr>
+                    <tr class="text-center">
+                        <th
+                            class="font-bold sticky left-0 z-10 bg-white px-4 py-3 w-36 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                            ID
+                        </th>
+                        <th
+                            class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                            Shade
+                        </th>
+                        <th
+                            class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                            Color
+                        </th>
+                        <th
+                            class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                            TKT
+                        </th>
+                        <th
+                            class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                            PST Number
+                        </th>
+                        <th
+                            class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                            Supplier
+                        </th>
+                        <th
+                            class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                            Quantity Available
+                        </th>
+                        <th
+                            class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                            Unit Price
+                        </th>
+                        <th
+                            class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                            Action
+                        </th>
+                    </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
-                        @foreach ($rawMaterials as $material)
-                            <tr class="hover:bg-gray-100 dark:hover:bg-gray-800 text-center">
-                                <td
-                                    class="sticky left-0 z-10 bg-white px-4 py-3 text-gray-700 dark:text-gray-300 whitespace-normal break-words">
-                                    {{ $material->id }}
-                                </td>
-                                <td class="px-4 py-3 text-gray-700 dark:text-gray-300 whitespace-normal break-words">
-                                    {{ $material->shade }}
-                                </td>
-                                <td class="px-4 py-3 text-gray-700 dark:text-gray-300 whitespace-normal break-words">
-                                    {{ $material->color }}
-                                </td>
-                                <td class="px-4 py-3 text-gray-700 dark:text-gray-300 whitespace-normal break-words">
-                                    {{ $material->tkt }}
-                                </td>
-                                <td class="px-4 py-3 text-gray-700 dark:text-gray-300 whitespace-normal break-words">
-                                    {{ $material->pst_no }}
-                                </td>
-                                <td class="px-4 py-3 text-gray-700 dark:text-gray-300 whitespace-normal break-words">
-                                    {{ $material->supplier }}
-                                </td>
-                                <td class="px-4 py-3 text-gray-700 dark:text-gray-300 whitespace-normal break-words">
-                                    {{ $material->available_quantity }}
-                                </td>
-                                <td class="px-4 py-3 text-gray-700 dark:text-gray-300 whitespace-normal break-words">
-                                    {{ $material->unit_price }}
-                                </td>
-                                <td class="px-4 py-3 text-gray-700 dark:text-gray-300 whitespace-normal break-words">
-                                    <button
-                                        class="bg-red-500 hover:bg-red-600 text-white font-semibold py-1 px-2 rounded shadow"
-                                        onclick="confirmDelete({{ $material->id }})">
-                                        Delete
-                                    </button>
-                                    <form id="delete-form-{{ $material->id }}"
-                                        action="{{ route('rawMaterial.destroy', $material->id) }}" method="POST"
-                                        class="hidden">
-                                        @csrf
-                                        @method('DELETE')
-                                    </form>
-                                </td>
-                            </tr>
-                        @endforeach
+                    @foreach ($rawMaterials as $material)
+                        <tr class="hover:bg-gray-100 dark:hover:bg-gray-800 text-center">
+                            <td
+                                class="sticky left-0 z-10 bg-white px-4 py-3 text-gray-700 dark:text-gray-300 whitespace-normal break-words">
+                                {{ $material->id }}
+                            </td>
+                            <td class="px-4 py-3 text-gray-700 dark:text-gray-300 whitespace-normal break-words">
+                                {{ $material->shade }}
+                            </td>
+                            <td class="px-4 py-3 text-gray-700 dark:text-gray-300 whitespace-normal break-words">
+                                {{ $material->color }}
+                            </td>
+                            <td class="px-4 py-3 text-gray-700 dark:text-gray-300 whitespace-normal break-words">
+                                {{ $material->tkt }}
+                            </td>
+                            <td class="px-4 py-3 text-gray-700 dark:text-gray-300 whitespace-normal break-words">
+                                {{ $material->pst_no }}
+                            </td>
+                            <td class="px-4 py-3 text-gray-700 dark:text-gray-300 whitespace-normal break-words">
+                                {{ $material->supplier }}
+                            </td>
+                            <td class="px-4 py-3 text-gray-700 dark:text-gray-300 whitespace-normal break-words">
+                                {{ $material->available_quantity }}
+                            </td>
+                            <td class="px-4 py-3 text-gray-700 dark:text-gray-300 whitespace-normal break-words">
+                                {{ $material->unit_price }}
+                            </td>
+                            <td class="px-4 py-3 text-gray-700 dark:text-gray-300 whitespace-normal break-words">
+                                <button
+                                    class="bg-red-500 hover:bg-red-600 text-white font-semibold py-1 px-2 rounded shadow"
+                                    onclick="confirmDelete({{ $material->id }})">
+                                    Delete
+                                </button>
+                                <form id="delete-form-{{ $material->id }}"
+                                      action="{{ route('rawMaterial.destroy', $material->id) }}" method="POST"
+                                      class="hidden">
+                                    @csrf
+                                    @method('DELETE')
+                                </form>
+                            </td>
+                        </tr>
+                    @endforeach
                     </tbody>
 
                     <!-- Pagination Footer -->
                     <tfoot class="bg-gray-200 dark:bg-gray-700">
-                        <tr>
-                            <td colspan="9" class="px-4 py-3">
-                                <div class="flex justify-end">
-                                    {{ $rawMaterials->links() }}
-                                </div>
-                            </td>
-                        </tr>
+                    <tr>
+                        <td colspan="9" class="px-4 py-3">
+                            <div class="flex justify-end">
+                                {{ $rawMaterials->links() }}
+                            </div>
+                        </td>
+                    </tr>
                     </tfoot>
                 </table>
 
             </div>
         </div>
         <script>
-            document.addEventListener("DOMContentLoaded", function() {
+            document.addEventListener("DOMContentLoaded", function () {
                 const spinner = document.getElementById("pageLoadingSpinner");
 
                 // Show spinner immediately
@@ -345,4 +345,4 @@
                 });
             });
         </script>
-    @endsection
+@endsection
