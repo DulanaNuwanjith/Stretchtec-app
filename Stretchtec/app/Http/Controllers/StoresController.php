@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\MailBooking;
 use App\Models\ProductInquiry;
 use App\Models\SampleStock;
 use App\Models\Stock;
@@ -104,30 +105,50 @@ class StoresController extends Controller
             'reason_for_reject' => 'nullable|string'
         ]);
 
-        // Find the store, stock, and product inquiry records
+        // Find the store and its stock
         $store = Stores::findOrFail($id);
         $stock = Stock::where('reference_no', $store->reference_no)->firstOrFail();
-        $productInquiry = ProductInquiry::where('prod_order_no', $store->prod_order_no)->firstOrFail();
 
         $requestedUom = $validated['allocated_uom'];
         $allocatedQtyInYards = $validated['qty_allocated'];
 
-        // ✅ Step 1: Ensure allocated UOM matches the customer's requested UOM
-        if ($productInquiry->uom !== $requestedUom) {
+        /**
+         * --------------------------------------------------------------------
+         * Handle assignment based on the order type
+         * --------------------------------------------------------------------
+         */
+        if (!is_null($store->order_no)) {
+            // 🟦 Case 1: Product Inquiry order
+            $order = ProductInquiry::where('id', $store->order_no)->firstOrFail();
+        } elseif (!is_null($store->mail_booking_no)) {
+            // 🟨 Case 2: Mail Booking order
+            $order = MailBooking::where('id', $store->mail_no)->firstOrFail();
+        } else {
+            // 🚫 No valid link
+            return back()->withErrors(['order_type' => 'Store record is not linked to any valid order.']);
+        }
+
+        /**
+         * --------------------------------------------------------------------
+         * Step 1: Validate UOM consistency
+         * --------------------------------------------------------------------
+         */
+        if ($order->uom !== $requestedUom) {
             return back()->withErrors([
-                'allocated_uom' => "Allocated UOM must match the customer's requested UOM ({$productInquiry->uom})."
+                'allocated_uom' => "Allocated UOM must match the customer's requested UOM ({$order->uom})."
             ]);
         }
 
-        // ✅ Step 2: Convert allocated qty into yards (if necessary)
+        /**
+         * --------------------------------------------------------------------
+         * Step 2: Convert allocated qty to yards for uniform stock deduction
+         * --------------------------------------------------------------------
+         */
         if ($requestedUom === 'meters') {
-            // Convert meters → yards
             $allocatedQtyInYards = $validated['qty_allocated'] * 1.09361;
         } elseif ($requestedUom === 'yards') {
-            // Already in yards
             $allocatedQtyInYards = $validated['qty_allocated'];
         } elseif ($requestedUom === 'pieces') {
-            // Pieces: must only be deducted if stock is also in pieces
             if ($stock->uom !== 'pieces') {
                 return back()->withErrors([
                     'qty_allocated' => 'Cannot allocate pieces from stock measured in ' . $stock->uom
@@ -136,17 +157,25 @@ class StoresController extends Controller
             $allocatedQtyInYards = $validated['qty_allocated'];
         }
 
-        // ✅ Step 3: Decrease the stock qty
-        if ($stock->qty_available >= $allocatedQtyInYards) {
-            $stock->qty_available -= $allocatedQtyInYards;
-            $stock->save();
-        } else {
+        /**
+         * --------------------------------------------------------------------
+         * Step 3: Check and reduce stock
+         * --------------------------------------------------------------------
+         */
+        if ($stock->qty_available < $allocatedQtyInYards) {
             return back()->withErrors([
                 'qty_allocated' => 'Not enough stock available to allocate.'
             ]);
         }
 
-        // ✅ Step 4: Update store fields
+        $stock->qty_available -= $allocatedQtyInYards;
+        $stock->save();
+
+        /**
+         * --------------------------------------------------------------------
+         * Step 4: Update store details
+         * --------------------------------------------------------------------
+         */
         $store->qty_allocated = $validated['qty_allocated'];
         $store->reason_for_reject = $validated['reason_for_reject'] ?? null;
         $store->is_qty_assigned = true;
@@ -163,9 +192,13 @@ class StoresController extends Controller
 
         $store->save();
 
-        // ✅ Step 5: Allow sending to production
-        $productInquiry->canSendToProduction = true;
-        $productInquiry->save();
+        /**
+         * --------------------------------------------------------------------
+         * Step 5: Mark respective order as ready for production
+         * --------------------------------------------------------------------
+         */
+        $order->canSendToProduction = true;
+        $order->save();
 
         return redirect()->back()->with('success', 'Quantity assigned successfully!');
     }

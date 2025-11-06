@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static selectRaw(string $string)
  * @method static create(array $array)
  * @method static findOrFail($id)
+ * @method static where(string $string, $mail_booking_no)
  */
 class MailBooking extends Model
 {
