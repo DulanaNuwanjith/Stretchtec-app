@@ -29,10 +29,6 @@
                class="pb-2 px-3 font-semibold {{ request()->routeIs('rawMaterial.*') ? 'border-b-2 border-blue-500 text-blue-600' : 'text-gray-600' }}">
                 Raw Material Management
             </a>
-            <a href="{{ route('orderRawMaterial.index') }}"
-               class="pb-2 px-3 font-semibold {{ request()->routeIs('orderRawMaterial.*') ? 'border-b-2 border-blue-500 text-blue-600' : 'text-gray-600' }}">
-                Production Raw Material Requests
-            </a>
         </div>
 
         <!-- ✅ PAGE CONTENT -->
