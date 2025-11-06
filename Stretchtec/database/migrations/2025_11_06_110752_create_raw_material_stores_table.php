@@ -20,7 +20,6 @@ return new class extends Migration
             $table->string('supplier');
             $table->integer('available_quantity');
             $table->string('unit');
-            $table->string('unit_price');
             $table->string('remarks')->nullable();
             $table->timestamps();
         });

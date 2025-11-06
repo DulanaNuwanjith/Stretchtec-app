@@ -188,11 +188,6 @@
                                         <option value="pcs">Pieces</option>
                                     </select>
                                 </div>
-                                <div>
-                                    <label class="block text-sm font-medium">Unit Price</label>
-                                    <input name="unit_price" type="number" step="0.01" required
-                                           class="w-full mt-1 px-3 py-2 border rounded-md text-sm">
-                                </div>
                             </div>
 
                             <!-- Row 4 -->
@@ -237,11 +232,11 @@
                     <tr class="text-center">
                         <th
                             class="font-bold sticky left-0 z-10 bg-white px-4 py-3 w-36 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                            ID
+                            Shade
                         </th>
                         <th
                             class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                            Shade
+                            Date
                         </th>
                         <th
                             class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
@@ -265,7 +260,7 @@
                         </th>
                         <th
                             class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                            Unit Price
+                            Quantity Available
                         </th>
                         <th
                             class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
@@ -278,7 +273,7 @@
                         <tr class="hover:bg-gray-100 dark:hover:bg-gray-800 text-center">
                             <td
                                 class="sticky left-0 z-10 bg-white px-4 py-3 text-gray-700 dark:text-gray-300 whitespace-normal break-words">
-                                {{ $material->id }}
+                                {{ $material->shade }}
                             </td>
                             <td class="px-4 py-3 text-gray-700 dark:text-gray-300 whitespace-normal break-words">
                                 {{ $material->shade }}
@@ -296,10 +291,8 @@
                                 {{ $material->supplier }}
                             </td>
                             <td class="px-4 py-3 text-gray-700 dark:text-gray-300 whitespace-normal break-words">
-                                {{ $material->available_quantity }}
-                            </td>
-                            <td class="px-4 py-3 text-gray-700 dark:text-gray-300 whitespace-normal break-words">
-                                {{ $material->unit_price }}
+                                {{ $material->available_quantity }} {{ $material->unit }}
+
                             </td>
                             <td class="px-4 py-3 text-gray-700 dark:text-gray-300 whitespace-normal break-words">
                                 <button

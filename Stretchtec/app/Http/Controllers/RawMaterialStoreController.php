@@ -40,7 +40,6 @@ class RawMaterialStoreController extends Controller
             'supplier' => 'required|string|max:255',
             'available_quantity' => 'required|integer|min:0',
             'unit' => 'required|string|max:50',
-            'unit_price' => 'required|numeric|min:0',
             'remarks' => 'nullable|string',
         ]);
 

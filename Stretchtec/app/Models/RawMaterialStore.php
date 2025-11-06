@@ -19,7 +19,6 @@ class RawMaterialStore extends Model
         'supplier',
         'available_quantity',
         'unit',
-        'unit_price',
         'remarks',
     ];
 }
