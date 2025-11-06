@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\RawMaterialStore;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 
 class RawMaterialStoreController extends Controller
@@ -10,7 +12,7 @@ class RawMaterialStoreController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): Factory|View
     {
         $rawMaterials = RawMaterialStore::paginate(10);
         return view('store-management.pages.rawMaterial', compact('rawMaterials'));
@@ -19,7 +21,7 @@ class RawMaterialStoreController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(): void
     {
         //
     }
@@ -29,7 +31,21 @@ class RawMaterialStoreController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'color' => 'required|string|max:255',
+            'shade' => 'required|string|max:255',
+            'pst_no' => 'nullable|string|max:255',
+            'tkt' => 'required|string|max:255',
+            'supplier' => 'required|string|max:255',
+            'available_quantity' => 'required|integer|min:0',
+            'unit' => 'required|string|max:50',
+            'unit_price' => 'required|numeric|min:0',
+            'remarks' => 'nullable|string',
+        ]);
+
+        RawMaterialStore::create($validated);
+
+        return redirect()->route('rawMaterial.index')->with('success', 'Raw material added successfully!');
     }
 
     /**

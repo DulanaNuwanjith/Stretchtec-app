@@ -113,14 +113,109 @@
                 }
             </script>
 
+            <!-- Header Section -->
             <div class="flex justify-between items-center mb-6">
                 <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Raw Material Records</h1>
                 <div class="flex space-x-3">
-                    <a href="{{ route('sampleStock.index') }}">
-                        <button class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded shadow">
-                            Add New Raw Material
-                        </button>
-                    </a>
+                    <button onclick="document.getElementById('addRawMaterial').classList.remove('hidden')"
+                            class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded shadow">
+                        + Add New Raw Material
+                    </button>
+                </div>
+            </div>
+
+            <!-- Add New Raw Material Modal -->
+            <div id="addRawMaterial"
+                 class="fixed inset-0 z-50 hidden bg-black bg-opacity-50 flex items-center justify-center py-5"
+                 onclick="this.classList.add('hidden')">
+                <div class="w-full max-w-[700px] bg-white rounded-2xl shadow-2xl p-6"
+                     onclick="event.stopPropagation()">
+                    <h2 class="text-2xl font-semibold mb-6 text-blue-900 text-center">
+                        Add New Raw Material
+                    </h2>
+
+                    <form action="{{ route('rawMaterial.store') }}" method="POST">
+                        @csrf
+
+                        <div class="space-y-4">
+                            <!-- Row 1 -->
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium">Color</label>
+                                    <input name="color" type="text" required
+                                           class="w-full mt-1 px-3 py-2 border rounded-md text-sm">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium">Shade</label>
+                                    <input name="shade" type="text" required
+                                           class="w-full mt-1 px-3 py-2 border rounded-md text-sm">
+                                </div>
+                            </div>
+
+                            <!-- Row 2 -->
+                            <div class="grid grid-cols-3 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium">TKT</label>
+                                    <input name="tkt" type="text"
+                                           class="w-full mt-1 px-3 py-2 border rounded-md text-sm">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium">PST No</label>
+                                    <input name="pst_no" type="text"
+                                           class="w-full mt-1 px-3 py-2 border rounded-md text-sm">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium">Supplier</label>
+                                    <input name="supplier" type="text"
+                                           class="w-full mt-1 px-3 py-2 border rounded-md text-sm">
+                                </div>
+                            </div>
+
+                            <!-- Row 3 -->
+                            <div class="grid grid-cols-3 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium">Available Quantity</label>
+                                    <input name="available_quantity" type="number" required min="1"
+                                           class="w-full mt-1 px-3 py-2 border rounded-md text-sm">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium">Unit</label>
+                                    <select name="unit"
+                                            class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md text-sm dark:bg-gray-700 dark:text-white">
+                                        <option value="kg">KG</option>
+                                        <option value="cone">Cone</option>
+                                        <option value="m">Meter</option>
+                                        <option value="pcs">Pieces</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium">Unit Price</label>
+                                    <input name="unit_price" type="number" step="0.01" required
+                                           class="w-full mt-1 px-3 py-2 border rounded-md text-sm">
+                                </div>
+                            </div>
+
+                            <!-- Row 4 -->
+                            <div>
+                                <label class="block text-sm font-medium">Remarks</label>
+                                <textarea name="remarks" rows="2"
+                                          class="w-full mt-1 px-3 py-2 border rounded-md text-sm"></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Buttons -->
+                        <div class="flex justify-end gap-3 mt-6">
+                            <button type="button"
+                                    onclick="document.getElementById('addRawMaterial').classList.add('hidden')"
+                                    class="px-4 py-2 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 text-sm rounded hover:bg-gray-300">
+                                Cancel
+                            </button>
+                            <button type="submit"
+                                    class="px-4 py-2 bg-blue-500 text-white text-sm rounded hover:bg-blue-600">
+                                Save Raw Material
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
 
@@ -195,13 +290,13 @@
                                     {{ $material->tkt }}
                                 </td>
                                 <td class="px-4 py-3 text-gray-700 dark:text-gray-300 whitespace-normal break-words">
-                                    {{ $material->pst_number }}
+                                    {{ $material->pst_no }}
                                 </td>
                                 <td class="px-4 py-3 text-gray-700 dark:text-gray-300 whitespace-normal break-words">
                                     {{ $material->supplier }}
                                 </td>
                                 <td class="px-4 py-3 text-gray-700 dark:text-gray-300 whitespace-normal break-words">
-                                    {{ $material->quantity_available }}
+                                    {{ $material->available_quantity }}
                                 </td>
                                 <td class="px-4 py-3 text-gray-700 dark:text-gray-300 whitespace-normal break-words">
                                     {{ $material->unit_price }}
