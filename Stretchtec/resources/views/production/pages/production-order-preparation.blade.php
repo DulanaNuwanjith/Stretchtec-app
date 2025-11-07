@@ -1,3 +1,4 @@
+@php use Carbon\Carbon; @endphp
 <head>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
@@ -160,27 +161,57 @@
                                         </td>
 
                                         <!-- Mark Raw Material Ordered -->
-                                        <td class="px-4 py-3 border-r border-gray-300">
-                                            <form action="{{ route('orders.markOrdered', $order->id) }}" method="POST">
-                                                @csrf
-                                                @method('PATCH')
-                                                <button type="submit"
-                                                        class="bg-blue-500 hover:bg-blue-600 text-white text-xs font-semibold py-2 px-3 rounded shadow transition">
-                                                    {{ $order->raw_material_ordered ? 'Ordered ✅' : 'Mark Ordered' }}
-                                                </button>
-                                            </form>
+                                        <td class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                            <div class="flex flex-col items-center justify-center">
+                                                @if ($order->isRawMaterialOrdered)
+                                                    <!-- Banner showing ordered timestamp -->
+                                                    <span
+                                                        class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-blue-100 dark:bg-gray-800 px-3 py-1 rounded">
+                Ordered on <br>
+                {{ Carbon::parse($order->raw_material_ordered_date)->format('Y-m-d') }}
+                at
+                {{ Carbon::parse($order->raw_material_ordered_date)->format('H:i') }}
+            </span>
+                                                @else
+                                                    <!-- Mark Ordered button -->
+                                                    <form action="{{ route('orders.markOrdered', $order->id) }}"
+                                                          method="POST" onsubmit="handleSubmit(this)">
+                                                        @csrf
+                                                        @method('PATCH')
+                                                        <button type="submit"
+                                                                class="px-3 py-1 mt-4 text-xs rounded-lg bg-blue-100 text-blue-700 hover:bg-blue-200 flex items-center justify-center">
+                                                            Mark as Ordered
+                                                        </button>
+                                                    </form>
+                                                @endif
+                                            </div>
                                         </td>
 
                                         <!-- Mark Raw Material Received -->
-                                        <td class="px-4 py-3 border-r border-gray-300">
-                                            <form action="{{ route('orders.markReceived', $order->id) }}" method="POST">
-                                                @csrf
-                                                @method('PATCH')
-                                                <button type="submit"
-                                                        class="bg-green-500 hover:bg-green-600 text-white text-xs font-semibold py-2 px-3 rounded shadow transition">
-                                                    {{ $order->raw_material_received ? 'Received 📦' : 'Mark Received' }}
-                                                </button>
-                                            </form>
+                                        <td class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                            <div class="flex flex-col items-center justify-center">
+                                                @if ($order->isRawMaterialReceived)
+                                                    <!-- Banner showing received timestamp -->
+                                                    <span
+                                                        class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-green-100 dark:bg-gray-800 px-3 py-1 rounded">
+                                                        Received on <br>
+                                                        {{ Carbon::parse($order->raw_material_received_date)->format('Y-m-d') }}
+                                                        at
+                                                        {{ Carbon::parse($order->raw_material_received_date)->format('H:i') }}
+                                                    </span>
+                                                @else
+                                                    <!-- Mark Received button -->
+                                                    <form action="{{ route('orders.markReceived', $order->id) }}"
+                                                          method="POST" onsubmit="handleSubmit(this)">
+                                                        @csrf
+                                                        @method('PATCH')
+                                                        <button type="submit"
+                                                                class="px-3 py-1 mt-4 text-xs rounded-lg bg-green-100 text-green-700 hover:bg-green-200 flex items-center justify-center">
+                                                            Mark as Received
+                                                        </button>
+                                                    </form>
+                                                @endif
+                                            </div>
                                         </td>
 
                                         <!-- Assign Order -->
