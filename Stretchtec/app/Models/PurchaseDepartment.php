@@ -20,6 +20,7 @@ class PurchaseDepartment extends Model
         'quantity',
         'rate',
         'amount',
+        'total_amount',
         'status',
     ];
 }

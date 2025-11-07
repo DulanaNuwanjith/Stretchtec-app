@@ -24,6 +24,7 @@ return new class extends Migration
             $table->decimal('quantity');
             $table->decimal('rate');
             $table->decimal('amount');
+            $table->decimal('total_amount');
             $table->string('status')->default('pending');
             $table->timestamps();
         });
