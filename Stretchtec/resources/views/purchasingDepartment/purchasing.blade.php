@@ -114,7 +114,91 @@
             </script>
 
             <div class="flex justify-between items-center mb-6">
-                <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Purchasing Records</h1>
+                <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">
+                    Purchase Department Records
+                </h1>
+                <button onclick="document.getElementById('addPurchaseModal').classList.remove('hidden')"
+                        class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded shadow">
+                    + Add New Purchase Order
+                </button>
+            </div>
+
+            <!-- Add Purchase Modal -->
+            <div id="addPurchaseModal"
+                 class="fixed inset-0 z-50 hidden bg-black bg-opacity-50 flex items-center justify-center py-5">
+                <div class="w-full max-w-[700px] bg-white dark:bg-gray-900 rounded-2xl shadow-2xl p-4 transform transition-all scale-95 max-h-[calc(100vh-10rem)] overflow-y-auto"
+                     onclick="event.stopPropagation()">
+                    <div class="max-w-[600px] mx-auto p-8">
+                        <h2 class="text-2xl font-semibold mb-8 text-blue-900 mt-4 dark:text-gray-100 text-center">
+                            Add New Purchase Order
+                        </h2>
+
+                        <!-- Purchase Order Form -->
+                        <form id="purchaseOrderForm" action="{{ route('purchasing.store') }}" method="POST">
+                            @csrf
+
+                            <!-- Master PO Fields -->
+                            <div class="mt-3">
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                    PO Number
+                                </label>
+                                <input type="text" name="po_number" required
+                                       class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                       placeholder="Enter Purchase Order Number">
+                            </div>
+
+                            <div class="mt-3">
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                    PO Date
+                                </label>
+                                <input type="date" name="po_date" required
+                                       class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                            </div>
+
+                            <!-- Item Container -->
+                            <div id="purchaseItemsContainer" class="mt-6"></div>
+
+                            <!-- Add Item Button -->
+                            <button type="button" id="addPurchaseItemBtn"
+                                    class="mt-4 px-4 py-2 bg-green-500 hover:bg-green-600 text-white text-sm rounded">
+                                + Add Item
+                            </button>
+
+                            <div class="mt-4">
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                    Total Amount
+                                </label>
+                                <input type="number" step="0.01" name="total_amount" required
+                                       class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                       placeholder="Enter Total Amount">
+                            </div>
+
+                            <div class="mt-3">
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                    Status
+                                </label>
+                                <select name="status" required
+                                        class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                                    <option value="pending">Pending</option>
+                                    <option value="approved">Approved</option>
+                                    <option value="rejected">Rejected</option>
+                                </select>
+                            </div>
+
+                            <!-- Action Buttons -->
+                            <div class="flex justify-end mt-6 space-x-3">
+                                <button type="button" onclick="document.getElementById('addPurchaseModal').classList.add('hidden')"
+                                        class="px-4 py-2 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 text-sm rounded hover:bg-gray-300">
+                                    Cancel
+                                </button>
+                                <button type="submit"
+                                        class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white text-sm rounded">
+                                    Create Purchase Order
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
 
             <!-- Stock / Stores Records Table -->
@@ -191,5 +275,85 @@
                     spinner.classList.add("hidden"); // hide spinner after rendering
                 });
             });
+        </script>
+
+        <script>
+            let purchaseItemIndex = 0;
+
+            document.getElementById('addPurchaseItemBtn').addEventListener('click', () => {
+                const container = document.getElementById('purchaseItemsContainer');
+                const itemHTML = getPurchaseItemFields(purchaseItemIndex++);
+                container.insertAdjacentHTML('beforeend', itemHTML);
+            });
+
+            function removePurchaseItem(btn) {
+                btn.closest('.purchase-item-block').remove();
+            }
+
+            function getPurchaseItemFields(index) {
+                return `
+        <div class="purchase-item-block border rounded-lg p-4 mt-4 bg-gray-50 dark:bg-gray-800 relative">
+            <button type="button" onclick="removePurchaseItem(this)"
+                    class="absolute top-2 right-2 text-red-500 hover:text-red-700 text-sm">✖</button>
+
+            <div class="grid grid-cols-2 gap-3">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Shade</label>
+                    <input type="text" name="items[${index}][shade]" required
+                        class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Color</label>
+                    <input type="text" name="items[${index}][color]" required
+                        class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3 mt-3">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">TKT</label>
+                    <input type="text" name="items[${index}][tkt]" required
+                        class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">PST No</label>
+                    <input type="text" name="items[${index}][pst_no]"
+                        class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                </div>
+            </div>
+
+            <div class="mt-3">
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Supplier Comment</label>
+                <textarea name="items[${index}][supplier_comment]" rows="2"
+                    class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"></textarea>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3 mt-3">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">UOM</label>
+                    <input type="text" name="items[${index}][uom]" required
+                        class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Quantity</label>
+                    <input type="number" step="0.01" name="items[${index}][quantity]" required
+                        class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3 mt-3">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Rate</label>
+                    <input type="number" step="0.01" name="items[${index}][rate]" required
+                        class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Amount</label>
+                    <input type="number" step="0.01" name="items[${index}][amount]" required
+                        class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                </div>
+            </div>
+        </div>`;
+            }
         </script>
     @endsection

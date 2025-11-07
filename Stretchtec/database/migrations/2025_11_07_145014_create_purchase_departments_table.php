@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('purchase_departments', static function (Blueprint $table) {
             $table->id();
-            $table->string('po_number')->unique();
+            $table->string('po_number');
             $table->date('po_date');
             $table->string('shade');
             $table->string('color');
