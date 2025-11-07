@@ -153,42 +153,88 @@
                          class="overflow-x-auto border border-gray-300 dark:border-gray-700 rounded-lg shadow-sm">
                         <table class="min-w-full border-collapse">
                             <thead class="bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300">
-                            <tr>
-                                <th class="px-4 py-3 border-r border-gray-300 text-left text-sm font-semibold">#</th>
-                                <th class="px-4 py-3 border-r border-gray-300 text-left text-sm font-semibold">Order
-                                    ID
+                            <tr class="text-center">
+                                <th class="font-bold sticky left-0 top-0 z-20 bg-white px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                    Order No
                                 </th>
-                                <th class="px-4 py-3 border-r border-gray-300 text-left text-sm font-semibold">Product
-                                    Name
+                                <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase">
+                                    Customer
                                 </th>
-                                <th class="px-4 py-3 border-r border-gray-300 text-left text-sm font-semibold">
+                                <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase">
+                                    Reference No
+                                </th>
+                                <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase">
+                                    Item
+                                </th>
+                                <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-24 text-xs text-gray-600 dark:text-gray-300 uppercase">
+                                    Size
+                                </th>
+                                <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-24 text-xs text-gray-600 dark:text-gray-300 uppercase">
+                                    Color
+                                </th>
+                                <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-24 text-xs text-gray-600 dark:text-gray-300 uppercase">
+                                    Shade
+                                </th>
+                                <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-24 text-xs text-gray-600 dark:text-gray-300 uppercase">
+                                    TKT
+                                </th>
+                                <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-24 text-xs text-gray-600 dark:text-gray-300 uppercase">
                                     Quantity
                                 </th>
-                                <th class="px-4 py-3 border-r border-gray-300 text-left text-sm font-semibold">Mark Raw
-                                    Material Ordered
+                                <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-28 text-xs text-gray-600 dark:text-gray-300 uppercase">
+                                    UOM
                                 </th>
-                                <th class="px-4 py-3 border-r border-gray-300 text-left text-sm font-semibold">Mark Raw
-                                    Material Received
+                                <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase">
+                                    Supplier
+                                </th>
+                                <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-28 text-xs text-gray-600 dark:text-gray-300 uppercase">
+                                    PST No
+                                </th>
+                                <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-36 text-xs text-gray-600 dark:text-gray-300 uppercase">
+                                    Supplier Comment
+                                </th>
+                                <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-28 text-xs text-gray-600 dark:text-gray-300 uppercase">
+                                    Status
+                                </th>
+                                <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-40 text-xs text-gray-600 dark:text-gray-300 uppercase">
+                                    Mark Raw Material Ordered
+                                </th>
+                                <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-40 text-xs text-gray-600 dark:text-gray-300 uppercase">
+                                    Mark Raw Material Received
+                                </th>
+                                <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-36 text-xs text-gray-600 dark:text-gray-300 uppercase">
+                                    Assign Order
                                 </th>
                             </tr>
                             </thead>
-                            <tbody class="bg-white dark:bg-gray-900">
-                            @forelse($orderPreparations as $index => $order)
-                                <tr class="border-t border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition">
-                                    <td class="px-4 py-3 border-r border-gray-300 text-gray-800 dark:text-gray-200">
-                                        {{ $index + 1 }}
+                            <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                            @forelse($orderPreparations as $order)
+                                <tr class="odd:bg-white even:bg-gray-50 border-b border-gray-200 text-center">
+                                    <!-- Sticky first column -->
+                                    <td class="px-4 py-3 font-bold sticky left-0 z-10 bg-gray-100 whitespace-normal break-words border-r border-gray-300 text-blue-500">
+                                        {{ $order->prod_order_no ?? 'N/A' }}
                                     </td>
-
-                                    <td class="px-4 py-3 border-r border-gray-300 text-gray-800 dark:text-gray-200">
-                                        {{ $order->id }}
-                                    </td>
-
-                                    <td class="px-4 py-3 border-r border-gray-300 text-gray-800 dark:text-gray-200">
-                                        {{ $order->product_name }}
-                                    </td>
-
-                                    <td class="px-4 py-3 border-r border-gray-300 text-gray-800 dark:text-gray-200">
-                                        {{ $order->quantity }}
+                                    <td class="px-4 py-3 border-r border-gray-300">{{ $order->customer_name ?? '-' }}</td>
+                                    <td class="px-4 py-3 border-r border-gray-300">{{ $order->reference_no ?? '-' }}</td>
+                                    <td class="px-4 py-3 border-r border-gray-300">{{ $order->item ?? '-' }}</td>
+                                    <td class="px-4 py-3 border-r border-gray-300">{{ $order->size ?? '-' }}</td>
+                                    <td class="px-4 py-3 border-r border-gray-300">{{ $order->color ?? '-' }}</td>
+                                    <td class="px-4 py-3 border-r border-gray-300">{{ $order->shade ?? '-' }}</td>
+                                    <td class="px-4 py-3 border-r border-gray-300">{{ $order->tkt ?? '-' }}</td>
+                                    <td class="px-4 py-3 border-r border-gray-300">{{ $order->qty ?? 0 }}</td>
+                                    <td class="px-4 py-3 border-r border-gray-300">{{ $order->uom ?? '-' }}</td>
+                                    <td class="px-4 py-3 border-r border-gray-300">{{ $order->supplier ?? '-' }}</td>
+                                    <td class="px-4 py-3 border-r border-gray-300">{{ $order->pst_no ?? '-' }}</td>
+                                    <td class="px-4 py-3 border-r border-gray-300">{{ $order->supplier_comment ?? '-' }}</td>
+                                    <td class="px-4 py-3 border-r border-gray-300">
+                                        <span class="px-2 py-1 text-xs rounded-full
+                                            {{ $order->status === 'Completed'
+                                                ? 'bg-green-100 text-green-700'
+                                                : ($order->status === 'Pending'
+                                                    ? 'bg-yellow-100 text-yellow-700'
+                                                    : 'bg-gray-100 text-gray-600') }}">
+                                            {{ $order->status ?? 'Pending' }}
+                                        </span>
                                     </td>
 
                                     <!-- Mark Raw Material Ordered -->
