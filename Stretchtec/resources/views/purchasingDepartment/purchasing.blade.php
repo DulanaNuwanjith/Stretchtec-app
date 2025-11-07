@@ -136,7 +136,7 @@
             <div id="orderPopupModal"
                  class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
                 <div
-                    class="bg-white dark:bg-gray-900 w-11/12 max-w-7xl rounded-2xl shadow-lg overflow-y-auto max-h-[90vh] relative p-6">
+                    class="bg-white dark:bg-gray-900 w-11/12 max-w-9xl rounded-2xl shadow-lg overflow-y-auto max-h-[90vh] relative p-6">
 
                     <!-- Close Button -->
                     <button onclick="closeOrderPopup()"
@@ -198,9 +198,6 @@
                                 </th>
                                 <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-40 text-xs text-gray-600 dark:text-gray-300 uppercase">
                                     Mark Raw Material Received
-                                </th>
-                                <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-36 text-xs text-gray-600 dark:text-gray-300 uppercase">
-                                    Assign Order
                                 </th>
                             </tr>
                             </thead>
