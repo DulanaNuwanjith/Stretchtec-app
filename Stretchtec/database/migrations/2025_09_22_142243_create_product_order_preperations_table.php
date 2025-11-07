@@ -16,6 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('product_inquiry_id');
             $table->string('prod_order_no');
             $table->string('customer_name');
+            $table->string('reference_no');
             $table->string('item');
             $table->string('size');
             $table->string('color');

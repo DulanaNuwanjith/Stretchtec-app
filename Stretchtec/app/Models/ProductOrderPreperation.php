@@ -15,6 +15,7 @@ class ProductOrderPreperation extends Model
         'product_inquiry_id',
         'prod_order_no',
         'customer_name',
+        'reference_no',
         'item',
         'size',
         'color',

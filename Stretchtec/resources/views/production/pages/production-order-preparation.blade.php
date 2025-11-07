@@ -84,6 +84,10 @@
                                         </th>
                                         <th
                                             class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                            Reference No
+                                        </th>
+                                        <th
+                                            class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                             Item
                                         </th>
                                         <th
@@ -141,6 +145,9 @@
                                             <td
                                                 class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
                                                 {{ $order->customer_name ?? 'N/A' }}</td>
+                                            <td
+                                                class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
+                                                {{ $order->reference_no ?? 'N/A' }}</td>
                                             <td
                                                 class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
                                                 {{ $order->item ?? 'N/A' }}</td>

@@ -291,7 +291,7 @@
                 </table>
             </div>
         </div>
-    
+
         <script>
             document.addEventListener("DOMContentLoaded", function () {
                 const spinner = document.getElementById("pageLoadingSpinner");
