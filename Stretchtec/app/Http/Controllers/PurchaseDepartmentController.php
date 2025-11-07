@@ -12,7 +12,8 @@ class PurchaseDepartmentController extends Controller
      */
     public function index()
     {
-        //
+        $purchase_department = PurchaseDepartment::all();
+        return view('purchasingDepartment.purchasing', compact('purchase_department'));
     }
 
     /**

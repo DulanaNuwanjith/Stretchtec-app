@@ -49,6 +49,7 @@ use App\Http\Controllers\OperatorsandSupervisorsController;
 use App\Http\Controllers\ProductCatalogController;
 use App\Http\Controllers\ProductInquiryController;
 use App\Http\Controllers\ProductOrderPreperationController;
+use App\Http\Controllers\PurchaseDepartmentController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SampleInquiryController;
 use App\Http\Controllers\SamplePreparationProductionController;
@@ -205,10 +206,12 @@ Route::middleware([
      |----------------------------------------------------------------------
      */
 
-    Route::get('purchasing', static function () {
-        return view('purchasingDepartment.purchasing');
-    })->name('purchasing.index');
-
+    Route::resource('purchasing', PurchaseDepartmentController::class)->names([
+        'index' => 'purchasing.index',
+        'store' => 'purchasing.store',
+        'update' => 'purchasing.update',
+        'destroy' => 'purchasing.destroy',
+    ]);
 
     /* ----------------------------------------------------------------------
      | Mail Booking Management Routes
