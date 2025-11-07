@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ProductOrderPreperation;
 use App\Models\PurchaseDepartment;
 use Exception;
 use Illuminate\Http\RedirectResponse;
@@ -17,7 +18,8 @@ class PurchaseDepartmentController extends Controller
     public function index()
     {
         $purchaseDepartments = PurchaseDepartment::all();
-        return view('purchasingDepartment.purchasing', compact('purchaseDepartments'));
+        $orderPreparations = ProductOrderPreperation::latest()->paginate(10);
+        return view('purchasingDepartment.purchasing', compact('purchaseDepartments', 'orderPreparations'));
     }
 
     /**

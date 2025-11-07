@@ -117,11 +117,117 @@
                 <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">
                     Purchase Department Records
                 </h1>
-                <button onclick="document.getElementById('addPurchaseModal').classList.remove('hidden')"
-                        class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded shadow">
-                    + Add New Purchase Order
-                </button>
+                <div class="flex space-x-3">
+                    <button onclick="document.getElementById('addPurchaseModal').classList.remove('hidden')"
+                            class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded shadow">
+                        + Add New Purchase Order
+                    </button>
+
+                    <button onclick="document.getElementById('orderPopupModal').classList.remove('hidden')"
+                            class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded shadow">
+                        View & Update Orders
+                    </button>
+                </div>
             </div>
+
+            <!-- Orders Popup Modal -->
+            <div id="orderPopupModal"
+                 class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+                <div class="bg-white dark:bg-gray-900 w-11/12 max-w-7xl rounded-2xl shadow-lg overflow-y-auto max-h-[90vh] relative p-6">
+
+                    <!-- Close Button -->
+                    <button onclick="closeOrderPopup()"
+                            class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 text-xl">
+                        ✖
+                    </button>
+
+                    <h2 class="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-100">
+                        Manage & Update Purchase Orders
+                    </h2>
+
+                    <!-- Table Container -->
+                    <div id="orderTableContainer" class="overflow-x-auto border border-gray-300 dark:border-gray-700 rounded-lg shadow-sm">
+                        <table class="min-w-full border-collapse">
+                            <thead class="bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300">
+                            <tr>
+                                <th class="px-4 py-3 border-r border-gray-300 text-left text-sm font-semibold">#</th>
+                                <th class="px-4 py-3 border-r border-gray-300 text-left text-sm font-semibold">Order ID</th>
+                                <th class="px-4 py-3 border-r border-gray-300 text-left text-sm font-semibold">Product Name</th>
+                                <th class="px-4 py-3 border-r border-gray-300 text-left text-sm font-semibold">Quantity</th>
+                                <th class="px-4 py-3 border-r border-gray-300 text-left text-sm font-semibold">Mark Raw Material Ordered</th>
+                                <th class="px-4 py-3 border-r border-gray-300 text-left text-sm font-semibold">Mark Raw Material Received</th>
+                            </tr>
+                            </thead>
+                            <tbody class="bg-white dark:bg-gray-900">
+                            @forelse($orderPreparations as $index => $order)
+                                <tr class="border-t border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition">
+                                    <td class="px-4 py-3 border-r border-gray-300 text-gray-800 dark:text-gray-200">
+                                        {{ $index + 1 }}
+                                    </td>
+
+                                    <td class="px-4 py-3 border-r border-gray-300 text-gray-800 dark:text-gray-200">
+                                        {{ $order->id }}
+                                    </td>
+
+                                    <td class="px-4 py-3 border-r border-gray-300 text-gray-800 dark:text-gray-200">
+                                        {{ $order->product_name }}
+                                    </td>
+
+                                    <td class="px-4 py-3 border-r border-gray-300 text-gray-800 dark:text-gray-200">
+                                        {{ $order->quantity }}
+                                    </td>
+
+                                    <!-- Mark Raw Material Ordered -->
+                                    <td class="px-4 py-3 border-r border-gray-300">
+                                        <form action="{{ route('orders.markOrdered', $order->id) }}" method="POST">
+                                            @csrf
+                                            @method('PATCH')
+                                            <button type="submit"
+                                                    class="bg-blue-500 hover:bg-blue-600 text-white text-xs font-semibold py-2 px-3 rounded shadow transition">
+                                                {{ $order->isRawMaterialOrdered ? 'Ordered ✅' : 'Mark Ordered' }}
+                                            </button>
+                                        </form>
+
+                                        @if($order->raw_material_ordered_date)
+                                            <div class="text-xs text-gray-500 mt-1">
+                                                {{ \Carbon\Carbon::parse($order->raw_material_ordered_date)->format('Y-m-d h:i A') }}
+                                            </div>
+                                        @endif
+                                    </td>
+
+                                    <!-- Mark Raw Material Received -->
+                                    <td class="px-4 py-3 border-r border-gray-300">
+                                        <form action="{{ route('orders.markReceived', $order->id) }}" method="POST">
+                                            @csrf
+                                            @method('PATCH')
+                                            <button type="submit"
+                                                    class="bg-green-500 hover:bg-green-600 text-white text-xs font-semibold py-2 px-3 rounded shadow transition">
+                                                {{ $order->isRawMaterialReceived ? 'Received 📦' : 'Mark Received' }}
+                                            </button>
+                                        </form>
+
+                                        @if($order->raw_material_received_date)
+                                            <div class="text-xs text-gray-500 mt-1">
+                                                {{ \Carbon\Carbon::parse($order->raw_material_received_date)->format('Y-m-d h:i A') }}
+                                            </div>
+                                        @endif
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="6" class="px-4 py-3 text-center text-gray-500 dark:text-gray-400">
+                                        No orders available.
+                                    </td>
+                                </tr>
+                            @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+
+
 
             <!-- Add Purchase Modal -->
             <div id="addPurchaseModal"
@@ -432,4 +538,22 @@
             // Initialize event listeners
             attachItemListeners();
         </script>
+
+        <script>
+            function openOrderPopup() {
+                document.getElementById('orderPopupModal').classList.remove('hidden');
+            }
+
+            function closeOrderPopup() {
+                document.getElementById('orderPopupModal').classList.add('hidden');
+            }
+
+            // Optional: Close modal when clicking outside content
+            window.addEventListener('click', function(e) {
+                const modal = document.getElementById('orderPopupModal');
+                if (e.target === modal) closeOrderPopup();
+            });
+        </script>
+
+
 @endsection
