@@ -193,9 +193,6 @@
                                 <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-36 text-xs text-gray-600 dark:text-gray-300 uppercase">
                                     Supplier Comment
                                 </th>
-                                <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-28 text-xs text-gray-600 dark:text-gray-300 uppercase">
-                                    Status
-                                </th>
                                 <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-40 text-xs text-gray-600 dark:text-gray-300 uppercase">
                                     Mark Raw Material Ordered
                                 </th>
@@ -226,16 +223,6 @@
                                     <td class="px-4 py-3 border-r border-gray-300">{{ $order->supplier ?? '-' }}</td>
                                     <td class="px-4 py-3 border-r border-gray-300">{{ $order->pst_no ?? '-' }}</td>
                                     <td class="px-4 py-3 border-r border-gray-300">{{ $order->supplier_comment ?? '-' }}</td>
-                                    <td class="px-4 py-3 border-r border-gray-300">
-                                        <span class="px-2 py-1 text-xs rounded-full
-                                            {{ $order->status === 'Completed'
-                                                ? 'bg-green-100 text-green-700'
-                                                : ($order->status === 'Pending'
-                                                    ? 'bg-yellow-100 text-yellow-700'
-                                                    : 'bg-gray-100 text-gray-600') }}">
-                                            {{ $order->status ?? 'Pending' }}
-                                        </span>
-                                    </td>
 
                                     <!-- Mark Raw Material Ordered -->
                                     <td class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
@@ -470,6 +457,11 @@
                     @endforeach
                     </tbody>
                 </table>
+            </div>
+
+            {{-- Pagination --}}
+            <div class="p-2 border-t border-gray-200 dark:border-gray-700">
+                {{ $purchaseDepartments->links() }}
             </div>
         </div>
 

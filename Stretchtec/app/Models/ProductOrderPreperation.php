@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static latest()
  * @method static create(array $array)
  * @method static findOrFail($id)
+ * @method static where(string $string, false $false)
  */
 class ProductOrderPreperation extends Model
 {
@@ -28,6 +29,13 @@ class ProductOrderPreperation extends Model
         'pst_no',
         'supplier_comment',
         'status',
+        'isRawMaterialOrdered',
+        'raw_material_ordered_date',
+        'isRawMaterialReceived',
+        'raw_material_received_date',
+        'isOrderAssigned',
+        'order_assigned_date',
+        'orderAssignedTo',
     ];
 
     // Optional: link back to ProductInquiry

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\ProductOrderPreperation;
 use App\Models\PurchaseDepartment;
 use Exception;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -15,10 +17,12 @@ class PurchaseDepartmentController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): Factory|View
     {
-        $purchaseDepartments = PurchaseDepartment::all();
-        $orderPreparations = ProductOrderPreperation::latest()->paginate(10);
+        $purchaseDepartments = PurchaseDepartment::latest()->paginate(10);
+        $orderPreparations = ProductOrderPreperation::where('isRawMaterialOrdered', false)
+            ->latest()
+            ->get();
         return view('purchasingDepartment.purchasing', compact('purchaseDepartments', 'orderPreparations'));
     }
 
@@ -80,7 +84,7 @@ class PurchaseDepartmentController extends Controller
 
         } catch (Exception $e) {
             DB::rollBack();
-            Log::error('Error saving purchase order: '.$e->getMessage());
+            Log::error('Error saving purchase order: ' . $e->getMessage());
             return back()->with('error', 'An error occurred while creating the purchase order.');
         }
     }
