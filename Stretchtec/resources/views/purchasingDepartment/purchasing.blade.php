@@ -1,3 +1,5 @@
+@php use Carbon\Carbon; @endphp
+
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <div class="flex h-full w-full">
     @extends('layouts.purchasing-tabs')
@@ -133,7 +135,8 @@
             <!-- Orders Popup Modal -->
             <div id="orderPopupModal"
                  class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
-                <div class="bg-white dark:bg-gray-900 w-11/12 max-w-7xl rounded-2xl shadow-lg overflow-y-auto max-h-[90vh] relative p-6">
+                <div
+                    class="bg-white dark:bg-gray-900 w-11/12 max-w-7xl rounded-2xl shadow-lg overflow-y-auto max-h-[90vh] relative p-6">
 
                     <!-- Close Button -->
                     <button onclick="closeOrderPopup()"
@@ -146,16 +149,27 @@
                     </h2>
 
                     <!-- Table Container -->
-                    <div id="orderTableContainer" class="overflow-x-auto border border-gray-300 dark:border-gray-700 rounded-lg shadow-sm">
+                    <div id="orderTableContainer"
+                         class="overflow-x-auto border border-gray-300 dark:border-gray-700 rounded-lg shadow-sm">
                         <table class="min-w-full border-collapse">
                             <thead class="bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300">
                             <tr>
                                 <th class="px-4 py-3 border-r border-gray-300 text-left text-sm font-semibold">#</th>
-                                <th class="px-4 py-3 border-r border-gray-300 text-left text-sm font-semibold">Order ID</th>
-                                <th class="px-4 py-3 border-r border-gray-300 text-left text-sm font-semibold">Product Name</th>
-                                <th class="px-4 py-3 border-r border-gray-300 text-left text-sm font-semibold">Quantity</th>
-                                <th class="px-4 py-3 border-r border-gray-300 text-left text-sm font-semibold">Mark Raw Material Ordered</th>
-                                <th class="px-4 py-3 border-r border-gray-300 text-left text-sm font-semibold">Mark Raw Material Received</th>
+                                <th class="px-4 py-3 border-r border-gray-300 text-left text-sm font-semibold">Order
+                                    ID
+                                </th>
+                                <th class="px-4 py-3 border-r border-gray-300 text-left text-sm font-semibold">Product
+                                    Name
+                                </th>
+                                <th class="px-4 py-3 border-r border-gray-300 text-left text-sm font-semibold">
+                                    Quantity
+                                </th>
+                                <th class="px-4 py-3 border-r border-gray-300 text-left text-sm font-semibold">Mark Raw
+                                    Material Ordered
+                                </th>
+                                <th class="px-4 py-3 border-r border-gray-300 text-left text-sm font-semibold">Mark Raw
+                                    Material Received
+                                </th>
                             </tr>
                             </thead>
                             <tbody class="bg-white dark:bg-gray-900">
@@ -178,39 +192,57 @@
                                     </td>
 
                                     <!-- Mark Raw Material Ordered -->
-                                    <td class="px-4 py-3 border-r border-gray-300">
-                                        <form action="{{ route('orders.markOrdered', $order->id) }}" method="POST">
-                                            @csrf
-                                            @method('PATCH')
-                                            <button type="submit"
-                                                    class="bg-blue-500 hover:bg-blue-600 text-white text-xs font-semibold py-2 px-3 rounded shadow transition">
-                                                {{ $order->isRawMaterialOrdered ? 'Ordered ✅' : 'Mark Ordered' }}
-                                            </button>
-                                        </form>
-
-                                        @if($order->raw_material_ordered_date)
-                                            <div class="text-xs text-gray-500 mt-1">
-                                                {{ \Carbon\Carbon::parse($order->raw_material_ordered_date)->format('Y-m-d h:i A') }}
-                                            </div>
-                                        @endif
+                                    <td class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                        <div class="flex flex-col items-center justify-center">
+                                            @if ($order->isRawMaterialOrdered)
+                                                <!-- Banner showing ordered timestamp -->
+                                                <span
+                                                    class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-blue-100 dark:bg-gray-800 px-3 py-1 rounded">
+                                                        Ordered on <br>
+                                                        {{ Carbon::parse($order->raw_material_ordered_date)->format('Y-m-d') }}
+                                                        at
+                                                        {{ Carbon::parse($order->raw_material_ordered_date)->format('H:i') }}
+                                                    </span>
+                                            @else
+                                                <!-- Mark Ordered button -->
+                                                <form action="{{ route('orders.markOrdered', $order->id) }}"
+                                                      method="POST" onsubmit="handleSubmit(this)">
+                                                    @csrf
+                                                    @method('PATCH')
+                                                    <button type="submit"
+                                                            class="px-3 py-1 mt-4 text-xs rounded-lg bg-blue-100 text-blue-700 hover:bg-blue-200 flex items-center justify-center">
+                                                        Mark as Ordered
+                                                    </button>
+                                                </form>
+                                            @endif
+                                        </div>
                                     </td>
 
                                     <!-- Mark Raw Material Received -->
-                                    <td class="px-4 py-3 border-r border-gray-300">
-                                        <form action="{{ route('orders.markReceived', $order->id) }}" method="POST">
-                                            @csrf
-                                            @method('PATCH')
-                                            <button type="submit"
-                                                    class="bg-green-500 hover:bg-green-600 text-white text-xs font-semibold py-2 px-3 rounded shadow transition">
-                                                {{ $order->isRawMaterialReceived ? 'Received 📦' : 'Mark Received' }}
-                                            </button>
-                                        </form>
-
-                                        @if($order->raw_material_received_date)
-                                            <div class="text-xs text-gray-500 mt-1">
-                                                {{ \Carbon\Carbon::parse($order->raw_material_received_date)->format('Y-m-d h:i A') }}
-                                            </div>
-                                        @endif
+                                    <td class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                        <div class="flex flex-col items-center justify-center">
+                                            @if ($order->isRawMaterialReceived)
+                                                <!-- Banner showing received timestamp -->
+                                                <span
+                                                    class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-green-100 dark:bg-gray-800 px-3 py-1 rounded">
+                                                        Received on <br>
+                                                        {{ Carbon::parse($order->raw_material_received_date)->format('Y-m-d') }}
+                                                        at
+                                                        {{ Carbon::parse($order->raw_material_received_date)->format('H:i') }}
+                                                    </span>
+                                            @else
+                                                <!-- Mark Received button -->
+                                                <form action="{{ route('orders.markReceived', $order->id) }}"
+                                                      method="POST" onsubmit="handleSubmit(this)">
+                                                    @csrf
+                                                    @method('PATCH')
+                                                    <button type="submit"
+                                                            class="px-3 py-1 mt-4 text-xs rounded-lg bg-green-100 text-green-700 hover:bg-green-200 flex items-center justify-center">
+                                                        Mark as Received
+                                                    </button>
+                                                </form>
+                                            @endif
+                                        </div>
                                     </td>
                                 </tr>
                             @empty
@@ -225,9 +257,6 @@
                     </div>
                 </div>
             </div>
-
-
-
 
             <!-- Add Purchase Modal -->
             <div id="addPurchaseModal"
@@ -524,7 +553,7 @@
                 });
             }
 
-            // Calculate and update total amount across all items
+            // Calculate and update the total amount across all items
             function calculateTotalAmount() {
                 let total = 0;
                 const amountInputs = document.querySelectorAll('.amount-input');
@@ -549,7 +578,7 @@
             }
 
             // Optional: Close modal when clicking outside content
-            window.addEventListener('click', function(e) {
+            window.addEventListener('click', function (e) {
                 const modal = document.getElementById('orderPopupModal');
                 if (e.target === modal) closeOrderPopup();
             });
