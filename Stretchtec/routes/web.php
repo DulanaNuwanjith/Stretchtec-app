@@ -262,6 +262,9 @@ Route::middleware([
 
     Route::get('/stock/add/{id}', [StockController::class, 'addStock'])->name('stockManagement.addStock');
 
+    Route::patch('/orders/{id}/mark-ordered', [ProductOrderPreperationController::class, 'markOrdered'])->name('orders.markOrdered');
+    Route::patch('/orders/{id}/mark-received', [ProductOrderPreperationController::class, 'markReceived'])->name('orders.markReceived');
+
     Route::get('knitted', static function () {
         return view('production.pages.knitted');
     })->name('knitted.index');

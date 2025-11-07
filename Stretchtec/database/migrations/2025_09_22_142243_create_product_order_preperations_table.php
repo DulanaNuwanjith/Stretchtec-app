@@ -27,6 +27,13 @@ return new class extends Migration
             $table->string('supplier')->nullable();
             $table->string('pst_no')->nullable();
             $table->string('supplier_comment')->nullable();
+            $table->boolean('isRawMaterialOrdered')->default(false);
+            $table->dateTime('raw_material_ordered_date')->nullable();
+            $table->boolean('isRawMaterialReceived')->default(false);
+            $table->dateTime('raw_material_received_date')->nullable();
+            $table->boolean('isOrderAssigned')->default(false);
+            $table->dateTime('order_assigned_date')->nullable();
+            $table->string('orderAssignedTo')->nullable();
             $table->string('status')->default('Pending');
             $table->timestamps();
 

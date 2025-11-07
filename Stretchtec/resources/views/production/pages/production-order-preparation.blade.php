@@ -29,12 +29,12 @@
                         {{-- Filters --}}
                         <div class="flex justify-start">
                             <button onclick="toggleFilterForm()"
-                                class="bg-white border border-blue-500 text-blue-500 hover:text-blue-600 hover:border-blue-600 font-semibold py-1 px-3 rounded shadow flex items-center gap-2 mb-6">
+                                    class="bg-white border border-blue-500 text-blue-500 hover:text-blue-600 hover:border-blue-600 font-semibold py-1 px-3 rounded shadow flex items-center gap-2 mb-6">
                                 <img src="{{ asset('icons/filter.png') }}" class="w-6 h-6" alt="Filter Icon">
                                 Filters
                             </button>
                             <button onclick="toggleReportForm()"
-                                class="bg-white border border-blue-500 text-blue-500 hover:text-blue-600 hover:border-blue-600 font-semibold py-1 px-3 rounded shadow flex items-center gap-2 mb-6 ml-2">
+                                    class="bg-white border border-blue-500 text-blue-500 hover:text-blue-600 hover:border-blue-600 font-semibold py-1 px-3 rounded shadow flex items-center gap-2 mb-6 ml-2">
                                 Generate Report
                             </button>
                         </div>
@@ -42,7 +42,7 @@
                         <div id="filterFormContainer" class="hidden mt-4">
                             <!-- Filter Form -->
                             <form id="filterForm1" method="GET" action="{{ route('sample-inquery-details.index') }}"
-                                class="mb-6 sticky top-0 z-40 flex gap-6 items-center">
+                                  class="mb-6 sticky top-0 z-40 flex gap-6 items-center">
                                 <div class="flex items-center gap-4 flex-wrap">
 
 
@@ -58,15 +58,16 @@
 
                         {{-- Data Table --}}
                         <div id="orderPreparationScroll"
-                            class="overflow-x-auto max-h-[1200px] bg-white dark:bg-gray-900 shadow rounded-lg">
+                             class="overflow-x-auto max-h-[1200px] bg-white dark:bg-gray-900 shadow rounded-lg">
                             <!-- Spinner -->
                             <div id="pageLoadingSpinner"
-                                class="fixed inset-0 z-50 bg-white bg-opacity-80 flex flex-col items-center justify-center">
+                                 class="fixed inset-0 z-50 bg-white bg-opacity-80 flex flex-col items-center justify-center">
                                 <svg class="animate-spin h-10 w-10 text-blue-600" xmlns="http://www.w3.org/2000/svg"
-                                    fill="none" viewBox="0 0 24 24">
+                                     fill="none" viewBox="0 0 24 24">
                                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
-                                        stroke-width="4"></circle>
-                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z">
+                                            stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor"
+                                          d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z">
                                     </path>
                                 </svg>
                                 <p class="mt-3 text-gray-700 font-semibold">Loading data...</p>
@@ -77,22 +78,54 @@
                                     <th class="font-bold sticky left-0 top-0 z-20 bg-white px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                         Order No
                                     </th>
-                                    <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase">Customer</th>
-                                    <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase">Reference No</th>
-                                    <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase">Item</th>
-                                    <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-24 text-xs text-gray-600 dark:text-gray-300 uppercase">Size</th>
-                                    <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-24 text-xs text-gray-600 dark:text-gray-300 uppercase">Color</th>
-                                    <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-24 text-xs text-gray-600 dark:text-gray-300 uppercase">Shade</th>
-                                    <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-24 text-xs text-gray-600 dark:text-gray-300 uppercase">TKT</th>
-                                    <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-24 text-xs text-gray-600 dark:text-gray-300 uppercase">Quantity</th>
-                                    <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-28 text-xs text-gray-600 dark:text-gray-300 uppercase">UOM</th>
-                                    <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase">Supplier</th>
-                                    <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-28 text-xs text-gray-600 dark:text-gray-300 uppercase">PST No</th>
-                                    <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-36 text-xs text-gray-600 dark:text-gray-300 uppercase">Supplier Comment</th>
-                                    <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-28 text-xs text-gray-600 dark:text-gray-300 uppercase">Status</th>
-                                    <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-40 text-xs text-gray-600 dark:text-gray-300 uppercase">Mark Raw Material Ordered</th>
-                                    <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-40 text-xs text-gray-600 dark:text-gray-300 uppercase">Mark Raw Material Received</th>
-                                    <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-36 text-xs text-gray-600 dark:text-gray-300 uppercase">Assign Order</th>
+                                    <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase">
+                                        Customer
+                                    </th>
+                                    <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase">
+                                        Reference No
+                                    </th>
+                                    <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase">
+                                        Item
+                                    </th>
+                                    <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-24 text-xs text-gray-600 dark:text-gray-300 uppercase">
+                                        Size
+                                    </th>
+                                    <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-24 text-xs text-gray-600 dark:text-gray-300 uppercase">
+                                        Color
+                                    </th>
+                                    <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-24 text-xs text-gray-600 dark:text-gray-300 uppercase">
+                                        Shade
+                                    </th>
+                                    <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-24 text-xs text-gray-600 dark:text-gray-300 uppercase">
+                                        TKT
+                                    </th>
+                                    <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-24 text-xs text-gray-600 dark:text-gray-300 uppercase">
+                                        Quantity
+                                    </th>
+                                    <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-28 text-xs text-gray-600 dark:text-gray-300 uppercase">
+                                        UOM
+                                    </th>
+                                    <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase">
+                                        Supplier
+                                    </th>
+                                    <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-28 text-xs text-gray-600 dark:text-gray-300 uppercase">
+                                        PST No
+                                    </th>
+                                    <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-36 text-xs text-gray-600 dark:text-gray-300 uppercase">
+                                        Supplier Comment
+                                    </th>
+                                    <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-28 text-xs text-gray-600 dark:text-gray-300 uppercase">
+                                        Status
+                                    </th>
+                                    <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-40 text-xs text-gray-600 dark:text-gray-300 uppercase">
+                                        Mark Raw Material Ordered
+                                    </th>
+                                    <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-40 text-xs text-gray-600 dark:text-gray-300 uppercase">
+                                        Mark Raw Material Received
+                                    </th>
+                                    <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-36 text-xs text-gray-600 dark:text-gray-300 uppercase">
+                                        Assign Order
+                                    </th>
                                 </tr>
                                 </thead>
 
@@ -116,19 +149,19 @@
                                         <td class="px-4 py-3 border-r border-gray-300">{{ $order->pst_no ?? '-' }}</td>
                                         <td class="px-4 py-3 border-r border-gray-300">{{ $order->supplier_comment ?? '-' }}</td>
                                         <td class="px-4 py-3 border-r border-gray-300">
-                <span class="px-2 py-1 text-xs rounded-full
-                    {{ $order->status === 'Completed'
-                        ? 'bg-green-100 text-green-700'
-                        : ($order->status === 'Pending'
-                            ? 'bg-yellow-100 text-yellow-700'
-                            : 'bg-gray-100 text-gray-600') }}">
-                    {{ $order->status ?? 'Pending' }}
-                </span>
+                                        <span class="px-2 py-1 text-xs rounded-full
+                                            {{ $order->status === 'Completed'
+                                                ? 'bg-green-100 text-green-700'
+                                                : ($order->status === 'Pending'
+                                                    ? 'bg-yellow-100 text-yellow-700'
+                                                    : 'bg-gray-100 text-gray-600') }}">
+                                            {{ $order->status ?? 'Pending' }}
+                                        </span>
                                         </td>
 
                                         <!-- Mark Raw Material Ordered -->
                                         <td class="px-4 py-3 border-r border-gray-300">
-                                            <form action="#" method="POST">
+                                            <form action="{{ route('orders.markOrdered', $order->id) }}" method="POST">
                                                 @csrf
                                                 @method('PATCH')
                                                 <button type="submit"
@@ -140,7 +173,7 @@
 
                                         <!-- Mark Raw Material Received -->
                                         <td class="px-4 py-3 border-r border-gray-300">
-                                            <form action="#" method="POST">
+                                            <form action="{{ route('orders.markReceived', $order->id) }}" method="POST">
                                                 @csrf
                                                 @method('PATCH')
                                                 <button type="submit"
@@ -181,7 +214,7 @@
             </div>
         </div>
         <script>
-            document.addEventListener("DOMContentLoaded", function() {
+            document.addEventListener("DOMContentLoaded", function () {
                 const spinner = document.getElementById("pageLoadingSpinner");
 
                 // Show spinner immediately
@@ -205,4 +238,4 @@
                 form.classList.toggle('hidden');
             }
         </script>
-    @endsection
+@endsection

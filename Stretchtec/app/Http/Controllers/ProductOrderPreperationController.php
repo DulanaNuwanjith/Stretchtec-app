@@ -68,4 +68,29 @@ class ProductOrderPreperationController extends Controller
     {
         //
     }
+
+    public function markOrdered($id)
+    {
+        $order = ProductOrderPreperation::findOrFail($id);
+
+        $order->isRawMaterialOrdered = true;
+        $order->raw_material_ordered_date = now(); // sets current date and time
+
+        $order->save();
+
+        return back()->with('success', 'Marked as ordered with timestamp.');
+    }
+
+    public function markReceived($id)
+    {
+        $order = ProductOrderPreperation::findOrFail($id);
+
+        $order->isRawMaterialReceived = true;
+        $order->raw_material_received_date = now(); // sets current date and time
+
+        $order->save();
+
+        return back()->with('success', 'Marked as received with timestamp.');
+    }
+
 }
