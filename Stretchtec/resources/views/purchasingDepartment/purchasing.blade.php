@@ -43,49 +43,49 @@
             <script>
                 document.addEventListener('DOMContentLoaded', () => {
                     @if (session('success'))
-                        Swal.fire({
-                            toast: true,
-                            position: 'top-end',
-                            icon: 'success',
-                            title: '{{ session('success') }}',
-                            showConfirmButton: false,
-                            timer: 2000,
-                            timerProgressBar: true,
-                            customClass: {
-                                popup: 'swal2-toast swal2-shadow'
-                            },
-                        });
+                    Swal.fire({
+                        toast: true,
+                        position: 'top-end',
+                        icon: 'success',
+                        title: '{{ session('success') }}',
+                        showConfirmButton: false,
+                        timer: 2000,
+                        timerProgressBar: true,
+                        customClass: {
+                            popup: 'swal2-toast swal2-shadow'
+                        },
+                    });
                     @endif
 
                     @if (session('error'))
-                        Swal.fire({
-                            toast: true,
-                            position: 'top-end',
-                            icon: 'error',
-                            title: '{{ session('error') }}',
-                            showConfirmButton: false,
-                            timer: 2000,
-                            timerProgressBar: true,
-                            customClass: {
-                                popup: 'swal2-toast swal2-shadow'
-                            },
-                        });
+                    Swal.fire({
+                        toast: true,
+                        position: 'top-end',
+                        icon: 'error',
+                        title: '{{ session('error') }}',
+                        showConfirmButton: false,
+                        timer: 2000,
+                        timerProgressBar: true,
+                        customClass: {
+                            popup: 'swal2-toast swal2-shadow'
+                        },
+                    });
                     @endif
 
                     @if ($errors->any())
-                        Swal.fire({
-                            toast: true,
-                            position: 'top-end',
-                            icon: 'warning',
-                            title: 'Validation Errors',
-                            html: `{!! implode('<br>', $errors->all()) !!}`,
-                            showConfirmButton: false,
-                            timer: 3000,
-                            timerProgressBar: true,
-                            customClass: {
-                                popup: 'swal2-toast swal2-shadow'
-                            },
-                        });
+                    Swal.fire({
+                        toast: true,
+                        position: 'top-end',
+                        icon: 'warning',
+                        title: 'Validation Errors',
+                        html: `{!! implode('<br>', $errors->all()) !!}`,
+                        showConfirmButton: false,
+                        timer: 3000,
+                        timerProgressBar: true,
+                        customClass: {
+                            popup: 'swal2-toast swal2-shadow'
+                        },
+                    });
                     @endif
                 });
             </script>
@@ -126,8 +126,9 @@
             <!-- Add Purchase Modal -->
             <div id="addPurchaseModal"
                  class="fixed inset-0 z-50 hidden bg-black bg-opacity-50 flex items-center justify-center py-5">
-                <div class="w-full max-w-[700px] bg-white dark:bg-gray-900 rounded-2xl shadow-2xl p-4 transform transition-all scale-95 max-h-[calc(100vh-10rem)] overflow-y-auto"
-                     onclick="event.stopPropagation()">
+                <div
+                    class="w-full max-w-[700px] bg-white dark:bg-gray-900 rounded-2xl shadow-2xl p-4 transform transition-all scale-95 max-h-[calc(100vh-10rem)] overflow-y-auto"
+                    onclick="event.stopPropagation()">
                     <div class="max-w-[600px] mx-auto p-8">
                         <h2 class="text-2xl font-semibold mb-8 text-blue-900 mt-4 dark:text-gray-100 text-center">
                             Add New Purchase Order
@@ -187,7 +188,8 @@
 
                             <!-- Action Buttons -->
                             <div class="flex justify-end mt-6 space-x-3">
-                                <button type="button" onclick="document.getElementById('addPurchaseModal').classList.add('hidden')"
+                                <button type="button"
+                                        onclick="document.getElementById('addPurchaseModal').classList.add('hidden')"
                                         class="px-4 py-2 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 text-sm rounded hover:bg-gray-300">
                                     Cancel
                                 </button>
@@ -205,11 +207,11 @@
             <div class="overflow-x-auto max-h-[1200px] bg-white dark:bg-gray-900 shadow rounded-lg">
                 <!-- Spinner -->
                 <div id="pageLoadingSpinner"
-                    class="fixed inset-0 z-50 bg-white bg-opacity-80 flex flex-col items-center justify-center">
+                     class="fixed inset-0 z-50 bg-white bg-opacity-80 flex flex-col items-center justify-center">
                     <svg class="animate-spin h-10 w-10 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none"
-                        viewBox="0 0 24 24">
+                         viewBox="0 0 24 24">
                         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
-                            stroke-width="4"></circle>
+                                stroke-width="4"></circle>
                         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
                     </svg>
                     <p class="mt-3 text-gray-700 font-semibold">Loading data...</p>
@@ -217,19 +219,45 @@
                 <table class="table-fixed w-full text-sm divide-y divide-gray-200 dark:divide-gray-700">
                     <thead class="bg-gray-200 dark:bg-gray-700 text-left">
                     <tr class="text-center">
-                        <th class="font-bold sticky left-0 z-10 bg-white px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase">PO Number</th>
-                        <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase">PO Date</th>
-                        <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs text-gray-600 dark:text-gray-300 uppercase">Shade</th>
-                        <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs text-gray-600 dark:text-gray-300 uppercase">Color</th>
-                        <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-24 text-xs text-gray-600 dark:text-gray-300 uppercase">TKT</th>
-                        <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs text-gray-600 dark:text-gray-300 uppercase">PST No</th>
-                        <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-40 text-xs text-gray-600 dark:text-gray-300 uppercase">Supplier Comment</th>
-                        <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-20 text-xs text-gray-600 dark:text-gray-300 uppercase">UOM</th>
-                        <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs text-gray-600 dark:text-gray-300 uppercase">Quantity</th>
-                        <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs text-gray-600 dark:text-gray-300 uppercase">Rate</th>
-                        <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase">Amount</th>
-                        <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase">Total Amount</th>
-                        <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs text-gray-600 dark:text-gray-300 uppercase">Status</th>
+                        <th class="font-bold sticky left-0 z-10 bg-white px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase">
+                            PO Number
+                        </th>
+                        <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase">
+                            PO Date
+                        </th>
+                        <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs text-gray-600 dark:text-gray-300 uppercase">
+                            Shade
+                        </th>
+                        <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs text-gray-600 dark:text-gray-300 uppercase">
+                            Color
+                        </th>
+                        <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-24 text-xs text-gray-600 dark:text-gray-300 uppercase">
+                            TKT
+                        </th>
+                        <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs text-gray-600 dark:text-gray-300 uppercase">
+                            PST No
+                        </th>
+                        <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-40 text-xs text-gray-600 dark:text-gray-300 uppercase">
+                            Supplier Comment
+                        </th>
+                        <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-20 text-xs text-gray-600 dark:text-gray-300 uppercase">
+                            UOM
+                        </th>
+                        <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs text-gray-600 dark:text-gray-300 uppercase">
+                            Quantity
+                        </th>
+                        <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs text-gray-600 dark:text-gray-300 uppercase">
+                            Rate
+                        </th>
+                        <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase">
+                            Amount
+                        </th>
+                        <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase">
+                            Total Amount
+                        </th>
+                        <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs text-gray-600 dark:text-gray-300 uppercase">
+                            Status
+                        </th>
                     </tr>
                     </thead>
 
@@ -264,7 +292,7 @@
             </div>
         </div>
         <script>
-            document.addEventListener("DOMContentLoaded", function() {
+            document.addEventListener("DOMContentLoaded", function () {
                 const spinner = document.getElementById("pageLoadingSpinner");
 
                 // Show spinner immediately
@@ -280,16 +308,25 @@
         <script>
             let purchaseItemIndex = 0;
 
-            document.getElementById('addPurchaseItemBtn').addEventListener('click', () => {
-                const container = document.getElementById('purchaseItemsContainer');
+            const addPurchaseItemBtn = document.getElementById('addPurchaseItemBtn');
+            const container = document.getElementById('purchaseItemsContainer');
+            const totalAmountInput = document.querySelector('input[name="total_amount"]');
+
+            // Add new item block
+            addPurchaseItemBtn.addEventListener('click', () => {
                 const itemHTML = getPurchaseItemFields(purchaseItemIndex++);
                 container.insertAdjacentHTML('beforeend', itemHTML);
+                attachAmountListeners(); // attach event listeners for dynamic inputs
+                calculateTotalAmount();  // recalculate total after adding
             });
 
+            // Remove item block
             function removePurchaseItem(btn) {
                 btn.closest('.purchase-item-block').remove();
+                calculateTotalAmount(); // recalc after removing
             }
 
+            // Generate purchase item fields dynamically
             function getPurchaseItemFields(index) {
                 return `
         <div class="purchase-item-block border rounded-lg p-4 mt-4 bg-gray-50 dark:bg-gray-800 relative">
@@ -350,10 +387,33 @@
                 <div>
                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Amount</label>
                     <input type="number" step="0.01" name="items[${index}][amount]" required
-                        class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                        class="amount-input w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
                 </div>
             </div>
         </div>`;
             }
+
+            // Attach listeners to all amount fields for real-time calculation
+            function attachAmountListeners() {
+                const amountInputs = document.querySelectorAll('.amount-input');
+                amountInputs.forEach(input => {
+                    input.removeEventListener('input', calculateTotalAmount); // prevent duplicates
+                    input.addEventListener('input', calculateTotalAmount);
+                });
+            }
+
+            // Calculate and update total amount
+            function calculateTotalAmount() {
+                let total = 0;
+                const amountInputs = document.querySelectorAll('.amount-input');
+                amountInputs.forEach(input => {
+                    const value = parseFloat(input.value) || 0;
+                    total += value;
+                });
+                totalAmountInput.value = total.toFixed(2); // update readonly field
+            }
+
+            // Initialize on load
+            attachAmountListeners();
         </script>
-    @endsection
+@endsection
