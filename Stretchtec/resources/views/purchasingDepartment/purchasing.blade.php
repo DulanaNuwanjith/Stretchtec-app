@@ -291,6 +291,7 @@
                 </table>
             </div>
         </div>
+    
         <script>
             document.addEventListener("DOMContentLoaded", function () {
                 const spinner = document.getElementById("pageLoadingSpinner");
@@ -312,21 +313,21 @@
             const container = document.getElementById('purchaseItemsContainer');
             const totalAmountInput = document.querySelector('input[name="total_amount"]');
 
-            // Add new item block
+            // Add new item block dynamically
             addPurchaseItemBtn.addEventListener('click', () => {
                 const itemHTML = getPurchaseItemFields(purchaseItemIndex++);
                 container.insertAdjacentHTML('beforeend', itemHTML);
-                attachAmountListeners(); // attach event listeners for dynamic inputs
-                calculateTotalAmount();  // recalculate total after adding
+                attachItemListeners(); // attach events to new item inputs
+                calculateTotalAmount(); // recalc after adding
             });
 
-            // Remove item block
+            // Remove an item block
             function removePurchaseItem(btn) {
                 btn.closest('.purchase-item-block').remove();
                 calculateTotalAmount(); // recalc after removing
             }
 
-            // Generate purchase item fields dynamically
+            // Template for purchase item fields
             function getPurchaseItemFields(index) {
                 return `
         <div class="purchase-item-block border rounded-lg p-4 mt-4 bg-gray-50 dark:bg-gray-800 relative">
@@ -374,7 +375,7 @@
                 <div>
                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Quantity</label>
                     <input type="number" step="0.01" name="items[${index}][quantity]" required
-                        class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                        class="quantity-input w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
                 </div>
             </div>
 
@@ -382,27 +383,42 @@
                 <div>
                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Rate</label>
                     <input type="number" step="0.01" name="items[${index}][rate]" required
-                        class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                        class="rate-input w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Amount</label>
-                    <input type="number" step="0.01" name="items[${index}][amount]" required
-                        class="amount-input w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                    <input type="number" step="0.01" name="items[${index}][amount]" required readonly
+                        class="amount-input w-full mt-1 px-3 py-2 border rounded-md bg-gray-100 dark:bg-gray-600 dark:text-white text-sm">
                 </div>
             </div>
         </div>`;
             }
 
-            // Attach listeners to all amount fields for real-time calculation
-            function attachAmountListeners() {
-                const amountInputs = document.querySelectorAll('.amount-input');
-                amountInputs.forEach(input => {
-                    input.removeEventListener('input', calculateTotalAmount); // prevent duplicates
-                    input.addEventListener('input', calculateTotalAmount);
+            // Attach listeners to quantity and rate fields for auto-calculation
+            function attachItemListeners() {
+                const itemBlocks = document.querySelectorAll('.purchase-item-block');
+                itemBlocks.forEach(block => {
+                    const quantityInput = block.querySelector('.quantity-input');
+                    const rateInput = block.querySelector('.rate-input');
+                    const amountInput = block.querySelector('.amount-input');
+
+                    const updateAmount = () => {
+                        const qty = parseFloat(quantityInput.value) || 0;
+                        const rate = parseFloat(rateInput.value) || 0;
+                        const amount = qty * rate;
+                        amountInput.value = amount.toFixed(2);
+                        calculateTotalAmount(); // update grand total
+                    };
+
+                    quantityInput.removeEventListener('input', updateAmount);
+                    rateInput.removeEventListener('input', updateAmount);
+
+                    quantityInput.addEventListener('input', updateAmount);
+                    rateInput.addEventListener('input', updateAmount);
                 });
             }
 
-            // Calculate and update total amount
+            // Calculate and update total amount across all items
             function calculateTotalAmount() {
                 let total = 0;
                 const amountInputs = document.querySelectorAll('.amount-input');
@@ -410,10 +426,10 @@
                     const value = parseFloat(input.value) || 0;
                     total += value;
                 });
-                totalAmountInput.value = total.toFixed(2); // update readonly field
+                totalAmountInput.value = total.toFixed(2);
             }
 
-            // Initialize on load
-            attachAmountListeners();
+            // Initialize event listeners
+            attachItemListeners();
         </script>
 @endsection
