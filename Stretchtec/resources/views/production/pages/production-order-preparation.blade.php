@@ -1,6 +1,11 @@
 @php use Carbon\Carbon; @endphp
 <head>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <!-- Include Flatpickr (CDN) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <!-- SweetAlert2 CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <div class="flex h-full w-full">
@@ -12,20 +17,115 @@
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-4 text-gray-900 dark:text-gray-100 mb-20">
 
-                        {{-- Success & Error Messages --}}
-                        @if (session('success'))
-                            <div
-                                class="mb-4 p-4 text-green-800 bg-green-100 border border-green-300 rounded-md dark:text-green-200 dark:bg-green-900 dark:border-green-800">
-                                {{ session('success') }}
-                            </div>
-                        @endif
+                        {{-- Style for Sweet Alert --}}
+                        <style>
+                            .swal2-toast {
+                                font-size: 0.875rem;
+                                padding: 0.75rem 1rem;
+                                border-radius: 8px;
+                                background-color: #ffffff !important;
+                                position: relative;
+                                box-sizing: border-box;
+                                color: #3b82f6 !important;
+                            }
 
-                        @if (session('error'))
-                            <div
-                                class="mb-4 p-4 text-red-800 bg-red-100 border border-red-300 rounded-md dark:text-red-200 dark:bg-red-900 dark:border-red-800">
-                                {{ session('error') }}
-                            </div>
-                        @endif
+                            .swal2-toast .swal2-title,
+                            .swal2-toast .swal2-html-container {
+                                color: #3b82f6 !important;
+                            }
+
+                            .swal2-toast .swal2-icon {
+                                color: #3b82f6 !important;
+                            }
+
+                            .swal2-shadow {
+                                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+                            }
+
+                            .swal2-toast::after {
+                                content: '';
+                                position: absolute;
+                                bottom: 0;
+                                left: 0;
+                                width: 100%;
+                                height: 3px;
+                                background-color: #3b82f6;
+                                border-radius: 0 0 8px 8px;
+                            }
+                        </style>
+
+                        <script>
+                            document.addEventListener('DOMContentLoaded', () => {
+                                @if (session('success'))
+                                Swal.fire({
+                                    toast: true,
+                                    position: 'top-end',
+                                    icon: 'success',
+                                    title: '{{ session('success') }}',
+                                    showConfirmButton: false,
+                                    timer: 2000,
+                                    timerProgressBar: true,
+                                    customClass: {
+                                        popup: 'swal2-toast swal2-shadow'
+                                    },
+                                });
+                                @endif
+
+                                @if (session('error'))
+                                Swal.fire({
+                                    toast: true,
+                                    position: 'top-end',
+                                    icon: 'error',
+                                    title: '{{ session('error') }}',
+                                    showConfirmButton: false,
+                                    timer: 2000,
+                                    timerProgressBar: true,
+                                    customClass: {
+                                        popup: 'swal2-toast swal2-shadow'
+                                    },
+                                });
+                                @endif
+
+                                @if ($errors->any())
+                                Swal.fire({
+                                    toast: true,
+                                    position: 'top-end',
+                                    icon: 'warning',
+                                    title: 'Validation Errors',
+                                    html: `{!! implode('<br>', $errors->all()) !!}`,
+                                    showConfirmButton: false,
+                                    timer: 3000,
+                                    timerProgressBar: true,
+                                    customClass: {
+                                        popup: 'swal2-toast swal2-shadow'
+                                    },
+                                });
+                                @endif
+                            });
+                        </script>
+
+                        <script>
+                            function confirmDelete(id) {
+                                Swal.fire({
+                                    title: 'Are you sure?',
+                                    text: "This record will be permanently deleted!",
+                                    icon: 'warning',
+                                    showCancelButton: true,
+                                    confirmButtonColor: '#3b82f6',
+                                    cancelButtonColor: '#6c757d',
+                                    confirmButtonText: 'Yes, delete it!',
+                                    background: '#ffffff',
+                                    color: '#3b82f6',
+                                    customClass: {
+                                        popup: 'swal2-toast swal2-shadow'
+                                    }
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        document.getElementById(`delete-form-${id}`).submit();
+                                    }
+                                });
+                            }
+                        </script>
 
                         {{-- Filters --}}
                         <div class="flex justify-start">
@@ -167,11 +267,11 @@
                                                     <!-- Banner showing ordered timestamp -->
                                                     <span
                                                         class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-blue-100 dark:bg-gray-800 px-3 py-1 rounded">
-                Ordered on <br>
-                {{ Carbon::parse($order->raw_material_ordered_date)->format('Y-m-d') }}
-                at
-                {{ Carbon::parse($order->raw_material_ordered_date)->format('H:i') }}
-            </span>
+                                                        Ordered on <br>
+                                                        {{ Carbon::parse($order->raw_material_ordered_date)->format('Y-m-d') }}
+                                                        at
+                                                        {{ Carbon::parse($order->raw_material_ordered_date)->format('H:i') }}
+                                                    </span>
                                                 @else
                                                     <!-- Mark Ordered button -->
                                                     <form action="{{ route('orders.markOrdered', $order->id) }}"
@@ -267,6 +367,27 @@
             function toggleReportForm() {
                 const form = document.getElementById('reportFormContainer');
                 form.classList.toggle('hidden');
+            }
+        </script>
+
+        <script>
+            function handleSubmit(form) {
+                let btn = form.querySelector("button[type='submit']");
+                btn.disabled = true;
+
+                // Replace text with loading spinner
+                btn.innerHTML = `
+            <svg class="animate-spin h-4 w-4 mr-2 text-blue-700" xmlns="http://www.w3.org/2000/svg" fill="none"
+                 viewBox="0 0 24 24">
+                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                 <path class="opacity-75" fill="currentColor"
+                       d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+            </svg>
+            Processing...
+        `;
+
+                // Allow form to continue submitting
+                return true;
             }
         </script>
 @endsection

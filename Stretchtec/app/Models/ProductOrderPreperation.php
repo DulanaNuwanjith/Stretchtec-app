@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 /**
  * @method static latest()
  * @method static create(array $array)
+ * @method static findOrFail($id)
  */
 class ProductOrderPreperation extends Model
 {
