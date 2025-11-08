@@ -200,6 +200,7 @@ class MailBookingController extends Controller
                 'product_inquiry_id' => $productInquiry->id,
                 'prod_order_no' => $productInquiry->mail_booking_number,
                 'customer_name' => $productInquiry->customer_name,
+                'reference_no' => $productInquiry->reference_no,
                 'item' => $productInquiry->item,
                 'size' => $productInquiry->size,
                 'color' => $productInquiry->color,

@@ -6,6 +6,7 @@ use App\Models\ProductOrderPreperation;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
 
 class ProductOrderPreperationController extends Controller
 {
@@ -68,4 +69,29 @@ class ProductOrderPreperationController extends Controller
     {
         //
     }
+
+    public function markOrdered($id): RedirectResponse
+    {
+        $order = ProductOrderPreperation::findOrFail($id);
+
+        $order->isRawMaterialOrdered = true;
+        $order->raw_material_ordered_date = now(); // sets current date and time
+
+        $order->save();
+
+        return back()->with('success', 'Marked as ordered with timestamp.');
+    }
+
+    public function markReceived($id): RedirectResponse
+    {
+        $order = ProductOrderPreperation::findOrFail($id);
+
+        $order->isRawMaterialReceived = true;
+        $order->raw_material_received_date = now(); // sets current date and time
+
+        $order->save();
+
+        return back()->with('success', 'Marked as received with timestamp.');
+    }
+
 }
