@@ -414,162 +414,173 @@
                                                 {{ $inquiry->remarks ?? '-' }}
                                             </td>
 
-                                                <td class="px-2 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
-                                                    <div class="approval-status flex flex-col justify-center items-center">
+                                            <td class="px-2 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                                <div class="approval-status flex flex-col justify-center items-center">
 
-                                                        {{-- Case 1: Not sent for approval yet --}}
-                                                        @if (!$inquiry->isSentForApproval && !$inquiry->isApproved)
-                                                            <form
-                                                                action="{{ route('mailBookingApproval.store', $inquiry->id) }}"
-                                                                method="GET"
-                                                                onsubmit="handleSubmit(this)">
-                                                                @csrf
-                                                                <button type="submit"
-                                                                        class="px-3 py-1 mt-2 text-xs rounded-lg bg-red-100 text-red-700 hover:bg-red-200 flex items-center justify-center"
-                                                                        id="sendForApprovalBtn-{{ $inquiry->id }}">
-                                                                    Send for Approval
-                                                                </button>
-                                                            </form>
+                                                    {{-- Case 1: Not sent for approval yet --}}
+                                                    @if (!$inquiry->isSentForApproval && !$inquiry->isApproved)
+                                                        <form
+                                                            action="{{ route('mailBookingApproval.store', $inquiry->id) }}"
+                                                            method="GET"
+                                                            onsubmit="handleSubmit(this)">
+                                                            @csrf
+                                                            <button type="submit"
+                                                                    class="px-3 py-1 mt-2 text-xs rounded-lg bg-red-100 text-red-700 hover:bg-red-200 flex items-center justify-center"
+                                                                    id="sendForApprovalBtn-{{ $inquiry->id }}">
+                                                                Send for Approval
+                                                            </button>
+                                                        </form>
 
-                                                            {{-- Case 2: Sent for approval but not yet approved --}}
-                                                        @elseif ($inquiry->isSentForApproval && !$inquiry->isApproved)
-                                                            <span
-                                                                class="inline-block m-1 text-sm font-semibold text-yellow-700 bg-yellow-100 dark:bg-gray-800 px-3 py-1 rounded">
+                                                        {{-- Case 2: Sent for approval but not yet approved --}}
+                                                    @elseif ($inquiry->isSentForApproval && !$inquiry->isApproved)
+                                                        <span
+                                                            class="inline-block m-1 text-sm font-semibold text-yellow-700 bg-yellow-100 dark:bg-gray-800 px-3 py-1 rounded">
                                                                 Sent for Approval
                                                             </span>
 
-                                                            {{-- Case 3: Sent for approval and approved --}}
-                                                        @elseif ($inquiry->isSentForApproval && $inquiry->isApproved)
-                                                            <span
-                                                                class="inline-block m-1 text-sm font-semibold text-green-700 bg-green-100 dark:bg-gray-800 px-3 py-1 rounded">
+                                                        {{-- Case 3: Sent for approval and approved --}}
+                                                    @elseif ($inquiry->isSentForApproval && $inquiry->isApproved)
+                                                        <span
+                                                            class="inline-block m-1 text-sm font-semibold text-green-700 bg-green-100 dark:bg-gray-800 px-3 py-1 rounded">
                                                                 Approved by {{ $inquiry->approvedBy?->name ?? 'N/A' }} <br>
                                                                 {{ \Carbon\Carbon::parse($inquiry->approved_at)->format('Y-m-d') }}
                                                                 at
                                                                 {{ \Carbon\Carbon::parse($inquiry->approved_at)->format('H:i') }}
                                                             </span>
-                                                        @endif
-                                                    </div>
-                                                </td>
+                                                    @endif
+                                                </div>
+                                            </td>
 
-                                                <td
-                                                    class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
-                                                    <div class="colour-match-stock flex flex-col justify-center items-center">
-                                                        @if (!$inquiry->isSentToStock && !$inquiry->canSendToProduction)
-                                                            {{-- Show button if neither is true --}}
-                                                            <form
-                                                                action="{{ route('production.sendToStoreMail', $inquiry->id) }}"
-                                                                method="POST" onsubmit="handleSubmit(this)">
-                                                                @csrf
-                                                                <button type="submit"
-                                                                        @if(!$inquiry->isApproved) disabled @endif
-                                                                        class="px-3 py-1 text-xs rounded-lg
+                                            <td
+                                                class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                                <div
+                                                    class="colour-match-stock flex flex-col justify-center items-center">
+                                                    @if (!$inquiry->isSentToStock && !$inquiry->canSendToProduction)
+                                                        {{-- Show button if neither is true --}}
+                                                        <form
+                                                            action="{{ route('production.sendToStoreMail', $inquiry->id) }}"
+                                                            method="POST" onsubmit="handleSubmit(this)">
+                                                            @csrf
+                                                            <button type="submit"
+                                                                    @if(!$inquiry->isApproved) disabled @endif
+                                                                    class="px-3 py-1 text-xs rounded-lg
                                                                                {{ !$inquiry->isApproved
                                                                                     ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
                                                                                     : 'bg-blue-100 text-blue-700 hover:bg-blue-200' }}
                                                                                mt-4 flex items-center justify-center"
-                                                                        id="sendToStoreBtn-{{ $inquiry->id }}">
-                                                                    Send to Stores
-                                                                </button>
-                                                            </form>
+                                                                    id="sendToStoreBtn-{{ $inquiry->id }}">
+                                                                Send to Stores
+                                                            </button>
+                                                        </form>
 
-                                                            {{-- Show note BELOW the button --}}
-                                                            @if(!$inquiry->isApproved)
-                                                                <span class="text-xs text-red-500 italic block">
+                                                        {{-- Show note BELOW the button --}}
+                                                        @if(!$inquiry->isApproved)
+                                                            <span class="text-xs text-red-500 italic block">
                                                                     Requires approval first
                                                                 </span>
-                                                            @endif
+                                                        @endif
 
-                                                        @elseif($inquiry->isSentToStock && $inquiry->canSendToProduction && !$inquiry->sent_to_stock_at)
-                                                            {{-- No stock available (red) --}}
-                                                            <span
-                                                                class="inline-block m-1 text-sm font-semibold text-red-700 bg-red-100 dark:bg-gray-800 px-3 py-1 rounded">
+                                                    @elseif($inquiry->isSentToStock && $inquiry->canSendToProduction && !$inquiry->sent_to_stock_at)
+                                                        {{-- No stock available (red) --}}
+                                                        <span
+                                                            class="inline-block m-1 text-sm font-semibold text-red-700 bg-red-100 dark:bg-gray-800 px-3 py-1 rounded">
                                                                 No Stock Available
                                                             </span>
-                                                        @elseif($inquiry->isSentToStock && !$inquiry->canSendToProduction)
-                                                            {{-- Sent to stock only (blue) --}}
-                                                            <span
-                                                                class="inline-block m-1 text-sm font-semibold text-blue-700 bg-blue-100 dark:bg-gray-800 px-3 py-1 rounded text-center">
+                                                    @elseif($inquiry->isSentToStock && !$inquiry->canSendToProduction)
+                                                        {{-- Sent to stock only (blue) --}}
+                                                        <span
+                                                            class="inline-block m-1 text-sm font-semibold text-blue-700 bg-blue-100 dark:bg-gray-800 px-3 py-1 rounded text-center">
                                                                 Sent on <br>
                                                                 {{ Carbon::parse($inquiry->sent_to_stock_at)->format('Y-m-d') }}
                                                                 at
                                                                 {{ Carbon::parse($inquiry->sent_to_stock_at)->format('H:i') }}
                                                             </span>
-                                                        @elseif($inquiry->isSentToStock && $inquiry->canSendToProduction)
-                                                            {{-- Both conditions true (green) --}}
-                                                            <span
-                                                                class="inline-block m-1 text-sm font-semibold text-green-700 bg-green-100 dark:bg-gray-800 px-3 py-1 rounded text-center">
+                                                    @elseif($inquiry->isSentToStock && $inquiry->canSendToProduction)
+                                                        {{-- Both conditions true (green) --}}
+                                                        <span
+                                                            class="inline-block m-1 text-sm font-semibold text-green-700 bg-green-100 dark:bg-gray-800 px-3 py-1 rounded text-center">
                                                                 Ready for Production <br>
                                                                 {{ Carbon::parse($inquiry->sent_to_stock_at)->format('Y-m-d') }}
                                                                 at
                                                                 {{ Carbon::parse($inquiry->sent_to_stock_at)->format('H:i') }}
                                                             </span>
-                                                        @endif
-                                                    </div>
+                                                    @endif
+                                                </div>
 
                                                 @if ($inquiry->isSentToStock && $inquiry->canSendToProduction && $inquiry->sent_to_stock_at)
-                                                        <ul class="mt-2 text-xs text-green-700 font-semibold">
-                                                            @forelse($inquiry->stores as $store)
-                                                                <li>{{ $store->reference_no }}
-                                                                    → {{ $store->qty_allocated ?? 0 }}
-                                                                    {{ $store->allocated_uom ?? 'NA' }}</li>
-                                                            @empty
-                                                                <li>No allocations yet</li>
-                                                            @endforelse
-                                                        </ul>
-                                                    @endif
-                                                </td>
-
-                                                <!-- Send to Production -->
-                                            <td
-                                                class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
-                                                @if ($inquiry->canSendToProduction === 1)
-                                                    <div class="colour-match-production">
-                                                        @if ($inquiry->isSentToProduction)
-                                                            <!-- Show timestamp if already sent -->
-                                                            <span
-                                                                class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-yellow-100 dark:bg-gray-800 px-3 py-1 rounded">
-                                                                    Sent on <br>
-                                                                    {{ Carbon::parse($inquiry->sent_to_production_at)->format('Y-m-d') }}
-                                                                    at
-                                                                    {{ Carbon::parse($inquiry->sent_to_production_at)->format('H:i') }}
-                                                                </span>
-                                                        @else
-                                                            @if (Auth::user()->role === 'ADMIN')
-                                                                <!-- Admin sees read-only button -->
-                                                                <button type="button"
-                                                                        class="px-3 py-1 text-xs rounded-lg bg-gray-200 text-gray-500 cursor-not-allowed"
-                                                                        disabled>
-                                                                    Pending
-                                                                </button>
-                                                            @else
-                                                                <div class="flex justify-center items-center">
-                                                                    <!-- Form for other users -->
-                                                                    <form
-                                                                        action="{{ route('production-inquiry.sendToProductionMail', $inquiry->id) }}"
-                                                                        method="POST" onsubmit="handleSubmit(this)">
-                                                                        @csrf
-                                                                        @method('PATCH')
-                                                                        <button type="submit"
-                                                                                class="px-3 py-1 mt-4 text-xs rounded-lg bg-indigo-100 text-indigo-700 hover:bg-indigo-200 flex items-center justify-center"
-                                                                                id="sendToProductionBtn-{{ $inquiry->id }}">
-                                                                            Send to Production
-                                                                        </button>
-                                                                    </form>
-                                                                </div>
-                                                            @endif
-                                                        @endif
-                                                    </div>
-                                                @else
-                                                    <!-- Admin sees read-only button -->
-                                                    <button type="button"
-                                                            class="px-3 py-1 text-xs rounded-lg bg-gray-200 text-gray-500 cursor-not-allowed"
-                                                            disabled>
-                                                        Send to Production
-                                                    </button>
+                                                    <ul class="mt-2 text-xs text-green-700 font-semibold">
+                                                        @forelse($inquiry->stores as $store)
+                                                            <li>{{ $store->reference_no }}
+                                                                → {{ $store->qty_allocated ?? 0 }}
+                                                                {{ $store->allocated_uom ?? 'NA' }}</li>
+                                                        @empty
+                                                            <li>No allocations yet</li>
+                                                        @endforelse
+                                                    </ul>
                                                 @endif
                                             </td>
 
-                                            <!-- Status -->
+                                                <!-- Send to Production -->
+                                                <td class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                                    @if ($inquiry->canSendToProduction === 1)
+                                                        <div class="colour-match-production">
+                                                            @if ($inquiry->status === 'Ready For Delivery - Direct')
+                                                                <!-- ✅ Always show this label when status is 'Ready For Delivery - Direct' -->
+                                                                <span
+                                                                    class="inline-block m-1 text-sm font-semibold text-green-700 bg-green-100 dark:bg-gray-800 px-3 py-1 rounded">
+                                                                No need of Production
+                                                            </span>
+
+                                                            @elseif ($inquiry->isSentToProduction)
+                                                                <!-- ✅ Show timestamp only if sent to production AND status is not 'Ready For Delivery - Direct' -->
+                                                                <span
+                                                                    class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-yellow-100 dark:bg-gray-800 px-3 py-1 rounded">
+                                                                Sent on <br>
+                                                                {{ Carbon::parse($inquiry->sent_to_production_at)->format('Y-m-d') }}
+                                                                at
+                                                                {{ Carbon::parse($inquiry->sent_to_production_at)->format('H:i') }}
+                                                            </span>
+
+                                                            @else
+                                                                <!-- ✅ Pending or ready-to-send state -->
+                                                                @if (Auth::user()->role === 'ADMIN')
+                                                                    <!-- Admin sees disabled button -->
+                                                                    <button type="button"
+                                                                            class="px-3 py-1 text-xs rounded-lg bg-gray-200 text-gray-500 cursor-not-allowed"
+                                                                            disabled>
+                                                                        Pending
+                                                                    </button>
+                                                                @else
+                                                                    <div class="flex justify-center items-center">
+                                                                        <!-- Other users see the active Send button -->
+                                                                        <form
+                                                                            action="{{ route('production-inquiry.sendToProductionMail', $inquiry->id) }}"
+                                                                            method="POST"
+                                                                            onsubmit="handleSubmit(this)">
+                                                                            @csrf
+                                                                            @method('PATCH')
+                                                                            <button type="submit"
+                                                                                    class="px-3 py-1 mt-4 text-xs rounded-lg bg-indigo-100 text-indigo-700 hover:bg-indigo-200 flex items-center justify-center"
+                                                                                    id="sendToProductionBtn-{{ $inquiry->id }}">
+                                                                                Send to Production
+                                                                            </button>
+                                                                        </form>
+                                                                    </div>
+                                                                @endif
+                                                            @endif
+                                                        </div>
+                                                    @else
+                                                        <!-- ✅ Disabled button when cannot send to production -->
+                                                        <button type="button"
+                                                                class="px-3 py-1 text-xs rounded-lg bg-gray-200 text-gray-500 cursor-not-allowed"
+                                                                disabled>
+                                                            Send to Production
+                                                        </button>
+                                                    @endif
+                                                </td>
+
+
+                                                <!-- Status -->
                                             <td
                                                 class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
                                                     <span
@@ -586,8 +597,29 @@
 
                                             <!-- Customer Delivery Status -->
                                             <td
-                                                class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center text-gray-500 italic">
-
+                                                class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                                @if ($inquiry->status === 'Ready For Delivery' || $inquiry->status === 'Ready For Delivery - Direct')
+                                                    <div class="flex justify-center items-center">
+                                                        <form
+                                                            action="#"
+                                                            method="POST"
+                                                            onsubmit="handleSubmit(this)">
+                                                            @csrf
+                                                            @method('PATCH')
+                                                            <button type="submit"
+                                                                    class="px-3 py-1 mt-4 text-xs rounded-lg bg-indigo-100 text-indigo-700 hover:bg-indigo-200 flex items-center justify-center">
+                                                                Deliver to Customer
+                                                            </button>
+                                                        </form>
+                                                    </div>
+                                                @elseif ($inquiry->status === 'Delivered')
+                                                    <span
+                                                        class="inline-block m-1 text-sm font-semibold text-green-700 bg-green-100 px-3 py-1 rounded">
+                                                                Delivered
+                                                            </span>
+                                                @else
+                                                    <span class="text-gray-500 italic">No action available</span>
+                                                @endif
                                             </td>
 
                                             <!-- Action -->
