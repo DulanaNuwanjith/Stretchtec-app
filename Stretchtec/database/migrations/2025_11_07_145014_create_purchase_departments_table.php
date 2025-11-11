@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('po_number');
             $table->date('po_date');
+            $table->string('supplier');
             $table->string('shade');
             $table->string('color');
             $table->string('tkt');

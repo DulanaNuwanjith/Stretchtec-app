@@ -15,6 +15,7 @@ class PurchaseDepartment extends Model
     protected $fillable = [
         'po_number',
         'po_date',
+        'supplier',
         'shade',
         'color',
         'tkt',

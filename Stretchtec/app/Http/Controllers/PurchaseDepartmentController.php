@@ -42,6 +42,7 @@ class PurchaseDepartmentController extends Controller
         $validated = $request->validate([
             'po_number' => 'required|string|max:255',
             'po_date' => 'required|date',
+            'supplier' => 'required|string|max:255',
             'total_amount' => 'required|numeric|min:0',
             'status' => 'required|in:pending,approved,rejected',
             'items' => 'required|array|min:1',
@@ -65,6 +66,7 @@ class PurchaseDepartmentController extends Controller
                 PurchaseDepartment::create([
                     'po_number' => $validated['po_number'],
                     'po_date' => $validated['po_date'],
+                    'supplier' => $validated['supplier'],
                     'shade' => $item['shade'],
                     'color' => $item['color'],
                     'tkt' => $item['tkt'],
