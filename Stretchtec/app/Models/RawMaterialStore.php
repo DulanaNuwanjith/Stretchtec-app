@@ -18,7 +18,6 @@ class RawMaterialStore extends Model
         'tkt',
         'pst_no',
         'supplier',
-        'supplier_comment',
         'available_quantity',
         'unit',
         'remarks',

@@ -20,7 +20,6 @@ return new class extends Migration
             $table->string('pst_no')->nullable();
             $table->string('tkt');
             $table->string('supplier');
-            $table->string('supplier_comment')->nullable();
             $table->integer('available_quantity');
             $table->string('unit');
             $table->string('remarks')->nullable();
