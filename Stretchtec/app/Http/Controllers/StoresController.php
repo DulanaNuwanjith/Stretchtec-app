@@ -247,7 +247,7 @@ class StoresController extends Controller
             // Check if the full quantity is allocated
             if ($order->qty <= $store->qty_allocated) {
                 $order->isSentToProduction = true;
-                $order->status = 'Ready For Delivery';
+                $order->status = 'Ready For Delivery - Direct';
             } else {
                 $order->status = 'Ready for Production';
             }
@@ -260,7 +260,7 @@ class StoresController extends Controller
             // Mail Booking case
             if ($order->qty <= $store->qty_allocated) {
                 $order->isSentToProduction = true;
-                $order->status = 'Ready For Delivery';
+                $order->status = 'Ready For Delivery - Direct';
             } else {
                 $order->status = 'Ready for Production';
             }
