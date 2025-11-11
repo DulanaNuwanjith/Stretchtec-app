@@ -108,6 +108,7 @@ class StoresController extends Controller
         // Find the store and its stock
         $store = Stores::findOrFail($id);
         $stock = Stock::where('reference_no', $store->reference_no)->firstOrFail();
+        $inquiry = ProductInquiry::find($store->order_no);
 
         $requestedUom = $validated['allocated_uom'];
         $allocatedQtyInYards = $validated['qty_allocated'];
@@ -155,6 +156,25 @@ class StoresController extends Controller
                 ]);
             }
             $allocatedQtyInYards = $validated['qty_allocated'];
+        }
+
+        /**
+         * --------------------------------------------------------------------
+         * Check allocated qty is less than or equal to the requested qty
+         * --------------------------------------------------------------------
+         */
+        // Safety check — make sure a related inquiry exists
+        if (!$inquiry) {
+            return back()->withErrors([
+                'qty_allocated' => 'No related product inquiry found for this store record.',
+            ]);
+        }
+
+        // Compare allocated qty with the requested qty from product_inquiries
+        if ($validated['qty_allocated'] > $inquiry->qty) {
+            return back()->withErrors([
+                'qty_allocated' => 'Allocated quantity (' . $validated['qty_allocated'] . ') cannot exceed the requested quantity (' . $inquiry->qty . ').',
+            ]);
         }
 
         /**
