@@ -39,7 +39,6 @@ class RawMaterialStoreController extends Controller
             'pst_no' => 'nullable|string|max:255',
             'tkt' => 'required|string|max:255',
             'supplier' => 'required|string|max:255',
-            'supplier_comment' => 'nullable|string',
             'available_quantity' => 'required|integer|min:0',
             'unit' => 'required|string|max:50',
             'remarks' => 'nullable|string',
