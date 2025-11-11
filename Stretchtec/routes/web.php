@@ -193,9 +193,16 @@ Route::middleware([
 
     Route::get('stockAvailabilityCheck', [StockController::class, 'storeManageIndex'])->name('stockAvailabilityCheck.index');
 
-    Route::get('rawMaterial', static function () {
-        return view('store-management.pages.rawMaterial');
-    })->name('rawMaterial.index');
+    /* ----------------------------------------------------------------------
+     | Store Management Routes
+     |----------------------------------------------------------------------
+     */
+    Route::resource('rawMaterial', \App\Http\Controllers\RawMaterialStoreController::class)->names([
+        'index' => 'rawMaterial.index',
+        'store' => 'rawMaterial.store',
+        'update' => 'rawMaterial.update',
+        'destroy' => 'rawMaterial.destroy',
+    ]);
 
     Route::get('orderRawMaterial', static function () {
         return view('store-management.pages.orderRawMaterial');

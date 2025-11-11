@@ -43,49 +43,49 @@
             <script>
                 document.addEventListener('DOMContentLoaded', () => {
                     @if (session('success'))
-                        Swal.fire({
-                            toast: true,
-                            position: 'top-end',
-                            icon: 'success',
-                            title: '{{ session('success') }}',
-                            showConfirmButton: false,
-                            timer: 2000,
-                            timerProgressBar: true,
-                            customClass: {
-                                popup: 'swal2-toast swal2-shadow'
-                            },
-                        });
+                    Swal.fire({
+                        toast: true,
+                        position: 'top-end',
+                        icon: 'success',
+                        title: '{{ session('success') }}',
+                        showConfirmButton: false,
+                        timer: 2000,
+                        timerProgressBar: true,
+                        customClass: {
+                            popup: 'swal2-toast swal2-shadow'
+                        },
+                    });
                     @endif
 
                     @if (session('error'))
-                        Swal.fire({
-                            toast: true,
-                            position: 'top-end',
-                            icon: 'error',
-                            title: '{{ session('error') }}',
-                            showConfirmButton: false,
-                            timer: 2000,
-                            timerProgressBar: true,
-                            customClass: {
-                                popup: 'swal2-toast swal2-shadow'
-                            },
-                        });
+                    Swal.fire({
+                        toast: true,
+                        position: 'top-end',
+                        icon: 'error',
+                        title: '{{ session('error') }}',
+                        showConfirmButton: false,
+                        timer: 2000,
+                        timerProgressBar: true,
+                        customClass: {
+                            popup: 'swal2-toast swal2-shadow'
+                        },
+                    });
                     @endif
 
                     @if ($errors->any())
-                        Swal.fire({
-                            toast: true,
-                            position: 'top-end',
-                            icon: 'warning',
-                            title: 'Validation Errors',
-                            html: `{!! implode('<br>', $errors->all()) !!}`,
-                            showConfirmButton: false,
-                            timer: 3000,
-                            timerProgressBar: true,
-                            customClass: {
-                                popup: 'swal2-toast swal2-shadow'
-                            },
-                        });
+                    Swal.fire({
+                        toast: true,
+                        position: 'top-end',
+                        icon: 'warning',
+                        title: 'Validation Errors',
+                        html: `{!! implode('<br>', $errors->all()) !!}`,
+                        showConfirmButton: false,
+                        timer: 3000,
+                        timerProgressBar: true,
+                        customClass: {
+                            popup: 'swal2-toast swal2-shadow'
+                        },
+                    });
                     @endif
                 });
             </script>
@@ -113,14 +113,114 @@
                 }
             </script>
 
+            <!-- Header Section -->
             <div class="flex justify-between items-center mb-6">
                 <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Raw Material Records</h1>
                 <div class="flex space-x-3">
-                    <a href="{{ route('sampleStock.index') }}">
-                        <button class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded shadow">
-                            Add New Raw Material
-                        </button>
-                    </a>
+                    <button onclick="document.getElementById('addRawMaterial').classList.remove('hidden')"
+                            class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded shadow">
+                        + Add New Raw Material
+                    </button>
+                </div>
+            </div>
+
+            <!-- Add New Raw Material Modal -->
+            <div id="addRawMaterial"
+                 class="fixed inset-0 z-50 hidden bg-black bg-opacity-50 flex items-center justify-center py-5"
+                 onclick="this.classList.add('hidden')">
+                <div class="w-full max-w-[700px] bg-white rounded-2xl shadow-2xl p-6"
+                     onclick="event.stopPropagation()">
+                    <h2 class="text-2xl font-semibold mb-6 text-blue-900 text-center">
+                        Add New Raw Material
+                    </h2>
+
+                    <form action="{{ route('rawMaterial.store') }}" method="POST">
+                        @csrf
+
+                        <div class="space-y-4">
+                            <!-- Row 1 -->
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium">Date</label>
+                                    <input name="date" type="date" required
+                                           class="w-full mt-1 px-3 py-2 border rounded-md text-sm">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium">Color</label>
+                                    <input name="color" type="text" required
+                                           class="w-full mt-1 px-3 py-2 border rounded-md text-sm">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium">Shade</label>
+                                    <input name="shade" type="text" required
+                                           class="w-full mt-1 px-3 py-2 border rounded-md text-sm">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium">Supplier Comment</label>
+                                    <input name="supplier_comment" type="text" required
+                                           class="w-full mt-1 px-3 py-2 border rounded-md text-sm">
+                                </div>
+                            </div>
+
+                            <!-- Row 2 -->
+                            <div class="grid grid-cols-3 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium">TKT</label>
+                                    <input name="tkt" type="text"
+                                           class="w-full mt-1 px-3 py-2 border rounded-md text-sm">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium">PST No</label>
+                                    <input name="pst_no" type="text"
+                                           class="w-full mt-1 px-3 py-2 border rounded-md text-sm">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium">Supplier</label>
+                                    <input name="supplier" type="text"
+                                           class="w-full mt-1 px-3 py-2 border rounded-md text-sm">
+                                </div>
+                            </div>
+
+                            <!-- Row 3 -->
+                            <div class="grid grid-cols-3 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium">Available Quantity</label>
+                                    <input name="available_quantity" type="number" required min="1"
+                                           class="w-full mt-1 px-3 py-2 border rounded-md text-sm">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium">Unit</label>
+                                    <select name="unit"
+                                            class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md text-sm dark:bg-gray-700 dark:text-white">
+                                        <option value="kg">KG</option>
+                                        <option value="cone">Cone</option>
+                                        <option value="m">Meter</option>
+                                        <option value="pcs">Pieces</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Row 4 -->
+                            <div>
+                                <label class="block text-sm font-medium">Remarks</label>
+                                <textarea name="remarks" rows="2"
+                                          class="w-full mt-1 px-3 py-2 border rounded-md text-sm"></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Buttons -->
+                        <div class="flex justify-end gap-3 mt-6">
+                            <button type="button"
+                                    onclick="document.getElementById('addRawMaterial').classList.add('hidden')"
+                                    class="px-4 py-2 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 text-sm rounded hover:bg-gray-300">
+                                Cancel
+                            </button>
+                            <button type="submit"
+                                    class="px-4 py-2 bg-blue-500 text-white text-sm rounded hover:bg-blue-600">
+                                Save Raw Material
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
 
@@ -128,62 +228,118 @@
             <div class="overflow-x-auto max-h-[1200px] bg-white dark:bg-gray-900 shadow rounded-lg">
                 <!-- Spinner -->
                 <div id="pageLoadingSpinner"
-                    class="fixed inset-0 z-50 bg-white bg-opacity-80 flex flex-col items-center justify-center">
+                     class="fixed inset-0 z-50 bg-white bg-opacity-80 flex flex-col items-center justify-center">
                     <svg class="animate-spin h-10 w-10 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none"
-                        viewBox="0 0 24 24">
+                         viewBox="0 0 24 24">
                         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
-                            stroke-width="4"></circle>
+                                stroke-width="4"></circle>
                         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
                     </svg>
                     <p class="mt-3 text-gray-700 font-semibold">Loading data...</p>
                 </div>
                 <table class="table-fixed w-full text-sm divide-y divide-gray-200 dark:divide-gray-700">
                     <thead class="bg-gray-200 dark:bg-gray-700 text-left">
-                        <tr class="text-center">
-                            <th
-                                class="font-bold sticky left-0 z-10 bg-white px-4 py-3 w-36 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                Order No
-                            </th>
-                            <th
-                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                Reference No
-                            </th>
-                            <th
-                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                Shade
-                            </th>
-                            <th
-                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                Cust Requested Qty
-                            </th>
-                            <th
-                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                Qty Available
-                            </th>
-                            <th
-                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                Qty Allocated
-                            </th>
-                            <th
-                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                Assigned By
-                            </th>
-                            <th
-                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                Is Assigned
-                            </th>
-                            <th
-                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                Reason for Reject
-                            </th>
-                        </tr>
+                    <tr class="text-center">
+                        <th
+                            class="font-bold sticky left-0 z-10 bg-white px-4 py-3 w-36 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                            Shade
+                        </th>
+                        <th
+                            class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                            Date
+                        </th>
+                        <th
+                            class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                            Color
+                        </th>
+                        <th
+                            class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                            TKT
+                        </th>
+                        <th
+                            class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                            PST Number
+                        </th>
+                        <th
+                            class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                            Supplier
+                        </th>
+                        <th
+                            class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                            Supplier Comment
+                        </th>
+                        <th
+                            class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                            Quantity Available
+                        </th>
+                        <th
+                            class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                            Action
+                        </th>
+                    </tr>
                     </thead>
+                    <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+                    @foreach ($rawMaterials as $material)
+                        <tr class="hover:bg-gray-100 dark:hover:bg-gray-800 text-center">
+                            <td
+                                class="sticky left-0 z-10 bg-white px-4 py-3 text-gray-700 dark:text-gray-300 whitespace-normal break-words">
+                                {{ $material->shade }}
+                            </td>
+                            <td class="px-4 py-3 text-gray-700 dark:text-gray-300 whitespace-normal break-words">
+                                {{ $material->date }}
+                            </td>
+                            <td class="px-4 py-3 text-gray-700 dark:text-gray-300 whitespace-normal break-words">
+                                {{ $material->color }}
+                            </td>
+                            <td class="px-4 py-3 text-gray-700 dark:text-gray-300 whitespace-normal break-words">
+                                {{ $material->tkt }}
+                            </td>
+                            <td class="px-4 py-3 text-gray-700 dark:text-gray-300 whitespace-normal break-words">
+                                {{ $material->pst_no }}
+                            </td>
+                            <td class="px-4 py-3 text-gray-700 dark:text-gray-300 whitespace-normal break-words">
+                                {{ $material->supplier }}
+                            </td>
+                            <td class="px-4 py-3 text-gray-700 dark:text-gray-300 whitespace-normal break-words">
+                                {{ $material->supplier_comment }}
+                            </td>
+                            <td class="px-4 py-3 text-gray-700 dark:text-gray-300 whitespace-normal break-words">
+                                {{ $material->available_quantity }} {{ $material->unit }}
+
+                            </td>
+                            <td class="px-4 py-3 text-gray-700 dark:text-gray-300 whitespace-normal break-words">
+                                <button
+                                    class="bg-red-500 hover:bg-red-600 text-white font-semibold py-1 px-2 rounded shadow"
+                                    onclick="confirmDelete({{ $material->id }})">
+                                    Delete
+                                </button>
+                                <form id="delete-form-{{ $material->id }}"
+                                      action="{{ route('rawMaterial.destroy', $material->id) }}" method="POST"
+                                      class="hidden">
+                                    @csrf
+                                    @method('DELETE')
+                                </form>
+                            </td>
+                        </tr>
+                    @endforeach
+                    </tbody>
+
+                    <!-- Pagination Footer -->
+                    <tfoot class="bg-gray-200 dark:bg-gray-700">
+                    <tr>
+                        <td colspan="9" class="px-4 py-3">
+                            <div class="flex justify-end">
+                                {{ $rawMaterials->links() }}
+                            </div>
+                        </td>
+                    </tr>
+                    </tfoot>
                 </table>
 
             </div>
         </div>
         <script>
-            document.addEventListener("DOMContentLoaded", function() {
+            document.addEventListener("DOMContentLoaded", function () {
                 const spinner = document.getElementById("pageLoadingSpinner");
 
                 // Show spinner immediately
@@ -195,4 +351,4 @@
                 });
             });
         </script>
-    @endsection
+@endsection
