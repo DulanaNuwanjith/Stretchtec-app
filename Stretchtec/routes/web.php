@@ -204,10 +204,6 @@ Route::middleware([
         'destroy' => 'rawMaterial.destroy',
     ]);
 
-    Route::get('orderRawMaterial', static function () {
-        return view('store-management.pages.orderRawMaterial');
-    })->name('orderRawMaterial.index');
-
     /* ----------------------------------------------------------------------
      | Purchasing Department Management Routes
      |----------------------------------------------------------------------
