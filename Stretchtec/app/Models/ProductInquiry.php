@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static findOrFail($id)
  * @method static where(string $string, $prod_order_no)
  * @method static orderBy(string $string, string $string1)
+ * @method static find($order_no)
  */
 class ProductInquiry extends Model
 {
