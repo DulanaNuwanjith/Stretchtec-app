@@ -237,11 +237,28 @@ class StoresController extends Controller
 
         /**
          * --------------------------------------------------------------------
-         * Step 5: Mark respective order as ready for production
+         * Step 5: Mark the respective order as ready for production but if requested qty is fulfilled then mark as status == ready for delivery
          * --------------------------------------------------------------------
          */
-        $order->canSendToProduction = true;
-        $order->save();
+        if (!is_null($store->order_no)) {
+            // Product Inquiry case
+            $order->canSendToProduction = true;
+
+            // Check if the full quantity is allocated
+            if ($order->qty <= $store->qty_allocated) {
+                $order->isSentToProduction = true;
+                $order->status = 'Ready For Delivery';
+            } else {
+                $order->status = 'Ready for Production';
+            }
+
+            $order->save();
+        } elseif (!is_null($store->mail_no)) {
+            // Mail Booking case
+            $order->canSendToProduction = true;
+            $order->status = 'Ready for Production';
+            $order->save();
+        }
 
         return redirect()->back()->with('success', 'Quantity assigned successfully!');
     }

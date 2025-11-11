@@ -261,16 +261,6 @@ class ProductInquiryController extends Controller
                 return redirect()->back()->with('info', 'This inquiry has already been sent to production.');
             }
 
-            $qtyForProduction = $productInquiry->qty - $productInquiry->stores->sum('qty_allocated');
-
-            if ($qtyForProduction <= 0) {
-                $productInquiry->update([
-                    'isSentToProduction' => true,
-                    'status' => 'Ready For Delivery',
-                ]);
-                return redirect()->back()->with('error', 'No quantity available to send to production.');
-            }
-
             // Update the inquiry status and timestamp
             $productInquiry->update([
                 'isSentToProduction' => true,
