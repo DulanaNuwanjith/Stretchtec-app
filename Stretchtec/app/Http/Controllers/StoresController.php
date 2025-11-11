@@ -254,9 +254,16 @@ class StoresController extends Controller
 
             $order->save();
         } elseif (!is_null($store->mail_no)) {
-            // Mail Booking case
+
             $order->canSendToProduction = true;
-            $order->status = 'Ready for Production';
+
+            // Mail Booking case
+            if ($order->qty <= $store->qty_allocated) {
+                $order->isSentToProduction = true;
+                $order->status = 'Ready For Delivery';
+            } else {
+                $order->status = 'Ready for Production';
+            }
             $order->save();
         }
 
