@@ -12,35 +12,6 @@
         [x-cloak] {
             display: none !important;
         }
-
-        /* Modern "invisible until hover" scrollbar for sidebar */
-        aside::-webkit-scrollbar {
-            width: 5px; 
-        }
-
-        aside::-webkit-scrollbar-track {
-            background: transparent; 
-        }
-
-        aside::-webkit-scrollbar-thumb {
-            background: rgba(59, 130, 246, 0.05); 
-            border-radius: 10px;
-            transition: background 0.3s ease;
-        }
-
-        aside::-webkit-scrollbar-thumb:hover {
-            background: rgba(59, 130, 246, 0.15); 
-        }
-
-        /* Firefox */
-        aside {
-            scrollbar-width: thin;
-            scrollbar-color: rgba(59, 130, 246, 0.05) transparent;
-        }
-
-        aside:hover {
-            scrollbar-color: rgba(59, 130, 246, 0.15) transparent; 
-        }
     </style>
 </head>
 
@@ -76,12 +47,9 @@
     </script>
 
     <!-- Sidebar -->
-    <aside x-data="{ collapsed: window.__initialCollapsed, initialized: false, open: false }"
-        x-init="initialized = true"
-        :class="collapsed ? 'md:w-20' : 'md:w-72'"
+    <aside x-data="{ collapsed: window.__initialCollapsed, initialized: false, open: false }" x-init="initialized = true" :class="collapsed ? 'md:w-20' : 'md:w-72'"
         class="fixed md:relative z-40 inset-y-0 left-0 w-64 md:w-auto transform md:translate-x-0 transition-transform duration-300 ease-in-out bg-gradient-to-b from-white to-blue-500 shadow-md flex flex-col min-h-screen"
-        x-bind:class="{ '-translate-x-full': !open, 'translate-x-0': open }"
-        style="width: var(--sidebar-width);">
+        x-bind:class="{ '-translate-x-full': !open, 'translate-x-0': open }" style="width: var(--sidebar-width);">
 
         <!-- Mobile Toggle -->
         <div class="flex justify-between items-center md:hidden p-4 bg-white border-b">
@@ -89,8 +57,8 @@
                 <img src="{{ asset('images/logo.png') }}" alt="Logo" class="h-10 w-auto" />
             </a>
             <button @click="open = !open" class="p-2 bg-blue-100 rounded-md hover:bg-blue-200 transition">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-900" fill="none"
-                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-900" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
             </button>
