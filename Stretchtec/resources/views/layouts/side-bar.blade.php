@@ -85,7 +85,7 @@
         </div>
 
         <!-- Navigation -->
-        <nav class="flex flex-col justify-between flex-1 p-3 text-base font-bold text-blue-900 overflow-y-auto" x-cloak>
+        <nav class="flex flex-col justify-between flex-1 p-3 text-base font-bold text-blue-900" x-cloak>
             <ul class="space-y-2">
                 <li>
                     <a x-show="initialized && !collapsed" class="flex items-center bg-white px-4 py-2 rounded">
