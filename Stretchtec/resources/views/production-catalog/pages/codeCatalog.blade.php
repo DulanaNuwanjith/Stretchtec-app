@@ -334,6 +334,10 @@
                                                 class="font-bold px-4 py-3 w-32 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Supplier
                                             </th>
+                                            <th
+                                                class="font-bold px-4 py-3 w-48 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                Item Description
+                                            </th>
                                             <th colspan="2"
                                                 class="font-bold px-4 py-3 w-[14rem] text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Approved By
@@ -590,7 +594,31 @@
                                                         value="{{ $catalog->supplier }}" />
                                                 </td>
 
-                                                <!-- Approval Section -->
+                                                <td
+                                                    class="px-4 py-3 w-48 whitespace-normal break-words border-r border-gray-300 text-left">
+                                                    @if (in_array($userRole, ['SUPERADMIN', 'SAMPLEDEVELOPER']))
+                                                        <form
+                                                            action="{{ route('product-catalog.updateDescription', $catalog->id) }}"
+                                                            method="POST">
+                                                            @csrf
+                                                            @method('PATCH')
+
+                                                            <textarea name="item_description"
+                                                                class="w-full px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm focus:ring focus:ring-blue-200"
+                                                                rows="2" placeholder="Enter item description">{{ old('item_description', $catalog->item_description) }}</textarea>
+
+                                                            <button type="submit"
+                                                                class="w-full px-3 py-1 rounded text-sm transition-all duration-200 bg-blue-600 hover:bg-blue-700 text-white mt-2">
+                                                                Save
+                                                            </button>
+                                                        </form>
+                                                    @else
+                                                        <span class="text-sm text-gray-700 dark:text-gray-300">
+                                                            {{ $catalog->item_description ?? 'No description' }}
+                                                        </span>
+                                                    @endif
+                                                </td>
+
                                                 <!-- Approval Section -->
                                                 <td colspan="2" class="px-4 py-3 border-r border-gray-300 text-left">
                                                     @if (in_array($userRole, ['SUPERADMIN', 'SAMPLEDEVELOPER', 'CUSTOMERCOORDINATOR']))

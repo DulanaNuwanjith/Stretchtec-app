@@ -123,6 +123,7 @@ Route::middleware([
     Route::post('elasticCatalog/store', [ProductCatalogController::class, 'storeElastic'])->name('elasticCatalog.store');
     Route::post('codeCatalog/store', [ProductCatalogController::class, 'storeCode'])->name('codeCatalog.store');
     Route::post('tapeCatalog/store', [ProductCatalogController::class, 'storeTape'])->name('tapeCatalog.store');
+    Route::patch('/product-catalog/{id}/update-description', [ProductCatalogController::class, 'updateDescription'])->name('product-catalog.updateDescription');
 
     // Upload product images and approvals
     Route::post('catalog/{catalog}/upload-image', [ProductCatalogController::class, 'uploadOrderImage'])->name('catalog.uploadImage');
