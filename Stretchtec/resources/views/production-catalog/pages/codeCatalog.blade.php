@@ -613,9 +613,11 @@
                                                             </button>
                                                         </form>
                                                     @else
-                                                        <span class="text-sm text-gray-700 dark:text-gray-300">
-                                                            {{ $catalog->item_description ?? 'No description' }}
-                                                        </span>
+                                                        <div class="text-center">
+                                                            <span class="text-sm text-gray-700 dark:text-gray-300">
+                                                                {{ $catalog->item_description ?? 'No description' }}
+                                                            </span>
+                                                        </div>
                                                     @endif
                                                 </td>
 
