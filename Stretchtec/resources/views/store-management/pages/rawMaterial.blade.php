@@ -113,14 +113,107 @@
                 }
             </script>
 
+            <!-- Header Section -->
             <div class="flex justify-between items-center mb-6">
                 <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Raw Material Records</h1>
                 <div class="flex space-x-3">
-                    <a href="{{ route('sampleStock.index') }}">
-                        <button class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded shadow">
-                            Add New Raw Material
-                        </button>
-                    </a>
+                    <button onclick="document.getElementById('addRawMaterial').classList.remove('hidden')"
+                        class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded shadow">
+                        + Add New Raw Material
+                    </button>
+                </div>
+            </div>
+
+            <!-- Add New Raw Material Modal -->
+            <div id="addRawMaterial"
+                class="fixed inset-0 z-50 hidden bg-black bg-opacity-50 flex items-center justify-center py-5"
+                onclick="this.classList.add('hidden')">
+                <div class="w-full max-w-[700px] bg-white rounded-2xl shadow-2xl p-6" onclick="event.stopPropagation()">
+                    <h2 class="text-2xl font-semibold mb-6 text-blue-900 text-center">
+                        Add New Raw Material
+                    </h2>
+
+                    <form action="{{ route('rawMaterial.store') }}" method="POST">
+                        @csrf
+
+                        <div class="space-y-4">
+                            <!-- Row 1 -->
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium">Date</label>
+                                    <input name="date" type="date" required
+                                        class="w-full mt-1 px-3 py-2 border rounded-md text-sm">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium">Supplier</label>
+                                    <input name="supplier" type="text"
+                                        class="w-full mt-1 px-3 py-2 border rounded-md text-sm">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium">Color</label>
+                                    <input name="color" type="text" required
+                                        class="w-full mt-1 px-3 py-2 border rounded-md text-sm">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium">Shade</label>
+                                    <input name="shade" type="text" required
+                                        class="w-full mt-1 px-3 py-2 border rounded-md text-sm">
+                                </div>
+                            </div>
+
+                            <!-- Row 2 -->
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium">TKT</label>
+                                    <input name="tkt" type="text"
+                                        class="w-full mt-1 px-3 py-2 border rounded-md text-sm">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium">PST No</label>
+                                    <input name="pst_no" type="text"
+                                        class="w-full mt-1 px-3 py-2 border rounded-md text-sm">
+                                </div>
+                            </div>
+
+                            <!-- Row 3 -->
+                            <div class="grid grid-cols-3 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium">Available Quantity</label>
+                                    <input name="available_quantity" type="number" required min="1"
+                                        class="w-full mt-1 px-3 py-2 border rounded-md text-sm">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium">Unit</label>
+                                    <select name="unit"
+                                        class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md text-sm dark:bg-gray-700 dark:text-white">
+                                        <option value="kg">KG</option>
+                                        <option value="cone">Cone</option>
+                                        <option value="m">Meter</option>
+                                        <option value="pcs">Pieces</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Row 4 -->
+                            <div>
+                                <label class="block text-sm font-medium">Remarks</label>
+                                <textarea name="remarks" rows="2" class="w-full mt-1 px-3 py-2 border rounded-md text-sm"></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Buttons -->
+                        <div class="flex justify-end gap-3 mt-6">
+                            <button type="button"
+                                onclick="document.getElementById('addRawMaterial').classList.add('hidden')"
+                                class="px-4 py-2 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 text-sm rounded hover:bg-gray-300">
+                                Cancel
+                            </button>
+                            <button type="submit"
+                                class="px-4 py-2 bg-blue-500 text-white text-sm rounded hover:bg-blue-600">
+                                Save Raw Material
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
 
@@ -142,44 +235,113 @@
                         <tr class="text-center">
                             <th
                                 class="font-bold sticky left-0 z-10 bg-white px-4 py-3 w-36 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                Order No
-                            </th>
-                            <th
-                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                Reference No
-                            </th>
-                            <th
-                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                 Shade
                             </th>
                             <th
                                 class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                Cust Requested Qty
+                                Date
                             </th>
                             <th
                                 class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                Qty Available
+                                Color
                             </th>
                             <th
                                 class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                Qty Allocated
+                                TKT
                             </th>
                             <th
                                 class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                Assigned By
+                                PST Number
                             </th>
                             <th
                                 class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                Is Assigned
+                                Supplier
                             </th>
                             <th
                                 class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                Reason for Reject
+                                Quantity Available
+                            </th>
+                            <th
+                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-40 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                Action
                             </th>
                         </tr>
                     </thead>
-                </table>
+                    <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+                        @foreach ($rawMaterials as $material)
+                            <tr class="hover:bg-gray-100 dark:hover:bg-gray-800 text-center">
+                                <td
+                                    class="sticky left-0 z-10 bg-white px-4 py-3 text-gray-700 dark:text-gray-300 whitespace-normal break-words">
+                                    {{ $material->shade }}
+                                </td>
+                                <td class="px-4 py-3 text-gray-700 dark:text-gray-300 whitespace-normal break-words">
+                                    {{ $material->date }}
+                                </td>
+                                <td class="px-4 py-3 text-gray-700 dark:text-gray-300 whitespace-normal break-words">
+                                    {{ $material->color }}
+                                </td>
+                                <td class="px-4 py-3 text-gray-700 dark:text-gray-300 whitespace-normal break-words">
+                                    {{ $material->tkt }}
+                                </td>
+                                <td class="px-4 py-3 text-gray-700 dark:text-gray-300 whitespace-normal break-words">
+                                    {{ $material->pst_no }}
+                                </td>
+                                <td class="px-4 py-3 text-gray-700 dark:text-gray-300 whitespace-normal break-words">
+                                    {{ $material->supplier }}
+                                </td>
+                                <td class="px-4 py-3 text-gray-700 dark:text-gray-300 whitespace-normal break-words">
+                                    {{ $material->available_quantity }} {{ $material->unit }}
+                                </td>
+                                <td class="px-4 py-3 text-gray-700 dark:text-gray-300 whitespace-normal break-words">
+                                    <div class="flex justify-center items-center space-x-2">
+                                        <div x-data="{ open: false }">
+                                            <!-- Button -->
+                                            <button type="button" @click="open = true"
+                                                class="mt-1 bg-yellow-600 hover:bg-yellow-700 text-white px-2 py-1 rounded text-sm transition">
+                                                Remarks
+                                            </button>
 
+                                            <!-- Modal -->
+                                            <div x-show="open"
+                                                class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+                                                x-cloak>
+
+                                                <div class="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
+                                                    <h2 class="text-lg font-semibold mb-4">Remarks
+                                                    </h2>
+                                                    <p class="text-gray-700">
+                                                        {{ $material->remarks }}
+                                                    </p>
+
+                                                    <div class="mt-6 flex justify-end">
+                                                        <button @click="open = false"
+                                                            class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded transition">
+                                                            Close
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <button
+                                            class="bg-red-500 mt-1 hover:bg-red-600 text-white font-semibold py-1 px-2 rounded shadow"
+                                            onclick="confirmDelete({{ $material->id }})">
+                                            Delete
+                                        </button>
+                                        <form id="delete-form-{{ $material->id }}"
+                                            action="{{ route('rawMaterial.destroy', $material->id) }}" method="POST"
+                                            class="hidden">
+                                            @csrf
+                                            @method('DELETE')
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+            <div class="flex justify-end">
+                {{ $rawMaterials->links() }}
             </div>
         </div>
         <script>

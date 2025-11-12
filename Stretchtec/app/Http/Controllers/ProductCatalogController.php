@@ -367,4 +367,18 @@ class ProductCatalogController extends Controller
             return back()->with('error', 'Failed to update shade. Please try again.');
         }
     }
+
+    public function updateDescription(Request $request, $id)
+    {
+        $request->validate([
+            'item_description' => 'nullable|string|max:2000',
+        ]);
+
+        $catalog = ProductCatalog::findOrFail($id);
+        $catalog->item_description = $request->item_description;
+        $catalog->save();
+
+        return back()->with('success', 'Item description updated successfully!');
+    }
+
 }

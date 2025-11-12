@@ -321,6 +321,15 @@
                                        class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
                             </div>
 
+                            <div class="mt-3">
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                    Supplier
+                                </label>
+                                <input type="text" name="supplier" required
+                                       class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
+                                       placeholder="Enter Supplier Name">
+                            </div>
+
                             <!-- Item Container -->
                             <div id="purchaseItemsContainer" class="mt-6"></div>
 
@@ -391,6 +400,9 @@
                             PO Date
                         </th>
                         <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs text-gray-600 dark:text-gray-300 uppercase">
+                            Supplier
+                        </th>
+                        <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs text-gray-600 dark:text-gray-300 uppercase">
                             Shade
                         </th>
                         <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs text-gray-600 dark:text-gray-300 uppercase">
@@ -431,6 +443,7 @@
                         <tr class="hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
                             <td class="px-4 py-3 text-gray-700 dark:text-gray-300">{{ $purchase->po_number }}</td>
                             <td class="px-4 py-3 text-gray-700 dark:text-gray-300">{{ $purchase->po_date }}</td>
+                            <td class="px-4 py-3 text-gray-700 dark:text-gray-300">{{ $purchase->supplier }}</td>
                             <td class="px-4 py-3 text-gray-700 dark:text-gray-300">{{ $purchase->shade }}</td>
                             <td class="px-4 py-3 text-gray-700 dark:text-gray-300">{{ $purchase->color }}</td>
                             <td class="px-4 py-3 text-gray-700 dark:text-gray-300">{{ $purchase->tkt }}</td>

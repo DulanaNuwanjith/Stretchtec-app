@@ -123,6 +123,7 @@ Route::middleware([
     Route::post('elasticCatalog/store', [ProductCatalogController::class, 'storeElastic'])->name('elasticCatalog.store');
     Route::post('codeCatalog/store', [ProductCatalogController::class, 'storeCode'])->name('codeCatalog.store');
     Route::post('tapeCatalog/store', [ProductCatalogController::class, 'storeTape'])->name('tapeCatalog.store');
+    Route::patch('/product-catalog/{id}/update-description', [ProductCatalogController::class, 'updateDescription'])->name('product-catalog.updateDescription');
 
     // Upload product images and approvals
     Route::post('catalog/{catalog}/upload-image', [ProductCatalogController::class, 'uploadOrderImage'])->name('catalog.uploadImage');
@@ -193,13 +194,22 @@ Route::middleware([
 
     Route::get('stockAvailabilityCheck', [StockController::class, 'storeManageIndex'])->name('stockAvailabilityCheck.index');
 
-    Route::get('rawMaterial', static function () {
-        return view('store-management.pages.rawMaterial');
-    })->name('rawMaterial.index');
+    /* ----------------------------------------------------------------------
+     | Store Management Routes
+     |----------------------------------------------------------------------
+     */
+    Route::resource('rawMaterial', \App\Http\Controllers\RawMaterialStoreController::class)->names([
+        'index' => 'rawMaterial.index',
+        'store' => 'rawMaterial.store',
+        'update' => 'rawMaterial.update',
+        'destroy' => 'rawMaterial.destroy',
+    ]);
 
-    Route::get('orderRawMaterial', static function () {
-        return view('store-management.pages.orderRawMaterial');
-    })->name('orderRawMaterial.index');
+    Route::get('rawMaterialReceipt', static function () {
+        return view('store-management.pages.rawMaterialReceipt');
+    })->name('rawMaterialReceipt.index');
+
+
 
     /* ----------------------------------------------------------------------
      | Purchasing Department Management Routes

@@ -476,22 +476,30 @@
                                             </td>
 
                                             <!-- Send to Production -->
-                                            <td
-                                                class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                            <td class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
                                                 @if ($inquiry->canSendToProduction === 1)
                                                     <div class="colour-match-production">
-                                                        @if ($inquiry->isSentToProduction)
-                                                            <!-- Show timestamp if already sent -->
+                                                        @if ($inquiry->status === 'Ready For Delivery - Direct')
+                                                            <!-- ✅ Always show this label when status is 'Ready For Delivery - Direct' -->
+                                                            <span
+                                                                class="inline-block m-1 text-sm font-semibold text-green-700 bg-green-100 dark:bg-gray-800 px-3 py-1 rounded">
+                                                                No need of Production
+                                                            </span>
+
+                                                        @elseif ($inquiry->isSentToProduction)
+                                                            <!-- ✅ Show timestamp only if sent to production AND status is not 'Ready For Delivery - Direct' -->
                                                             <span
                                                                 class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-yellow-100 dark:bg-gray-800 px-3 py-1 rounded">
-                                                                    Sent on <br>
-                                                                    {{ Carbon::parse($inquiry->sent_to_production_at)->format('Y-m-d') }}
-                                                                    at
-                                                                    {{ Carbon::parse($inquiry->sent_to_production_at)->format('H:i') }}
-                                                                </span>
+                                                                Sent on <br>
+                                                                {{ Carbon::parse($inquiry->sent_to_production_at)->format('Y-m-d') }}
+                                                                at
+                                                                {{ Carbon::parse($inquiry->sent_to_production_at)->format('H:i') }}
+                                                            </span>
+
                                                         @else
+                                                            <!-- ✅ Pending or ready-to-send state -->
                                                             @if (Auth::user()->role === 'ADMIN')
-                                                                <!-- Admin sees read-only button -->
+                                                                <!-- Admin sees disabled button -->
                                                                 <button type="button"
                                                                         class="px-3 py-1 text-xs rounded-lg bg-gray-200 text-gray-500 cursor-not-allowed"
                                                                         disabled>
@@ -499,10 +507,11 @@
                                                                 </button>
                                                             @else
                                                                 <div class="flex justify-center items-center">
-                                                                    <!-- Form for other users -->
+                                                                    <!-- Other users see the active Send button -->
                                                                     <form
                                                                         action="{{ route('production-inquiry.sendToProduction', $inquiry->id) }}"
-                                                                        method="POST" onsubmit="handleSubmit(this)">
+                                                                        method="POST"
+                                                                        onsubmit="handleSubmit(this)">
                                                                         @csrf
                                                                         @method('PATCH')
                                                                         <button type="submit"
@@ -516,7 +525,7 @@
                                                         @endif
                                                     </div>
                                                 @else
-                                                    <!-- Admin sees read-only button -->
+                                                    <!-- ✅ Disabled button when cannot send to production -->
                                                     <button type="button"
                                                             class="px-3 py-1 text-xs rounded-lg bg-gray-200 text-gray-500 cursor-not-allowed"
                                                             disabled>
@@ -543,7 +552,7 @@
                                             <!-- Customer Delivery Status -->
                                             <td
                                                 class="px-4 py-3 whitespace-normal break-words border-r border-gray-300 text-center">
-                                                @if ($inquiry->status === 'Ready For Delivery')
+                                                @if ($inquiry->status === 'Ready For Delivery' || $inquiry->status === 'Ready For Delivery - Direct')
                                                     <div class="flex justify-center items-center">
                                                         <form
                                                             action="#"

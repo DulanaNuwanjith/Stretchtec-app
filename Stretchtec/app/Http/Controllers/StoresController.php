@@ -105,12 +105,11 @@ class StoresController extends Controller
             'reason_for_reject' => 'nullable|string'
         ]);
 
-        // Find the store and its stock
+        // Fetch the store record and related stock and order
         $store = Stores::findOrFail($id);
         $stock = Stock::where('reference_no', $store->reference_no)->firstOrFail();
 
         $requestedUom = $validated['allocated_uom'];
-        $allocatedQtyInYards = $validated['qty_allocated'];
 
         /**
          * --------------------------------------------------------------------
@@ -118,13 +117,13 @@ class StoresController extends Controller
          * --------------------------------------------------------------------
          */
         if (!is_null($store->order_no)) {
-            // 🟦 Case 1: Product Inquiry order
+            // Case 1: Product Inquiry order
             $order = ProductInquiry::where('id', $store->order_no)->firstOrFail();
         } elseif (!is_null($store->mail_booking_no)) {
-            // 🟨 Case 2: Mail Booking order
+            // Case 2: Mail Booking order
             $order = MailBooking::where('id', $store->mail_no)->firstOrFail();
         } else {
-            // 🚫 No valid link
+            // No valid link
             return back()->withErrors(['order_type' => 'Store record is not linked to any valid order.']);
         }
 
@@ -155,6 +154,50 @@ class StoresController extends Controller
                 ]);
             }
             $allocatedQtyInYards = $validated['qty_allocated'];
+        }
+
+        /**
+         * --------------------------------------------------------------------
+         * Check allocated qty is less than or equal to the requested qty
+         * --------------------------------------------------------------------
+         */
+
+
+        // If the store record is linked to a Mail Booking
+        if ($store->mail_no !== null) {
+            $mailBooking = MailBooking::find($store->mail_no);
+
+            if (!$mailBooking) {
+                return back()->withErrors([
+                    'qty_allocated' => 'No related mail booking record found for this store record.',
+                ]);
+            }
+
+            $requestedQty = $mailBooking->qty; // Assuming the MailBooking table has a `qty` field
+
+        } elseif ($store->order_no !== null) {
+            // Otherwise, check the Product Inquiry table
+            $inquiry = ProductInquiry::find($store->order_no);
+
+            if (!$inquiry) {
+                return back()->withErrors([
+                    'qty_allocated' => 'No related product inquiry found for this store record.',
+                ]);
+            }
+
+            $requestedQty = $inquiry->qty;
+        } else {
+            // Neither mail_no nor order_no is set
+            return back()->withErrors([
+                'qty_allocated' => 'No valid linked record found for this store entry.',
+            ]);
+        }
+
+        // Now compare the allocated qty with the requested qty
+        if ($validated['qty_allocated'] > $requestedQty) {
+            return back()->withErrors([
+                'qty_allocated' => 'Allocated quantity (' . $validated['qty_allocated'] . ') cannot exceed the requested quantity (' . $requestedQty . ').',
+            ]);
         }
 
         /**
@@ -194,11 +237,35 @@ class StoresController extends Controller
 
         /**
          * --------------------------------------------------------------------
-         * Step 5: Mark respective order as ready for production
+         * Step 5: Mark the respective order as ready for production but if requested qty is fulfilled then mark as status == ready for delivery
          * --------------------------------------------------------------------
          */
-        $order->canSendToProduction = true;
-        $order->save();
+        if (!is_null($store->order_no)) {
+            // Product Inquiry case
+            $order->canSendToProduction = true;
+
+            // Check if the full quantity is allocated
+            if ($order->qty <= $store->qty_allocated) {
+                $order->isSentToProduction = true;
+                $order->status = 'Ready For Delivery - Direct';
+            } else {
+                $order->status = 'Ready for Production';
+            }
+
+            $order->save();
+        } elseif (!is_null($store->mail_no)) {
+
+            $order->canSendToProduction = true;
+
+            // Mail Booking case
+            if ($order->qty <= $store->qty_allocated) {
+                $order->isSentToProduction = true;
+                $order->status = 'Ready For Delivery - Direct';
+            } else {
+                $order->status = 'Ready for Production';
+            }
+            $order->save();
+        }
 
         return redirect()->back()->with('success', 'Quantity assigned successfully!');
     }
