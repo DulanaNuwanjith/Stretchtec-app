@@ -373,6 +373,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/color-match-reject/{id}', [ColorMatchRejectController::class, 'getRejectDetails']);
 
         Route::post('/report/rnd', [ReportController::class, 'generateRndReport'])->name('report.rndReport');
+        Route::post('/sample-preparation-rnd/{id}/cancel', [SamplePreparationRndController::class, 'cancelOrder']);
     });
 });
 

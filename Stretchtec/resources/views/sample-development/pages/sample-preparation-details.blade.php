@@ -133,6 +133,75 @@
                                     });
                                 }
                             </script>
+                            <script>
+                                function confirmOrderCancel(id, btn) {
+                                    Swal.fire({
+                                        title: 'Are you sure?',
+                                        text: "This order will be canceled!",
+                                        icon: 'warning',
+                                        showCancelButton: true,
+                                        confirmButtonColor: '#3b82f6',
+                                        cancelButtonColor: '#6c757d',
+                                        confirmButtonText: 'Yes, cancel it!',
+                                        background: '#ffffff',
+                                        color: '#3b82f6',
+                                        customClass: {
+                                            popup: 'swal2-toast swal2-shadow'
+                                        }
+                                    }).then((result) => {
+                                        if (result.isConfirmed) {
+                                            // Send AJAX request
+                                            fetch(`/sample-preparation-rnd/${id}/cancel`, {
+                                                    method: 'POST',
+                                                    headers: {
+                                                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                                        'Content-Type': 'application/json'
+                                                    },
+                                                    body: JSON.stringify({
+                                                        order_cancel: 1
+                                                    })
+                                                })
+                                                .then(res => res.json())
+                                                .then(data => {
+                                                    if (data.success) {
+                                                        // Update button state
+                                                        btn.disabled = true;
+                                                        btn.classList.remove('bg-red-600', 'hover:bg-red-700');
+                                                        btn.classList.add('bg-gray-300', 'cursor-not-allowed');
+                                                        btn.innerText = 'Canceled';
+
+                                                        // Show success toast
+                                                        Swal.fire({
+                                                            toast: true,
+                                                            position: 'top-end',
+                                                            icon: 'success',
+                                                            title: 'Order canceled successfully!',
+                                                            showConfirmButton: false,
+                                                            timer: 2000,
+                                                            timerProgressBar: true,
+                                                            customClass: {
+                                                                popup: 'swal2-toast swal2-shadow'
+                                                            },
+                                                        });
+                                                    } else {
+                                                        Swal.fire({
+                                                            toast: true,
+                                                            position: 'top-end',
+                                                            icon: 'error',
+                                                            title: 'Failed to cancel order',
+                                                            showConfirmButton: false,
+                                                            timer: 2000,
+                                                            timerProgressBar: true,
+                                                            customClass: {
+                                                                popup: 'swal2-toast swal2-shadow'
+                                                            },
+                                                        });
+                                                    }
+                                                });
+                                        }
+                                    });
+                                }
+                            </script>
 
                             {{-- Filters --}}
                             <div class="flex justify-start">
@@ -462,7 +531,7 @@
                                                 </div>
 
                                                 <div class="py-1" id="statusOptionsRnd">
-                                                    @foreach (['Pending', 'Delivered'] as $status)
+                                                    @foreach (['Pending', 'Delivered', 'Canceled'] as $status)
                                                         <label
                                                             class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600">
                                                             <input type="checkbox" name="status[]"
@@ -1153,8 +1222,8 @@
                                                                                                         stroke-linecap="round"
                                                                                                         stroke-linejoin="round"
                                                                                                         d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0
-                                                                                                                                                                                   01-1.995-1.858L5 7m5 4v6m4-6v6M9 7V4a1 1 0
-                                                                                                                                                                                   011-1h4a1 1 0 011 1v3m-9 0h10" />
+                                                                                                                                                                                                   01-1.995-1.858L5 7m5 4v6m4-6v6M9 7V4a1 1 0
+                                                                                                                                                                                                   011-1h4a1 1 0 011 1v3m-9 0h10" />
                                                                                                 </svg>
                                                                                             </button>
                                                                                         </div>
@@ -1727,8 +1796,9 @@
                                                                                         <span
                                                                                             class="block mb-1"><strong>Shade:</strong>
                                                                                             {{ $shade->shade }}</span>
-                                                                                        @if(!empty($shade->pst_no))
-                                                                                            <span class="block mb-1"><strong>PST
+                                                                                        @if (!empty($shade->pst_no))
+                                                                                            <span
+                                                                                                class="block mb-1"><strong>PST
                                                                                                     No:</strong>
                                                                                                 {{ $shade->pst_no }}</span>
                                                                                         @endif
@@ -2323,7 +2393,7 @@
                                                     @endif
                                                 </td>
 
-                                                <td class="px-4 py-3 whitespace-normal break-words text-center">
+                                                <td class="px-3 py-3 whitespace-normal break-words text-center">
                                                     <div class="flex justify-center space-x-2">
                                                         {{-- <button
                                                     class="bg-green-600 h-10 px-3 py-1 rounded text-white text-sm hover:bg-green-700"
@@ -2344,6 +2414,14 @@
                                                                 No File
                                                             </button>
                                                         @endif
+
+                                                        <button type="button"
+                                                            onclick="confirmOrderCancel({{ $prep->id }}, this)"
+                                                            class="h-10 w-24 px-3 py-2 rounded text-white text-sm 
+           {{ $prep->order_cancel ? 'bg-gray-300 cursor-not-allowed' : 'bg-red-600 hover:bg-red-700' }}"
+                                                            {{ $prep->order_cancel ? 'disabled' : '' }}>
+                                                            {{ $prep->order_cancel ? 'Canceled' : 'Cancel' }}
+                                                        </button>
 
                                                     </div>
                                                 </td>

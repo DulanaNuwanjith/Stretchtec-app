@@ -322,55 +322,67 @@ class ReportController extends Controller
         $request->validate([
             'start_date' => 'required|date',
             'end_date' => 'required|date|after_or_equal:start_date',
-            'status' => 'required|array', // ['Pending', 'Delivered']
+            'status' => 'required|array', // ['Pending', 'Delivered', 'Canceled']
             'coordinatorName' => 'nullable|array',
         ]);
 
-        // normalize dates (avoid timezone/time issues)
+        // Normalize dates
         $startDate = Carbon::parse($request->input('start_date'))->toDateString();
         $endDate = Carbon::parse($request->input('end_date'))->toDateString();
 
-        // normalize statuses (case-insensitive)
+        // Normalize statuses (case-insensitive)
         $statuses = array_map('strtolower', (array)$request->input('status', []));
         $wantPending = in_array('pending', $statuses, true);
         $wantDelivered = in_array('delivered', $statuses, true);
+        $wantCanceled = in_array('canceled', $statuses, true);
 
+        // Base query
         $query = SamplePreparationRnD::with(['sampleInquiry', 'shadeOrders'])
             ->whereHas('sampleInquiry', function ($q) use ($startDate, $endDate) {
                 $q->whereBetween('inquiryReceiveDate', [$startDate, $endDate]);
             });
 
-        // coordinator filter (unchanged)
+        // Coordinator filter
         if (!empty($request->coordinatorName) && $request->filled('coordinatorName')) {
             $query->whereHas('sampleInquiry', function ($sq) use ($request) {
                 $sq->whereIn('coordinatorName', $request->input('coordinatorName'));
             });
         }
 
-        // status filter using the related SampleInquiry.customerDeliveryDate
-        if ($wantPending && !$wantDelivered) {
-            // only Pending -> sample_inquiries.customerDeliveryDate IS NULL
-            $query->whereHas('sampleInquiry', function ($sq) {
-                $sq->whereNull('customerDeliveryDate');
-            });
-        } elseif ($wantDelivered && !$wantPending) {
-            // only Delivered -> sample_inquiries.customerDeliveryDate IS NOT NULL
-            $query->whereHas('sampleInquiry', function ($sq) {
-                $sq->whereNotNull('customerDeliveryDate');
-            });
-        }
-        // both selected -> show all (no additional filter)
+        // Status filter
+        $query->where(function ($q) use ($wantPending, $wantDelivered, $wantCanceled) {
+            if ($wantPending) {
+                $q->orWhere(function ($sub) {
+                    $sub->whereHas('sampleInquiry', function ($sq) {
+                        $sq->whereNull('customerDeliveryDate');
+                    })->where('order_cancel', 0);
+                });
+            }
 
-        // debug - uncomment if you want to log the built SQL & bindings
-        // Log::debug('RnD query SQL', ['sql' => $query->toSql(), 'bindings' => $query->getBindings(), 'statuses' => $statuses]);
+            if ($wantDelivered) {
+                $q->orWhere(function ($sub) {
+                    $sub->whereHas('sampleInquiry', function ($sq) {
+                        $sq->whereNotNull('customerDeliveryDate');
+                    })->where('order_cancel', 0);
+                });
+            }
+
+            if ($wantCanceled) {
+                $q->orWhere('order_cancel', 1);
+            }
+        });
 
         $records = $query->orderBy('id', 'desc')->get();
 
-        // attach a derived `status` property for the view
+        // Attach derived `status` property for PDF view
         $records = $records->map(function ($record) {
-            $record->status = ($record->sampleInquiry && $record->sampleInquiry->customerDeliveryDate)
-                ? 'Delivered'
-                : 'Pending';
+            if ($record->order_cancel == 1) {
+                $record->status = 'Canceled';
+            } elseif ($record->sampleInquiry && $record->sampleInquiry->customerDeliveryDate) {
+                $record->status = 'Delivered';
+            } else {
+                $record->status = 'Pending';
+            }
             return $record;
         });
 
