@@ -58,6 +58,8 @@
                                     background-color: #3b82f6;
                                     border-radius: 0 0 8px 8px;
                                 }
+
+
                             </style>
 
                             {{-- Sweet Alert Script --}}
@@ -2286,7 +2288,7 @@
                                                                                     </button>
 
                                                                                     <div
-                                                                                        class="referenceDropdownMenu absolute z-40 mt-1 w-full bg-white border rounded-lg shadow-lg hidden max-h-48 overflow-y-auto p-2">
+                                                                                        class="referenceDropdownMenu absolute z-40 mt-1 w-full bg-white border rounded-lg shadow-lg hidden max-h-48 overflow-y-auto p-2 pb-2">
                                                                                         <input type="text"
                                                                                             class="referenceSearchInput w-full px-2 py-1 text-sm border rounded-md mb-1"
                                                                                             placeholder="Search..."
@@ -2294,7 +2296,7 @@
                                                                                             onkeyup="filterReferencesDynamic(this)">
 
                                                                                         @foreach ($sampleStockReferences as $ref)
-                                                                                            <div onclick="selectReferenceDynamic('{{ $ref }}', this)"
+                                                                                            <div onclick="selectReferenceDynamic(`{{ $ref }}`, this)"
                                                                                                 tabindex="0"
                                                                                                 class="reference-option px-4 py-2 hover:bg-gray-100 cursor-pointer text-sm">
                                                                                                 {{ $ref }}
@@ -2417,7 +2419,7 @@
 
                                                         <button type="button"
                                                             onclick="confirmOrderCancel({{ $prep->id }}, this)"
-                                                            class="h-10 w-24 px-3 py-2 rounded text-white text-sm 
+                                                            class="h-10 w-24 px-3 py-2 rounded text-white text-sm
            {{ $prep->order_cancel ? 'bg-gray-300 cursor-not-allowed' : 'bg-red-600 hover:bg-red-700' }}"
                                                             {{ $prep->order_cancel ? 'disabled' : '' }}>
                                                             {{ $prep->order_cancel ? 'Canceled' : 'Cancel' }}
