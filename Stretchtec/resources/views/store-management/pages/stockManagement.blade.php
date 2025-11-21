@@ -214,7 +214,7 @@
                     onclick="event.stopPropagation()">
                     <div class="max-w-[600px] mx-auto p-8">
                         <h2 class="text-2xl font-semibold mb-8 text-blue-900 mt-4 dark:text-gray-100 text-center">
-                            Add New Cord Catalog Item
+                            Add New Stock Item
                         </h2>
                         <form action="{{ route('stockManagement.store') }}" method="POST" enctype="multipart/form-data">
                             @csrf
