@@ -764,4 +764,25 @@ class SamplePreparationRnDController extends Controller
 
         return back()->with('success', 'Borrowed successfully.');
     }
+
+    public function cancelOrder(Request $request, $id)
+    {
+        try {
+            $prep = SamplePreparationRnd::findOrFail($id);
+
+            // Update order_cancel to 1
+            $prep->order_cancel = 1;
+            $prep->save();
+
+            // Return JSON response
+            return response()->json(['success' => true]);
+
+        } catch (\Exception $e) {
+            // Optional: log the error
+            \Log::error('Order Cancel Error: ' . $e->getMessage());
+
+            // Return failure response
+            return response()->json(['success' => false], 500);
+        }
+    }
 }
