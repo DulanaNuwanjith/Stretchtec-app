@@ -212,7 +212,7 @@ Route::middleware([
 
 
     /* ----------------------------------------------------------------------
-     | Purchasing Department Management Routes
+     | Purchase Operations Management Routes
      |----------------------------------------------------------------------
      */
 
@@ -222,6 +222,14 @@ Route::middleware([
         'update' => 'purchasing.update',
         'destroy' => 'purchasing.destroy',
     ]);
+
+    Route::get('localinvoiceManage', static function () {
+        return view('purchasingDepartment.localinvoiceManage');
+    })->name('localinvoiceManage.index');
+
+    Route::get('exportinvoiceManage', static function () {
+        return view('purchasingDepartment.exportinvoiceManage');
+    })->name('exportinvoiceManage.index');
 
     /* ----------------------------------------------------------------------
      | Mail Booking Management Routes
