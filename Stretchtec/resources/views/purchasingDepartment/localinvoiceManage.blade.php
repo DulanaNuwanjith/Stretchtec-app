@@ -418,10 +418,18 @@
                     <input type="text" name="items[${index}][tkt]" required
                         class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
                 </div>
-                <div>
+               <div>
                     <label class="block text-sm font-medium">UOM</label>
-                    <input type="text" name="items[${index}][uom]" required
+                    <select name="items[${index}][uom]" required
                         class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                        <option value="" disabled selected>Select Unit</option>
+                        <option value="g">Gram (g)</option>
+                        <option value="kg">Kilogram (kg)</option>
+                        <option value="m">Meter (m)</option>
+                        <option value="yard">Yard</option>
+                        <option value="corn">Corn</option>
+                        <option value="piece">Piece</option>
+                    </select>
                 </div>
             </div>
 
