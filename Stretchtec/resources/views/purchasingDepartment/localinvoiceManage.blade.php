@@ -361,15 +361,21 @@
                             <div class="grid grid-cols-2 gap-3 mt-3">
                                 <div>
                                     <label class="block text-sm font-medium">Total Quantity</label>
-                                    <input type="text" id="overallTotalQty" name="total_quantity" readonly
+                                    <input type="number" id="overallTotalQty" name="total_quantity" readonly
                                            class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm bg-gray-200">
                                 </div>
 
                                 <div>
                                     <label class="block text-sm font-medium">Invoice Value</label>
-                                    <input type="text" id="invoiceValue" name="invoice_value" readonly
+                                    <input type="number" id="invoiceValue" name="invoice_value" readonly
                                            class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm bg-gray-200">
                                 </div>
+                            </div>
+
+                            <div class="mt-3">
+                                <label class="block text-sm font-medium">Checked By</label>
+                                <input type="text" name="approved_by"
+                                       class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
                             </div>
 
                             <div class="mt-3">
