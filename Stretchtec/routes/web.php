@@ -42,6 +42,7 @@
 
 use App\Http\Controllers\ColorMatchRejectController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ExportProcurementController;
 use App\Http\Controllers\LeftoverYarnController;
 use App\Http\Controllers\LocalProcurementController;
 use App\Http\Controllers\MailBookingApprovalController;
@@ -231,9 +232,12 @@ Route::middleware([
         'destroy' => 'localinvoiceManage.destroy',
     ]);
 
-    Route::get('exportinvoiceManage', static function () {
-        return view('purchasingDepartment.exportinvoiceManage');
-    })->name('exportinvoiceManage.index');
+    Route::resource('exportinvoiceManage', ExportProcurementController::class)->names([
+        'index' => 'exportinvoiceManage.index',
+        'store' => 'exportinvoiceManage.store',
+        'update' => 'exportinvoiceManage.update',
+        'destroy' => 'exportinvoiceManage.destroy',
+    ]);
 
     /* ----------------------------------------------------------------------
      | Mail Booking Management Routes
