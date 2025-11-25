@@ -348,18 +348,6 @@
                                        placeholder="Enter Total Amount">
                             </div>
 
-                            <div class="mt-3">
-                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                                    Status
-                                </label>
-                                <select name="status" required
-                                        class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                    <option value="pending">Pending</option>
-                                    <option value="approved">Approved</option>
-                                    <option value="rejected">Rejected</option>
-                                </select>
-                            </div>
-
                             <!-- Action Buttons -->
                             <div class="flex justify-end mt-6 space-x-3">
                                 <button type="button"
