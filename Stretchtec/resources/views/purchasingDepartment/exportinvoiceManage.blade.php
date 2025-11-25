@@ -146,127 +146,180 @@
 
 <!-- ================= ADD EXPORT PROCUREMENT MODAL ================== -->
 <div id="addExportProcModal"
-     class="fixed inset-0 z-50 hidden bg-black bg-opacity-50 flex items-center justify-center py-5"
-     onclick="this.classList.add('hidden')">
+     class="fixed inset-0 z-50 hidden bg-black bg-opacity-50 flex items-center justify-center py-5">
 
     <div class="w-full max-w-[750px] bg-white dark:bg-gray-900 rounded-2xl shadow-2xl p-6
                 transform transition-all scale-95 max-h-[calc(100vh-10rem)] overflow-y-auto"
          onclick="event.stopPropagation()">
 
-        <!-- Modal Header -->
-        <div class="flex justify-between items-center mb-4">
-            <h2 class="text-xl font-bold text-gray-800 dark:text-gray-100">Add Export Procurement</h2>
-            <button onclick="document.getElementById('addExportProcModal').classList.add('hidden')"
-                    class="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 text-xl">
-                ✖
-            </button>
-        </div>
+        <h2 class="text-2xl font-semibold mb-6 text-blue-900 dark:text-gray-100 text-center">
+            Add Export Procurement
+        </h2>
 
-        <!-- FORM -->
-        <form action="{{ route('exportinvoiceManage.store') }}" method="POST" class="space-y-4">
+        <form id="exportProcForm" action="{{ route('exportinvoiceManage.store') }}" method="POST">
             @csrf
 
-            <!-- Date + Invoice -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- MASTER FIELDS -->
+            <div class="grid grid-cols-2 gap-3">
                 <div>
-                    <label class="font-medium text-sm">Date</label>
+                    <label class="block text-sm font-medium">Date</label>
                     <input type="date" name="date" required
-                           class="w-full p-2 rounded-lg border bg-white dark:bg-gray-800
-                                  dark:text-white border-gray-300 dark:border-gray-700">
+                           class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
                 </div>
 
                 <div>
-                    <label class="font-medium text-sm">Invoice Number</label>
+                    <label class="block text-sm font-medium">Invoice Number</label>
                     <input type="text" name="invoice_number" required
-                           class="w-full p-2 rounded-lg border bg-white dark:bg-gray-800
-                                  dark:text-white border-gray-300 dark:border-gray-700">
+                           class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
                 </div>
             </div>
 
-            <!-- Supplier -->
-            <div>
-                <label class="font-medium text-sm">Supplier</label>
+            <div class="mt-3">
+                <label class="block text-sm font-medium">Supplier</label>
                 <input type="text" name="supplier" required
-                       class="w-full p-2 rounded-lg border bg-white dark:bg-gray-800
-                              dark:text-white border-gray-300 dark:border-gray-700">
+                       class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
             </div>
 
-            <!-- Product Description -->
-            <div>
-                <label class="font-medium text-sm">Product Description</label>
-                <textarea name="product_description" rows="3" required
-                          class="w-full p-2 rounded-lg border bg-white dark:bg-gray-800
-                                 dark:text-white border-gray-300 dark:border-gray-700"></textarea>
-            </div>
+            <!-- DYNAMIC ITEMS -->
+            <div id="exportProcItemsContainer" class="mt-6"></div>
 
-            <!-- Weight + Price -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <!-- ADD ITEM BUTTON -->
+            <button type="button" id="addExportProcItemBtn"
+                    class="mt-4 px-4 py-2 bg-green-500 hover:bg-green-600 text-white text-sm rounded">
+                + Add Item
+            </button>
+
+            <!-- AUTO-CALCULATED FIELDS -->
+            <div class="grid grid-cols-2 gap-4 mt-6">
                 <div>
-                    <label class="font-medium text-sm">Net Weight</label>
-                    <input type="number" step="0.01" name="net_weight" required
-                           class="w-full p-2 rounded-lg border bg-white dark:bg-gray-800
-                                  dark:text-white border-gray-300 dark:border-gray-700">
+                    <label class="block text-sm font-medium">Total Weight</label>
+                    <input type="number" step="0.01" name="total_weight" id="totalWeight" readonly
+                           class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm bg-gray-100">
                 </div>
 
                 <div>
-                    <label class="font-medium text-sm">Unit Price</label>
-                    <input type="number" step="0.01" name="unit_price" required
-                           class="w-full p-2 rounded-lg border bg-white dark:bg-gray-800
-                                  dark:text-white border-gray-300 dark:border-gray-700">
-                </div>
-
-                <div>
-                    <label class="font-medium text-sm">Total Amount</label>
-                    <input type="number" step="0.01" name="total_amount" required
-                           class="w-full p-2 rounded-lg border bg-white dark:bg-gray-800
-                                  dark:text-white border-gray-300 dark:border-gray-700">
+                    <label class="block text-sm font-medium">Invoice Value</label>
+                    <input type="number" step="0.01" name="invoice_value" id="invoiceValue" readonly
+                           class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm bg-gray-100">
                 </div>
             </div>
 
-            <!-- Total Weight + Invoice Value -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                    <label class="font-medium text-sm">Total Weight</label>
-                    <input type="number" step="0.01" name="total_weight"
-                           class="w-full p-2 rounded-lg border bg-white dark:bg-gray-800
-                                  dark:text-white border-gray-300 dark:border-gray-700">
-                </div>
-
-                <div>
-                    <label class="font-medium text-sm">Invoice Value</label>
-                    <input type="number" step="0.01" name="invoice_value"
-                           class="w-full p-2 rounded-lg border bg-white dark:bg-gray-800
-                                  dark:text-white border-gray-300 dark:border-gray-700">
-                </div>
-            </div>
-
-            <!-- Checked By -->
-            <div>
-                <label class="font-medium text-sm">Checked By</label>
+            <div class="mt-3">
+                <label class="block text-sm font-medium">Checked By</label>
                 <input type="text" name="checked_by"
-                       class="w-full p-2 rounded-lg border bg-white dark:bg-gray-800
-                              dark:text-white border-gray-300 dark:border-gray-700">
+                       class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
             </div>
 
-            <!-- Notes -->
-            <div>
-                <label class="font-medium text-sm">Notes</label>
+            <div class="mt-3">
+                <label class="block text-sm font-medium">Notes</label>
                 <textarea name="notes" rows="3"
-                          class="w-full p-2 rounded-lg border bg-white dark:bg-gray-800
-                                 dark:text-white border-gray-300 dark:border-gray-700"></textarea>
+                          class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"></textarea>
             </div>
 
-            <!-- Submit -->
-            <div class="flex justify-end pt-4">
+            <div class="flex justify-end mt-6 space-x-3">
+                <button type="button"
+                        onclick="document.getElementById('addExportProcModal').classList.add('hidden')"
+                        class="px-4 py-2 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 text-sm rounded hover:bg-gray-300">
+                    Cancel
+                </button>
                 <button type="submit"
-                        class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg shadow">
-                    Save Export Procurement
+                        class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white text-sm rounded">
+                    Save Record
                 </button>
             </div>
 
         </form>
     </div>
 </div>
+
+<script>
+    let exportProcItemIndex = 0;
+    const addExportItemBtn = document.getElementById('addExportProcItemBtn');
+    const exportItemsContainer = document.getElementById('exportProcItemsContainer');
+    const totalWeightField = document.getElementById('totalWeight');
+    const invoiceValueField = document.getElementById('invoiceValue');
+
+    // Add new item block
+    addExportItemBtn.addEventListener('click', () => {
+        const html = getExportItemFields(exportProcItemIndex++);
+        exportItemsContainer.insertAdjacentHTML('beforeend', html);
+        attachCalculationListeners();
+    });
+
+    // Remove item
+    function removeExportProcItem(btn) {
+        btn.closest('.export-item-block').remove();
+        calculateTotals();
+    }
+
+    // TEMPLATE FOR ITEM FIELDS
+    function getExportItemFields(index) {
+        return `
+            <div class="export-item-block border rounded-lg p-4 mt-4 bg-gray-50 dark:bg-gray-800 relative">
+                <button type="button" onclick="removeExportProcItem(this)"
+                        class="absolute top-2 right-2 text-red-500 hover:text-red-700 text-sm">✖</button>
+
+                <div>
+                    <label class="block text-sm font-medium">Product Description</label>
+                    <textarea name="items[${index}][product_description]" required rows="2"
+                        class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"></textarea>
+                </div>
+
+                <div class="grid grid-cols-3 gap-3 mt-3">
+                    <div>
+                        <label class="block text-sm font-medium">Net Weight</label>
+                        <input type="number" step="0.01" class="netWeight"
+                               name="items[${index}][net_weight]" required
+                               oninput="calculateTotals()"
+                               class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium">Unit Price</label>
+                        <input type="number" step="0.01" class="unitPrice"
+                               name="items[${index}][unit_price]" required
+                               oninput="calculateTotals()"
+                               class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium">Total Amount</label>
+                        <input type="number" step="0.01" class="totalAmount"
+                               name="items[${index}][total_amount]" readonly
+                               class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm bg-gray-100">
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    // Attach event listeners after new items are added
+    function attachCalculationListeners() {
+        document.querySelectorAll('.netWeight, .unitPrice').forEach(input => {
+            input.addEventListener('input', calculateTotals);
+        });
+    }
+
+    // CALCULATION LOGIC
+    function calculateTotals() {
+        let totalWeight = 0;
+        let totalInvoiceAmount = 0;
+
+        document.querySelectorAll('.export-item-block').forEach(block => {
+            const netWeight = parseFloat(block.querySelector('.netWeight')?.value) || 0;
+            const unitPrice = parseFloat(block.querySelector('.unitPrice')?.value) || 0;
+
+            const totalAmount = netWeight * unitPrice;
+            block.querySelector('.totalAmount').value = totalAmount.toFixed(2);
+
+            totalWeight += netWeight;
+            totalInvoiceAmount += totalAmount;
+        });
+
+        totalWeightField.value = totalWeight.toFixed(2);
+        invoiceValueField.value = totalInvoiceAmount.toFixed(2);
+    }
+</script>
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
