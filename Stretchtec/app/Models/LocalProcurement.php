@@ -5,6 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @method static orderBy(string $string, string $string1)
+ * @method static create(array $all)
+ */
 class LocalProcurement extends Model
 {
     protected $fillable = [

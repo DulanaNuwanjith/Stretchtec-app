@@ -10,11 +10,11 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('local_procurements', function (Blueprint $table) {
+        Schema::create('local_procurements', static function (Blueprint $table) {
             $table->id();
             $table->date('date');
             $table->string('invoice_number')->unique();
-            $table->string('po_number')->unique();
+            $table->string('po_number');
             $table->string('supplier_name');
             $table->string('color');
             $table->string('shade');
@@ -26,9 +26,6 @@ return new class extends Migration {
             $table->string('approved_by')->nullable();
             $table->string('status')->default('pending');
             $table->timestamps();
-
-            // Foreign key constraint
-            $table->foreign('po_number')->references('po_number')->on('purchase_departments')->onDelete('cascade');
         });
     }
 

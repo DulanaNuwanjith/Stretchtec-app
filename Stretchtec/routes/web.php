@@ -43,6 +43,7 @@
 use App\Http\Controllers\ColorMatchRejectController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LeftoverYarnController;
+use App\Http\Controllers\LocalProcurementController;
 use App\Http\Controllers\MailBookingApprovalController;
 use App\Http\Controllers\MailBookingController;
 use App\Http\Controllers\OperatorsandSupervisorsController;
@@ -50,6 +51,7 @@ use App\Http\Controllers\ProductCatalogController;
 use App\Http\Controllers\ProductInquiryController;
 use App\Http\Controllers\ProductOrderPreperationController;
 use App\Http\Controllers\PurchaseDepartmentController;
+use App\Http\Controllers\RawMaterialStoreController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SampleInquiryController;
 use App\Http\Controllers\SamplePreparationProductionController;
@@ -198,7 +200,7 @@ Route::middleware([
      | Store Management Routes
      |----------------------------------------------------------------------
      */
-    Route::resource('rawMaterial', \App\Http\Controllers\RawMaterialStoreController::class)->names([
+    Route::resource('rawMaterial', RawMaterialStoreController::class)->names([
         'index' => 'rawMaterial.index',
         'store' => 'rawMaterial.store',
         'update' => 'rawMaterial.update',
@@ -208,7 +210,6 @@ Route::middleware([
     Route::get('rawMaterialReceipt', static function () {
         return view('store-management.pages.rawMaterialReceipt');
     })->name('rawMaterialReceipt.index');
-
 
 
     /* ----------------------------------------------------------------------
@@ -223,9 +224,12 @@ Route::middleware([
         'destroy' => 'purchasing.destroy',
     ]);
 
-    Route::get('localinvoiceManage', static function () {
-        return view('purchasingDepartment.localinvoiceManage');
-    })->name('localinvoiceManage.index');
+    Route::resource('localinvoiceManage', LocalProcurementController::class)->names([
+        'index' => 'localinvoiceManage.index',
+        'store' => 'localinvoiceManage.store',
+        'update' => 'localinvoiceManage.update',
+        'destroy' => 'localinvoiceManage.destroy',
+    ]);
 
     Route::get('exportinvoiceManage', static function () {
         return view('purchasingDepartment.exportinvoiceManage');
