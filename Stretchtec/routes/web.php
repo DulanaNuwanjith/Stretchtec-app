@@ -208,9 +208,7 @@ Route::middleware([
         'destroy' => 'rawMaterial.destroy',
     ]);
 
-    Route::get('rawMaterialReceipt', static function () {
-        return view('store-management.pages.rawMaterialReceipt');
-    })->name('rawMaterialReceipt.index');
+    Route::get('rawMaterialReceipt', [ExportProcurementController::class, 'exportRawIndex'])->name('rawMaterialReceipt.index');
 
 
     /* ----------------------------------------------------------------------

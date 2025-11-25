@@ -115,7 +115,8 @@
 
             <!-- Header Section -->
             <div class="flex justify-between items-center mb-6">
-                <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Raw Material Receipt & Invoice Records</h1>
+                <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Raw Material Receipt & Invoice
+                    Records</h1>
                 <div class="flex space-x-3">
                     <button onclick="document.getElementById('addRawMaterial').classList.remove('hidden')"
                             class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded shadow">
@@ -140,50 +141,75 @@
                 <table class="table-fixed w-full text-sm divide-y divide-gray-200 dark:divide-gray-700">
                     <thead class="bg-gray-200 dark:bg-gray-700 text-left">
                     <tr class="text-center">
-                        <th
-                            class="font-bold sticky left-0 z-10 bg-white px-4 py-3 w-36 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                            Shade
-                        </th>
-                        <th
-                            class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                            Date
-                        </th>
-                        <th
-                            class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                            Color
-                        </th>
-                        <th
-                            class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                            TKT
-                        </th>
-                        <th
-                            class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                            PST Number
-                        </th>
-                        <th
-                            class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                        <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-40 text-xs text-gray-600 dark:text-gray-300 uppercase">
                             Supplier
                         </th>
-                        <th
-                            class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                            Supplier Comment
+                        <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-64 text-xs text-gray-600 dark:text-gray-300 uppercase">
+                            Product Description
                         </th>
-                        <th
-                            class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                            Quantity Available
+                        <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase">
+                            Net Weight
                         </th>
-                        <th
-                            class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                        <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase">
+                            Unit Price
+                        </th>
+                        <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase">
+                            Total Amount
+                        </th>
+                        <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-40 text-xs text-gray-600 dark:text-gray-300 uppercase">
+                            Notes
+                        </th>
+                        <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase">
                             Action
                         </th>
                     </tr>
                     </thead>
 
-                    <!-- Pagination Footer -->
+                    <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+                    @forelse ($exportRawMaterials as $material)
+                        <tr class="text-center hover:bg-gray-100 dark:hover:bg-gray-800 transition">
+                            <td class="px-4 py-3 text-gray-800 dark:text-gray-200">
+                                {{ $material->supplier }}
+                            </td>
+
+                            <td class="px-4 py-3 text-gray-800 dark:text-gray-200 break-words">
+                                {{ $material->product_description }}
+                            </td>
+
+                            <td class="px-4 py-3 text-gray-800 dark:text-gray-200">
+                                {{ number_format($material->net_weight, 2) }}
+                            </td>
+
+                            <td class="px-4 py-3 text-gray-800 dark:text-gray-200">
+                                {{ number_format($material->unit_price, 2) }}
+                            </td>
+
+                            <td class="px-4 py-3 text-gray-800 dark:text-gray-200 font-semibold">
+                                {{ number_format($material->total_amount, 2) }}
+                            </td>
+
+                            <td class="px-4 py-3 text-gray-800 dark:text-gray-200 break-words">
+                                {{ $material->notes ?? '—' }}
+                            </td>
+
+                            <td class="px-4 py-3">
+
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="7" class="px-4 py-6 text-center text-gray-500 dark:text-gray-400">
+                                No records found.
+                            </td>
+                        </tr>
+                    @endforelse
+                    </tbody>
+
                     <tfoot class="bg-gray-200 dark:bg-gray-700">
                     <tr>
-                        <td colspan="9" class="px-4 py-3">
+                        <td colspan="7" class="px-4 py-3">
                             <div class="flex justify-end">
+                                {{ $exportRawMaterials->links() ?? '' }}
                             </div>
                         </td>
                     </tr>

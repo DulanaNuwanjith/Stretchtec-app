@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ExportProcurement;
+use App\Models\ExportRawMaterial;
 use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -21,6 +22,13 @@ class ExportProcurementController extends Controller
     {
         $exportProcurements = ExportProcurement::latest()->paginate(10);
         return view('purchasingDepartment.exportinvoiceManage', compact('exportProcurements'));
+    }
+
+    public function exportRawIndex(): Factory|View
+    {
+        $exportRawMaterials = ExportRawMaterial::latest()->paginate(10);
+        return view('store-management.pages.rawMaterialReceipt', compact('exportRawMaterials'));
+
     }
 
     /**
@@ -67,6 +75,15 @@ class ExportProcurementController extends Controller
                     'total_weight' => $validatedMaster['total_weight'],
                     'invoice_value' => $validatedMaster['invoice_value'],
                     'checked_by' => $validatedMaster['checked_by'] ?? null,
+                    'notes' => $validatedMaster['notes'] ?? null,
+                ]);
+
+                ExportRawMaterial::create([
+                    'supplier' => $validatedMaster['supplier'],
+                    'product_description' => $item['product_description'],
+                    'net_weight' => $item['net_weight'],
+                    'unit_price' => $item['unit_price'],
+                    'total_amount' => $item['total_amount'],
                     'notes' => $validatedMaster['notes'] ?? null,
                 ]);
             }
