@@ -454,9 +454,9 @@
                         <option value="g">Gram (g)</option>
                         <option value="kg">Kilogram (kg)</option>
                         <option value="m">Meter (m)</option>
-                        <option value="yard">Yard</option>
-                        <option value="corn">Corn</option>
-                        <option value="piece">Piece</option>
+                        <option value="y">Yard</option>
+                        <option value="c">Corn</option>
+                        <option value="pcs">Piece</option>
                     </select>
                 </div>
             </div>

@@ -295,8 +295,8 @@
                             <option value="g">Gram (G)</option>
                             <option value="pcs">Pieces (PCS)</option>
                             <option value="m">Meter (M)</option>
-                            <option value="m">Yards (M)</option>
-                            <option value="m">Cones (C)</option>
+                            <option value="y">Yards (Y)</option>
+                            <option value="c">Cones (C)</option>
 
                         </select>
                     </div>

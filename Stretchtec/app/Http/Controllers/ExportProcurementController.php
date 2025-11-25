@@ -56,7 +56,7 @@ class ExportProcurementController extends Controller
                 'items.*.net_weight' => 'required|numeric|min:0',
                 'items.*.unit_price' => 'required|numeric|min:0',
                 'items.*.total_amount' => 'required|numeric|min:0',
-                'items.*.uom' => 'nullable|string',
+                'items.*.uom' => 'required|string',
             ]);
 
             DB::beginTransaction();
