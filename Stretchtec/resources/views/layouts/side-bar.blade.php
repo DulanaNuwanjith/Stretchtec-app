@@ -145,7 +145,7 @@
                     <li>
                         <a href="{{ route('purchasing.index') }}"
                             class="flex items-center px-4 py-2 rounded hover:bg-gray-200
-                      {{ request()->routeIs('purchasing.*') ? 'bg-gray-200' : '' }}">
+                      {{ request()->routeIs('purchasing.*', 'localinvoiceManage.*', 'exportinvoiceManage.*') ? 'bg-gray-200' : '' }}">
                             <img src="{{ asset('icons/purchasing.png') }}" alt="" class="w-6 h-6 mr-5" />
                             <span x-show="initialized && !collapsed">Purchase Operations</span>
                         </a>
