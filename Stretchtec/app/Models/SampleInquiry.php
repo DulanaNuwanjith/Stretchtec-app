@@ -163,53 +163,58 @@ class SampleInquiry extends Model
      */
     protected static function booted(): void
     {
-        static::updated(static function ($inquiry) {
-            if (
-                !empty($inquiry->referenceNo) &&
-                !$inquiry->productCatalog &&
-                $inquiry->isDirty('referenceNo')
-            ) {
-                try {
-                    $rnd = $inquiry->samplePreparationRnD;
+        static::updated(function ($inquiry) {
 
-                    if ($rnd && $rnd->alreadyDeveloped !== 'No Need to Develop') {
+            if (empty($inquiry->referenceNo) || !$inquiry->isDirty('referenceNo')) {
+                return;
+            }
 
-                        // --- Shade Selection Logic ---
-                        $shade = trim($rnd->shade ?? '');
-                        if ($shade === '') {
-                            $isShadeSelected = false; // empty shade
-                        } elseif (strpos($shade, ',') !== false) {
-                            $isShadeSelected = false; // multiple shades
-                        } else {
-                            $isShadeSelected = true; // single shade
-                        }
+            try {
+                $rnd = $inquiry->samplePreparationRnD;
 
-                        ProductCatalog::create([
-                            'order_no' => $inquiry->orderNo,
-                            'reference_no' => $inquiry->referenceNo,
-                            'reference_added_date' => now(),
-                            'coordinator_name' => $inquiry->coordinatorName,
-                            'item' => $inquiry->item,
-                            'size' => $inquiry->size,
-                            'colour' => $inquiry->color,
-                            'shade' => $rnd->shade,
-                            'supplierComment' => $rnd->supplierComment,
-                            'tkt' => $rnd->tkt,
-                            'sample_inquiry_id' => $inquiry->id,
-                            'sample_preparation_rnd_id' => $rnd->id,
-                            'supplier' => $rnd->yarnSupplier,
-                            'pst_no' => $rnd->pst_no,
-                            'isShadeSelected' => $isShadeSelected,
-                        ]);
-                    }
+                if (!$rnd || $rnd->alreadyDeveloped === 'No Need to Develop') {
+                    return;
+                }
 
-                } catch (\Throwable $e) {
-                    Log::error('Error creating ProductCatalog: ' . $e->getMessage(), [
-                        'inquiry_id' => $inquiry->id,
-                        'referenceNo' => $inquiry->referenceNo,
+                $shade = trim($rnd->shade ?? '');
+                $isShadeSelected = ($shade !== '' && strpos($shade, ',') === false);
+
+                // --- Prevent duplicate ProductCatalog entries ---
+                $existing = ProductCatalog::where('reference_no', $inquiry->referenceNo)
+                    ->where('item', $inquiry->item)
+                    ->where('size', $inquiry->size)
+                    ->where('shade', $rnd->shade)
+                    ->where('supplier', $rnd->yarnSupplier)
+                    ->where('pst_no', $rnd->pst_no)
+                    ->first();
+
+                if (!$existing) {
+                    ProductCatalog::create([
+                        'order_no' => $inquiry->orderNo,
+                        'reference_no' => $inquiry->referenceNo,
+                        'reference_added_date' => now(),
+                        'coordinator_name' => $inquiry->coordinatorName,
+                        'item' => $inquiry->item,
+                        'size' => $inquiry->size,
+                        'colour' => $inquiry->color,
+                        'shade' => $rnd->shade,
+                        'supplierComment' => $rnd->supplierComment,
+                        'tkt' => $rnd->tkt,
+                        'sample_inquiry_id' => $inquiry->id,
+                        'sample_preparation_rnd_id' => $rnd->id,
+                        'supplier' => $rnd->yarnSupplier,
+                        'pst_no' => $rnd->pst_no,
+                        'isShadeSelected' => $isShadeSelected,
                     ]);
                 }
+
+            } catch (\Throwable $e) {
+                Log::error('Error creating ProductCatalog: ' . $e->getMessage(), [
+                    'inquiry_id' => $inquiry->id,
+                    'referenceNo' => $inquiry->referenceNo,
+                ]);
             }
+
         });
     }
 }

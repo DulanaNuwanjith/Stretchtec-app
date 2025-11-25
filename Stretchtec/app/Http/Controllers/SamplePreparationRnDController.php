@@ -8,6 +8,7 @@ use App\Models\SamplePreparationProduction;
 use App\Models\SamplePreparationRnD;
 use App\Models\SampleStock;
 use App\Models\ShadeOrder;
+use App\Models\ProductCatalog;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -494,15 +495,13 @@ class SamplePreparationRnDController extends Controller
 
         // --- Dynamic validation ---
         if (in_array($prep->alreadyDeveloped, ['Need to Develop', 'Tape Match Pan Asia'])) {
-            // For these, yarnPrice is NOT required
             $request->validate([
                 'id' => 'required|exists:sample_preparation_rnd,id',
                 'referenceNo' => 'required|string',
             ]);
-            $referenceNos = [$request->input('referenceNo')]; // wrap single value as array
+            $referenceNos = [$request->input('referenceNo')];
             $shades = [];
         } else {
-            // --- No Need to Develop ---
             $request->validate([
                 'id' => 'required|exists:sample_preparation_rnd,id',
                 'referenceNo' => 'required|array',
@@ -511,26 +510,54 @@ class SamplePreparationRnDController extends Controller
                 'shade.*' => 'string',
                 'yarnPrice' => 'required|numeric|min:0',
             ]);
-
             $referenceNos = $request->input('referenceNo');
             $shades = $request->input('shade', []);
-            $yarnPrice = $request->input('yarnPrice');
-
-            // ✅ Save yarn price only for "No Need to Develop"
-            $prep->yarnPrice = $yarnPrice;
+            $prep->yarnPrice = $request->input('yarnPrice');
         }
 
-        // --- Duplicate check only for single reference types ---
-        if (in_array($prep->alreadyDeveloped, ['Need to Develop', 'Tape Match Pan Asia'])) {
-            foreach ($referenceNos as $ref) {
-                $exists = SamplePreparationRnD::where('referenceNo', $ref)
-                    ->where('id', '!=', $prep->id)
-                    ->exists();
+        foreach ($referenceNos as $ref) {
+            // --- Check if reference exists with same key details ---
+            $existing = ProductCatalog::where('reference_no', $ref)
+                ->where('item', $prep->sampleInquiry?->item)
+                ->where('size', $prep->sampleInquiry?->size)
+                ->where('shade', $prep->shade)
+                ->where('supplier', $prep->yarnSupplier)
+                ->where('pst_no', $prep->pst_no)
+                ->first();
 
-                if ($exists) {
-                    return back()->withErrors(['referenceNo' => "Reference No '{$ref}' already exists."])
-                        ->withInput();
-                }
+            if ($existing) {
+                // ✅ Reference exists with same details → allow saving but do NOT create new
+                continue;
+            }
+
+            // --- Check if reference exists with different details ---
+            $conflict = ProductCatalog::where('reference_no', $ref)->first();
+            if ($conflict) {
+                // ❌ Reference exists but details mismatch → block
+                return back()->withErrors([
+                    'referenceNo' => "Reference '{$ref}' exists but details mismatch in Product Catalog."
+                ])->withInput();
+            }
+
+            // --- Reference does not exist → create new ProductCatalog ---
+            if ($prep->sampleInquiry) {
+                ProductCatalog::create([
+                    'order_no' => $prep->sampleInquiry->orderNo,
+                    'reference_no' => $ref,
+                    'reference_added_date' => now(),
+                    'coordinator_name' => $prep->sampleInquiry->coordinatorName,
+                    'item' => $prep->sampleInquiry->item,
+                    'size' => $prep->sampleInquiry->size,
+                    'colour' => $prep->sampleInquiry->color,
+                    'shade' => $prep->shade,
+                    'supplierComment' => $prep->supplierComment ?? null,
+                    'tkt' => $prep->tkt ?? null,
+                    'sample_inquiry_id' => $prep->sampleInquiry->id,
+                    'sample_preparation_rnd_id' => $prep->id,
+                    'supplier' => $prep->yarnSupplier,
+                    'pst_no' => $prep->pst_no,
+                    'isShadeSelected' => !empty($prep->shade) && strpos($prep->shade, ',') === false,
+                ]);
             }
         }
 
@@ -544,14 +571,11 @@ class SamplePreparationRnDController extends Controller
                 ->implode(', ');
             $finalReference = $pairs;
         } else {
-            $finalReference = $referenceNos[0] ?? null; // single reference
+            $finalReference = $referenceNos[0] ?? null;
         }
 
         $prep->referenceNo = $finalReference;
-
-        if ($isFirstTime) {
-            $prep->is_reference_locked = true;
-        }
+        if ($isFirstTime) $prep->is_reference_locked = true;
         $prep->save();
 
         // --- Handle sample stock creation ---
@@ -562,10 +586,7 @@ class SamplePreparationRnDController extends Controller
                 ->exists());
 
         foreach ($dispatchedShades as $shadeOrder) {
-            $productionOutput = (int)($shadeOrder->production_output ?? 0);
-            $damagedOutput = (int)($shadeOrder->damaged_output ?? 0);
-            $availableStock = max($productionOutput - $damagedOutput, 0);
-
+            $availableStock = max((int)$shadeOrder->production_output - (int)$shadeOrder->damaged_output, 0);
             if ($availableStock > 0) {
                 SampleStock::create([
                     'reference_no' => $prep->referenceNo,
@@ -577,10 +598,9 @@ class SamplePreparationRnDController extends Controller
         }
 
         // --- Sync reference to SampleInquiry ---
-        $inquiry = $prep->sampleInquiry;
-        if ($inquiry) {
-            $inquiry->referenceNo = $prep->referenceNo;
-            $inquiry->save();
+        if ($prep->sampleInquiry) {
+            $prep->sampleInquiry->referenceNo = $prep->referenceNo;
+            $prep->sampleInquiry->save();
         }
 
         return back()->with('success', $isFirstTime
