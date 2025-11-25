@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\LocalProcurement;
 use App\Models\ProductOrderPreperation;
 use App\Models\PurchaseDepartment;
+use App\Models\RawMaterialStore;
 use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -62,8 +63,8 @@ class LocalProcurementController extends Controller
             // Begin transaction
             DB::beginTransaction();
 
-            // Loop through each item and save
             foreach ($validatedItems['items'] as $item) {
+                // Create a local procurement record
                 LocalProcurement::create([
                     'invoice_number' => $validatedMaster['invoice_number'],
                     'po_number' => $validatedMaster['po_number'],
@@ -77,13 +78,26 @@ class LocalProcurementController extends Controller
                     'pst_no' => $item['pst_no'] ?? null,
                     'supplier_comment' => $item['supplier_comment'] ?? null,
                 ]);
+
+                // Add corresponding raw material entry
+                RawMaterialStore::create([
+                    'date' => $validatedMaster['date'],
+                    'color' => $item['color'],
+                    'shade' => $item['shade'],
+                    'pst_no' => $item['pst_no'] ?? null,
+                    'tkt' => $item['tkt'],
+                    'supplier' => $validatedMaster['supplier_name'],
+                    'available_quantity' => $item['quantity'],
+                    'unit' => $item['uom'],
+                    'remarks' => $item['supplier_comment'] ?? null,
+                ]);
             }
 
             DB::commit();
 
             return redirect()
                 ->back()
-                ->with('success', 'Local procurement record created successfully with all items.');
+                ->with('success', 'Local procurement and raw material records created successfully.');
 
         } catch (ValidationException $e) {
             DB::rollBack();
@@ -101,7 +115,7 @@ class LocalProcurementController extends Controller
 
             return redirect()
                 ->back()
-                ->with('error', 'An error occurred while creating the procurement record.')
+                ->with('error', 'An error occurred while creating the procurement and raw material records.')
                 ->withInput();
         }
     }
