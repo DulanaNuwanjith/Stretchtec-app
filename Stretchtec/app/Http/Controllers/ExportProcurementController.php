@@ -56,6 +56,7 @@ class ExportProcurementController extends Controller
                 'items.*.net_weight' => 'required|numeric|min:0',
                 'items.*.unit_price' => 'required|numeric|min:0',
                 'items.*.total_amount' => 'required|numeric|min:0',
+                'items.*.uom' => 'nullable|string',
             ]);
 
             DB::beginTransaction();
@@ -71,6 +72,7 @@ class ExportProcurementController extends Controller
                     'net_weight' => $item['net_weight'],
                     'unit_price' => $item['unit_price'],
                     'total_amount' => $item['total_amount'],
+                    'uom' => $item['uom'] ?? null,
 
                     'total_weight' => $validatedMaster['total_weight'],
                     'invoice_value' => $validatedMaster['invoice_value'],
@@ -83,7 +85,7 @@ class ExportProcurementController extends Controller
                     'product_description' => $item['product_description'],
                     'net_weight' => $item['net_weight'],
                     'unit_price' => $item['unit_price'],
-                    'total_amount' => $item['total_amount'],
+                    'uom' => $item['uom'] ?? null,
                     'notes' => $validatedMaster['notes'] ?? null,
                 ]);
             }

@@ -98,6 +98,7 @@ class LocalProcurementController extends Controller
                     'tkt' => $item['tkt'],
                     'supplier' => $validatedMaster['supplier_name'],
                     'available_quantity' => $item['quantity'],
+                    'unit_price' => $item['unit_price'],
                     'unit' => $item['uom'],
                     'remarks' => $item['supplier_comment'] ?? null,
                 ]);

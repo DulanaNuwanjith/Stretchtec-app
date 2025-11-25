@@ -16,7 +16,7 @@ return new class extends Migration {
             $table->string('product_description');
             $table->decimal('net_weight');
             $table->decimal('unit_price');
-            $table->decimal('total_amount');
+            $table->string('uom');
             $table->string('notes')->nullable();
             $table->timestamps();
         });
