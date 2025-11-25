@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\LocalProcurement;
+use App\Models\ProductOrderPreperation;
 use App\Models\PurchaseDepartment;
 use Exception;
 use Illuminate\Contracts\View\Factory;
@@ -22,9 +23,14 @@ class LocalProcurementController extends Controller
     {
         $localProcurements = LocalProcurement::orderBy('id', 'desc')->paginate(10);
 
-        $poNumbers = PurchaseDepartment::pluck('po_number')->toArray();
+        $poNumbers = PurchaseDepartment::distinct()->pluck('po_number')->toArray();
 
-        return view('purchasingDepartment.localinvoiceManage', compact('localProcurements', 'poNumbers'));
+        $orderPreparations = ProductOrderPreperation::where('isRawMaterialOrdered', 1)
+            ->where('isRawMaterialReceived', 0)
+            ->latest()
+            ->get();
+
+        return view('purchasingDepartment.localinvoiceManage', compact('localProcurements', 'poNumbers', 'orderPreparations'));
     }
 
     /**

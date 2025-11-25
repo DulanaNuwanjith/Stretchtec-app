@@ -44,17 +44,177 @@
         <div class="p-6">
 
             <!-- Header -->
-            <div class="flex justify-between items-center mb-6">
+            <div class="flex items-center mb-6">
                 <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">
                     Local Procurement Records
                 </h1>
 
-                <div class="flex space-x-3">
+                <div class="ml-auto flex space-x-3">
                     <button
                         onclick="document.getElementById('addLocalProcModal').classList.remove('hidden')"
                         class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded shadow">
                         + Add Local Procurement
                     </button>
+                    <button onclick="document.getElementById('orderPopupModal').classList.remove('hidden')"
+                            class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded shadow">
+                        View & Update Orders
+                    </button>
+                </div>
+            </div>
+
+            <!-- Orders Popup Modal -->
+            <div id="orderPopupModal"
+                 class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+                <div
+                    class="bg-white dark:bg-gray-900 w-11/12 max-w-9xl rounded-2xl shadow-lg overflow-y-auto max-h-[90vh] relative p-6">
+
+                    <!-- Close Button -->
+                    <button onclick="closeOrderPopup()"
+                            class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 text-xl">
+                        ✖
+                    </button>
+
+                    <h2 class="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-100">
+                        Manage & Update Purchase Orders
+                    </h2>
+
+                    <!-- Table Container -->
+                    <div id="orderTableContainer"
+                         class="overflow-x-auto border border-gray-300 dark:border-gray-700 rounded-lg shadow-sm">
+                        <table class="min-w-full border-collapse">
+                            <thead class="bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300">
+                            <tr class="text-center">
+                                <th class="font-bold sticky left-0 top-0 z-20 bg-white px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                    Order No
+                                </th>
+                                <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase">
+                                    Customer
+                                </th>
+                                <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase">
+                                    Reference No
+                                </th>
+                                <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase">
+                                    Item
+                                </th>
+                                <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-24 text-xs text-gray-600 dark:text-gray-300 uppercase">
+                                    Size
+                                </th>
+                                <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-24 text-xs text-gray-600 dark:text-gray-300 uppercase">
+                                    Color
+                                </th>
+                                <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-24 text-xs text-gray-600 dark:text-gray-300 uppercase">
+                                    Shade
+                                </th>
+                                <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-24 text-xs text-gray-600 dark:text-gray-300 uppercase">
+                                    TKT
+                                </th>
+                                <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-24 text-xs text-gray-600 dark:text-gray-300 uppercase">
+                                    Quantity
+                                </th>
+                                <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-28 text-xs text-gray-600 dark:text-gray-300 uppercase">
+                                    UOM
+                                </th>
+                                <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase">
+                                    Supplier
+                                </th>
+                                <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-28 text-xs text-gray-600 dark:text-gray-300 uppercase">
+                                    PST No
+                                </th>
+                                <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-36 text-xs text-gray-600 dark:text-gray-300 uppercase">
+                                    Supplier Comment
+                                </th>
+                                <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-40 text-xs text-gray-600 dark:text-gray-300 uppercase">
+                                    Mark Raw Material Ordered
+                                </th>
+                                <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-40 text-xs text-gray-600 dark:text-gray-300 uppercase">
+                                    Mark Raw Material Received
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                            @forelse($orderPreparations as $order)
+                                <tr class="odd:bg-white even:bg-gray-50 border-b border-gray-200 text-center">
+                                    <!-- Sticky first column -->
+                                    <td class="px-4 py-3 font-bold sticky left-0 z-10 bg-gray-100 whitespace-normal break-words border-r border-gray-300 text-blue-500">
+                                        {{ $order->prod_order_no ?? 'N/A' }}
+                                    </td>
+                                    <td class="px-4 py-3 border-r border-gray-300">{{ $order->customer_name ?? '-' }}</td>
+                                    <td class="px-4 py-3 border-r border-gray-300">{{ $order->reference_no ?? '-' }}</td>
+                                    <td class="px-4 py-3 border-r border-gray-300">{{ $order->item ?? '-' }}</td>
+                                    <td class="px-4 py-3 border-r border-gray-300">{{ $order->size ?? '-' }}</td>
+                                    <td class="px-4 py-3 border-r border-gray-300">{{ $order->color ?? '-' }}</td>
+                                    <td class="px-4 py-3 border-r border-gray-300">{{ $order->shade ?? '-' }}</td>
+                                    <td class="px-4 py-3 border-r border-gray-300">{{ $order->tkt ?? '-' }}</td>
+                                    <td class="px-4 py-3 border-r border-gray-300">{{ $order->qty ?? 0 }}</td>
+                                    <td class="px-4 py-3 border-r border-gray-300">{{ $order->uom ?? '-' }}</td>
+                                    <td class="px-4 py-3 border-r border-gray-300">{{ $order->supplier ?? '-' }}</td>
+                                    <td class="px-4 py-3 border-r border-gray-300">{{ $order->pst_no ?? '-' }}</td>
+                                    <td class="px-4 py-3 border-r border-gray-300">{{ $order->supplier_comment ?? '-' }}</td>
+
+                                    <!-- Mark Raw Material Ordered -->
+                                    <td class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                        <div class="flex flex-col items-center justify-center">
+                                            @if ($order->isRawMaterialOrdered)
+                                                <!-- Banner showing ordered timestamp -->
+                                                <span
+                                                    class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-blue-100 dark:bg-gray-800 px-3 py-1 rounded">
+                                                        Ordered on <br>
+                                                        {{ Carbon::parse($order->raw_material_ordered_date)->format('Y-m-d') }}
+                                                        at
+                                                        {{ Carbon::parse($order->raw_material_ordered_date)->format('H:i') }}
+                                                    </span>
+                                            @else
+                                                <!-- Mark Ordered button -->
+                                                <form action="{{ route('orders.markOrdered', $order->id) }}"
+                                                      method="POST" onsubmit="handleSubmit(this)">
+                                                    @csrf
+                                                    @method('PATCH')
+                                                    <button type="submit"
+                                                            class="px-3 py-1 mt-4 text-xs rounded-lg bg-blue-100 text-blue-700 hover:bg-blue-200 flex items-center justify-center">
+                                                        Mark as Ordered
+                                                    </button>
+                                                </form>
+                                            @endif
+                                        </div>
+                                    </td>
+
+                                    <!-- Mark Raw Material Received -->
+                                    <td class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                        <div class="flex flex-col items-center justify-center">
+                                            @if ($order->isRawMaterialReceived)
+                                                <!-- Banner showing received timestamp -->
+                                                <span
+                                                    class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-green-100 dark:bg-gray-800 px-3 py-1 rounded">
+                                                        Received on <br>
+                                                        {{ Carbon::parse($order->raw_material_received_date)->format('Y-m-d') }}
+                                                        at
+                                                        {{ Carbon::parse($order->raw_material_received_date)->format('H:i') }}
+                                                    </span>
+                                            @else
+                                                <!-- Mark Received button -->
+                                                <form action="{{ route('orders.markReceived', $order->id) }}"
+                                                      method="POST" onsubmit="handleSubmit(this)">
+                                                    @csrf
+                                                    @method('PATCH')
+                                                    <button type="submit"
+                                                            class="px-3 py-1 mt-4 text-xs rounded-lg bg-green-100 text-green-700 hover:bg-green-200 flex items-center justify-center">
+                                                        Mark as Received
+                                                    </button>
+                                                </form>
+                                            @endif
+                                        </div>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="6" class="px-4 py-3 text-center text-gray-500 dark:text-gray-400">
+                                        No orders available.
+                                    </td>
+                                </tr>
+                            @endforelse
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 
@@ -290,6 +450,22 @@
                     // Currently no auto-calculation, but can add if needed
                 }
 
+            </script>
+
+            <script>
+                function openOrderPopup() {
+                    document.getElementById('orderPopupModal').classList.remove('hidden');
+                }
+
+                function closeOrderPopup() {
+                    document.getElementById('orderPopupModal').classList.add('hidden');
+                }
+
+                // Optional: Close modal when clicking outside content
+                window.addEventListener('click', function (e) {
+                    const modal = document.getElementById('orderPopupModal');
+                    if (e.target === modal) closeOrderPopup();
+                });
             </script>
 
         </div>
