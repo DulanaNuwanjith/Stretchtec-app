@@ -48,6 +48,7 @@ class LocalProcurementController extends Controller
                 'supplier_name' => 'required|string',
                 'total_quantity' => 'required|numeric|min:1',
                 'invoice_value' => 'required|numeric|min:0',
+                'checked_by' => 'nullable|string',
                 'notes' => 'nullable|string',
             ]);
 
@@ -75,6 +76,7 @@ class LocalProcurementController extends Controller
                     'po_number' => $validatedMaster['po_number'],
                     'date' => $validatedMaster['date'],
                     'supplier_name' => $validatedMaster['supplier_name'],
+                    'approved_by' => $validatedMaster['checked_by'] ?? null,
                     'color' => $item['color'],
                     'shade' => $item['shade'],
                     'tkt' => $item['tkt'],

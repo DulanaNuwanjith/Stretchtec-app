@@ -374,7 +374,7 @@
 
                             <div class="mt-3">
                                 <label class="block text-sm font-medium">Checked By</label>
-                                <input type="text" name="approved_by"
+                                <input type="text" name="checked_by"
                                        class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
                             </div>
 
