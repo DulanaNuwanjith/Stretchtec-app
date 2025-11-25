@@ -13,7 +13,7 @@ return new class extends Migration {
         Schema::create('local_procurements', static function (Blueprint $table) {
             $table->id();
             $table->date('date');
-            $table->string('invoice_number')->unique();
+            $table->string('invoice_number');
             $table->string('po_number');
             $table->string('supplier_name');
             $table->string('color');

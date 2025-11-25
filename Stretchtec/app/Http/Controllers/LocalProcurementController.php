@@ -33,33 +33,51 @@ class LocalProcurementController extends Controller
     public function store(Request $request): ?RedirectResponse
     {
         try {
-            // Validate request data
-            $validated = $request->validate([
+            // Validate master invoice fields
+            $validatedMaster = $request->validate([
                 'date' => 'required|date',
                 'invoice_number' => 'required|string|unique:local_procurements,invoice_number',
                 'po_number' => 'required|string|exists:purchase_departments,po_number',
                 'supplier_name' => 'required|string',
-                'color' => 'required|string',
-                'shade' => 'required|string',
-                'tkt' => 'required|string',
-                'uom' => 'required|string',
-                'quantity' => 'required|numeric',
-                'pst_no' => 'nullable|string',
-                'supplier_comment' => 'nullable|string',
             ]);
 
-            // Begin transaction for data consistency
+            // Validate items (array)
+            $validatedItems = $request->validate([
+                'items' => 'required|array|min:1',
+                'items.*.color' => 'required|string',
+                'items.*.shade' => 'required|string',
+                'items.*.tkt' => 'required|string',
+                'items.*.uom' => 'required|string',
+                'items.*.quantity' => 'required|numeric|min:1',
+                'items.*.pst_no' => 'nullable|string',
+                'items.*.supplier_comment' => 'nullable|string',
+            ]);
+
+            // Begin transaction
             DB::beginTransaction();
 
-            // Only use validated data for creation
-            LocalProcurement::create($validated);
+            // Loop through each item and save
+            foreach ($validatedItems['items'] as $item) {
+                LocalProcurement::create([
+                    'invoice_number' => $validatedMaster['invoice_number'],
+                    'po_number' => $validatedMaster['po_number'],
+                    'date' => $validatedMaster['date'],
+                    'supplier_name' => $validatedMaster['supplier_name'],
+                    'color' => $item['color'],
+                    'shade' => $item['shade'],
+                    'tkt' => $item['tkt'],
+                    'uom' => $item['uom'],
+                    'quantity' => $item['quantity'],
+                    'pst_no' => $item['pst_no'] ?? null,
+                    'supplier_comment' => $item['supplier_comment'] ?? null,
+                ]);
+            }
 
-            // Commit transaction
             DB::commit();
 
             return redirect()
                 ->back()
-                ->with('success', 'Local procurement record created successfully.');
+                ->with('success', 'Local procurement record created successfully with all items.');
 
         } catch (ValidationException $e) {
             DB::rollBack();
