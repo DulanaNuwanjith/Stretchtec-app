@@ -265,28 +265,40 @@
                         class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"></textarea>
                 </div>
 
-                <div class="grid grid-cols-3 gap-3 mt-3">
+                <div class="grid grid-cols-2 gap-2 mt-2">
                     <div>
                         <label class="block text-sm font-medium">Net Weight</label>
-                        <input type="number" step="0.01" class="netWeight"
+                        <input type="number" step="0.01" class="netWeight w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                name="items[${index}][net_weight]" required
-                               oninput="calculateTotals()"
-                               class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                               oninput="calculateTotals()">
                     </div>
 
                     <div>
                         <label class="block text-sm font-medium">Unit Price</label>
-                        <input type="number" step="0.01" class="unitPrice"
+                        <input type="number" step="0.01" class="unitPrice w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"
                                name="items[${index}][unit_price]" required
-                               oninput="calculateTotals()"
-                               class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                               oninput="calculateTotals()">
                     </div>
 
                     <div>
                         <label class="block text-sm font-medium">Total Amount</label>
-                        <input type="number" step="0.01" class="totalAmount"
-                               name="items[${index}][total_amount]" readonly
-                               class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm bg-gray-100">
+                        <input type="number" step="0.01" class="totalAmount w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm bg-gray-100"
+                               name="items[${index}][total_amount]" readonly>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium">Unit of Measurement</label>
+                        <select name="items[${index}][uom]" required
+                                class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                            <option value="">Select UOM</option>
+                            <option value="kg">Kilogram (KG)</option>
+                            <option value="g">Gram (G)</option>
+                            <option value="pcs">Pieces (PCS)</option>
+                            <option value="m">Meter (M)</option>
+                            <option value="y">Yards (Y)</option>
+                            <option value="c">Cones (C)</option>
+
+                        </select>
                     </div>
                 </div>
             </div>

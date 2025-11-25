@@ -46,6 +46,10 @@ class LocalProcurementController extends Controller
                 'invoice_number' => 'required|string|unique:local_procurements,invoice_number',
                 'po_number' => 'required|string|exists:purchase_departments,po_number',
                 'supplier_name' => 'required|string',
+                'total_quantity' => 'required|numeric|min:1',
+                'invoice_value' => 'required|numeric|min:0',
+                'checked_by' => 'nullable|string',
+                'notes' => 'nullable|string',
             ]);
 
             // Validate items (array)
@@ -56,6 +60,8 @@ class LocalProcurementController extends Controller
                 'items.*.tkt' => 'required|string',
                 'items.*.uom' => 'required|string',
                 'items.*.quantity' => 'required|numeric|min:1',
+                'items.*.unit_price' => 'required|numeric|min:0',
+                'items.*.total_price' => 'required|numeric|min:0',
                 'items.*.pst_no' => 'nullable|string',
                 'items.*.supplier_comment' => 'nullable|string',
             ]);
@@ -70,11 +76,17 @@ class LocalProcurementController extends Controller
                     'po_number' => $validatedMaster['po_number'],
                     'date' => $validatedMaster['date'],
                     'supplier_name' => $validatedMaster['supplier_name'],
+                    'approved_by' => $validatedMaster['checked_by'] ?? null,
                     'color' => $item['color'],
                     'shade' => $item['shade'],
                     'tkt' => $item['tkt'],
                     'uom' => $item['uom'],
                     'quantity' => $item['quantity'],
+                    'unit_price' => $item['unit_price'],
+                    'total_price' => $item['total_price'],
+                    'total_quantity' => $validatedMaster['total_quantity'],
+                    'invoice_value' => $validatedMaster['invoice_value'],
+                    'notes' => $validatedMaster['notes'] ?? null,
                     'pst_no' => $item['pst_no'] ?? null,
                     'supplier_comment' => $item['supplier_comment'] ?? null,
                 ]);
@@ -88,6 +100,7 @@ class LocalProcurementController extends Controller
                     'tkt' => $item['tkt'],
                     'supplier' => $validatedMaster['supplier_name'],
                     'available_quantity' => $item['quantity'],
+                    'unit_price' => $item['unit_price'],
                     'unit' => $item['uom'],
                     'remarks' => $item['supplier_comment'] ?? null,
                 ]);

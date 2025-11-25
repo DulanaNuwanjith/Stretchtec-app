@@ -358,6 +358,32 @@
                                 + Add Item
                             </button>
 
+                            <div class="grid grid-cols-2 gap-3 mt-3">
+                                <div>
+                                    <label class="block text-sm font-medium">Total Quantity</label>
+                                    <input type="number" id="overallTotalQty" name="total_quantity" readonly
+                                           class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm bg-gray-200">
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium">Invoice Value</label>
+                                    <input type="number" id="invoiceValue" name="invoice_value" readonly
+                                           class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm bg-gray-200">
+                                </div>
+                            </div>
+
+                            <div class="mt-3">
+                                <label class="block text-sm font-medium">Checked By</label>
+                                <input type="text" name="checked_by"
+                                       class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                            </div>
+
+                            <div class="mt-3">
+                                <label class="block text-sm font-medium">Notes</label>
+                                <textarea name="notes" rows="3"
+                                          class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"></textarea>
+                            </div>
+
                             <!-- Action Buttons -->
                             <div class="flex justify-end mt-6 space-x-3">
                                 <button type="button"
@@ -390,7 +416,9 @@
                 // Remove an item
                 function removeLocalProcItem(btn) {
                     btn.closest('.local-proc-item-block').remove();
+                    calculateOverallTotals();
                 }
+
 
                 // Template for Local Procurement item fields
                 function getLocalProcItemFields(index) {
@@ -426,9 +454,9 @@
                         <option value="g">Gram (g)</option>
                         <option value="kg">Kilogram (kg)</option>
                         <option value="m">Meter (m)</option>
-                        <option value="yard">Yard</option>
-                        <option value="corn">Corn</option>
-                        <option value="piece">Piece</option>
+                        <option value="y">Yard</option>
+                        <option value="c">Corn</option>
+                        <option value="pcs">Piece</option>
                     </select>
                 </div>
             </div>
@@ -446,6 +474,20 @@
                 </div>
             </div>
 
+           <div class="grid grid-cols-2 gap-3 mt-3">
+                <div>
+                    <label class="block text-sm font-medium">Unit Price</label>
+                    <input type="number" step="0.01" name="items[${index}][unit_price]"
+                           class="unit-price w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium">Total Price</label>
+                    <input type="number" name="items[${index}][total_price]" readonly
+                           class="total-price w-full mt-1 px-3 py-2 border rounded-md bg-gray-200 dark:bg-gray-600 dark:text-white text-sm">
+                </div>
+            </div>
+
+
             <div class="mt-3">
                 <label class="block text-sm font-medium">Supplier Comment</label>
                 <textarea name="items[${index}][supplier_comment]" rows="2"
@@ -455,8 +497,42 @@
                 }
 
                 function attachLocalProcListeners() {
-                    // Currently no auto-calculation, but can add if needed
+
+                    document.querySelectorAll('.local-proc-item-block').forEach(block => {
+                        const qtyInput = block.querySelector('input[name*="[quantity]"]');
+                        const unitPriceInput = block.querySelector('.unit-price');
+                        const totalPriceInput = block.querySelector('.total-price');
+
+                        function calculateItemTotal() {
+                            const qty = parseFloat(qtyInput.value) || 0;
+                            const unit = parseFloat(unitPriceInput.value) || 0;
+                            const total = qty * unit;
+                            totalPriceInput.value = total.toFixed(2);
+
+                            calculateOverallTotals();
+                        }
+
+                        qtyInput.addEventListener('input', calculateItemTotal);
+                        unitPriceInput.addEventListener('input', calculateItemTotal);
+                    });
                 }
+
+                function calculateOverallTotals() {
+                    let totalQty = 0;
+                    let invoiceValue = 0;
+
+                    document.querySelectorAll('.local-proc-item-block').forEach(block => {
+                        const qty = parseFloat(block.querySelector('input[name*="[quantity]"]').value) || 0;
+                        const total = parseFloat(block.querySelector('.total-price').value) || 0;
+
+                        totalQty += qty;
+                        invoiceValue += total;
+                    });
+
+                    document.getElementById('overallTotalQty').value = totalQty;
+                    document.getElementById('invoiceValue').value = invoiceValue.toFixed(2);
+                }
+
 
             </script>
 

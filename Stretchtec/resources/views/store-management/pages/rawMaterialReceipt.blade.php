@@ -177,7 +177,7 @@
                             </td>
 
                             <td class="px-4 py-3 text-gray-800 dark:text-gray-200">
-                                {{ number_format($material->net_weight, 2) }}
+                                {{ number_format($material->net_weight, 2) }} {{$material->uom}}
                             </td>
 
                             <td class="px-4 py-3 text-gray-800 dark:text-gray-200">

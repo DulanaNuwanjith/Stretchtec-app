@@ -17,6 +17,7 @@ return new class extends Migration {
             $table->string('supplier');
             $table->string('product_description');
             $table->decimal('net_weight');
+            $table->string('uom');
             $table->decimal('unit_price');
             $table->decimal('total_amount');
             $table->decimal('total_weight');

@@ -21,9 +21,14 @@ return new class extends Migration {
             $table->string('tkt');
             $table->string('uom');
             $table->decimal('quantity');
+            $table->decimal('unit_price');
+            $table->decimal('total_price');
             $table->string('pst_no')->nullable();
             $table->string('supplier_comment')->nullable();
+            $table->decimal('total_quantity');
+            $table->decimal('invoice_value');
             $table->string('approved_by')->nullable();
+            $table->string('notes')->nullable();
             $table->string('status')->default('pending');
             $table->timestamps();
         });
