@@ -231,7 +231,7 @@
                     <p class="mt-3 text-gray-700 font-semibold">Loading data...</p>
                 </div>
                 <table class="table-fixed w-full text-sm divide-y divide-gray-200 dark:divide-gray-700">
-                    <thead class="bg-gray-200 dark:bg-gray-700 text-left">
+                    <thead class="bg-gray-100 dark:bg-gray-700">
                         <tr class="text-center">
                             <th
                                 class="font-bold sticky left-0 z-10 bg-white px-4 py-3 w-36 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
@@ -267,32 +267,32 @@
                             </th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+                    <tbody class="divide-y divide-gray-200 dark:divide-gray-600">
                         @foreach ($rawMaterials as $material)
-                            <tr class="hover:bg-gray-100 dark:hover:bg-gray-800 text-center">
+                            <tr class="odd:bg-white even:bg-gray-50 border-b border-gray-200 text-center">
                                 <td
-                                    class="sticky left-0 z-10 bg-white px-4 py-3 text-gray-700 dark:text-gray-300 whitespace-normal break-words">
+                                    class="sticky left-0 z-10 bg-white px-4 py-3 text-sm bg-gray-100 border-r border-gray-300 text-left whitespace-normal break-words font-bold">
                                     {{ $material->shade }}
                                 </td>
-                                <td class="px-4 py-3 text-gray-700 dark:text-gray-300 whitespace-normal break-words">
+                                <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">
                                     {{ $material->date }}
                                 </td>
-                                <td class="px-4 py-3 text-gray-700 dark:text-gray-300 whitespace-normal break-words">
+                                <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">
                                     {{ $material->color }}
                                 </td>
-                                <td class="px-4 py-3 text-gray-700 dark:text-gray-300 whitespace-normal break-words">
+                                <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">
                                     {{ $material->tkt }}
                                 </td>
-                                <td class="px-4 py-3 text-gray-700 dark:text-gray-300 whitespace-normal break-words">
+                                <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">
                                     {{ $material->pst_no }}
                                 </td>
-                                <td class="px-4 py-3 text-gray-700 dark:text-gray-300 whitespace-normal break-words">
+                                <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">
                                     {{ $material->supplier }}
                                 </td>
-                                <td class="px-4 py-3 text-gray-700 dark:text-gray-300 whitespace-normal break-words">
+                                <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">
                                     {{ $material->available_quantity }} {{ $material->unit }}
                                 </td>
-                                <td class="px-4 py-3 text-gray-700 dark:text-gray-300 whitespace-normal break-words">
+                                <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">
                                     <div class="flex justify-center items-center space-x-2">
                                         <div x-data="{ open: false }">
                                             <!-- Button -->
@@ -340,7 +340,7 @@
                     </tbody>
                 </table>
             </div>
-            <div class="flex justify-end">
+            <div class="flex justify-center mt-4">
                 {{ $rawMaterials->links() }}
             </div>
         </div>

@@ -208,7 +208,7 @@
                     <tfoot class="bg-gray-200 dark:bg-gray-700">
                     <tr>
                         <td colspan="7" class="px-4 py-3">
-                            <div class="flex justify-end">
+                            <div class="flex justify-center mt-4">
                                 {{ $exportRawMaterials->links() ?? '' }}
                             </div>
                         </td>
