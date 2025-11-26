@@ -220,17 +220,28 @@
 
             <!-- ================= TABLE ================== -->
             <div class="overflow-x-auto max-h-[1200px] bg-white dark:bg-gray-900 shadow rounded-lg">
+                <!-- Spinner -->
+                <div id="pageLoadingSpinner"
+                     class="fixed inset-0 z-50 bg-white bg-opacity-80 flex flex-col items-center justify-center">
+                    <svg class="animate-spin h-10 w-10 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none"
+                         viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
+                                stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+                    </svg>
+                    <p class="mt-3 text-gray-700 font-semibold">Loading data...</p>
+                </div>
                 <table class="table-fixed w-full text-sm divide-y divide-gray-200 dark:divide-gray-700">
                     <thead class="bg-gray-200 dark:bg-gray-700 text-left">
                     <tr class="text-center">
                         <th class="font-bold sticky left-0 z-10 bg-white px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase">
-                            PO Number
+                            Invoice No
                         </th>
                         <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase">
                             Date
                         </th>
                         <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs text-gray-600 dark:text-gray-300 uppercase">
-                            Invoice No
+                            PO Number
                         </th>
                         <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs text-gray-600 dark:text-gray-300 uppercase">
                             Supplier
@@ -243,9 +254,6 @@
                         </th>
                         <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-24 text-xs text-gray-600 dark:text-gray-300 uppercase">
                             TKT
-                        </th>
-                        <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-20 text-xs text-gray-600 dark:text-gray-300 uppercase">
-                            UOM
                         </th>
                         <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs text-gray-600 dark:text-gray-300 uppercase">
                             Quantity
@@ -264,19 +272,18 @@
 
                     <tbody class="divide-y divide-gray-200 dark:divide-gray-700 text-center">
                     @forelse($localProcurements as $proc)
-                        <tr class="hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
-                            <td class="px-4 py-3">{{ $proc->po_number }}</td>
-                            <td class="px-4 py-3">{{ $proc->date }}</td>
-                            <td class="px-4 py-3">{{ $proc->invoice_number }}</td>
-                            <td class="px-4 py-3">{{ $proc->supplier_name }}</td>
-                            <td class="px-4 py-3">{{ $proc->color }}</td>
-                            <td class="px-4 py-3">{{ $proc->shade }}</td>
-                            <td class="px-4 py-3">{{ $proc->tkt }}</td>
-                            <td class="px-4 py-3">{{ $proc->uom }}</td>
-                            <td class="px-4 py-3">{{ $proc->quantity }}</td>
-                            <td class="px-4 py-3">{{ $proc->pst_no }}</td>
-                            <td class="px-4 py-3 whitespace-normal break-words">{{ $proc->supplier_comment }}</td>
-                            <td class="px-4 py-3">
+                        <tr class="odd:bg-white even:bg-gray-50 border-b border-gray-200 text-center">
+                            <td class="sticky left-0 z-10 bg-white px-4 py-3 text-sm bg-gray-100 border-r border-gray-300 text-center whitespace-normal break-words font-bold">{{ $proc->invoice_number }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">{{ $proc->date }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">{{ $proc->po_number }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">{{ $proc->supplier_name }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">{{ $proc->color }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">{{ $proc->shade }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">{{ $proc->tkt }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">{{ $proc->quantity }} {{ $proc->uom }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">{{ $proc->pst_no }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words whitespace-normal">{{ $proc->supplier_comment }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">
                         <span class="px-2 py-1 rounded-full text-xs font-semibold
                             @if($proc->status === 'pending') bg-yellow-100 text-yellow-800
                             @elseif($proc->status === 'approved') bg-green-100 text-green-800
@@ -400,6 +407,20 @@
                     </div>
                 </div>
             </div>
+
+            <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const spinner = document.getElementById("pageLoadingSpinner");
+
+                // Show spinner immediately
+                spinner.classList.remove("hidden");
+
+                // Wait for table to render completely
+                window.requestAnimationFrame(() => {
+                    spinner.classList.add("hidden"); // hide spinner after rendering
+                });
+            });
+            </script>
 
             <script>
                 let localProcItemIndex = 0;

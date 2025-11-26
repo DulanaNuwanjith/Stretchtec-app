@@ -45,71 +45,82 @@
 
             {{-- ===================== TABLE CONTAINER ===================== --}}
             <div class="overflow-x-auto border border-gray-300 dark:border-gray-700 rounded-lg shadow-sm">
-                <table class="min-w-full border-collapse">
-                    <thead class="bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300">
+                <!-- Spinner -->
+                <div id="pageLoadingSpinner"
+                     class="fixed inset-0 z-50 bg-white bg-opacity-80 flex flex-col items-center justify-center">
+                    <svg class="animate-spin h-10 w-10 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none"
+                         viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
+                                stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+                    </svg>
+                    <p class="mt-3 text-gray-700 font-semibold">Loading data...</p>
+                </div>
+                <table class="table-fixed w-full text-sm divide-y divide-gray-200 dark:divide-gray-700">
+                    <thead class="bg-gray-200 dark:bg-gray-700 text-left">
                     <tr class="text-center">
 
-                        <th class="sticky top-0 px-4 py-3 w-32 text-xs font-bold uppercase">
-                            Date
-                        </th>
-
-                        <th class="sticky top-0 px-4 py-3 w-32 text-xs font-bold uppercase">
+                        <th class="font-bold sticky left-0 z-10 bg-white px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase">
                             Invoice No
                         </th>
 
-                        <th class="sticky top-0 px-4 py-3 w-40 text-xs font-bold uppercase">
+                        <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase">
+                            Date
+                        </th>
+
+                        <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase">
                             Supplier
                         </th>
 
-                        <th class="sticky top-0 px-4 py-3 w-64 text-xs font-bold uppercase">
+                        <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase">
                             Product Description
                         </th>
 
-                        <th class="sticky top-0 px-4 py-3 w-28 text-xs font-bold uppercase">
+                        <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs text-gray-600 dark:text-gray-300 uppercase">
                             Net Weight
                         </th>
 
-                        <th class="sticky top-0 px-4 py-3 w-28 text-xs font-bold uppercase">
+                        <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs text-gray-600 dark:text-gray-300 uppercase">
                             Unit Price
                         </th>
 
-                        <th class="sticky top-0 px-4 py-3 w-32 text-xs font-bold uppercase">
+                        <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase">
                             Total Amount
                         </th>
 
-                        <th class="sticky top-0 px-4 py-3 w-32 text-xs font-bold uppercase">
+                        <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase">
                             Checked By
                         </th>
 
-                        <th class="sticky top-0 px-4 py-3 w-28 text-xs font-bold uppercase">
+                        <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase">
                             Actions
                         </th>
 
                     </tr>
                     </thead>
 
-                    <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                    <tbody class="divide-y divide-gray-200 dark:divide-gray-700 text-center">
                     @forelse($exportProcurements as $exp)
                         <tr class="odd:bg-white even:bg-gray-50 border-b border-gray-200 text-center">
 
-                            <td class="px-4 py-3">{{ $exp->date }}</td>
-                            <td class="px-4 py-3">{{ $exp->invoice_number }}</td>
-                            <td class="px-4 py-3">{{ $exp->supplier }}</td>
-                            <td class="px-4 py-3 whitespace-normal break-words">
+                            <td class="sticky left-0 z-10 bg-white px-4 py-3 text-sm bg-gray-100 border-r border-gray-300 text-center whitespace-normal break-words font-bold">{{ $exp->invoice_number }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">{{ $exp->date }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">{{ $exp->supplier }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">
                                 {{ $exp->product_description }}
                             </td>
-                            <td class="px-4 py-3">{{ $exp->net_weight }}</td>
-                            <td class="px-4 py-3">{{ number_format($exp->unit_price, 2) }}</td>
-                            <td class="px-4 py-3">{{ number_format($exp->total_amount, 2) }}</td>
-                            <td class="px-4 py-3">{{ $exp->checked_by }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">{{ $exp->net_weight }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">{{ number_format($exp->unit_price, 2) }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">{{ number_format($exp->total_amount, 2) }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">{{ $exp->checked_by }}</td>
 
-                            <td class="px-4 py-3">
-                                <button onclick="openEditModal('{{ $exp->id }}')" class="text-blue-600 hover:underline">
+                            <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center">
+                                <button onclick="openEditModal('{{ $exp->id }}')" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs shadow-sm mt-2">
                                     Edit
                                 </button>
 
                                 <button onclick="confirmDelete('{{ $exp->id }}')"
-                                        class="text-red-600 hover:underline ml-3">
+                                        class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg text-xs shadow-sm mt-2">
                                     Delete
                                 </button>
                             </td>
@@ -161,17 +172,17 @@
 
             <!-- MASTER FIELDS -->
             <div class="grid grid-cols-2 gap-3">
+                 <div>
+                    <label class="block text-sm font-medium">Invoice Number</label>
+                    <input type="text" name="invoice_number" required
+                           class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                </div>
                 <div>
                     <label class="block text-sm font-medium">Date</label>
                     <input type="date" name="date" required
                            class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
                 </div>
-
-                <div>
-                    <label class="block text-sm font-medium">Invoice Number</label>
-                    <input type="text" name="invoice_number" required
-                           class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                </div>
+               
             </div>
 
             <div class="mt-3">
@@ -231,6 +242,20 @@
         </form>
     </div>
 </div>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const spinner = document.getElementById("pageLoadingSpinner");
+
+                // Show spinner immediately
+                spinner.classList.remove("hidden");
+
+                // Wait for table to render completely
+                window.requestAnimationFrame(() => {
+                    spinner.classList.add("hidden"); // hide spinner after rendering
+                });
+            });
+        </script>
 
 <script>
     let exportProcItemIndex = 0;
