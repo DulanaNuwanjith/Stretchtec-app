@@ -455,7 +455,7 @@
                         <option value="kg">Kilogram (kg)</option>
                         <option value="m">Meter (m)</option>
                         <option value="y">Yard</option>
-                        <option value="c">Corn</option>
+                        <option value="cone">Cone</option>
                         <option value="pcs">Piece</option>
                     </select>
                 </div>
