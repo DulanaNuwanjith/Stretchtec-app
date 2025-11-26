@@ -19,11 +19,28 @@ class PurchaseDepartmentController extends Controller
      */
     public function index(): Factory|View
     {
-        $purchaseDepartments = PurchaseDepartment::latest()->paginate(10);
+        // Step 1: Get unique PO numbers and paginate them
+        $uniquePoNumbers = PurchaseDepartment::select('po_number')
+            ->groupBy('po_number')
+            ->orderBy('po_date', 'desc')
+            ->paginate(10); // 👉 pagination applied here
+
+        // Step 2: Fetch all purchase items for only the PO numbers on this page
+        $purchaseItems = PurchaseDepartment::whereIn('po_number', $uniquePoNumbers->pluck('po_number'))
+            ->orderBy('po_date', 'desc')
+            ->get()
+            ->groupBy('po_number'); // 👉 grouped for collapsible table
+
+        // Existing logic
         $orderPreparations = ProductOrderPreperation::where('isRawMaterialOrdered', false)
             ->latest()
             ->get();
-        return view('purchasingDepartment.purchasing', compact('purchaseDepartments', 'orderPreparations'));
+
+        return view('purchasingDepartment.purchasing', [
+            'uniquePoNumbers' => $uniquePoNumbers,      // Pagination object
+            'groupedPurchaseOrders' => $purchaseItems,  // Grouped purchase order items
+            'orderPreparations' => $orderPreparations,
+        ]);
     }
 
     /**
