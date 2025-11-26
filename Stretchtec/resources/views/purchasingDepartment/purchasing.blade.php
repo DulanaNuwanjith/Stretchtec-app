@@ -366,7 +366,7 @@
             </div>
 
             <!-- Stock / Stores Records Table -->
-            <div class="overflow-x-auto max-h-[1200px] bg-white dark:bg-gray-900 shadow rounded-lg">
+            <div class="overflow-x-auto bg-white dark:bg-gray-900 shadow rounded-lg">
                 <!-- Spinner -->
                 <div id="pageLoadingSpinner"
                      class="fixed inset-0 z-50 bg-white bg-opacity-80 flex flex-col items-center justify-center">
@@ -405,9 +405,6 @@
                         <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-40 text-xs text-gray-600 dark:text-gray-300 uppercase">
                             Supplier Comment
                         </th>
-                        <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-20 text-xs text-gray-600 dark:text-gray-300 uppercase">
-                            UOM
-                        </th>
                         <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs text-gray-600 dark:text-gray-300 uppercase">
                             Quantity
                         </th>
@@ -437,8 +434,7 @@
                             <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">{{ $purchase->tkt }}</td>
                             <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">{{ $purchase->pst_no }}</td>
                             <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">{{ $purchase->supplier_comment }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">{{ $purchase->uom }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">{{ $purchase->quantity }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">{{ $purchase->quantity }} {{ $purchase->uom }}</td>
                             <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">{{ $purchase->rate }}</td>
                             <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">{{ $purchase->amount }}</td>
                             <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">{{ $purchase->total_amount }}</td>
@@ -540,9 +536,18 @@
             <div class="grid grid-cols-2 gap-3 mt-3">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">UOM</label>
-                    <input type="text" name="items[${index}][uom]" required
+                    <select name="items[${index}][uom]" required
                         class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                        <option value="" disabled selected>Select Unit</option>
+                        <option value="g">Gram (g)</option>
+                        <option value="kg">Kilogram (kg)</option>
+                        <option value="m">Meter (m)</option>
+                        <option value="y">Yard</option>
+                        <option value="cone">Cone</option>
+                        <option value="pcs">Piece</option>
+                    </select>
                 </div>
+                
                 <div>
                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Quantity</label>
                     <input type="number" step="0.01" name="items[${index}][quantity]" required

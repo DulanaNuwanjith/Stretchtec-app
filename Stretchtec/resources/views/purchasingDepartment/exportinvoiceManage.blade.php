@@ -130,7 +130,7 @@
             </div>
 
             {{-- ===================== TABLE CONTAINER ===================== --}}
-            <div class="overflow-x-auto max-h-[1200px] bg-white dark:bg-gray-900 shadow rounded-lg">
+            <div class="overflow-x-auto bg-white dark:bg-gray-900 shadow rounded-lg">
                 <!-- Spinner -->
                 <div id="pageLoadingSpinner"
                      class="fixed inset-0 z-50 bg-white bg-opacity-80 flex flex-col items-center justify-center">
