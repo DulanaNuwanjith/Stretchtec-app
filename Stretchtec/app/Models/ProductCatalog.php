@@ -90,6 +90,7 @@ class ProductCatalog extends Model
         'size',
         'colour',
         'shade',
+        'option',
         'supplierComment',
         'tkt',
         'order_image',

@@ -357,6 +357,7 @@ class ProductCatalogController extends Controller
         $request->validate([
             'selected_shade' => 'required|string',
             'final_shade' => 'required|string',
+            'option_text' => 'nullable|string',
         ]);
 
         try {
@@ -368,8 +369,9 @@ class ProductCatalogController extends Controller
                 $catalog->pst_no = $shadeOrder->pst_no;
             }
 
-            $catalog->shade = $request->input('final_shade');
+            $catalog->shade = $request->input('selected_shade');
             $catalog->isShadeSelected = true;
+            $catalog->option = $request->input('option_text');
             $catalog->save();
 
 
