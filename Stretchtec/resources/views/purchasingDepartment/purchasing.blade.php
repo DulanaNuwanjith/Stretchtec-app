@@ -1,11 +1,11 @@
 @php use Carbon\Carbon; @endphp
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<div class="flex h-full w-full">
+<div class="flex h-full w-full bg-white">
     @extends('layouts.purchasing-tabs')
 
     @section('content')
-        <div class="flex-1 overflow-y-auto p-8 bg-white">
+        <div class="flex-1 overflow-y-auto p-6 bg-white">
             <style>
                 .swal2-toast {
                     font-size: 0.875rem;
@@ -381,7 +381,7 @@
                 <table class="table-fixed w-full text-sm divide-y divide-gray-200 dark:divide-gray-700">
                     <thead class="bg-gray-200 dark:bg-gray-700 text-left">
                     <tr class="text-center">
-                        <th class="font-bold sticky left-0 z-10 bg-white px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase">
+                        <th class="font-bold sticky left-0 top-0 z-20 bg-white px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                             PO Number
                         </th>
                         <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase">
