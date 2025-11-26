@@ -1,47 +1,122 @@
 @php use Carbon\Carbon; @endphp
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-<!-- ===================== SWEETALERT SUCCESS ===================== -->
-@if(session('success'))
-    <script>
-        Swal.fire({
-            icon: 'success',
-            title: 'Success',
-            text: "{{ session('success') }}",
-            confirmButtonColor: '#2563eb'
-        });
-    </script>
-@endif
-
-<!-- ===================== SWEETALERT VALIDATION ERRORS ===================== -->
-@if($errors->any())
-    <script>
-        Swal.fire({
-            icon: 'error',
-            title: 'Validation Error',
-            html: `{!! implode('<br>', $errors->all()) !!}`,
-            confirmButtonColor: '#dc2626'
-        });
-    </script>
-@endif
 
 <div class="flex h-full w-full">
     @extends('layouts.purchasing-tabs')
 
     @section('content')
-        @if(session('success'))
-            <div class="mb-4 p-3 bg-green-100 text-green-800 rounded">
-                {{ session('success') }}
-            </div>
-        @endif
+        <div class="flex-1 overflow-y-auto p-8 bg-white">
+            <style>
+                .swal2-toast {
+                    font-size: 0.875rem;
+                    padding: 0.75rem 1rem;
+                    border-radius: 8px;
+                    background-color: #ffffff !important;
+                    position: relative;
+                    box-sizing: border-box;
+                    color: #3b82f6 !important;
+                }
 
-        @if(session('error'))
-            <div class="mb-4 p-3 bg-red-100 text-red-800 rounded">
-                {{ session('error') }}
-            </div>
-        @endif
+                .swal2-toast .swal2-title,
+                .swal2-toast .swal2-html-container {
+                    color: #3b82f6 !important;
+                }
 
-        <div class="p-6">
+                .swal2-toast .swal2-icon {
+                    color: #3b82f6 !important;
+                }
+
+                .swal2-shadow {
+                    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+                }
+
+                .swal2-toast::after {
+                    content: '';
+                    position: absolute;
+                    bottom: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 3px;
+                    background-color: #3b82f6;
+                    border-radius: 0 0 8px 8px;
+                }
+            </style>
+
+            <script>
+                document.addEventListener('DOMContentLoaded', () => {
+                    @if (session('success'))
+                    Swal.fire({
+                        toast: true,
+                        position: 'top-end',
+                        icon: 'success',
+                        title: '{{ session('success') }}',
+                        showConfirmButton: false,
+                        timer: 2000,
+                        timerProgressBar: true,
+                        customClass: {
+                            popup: 'swal2-toast swal2-shadow'
+                        },
+                    });
+                    @endif
+
+                    @if (session('error'))
+                    Swal.fire({
+                        toast: true,
+                        position: 'top-end',
+                        icon: 'error',
+                        title: '{{ session('error') }}',
+                        showConfirmButton: false,
+                        timer: 2000,
+                        timerProgressBar: true,
+                        customClass: {
+                            popup: 'swal2-toast swal2-shadow'
+                        },
+                    });
+                    @endif
+
+                    @if ($errors->any())
+                    Swal.fire({
+                        toast: true,
+                        position: 'top-end',
+                        icon: 'warning',
+                        title: 'Validation Errors',
+                        html: `{!! implode('<br>', $errors->all()) !!}`,
+                        showConfirmButton: false,
+                        timer: 3000,
+                        timerProgressBar: true,
+                        customClass: {
+                            popup: 'swal2-toast swal2-shadow'
+                        },
+                    });
+                    @endif
+                });
+            </script>
+
+            <script>
+                function confirmDelete(id) {
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: "This record will be permanently deleted!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3b82f6',
+                        cancelButtonColor: '#6c757d',
+                        confirmButtonText: 'Yes, delete it!',
+                        background: '#ffffff',
+                        color: '#3b82f6',
+                        customClass: {
+                            popup: 'swal2-toast swal2-shadow'
+                        }
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            document.getElementById(`delete-form-${id}`).submit();
+                        }
+                    });
+                }
+            </script>
+
+        
 
             <!-- Header -->
             <div class="flex items-center mb-6">
