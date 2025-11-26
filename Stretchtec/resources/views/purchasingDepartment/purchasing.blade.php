@@ -201,7 +201,7 @@
                                 </th>
                             </tr>
                             </thead>
-                            <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                            <tbody class="divide-y divide-gray-200 dark:divide-gray-600">
                             @forelse($orderPreparations as $order)
                                 <tr class="odd:bg-white even:bg-gray-50 border-b border-gray-200 text-center">
                                     <!-- Sticky first column -->
@@ -348,18 +348,6 @@
                                        placeholder="Enter Total Amount">
                             </div>
 
-                            <div class="mt-3">
-                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                                    Status
-                                </label>
-                                <select name="status" required
-                                        class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                                    <option value="pending">Pending</option>
-                                    <option value="approved">Approved</option>
-                                    <option value="rejected">Rejected</option>
-                                </select>
-                            </div>
-
                             <!-- Action Buttons -->
                             <div class="flex justify-end mt-6 space-x-3">
                                 <button type="button"
@@ -440,21 +428,21 @@
 
                     <tbody class="divide-y divide-gray-200 dark:divide-gray-700 text-center">
                     @foreach ($purchaseDepartments as $purchase)
-                        <tr class="hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
-                            <td class="px-4 py-3 text-gray-700 dark:text-gray-300">{{ $purchase->po_number }}</td>
-                            <td class="px-4 py-3 text-gray-700 dark:text-gray-300">{{ $purchase->po_date }}</td>
-                            <td class="px-4 py-3 text-gray-700 dark:text-gray-300">{{ $purchase->supplier }}</td>
-                            <td class="px-4 py-3 text-gray-700 dark:text-gray-300">{{ $purchase->shade }}</td>
-                            <td class="px-4 py-3 text-gray-700 dark:text-gray-300">{{ $purchase->color }}</td>
-                            <td class="px-4 py-3 text-gray-700 dark:text-gray-300">{{ $purchase->tkt }}</td>
-                            <td class="px-4 py-3 text-gray-700 dark:text-gray-300">{{ $purchase->pst_no }}</td>
-                            <td class="px-4 py-3 text-gray-700 dark:text-gray-300 whitespace-normal break-words">{{ $purchase->supplier_comment }}</td>
-                            <td class="px-4 py-3 text-gray-700 dark:text-gray-300">{{ $purchase->uom }}</td>
-                            <td class="px-4 py-3 text-gray-700 dark:text-gray-300">{{ $purchase->quantity }}</td>
-                            <td class="px-4 py-3 text-gray-700 dark:text-gray-300">{{ $purchase->rate }}</td>
-                            <td class="px-4 py-3 text-gray-700 dark:text-gray-300">{{ $purchase->amount }}</td>
-                            <td class="px-4 py-3 text-gray-700 dark:text-gray-300">{{ $purchase->total_amount }}</td>
-                            <td class="px-4 py-3 text-gray-700 dark:text-gray-300">
+                        <tr class="odd:bg-white even:bg-gray-50 border-b border-gray-200 text-center">
+                            <td class="sticky left-0 z-10 bg-white px-4 py-3 text-sm bg-gray-100 border-r border-gray-300 text-center whitespace-normal break-words font-bold">{{ $purchase->po_number }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">{{ $purchase->po_date }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">{{ $purchase->supplier }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">{{ $purchase->shade }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">{{ $purchase->color }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">{{ $purchase->tkt }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">{{ $purchase->pst_no }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">{{ $purchase->supplier_comment }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">{{ $purchase->uom }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">{{ $purchase->quantity }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">{{ $purchase->rate }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">{{ $purchase->amount }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">{{ $purchase->total_amount }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">
                     <span class="px-2 py-1 rounded-full text-xs font-semibold
                         @if($purchase->status === 'Pending') bg-yellow-100 text-yellow-800
                         @elseif($purchase->status === 'Approved') bg-green-100 text-green-800

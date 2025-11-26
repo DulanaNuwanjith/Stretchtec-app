@@ -44,7 +44,6 @@ class PurchaseDepartmentController extends Controller
             'po_date' => 'required|date',
             'supplier' => 'required|string|max:255',
             'total_amount' => 'required|numeric|min:0',
-            'status' => 'required|in:pending,approved,rejected',
             'items' => 'required|array|min:1',
 
             // validate array fields
@@ -77,7 +76,6 @@ class PurchaseDepartmentController extends Controller
                     'rate' => $item['rate'],
                     'amount' => $item['amount'],
                     'total_amount' => $validated['total_amount'],
-                    'status' => $validated['status'],
                 ]);
             }
 

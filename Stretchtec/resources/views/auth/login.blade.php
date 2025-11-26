@@ -8,8 +8,31 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body class="bg-gradient-to-br from-blue-500 to-white">
-<div class="flex items-center justify-center min-h-screen">
+<body class="bg-gradient-to-br from-blue-500 to-white min-h-screen flex flex-col">
+
+<!-- Full-Screen Mobile Blocker -->
+<div id="mobileBlocker"
+     class="fixed inset-0 bg-white z-50 flex flex-col items-center justify-center text-center p-6 md:hidden">
+
+    <img src="{{ asset('images/logo.png') }}" class="h-24 w-auto mb-6 opacity-90" alt="Logo">
+
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-red-600 mb-4" fill="none"
+         viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M12 9v2m0 4h.01M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9 9 4.03 9 9z"/>
+    </svg>
+
+    <h1 class="text-xl font-semibold text-gray-800 mb-2">
+        Mobile Access Not Supported
+    </h1>
+
+    <p class="text-gray-600 text-sm max-w-xs">
+        This system is not optimized for mobile devices.
+        Please access this application using a desktop or laptop for the best experience.
+    </p>
+</div>
+
+<div class="flex-grow flex items-center justify-center">
     <div class="w-full max-w-4xl bg-white shadow-lg rounded-2xl overflow-hidden flex">
         <!-- Left Panel -->
         <div
@@ -81,6 +104,26 @@
     </div>
 </div>
 </body>
+
+<!-- Modern Centered Footer -->
+<footer class="w-full py-3">
+    <div class="max-w-6xl mx-auto px-6 flex items-center justify-center gap-4 text-center">
+
+        <!-- Logo -->
+        <img src="{{ asset('images/logo2.png') }}"
+             alt="Elevator X Logo"
+             class="h-8 w-auto">
+
+        <!-- Vertical Separator -->
+        <div class="h-4 w-px bg-gray-300"></div>
+
+        <!-- Text -->
+        <p class="text-gray-600 text-xs md:text-sm whitespace-nowrap">
+            © {{ date('Y') }} Elevator X - Built with care & accessibility in mind.
+        </p>
+
+    </div>
+</footer>
 
 </html>
 
