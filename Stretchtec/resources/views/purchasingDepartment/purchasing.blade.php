@@ -179,25 +179,66 @@
                             </th>
                         </tr>
                     </thead>
-                    <tbody>
-                     @forelse($purchasings ?? [] as $purchase)
-                        <tr class="text-center border-b dark:border-gray-700">
-                            <td class="px-4 py-2">{{ $purchase->order_no }}</td>
-                            <td class="px-4 py-2">{{ $purchase->color }}</td>
-                            <td class="px-4 py-2">{{ $purchase->shade }}</td>
-                            <td class="px-4 py-2">{{ $purchase->pst_no }}</td>
-                            <td class="px-4 py-2">{{ $purchase->tkt }}</td>
-                            <td class="px-4 py-2">{{ $purchase->supplier_comment }}</td>
-                            <td class="px-4 py-2">{{ $purchase->type }}</td>
-                            <td class="px-4 py-2">{{ $purchase->price }}</td>
-                            <td class="px-4 py-2">{{ $purchase->description }}</td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="9" class="text-center text-gray-500 py-4">No purchase records found.</td>
-                        </tr>
-                    @endforelse
-                </tbody>
+                    <tbody id="purchaseRecords"
+                        class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                        @forelse($purchasings ?? [] as $purchase)
+                            <tr id="row{{ $purchase->id }}"
+                                class="odd:bg-white even:bg-gray-50 border-b border-gray-200 text-center h-20">
+                                
+                                <!-- Order No -->
+                                <td class="sticky left-0 z-10 px-4 py-3 bg-gray-100 font-semibold text-gray-700 dark:text-gray-200 border-r border-gray-300">
+                                    {{ $purchase->order_no }}
+                                </td>
+
+                                <!-- Color -->
+                                <td class="px-4 py-3 text-center text-gray-800 dark:text-gray-300 border-r border-gray-300">
+                                    {{ $purchase->color }}
+                                </td>
+
+                                <!-- Shade -->
+                                <td class="px-4 py-3 text-center text-gray-800 dark:text-gray-300 border-r border-gray-300">
+                                    {{ $purchase->shade }}
+                                </td>
+
+                                <!-- PST No -->
+                                <td class="px-4 py-3 text-center text-gray-800 dark:text-gray-300 border-r border-gray-300">
+                                    {{ $purchase->pst_no }}
+                                </td>
+
+                                <!-- TKT -->
+                                <td class="px-4 py-3 text-center text-gray-800 dark:text-gray-300 border-r border-gray-300">
+                                    {{ $purchase->tkt }}
+                                </td>
+
+                                <!-- Supplier Comment -->
+                                <td class="px-4 py-3 text-center text-gray-800 dark:text-gray-300 border-r border-gray-300">
+                                    {{ $purchase->supplier_comment }}
+                                </td>
+
+                                <!-- KG or Cone -->
+                                <td class="px-4 py-3 text-center text-gray-800 dark:text-gray-300 border-r border-gray-300">
+                                    {{ $purchase->type }}
+                                </td>
+
+                                <!-- Price -->
+                                <td class="px-4 py-3 text-center text-gray-800 dark:text-gray-300 border-r border-gray-300">
+                                    {{ $purchase->price }}
+                                </td>
+
+                                <!-- Description -->
+                                <td class="px-4 py-3 text-center text-gray-800 dark:text-gray-300">
+                                    {{ $purchase->description }}
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="9" class="text-center text-gray-500 py-6 bg-gray-50 dark:bg-gray-900 dark:text-gray-400">
+                                    No purchase records found.
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+
 
                 </table>
 
