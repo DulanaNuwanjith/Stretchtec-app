@@ -33,6 +33,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * --------------------------------------------------------------------------
  * @method static findOrFail(mixed $shadeId)
  * @method static whereIn(string $string, mixed $shade_ids)
+ * @method static where(string $string, mixed $input)
  */
 class ShadeOrder extends Model
 {

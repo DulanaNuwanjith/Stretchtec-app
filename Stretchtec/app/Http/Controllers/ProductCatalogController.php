@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ProductCatalog;
+use App\Models\ShadeOrder;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -354,13 +355,23 @@ class ProductCatalogController extends Controller
     public function updateShade(Request $request, ProductCatalog $catalog): RedirectResponse
     {
         $request->validate([
+            'selected_shade' => 'required|string',
             'final_shade' => 'required|string',
         ]);
 
         try {
+            // Get the pst_no related to the shade if any shade order exists
+            $shadeOrder = ShadeOrder::where('shade', $request->input('selected_shade'))->first();
+
+
+            if ($shadeOrder->pst_no) {
+                $catalog->pst_no = $shadeOrder->pst_no;
+            }
+
             $catalog->shade = $request->input('final_shade');
             $catalog->isShadeSelected = true;
             $catalog->save();
+
 
             return back()->with('success', 'Shade updated successfully.');
         } catch (Exception) {
