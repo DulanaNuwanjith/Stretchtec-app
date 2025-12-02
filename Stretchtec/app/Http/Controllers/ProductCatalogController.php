@@ -7,6 +7,7 @@ use App\Models\ShadeOrder;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\Factory;
 use Illuminate\View\View;
@@ -364,19 +365,37 @@ class ProductCatalogController extends Controller
             // Get the pst_no related to the shade if any shade order exists
             $shadeOrder = ShadeOrder::where('shade', $request->input('selected_shade'))->first();
 
-
-            if ($shadeOrder->pst_no) {
-                $catalog->pst_no = $shadeOrder->pst_no;
+            if (!$shadeOrder) {
+                Log::warning('No shade order found for shade: ' . $request->input('selected_shade'));
+            } else{
+                if ($shadeOrder->pst_no) {
+                    $catalog->pst_no = $shadeOrder->pst_no;
+                } else {
+                    Log::info('No PST number found for shade order ID: ' . $shadeOrder->id);
+                }
             }
 
             $catalog->shade = $request->input('selected_shade');
-            $catalog->isShadeSelected = true;
             $catalog->option = $request->input('option_text');
-            $catalog->save();
 
+            try {
+                $catalog->save();
+            } catch (\Exception $e) {
+                Log::error('Failed to save catalog updates: ' . $e->getMessage(), [
+                    'catalog_id' => $catalog->id,
+                    'selected_shade' => $request->input('selected_shade'),
+                    'exception' => $e
+                ]);
+                throw $e;
+            }
 
             return back()->with('success', 'Shade updated successfully.');
-        } catch (Exception) {
+        } catch (\Exception $e) {
+            Log::error('Error in updateShade: ' . $e->getMessage(), [
+                'catalog_id' => $catalog->id,
+                'selected_shade' => $request->input('selected_shade'),
+                'exception' => $e
+            ]);
             return back()->with('error', 'Failed to update shade. Please try again.');
         }
     }
