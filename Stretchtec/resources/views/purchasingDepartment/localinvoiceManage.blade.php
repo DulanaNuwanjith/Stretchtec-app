@@ -359,7 +359,7 @@
                                 @if ($hasMultiple)
                                     <button @click="open = !open"
                                             class="flex items-center w-full gap-2 text-blue-600 hover:text-blue-800">
-                                        <span class="w-1 shrink-0" x-text="open ? '^' : '>'"></span>
+                                        <span class="w-2 shrink-0" x-text="open ? '▾' : '▸'"></span>
                                         <span class="flex-1 text-center">{{ $invoiceNumber }}</span>
                                     </button>
                                 @else

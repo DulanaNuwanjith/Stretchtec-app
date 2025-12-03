@@ -468,8 +468,7 @@
                                     @if ($hasMultipleItems)
                                         <button @click="open = !open"
                                             class="flex items-center w-full gap-2 text-blue-600 hover:text-blue-800">
-                                            <!-- fixed-width arrow column (keeps same width in else) -->
-                                            <span class="w-1 shrink-0 text-left" x-text="open ? '^' : '>'"></span>
+                                            <span class="w-2 shrink-0" x-text="open ? '▾' : '▸'"></span>
 
                                             <!-- centered PO number -->
                                             <span class="flex-1 text-center">{{ $poNumber }}</span>
