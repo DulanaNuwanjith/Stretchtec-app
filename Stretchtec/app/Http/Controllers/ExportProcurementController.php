@@ -156,8 +156,20 @@ class ExportProcurementController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(ExportProcurement $exportProcurement)
+   public function destroy($id)
     {
-        //
+        try {
+            // find the specific row
+            $record = ExportProcurement::findOrFail($id);
+
+            // delete ALL rows under this invoice number
+            ExportProcurement::where('invoice_number', $record->invoice_number)->delete();
+
+            return back()->with('success', 'Invoice and all its items deleted successfully.');
+        } catch (\Exception $e) {
+            Log::error('Error deleting invoice: ' . $e->getMessage());
+            return back()->with('error', 'Failed to delete the invoice.');
+        }
     }
+
 }

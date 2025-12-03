@@ -144,4 +144,5 @@ class PurchaseDepartmentController extends Controller
             return back()->with('error', 'Failed to delete the Purchase Order.');
         }
     }
+    
 }

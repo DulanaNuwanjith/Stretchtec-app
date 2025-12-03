@@ -134,11 +134,11 @@
 
                 <!-- Spinner -->
                 <div id="pageLoadingSpinner"
-                     class="fixed inset-0 z-50 bg-white bg-opacity-80 flex flex-col items-center justify-center">
+                    class="fixed inset-0 z-50 bg-white bg-opacity-80 flex flex-col items-center justify-center">
                     <svg class="animate-spin h-10 w-10 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none"
-                         viewBox="0 0 24 24">
+                        viewBox="0 0 24 24">
                         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
-                                stroke-width="4"></circle>
+                            stroke-width="4"></circle>
                         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
                     </svg>
                     <p class="mt-3 text-gray-700 font-semibold">Loading data...</p>
@@ -146,25 +146,35 @@
 
                 <table class="table-fixed w-full text-sm divide-y divide-gray-200 dark:divide-gray-700">
                     <thead class="bg-gray-200 dark:bg-gray-700 text-left">
-                    <tr class="text-center">
+                        <tr class="text-center">
 
-                        <!-- Parent Columns -->
-                        <th class="sticky left-0 top-0 bg-white z-20 px-4 py-3 w-32 text-xs font-bold uppercase text-gray-600">
-                            Invoice No
-                        </th>
-                        <th class="sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs font-bold uppercase text-gray-600">Date</th>
-                        <th class="sticky top-0 bg-gray-200 px-4 py-3 w-40 text-xs font-bold uppercase text-gray-600">Supplier</th>
+                            <!-- Parent Columns -->
+                            <th
+                                class="sticky left-0 top-0 bg-white z-20 px-4 py-3 w-32 text-xs font-bold uppercase text-gray-600">
+                                Invoice No
+                            </th>
+                            <th class="sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs font-bold uppercase text-gray-600">
+                                Date</th>
+                            <th class="sticky top-0 bg-gray-200 px-4 py-3 w-40 text-xs font-bold uppercase text-gray-600">
+                                Supplier</th>
 
-                        <!-- Item Columns -->
-                        <th class="sticky top-0 bg-gray-200 px-4 py-3 w-44 text-xs font-bold uppercase text-gray-600">Product Description</th>
-                        <th class="sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs font-bold uppercase text-gray-600">Net Weight</th>
-                        <th class="sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs font-bold uppercase text-gray-600">Unit Price</th>
-                        <th class="sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs font-bold uppercase text-gray-600">Total Amount</th>
-                        <th class="sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs font-bold uppercase text-gray-600">Checked By</th>
-                        <th class="sticky top-0 bg-gray-200 px-4 py-3 w-40 text-xs font-bold uppercase text-gray-600">Notes</th>
-                        <th class="sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs font-bold uppercase text-gray-600">Actions</th>
+                            <!-- Item Columns -->
+                            <th class="sticky top-0 bg-gray-200 px-4 py-3 w-44 text-xs font-bold uppercase text-gray-600">
+                                Product Description</th>
+                            <th class="sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs font-bold uppercase text-gray-600">
+                                Net Weight</th>
+                            <th class="sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs font-bold uppercase text-gray-600">
+                                Unit Price</th>
+                            <th class="sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs font-bold uppercase text-gray-600">
+                                Total Amount</th>
+                            <th class="sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs font-bold uppercase text-gray-600">
+                                Checked By</th>
+                            <th class="sticky top-0 bg-gray-200 px-4 py-3 w-40 text-xs font-bold uppercase text-gray-600">
+                                Notes</th>
+                            <th class="sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs font-bold uppercase text-gray-600">
+                                Actions</th>
 
-                    </tr>
+                        </tr>
                     </thead>
 
                     @foreach ($invoiceItems as $invoiceNumber => $items)
@@ -174,69 +184,80 @@
                         @endphp
 
                         <tbody x-data="{ open: false }"
-                               class="divide-y divide-gray-200 dark:divide-gray-700 text-center border-b">
+                            class="divide-y divide-gray-200 dark:divide-gray-700 text-center border-b">
 
-                        <!-- ===================== PARENT ROW ===================== -->
-                        <tr class="bg-gray-100">
+                            <!-- ===================== PARENT ROW ===================== -->
+                            <tr class="bg-gray-100">
 
-                            <!-- Expand/Collapse -->
-                            <td class="sticky left-0 z-20 bg-white border-r px-4 py-3 text-sm font-bold">
-                                @if ($hasMultiple)
-                                    <button @click="open = !open"
+                                <!-- Expand/Collapse -->
+                                <td class="sticky left-0 z-20 bg-white border-r px-4 py-3 text-sm font-bold">
+                                    @if ($hasMultiple)
+                                        <button @click="open = !open"
                                             class="flex items-center w-full gap-2 text-blue-600 hover:text-blue-800">
-                                        <span class="w-2 shrink-0" x-text="open ? '▾' : '▸'"></span>
-                                        <span class="flex-1 text-center">{{ $invoiceNumber }}</span>
-                                    </button>
-                                @else
-                                    <div class="flex items-center w-full gap-2">
-                                        <span class="w-2 shrink-0 opacity-0">▸</span>
-                                        <span class="flex-1 text-center">{{ $invoiceNumber }}</span>
+                                            <span class="w-2 shrink-0" x-text="open ? '▾' : '▸'"></span>
+                                            <span class="flex-1 text-center">{{ $invoiceNumber }}</span>
+                                        </button>
+                                    @else
+                                        <div class="flex items-center w-full gap-2">
+                                            <span class="w-2 shrink-0 opacity-0">▸</span>
+                                            <span class="flex-1 text-center">{{ $invoiceNumber }}</span>
+                                        </div>
+                                    @endif
+                                </td>
+
+                                <td class="px-4 py-3 text-sm">{{ $first->date }}</td>
+                                <td class="px-4 py-3 text-sm">{{ $first->supplier }}</td>
+
+                                <td class="px-4 py-3 text-sm">{{ $first->product_description }}</td>
+                                <td class="px-4 py-3 text-sm">{{ $first->net_weight }}</td>
+                                <td class="px-4 py-3 text-sm">{{ number_format($first->unit_price, 2) }}</td>
+                                <td class="px-4 py-3 text-sm">{{ number_format($first->total_amount, 2) }}</td>
+                                <td class="px-4 py-3 text-sm">{{ $first->checked_by }}</td>
+                                <td class="px-4 py-3 text-sm">{{ $first->notes }}</td>
+                                <!-- Actions -->
+                                <td class="px-4 py-3 whitespace-normal break-words text-center">
+                                    <div class="flex space-x-2 justify-center items-center">
+                                        @if (Auth::user()->role === 'SUPERADMIN')
+                                            <form id="delete-form-{{ $first->id }}" action="{{ route('exportinvoiceManage.destroy', $first->id) }}"
+                                                method="POST" class="flex items-center">
+
+                                                @csrf
+                                                @method('DELETE')
+
+                                                <button type="button" onclick="confirmDelete('{{ $first->id }}')"
+                                                    class="bg-red-600 h-10 mt-3 hover:bg-red-700 text-white px-3 py-1 rounded text-sm">
+                                                    Delete
+                                                </button>
+                                            </form>
+                                        @endif
                                     </div>
-                                @endif
-                            </td>
+                                </td>
+                            </tr>
 
-                            <td class="px-4 py-3 text-sm">{{ $first->date }}</td>
-                            <td class="px-4 py-3 text-sm">{{ $first->supplier }}</td>
+                            <!-- ===================== CHILD ROWS ===================== -->
+                            @if ($hasMultiple)
+                                @foreach ($items->skip(1) as $item)
+                                    <tr x-show="open" style="display: none;" class="bg-gray-50">
 
-                            <td class="px-4 py-3 text-sm">{{ $first->product_description }}</td>
-                            <td class="px-4 py-3 text-sm">{{ $first->net_weight }}</td>
-                            <td class="px-4 py-3 text-sm">{{ number_format($first->unit_price, 2) }}</td>
-                            <td class="px-4 py-3 text-sm">{{ number_format($first->total_amount, 2) }}</td>
-                            <td class="px-4 py-3 text-sm">{{ $first->checked_by }}</td>
-                            <td class="px-4 py-3 text-sm">{{ $first->notes }}</td>
+                                        <td class="sticky left-0 border-r bg-white"></td>
+                                        <td class="px-4 py-3 text-sm"></td>
+                                        <td class="px-4 py-3 text-sm"></td>
 
-                            <td class="px-4 py-3 text-sm">
-                                <button onclick="confirmDelete('{{ $first->id }}')"
-                                        class="px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded text-xs shadow-sm mt-1 block">
-                                    Delete
-                                </button>
-                            </td>
-                        </tr>
+                                        <td class="px-4 py-3 text-sm">{{ $item->product_description }}</td>
+                                        <td class="px-4 py-3 text-sm">{{ $item->net_weight }}</td>
+                                        <td class="px-4 py-3 text-sm">{{ number_format($item->unit_price, 2) }}</td>
+                                        <td class="px-4 py-3 text-sm">{{ number_format($item->total_amount, 2) }}</td>
+                                        <td class="px-4 py-3 text-sm">{{ $item->checked_by }}</td>
+                                        <td class="px-4 py-3 text-sm">{{ $item->notes }}</td>
 
-                        <!-- ===================== CHILD ROWS ===================== -->
-                        @if ($hasMultiple)
-                            @foreach ($items->skip(1) as $item)
-                                <tr x-show="open" style="display: none;" class="bg-gray-50">
-
-                                    <td class="sticky left-0 border-r bg-white"></td>
-                                    <td class="px-4 py-3 text-sm">-</td>
-                                    <td class="px-4 py-3 text-sm">-</td>
-
-                                    <td class="px-4 py-3 text-sm">{{ $item->product_description }}</td>
-                                    <td class="px-4 py-3 text-sm">{{ $item->net_weight }}</td>
-                                    <td class="px-4 py-3 text-sm">{{ number_format($item->unit_price, 2) }}</td>
-                                    <td class="px-4 py-3 text-sm">{{ number_format($item->total_amount, 2) }}</td>
-                                    <td class="px-4 py-3 text-sm">{{ $item->checked_by }}</td>
-                                    <td class="px-4 py-3 text-sm">{{ $item->notes }}</td>
-
-                                    <td class="px-4 py-3 text-sm">
-                                        -
-                                    </td>
+                                        <td class="px-4 py-3 text-sm">
+                                            -
+                                        </td>
 
 
-                                </tr>
-                            @endforeach
-                        @endif
+                                    </tr>
+                                @endforeach
+                            @endif
 
                         </tbody>
                     @endforeach
@@ -248,155 +269,147 @@
             <div class="p-3 border-t border-gray-200 dark:border-gray-700">
                 {{ $uniqueInvoiceNumbers->links() }}
             </div>
-
-
-            {{-- ===================== DELETE CONFIRMATION ===================== --}}
-        <script>
-            function confirmDelete(id) {
-                if (confirm("Are you sure you want to delete this record?")) {
-                    document.getElementById(`delete-form-${id}`).submit();
-                }
-            }
-        </script>
-    </div>
-
-
-    <!-- ================= ADD EXPORT PROCUREMENT MODAL ================== -->
-    <div id="addExportProcModal"
-        class="fixed inset-0 z-50 hidden bg-black bg-opacity-50 flex items-center justify-center py-5">
-
-        <div class="w-full max-w-[750px] bg-white dark:bg-gray-900 rounded-2xl shadow-2xl p-6
-                transform transition-all scale-95 max-h-[calc(100vh-10rem)] overflow-y-auto"
-            onclick="event.stopPropagation()">
-
-            <h2 class="text-2xl font-semibold mb-6 text-blue-900 dark:text-gray-100 text-center">
-                Add Export Procurement
-            </h2>
-
-            <form id="exportProcForm" action="{{ route('exportinvoiceManage.store') }}" method="POST">
-                @csrf
-
-                <!-- MASTER FIELDS -->
-                <div class="grid grid-cols-2 gap-3">
-                    <div>
-                        <label class="block text-sm font-medium">Invoice Number</label>
-                        <input type="text" name="invoice_number" required
-                            class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium">Date</label>
-                        <input type="date" name="date" required
-                            class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                    </div>
-
-                </div>
-
-                <div class="mt-3">
-                    <label class="block text-sm font-medium">Supplier</label>
-                    <input type="text" name="supplier" required
-                        class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                </div>
-
-                <!-- DYNAMIC ITEMS -->
-                <div id="exportProcItemsContainer" class="mt-6"></div>
-
-                <!-- ADD ITEM BUTTON -->
-                <button type="button" id="addExportProcItemBtn"
-                    class="mt-4 px-4 py-2 bg-green-500 hover:bg-green-600 text-white text-sm rounded">
-                    + Add Item
-                </button>
-
-                <!-- AUTO-CALCULATED FIELDS -->
-                <div class="grid grid-cols-2 gap-4 mt-6">
-                    <div>
-                        <label class="block text-sm font-medium">Total Weight</label>
-                        <input type="number" step="0.01" name="total_weight" id="totalWeight" readonly
-                            class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm bg-gray-100">
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium">Invoice Value</label>
-                        <input type="number" step="0.01" name="invoice_value" id="invoiceValue" readonly
-                            class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm bg-gray-100">
-                    </div>
-                </div>
-
-                <div class="mt-3">
-                    <label class="block text-sm font-medium">Checked By</label>
-                    <input type="text" name="checked_by"
-                        class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
-                </div>
-
-                <div class="mt-3">
-                    <label class="block text-sm font-medium">Notes</label>
-                    <textarea name="notes" rows="3"
-                        class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"></textarea>
-                </div>
-
-                <div class="flex justify-end mt-6 space-x-3">
-                    <button type="button" onclick="document.getElementById('addExportProcModal').classList.add('hidden')"
-                        class="px-4 py-2 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 text-sm rounded hover:bg-gray-300">
-                        Cancel
-                    </button>
-                    <button type="submit" id="createExportInvoiceBtn" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white text-sm rounded">
-                        Save Invoice Record
-                    </button>
-                </div>
-
-            </form>
         </div>
-    </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const form = document.querySelector('#addExportProcModal form');
-            const submitBtn = document.getElementById('createExportInvoiceBtn');
 
-            form.addEventListener('submit', function() {
-                // Disable the button to prevent multiple clicks
-                submitBtn.disabled = true;
-                submitBtn.innerText = 'Submitting...';
+        <!-- ================= ADD EXPORT PROCUREMENT MODAL ================== -->
+        <div id="addExportProcModal"
+            class="fixed inset-0 z-50 hidden bg-black bg-opacity-50 flex items-center justify-center py-5">
+
+            <div class="w-full max-w-[750px] bg-white dark:bg-gray-900 rounded-2xl shadow-2xl p-6
+                transform transition-all scale-95 max-h-[calc(100vh-10rem)] overflow-y-auto"
+                onclick="event.stopPropagation()">
+
+                <h2 class="text-2xl font-semibold mb-6 text-blue-900 dark:text-gray-100 text-center">
+                    Add Export Procurement
+                </h2>
+
+                <form id="exportProcForm" action="{{ route('exportinvoiceManage.store') }}" method="POST">
+                    @csrf
+
+                    <!-- MASTER FIELDS -->
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-sm font-medium">Invoice Number</label>
+                            <input type="text" name="invoice_number" required
+                                class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium">Date</label>
+                            <input type="date" name="date" required
+                                class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                        </div>
+
+                    </div>
+
+                    <div class="mt-3">
+                        <label class="block text-sm font-medium">Supplier</label>
+                        <input type="text" name="supplier" required
+                            class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                    </div>
+
+                    <!-- DYNAMIC ITEMS -->
+                    <div id="exportProcItemsContainer" class="mt-6"></div>
+
+                    <!-- ADD ITEM BUTTON -->
+                    <button type="button" id="addExportProcItemBtn"
+                        class="mt-4 px-4 py-2 bg-green-500 hover:bg-green-600 text-white text-sm rounded">
+                        + Add Item
+                    </button>
+
+                    <!-- AUTO-CALCULATED FIELDS -->
+                    <div class="grid grid-cols-2 gap-4 mt-6">
+                        <div>
+                            <label class="block text-sm font-medium">Total Weight</label>
+                            <input type="number" step="0.01" name="total_weight" id="totalWeight" readonly
+                                class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm bg-gray-100">
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium">Invoice Value</label>
+                            <input type="number" step="0.01" name="invoice_value" id="invoiceValue" readonly
+                                class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm bg-gray-100">
+                        </div>
+                    </div>
+
+                    <div class="mt-3">
+                        <label class="block text-sm font-medium">Checked By</label>
+                        <input type="text" name="checked_by"
+                            class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
+                    </div>
+
+                    <div class="mt-3">
+                        <label class="block text-sm font-medium">Notes</label>
+                        <textarea name="notes" rows="3"
+                            class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm"></textarea>
+                    </div>
+
+                    <div class="flex justify-end mt-6 space-x-3">
+                        <button type="button"
+                            onclick="document.getElementById('addExportProcModal').classList.add('hidden')"
+                            class="px-4 py-2 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 text-sm rounded hover:bg-gray-300">
+                            Cancel
+                        </button>
+                        <button type="submit" id="createExportInvoiceBtn"
+                            class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white text-sm rounded">
+                            Save Invoice Record
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                const form = document.querySelector('#addExportProcModal form');
+                const submitBtn = document.getElementById('createExportInvoiceBtn');
+
+                form.addEventListener('submit', function() {
+                    // Disable the button to prevent multiple clicks
+                    submitBtn.disabled = true;
+                    submitBtn.innerText = 'Submitting...';
+                });
             });
-        });
-    </script>
+        </script>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const spinner = document.getElementById("pageLoadingSpinner");
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const spinner = document.getElementById("pageLoadingSpinner");
 
-            // Show spinner immediately
-            spinner.classList.remove("hidden");
+                // Show spinner immediately
+                spinner.classList.remove("hidden");
 
-            // Wait for table to render completely
-            window.requestAnimationFrame(() => {
-                spinner.classList.add("hidden"); // hide spinner after rendering
+                // Wait for table to render completely
+                window.requestAnimationFrame(() => {
+                    spinner.classList.add("hidden"); // hide spinner after rendering
+                });
             });
-        });
-    </script>
+        </script>
 
-    <script>
-        let exportProcItemIndex = 0;
-        const addExportItemBtn = document.getElementById('addExportProcItemBtn');
-        const exportItemsContainer = document.getElementById('exportProcItemsContainer');
-        const totalWeightField = document.getElementById('totalWeight');
-        const invoiceValueField = document.getElementById('invoiceValue');
+        <script>
+            let exportProcItemIndex = 0;
+            const addExportItemBtn = document.getElementById('addExportProcItemBtn');
+            const exportItemsContainer = document.getElementById('exportProcItemsContainer');
+            const totalWeightField = document.getElementById('totalWeight');
+            const invoiceValueField = document.getElementById('invoiceValue');
 
-        // Add new item block
-        addExportItemBtn.addEventListener('click', () => {
-            const html = getExportItemFields(exportProcItemIndex++);
-            exportItemsContainer.insertAdjacentHTML('beforeend', html);
-            attachCalculationListeners();
-        });
+            // Add new item block
+            addExportItemBtn.addEventListener('click', () => {
+                const html = getExportItemFields(exportProcItemIndex++);
+                exportItemsContainer.insertAdjacentHTML('beforeend', html);
+                attachCalculationListeners();
+            });
 
-        // Remove item
-        function removeExportProcItem(btn) {
-            btn.closest('.export-item-block').remove();
-            calculateTotals();
-        }
+            // Remove item
+            function removeExportProcItem(btn) {
+                btn.closest('.export-item-block').remove();
+                calculateTotals();
+            }
 
-        // TEMPLATE FOR ITEM FIELDS
-        function getExportItemFields(index) {
-            return `
+            // TEMPLATE FOR ITEM FIELDS
+            function getExportItemFields(index) {
+                return `
             <div class="export-item-block border rounded-lg p-4 mt-4 bg-gray-50 dark:bg-gray-800 relative">
                 <button type="button" onclick="removeExportProcItem(this)"
                         class="absolute top-2 right-2 text-red-500 hover:text-red-700 text-sm">✖</button>
@@ -445,47 +458,47 @@
                 </div>
             </div>
         `;
-        }
+            }
 
-        // Attach event listeners after new items are added
-        function attachCalculationListeners() {
-            document.querySelectorAll('.netWeight, .unitPrice').forEach(input => {
-                input.addEventListener('input', calculateTotals);
+            // Attach event listeners after new items are added
+            function attachCalculationListeners() {
+                document.querySelectorAll('.netWeight, .unitPrice').forEach(input => {
+                    input.addEventListener('input', calculateTotals);
+                });
+            }
+
+            // CALCULATION LOGIC
+            function calculateTotals() {
+                let totalWeight = 0;
+                let totalInvoiceAmount = 0;
+
+                document.querySelectorAll('.export-item-block').forEach(block => {
+                    const netWeight = parseFloat(block.querySelector('.netWeight')?.value) || 0;
+                    const unitPrice = parseFloat(block.querySelector('.unitPrice')?.value) || 0;
+
+                    const totalAmount = netWeight * unitPrice;
+                    block.querySelector('.totalAmount').value = totalAmount.toFixed(2);
+
+                    totalWeight += netWeight;
+                    totalInvoiceAmount += totalAmount;
+                });
+
+                totalWeightField.value = totalWeight.toFixed(2);
+                invoiceValueField.value = totalInvoiceAmount.toFixed(2);
+            }
+        </script>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const spinner = document.getElementById("pageLoadingSpinner");
+
+                // Show spinner immediately
+                spinner.classList.remove("hidden");
+
+                // Wait for table to render completely
+                window.requestAnimationFrame(() => {
+                    spinner.classList.add("hidden"); // hide spinner after rendering
+                });
             });
-        }
-
-        // CALCULATION LOGIC
-        function calculateTotals() {
-            let totalWeight = 0;
-            let totalInvoiceAmount = 0;
-
-            document.querySelectorAll('.export-item-block').forEach(block => {
-                const netWeight = parseFloat(block.querySelector('.netWeight')?.value) || 0;
-                const unitPrice = parseFloat(block.querySelector('.unitPrice')?.value) || 0;
-
-                const totalAmount = netWeight * unitPrice;
-                block.querySelector('.totalAmount').value = totalAmount.toFixed(2);
-
-                totalWeight += netWeight;
-                totalInvoiceAmount += totalAmount;
-            });
-
-            totalWeightField.value = totalWeight.toFixed(2);
-            invoiceValueField.value = totalInvoiceAmount.toFixed(2);
-        }
-    </script>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const spinner = document.getElementById("pageLoadingSpinner");
-
-            // Show spinner immediately
-            spinner.classList.remove("hidden");
-
-            // Wait for table to render completely
-            window.requestAnimationFrame(() => {
-                spinner.classList.add("hidden"); // hide spinner after rendering
-            });
-        });
-    </script>
-@endsection
+        </script>
+    @endsection
