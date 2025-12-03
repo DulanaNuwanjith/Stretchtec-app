@@ -401,9 +401,9 @@
 
                                     <!-- empty for alignment -->
                                     <td class="sticky left-0 z-10 border-r bg-white"></td>
-                                    <td class="px-4 py-2 text-sm">-</td>
-                                    <td class="px-4 py-2 text-sm">-</td>
-                                    <td class="px-4 py-2 text-sm">-</td>
+                                    <td class="px-4 py-2 text-sm"></td>
+                                    <td class="px-4 py-2 text-sm"></td>
+                                    <td class="px-4 py-2 text-sm"></td>
 
                                     <td class="px-4 py-2 text-sm">{{ $item->color }}</td>
                                     <td class="px-4 py-2 text-sm">{{ $item->shade }}</td>
