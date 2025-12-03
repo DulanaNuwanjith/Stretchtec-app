@@ -17,14 +17,14 @@ class StockController extends Controller
      */
     public function index(): Factory|View
     {
-        $stock = Stock::orderBy('id', 'asc')->paginate(10);
+        $stock = Stock::orderBy('id', 'asc')->paginate(20);
         return view('store-management.pages.stockManagement', compact('stock'));
     }
 
     public function storeManageIndex(): Factory|View
     {
         // Order by latest created record
-        $stores = Stores::orderBy('id', 'desc')->paginate(10);
+        $stores = Stores::orderBy('id', 'desc')->paginate(20);
 
         return view('store-management.pages.storeAvailabilityCheck', compact('stores'));
     }
@@ -48,7 +48,7 @@ class StockController extends Controller
             'shade' => 'required|string|max:255',
             'available_stock' => 'required|integer|min:0',
             'special_note' => 'nullable|string|max:500',
-            'uom' => 'required|string|in:m,y,p'
+            'uom' => 'required|string|in:m,y,pcs'
         ]);
 
         try {

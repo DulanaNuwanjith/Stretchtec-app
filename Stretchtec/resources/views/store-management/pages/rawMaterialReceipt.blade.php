@@ -138,28 +138,28 @@
                     </svg>
                     <p class="mt-3 text-gray-700 font-semibold">Loading data...</p>
                 </div>
-                <table class="table-fixed w-full text-sm divide-y divide-gray-200 dark:divide-gray-700">
-                    <thead class="bg-gray-200 dark:bg-gray-700 text-left">
+                <table class="min-w-full border-collapse">
+                    <thead class="bg-gray-100 dark:bg-gray-700">
                     <tr class="text-center">
-                        <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-40 text-xs text-gray-600 dark:text-gray-300 uppercase">
+                        <th class="font-bold sticky left-0 z-10 bg-white px-4 py-3 w-36 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                             Supplier
                         </th>
-                        <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-64 text-xs text-gray-600 dark:text-gray-300 uppercase">
+                        <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                             Product Description
                         </th>
-                        <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase">
+                        <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                             Net Weight
                         </th>
-                        <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase">
+                        <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                             Unit Price
                         </th>
-                        <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase">
+                        <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                             Total Amount
                         </th>
-                        <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-40 text-xs text-gray-600 dark:text-gray-300 uppercase">
+                        <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-40 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                             Notes
                         </th>
-                        <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase">
+                        <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-36 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                             Action
                         </th>
                     </tr>
@@ -167,33 +167,32 @@
 
                     <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
                     @forelse ($exportRawMaterials as $material)
-                        <tr class="text-center hover:bg-gray-100 dark:hover:bg-gray-800 transition">
-                            <td class="px-4 py-3 text-gray-800 dark:text-gray-200">
+                        <tr class="odd:bg-white even:bg-gray-50 border-b border-gray-200 text-center">
+                            <td class="px-4 py-3 text-gray-800 dark:text-gray-200 border-r">
                                 {{ $material->supplier }}
                             </td>
 
-                            <td class="px-4 py-3 text-gray-800 dark:text-gray-200 break-words">
+                            <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">
                                 {{ $material->product_description }}
                             </td>
 
-                            <td class="px-4 py-3 text-gray-800 dark:text-gray-200">
+                            <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">
                                 {{ number_format($material->net_weight, 2) }} {{$material->uom}}
                             </td>
 
-                            <td class="px-4 py-3 text-gray-800 dark:text-gray-200">
+                            <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">
                                 {{ number_format($material->unit_price, 2) }}
                             </td>
 
-                            <td class="px-4 py-3 text-gray-800 dark:text-gray-200 font-semibold">
+                            <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">
                                 {{ number_format($material->total_amount, 2) }}
                             </td>
 
-                            <td class="px-4 py-3 text-gray-800 dark:text-gray-200 break-words">
+                            <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">
                                 {{ $material->notes ?? '—' }}
                             </td>
 
-                            <td class="px-4 py-3">
-
+                            <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">
                             </td>
                         </tr>
                     @empty
@@ -204,18 +203,10 @@
                         </tr>
                     @endforelse
                     </tbody>
-
-                    <tfoot class="bg-gray-200 dark:bg-gray-700">
-                    <tr>
-                        <td colspan="7" class="px-4 py-3">
-                            <div class="flex justify-end">
-                                {{ $exportRawMaterials->links() ?? '' }}
-                            </div>
-                        </td>
-                    </tr>
-                    </tfoot>
                 </table>
-
+            </div>
+            <div class="py-6 flex justify-center">
+                {{ $exportRawMaterials->links() ?? '' }}
             </div>
         </div>
         <script>

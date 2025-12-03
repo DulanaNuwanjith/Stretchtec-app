@@ -205,8 +205,8 @@
                             <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">{{ $exp->checked_by }}</td>
                             <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">{{ $exp->notes }}</td>
 
-                            <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center">
-                                <button onclick="openEditModal('{{ $exp->id }}')" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs shadow-sm mt-2">
+                            <td class="px-3 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center">
+                                <button onclick="openEditModal('{{ $exp->id }}')" class="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs shadow-sm mt-2">
                                     Edit
                                 </button>
 
