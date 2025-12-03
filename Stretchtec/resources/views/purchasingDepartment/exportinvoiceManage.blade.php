@@ -179,7 +179,7 @@
                         </tr>
                     </thead>
 
-                    @foreach ($invoiceItems as $invoiceNumber => $items)
+@foreach ($invoiceItems as $invoiceNumber => $items)
                         @php
                             $hasMultiple = $items->count() > 1;
                             $first = $items->first();
