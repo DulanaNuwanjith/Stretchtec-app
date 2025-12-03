@@ -22,16 +22,26 @@ class LocalProcurementController extends Controller
      */
     public function index(): Factory|View
     {
-        $localProcurements = LocalProcurement::orderBy('id', 'desc')->paginate(10);
+        $uniqueInvoiceNumbers = LocalProcurement::select('invoice_number')
+            ->groupBy('invoice_number')
+            ->orderBy('date', 'desc')
+            ->paginate(10);
 
-        $poNumbers = PurchaseDepartment::distinct()->pluck('po_number')->toArray();
+        $invoiceItems = LocalProcurement::whereIn('invoice_number', $uniqueInvoiceNumbers->pluck('invoice_number'))
+            ->orderBy('date', 'desc')
+            ->get()
+            ->groupBy('invoice_number');
 
         $orderPreparations = ProductOrderPreperation::where('isRawMaterialOrdered', 1)
             ->where('isRawMaterialReceived', 0)
             ->latest()
             ->get();
 
-        return view('purchasingDepartment.localinvoiceManage', compact('localProcurements', 'poNumbers', 'orderPreparations'));
+        $poNumbers = $invoiceItems->flatMap(function ($items) {
+            return $items->pluck('po_number');
+        })->unique()->toArray();
+
+        return view('purchasingDepartment.localinvoiceManage', compact('uniqueInvoiceNumbers', 'invoiceItems', 'orderPreparations', 'poNumbers'));
     }
 
     /**

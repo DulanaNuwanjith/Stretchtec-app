@@ -116,7 +116,7 @@
                 }
             </script>
 
-        
+
 
             <!-- Header -->
             <div class="flex items-center mb-6">
@@ -293,8 +293,9 @@
                 </div>
             </div>
 
-            <!-- ================= TABLE ================== -->
+            <!-- Collapsible Local Procurement Table -->
             <div class="overflow-x-auto max-h-[1200px] bg-white dark:bg-gray-900 shadow rounded-lg">
+
                 <!-- Spinner -->
                 <div id="pageLoadingSpinner"
                      class="fixed inset-0 z-50 bg-white bg-opacity-80 flex flex-col items-center justify-center">
@@ -306,90 +307,132 @@
                     </svg>
                     <p class="mt-3 text-gray-700 font-semibold">Loading data...</p>
                 </div>
+
                 <table class="table-fixed w-full text-sm divide-y divide-gray-200 dark:divide-gray-700">
                     <thead class="bg-gray-200 dark:bg-gray-700 text-left">
                     <tr class="text-center">
-                        <th class="font-bold sticky left-0 z-10 bg-white px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase">
+
+                        <!-- Parent Row Columns -->
+                        <th class="sticky left-0 top-0 bg-white z-20 px-4 py-3 w-32 text-xs font-bold uppercase text-gray-600">
                             Invoice No
                         </th>
-                        <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase">
+
+                        <th class="sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs font-bold uppercase text-gray-600">
                             Date
                         </th>
-                        <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs text-gray-600 dark:text-gray-300 uppercase">
+                        <th class="sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs font-bold uppercase text-gray-600">
                             PO Number
                         </th>
-                        <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs text-gray-600 dark:text-gray-300 uppercase">
+                        <th class="sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs font-bold uppercase text-gray-600">
                             Supplier
                         </th>
-                        <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs text-gray-600 dark:text-gray-300 uppercase">
-                            Color
-                        </th>
-                        <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs text-gray-600 dark:text-gray-300 uppercase">
-                            Shade
-                        </th>
-                        <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs text-gray-600 dark:text-gray-300 uppercase">
-                            PST No
-                        </th>
-                        <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-24 text-xs text-gray-600 dark:text-gray-300 uppercase">
-                            TKT
-                        </th>
-                        <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs text-gray-600 dark:text-gray-300 uppercase">
-                            Quantity
-                        </th>
-                        <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-40 text-xs text-gray-600 dark:text-gray-300 uppercase">
+
+                        <!-- Item row columns -->
+                        <th class="sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs font-bold uppercase text-gray-600">Color</th>
+                        <th class="sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs font-bold uppercase text-gray-600">Shade</th>
+                        <th class="sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs font-bold uppercase text-gray-600">PST No</th>
+                        <th class="sticky top-0 bg-gray-200 px-4 py-3 w-24 text-xs font-bold uppercase text-gray-600">TKT</th>
+                        <th class="sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs font-bold uppercase text-gray-600">Quantity</th>
+                        <th class="sticky top-0 bg-gray-200 px-4 py-3 w-40 text-xs font-bold uppercase text-gray-600">
                             Supplier Comment
                         </th>
-                        <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs text-gray-600 dark:text-gray-300 uppercase">
-                            Amount
-                        </th>
-                        <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs text-gray-600 dark:text-gray-300 uppercase">
-                            Total Amount
-                        </th>
-                        <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase">
-                            Status
-                        </th>
+                        <th class="sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs font-bold uppercase text-gray-600">Amount</th>
+                        <th class="sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs font-bold uppercase text-gray-600">Total Amount</th>
+                        <th class="sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs font-bold uppercase text-gray-600">Status</th>
+
                     </tr>
                     </thead>
 
-                    <tbody class="divide-y divide-gray-200 dark:divide-gray-700 text-center">
-                    @forelse($localProcurements as $proc)
-                        <tr class="odd:bg-white even:bg-gray-50 border-b border-gray-200 text-center">
-                            <td class="sticky left-0 z-10 bg-white px-4 py-3 text-sm bg-gray-100 border-r border-gray-300 text-center whitespace-normal break-words font-bold">{{ $proc->invoice_number }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">{{ $proc->date }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">{{ $proc->po_number }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">{{ $proc->supplier_name }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">{{ $proc->color }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">{{ $proc->shade }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">{{ $proc->pst_no }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">{{ $proc->tkt }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">{{ $proc->quantity }} {{ $proc->uom }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words whitespace-normal">{{ $proc->supplier_comment }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">{{ $proc->total_price }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">{{ $proc->invoice_value }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">
-                        <span class="px-2 py-1 rounded-full text-xs font-semibold
-                            @if($proc->status === 'pending') bg-yellow-100 text-yellow-800
-                            @elseif($proc->status === 'approved') bg-green-100 text-green-800
-                            @elseif($proc->status === 'rejected') bg-red-100 text-red-800
-                            @else bg-gray-100 text-gray-800 @endif">
-                            {{ ucfirst($proc->status) }}
-                        </span>
+                    @foreach ($invoiceItems as $invoiceNumber => $items)
+                        @php
+                            $hasMultiple = $items->count() > 1;
+                            $first = $items->first();
+                        @endphp
+
+                        <tbody x-data="{ open: false }"
+                               class="divide-y divide-gray-200 dark:divide-gray-700 text-center border-b">
+                        <!-- Parent Row -->
+                        <tr class="bg-gray-100">
+
+                            <!-- Expand Invoice -->
+                            <td class="sticky left-0 z-20 bg-white border-r px-4 py-3 text-sm font-bold">
+                                @if ($hasMultiple)
+                                    <button @click="open = !open"
+                                            class="flex items-center w-full gap-2 text-blue-600 hover:text-blue-800">
+                                        <span class="w-1 shrink-0" x-text="open ? '^' : '>'"></span>
+                                        <span class="flex-1 text-center">{{ $invoiceNumber }}</span>
+                                    </button>
+                                @else
+                                    <div class="flex items-center w-full gap-2">
+                                        <span class="w-1 shrink-0 opacity-0">></span>
+                                        <span class="flex-1 text-center">{{ $invoiceNumber }}</span>
+                                    </div>
+                                @endif
+                            </td>
+
+                            <td class="px-4 py-3 text-sm">{{ $first->date }}</td>
+                            <td class="px-4 py-3 text-sm">{{ $first->po_number }}</td>
+                            <td class="px-4 py-3 text-sm">{{ $first->supplier_name }}</td>
+
+                            <td class="px-4 py-3 text-sm">{{ $first->color }}</td>
+                            <td class="px-4 py-3 text-sm">{{ $first->shade }}</td>
+                            <td class="px-4 py-3 text-sm">{{ $first->pst_no }}</td>
+                            <td class="px-4 py-3 text-sm">{{ $first->tkt }}</td>
+                            <td class="px-4 py-3 text-sm">{{ $first->quantity }} {{ $first->uom }}</td>
+                            <td class="px-4 py-3 text-sm">{{ $first->supplier_comment }}</td>
+                            <td class="px-4 py-3 text-sm">{{ $first->total_price }}</td>
+                            <td class="px-4 py-3 text-sm">{{ $first->invoice_value }}</td>
+
+                            <td class="px-4 py-3 text-sm">
+                    <span class="px-2 py-1 rounded-full text-xs font-semibold
+                        @if($first->status === 'pending') bg-yellow-100 text-yellow-800
+                        @elseif($first->status === 'approved') bg-green-100 text-green-800
+                        @elseif($first->status === 'rejected') bg-red-100 text-red-800
+                        @else bg-gray-100 text-gray-800 @endif">
+                        {{ ucfirst($first->status) }}
+                    </span>
                             </td>
                         </tr>
-                    @empty
-                        <tr>
-                            <td colspan="12" class="px-4 py-4 text-gray-500 dark:text-gray-400 text-center">
-                                No records found.
-                            </td>
-                        </tr>
-                    @endforelse
-                    </tbody>
+
+                        <!-- Child Rows -->
+                        @if ($hasMultiple)
+                            @foreach ($items->skip(1) as $item)
+                                <tr x-show="open" style="display: none;" class="bg-gray-50">
+
+                                    <!-- empty for alignment -->
+                                    <td class="sticky left-0 z-10 border-r bg-white"></td>
+                                    <td class="px-4 py-2 text-sm">-</td>
+                                    <td class="px-4 py-2 text-sm">-</td>
+                                    <td class="px-4 py-2 text-sm">-</td>
+
+                                    <td class="px-4 py-2 text-sm">{{ $item->color }}</td>
+                                    <td class="px-4 py-2 text-sm">{{ $item->shade }}</td>
+                                    <td class="px-4 py-2 text-sm">{{ $item->pst_no }}</td>
+                                    <td class="px-4 py-2 text-sm">{{ $item->tkt }}</td>
+
+                                    <td class="px-4 py-2 text-sm">
+                                        {{ $item->quantity }} {{ $item->uom }}
+                                    </td>
+
+                                    <td class="px-4 py-2 text-sm">{{ $item->supplier_comment }}</td>
+                                    <td class="px-4 py-2 text-sm">{{ $item->total_price }}</td>
+                                    <td class="px-4 py-2 text-sm">-</td>
+
+                                    <td class="px-4 py-2 text-sm">
+                                        <span class="px-2 py-1 rounded-full text-xs font-semibold">-</span>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        @endif
+                        </tbody>
+
+                    @endforeach
                 </table>
             </div>
 
-            {{-- Pagination --}}
+            <!-- Pagination -->
             <div class="p-2 border-t border-gray-200 dark:border-gray-700">
-                {{ $localProcurements->links() }}
+                {{ $uniqueInvoiceNumbers->links() }}
             </div>
 
 
