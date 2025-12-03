@@ -398,7 +398,7 @@
                     <p class="mt-3 text-gray-700 font-semibold">Loading data...</p>
                 </div>
 
-                <table class="min-w-full border-collapse">
+                <table class="table-fixed w-full text-sm divide-y divide-gray-200 dark:divide-gray-700">
                     <thead class="bg-gray-100 dark:bg-gray-700">
                         <tr class="text-center">
 
@@ -407,9 +407,8 @@
                                 class="font-bold sticky left-0 z-10 bg-white px-4 py-3 w-36 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                 PO Number
                             </th>
-                            <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                                PO
-                                Date
+                            <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-36 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                PO Date
                             </th>
                             <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                 Supplier
@@ -515,14 +514,14 @@
                                     </td>
                                 @else
                                     <!-- Parent shows the first item -->
-                                    <td class="px-4 py-3 text-sm text-left">{{ $first->shade }}</td>
-                                    <td class="px-4 py-3 text-sm text-left">{{ $first->color }}</td>
-                                    <td class="px-4 py-3 text-sm text-left">{{ $first->tkt }}</td>
-                                    <td class="px-4 py-3 text-sm text-left">{{ $first->pst_no }}</td>
-                                    <td class="px-4 py-3 text-sm">{{ $first->supplier_comment }}</td>
-                                    <td class="px-4 py-3 text-sm">{{ $first->quantity }} {{ $first->uom }}</td>
-                                    <td class="px-4 py-3 text-sm">{{ $first->rate }}</td>
-                                    <td class="px-4 py-3 text-sm">{{ $first->amount }}</td>
+                                    <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-left">{{ $first->shade }}</td>
+                                    <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-left">{{ $first->color }}</td>
+                                    <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-left">{{ $first->tkt }}</td>
+                                    <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-left">{{ $first->pst_no }}</td>
+                                    <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">{{ $first->supplier_comment }}</td>
+                                    <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">{{ $first->quantity }} {{ $first->uom }}</td>
+                                    <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">{{ $first->rate }}</td>
+                                    <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">{{ $first->amount }}</td>
 
                                     <!-- Total + Status -->
                                     <td class="px-4 py-3 text-sm">{{ $first->total_amount }}</td>
@@ -565,20 +564,20 @@
 
                                         <!-- Empty parent columns -->
                                         <td class="sticky left-0 z-10 border-r bg-white"></td>
-                                        <td></td>
-                                        <td></td>
+                                        <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-left"></td>
+                                        <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-left"></td>
 
                                         <!-- Item Columns -->
-                                        <td class="px-4 py-2 text-left">{{ $item->shade }}</td>
-                                        <td class="px-4 py-2 text-left">{{ $item->color }}</td>
-                                        <td class="px-4 py-2 text-left">{{ $item->tkt }}</td>
-                                        <td class="px-4 py-2 text-left">{{ $item->pst_no }}</td>
-                                        <td class="px-4 py-2">{{ $item->supplier_comment }}</td>
-                                        <td class="px-4 py-2">{{ $item->quantity }} {{ $item->uom }}</td>
-                                        <td class="px-4 py-2">{{ $item->rate }}</td>
-                                        <td class="px-4 py-2">{{ $item->amount }}</td>
-                                        <td class="px-4 py-2">-</td>
-                                        <td class="px-4 py-2">
+                                        <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-left">{{ $item->shade }}</td>
+                                        <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-left">{{ $item->color }}</td>
+                                        <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-left">{{ $item->tkt }}</td>
+                                        <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-left">{{ $item->pst_no }}</td>
+                                        <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">{{ $item->supplier_comment }}</td>
+                                        <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">{{ $item->quantity }} {{ $item->uom }}</td>
+                                        <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">{{ $item->rate }}</td>
+                                        <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">{{ $item->amount }}</td>
+                                        <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">-</td>
+                                        <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">
                                             <span class="px-2 py-1 rounded-full text-xs font-semibold">-</span>
                                         </td>
                                         <td class="px-4 py-2">
