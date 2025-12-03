@@ -524,8 +524,8 @@
                                     <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">{{ $first->amount }}</td>
 
                                     <!-- Total + Status -->
-                                    <td class="px-4 py-3 text-sm">{{ $first->total_amount }}</td>
-                                    <td class="px-4 py-3 text-sm">
+                                    <td class="px-4 py-3 text-sm text-gray-800 dark:text-gray-200 border-r">{{ $first->total_amount }}</td>
+                                    <td class="px-4 py-3 text-sm text-gray-800 dark:text-gray-200 border-r">
                                         <span
                                             class="px-2 py-1 rounded-full text-xs font-semibold
                                         @if ($first->status === 'Pending') bg-yellow-100 text-yellow-800
