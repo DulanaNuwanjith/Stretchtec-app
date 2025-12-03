@@ -327,6 +327,9 @@
                         <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs text-gray-600 dark:text-gray-300 uppercase">
                             Shade
                         </th>
+                        <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs text-gray-600 dark:text-gray-300 uppercase">
+                            PST No
+                        </th>
                         <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-24 text-xs text-gray-600 dark:text-gray-300 uppercase">
                             TKT
                         </th>
@@ -334,7 +337,7 @@
                             Quantity
                         </th>
                         <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs text-gray-600 dark:text-gray-300 uppercase">
-                            PST No
+                            Total Amount
                         </th>
                         <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-40 text-xs text-gray-600 dark:text-gray-300 uppercase">
                             Supplier Comment
@@ -354,9 +357,10 @@
                             <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">{{ $proc->supplier_name }}</td>
                             <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">{{ $proc->color }}</td>
                             <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">{{ $proc->shade }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">{{ $proc->pst_no }}</td>
                             <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">{{ $proc->tkt }}</td>
                             <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">{{ $proc->quantity }} {{ $proc->uom }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">{{ $proc->pst_no }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">{{ $proc->total_price }}</td>
                             <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words whitespace-normal">{{ $proc->supplier_comment }}</td>
                             <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">
                         <span class="px-2 py-1 rounded-full text-xs font-semibold
