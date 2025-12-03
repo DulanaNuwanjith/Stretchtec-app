@@ -373,7 +373,8 @@
                      class="fixed inset-0 z-50 bg-white bg-opacity-80 flex flex-col items-center justify-center">
                     <svg class="animate-spin h-10 w-10 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none"
                          viewBox="0 0 24 24">
-                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
+                                stroke-width="4"></circle>
                         <path class="opacity-75" fill="currentColor"
                               d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
                     </svg>
@@ -388,20 +389,44 @@
                         <th class="sticky left-0 top-0 bg-white z-20 px-4 py-3 w-32 text-xs font-bold uppercase text-gray-600">
                             PO Number
                         </th>
-                        <th class="sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs font-bold uppercase text-gray-600">PO Date</th>
-                        <th class="sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs font-bold uppercase text-gray-600">Supplier</th>
+                        <th class="sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs font-bold uppercase text-gray-600">PO
+                            Date
+                        </th>
+                        <th class="sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs font-bold uppercase text-gray-600">
+                            Supplier
+                        </th>
 
                         <!-- Only shown for item rows -->
-                        <th class="sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs font-bold uppercase text-gray-600">Shade</th>
-                        <th class="sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs font-bold uppercase text-gray-600">Color</th>
-                        <th class="sticky top-0 bg-gray-200 px-4 py-3 w-24 text-xs font-bold uppercase text-gray-600">TKT</th>
-                        <th class="sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs font-bold uppercase text-gray-600">PST No</th>
-                        <th class="sticky top-0 bg-gray-200 px-4 py-3 w-40 text-xs font-bold uppercase text-gray-600">Supplier Comment</th>
-                        <th class="sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs font-bold uppercase text-gray-600">Quantity</th>
-                        <th class="sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs font-bold uppercase text-gray-600">Rate</th>
-                        <th class="sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs font-bold uppercase text-gray-600">Amount</th>
-                        <th class="sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs font-bold uppercase text-gray-600">Total Amount</th>
-                        <th class="sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs font-bold uppercase text-gray-600">Status</th>
+                        <th class="sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs font-bold uppercase text-gray-600">
+                            Shade
+                        </th>
+                        <th class="sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs font-bold uppercase text-gray-600">
+                            Color
+                        </th>
+                        <th class="sticky top-0 bg-gray-200 px-4 py-3 w-24 text-xs font-bold uppercase text-gray-600">
+                            TKT
+                        </th>
+                        <th class="sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs font-bold uppercase text-gray-600">
+                            PST No
+                        </th>
+                        <th class="sticky top-0 bg-gray-200 px-4 py-3 w-40 text-xs font-bold uppercase text-gray-600">
+                            Supplier Comment
+                        </th>
+                        <th class="sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs font-bold uppercase text-gray-600">
+                            Quantity
+                        </th>
+                        <th class="sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs font-bold uppercase text-gray-600">
+                            Rate
+                        </th>
+                        <th class="sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs font-bold uppercase text-gray-600">
+                            Amount
+                        </th>
+                        <th class="sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs font-bold uppercase text-gray-600">
+                            Total Amount
+                        </th>
+                        <th class="sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs font-bold uppercase text-gray-600">
+                            Status
+                        </th>
 
                     </tr>
                     </thead>
@@ -412,41 +437,58 @@
                             $first = $items->first();
                         @endphp
 
-                        <tbody x-data="{ open: false }" class="divide-y divide-gray-200 dark:divide-gray-700 text-center border-b border-gray-200 dark:border-gray-700">
-                            <!-- Parent Row -->
-                            <tr class="bg-gray-100">
+                        <tbody x-data="{ open: false }"
+                               class="divide-y divide-gray-200 dark:divide-gray-700 text-center border-b border-gray-200 dark:border-gray-700">
+                        <!-- Parent Row -->
+                        <tr class="bg-gray-100">
 
-                                <!-- Expand PO Number -->
-                                <td class="sticky left-0 z-20 bg-white border-r px-4 py-3 text-sm font-bold">
-                                    @if($hasMultipleItems)
-                                        <button @click="open = !open"
-                                                class="flex items-center gap-2 text-blue-600 hover:text-blue-800 mx-auto">
-                                            <span x-text="open ? '^' : '>'"></span>
-                                            {{ $poNumber }}
-                                        </button>
-                                    @else
+                            <!-- Expand PO Number -->
+                            <td class="sticky left-0 z-20 bg-white border-r px-4 py-3 text-sm font-bold">
+                                @if($hasMultipleItems)
+                                    <button @click="open = !open"
+                                            class="flex items-center gap-2 text-blue-600 hover:text-blue-800 mx-auto">
+                                        <span x-text="open ? '^' : '>'"></span>
                                         {{ $poNumber }}
-                                    @endif
+                                    </button>
+                                @else
+                                    {{ $poNumber }}
+                                @endif
+                            </td>
+
+                            <!-- PO Date -->
+                            <td class="px-4 py-3 text-sm">{{ $first->po_date }}</td>
+
+                            <!-- Supplier -->
+                            <td class="px-4 py-3 text-sm">{{ $first->supplier }}</td>
+
+                            <!-- Single Item View -->
+                            @if(!$hasMultipleItems)
+                                <td class="px-4 py-3 text-sm">{{ $first->shade }}</td>
+                                <td class="px-4 py-3 text-sm">{{ $first->color }}</td>
+                                <td class="px-4 py-3 text-sm">{{ $first->tkt }}</td>
+                                <td class="px-4 py-3 text-sm">{{ $first->pst_no }}</td>
+                                <td class="px-4 py-3 text-sm">{{ $first->supplier_comment }}</td>
+                                <td class="px-4 py-3 text-sm">{{ $first->quantity }} {{ $first->uom }}</td>
+                                <td class="px-4 py-3 text-sm">{{ $first->rate }}</td>
+                                <td class="px-4 py-3 text-sm">{{ $first->amount }}</td>
+                                <td class="px-4 py-3 text-sm">{{ $first->total_amount }}</td>
+                                <td class="px-4 py-3 text-sm">
+                    <span class="px-2 py-1 rounded-full text-xs font-semibold
+                        @if($first->status === 'Pending') bg-yellow-100 text-yellow-800
+                        @elseif($first->status === 'Approved') bg-green-100 text-green-800
+                        @elseif($first->status === 'Rejected') bg-red-100 text-red-800
+                        @else bg-gray-100 text-gray-800 @endif">
+                        {{ $first->status }}
+                    </span>
                                 </td>
 
-                                <!-- PO Date -->
-                                <td class="px-4 py-3 text-sm">{{ $first->po_date }}</td>
-
-                                <!-- Supplier -->
-                                <td class="px-4 py-3 text-sm">{{ $first->supplier }}</td>
-
-                                <!-- Single Item View -->
-                                @if(!$hasMultipleItems)
-                                    <td class="px-4 py-3 text-sm">{{ $first->shade }}</td>
-                                    <td class="px-4 py-3 text-sm">{{ $first->color }}</td>
-                                    <td class="px-4 py-3 text-sm">{{ $first->tkt }}</td>
-                                    <td class="px-4 py-3 text-sm">{{ $first->pst_no }}</td>
-                                    <td class="px-4 py-3 text-sm">{{ $first->supplier_comment }}</td>
-                                    <td class="px-4 py-3 text-sm">{{ $first->quantity }} {{ $first->uom }}</td>
-                                    <td class="px-4 py-3 text-sm">{{ $first->rate }}</td>
-                                    <td class="px-4 py-3 text-sm">{{ $first->amount }}</td>
-                                    <td class="px-4 py-3 text-sm">{{ $first->total_amount }}</td>
-                                    <td class="px-4 py-3 text-sm">
+                            @else
+                                <!-- Parent consolidated row -->
+                                <td colspan="8" class="text-gray-400 text-xs italic">
+                                    Click to view {{ $items->count() }} items
+                                </td>
+                                <td class="px-4 py-3 text-sm">{{ $first->total_amount }}</td>
+                                <td class="px-4 py-3 text-sm">
                     <span class="px-2 py-1 rounded-full text-xs font-semibold
                         @if($first->status === 'Pending') bg-yellow-100 text-yellow-800
                         @elseif($first->status === 'Approved') bg-green-100 text-green-800
@@ -454,77 +496,35 @@
                         @else bg-gray-100 text-gray-800 @endif">
                         {{ $first->status }}
                     </span>
-                                    </td>
+                                </td>
+                            @endif
+                        </tr>
 
-                                @else
-                                    <!-- Parent consolidated row -->
-                                    <td colspan="8" class="text-gray-400 text-xs italic">
-                                        Click to view {{ $items->count() }} items
-                                    </td>
-                                    <td class="px-4 py-3 text-sm">{{ $first->total_amount }}</td>
-                                    <td class="px-4 py-3 text-sm">
-                    <span class="px-2 py-1 rounded-full text-xs font-semibold
-                        @if($first->status === 'Pending') bg-yellow-100 text-yellow-800
-                        @elseif($first->status === 'Approved') bg-green-100 text-green-800
-                        @elseif($first->status === 'Rejected') bg-red-100 text-red-800
-                        @else bg-gray-100 text-gray-800 @endif">
-                        {{ $first->status }}
-                    </span>
-                                    </td>
-                                @endif
-                            </tr>
+                        <!-- Collapsible Child Rows -->
+                        @if($hasMultipleItems)
+                            @foreach($items as $item)
+                                <tr x-show="open" x-transition style="display: none;" class="bg-white">
+                                    <!-- Empty parent columns -->
+                                    <td class="sticky left-0 bg-white z-10"></td>
+                                    <td></td>
+                                    <td></td>
 
-                            <!-- Collapsible Child Rows -->
-                            @if($hasMultipleItems)
-                                <tr x-show="open" x-transition style="display: none;">
-                                    <td colspan="13" class="bg-white p-0">
-
-                                        <!-- Child Item Table -->
-                                        <table class="w-full text-sm">
-                                            <thead class="bg-gray-50 border-b">
-                                            <tr class="text-center">
-                                                <th class="px-4 py-2 text-xs font-bold">Shade</th>
-                                                <th class="px-4 py-2 text-xs font-bold">Color</th>
-                                                <th class="px-4 py-2 text-xs font-bold">TKT</th>
-                                                <th class="px-4 py-2 text-xs font-bold">PST No</th>
-                                                <th class="px-4 py-2 text-xs font-bold">Comment</th>
-                                                <th class="px-4 py-2 text-xs font-bold">Qty</th>
-                                                <th class="px-4 py-2 text-xs font-bold">Rate</th>
-                                                <th class="px-4 py-2 text-xs font-bold">Amount</th>
-                                                <th class="px-4 py-2 text-xs font-bold">Total</th>
-                                                <th class="px-4 py-2 text-xs font-bold">Status</th>
-                                            </tr>
-                                            </thead>
-
-                                            <tbody>
-                                            @foreach($items as $item)
-                                                <tr class="border-t">
-                                                    <td class="px-4 py-2">{{ $item->shade }}</td>
-                                                    <td class="px-4 py-2">{{ $item->color }}</td>
-                                                    <td class="px-4 py-2">{{ $item->tkt }}</td>
-                                                    <td class="px-4 py-2">{{ $item->pst_no }}</td>
-                                                    <td class="px-4 py-2">{{ $item->supplier_comment }}</td>
-                                                    <td class="px-4 py-2">{{ $item->quantity }} {{ $item->uom }}</td>
-                                                    <td class="px-4 py-2">{{ $item->rate }}</td>
-                                                    <td class="px-4 py-2">{{ $item->amount }}</td>
-                                                    <td class="px-4 py-2">{{ $item->total_amount }}</td>
-                                                    <td class="px-4 py-2">
-                                        <span class="px-2 py-1 rounded-full text-xs font-semibold
-                                            @if($item->status === 'Pending') bg-yellow-100 text-yellow-800
-                                            @elseif($item->status === 'Approved') bg-green-100 text-green-800
-                                            @elseif($item->status === 'Rejected') bg-red-100 text-red-800
-                                            @else bg-gray-100 text-gray-800 @endif">
-                                            {{ $item->status }}
-                                        </span>
-                                                    </td>
-                                                </tr>
-                                            @endforeach
-                                            </tbody>
-                                        </table>
-
+                                    <!-- Item Columns -->
+                                    <td class="px-4 py-2">{{ $item->shade }}</td>
+                                    <td class="px-4 py-2">{{ $item->color }}</td>
+                                    <td class="px-4 py-2">{{ $item->tkt }}</td>
+                                    <td class="px-4 py-2">{{ $item->pst_no }}</td>
+                                    <td class="px-4 py-2">{{ $item->supplier_comment }}</td>
+                                    <td class="px-4 py-2">{{ $item->quantity }} {{ $item->uom }}</td>
+                                    <td class="px-4 py-2">{{ $item->rate }}</td>
+                                    <td class="px-4 py-2">{{ $item->amount }}</td>
+                                    <td class="px-4 py-2">-</td>
+                                    <td class="px-4 py-2">
+                                        <span class="px-2 py-1 rounded-full text-xs font-semibold">-</span>
                                     </td>
                                 </tr>
-                            @endif
+                            @endforeach
+                        @endif
                         </tbody>
                     @endforeach
                 </table>
