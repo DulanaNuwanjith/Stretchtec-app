@@ -533,7 +533,7 @@
                                     <tr x-show="open" style="display: none;" class="bg-gray-50">
 
                                         <!-- Empty parent columns -->
-                                        <td class="sticky left-0 z-10"></td>
+                                        <td class="sticky left-0 z-10 border-r bg-white"></td>
                                         <td></td>
                                         <td></td>
 
