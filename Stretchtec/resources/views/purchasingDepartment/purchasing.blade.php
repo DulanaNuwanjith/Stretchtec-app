@@ -503,9 +503,9 @@
                         <!-- Collapsible Child Rows -->
                         @if($hasMultipleItems)
                             @foreach($items as $item)
-                                <tr x-show="open" x-transition style="display: none;" class="bg-white">
+                                <tr x-show="open" style="display: none;" class="bg-gray-50">
                                     <!-- Empty parent columns -->
-                                    <td class="sticky left-0 bg-white z-10"></td>
+                                    <td class="sticky left-0 z-10"></td>
                                     <td></td>
                                     <td></td>
 
