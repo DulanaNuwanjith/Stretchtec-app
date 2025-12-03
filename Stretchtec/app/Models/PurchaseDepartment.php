@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static latest()
  * @method static pluck(string $string)
  * @method static distinct()
+ * @method static select(string $string)
+ * @method static whereIn(string $string, $pluck)
  */
 class PurchaseDepartment extends Model
 {
