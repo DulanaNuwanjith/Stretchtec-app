@@ -473,13 +473,13 @@
                                 <td class="px-4 py-3 text-sm">{{ $first->amount }}</td>
                                 <td class="px-4 py-3 text-sm">{{ $first->total_amount }}</td>
                                 <td class="px-4 py-3 text-sm">
-                    <span class="px-2 py-1 rounded-full text-xs font-semibold
-                        @if($first->status === 'Pending') bg-yellow-100 text-yellow-800
-                        @elseif($first->status === 'Approved') bg-green-100 text-green-800
-                        @elseif($first->status === 'Rejected') bg-red-100 text-red-800
-                        @else bg-gray-100 text-gray-800 @endif">
-                        {{ $first->status }}
-                    </span>
+                                    <span class="px-2 py-1 rounded-full text-xs font-semibold
+                                        @if($first->status === 'Pending') bg-yellow-100 text-yellow-800
+                                        @elseif($first->status === 'Approved') bg-green-100 text-green-800
+                                        @elseif($first->status === 'Rejected') bg-red-100 text-red-800
+                                        @else bg-gray-100 text-gray-800 @endif">
+                                        {{ $first->status }}
+                                    </span>
                                 </td>
 
                             @else
@@ -489,13 +489,13 @@
                                 </td>
                                 <td class="px-4 py-3 text-sm">{{ $first->total_amount }}</td>
                                 <td class="px-4 py-3 text-sm">
-                    <span class="px-2 py-1 rounded-full text-xs font-semibold
-                        @if($first->status === 'Pending') bg-yellow-100 text-yellow-800
-                        @elseif($first->status === 'Approved') bg-green-100 text-green-800
-                        @elseif($first->status === 'Rejected') bg-red-100 text-red-800
-                        @else bg-gray-100 text-gray-800 @endif">
-                        {{ $first->status }}
-                    </span>
+                                    <span class="px-2 py-1 rounded-full text-xs font-semibold
+                                        @if($first->status === 'Pending') bg-yellow-100 text-yellow-800
+                                        @elseif($first->status === 'Approved') bg-green-100 text-green-800
+                                        @elseif($first->status === 'Rejected') bg-red-100 text-red-800
+                                        @else bg-gray-100 text-gray-800 @endif">
+                                        {{ $first->status }}
+                                    </span>
                                 </td>
                             @endif
                         </tr>
