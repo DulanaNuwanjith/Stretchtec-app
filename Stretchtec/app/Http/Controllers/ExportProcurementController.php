@@ -20,8 +20,17 @@ class ExportProcurementController extends Controller
      */
     public function index(): Factory|View
     {
-        $exportProcurements = ExportProcurement::latest()->paginate(10);
-        return view('purchasingDepartment.exportinvoiceManage', compact('exportProcurements'));
+        $uniqueInvoiceNumbers = ExportProcurement::select('invoice_number')
+            ->groupBy('invoice_number')
+            ->orderBy('date', 'desc')
+            ->paginate(10);
+
+        $invoiceItems = ExportProcurement::whereIn('invoice_number', $uniqueInvoiceNumbers->pluck('invoice_number'))
+            ->orderBy('date', 'desc')
+            ->get()
+            ->groupBy('invoice_number');
+
+        return view('purchasingDepartment.exportinvoiceManage', compact('uniqueInvoiceNumbers', 'invoiceItems'));
     }
 
     public function exportRawIndex(): Factory|View
@@ -147,8 +156,20 @@ class ExportProcurementController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(ExportProcurement $exportProcurement)
+   public function destroy($id)
     {
-        //
+        try {
+            // find the specific row
+            $record = ExportProcurement::findOrFail($id);
+
+            // delete ALL rows under this invoice number
+            ExportProcurement::where('invoice_number', $record->invoice_number)->delete();
+
+            return back()->with('success', 'Invoice and all its items deleted successfully.');
+        } catch (\Exception $e) {
+            Log::error('Error deleting invoice: ' . $e->getMessage());
+            return back()->with('error', 'Failed to delete the invoice.');
+        }
     }
+
 }

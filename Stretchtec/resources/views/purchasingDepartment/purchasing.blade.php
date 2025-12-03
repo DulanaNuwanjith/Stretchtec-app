@@ -373,7 +373,7 @@
                                     class="px-4 py-2 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 text-sm rounded hover:bg-gray-300">
                                     Cancel
                                 </button>
-                                <button type="submit"
+                                <button type="submit" id="createPurchaseBtn"
                                     class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white text-sm rounded">
                                     Create Purchase Order
                                 </button>
@@ -447,6 +447,10 @@
                                 Status
                             </th>
 
+                            <th class="sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs font-bold uppercase text-gray-600">
+                                Actions
+                            </th>
+
                         </tr>
                     </thead>
 
@@ -466,8 +470,7 @@
                                     @if ($hasMultipleItems)
                                         <button @click="open = !open"
                                             class="flex items-center w-full gap-2 text-blue-600 hover:text-blue-800">
-                                            <!-- fixed-width arrow column (keeps same width in else) -->
-                                            <span class="w-1 shrink-0 text-left" x-text="open ? '^' : '>'"></span>
+                                            <span class="w-2 shrink-0" x-text="open ? '▾' : '▸'"></span>
 
                                             <!-- centered PO number -->
                                             <span class="flex-1 text-center">{{ $poNumber }}</span>
@@ -534,6 +537,25 @@
                                         </span>
                                     </td>
                                 @endif
+                                <!-- Actions -->
+                                <td class="px-4 py-3 whitespace-normal break-words text-center">
+                                    <div class="flex space-x-2 justify-center items-center">
+                                        @if (Auth::user()->role === 'SUPERADMIN')
+                                            <form id="delete-form-{{ $poNumber }}"
+                                                action="{{ route('purchasing.destroy', $poNumber) }}" method="POST"
+                                                class="flex items-center">
+
+                                                @csrf
+                                                @method('DELETE')
+
+                                                <button type="button" onclick="confirmDelete('{{ $poNumber }}')"
+                                                    class="bg-red-600 h-10 mt-3 hover:bg-red-700 text-white px-3 py-1 rounded text-sm">
+                                                    Delete
+                                                </button>
+                                            </form>
+                                        @endif
+                                    </div>
+                                </td>
                             </tr>
 
                             <!-- Collapsible Child Rows -->
@@ -559,6 +581,10 @@
                                         <td class="px-4 py-2">
                                             <span class="px-2 py-1 rounded-full text-xs font-semibold">-</span>
                                         </td>
+                                        <td class="px-4 py-2">
+                                            <span class="px-2 py-1 rounded-full text-xs font-semibold">-</span>
+                                        </td>
+                                       
                                     </tr>
                                 @endforeach
                             @endif
@@ -584,6 +610,19 @@
                 // Wait for table to render completely
                 window.requestAnimationFrame(() => {
                     spinner.classList.add("hidden"); // hide spinner after rendering
+                });
+            });
+        </script>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                const form = document.querySelector('#addPurchaseModal form');
+                const submitBtn = document.getElementById('createPurchaseBtn');
+
+                form.addEventListener('submit', function() {
+                    // Disable the button to prevent multiple clicks
+                    submitBtn.disabled = true;
+                    submitBtn.innerText = 'Submitting...';
                 });
             });
         </script>

@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static distinct()
  * @method static select(string $string)
  * @method static whereIn(string $string, $pluck)
+ * @method static orderBy(string $string, string $string1)
  */
 class PurchaseDepartment extends Model
 {

@@ -133,8 +133,16 @@ class PurchaseDepartmentController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(PurchaseDepartment $purchaseDepartment)
+    public function destroy($po_number): RedirectResponse
     {
-        //
+        try {
+            PurchaseDepartment::where('po_number', $po_number)->delete();
+
+            return back()->with('success', 'Purchase Order deleted successfully.');
+        } catch (Exception $e) {
+            Log::error('Error deleting purchase order: ' . $e->getMessage());
+            return back()->with('error', 'Failed to delete the Purchase Order.');
+        }
     }
+    
 }
