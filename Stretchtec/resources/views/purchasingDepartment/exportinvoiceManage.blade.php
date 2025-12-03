@@ -166,6 +166,8 @@
                             <th class="sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs font-bold uppercase text-gray-600">
                                 Unit Price</th>
                             <th class="sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs font-bold uppercase text-gray-600">
+                                Amount</th>
+                            <th class="sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs font-bold uppercase text-gray-600">
                                 Total Amount</th>
                             <th class="sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs font-bold uppercase text-gray-600">
                                 Checked By</th>
@@ -212,6 +214,7 @@
                                 <td class="px-4 py-3 text-sm">{{ $first->net_weight }}</td>
                                 <td class="px-4 py-3 text-sm">{{ number_format($first->unit_price, 2) }}</td>
                                 <td class="px-4 py-3 text-sm">{{ number_format($first->total_amount, 2) }}</td>
+                                <td class="px-4 py-3 text-sm">{{ number_format($first->invoice_value, 2) }}</td>
                                 <td class="px-4 py-3 text-sm">{{ $first->checked_by }}</td>
                                 <td class="px-4 py-3 text-sm">{{ $first->notes }}</td>
                                 <!-- Actions -->
@@ -251,6 +254,9 @@
                                         <td class="px-4 py-3 text-sm">{{ $item->checked_by }}</td>
                                         <td class="px-4 py-3 text-sm">{{ $item->notes }}</td>
 
+                                        <td class="px-4 py-3 text-sm">
+                                            -
+                                        </td>
                                         <td class="px-4 py-3 text-sm">
                                             -
                                         </td>
