@@ -373,7 +373,7 @@
                                     class="px-4 py-2 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 text-sm rounded hover:bg-gray-300">
                                     Cancel
                                 </button>
-                                <button type="submit"
+                                <button type="submit" id="createPurchaseBtn"
                                     class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white text-sm rounded">
                                     Create Purchase Order
                                 </button>
@@ -541,8 +541,8 @@
                                     <div class="flex space-x-2 justify-center items-center">
                                         @if (Auth::user()->role === 'SUPERADMIN')
                                             <form id="delete-form-{{ $poNumber }}"
-                                                action="{{ route('purchasing.destroy', $poNumber) }}"
-                                                method="POST" class="flex items-center">
+                                                action="{{ route('purchasing.destroy', $poNumber) }}" method="POST"
+                                                class="flex items-center">
 
                                                 @csrf
                                                 @method('DELETE')
@@ -608,6 +608,19 @@
                 // Wait for table to render completely
                 window.requestAnimationFrame(() => {
                     spinner.classList.add("hidden"); // hide spinner after rendering
+                });
+            });
+        </script>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                const form = document.querySelector('#addPurchaseModal form');
+                const submitBtn = document.getElementById('createPurchaseBtn');
+
+                form.addEventListener('submit', function() {
+                    // Disable the button to prevent multiple clicks
+                    submitBtn.disabled = true;
+                    submitBtn.innerText = 'Submitting...';
                 });
             });
         </script>
