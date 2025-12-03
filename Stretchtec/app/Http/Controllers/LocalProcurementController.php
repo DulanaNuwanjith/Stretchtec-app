@@ -37,9 +37,9 @@ class LocalProcurementController extends Controller
             ->latest()
             ->get();
 
-        $poNumbers = $invoiceItems->flatMap(function ($items) {
-            return $items->pluck('po_number');
-        })->unique()->toArray();
+        $poNumbers = PurchaseDepartment::orderBy('po_date', 'desc')
+            ->pluck('po_number')
+            ->unique();
 
         return view('purchasingDepartment.localinvoiceManage', compact('uniqueInvoiceNumbers', 'invoiceItems', 'orderPreparations', 'poNumbers'));
     }
