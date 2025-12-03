@@ -483,10 +483,17 @@
                                 </td>
 
                             @else
-                                <!-- Parent consolidated row -->
-                                <td colspan="8" class="text-gray-400 text-xs italic">
-                                    Click to view {{ $items->count() }} items
-                                </td>
+                                <!-- Parent shows the first item -->
+                                <td class="px-4 py-3 text-sm">{{ $first->shade }}</td>
+                                <td class="px-4 py-3 text-sm">{{ $first->color }}</td>
+                                <td class="px-4 py-3 text-sm">{{ $first->tkt }}</td>
+                                <td class="px-4 py-3 text-sm">{{ $first->pst_no }}</td>
+                                <td class="px-4 py-3 text-sm">{{ $first->supplier_comment }}</td>
+                                <td class="px-4 py-3 text-sm">{{ $first->quantity }} {{ $first->uom }}</td>
+                                <td class="px-4 py-3 text-sm">{{ $first->rate }}</td>
+                                <td class="px-4 py-3 text-sm">{{ $first->amount }}</td>
+
+                                <!-- Total + Status -->
                                 <td class="px-4 py-3 text-sm">{{ $first->total_amount }}</td>
                                 <td class="px-4 py-3 text-sm">
                                     <span class="px-2 py-1 rounded-full text-xs font-semibold
@@ -497,13 +504,15 @@
                                         {{ $first->status }}
                                     </span>
                                 </td>
+
                             @endif
                         </tr>
 
                         <!-- Collapsible Child Rows -->
                         @if($hasMultipleItems)
-                            @foreach($items as $item)
+                            @foreach($items->skip(1) as $item)
                                 <tr x-show="open" style="display: none;" class="bg-gray-50">
+
                                     <!-- Empty parent columns -->
                                     <td class="sticky left-0 z-10"></td>
                                     <td></td>
@@ -525,6 +534,7 @@
                                 </tr>
                             @endforeach
                         @endif
+
                         </tbody>
                     @endforeach
                 </table>
