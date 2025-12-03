@@ -170,8 +170,19 @@ class LocalProcurementController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(LocalProcurement $localProcurement)
+    public function destroy($id)
     {
-        //
+        try {
+            // find the specific row
+            $record = LocalProcurement::findOrFail($id);
+
+            // delete ALL rows under this invoice number
+            LocalProcurement::where('invoice_number', $record->invoice_number)->delete();
+
+            return back()->with('success', 'Invoice and all its items deleted successfully.');
+        } catch (\Exception $e) {
+            Log::error('Error deleting invoice: ' . $e->getMessage());
+            return back()->with('error', 'Failed to delete the invoice.');
+        }
     }
 }
