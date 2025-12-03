@@ -22,16 +22,26 @@ class LocalProcurementController extends Controller
      */
     public function index(): Factory|View
     {
-        $localProcurements = LocalProcurement::orderBy('id', 'desc')->paginate(10);
+        $uniqueInvoiceNumbers = LocalProcurement::select('invoice_number')
+            ->groupBy('invoice_number')
+            ->orderBy('date', 'desc')
+            ->paginate(10);
 
-        $poNumbers = PurchaseDepartment::distinct()->pluck('po_number')->toArray();
+        $invoiceItems = LocalProcurement::whereIn('invoice_number', $uniqueInvoiceNumbers->pluck('invoice_number'))
+            ->orderBy('date', 'desc')
+            ->get()
+            ->groupBy('invoice_number');
 
         $orderPreparations = ProductOrderPreperation::where('isRawMaterialOrdered', 1)
             ->where('isRawMaterialReceived', 0)
             ->latest()
             ->get();
 
-        return view('purchasingDepartment.localinvoiceManage', compact('localProcurements', 'poNumbers', 'orderPreparations'));
+        $poNumbers = PurchaseDepartment::orderBy('po_date', 'desc')
+            ->pluck('po_number')
+            ->unique();
+
+        return view('purchasingDepartment.localinvoiceManage', compact('uniqueInvoiceNumbers', 'invoiceItems', 'orderPreparations', 'poNumbers'));
     }
 
     /**
@@ -160,8 +170,19 @@ class LocalProcurementController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(LocalProcurement $localProcurement)
+    public function destroy($id)
     {
-        //
+        try {
+            // find the specific row
+            $record = LocalProcurement::findOrFail($id);
+
+            // delete ALL rows under this invoice number
+            LocalProcurement::where('invoice_number', $record->invoice_number)->delete();
+
+            return back()->with('success', 'Invoice and all its items deleted successfully.');
+        } catch (\Exception $e) {
+            Log::error('Error deleting invoice: ' . $e->getMessage());
+            return back()->with('error', 'Failed to delete the invoice.');
+        }
     }
 }

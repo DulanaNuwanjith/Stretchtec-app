@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 /**
  * @method static orderBy(string $string, string $string1)
  * @method static create(array $all)
+ * @method static select(string $string)
+ * @method static whereIn(string $string, $pluck)
  */
 class LocalProcurement extends Model
 {

@@ -522,6 +522,7 @@ class SamplePreparationRnDController extends Controller
                 ->where('size', $prep->sampleInquiry?->size)
                 ->where('shade', $prep->shade)
                 ->where('supplier', $prep->yarnSupplier)
+                ->where('tkt', $prep->tkt)
                 ->where('pst_no', $prep->pst_no)
                 ->first();
 

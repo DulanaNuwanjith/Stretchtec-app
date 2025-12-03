@@ -163,7 +163,7 @@
                                 <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">{{ $item->shade }}
                                 </td>
                                 <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">
-                                    {{ $item->qty_available }} {{ $item->uom === 'p' ? 'p' : 'y' }}
+                                    {{ $item->qty_available }} {{ $item->uom === 'pcs' ? 'pcs' : 'y' }}
                                 </td>
                                 <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">
                                     {{ $item->notes ?? '-' }}</td>
@@ -204,6 +204,8 @@
                         @endforelse
                     </tbody>
                 </table>
+            </div>
+             <div class="py-6 flex justify-center">
                 {{ $stock->links() }}
             </div>
 
@@ -253,7 +255,7 @@
                                             class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                             <option value="m">Meters</option>
                                             <option value="y">Yards</option>
-                                            <option value="p">Pieces</option>
+                                            <option value="pcs">Pieces</option>
                                         </select>
                                     </div>
                                 </div>

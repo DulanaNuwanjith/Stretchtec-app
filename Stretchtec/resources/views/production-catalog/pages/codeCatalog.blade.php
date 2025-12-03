@@ -537,7 +537,7 @@
                                                         </div>
                                                     @else
                                                         {{-- Read-only display (single shade OR unauthorized role) --}}
-                                                        <span class="readonly">{{ $catalog->shade }}</span>
+                                                        <span class="readonly">{{ $catalog->shade }} - {{ $catalog->option }}</span>
                                                     @endif
                                                 </td>
 

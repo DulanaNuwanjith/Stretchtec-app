@@ -185,6 +185,7 @@ class SampleInquiry extends Model
                     ->where('size', $inquiry->size)
                     ->where('shade', $rnd->shade)
                     ->where('supplier', $rnd->yarnSupplier)
+                    ->where('tkt', $rnd->tkt)
                     ->where('pst_no', $rnd->pst_no)
                     ->first();
 
