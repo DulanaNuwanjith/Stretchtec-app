@@ -467,7 +467,7 @@
                                         <button @click="open = !open"
                                             class="flex items-center w-full gap-2 text-blue-600 hover:text-blue-800">
                                             <!-- fixed-width arrow column (keeps same width in else) -->
-                                            <span class="w-4 shrink-0 text-left" x-text="open ? '^' : '>'"></span>
+                                            <span class="w-1 shrink-0 text-left" x-text="open ? '^' : '>'"></span>
 
                                             <!-- centered PO number -->
                                             <span class="flex-1 text-center">{{ $poNumber }}</span>
@@ -475,7 +475,7 @@
                                     @else
                                         <div class="flex items-center w-full gap-2">
                                             <!-- invisible placeholder to preserve left spacing -->
-                                            <span class="w-4 shrink-0 opacity-0" aria-hidden="true">></span>
+                                            <span class="w-1 shrink-0 opacity-0" aria-hidden="true">></span>
 
                                             <!-- centered PO number -->
                                             <span class="flex-1 text-center">{{ $poNumber }}</span>
