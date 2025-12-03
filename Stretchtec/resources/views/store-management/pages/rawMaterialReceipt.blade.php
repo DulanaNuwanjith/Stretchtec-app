@@ -168,7 +168,7 @@
                     <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
                     @forelse ($exportRawMaterials as $material)
                         <tr class="odd:bg-white even:bg-gray-50 border-b border-gray-200 text-center">
-                            <td class="px-4 py-3 text-gray-800 dark:text-gray-200 border-r">
+                            <td class="sticky left-0 z-10 bg-white px-4 py-3 text-sm bg-gray-100 border-r border-gray-300 text-left whitespace-normal break-words font-bold">
                                 {{ $material->supplier }}
                             </td>
 
