@@ -465,12 +465,21 @@
                                 <td class="sticky left-0 z-20 bg-white border-r px-4 py-3 text-sm font-bold">
                                     @if ($hasMultipleItems)
                                         <button @click="open = !open"
-                                            class="flex items-center gap-2 text-blue-600 hover:text-blue-800 mx-auto">
-                                            <span x-text="open ? '^' : '>'"></span>
-                                            {{ $poNumber }}
+                                            class="flex items-center w-full gap-2 text-blue-600 hover:text-blue-800">
+                                            <!-- fixed-width arrow column (keeps same width in else) -->
+                                            <span class="w-4 shrink-0 text-left" x-text="open ? '^' : '>'"></span>
+
+                                            <!-- centered PO number -->
+                                            <span class="flex-1 text-center">{{ $poNumber }}</span>
                                         </button>
                                     @else
-                                        {{ $poNumber }}
+                                        <div class="flex items-center w-full gap-2">
+                                            <!-- invisible placeholder to preserve left spacing -->
+                                            <span class="w-4 shrink-0 opacity-0" aria-hidden="true">></span>
+
+                                            <!-- centered PO number -->
+                                            <span class="flex-1 text-center">{{ $poNumber }}</span>
+                                        </div>
                                     @endif
                                 </td>
 
