@@ -336,11 +336,14 @@
                         <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs text-gray-600 dark:text-gray-300 uppercase">
                             Quantity
                         </th>
-                        <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs text-gray-600 dark:text-gray-300 uppercase">
-                            Total Amount
-                        </th>
                         <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-40 text-xs text-gray-600 dark:text-gray-300 uppercase">
                             Supplier Comment
+                        </th>
+                        <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs text-gray-600 dark:text-gray-300 uppercase">
+                            Amount
+                        </th>
+                        <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs text-gray-600 dark:text-gray-300 uppercase">
+                            Total Amount
                         </th>
                         <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase">
                             Status
@@ -360,8 +363,9 @@
                             <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">{{ $proc->pst_no }}</td>
                             <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">{{ $proc->tkt }}</td>
                             <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">{{ $proc->quantity }} {{ $proc->uom }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">{{ $proc->total_price }}</td>
                             <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words whitespace-normal">{{ $proc->supplier_comment }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">{{ $proc->total_price }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">{{ $proc->invoice_value }}</td>
                             <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">
                         <span class="px-2 py-1 rounded-full text-xs font-semibold
                             @if($proc->status === 'pending') bg-yellow-100 text-yellow-800

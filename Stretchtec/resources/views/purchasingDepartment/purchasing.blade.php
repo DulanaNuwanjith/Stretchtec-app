@@ -411,21 +411,21 @@
                                 PO
                                 Date
                             </th>
-                            <th class="sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs font-bold uppercase text-gray-600">
+                            <th class="sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs font-bold uppercase text-gray-600">
                                 Supplier
                             </th>
 
                             <!-- Only shown for item rows -->
-                            <th class="sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs font-bold uppercase text-gray-600">
+                            <th class="sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs font-bold uppercase text-gray-600">
                                 Shade
                             </th>
-                            <th class="sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs font-bold uppercase text-gray-600">
+                            <th class="sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs font-bold uppercase text-gray-600">
                                 Color
                             </th>
-                            <th class="sticky top-0 bg-gray-200 px-4 py-3 w-24 text-xs font-bold uppercase text-gray-600">
+                            <th class="sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs font-bold uppercase text-gray-600">
                                 TKT
                             </th>
-                            <th class="sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs font-bold uppercase text-gray-600">
+                            <th class="sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs font-bold uppercase text-gray-600">
                                 PST No
                             </th>
                             <th class="sticky top-0 bg-gray-200 px-4 py-3 w-40 text-xs font-bold uppercase text-gray-600">
@@ -437,13 +437,13 @@
                             <th class="sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs font-bold uppercase text-gray-600">
                                 Rate
                             </th>
-                            <th class="sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs font-bold uppercase text-gray-600">
+                            <th class="sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs font-bold uppercase text-gray-600">
                                 Amount
                             </th>
-                            <th class="sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs font-bold uppercase text-gray-600">
+                            <th class="sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs font-bold uppercase text-gray-600">
                                 Total Amount
                             </th>
-                            <th class="sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs font-bold uppercase text-gray-600">
+                            <th class="sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs font-bold uppercase text-gray-600">
                                 Status
                             </th>
 
