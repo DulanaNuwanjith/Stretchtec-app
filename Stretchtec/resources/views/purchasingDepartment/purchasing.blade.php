@@ -446,7 +446,9 @@
                             <th class="sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs font-bold uppercase text-gray-600">
                                 Status
                             </th>
-
+                            <th class="sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs font-bold uppercase text-gray-600">
+                                Actions
+                            </th>
                         </tr>
                     </thead>
 
@@ -534,6 +536,25 @@
                                         </span>
                                     </td>
                                 @endif
+                                <!-- Actions -->
+                                <td class="px-4 py-3 whitespace-normal break-words text-center">
+                                    <div class="flex space-x-2 justify-center items-center">
+                                        @if (Auth::user()->role === 'SUPERADMIN')
+                                            <form id="delete-form-{{ $poNumber }}"
+                                                action="{{ route('purchasing.destroy', $poNumber) }}"
+                                                method="POST" class="flex items-center">
+
+                                                @csrf
+                                                @method('DELETE')
+
+                                                <button type="button" onclick="confirmDelete('{{ $poNumber }}')"
+                                                    class="bg-red-600 h-10 mt-3 hover:bg-red-700 text-white px-3 py-1 rounded text-sm">
+                                                    Delete
+                                                </button>
+                                            </form>
+                                        @endif
+                                    </div>
+                                </td>
                             </tr>
 
                             <!-- Collapsible Child Rows -->
@@ -556,6 +577,9 @@
                                         <td class="px-4 py-2">{{ $item->rate }}</td>
                                         <td class="px-4 py-2">{{ $item->amount }}</td>
                                         <td class="px-4 py-2">-</td>
+                                        <td class="px-4 py-2">
+                                            <span class="px-2 py-1 rounded-full text-xs font-semibold">-</span>
+                                        </td>
                                         <td class="px-4 py-2">
                                             <span class="px-2 py-1 rounded-full text-xs font-semibold">-</span>
                                         </td>
