@@ -20,8 +20,17 @@ class ExportProcurementController extends Controller
      */
     public function index(): Factory|View
     {
-        $exportProcurements = ExportProcurement::latest()->paginate(10);
-        return view('purchasingDepartment.exportinvoiceManage', compact('exportProcurements'));
+        $uniqueInvoiceNumbers = ExportProcurement::select('invoice_number')
+            ->groupBy('invoice_number')
+            ->orderBy('date', 'desc')
+            ->paginate(10);
+
+        $invoiceItems = ExportProcurement::whereIn('invoice_number', $uniqueInvoiceNumbers->pluck('invoice_number'))
+            ->orderBy('date', 'desc')
+            ->get()
+            ->groupBy('invoice_number');
+
+        return view('purchasingDepartment.exportinvoiceManage', compact('uniqueInvoiceNumbers', 'invoiceItems'));
     }
 
     public function exportRawIndex(): Factory|View

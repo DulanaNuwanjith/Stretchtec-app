@@ -129,133 +129,128 @@
                 </div>
             </div>
 
-            {{-- ===================== TABLE CONTAINER ===================== --}}
+            {{-- ===================== COLLAPSIBLE EXPORT PROCUREMENT TABLE ===================== --}}
             <div class="overflow-x-auto max-h-[1200px] bg-white dark:bg-gray-900 shadow rounded-lg">
+
                 <!-- Spinner -->
                 <div id="pageLoadingSpinner"
-                    class="fixed inset-0 z-50 bg-white bg-opacity-80 flex flex-col items-center justify-center">
+                     class="fixed inset-0 z-50 bg-white bg-opacity-80 flex flex-col items-center justify-center">
                     <svg class="animate-spin h-10 w-10 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none"
-                        viewBox="0 0 24 24">
+                         viewBox="0 0 24 24">
                         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
-                            stroke-width="4"></circle>
+                                stroke-width="4"></circle>
                         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
                     </svg>
                     <p class="mt-3 text-gray-700 font-semibold">Loading data...</p>
                 </div>
+
                 <table class="table-fixed w-full text-sm divide-y divide-gray-200 dark:divide-gray-700">
                     <thead class="bg-gray-200 dark:bg-gray-700 text-left">
-                        <tr class="text-center">
+                    <tr class="text-center">
 
-                            <th
-                                class="font-bold sticky left-0 z-10 bg-white px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase">
-                                Invoice No
-                            </th>
+                        <!-- Parent Columns -->
+                        <th class="sticky left-0 top-0 bg-white z-20 px-4 py-3 w-32 text-xs font-bold uppercase text-gray-600">
+                            Invoice No
+                        </th>
+                        <th class="sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs font-bold uppercase text-gray-600">Date</th>
+                        <th class="sticky top-0 bg-gray-200 px-4 py-3 w-40 text-xs font-bold uppercase text-gray-600">Supplier</th>
 
-                            <th
-                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase">
-                                Date
-                            </th>
+                        <!-- Item Columns -->
+                        <th class="sticky top-0 bg-gray-200 px-4 py-3 w-44 text-xs font-bold uppercase text-gray-600">Product Description</th>
+                        <th class="sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs font-bold uppercase text-gray-600">Net Weight</th>
+                        <th class="sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs font-bold uppercase text-gray-600">Unit Price</th>
+                        <th class="sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs font-bold uppercase text-gray-600">Total Amount</th>
+                        <th class="sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs font-bold uppercase text-gray-600">Checked By</th>
+                        <th class="sticky top-0 bg-gray-200 px-4 py-3 w-40 text-xs font-bold uppercase text-gray-600">Notes</th>
+                        <th class="sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs font-bold uppercase text-gray-600">Actions</th>
 
-                            <th
-                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase">
-                                Supplier
-                            </th>
-
-                            <th
-                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase">
-                                Product Description
-                            </th>
-
-                            <th
-                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs text-gray-600 dark:text-gray-300 uppercase">
-                                Net Weight
-                            </th>
-
-                            <th
-                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs text-gray-600 dark:text-gray-300 uppercase">
-                                Unit Price
-                            </th>
-
-                            <th
-                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase">
-                                Total Amount
-                            </th>
-
-                            <th
-                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase">
-                                Checked By
-                            </th>
-
-                            <th
-                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase">
-                                Notes
-                            </th>
-
-                            <th
-                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase">
-                                Actions
-                            </th>
-
-                        </tr>
+                    </tr>
                     </thead>
 
-                    <tbody class="divide-y divide-gray-200 dark:divide-gray-700 text-center">
-                        @forelse($exportProcurements as $exp)
-                            <tr class="odd:bg-white even:bg-gray-50 border-b border-gray-200 text-center">
+                    @foreach ($invoiceItems as $invoiceNumber => $items)
+                        @php
+                            $hasMultiple = $items->count() > 1;
+                            $first = $items->first();
+                        @endphp
 
-                                <td
-                                    class="sticky left-0 z-10 bg-white px-4 py-3 text-sm bg-gray-100 border-r border-gray-300 text-center whitespace-normal break-words font-bold">
-                                    {{ $exp->invoice_number }}</td>
-                                <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">
-                                    {{ $exp->date }}</td>
-                                <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">
-                                    {{ $exp->supplier }}</td>
-                                <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">
-                                    {{ $exp->product_description }}
-                                </td>
-                                <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">
-                                    {{ $exp->net_weight }}</td>
-                                <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">
-                                    {{ number_format($exp->unit_price, 2) }}</td>
-                                <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">
-                                    {{ number_format($exp->total_amount, 2) }}</td>
-                                <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">
-                                    {{ $exp->checked_by }}</td>
-                                <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">
-                                    {{ $exp->notes }}</td>
+                        <tbody x-data="{ open: false }"
+                               class="divide-y divide-gray-200 dark:divide-gray-700 text-center border-b">
 
-                                <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center">
-                                    <button onclick="openEditModal('{{ $exp->id }}')"
-                                        class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs shadow-sm mt-2">
-                                        Edit
+                        <!-- ===================== PARENT ROW ===================== -->
+                        <tr class="bg-gray-100">
+
+                            <!-- Expand/Collapse -->
+                            <td class="sticky left-0 z-20 bg-white border-r px-4 py-3 text-sm font-bold">
+                                @if ($hasMultiple)
+                                    <button @click="open = !open"
+                                            class="flex items-center w-full gap-2 text-blue-600 hover:text-blue-800">
+                                        <span class="w-2 shrink-0" x-text="open ? '▾' : '▸'"></span>
+                                        <span class="flex-1 text-center">{{ $invoiceNumber }}</span>
                                     </button>
+                                @else
+                                    <div class="flex items-center w-full gap-2">
+                                        <span class="w-2 shrink-0 opacity-0">▸</span>
+                                        <span class="flex-1 text-center">{{ $invoiceNumber }}</span>
+                                    </div>
+                                @endif
+                            </td>
 
-                                    <button onclick="confirmDelete('{{ $exp->id }}')"
-                                        class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg text-xs shadow-sm mt-2">
-                                        Delete
-                                    </button>
-                                </td>
+                            <td class="px-4 py-3 text-sm">{{ $first->date }}</td>
+                            <td class="px-4 py-3 text-sm">{{ $first->supplier }}</td>
 
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="9" class="px-4 py-4 text-gray-500 text-center">
-                                    No export procurement records found.
-                                </td>
-                            </tr>
-                        @endforelse
-                    </tbody>
+                            <td class="px-4 py-3 text-sm">{{ $first->product_description }}</td>
+                            <td class="px-4 py-3 text-sm">{{ $first->net_weight }}</td>
+                            <td class="px-4 py-3 text-sm">{{ number_format($first->unit_price, 2) }}</td>
+                            <td class="px-4 py-3 text-sm">{{ number_format($first->total_amount, 2) }}</td>
+                            <td class="px-4 py-3 text-sm">{{ $first->checked_by }}</td>
+                            <td class="px-4 py-3 text-sm">{{ $first->notes }}</td>
+
+                            <td class="px-4 py-3 text-sm">
+                                <button onclick="confirmDelete('{{ $first->id }}')"
+                                        class="px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded text-xs shadow-sm mt-1 block">
+                                    Delete
+                                </button>
+                            </td>
+                        </tr>
+
+                        <!-- ===================== CHILD ROWS ===================== -->
+                        @if ($hasMultiple)
+                            @foreach ($items->skip(1) as $item)
+                                <tr x-show="open" style="display: none;" class="bg-gray-50">
+
+                                    <td class="sticky left-0 border-r bg-white"></td>
+                                    <td class="px-4 py-3 text-sm">-</td>
+                                    <td class="px-4 py-3 text-sm">-</td>
+
+                                    <td class="px-4 py-3 text-sm">{{ $item->product_description }}</td>
+                                    <td class="px-4 py-3 text-sm">{{ $item->net_weight }}</td>
+                                    <td class="px-4 py-3 text-sm">{{ number_format($item->unit_price, 2) }}</td>
+                                    <td class="px-4 py-3 text-sm">{{ number_format($item->total_amount, 2) }}</td>
+                                    <td class="px-4 py-3 text-sm">{{ $item->checked_by }}</td>
+                                    <td class="px-4 py-3 text-sm">{{ $item->notes }}</td>
+
+                                    <td class="px-4 py-3 text-sm">
+                                        -
+                                    </td>
+
+
+                                </tr>
+                            @endforeach
+                        @endif
+
+                        </tbody>
+                    @endforeach
+
                 </table>
             </div>
 
-            {{-- ===================== PAGINATION ===================== --}}
+            {{-- Pagination --}}
             <div class="p-3 border-t border-gray-200 dark:border-gray-700">
-                {{ $exportProcurements->links() }}
+                {{ $uniqueInvoiceNumbers->links() }}
             </div>
 
-        </div>
 
-        {{-- ===================== DELETE CONFIRMATION ===================== --}}
+            {{-- ===================== DELETE CONFIRMATION ===================== --}}
         <script>
             function confirmDelete(id) {
                 if (confirm("Are you sure you want to delete this record?")) {
