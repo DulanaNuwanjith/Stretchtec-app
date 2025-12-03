@@ -329,46 +329,45 @@
                 <table class="table-fixed w-full text-sm divide-y divide-gray-200 dark:divide-gray-700">
                     <thead class="bg-gray-200 dark:bg-gray-700 text-left">
                         <tr class="text-center">
-
                             <!-- Parent Row Columns -->
                             <th
-                                class="sticky left-0 top-0 bg-white z-20 px-4 py-3 w-32 text-xs font-bold uppercase text-gray-600">
+                                class="sticky left-0 top-0 z-20 px-4 py-3 w-32 text-xs font-bold uppercase text-gray-600 bg-gray-200">
                                 Invoice No
                             </th>
 
-                            <th class="sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs font-bold uppercase text-gray-600">
+                            <th class="sticky top-0 px-4 py-3 w-32 text-xs font-bold uppercase text-gray-600 bg-gray-200">
                                 Date
                             </th>
-                            <th class="sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs font-bold uppercase text-gray-600">
+                            <th class="sticky top-0 px-4 py-3 w-32 text-xs font-bold uppercase text-gray-600 bg-gray-200">
                                 PO Number
                             </th>
-                            <th class="sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs font-bold uppercase text-gray-600">
+                            <th class="sticky top-0 px-4 py-3 w-32 text-xs font-bold uppercase text-gray-600 bg-gray-200">
                                 Supplier
                             </th>
 
-                            <!-- Item row columns -->
-                            <th class="sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs font-bold uppercase text-gray-600">
+                            <!-- Other Columns -->
+                            <th class="sticky top-0 px-4 py-3 w-28 text-xs font-bold uppercase text-gray-600 bg-gray-200">
                                 Color</th>
-                            <th class="sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs font-bold uppercase text-gray-600">
+                            <th class="sticky top-0 px-4 py-3 w-28 text-xs font-bold uppercase text-gray-600 bg-gray-200">
                                 Shade</th>
-                            <th class="sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs font-bold uppercase text-gray-600">
+                            <th class="sticky top-0 px-4 py-3 w-28 text-xs font-bold uppercase text-gray-600 bg-gray-200">
                                 PST No</th>
-                            <th class="sticky top-0 bg-gray-200 px-4 py-3 w-24 text-xs font-bold uppercase text-gray-600">
+                            <th class="sticky top-0 px-4 py-3 w-24 text-xs font-bold uppercase text-gray-600 bg-gray-200">
                                 TKT</th>
-                            <th class="sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs font-bold uppercase text-gray-600">
+                            <th class="sticky top-0 px-4 py-3 w-28 text-xs font-bold uppercase text-gray-600 bg-gray-200">
                                 Quantity</th>
-                            <th class="sticky top-0 bg-gray-200 px-4 py-3 w-40 text-xs font-bold uppercase text-gray-600">
-                                Supplier Comment
-                            </th>
-                            <th class="sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs font-bold uppercase text-gray-600">
+                            <th class="sticky top-0 px-4 py-3 w-40 text-xs font-bold uppercase text-gray-600 bg-gray-200">
+                                Supplier Comment</th>
+                            <th class="sticky top-0 px-4 py-3 w-28 text-xs font-bold uppercase text-gray-600 bg-gray-200">
                                 Amount</th>
-                            <th class="sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs font-bold uppercase text-gray-600">
+                            <th class="sticky top-0 px-4 py-3 w-28 text-xs font-bold uppercase text-gray-600 bg-gray-200">
                                 Total Amount</th>
-                            <th class="sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs font-bold uppercase text-gray-600">
+                            <th class="sticky top-0 px-4 py-3 w-32 text-xs font-bold uppercase text-gray-600 bg-gray-200">
                                 Status</th>
-                            <th class="sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs font-bold uppercase text-gray-600">
-                                Actions</th>
 
+                            <th class="sticky top-0 px-4 py-3 w-32 text-xs font-bold uppercase text-gray-600 bg-gray-200">
+                                Actions
+                            </th>
                         </tr>
                     </thead>
 

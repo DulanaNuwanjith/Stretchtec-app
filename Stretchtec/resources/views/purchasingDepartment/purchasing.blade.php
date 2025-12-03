@@ -398,7 +398,7 @@
                     <p class="mt-3 text-gray-700 font-semibold">Loading data...</p>
                 </div>
 
-                <table class="table-fixed w-full text-sm divide-y divide-gray-200 dark:divide-gray-700">
+                <table class="w-full text-sm divide-y divide-gray-200 dark:divide-gray-700">
                     <thead class="bg-gray-200 dark:bg-gray-700 text-left">
                         <tr class="text-center">
 
@@ -446,9 +446,11 @@
                             <th class="sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs font-bold uppercase text-gray-600">
                                 Status
                             </th>
+
                             <th class="sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs font-bold uppercase text-gray-600">
                                 Actions
                             </th>
+
                         </tr>
                     </thead>
 
@@ -582,6 +584,7 @@
                                         <td class="px-4 py-2">
                                             <span class="px-2 py-1 rounded-full text-xs font-semibold">-</span>
                                         </td>
+                                       
                                     </tr>
                                 @endforeach
                             @endif

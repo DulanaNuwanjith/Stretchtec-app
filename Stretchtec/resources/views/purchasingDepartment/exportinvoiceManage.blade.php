@@ -218,7 +218,8 @@
                                 <td class="px-4 py-3 whitespace-normal break-words text-center">
                                     <div class="flex space-x-2 justify-center items-center">
                                         @if (Auth::user()->role === 'SUPERADMIN')
-                                            <form id="delete-form-{{ $first->id }}" action="{{ route('exportinvoiceManage.destroy', $first->id) }}"
+                                            <form id="delete-form-{{ $first->id }}"
+                                                action="{{ route('exportinvoiceManage.destroy', $first->id) }}"
                                                 method="POST" class="flex items-center">
 
                                                 @csrf
