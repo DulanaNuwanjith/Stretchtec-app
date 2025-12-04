@@ -326,7 +326,7 @@
                     <p class="mt-3 text-gray-700 font-semibold">Loading data...</p>
                 </div>
 
-                <table class="min-w-full border-collapse">
+                <table class="table-fixed w-full text-sm divide-y divide-gray-200 dark:divide-gray-700">
                     <thead class="bg-gray-100 dark:bg-gray-700">
                         <tr class="text-center">
                             <!-- Parent Row Columns -->
@@ -362,6 +362,10 @@
                                 Amount</th>
                             <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                 Total Amount</th>
+                             <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                Checked By</th>
+                            <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-40 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                Notes</th>
                             <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                 Status</th>
 
@@ -408,9 +412,10 @@
                                 <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">{{ $first->tkt }}</td>
                                 <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">{{ $first->quantity }} {{ $first->uom }}</td>
                                 <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">{{ $first->supplier_comment }}</td>
-                                <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">{{ $first->total_price }}</td>
-                                <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">{{ $first->invoice_value }}</td>
-
+                                <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">{{ number_format($first->total_price, 2) }}</td>
+                                <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">{{ number_format($first->invoice_value, 2) }}</td>
+                                 <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">{{ $first->approved_by }}</td>
+                                <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">{{ $first->notes }}</td>
                                 <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">
                                     <span
                                         class="px-2 py-1 rounded-full text-xs font-semibold
@@ -450,25 +455,34 @@
 
                                         <!-- empty for alignment -->
                                         <td class="sticky left-0 z-10 border-r bg-white"></td>
-                                        <td class="px-2 py-4 text-sm text-gray-800 dark:text-gray-200 border-r"></td>
-                                        <td class="px-2 py-4 text-sm text-gray-800 dark:text-gray-200 border-r"></td>
-                                        <td class="px-2 py-4 text-sm text-gray-800 dark:text-gray-200 border-r"></td>
+                                        <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center"></td>
+                                        <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center"></td>
+                                        <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center"></td>
 
-                                        <td class="px-2 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">{{ $item->color }}</td>
-                                        <td class="px-2 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">{{ $item->shade }}</td>
-                                        <td class="px-2 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">{{ $item->pst_no }}</td>
-                                        <td class="px-2 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">{{ $item->tkt }}</td>
+                                        <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center">{{ $item->color }}</td>
+                                        <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center">{{ $item->shade }}</td>
+                                        <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center">{{ $item->pst_no }}</td>
+                                        <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center">{{ $item->tkt }}</td>
 
-                                        <td class="px-2 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">
+                                        <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center">
                                             {{ $item->quantity }} {{ $item->uom }}
                                         </td>
 
-                                        <td class="px-2 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">{{ $item->supplier_comment }}</td>
-                                        <td class="px-2 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">{{ $item->total_price }}</td>
-                                        <td class="px-2 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">-</td>
+                                        <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center">{{ $item->supplier_comment }}</td>
+                                        <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center">{{ $item->total_price }}</td>
+                                        <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center">-</td>
 
-                                        <td class="px-2 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">
+                                        <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center">
                                             <span class="px-2 py-1 rounded-full text-xs font-semibold">-</span>
+                                        </td>
+                                        <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center">
+                                            <span class="px-2 py-1 rounded-full text-xs font-semibold">-</span>
+                                        </td>
+                                        <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center">
+                                            <span class="px-2 py-1 rounded-full text-xs font-semibold">-</span>
+                                        </td>
+                                        <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center">
+                                            <span class="px-2 py-1 rounded-full text-xs font-semibold"></span>
                                         </td>
                                     </tr>
                                 @endforeach

@@ -145,35 +145,35 @@
                 </div>
 
                 <table class="table-fixed w-full text-sm divide-y divide-gray-200 dark:divide-gray-700">
-                    <thead class="bg-gray-200 dark:bg-gray-700 text-left">
+                    <thead class="bg-gray-200 dark:bg-gray-700">
                         <tr class="text-center">
 
                             <!-- Parent Columns -->
                             <th
-                                class="sticky left-0 top-0 bg-white z-20 px-4 py-3 w-32 text-xs font-bold uppercase text-gray-600">
+                                class="font-bold sticky left-0 z-10 bg-white px-4 py-3 w-36 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                 Invoice No
                             </th>
-                            <th class="sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs font-bold uppercase text-gray-600">
+                            <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-36 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                 Date</th>
-                            <th class="sticky top-0 bg-gray-200 px-4 py-3 w-40 text-xs font-bold uppercase text-gray-600">
+                            <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-40 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                 Supplier</th>
 
                             <!-- Item Columns -->
-                            <th class="sticky top-0 bg-gray-200 px-4 py-3 w-44 text-xs font-bold uppercase text-gray-600">
+                            <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-36 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                 Product Description</th>
-                            <th class="sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs font-bold uppercase text-gray-600">
+                            <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                 Net Weight</th>
-                            <th class="sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs font-bold uppercase text-gray-600">
+                            <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                 Unit Price</th>
-                            <th class="sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs font-bold uppercase text-gray-600">
+                            <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                 Amount</th>
-                            <th class="sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs font-bold uppercase text-gray-600">
+                            <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                 Total Amount</th>
-                            <th class="sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs font-bold uppercase text-gray-600">
+                            <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                 Checked By</th>
-                            <th class="sticky top-0 bg-gray-200 px-4 py-3 w-40 text-xs font-bold uppercase text-gray-600">
+                            <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-40 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                 Notes</th>
-                            <th class="sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs font-bold uppercase text-gray-600">
+                            <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                 Actions</th>
 
                         </tr>
@@ -186,13 +186,13 @@
                         @endphp
 
                         <tbody x-data="{ open: false }"
-                            class="divide-y divide-gray-200 dark:divide-gray-700 text-center border-b">
+                            class="divide-y divide-gray-200 dark:divide-gray-600">
 
                             <!-- ===================== PARENT ROW ===================== -->
-                            <tr class="bg-gray-100">
+                            <tr class="odd:bg-white even:bg-gray-50 border-b border-gray-200 text-center">
 
                                 <!-- Expand/Collapse -->
-                                <td class="sticky left-0 z-20 bg-white border-r px-4 py-3 text-sm font-bold">
+                                <td class="sticky left-0 z-10 bg-white px-4 py-3 text-sm bg-gray-100 border-r border-gray-300 text-left whitespace-normal break-words font-bold">
                                     @if ($hasMultiple)
                                         <button @click="open = !open"
                                             class="flex items-center w-full gap-2 text-blue-600 hover:text-blue-800">
@@ -207,18 +207,18 @@
                                     @endif
                                 </td>
 
-                                <td class="px-4 py-3 text-sm">{{ $first->date }}</td>
-                                <td class="px-4 py-3 text-sm">{{ $first->supplier }}</td>
+                                <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">{{ $first->date }}</td>
+                                <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">{{ $first->supplier }}</td>
 
-                                <td class="px-4 py-3 text-sm">{{ $first->product_description }}</td>
-                                <td class="px-4 py-3 text-sm">{{ $first->net_weight }}</td>
-                                <td class="px-4 py-3 text-sm">{{ number_format($first->unit_price, 2) }}</td>
-                                <td class="px-4 py-3 text-sm">{{ number_format($first->total_amount, 2) }}</td>
-                                <td class="px-4 py-3 text-sm">{{ number_format($first->invoice_value, 2) }}</td>
-                                <td class="px-4 py-3 text-sm">{{ $first->checked_by }}</td>
-                                <td class="px-4 py-3 text-sm">{{ $first->notes }}</td>
+                                <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">{{ $first->product_description }}</td>
+                                <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">{{ $first->net_weight }}</td>
+                                <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">{{ number_format($first->unit_price, 2) }}</td>
+                                <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">{{ number_format($first->total_amount, 2) }}</td>
+                                <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">{{ number_format($first->invoice_value, 2) }}</td>
+                                <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">{{ $first->checked_by }}</td>
+                                <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">{{ $first->notes }}</td>
                                 <!-- Actions -->
-                                <td class="px-4 py-3 whitespace-normal break-words text-center">
+                                <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">
                                     <div class="flex space-x-2 justify-center items-center">
                                         @if (Auth::user()->role === 'SUPERADMIN')
                                             <form id="delete-form-{{ $first->id }}"
@@ -244,21 +244,21 @@
                                     <tr x-show="open" style="display: none;" class="bg-gray-50">
 
                                         <td class="sticky left-0 border-r bg-white"></td>
-                                        <td class="px-4 py-3 text-sm"></td>
-                                        <td class="px-4 py-3 text-sm"></td>
+                                        <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center"></td>
+                                        <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center"></td>
 
-                                        <td class="px-4 py-3 text-sm">{{ $item->product_description }}</td>
-                                        <td class="px-4 py-3 text-sm">{{ $item->net_weight }}</td>
-                                        <td class="px-4 py-3 text-sm">{{ number_format($item->unit_price, 2) }}</td>
-                                        <td class="px-4 py-3 text-sm">{{ number_format($item->total_amount, 2) }}</td>
-                                        <td class="px-4 py-3 text-sm">{{ $item->checked_by }}</td>
-                                        <td class="px-4 py-3 text-sm">{{ $item->notes }}</td>
+                                        <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center">{{ $item->product_description }}</td>
+                                        <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center">{{ $item->net_weight }}</td>
+                                        <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center">{{ number_format($item->unit_price, 2) }}</td>
+                                        <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center">{{ number_format($item->total_amount, 2) }}</td>
+                                        <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center">{{ $item->checked_by }}</td>
+                                        <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center">{{ $item->notes }}</td>
 
-                                        <td class="px-4 py-3 text-sm">
+                                        <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center">
                                             -
                                         </td>
-                                        <td class="px-4 py-3 text-sm">
-                                            -
+                                        <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center">
+                            
                                         </td>
 
 
@@ -273,7 +273,7 @@
             </div>
 
             {{-- Pagination --}}
-            <div class="p-3 border-t border-gray-200 dark:border-gray-700">
+            <div class="py-6 flex justify-center">
                 {{ $uniqueInvoiceNumbers->links() }}
             </div>
         </div>
