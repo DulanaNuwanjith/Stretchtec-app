@@ -83,4 +83,30 @@ class RawMaterialStoreController extends Controller
 
         return redirect()->route('rawMaterial.index')->with('success', 'Raw material deleted successfully!');
     }
+
+    public function borrow(Request $request, $id): RedirectResponse
+    {
+        $request->validate([
+            'borrow_qty' => 'required|integer|min:1',
+        ]);
+
+        $material = RawMaterialStore::findOrFail($id);
+
+        if ($material->available_quantity < $request->borrow_qty) {
+            return back()->with('error', 'Insufficient quantity to borrow.');
+        }
+
+        // Deduct quantity
+        $material->available_quantity -= $request->borrow_qty;
+
+        if ($material->available_quantity <= 0) {
+            // Delete record if fully borrowed
+            $material->delete();
+            return back()->with('success', 'All quantity borrowed. Record deleted!');
+        } else {
+            $material->save();
+            return back()->with('success', 'Borrowed ' . $request->borrow_qty . ' ' . $material->unit . ' successfully!');
+        }
+    }
+
 }

@@ -333,6 +333,11 @@
                                             @csrf
                                             @method('DELETE')
                                         </form>
+                                        <button type="button"
+                                            onclick="openBorrowModal({{ $material->id }}, '{{ $material->shade }}')"
+                                            class="bg-yellow-500 mt-1 hover:bg-yellow-600 text-white font-semibold py-1 px-2 rounded shadow">
+                                            Borrow
+                                        </button>
                                     </div>
                                 </td>
                             </tr>
@@ -344,7 +349,45 @@
                 {{ $rawMaterials->links() }}
             </div>
         </div>
-         
+
+        <div id="borrowModal" class="fixed inset-0 z-50 hidden bg-black bg-opacity-50 flex items-center justify-center">
+            <div class="bg-white p-6 rounded-xl w-96 shadow-lg" onclick="event.stopPropagation()">
+                <h2 class="text-xl font-bold text-gray-800 mb-4">Borrow Raw Material</h2>
+
+                <form id="borrowForm" method="POST">
+                    @csrf
+                    <input type="hidden" id="borrow_material_id" name="id">
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Quantity to Borrow</label>
+                        <input type="number" id="borrow_qty" name="borrow_qty" min="1" required
+                            class="w-full mt-1 px-3 py-2 border rounded" placeholder="Quantity">
+                    </div>
+
+                    <div class="flex justify-end gap-3 mt-6">
+                        <button type="button" onclick="closeBorrowModal()" class="px-4 py-2 bg-gray-300 rounded">
+                            Cancel
+                        </button>
+                        <button type="submit" class="px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600">
+                            Borrow
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <script>
+            function openBorrowModal(id, shade) {
+                document.getElementById('borrowModal').classList.remove('hidden');
+                document.getElementById('borrow_material_id').value = id;
+                document.getElementById('borrowForm').action = `/raw-material/borrow/${id}`;
+            }
+
+            function closeBorrowModal() {
+                document.getElementById('borrowModal').classList.add('hidden');
+                document.getElementById('borrow_qty').value = '';
+            }
+        </script>
+
         <script>
             document.addEventListener("DOMContentLoaded", function() {
                 const spinner = document.getElementById("pageLoadingSpinner");
