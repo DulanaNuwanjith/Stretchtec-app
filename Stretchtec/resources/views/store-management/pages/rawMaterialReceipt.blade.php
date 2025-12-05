@@ -341,7 +341,7 @@
             function openBorrowModal(id, description) {
                 document.getElementById('borrowModal').classList.remove('hidden');
                 document.getElementById('borrow_material_id').value = id;
-                document.getElementById('borrowForm').action = `/raw-material/borrow/${id}`;
+                document.getElementById('borrowForm').action = `/export-raw-material/borrow/${id}`;
             }
 
             function closeBorrowModal() {

@@ -208,13 +208,14 @@ Route::middleware([
         'destroy' => 'rawMaterial.destroy',
     ]);
     Route::post('/raw-material/borrow/{id}', [RawMaterialStoreController::class, 'borrow'])
-    ->name('rawMaterial.borrow');
+        ->name('rawMaterial.borrow');
+
 
 
     Route::get('rawMaterialReceipt', [ExportProcurementController::class, 'exportRawIndex'])->name('rawMaterialReceipt.index');
     Route::delete('rawMaterialReceipt/{id}', [ExportProcurementController::class, 'exportRawDelete'])->name('rawMaterialReceipt.delete');
     Route::post('rawMaterialReceipt', [ExportProcurementController::class, 'exportRawStore'])->name('rawMaterialReceipt.store');
-    Route::post('/raw-material/borrow/{id}', [ExportProcurementController::class, 'borrowExportRawMaterial'])
+    Route::post('/export-raw-material/borrow/{id}', [ExportProcurementController::class, 'borrowExportRawMaterial'])
     ->name('rawMaterialReceipt.borrow');
 
 

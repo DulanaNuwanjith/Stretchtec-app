@@ -376,10 +376,11 @@
             </div>
         </div>
         <script>
-            function openBorrowModal(id, shade) {
-                document.getElementById('borrowModal').classList.remove('hidden');
+            function openBorrowModal(id) {
                 document.getElementById('borrow_material_id').value = id;
                 document.getElementById('borrowForm').action = `/raw-material/borrow/${id}`;
+                document.getElementById('borrow_qty').value = "";
+                document.getElementById('borrowModal').classList.remove('hidden');
             }
 
             function closeBorrowModal() {
