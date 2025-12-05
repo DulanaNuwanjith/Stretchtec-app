@@ -77,6 +77,33 @@ class ExportProcurementController extends Controller
             ->with('success', 'Raw material record deleted successfully.');
     }
 
+    public function borrowExportRawMaterial(Request $request, $id): RedirectResponse
+    {
+        $request->validate([
+            'borrow_qty' => 'required|numeric|min:0.01',
+        ]);
+
+        $material = ExportRawMaterial::findOrFail($id);
+
+        // Prevent borrowing more than available net_weight
+        if ($material->net_weight < $request->borrow_qty) {
+            return back()->with('error', 'Insufficient quantity to borrow.');
+        }
+
+        // Deduct quantity
+        $material->net_weight -= $request->borrow_qty;
+
+        if ($material->net_weight <= 0) {
+            // Delete record if all quantity borrowed
+            $material->delete();
+            return back()->with('success', 'All quantity borrowed. Record deleted.');
+        } else {
+            $material->save();
+            return back()->with('success', 'Borrowed ' . $request->borrow_qty . ' ' . $material->uom . ' successfully!');
+        }
+    }
+
+
     /**
      * Show the form for creating a new resource.
      */
