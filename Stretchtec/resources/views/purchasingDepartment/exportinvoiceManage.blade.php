@@ -207,16 +207,16 @@
                                     @endif
                                 </td>
 
-                                <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">{{ $first->date }}</td>
-                                <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">{{ $first->supplier }}</td>
+                                <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">{{ $first->date }}</td>
+                                <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">{{ $first->supplier }}</td>
 
-                                <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">{{ $first->product_description }}</td>
-                                <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">{{ $first->net_weight }}</td>
-                                <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">{{ number_format($first->unit_price, 2) }}</td>
-                                <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">{{ number_format($first->total_amount, 2) }}</td>
-                                <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">{{ number_format($first->invoice_value, 2) }}</td>
-                                <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">{{ $first->checked_by }}</td>
-                                <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">{{ $first->notes }}</td>
+                                <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">{{ $first->product_description }}</td>
+                                <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">{{ $first->net_weight }}</td>
+                                <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">{{ number_format($first->unit_price, 2) }}</td>
+                                <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">{{ number_format($first->total_amount, 2) }}</td>
+                                <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">{{ number_format($first->invoice_value, 2) }}</td>
+                                <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">{{ $first->checked_by }}</td>
+                                <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">{{ $first->notes }}</td>
                                 <!-- Actions -->
                                 <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">
                                     <div class="flex space-x-2 justify-center items-center">
@@ -244,15 +244,15 @@
                                     <tr x-show="open" style="display: none;" class="bg-gray-50">
 
                                         <td class="sticky left-0 border-r bg-white"></td>
-                                        <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center"></td>
-                                        <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center"></td>
+                                        <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center break-words"></td>
+                                        <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center break-words"></td>
 
-                                        <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center">{{ $item->product_description }}</td>
-                                        <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center">{{ $item->net_weight }}</td>
-                                        <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center">{{ number_format($item->unit_price, 2) }}</td>
-                                        <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center">{{ number_format($item->total_amount, 2) }}</td>
-                                        <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center">{{ $item->checked_by }}</td>
-                                        <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center">{{ $item->notes }}</td>
+                                        <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center break-words">{{ $item->product_description }}</td>
+                                        <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center break-words">{{ $item->net_weight }}</td>
+                                        <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center break-words">{{ number_format($item->unit_price, 2) }}</td>
+                                        <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center break-words">{{ number_format($item->total_amount, 2) }}</td>
+                                        <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center break-words">{{ $item->checked_by }}</td>
+                                        <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center break-words">{{ $item->notes }}</td>
 
                                         <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center">
                                             -

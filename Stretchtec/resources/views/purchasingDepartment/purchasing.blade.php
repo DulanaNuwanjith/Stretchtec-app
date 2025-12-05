@@ -486,23 +486,23 @@
                                 </td>
 
                                 <!-- PO Date -->
-                                <td class="px-2 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">{{ $first->po_date }}</td>
+                                <td class="px-2 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">{{ $first->po_date }}</td>
 
                                 <!-- Supplier -->
-                                <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">{{ $first->supplier }}</td>
+                                <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">{{ $first->supplier }}</td>
 
                                 <!-- Single Item View -->
                                 @if (!$hasMultipleItems)
-                                    <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">{{ $first->shade }}</td>
-                                    <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">{{ $first->color }}</td>
-                                    <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">{{ $first->tkt }}</td>
-                                    <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">{{ $first->pst_no }}</td>
-                                    <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">{{ $first->supplier_comment }}</td>
-                                    <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">{{ $first->quantity }} {{ $first->uom }}</td>
-                                    <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">{{ $first->rate }}</td>
-                                    <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">{{ $first->amount }}</td>
-                                    <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">{{ $first->total_amount }}</td>
-                                    <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">
+                                    <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">{{ $first->shade }}</td>
+                                    <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">{{ $first->color }}</td>
+                                    <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">{{ $first->tkt }}</td>
+                                    <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">{{ $first->pst_no }}</td>
+                                    <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">{{ $first->supplier_comment }}</td>
+                                    <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">{{ $first->quantity }} {{ $first->uom }}</td>
+                                    <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">{{ $first->rate }}</td>
+                                    <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">{{ $first->amount }}</td>
+                                    <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">{{ $first->total_amount }}</td>
+                                    <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">
                                         <span
                                             class="px-2 py-1 rounded-full text-xs font-semibold
                                         @if ($first->status === 'Pending') bg-yellow-100 text-yellow-800
@@ -514,18 +514,18 @@
                                     </td>
                                 @else
                                     <!-- Parent shows the first item -->
-                                    <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center">{{ $first->shade }}</td>
-                                    <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center">{{ $first->color }}</td>
-                                    <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center">{{ $first->tkt }}</td>
-                                    <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center">{{ $first->pst_no }}</td>
-                                    <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center">{{ $first->supplier_comment }}</td>
-                                    <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center">{{ $first->quantity }} {{ $first->uom }}</td>
-                                    <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center">{{ $first->rate }}</td>
-                                    <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center">{{ $first->amount }}</td>
+                                    <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center break-words">{{ $first->shade }}</td>
+                                    <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center break-words">{{ $first->color }}</td>
+                                    <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center break-words">{{ $first->tkt }}</td>
+                                    <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center break-words">{{ $first->pst_no }}</td>
+                                    <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center break-words">{{ $first->supplier_comment }}</td>
+                                    <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center break-words">{{ $first->quantity }} {{ $first->uom }}</td>
+                                    <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center break-words">{{ $first->rate }}</td>
+                                    <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center break-words">{{ $first->amount }}</td>
 
                                     <!-- Total + Status -->
-                                    <td class="px-4 py-3 text-sm text-gray-800 dark:text-gray-200 border-r text-center">{{ $first->total_amount }}</td>
-                                    <td class="px-4 py-3 text-sm text-gray-800 dark:text-gray-200 border-r text-center">
+                                    <td class="px-4 py-3 text-sm text-gray-800 dark:text-gray-200 border-r text-center break-words">{{ $first->total_amount }}</td>
+                                    <td class="px-4 py-3 text-sm text-gray-800 dark:text-gray-200 border-r text-center break-words">
                                         <span
                                             class="px-2 py-1 rounded-full text-xs font-semibold
                                         @if ($first->status === 'Pending') bg-yellow-100 text-yellow-800
@@ -568,14 +568,14 @@
                                         <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center"></td>
 
                                         <!-- Item Columns -->
-                                        <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center">{{ $item->shade }}</td>
-                                        <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center">{{ $item->color }}</td>
-                                        <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center">{{ $item->tkt }}</td>
-                                        <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center">{{ $item->pst_no }}</td>
-                                        <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center">{{ $item->supplier_comment }}</td>
-                                        <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center">{{ $item->quantity }} {{ $item->uom }}</td>
-                                        <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center">{{ $item->rate }}</td>
-                                        <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center">{{ $item->amount }}</td>
+                                        <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center break-words">{{ $item->shade }}</td>
+                                        <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center break-words">{{ $item->color }}</td>
+                                        <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center break-words">{{ $item->tkt }}</td>
+                                        <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center break-words">{{ $item->pst_no }}</td>
+                                        <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center break-words">{{ $item->supplier_comment }}</td>
+                                        <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center break-words">{{ $item->quantity }} {{ $item->uom }}</td>
+                                        <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center break-words">{{ $item->rate }}</td>
+                                        <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center break-words">{{ $item->amount }}</td>
                                         <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center">-</td>
                                         <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center">
                                             <span class="px-2 py-1 rounded-full text-xs font-semibold text-center">-</span>
