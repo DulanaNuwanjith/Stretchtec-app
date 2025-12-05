@@ -120,7 +120,7 @@
                 <div class="flex space-x-3">
                     <button onclick="document.getElementById('addExportRawMaterial').classList.remove('hidden')"
                             class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded shadow">
-                        + Add New Invoice
+                        + Add New Raw Material
                     </button>
                 </div>
             </div>
