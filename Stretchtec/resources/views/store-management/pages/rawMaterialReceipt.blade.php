@@ -193,6 +193,17 @@
                             </td>
 
                             <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">
+                                <button
+                                    class="bg-red-500 mt-1 hover:bg-red-600 text-white font-semibold py-1 px-2 rounded shadow"
+                                    onclick="confirmDelete({{ $material->id }})">
+                                    Delete
+                                </button>
+                                <form id="delete-form-{{ $material->id }}"
+                                      action="{{ route('rawMaterialReceipt.delete', $material->id) }}" method="POST"
+                                      class="hidden">
+                                    @csrf
+                                    @method('DELETE')
+                                </form>
                             </td>
                         </tr>
                     @empty
