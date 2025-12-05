@@ -286,7 +286,8 @@ Route::middleware([
 
     Route::post('/stores/{id}/assign', [StoresController::class, 'assign'])->name('stores.assign');
 
-    Route::get('/stock/add/{id}', [StockController::class, 'addStock'])->name('stockManagement.addStock');
+    Route::post('/stock/add/{id}', [StockController::class, 'addStock'])->name('stockManagement.addStock');
+    Route::post('/stock/borrow/{id}', [StockController::class, 'borrowStock'])->name('stockManagement.borrowStock');
 
     Route::patch('/orders/{id}/mark-ordered', [ProductOrderPreperationController::class, 'markOrdered'])->name('orders.markOrdered');
     Route::patch('/orders/{id}/mark-received', [ProductOrderPreperationController::class, 'markReceived'])->name('orders.markReceived');

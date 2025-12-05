@@ -138,4 +138,31 @@ class StockController extends Controller
         return back()->with('success', 'Stock increased by ' . $request->stock_increment);
     }
 
+
+    public function borrowStock(Request $request, $id): RedirectResponse
+    {
+        $request->validate([
+            'borrow_qty' => 'required|numeric|min:1',
+        ]);
+
+        $stock = Stock::findOrFail($id);
+
+        // Prevent borrowing more than available
+        if ($stock->qty_available < $request->borrow_qty) {
+            return back()->with('error', 'Insufficient stock to borrow.');
+        }
+
+        // Deduct stock
+        $stock->qty_available -= $request->borrow_qty;
+
+        if ($stock->qty_available <= 0) {
+            // Delete stock if nothing left
+            $stock->delete();
+            return back()->with('success', 'All stock borrowed. Item has been deleted.');
+        } else {
+            $stock->save();
+            return back()->with('success', 'Borrowed ' . $request->borrow_qty . ' successfully!');
+        }
+    }
+
 }
