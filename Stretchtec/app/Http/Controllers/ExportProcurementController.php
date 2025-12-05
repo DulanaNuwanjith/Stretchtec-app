@@ -40,6 +40,32 @@ class ExportProcurementController extends Controller
 
     }
 
+    public function exportRawStore(Request $request): RedirectResponse
+    {
+        // 1. Validate incoming request data
+        $validated = $request->validate([
+            'supplier'            => 'required|string|max:255',
+            'product_description' => 'required|string|max:255',
+            'net_weight'          => 'required|numeric|min:0.01',
+            'uom'                 => 'required|string|max:50',
+            'unit_price'          => 'required|numeric|min:0.01',
+            'notes'               => 'nullable|string|max:500',
+        ]);
+
+        // 2. Save into a database
+        ExportRawMaterial::create([
+            'supplier'            => $validated['supplier'],
+            'product_description' => $validated['product_description'],
+            'net_weight'          => $validated['net_weight'],
+            'uom'                 => $validated['uom'],
+            'unit_price'          => $validated['unit_price'],
+            'notes'               => $validated['notes'] ?? null,
+        ]);
+
+        // 3. Redirect or return success response
+        return redirect()->back()->with('success', 'Export raw material added successfully.');
+    }
+
     public function exportRawDelete($id): RedirectResponse
     {
         $exportRaw = ExportRawMaterial::findOrFail($id);

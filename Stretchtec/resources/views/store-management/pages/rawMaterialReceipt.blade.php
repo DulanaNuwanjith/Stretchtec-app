@@ -118,10 +118,95 @@
                 <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Raw Material Receipt & Invoice
                     Records</h1>
                 <div class="flex space-x-3">
-                    <button onclick="document.getElementById('addRawMaterial').classList.remove('hidden')"
+                    <button onclick="document.getElementById('addExportRawMaterial').classList.remove('hidden')"
                             class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded shadow">
                         + Add New Invoice
                     </button>
+                </div>
+            </div>
+
+            <!-- Add Export Raw Material Modal -->
+            <div id="addExportRawMaterial"
+                 class="fixed inset-0 z-50 hidden bg-black bg-opacity-50 flex items-center justify-center py-5"
+                 onclick="this.classList.add('hidden')">
+
+                <div class="w-full max-w-[700px] bg-white rounded-2xl shadow-2xl p-6"
+                     onclick="event.stopPropagation()">
+
+                    <h2 class="text-2xl font-semibold mb-6 text-blue-900 text-center">
+                        Add New Export Raw Material
+                    </h2>
+
+                    <form action="{{ route('rawMaterialReceipt.store') }}" method="POST">
+                        @csrf
+
+                        <div class="space-y-4">
+
+                            <!-- Row 1 -->
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium">Supplier</label>
+                                    <input name="supplier" type="text" required
+                                           class="w-full mt-1 px-3 py-2 border rounded-md text-sm">
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium">Product Description</label>
+                                    <input name="product_description" type="text" required
+                                           class="w-full mt-1 px-3 py-2 border rounded-md text-sm">
+                                </div>
+                            </div>
+
+                            <!-- Row 2 -->
+                            <div class="grid grid-cols-3 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium">Net Weight</label>
+                                    <input name="net_weight" type="number" min="0.01" step="0.01" required
+                                           class="w-full mt-1 px-3 py-2 border rounded-md text-sm">
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium">Unit</label>
+                                    <select name="uom"
+                                            class="w-full mt-1 px-3 py-2 border rounded-md text-sm">
+                                        <option value="kg">KG</option>
+                                        <option value="g">Gram</option>
+                                        <option value="m">Meter</option>
+                                        <option value="pcs">Pieces</option>
+                                    </select>
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium">Unit Price</label>
+                                    <input name="unit_price" type="number" min="0.01" step="0.01" required
+                                           class="w-full mt-1 px-3 py-2 border rounded-md text-sm">
+                                </div>
+                            </div>
+
+                            <!-- Row 4 -->
+                            <div>
+                                <label class="block text-sm font-medium">Notes</label>
+                                <textarea name="notes" rows="2"
+                                          class="w-full mt-1 px-3 py-2 border rounded-md text-sm"></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Buttons -->
+                        <div class="flex justify-end gap-3 mt-6">
+                            <button type="button"
+                                    onclick="document.getElementById('addExportRawMaterial').classList.add('hidden')"
+                                    class="px-4 py-2 bg-gray-200 text-gray-700 text-sm rounded hover:bg-gray-300">
+                                Cancel
+                            </button>
+
+                            <button type="submit"
+                                    class="px-4 py-2 bg-blue-500 text-white text-sm rounded hover:bg-blue-600">
+                                Save Record
+                            </button>
+                        </div>
+
+                    </form>
+
                 </div>
             </div>
 
@@ -153,9 +238,6 @@
                         <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                             Unit Price
                         </th>
-                        <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
-                            Total Amount
-                        </th>
                         <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-40 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                             Notes
                         </th>
@@ -182,10 +264,6 @@
 
                             <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">
                                 {{ number_format($material->unit_price, 2) }}
-                            </td>
-
-                            <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">
-                                {{ number_format($material->total_amount, 2) }}
                             </td>
 
                             <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">

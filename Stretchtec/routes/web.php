@@ -210,6 +210,7 @@ Route::middleware([
 
     Route::get('rawMaterialReceipt', [ExportProcurementController::class, 'exportRawIndex'])->name('rawMaterialReceipt.index');
     Route::delete('rawMaterialReceipt/{id}', [ExportProcurementController::class, 'exportRawDelete'])->name('rawMaterialReceipt.delete');
+    Route::post('rawMaterialReceipt', [ExportProcurementController::class, 'exportRawStore'])->name('rawMaterialReceipt.store');
 
 
     /* ----------------------------------------------------------------------
