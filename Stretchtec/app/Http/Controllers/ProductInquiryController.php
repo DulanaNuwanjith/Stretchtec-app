@@ -103,7 +103,7 @@ class ProductInquiryController extends Controller
 
             $data = $validator->validated();
 
-            // Save each item separately with unique order number
+            // Save each item separately with a unique order number
             foreach ($data['items'] as $item) {
                 $referenceNo = null;
                 $sampleId = null;
@@ -163,31 +163,6 @@ class ProductInquiryController extends Controller
 
             return redirect()->back()->with('error', 'Something went wrong.')->withInput();
         }
-    }
-
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(ProductInquiry $productInquiry)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(ProductInquiry $productInquiry)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, ProductInquiry $productInquiry)
-    {
-        //
     }
 
     /**
