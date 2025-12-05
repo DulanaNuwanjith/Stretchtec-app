@@ -293,11 +293,11 @@
                                     {{ $material->available_quantity }} {{ $material->unit }}
                                 </td>
                                 <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">
-                                    <div class="flex justify-center items-center space-x-2">
+                                    <div class="flex gap-2 justify-center">
                                         <div x-data="{ open: false }">
                                             <!-- Button -->
                                             <button type="button" @click="open = true"
-                                                class="mt-1 bg-yellow-600 hover:bg-yellow-700 text-white px-2 py-1 rounded text-sm transition">
+                                                class="bg-yellow-600 h-10 hover:bg-yellow-700 text-white px-3 py-1 rounded text-sm">
                                                 Remarks
                                             </button>
 
@@ -323,7 +323,7 @@
                                             </div>
                                         </div>
                                         <button
-                                            class="bg-red-500 mt-1 hover:bg-red-600 text-white font-semibold py-1 px-2 rounded shadow"
+                                            class="bg-red-600 h-10 hover:bg-red-700 text-white px-3 py-1 rounded text-sm"
                                             onclick="confirmDelete({{ $material->id }})">
                                             Delete
                                         </button>
@@ -335,7 +335,7 @@
                                         </form>
                                         <button type="button"
                                             onclick="openBorrowModal({{ $material->id }}, '{{ $material->shade }}')"
-                                            class="bg-yellow-500 mt-1 hover:bg-yellow-600 text-white font-semibold py-1 px-2 rounded shadow">
+                                            class="bg-yellow-500 h-10 hover:bg-yellow-600 text-white px-3 py-1 rounded text-sm">
                                             Borrow
                                         </button>
                                     </div>

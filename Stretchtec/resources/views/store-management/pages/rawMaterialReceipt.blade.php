@@ -220,7 +220,7 @@
                     </svg>
                     <p class="mt-3 text-gray-700 font-semibold">Loading data...</p>
                 </div>
-                <table class="min-w-full border-collapse">
+                <table class="table-fixed w-full text-sm divide-y divide-gray-200 dark:divide-gray-700">
                     <thead class="bg-gray-100 dark:bg-gray-700">
                         <tr class="text-center">
                             <th
