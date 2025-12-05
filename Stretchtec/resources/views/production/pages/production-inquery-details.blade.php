@@ -865,6 +865,17 @@
         </div>
     </div>
 
+    <div class="grid grid-cols-2 gap-4 mt-3">
+        <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">PST No</label>
+            <input type="text" name="items[${index}][pst_no]" readonly class="samplePSTNo w-full mt-1 px-3 py-2 border rounded-md bg-gray-100 dark:bg-gray-600 dark:text-white text-sm">
+        </div>
+        <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Supplier Comment</label>
+            <input type="text" name="items[${index}][supplier_comment]" readonly class="sampleSupplierComment w-full mt-1 px-3 py-2 border rounded-md bg-gray-100 dark:bg-gray-600 dark:text-white text-sm">
+        </div>
+    </div>
+
     <div class="grid grid-cols-4 gap-4 mt-3">
         <div>
             <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Qty</label>
@@ -975,7 +986,9 @@
                 group.querySelector(".sampleTKT").value = data.tkt || '';
                 group.querySelector(".sampleSize").value = data.size || '';
                 group.querySelector(".sampleItem").value = data.item || '';
+                group.querySelector(".samplePSTNo").value = data.pst_no || '';
                 group.querySelector(".sampleSupplier").value = data.supplier || '';
+                group.querySelector(".sampleSupplierComment").value = data.supplier_comments || '';
             })
             .catch(err => console.error('Error fetching sample details:', err));
     }
