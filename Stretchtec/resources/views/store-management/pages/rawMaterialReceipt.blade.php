@@ -208,7 +208,7 @@
             </div>
 
             <!-- Stock / Stores Records Table -->
-            <div class="overflow-x-auto max-h-[1200px] bg-white dark:bg-gray-900 shadow rounded-lg">
+            <div class="overflow-x-auto bg-white dark:bg-gray-900 shadow rounded-lg">
                 <!-- Spinner -->
                 <div id="pageLoadingSpinner"
                     class="fixed inset-0 z-50 bg-white bg-opacity-80 flex flex-col items-center justify-center">
@@ -228,7 +228,7 @@
                                 Supplier
                             </th>
                             <th
-                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-48 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                 Product Description
                             </th>
                             <th
@@ -240,7 +240,7 @@
                                 Unit Price
                             </th>
                             <th
-                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-40 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-48 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                 Notes
                             </th>
                             <th
