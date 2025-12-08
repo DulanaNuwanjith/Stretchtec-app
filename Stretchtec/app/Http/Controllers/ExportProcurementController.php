@@ -35,9 +35,28 @@ class ExportProcurementController extends Controller
 
     public function exportRawIndex(): Factory|View
     {
-        $exportRawMaterials = ExportRawMaterial::latest()->paginate(20);
-        return view('store-management.pages.rawMaterialReceipt', compact('exportRawMaterials'));
+        $query = ExportRawMaterial::query();
 
+        if ($supplier = request('supplier')) {
+            $query->where('supplier', 'like', "%{$supplier}%");
+        }
+
+        if ($product = request('product_description')) {
+            $query->where('product_description', 'like', "%{$product}%");
+        }
+
+        $exportRawMaterials = $query->latest()->paginate(20);
+
+        // Get unique suppliers for the dropdown
+        $suppliers = ExportRawMaterial::select('supplier')->distinct()->pluck('supplier');
+
+        // You can also get product descriptions if needed
+        $products = ExportRawMaterial::select('product_description')->distinct()->pluck('product_description');
+
+        return view(
+            'store-management.pages.rawMaterialReceipt',
+            compact('exportRawMaterials', 'suppliers', 'products')
+        );
     }
 
     public function exportRawStore(Request $request): RedirectResponse
