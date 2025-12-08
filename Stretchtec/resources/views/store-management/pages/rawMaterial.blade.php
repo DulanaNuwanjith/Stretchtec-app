@@ -322,6 +322,11 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <button type="button"
+                                            onclick="openBorrowModal({{ $material->id }}, '{{ $material->shade }}')"
+                                            class="bg-yellow-500 h-10 hover:bg-yellow-600 text-white px-3 py-1 rounded text-sm">
+                                            Borrow
+                                        </button>
                                         <button
                                             class="bg-red-600 h-10 hover:bg-red-700 text-white px-3 py-1 rounded text-sm"
                                             onclick="confirmDelete({{ $material->id }})">
@@ -333,11 +338,6 @@
                                             @csrf
                                             @method('DELETE')
                                         </form>
-                                        <button type="button"
-                                            onclick="openBorrowModal({{ $material->id }}, '{{ $material->shade }}')"
-                                            class="bg-yellow-500 h-10 hover:bg-yellow-600 text-white px-3 py-1 rounded text-sm">
-                                            Borrow
-                                        </button>
                                     </div>
                                 </td>
                             </tr>

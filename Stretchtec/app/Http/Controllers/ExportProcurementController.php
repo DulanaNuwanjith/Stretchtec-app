@@ -35,7 +35,7 @@ class ExportProcurementController extends Controller
 
     public function exportRawIndex(): Factory|View
     {
-        $exportRawMaterials = ExportRawMaterial::latest()->paginate(10);
+        $exportRawMaterials = ExportRawMaterial::latest()->paginate(20);
         return view('store-management.pages.rawMaterialReceipt', compact('exportRawMaterials'));
 
     }
