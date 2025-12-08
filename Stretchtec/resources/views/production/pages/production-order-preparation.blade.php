@@ -300,8 +300,8 @@
                                                         at
                                                         {{ Carbon::parse($order->raw_material_received_date)->format('H:i') }}
                                                     </span>
-                                                @else
-                                                    <!-- Mark Received button -->
+                                                @elseif ($order->isRawMaterialOrdered)
+                                                    <!-- Mark Received button (only if ordered) -->
                                                     <form action="{{ route('orders.markReceived', $order->id) }}"
                                                           method="POST" onsubmit="handleSubmit(this)">
                                                         @csrf
@@ -311,18 +311,29 @@
                                                             Mark as Received
                                                         </button>
                                                     </form>
+                                                @else
+                                                    <!-- Optional: Show disabled button or placeholder if not ordered -->
+                                                    <span class="text-gray-400 text-sm">Not ordered yet</span>
                                                 @endif
                                             </div>
                                         </td>
 
                                         <td class="px-4 py-3 border-r border-gray-300">
-                                            <button type="button"
-                                                    onclick="openAssignModal({{ $order->id }})"
-                                                    class="bg-purple-500 hover:bg-purple-600 text-white text-xs font-semibold py-2 px-3 rounded shadow transition">
-                                                Assign Order
-                                            </button>
+                                            @if($order->isRawMaterialOrdered && $order->isRawMaterialReceived)
+                                                <button type="button"
+                                                        onclick="openAssignModal({{ $order->id }})"
+                                                        class="bg-purple-500 hover:bg-purple-600 text-white text-xs font-semibold py-2 px-3 rounded shadow transition">
+                                                    Assign Order
+                                                </button>
+                                            @else
+                                                <!-- Optional: Show a disabled button for visual feedback -->
+                                                <button type="button"
+                                                        disabled
+                                                        class="bg-gray-300 text-gray-600 text-xs font-semibold py-2 px-3 rounded shadow cursor-not-allowed">
+                                                    Assign Order
+                                                </button>
+                                            @endif
                                         </td>
-
                                     </tr>
                                 @empty
                                     <tr>
@@ -341,104 +352,132 @@
                             {{ $orderPreparations->links() }}
                         </div>
 
-                        <!-- Modal -->
+                        <!-- Assign Modal -->
                         <div id="assignModal"
                              class="fixed inset-0 bg-black bg-opacity-40 hidden items-center justify-center z-50">
-                            <div class="bg-white rounded-xl shadow-xl w-full max-w-4xl p-6 space-y-6">
+                            <div class="bg-white rounded-xl shadow-xl w-full max-w-7xl p-6 space-y-6">
 
                                 <h2 class="text-xl font-semibold text-gray-800">Select Raw Materials</h2>
 
-                                <!-- Local Raw Materials -->
-                                <div>
-                                    <h3 class="font-semibold text-gray-700 mb-2">Local Raw Materials</h3>
-                                    <div class="max-h-60 overflow-y-auto border rounded-lg">
-                                        <table class="w-full text-sm">
-                                            <thead class="bg-gray-100">
-                                            <tr>
-                                                <th class="px-3 py-2 border">Select</th>
-                                                <th class="px-3 py-2 border">Color</th>
-                                                <th class="px-3 py-2 border">Shade</th>
-                                                <th class="px-3 py-2 border">Qty</th>
-                                                <th class="px-3 py-2 border">Assign Qty</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            @foreach($localRawMaterials as $mat)
-                                                <tr class="border">
-                                                    <td class="px-3 py-2 border text-center">
-                                                        <input type="checkbox"
-                                                               class="material-check"
-                                                               data-type="local"
-                                                               data-id="{{ $mat->id }}"
-                                                               data-name="{{ $mat->color }} - {{ $mat->shade }}"
-                                                               data-price="{{ $mat->unit_price }}"
-                                                               data-unit="{{ $mat->unit }}"
-                                                               data-max="{{ $mat->available_quantity }}"
-                                                               onchange="toggleQtyInput(this)">
-                                                    </td>
-                                                    <td class="px-3 py-2 border">{{ $mat->color }}</td>
-                                                    <td class="px-3 py-2 border">{{ $mat->shade }}</td>
-                                                    <td class="px-3 py-2 border">{{ $mat->available_quantity }} {{ $mat->unit }}</td>
-                                                    <td class="px-3 py-2 border">
-                                                        <input type="number"
-                                                               class="qty-input w-20 px-2 py-1 border rounded hidden"
-                                                               min="1"
-                                                               max="{{ $mat->available_quantity }}"
-                                                               data-max="{{ $mat->available_quantity }}"
-                                                               oninput="validateQty(this)">
-                                                    </td>
-                                                </tr>
-                                            @endforeach
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
+                                <!-- Tabs Wrapper -->
+                                <div x-data="{ tab: 'local' }">
 
-                                <!-- Export Raw Materials -->
-                                <div>
-                                    <h3 class="font-semibold text-gray-700 mb-2">Export Raw Materials</h3>
-                                    <div class="max-h-60 overflow-y-auto border rounded-lg">
-                                        <table class="w-full text-sm">
-                                            <thead class="bg-gray-100">
-                                            <tr>
-                                                <th class="px-3 py-2 border">Select</th>
-                                                <th class="px-3 py-2 border">Description</th>
-                                                <th class="px-3 py-2 border">Net Weight</th>
-                                                <th class="px-3 py-2 border">Assign Qty</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            @foreach($exportRawMaterials as $mat)
-                                                <tr class="border">
-                                                    <td class="px-3 py-2 border text-center">
-                                                        <input type="checkbox"
-                                                               class="material-check"
-                                                               data-type="export"
-                                                               data-id="{{ $mat->id }}"
-                                                               data-name="{{ $mat->product_description }}"
-                                                               data-price="{{ $mat->unit_price }}"
-                                                               data-unit="{{ $mat->uom }}"
-                                                               data-max="{{ $mat->net_weight }}"
-                                                               onchange="toggleQtyInput(this)">
-                                                    </td>
-                                                    <td class="px-3 py-2 border">{{ $mat->product_description }}</td>
-                                                    <td class="px-3 py-2 border">{{ $mat->net_weight }} {{ $mat->uom }}</td>
-                                                    <td class="px-3 py-2 border">
-                                                        <input type="number"
-                                                               class="qty-input w-20 px-2 py-1 border rounded hidden"
-                                                               min="1"
-                                                               max="{{ $mat->net_weight }}"
-                                                               data-max="{{ $mat->net_weight }}"
-                                                               oninput="validateQty(this)">
-                                                    </td>
-                                                </tr>
-                                            @endforeach
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
+                                    <!-- Tab Headers -->
+                                    <div class="flex border-b mb-4">
+                                        <button
+                                            @click="tab = 'local'"
+                                            :class="tab === 'local' ? 'border-b-2 border-purple-600 text-purple-600' : 'text-gray-500'"
+                                            class="px-4 py-2 font-semibold">
+                                            Local Raw Materials
+                                        </button>
 
-                                <!-- Buttons -->
+                                        <button
+                                            @click="tab = 'export'"
+                                            :class="tab === 'export' ? 'border-b-2 border-purple-600 text-purple-600' : 'text-gray-500'"
+                                            class="px-4 py-2 font-semibold">
+                                            Export Raw Materials
+                                        </button>
+                                    </div>
+
+                                    <!-- LOCAL TAB -->
+                                    <div x-show="tab === 'local'" class="space-y-2">
+                                        <div class="max-h-60 overflow-y-auto border rounded-lg">
+                                            <table class="w-full text-sm">
+                                                <thead class="bg-gray-100">
+                                                <tr>
+                                                    <th class="px-3 py-2 border">Select</th>
+                                                    <th class="px-3 py-2 border">Color</th>
+                                                    <th class="px-3 py-2 border">Shade</th>
+                                                    <th class="px-3 py-2 border">Qty</th>
+                                                    <th class="px-3 py-2 border">Assign Qty</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                @foreach($localRawMaterials as $mat)
+                                                    <tr class="border h-12"> <!-- FIXED HEIGHT -->
+                                                        <td class="px-3 py-2 border text-center">
+                                                            <input type="checkbox"
+                                                                   class="material-check"
+                                                                   data-type="local"
+                                                                   data-id="{{ $mat->id }}"
+                                                                   data-name="{{ $mat->color }} - {{ $mat->shade }}"
+                                                                   data-price="{{ $mat->unit_price }}"
+                                                                   data-unit="{{ $mat->unit }}"
+                                                                   data-max="{{ $mat->available_quantity }}"
+                                                                   onchange="toggleQtyInput(this)">
+                                                        </td>
+                                                        <td class="px-3 py-2 border">{{ $mat->color }}</td>
+                                                        <td class="px-3 py-2 border">{{ $mat->shade }}</td>
+                                                        <td class="px-3 py-2 border">{{ $mat->available_quantity }} {{ $mat->unit }}</td>
+
+                                                        <!-- FIXED HEIGHT + FIXED ALIGNMENT -->
+                                                        <td class="px-3 py-2 border">
+                                                            <div class="h-full flex items-center">
+                                                                <input type="number"
+                                                                       class="qty-input w-20 px-2 py-1 border rounded hidden"
+                                                                       min="1"
+                                                                       max="{{ $mat->available_quantity }}"
+                                                                       data-max="{{ $mat->available_quantity }}"
+                                                                       oninput="validateQty(this)">
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+
+                                    <!-- EXPORT TAB -->
+                                    <div x-show="tab === 'export'" class="space-y-2">
+                                        <div class="max-h-60 overflow-y-auto border rounded-lg">
+                                            <table class="w-full text-sm">
+                                                <thead class="bg-gray-100">
+                                                <tr>
+                                                    <th class="px-3 py-2 border">Select</th>
+                                                    <th class="px-3 py-2 border">Description</th>
+                                                    <th class="px-3 py-2 border">Net Weight</th>
+                                                    <th class="px-3 py-2 border">Assign Qty</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                @foreach($exportRawMaterials as $mat)
+                                                    <tr class="border h-12"> <!-- FIXED HEIGHT -->
+                                                        <td class="px-3 py-2 border text-center">
+                                                            <input type="checkbox"
+                                                                   class="material-check"
+                                                                   data-type="export"
+                                                                   data-id="{{ $mat->id }}"
+                                                                   data-name="{{ $mat->product_description }}"
+                                                                   data-price="{{ $mat->unit_price }}"
+                                                                   data-unit="{{ $mat->uom }}"
+                                                                   data-max="{{ $mat->net_weight }}"
+                                                                   onchange="toggleQtyInput(this)">
+                                                        </td>
+                                                        <td class="px-3 py-2 border">{{ $mat->product_description }}</td>
+                                                        <td class="px-3 py-2 border">{{ $mat->net_weight }} {{ $mat->uom }}</td>
+
+                                                        <!-- FIXED HEIGHT + FIXED ALIGNMENT -->
+                                                        <td class="px-3 py-2 border">
+                                                            <div class="h-full flex items-center">
+                                                                <input type="number"
+                                                                       class="qty-input w-20 px-2 py-1 border rounded hidden"
+                                                                       min="1"
+                                                                       max="{{ $mat->net_weight }}"
+                                                                       data-max="{{ $mat->net_weight }}"
+                                                                       oninput="validateQty(this)">
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+
+                                </div> <!-- End Tabs -->
+
+                                <!-- Buttons (Close / Add to Cart) -->
                                 <div class="flex justify-end gap-3">
                                     <button onclick="closeAssignModal()"
                                             class="px-4 py-2 bg-gray-300 hover:bg-gray-400 text-gray-800 rounded">
@@ -451,22 +490,18 @@
                                     </button>
                                 </div>
 
-                                <!-- Cart + Submit Buttons inside Modal -->
+                                <!-- Cart + Submit Buttons -->
                                 <div class="flex justify-between items-center pt-4 border-t mt-4">
-                                    <!-- Cart Button -->
-                                    <button
-                                        onclick="openCartModal()"
-                                        class="relative bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg shadow font-semibold transition">
+                                    <button onclick="openCartModal()"
+                                            class="relative bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg shadow font-semibold">
                                         Cart
                                         <span id="cart-count"
                                               class="absolute -top-2 -right-2 bg-red-600 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full shadow">
                                         </span>
                                     </button>
 
-                                    <!-- Submit Button -->
-                                    <button
-                                        onclick="submitCart()"
-                                        class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg shadow font-semibold transition">
+                                    <button onclick="submitCart()"
+                                            class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg shadow font-semibold">
                                         Submit
                                     </button>
                                 </div>
