@@ -528,11 +528,6 @@
                             </div>
                         </div>
 
-                        <form id="cartSubmitForm" action="{{ route('orders.assignRawMaterials') }}" method="POST">
-                            @csrf
-                            <input type="hidden" name="cart_items" id="cartDataInput">
-                        </form>
-
                     </div>
                 </div>
             </div>
