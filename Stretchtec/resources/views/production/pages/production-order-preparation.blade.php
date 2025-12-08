@@ -157,6 +157,7 @@
                             </h1>
                         </div>
 
+
                         {{-- Data Table --}}
                         <div id="orderPreparationScroll"
                              class="overflow-x-auto max-h-[1200px] bg-white dark:bg-gray-900 shadow rounded-lg">
@@ -314,7 +315,6 @@
                                             </div>
                                         </td>
 
-                                        <!-- Assign Order -->
                                         <td class="px-4 py-3 border-r border-gray-300">
                                             <button type="button"
                                                     onclick="openAssignModal({{ $order->id }})"
@@ -322,6 +322,7 @@
                                                 Assign Order
                                             </button>
                                         </td>
+
                                     </tr>
                                 @empty
                                     <tr>
@@ -340,10 +341,328 @@
                             {{ $orderPreparations->links() }}
                         </div>
 
+                        <!-- Modal -->
+                        <div id="assignModal"
+                             class="fixed inset-0 bg-black bg-opacity-40 hidden items-center justify-center z-50">
+                            <div class="bg-white rounded-xl shadow-xl w-full max-w-4xl p-6 space-y-6">
+
+                                <h2 class="text-xl font-semibold text-gray-800">Select Raw Materials</h2>
+
+                                <!-- Local Raw Materials -->
+                                <div>
+                                    <h3 class="font-semibold text-gray-700 mb-2">Local Raw Materials</h3>
+                                    <div class="max-h-60 overflow-y-auto border rounded-lg">
+                                        <table class="w-full text-sm">
+                                            <thead class="bg-gray-100">
+                                            <tr>
+                                                <th class="px-3 py-2 border">Select</th>
+                                                <th class="px-3 py-2 border">Color</th>
+                                                <th class="px-3 py-2 border">Shade</th>
+                                                <th class="px-3 py-2 border">Qty</th>
+                                                <th class="px-3 py-2 border">Assign Qty</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            @foreach($localRawMaterials as $mat)
+                                                <tr class="border">
+                                                    <td class="px-3 py-2 border text-center">
+                                                        <input type="checkbox"
+                                                               class="material-check"
+                                                               data-type="local"
+                                                               data-id="{{ $mat->id }}"
+                                                               data-name="{{ $mat->color }} - {{ $mat->shade }}"
+                                                               data-price="{{ $mat->unit_price }}"
+                                                               data-unit="{{ $mat->unit }}"
+                                                               data-max="{{ $mat->available_quantity }}"
+                                                               onchange="toggleQtyInput(this)">
+                                                    </td>
+                                                    <td class="px-3 py-2 border">{{ $mat->color }}</td>
+                                                    <td class="px-3 py-2 border">{{ $mat->shade }}</td>
+                                                    <td class="px-3 py-2 border">{{ $mat->available_quantity }} {{ $mat->unit }}</td>
+                                                    <td class="px-3 py-2 border">
+                                                        <input type="number"
+                                                               class="qty-input w-20 px-2 py-1 border rounded hidden"
+                                                               min="1"
+                                                               max="{{ $mat->available_quantity }}"
+                                                               data-max="{{ $mat->available_quantity }}"
+                                                               oninput="validateQty(this)">
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <!-- Export Raw Materials -->
+                                <div>
+                                    <h3 class="font-semibold text-gray-700 mb-2">Export Raw Materials</h3>
+                                    <div class="max-h-60 overflow-y-auto border rounded-lg">
+                                        <table class="w-full text-sm">
+                                            <thead class="bg-gray-100">
+                                            <tr>
+                                                <th class="px-3 py-2 border">Select</th>
+                                                <th class="px-3 py-2 border">Description</th>
+                                                <th class="px-3 py-2 border">Net Weight</th>
+                                                <th class="px-3 py-2 border">Assign Qty</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            @foreach($exportRawMaterials as $mat)
+                                                <tr class="border">
+                                                    <td class="px-3 py-2 border text-center">
+                                                        <input type="checkbox"
+                                                               class="material-check"
+                                                               data-type="export"
+                                                               data-id="{{ $mat->id }}"
+                                                               data-name="{{ $mat->product_description }}"
+                                                               data-price="{{ $mat->unit_price }}"
+                                                               data-unit="{{ $mat->uom }}"
+                                                               data-max="{{ $mat->net_weight }}"
+                                                               onchange="toggleQtyInput(this)">
+                                                    </td>
+                                                    <td class="px-3 py-2 border">{{ $mat->product_description }}</td>
+                                                    <td class="px-3 py-2 border">{{ $mat->net_weight }} {{ $mat->uom }}</td>
+                                                    <td class="px-3 py-2 border">
+                                                        <input type="number"
+                                                               class="qty-input w-20 px-2 py-1 border rounded hidden"
+                                                               min="1"
+                                                               max="{{ $mat->net_weight }}"
+                                                               data-max="{{ $mat->net_weight }}"
+                                                               oninput="validateQty(this)">
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <!-- Buttons -->
+                                <div class="flex justify-end gap-3">
+                                    <button onclick="closeAssignModal()"
+                                            class="px-4 py-2 bg-gray-300 hover:bg-gray-400 text-gray-800 rounded">
+                                        Cancel
+                                    </button>
+
+                                    <button onclick="addToCart()"
+                                            class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded shadow">
+                                        Add to Cart
+                                    </button>
+                                </div>
+
+                                <!-- Cart + Submit Buttons inside Modal -->
+                                <div class="flex justify-between items-center pt-4 border-t mt-4">
+                                    <!-- Cart Button -->
+                                    <button
+                                        onclick="openCartModal()"
+                                        class="relative bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg shadow font-semibold transition">
+                                        Cart
+                                        <span id="cart-count"
+                                              class="absolute -top-2 -right-2 bg-red-600 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full shadow">
+                                        </span>
+                                    </button>
+
+                                    <!-- Submit Button -->
+                                    <button
+                                        onclick="submitCart()"
+                                        class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg shadow font-semibold transition">
+                                        Submit
+                                    </button>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div id="cartModal"
+                             class="fixed inset-0 bg-black bg-opacity-40 hidden items-center justify-center z-50">
+                            <div class="bg-white rounded-xl shadow-xl w-full max-w-3xl p-6 space-y-6">
+
+                                <h2 class="text-xl font-semibold text-gray-800">Cart Items</h2>
+
+                                <div id="cart-items-container" class="max-h-80 overflow-y-auto space-y-4">
+                                    <!-- Items inserted dynamically -->
+                                </div>
+
+                                <div class="flex justify-end gap-3">
+                                    <button onclick="closeCartModal()"
+                                            class="px-4 py-2 bg-gray-300 hover:bg-gray-400 text-gray-800 rounded">
+                                        Close
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
         </div>
+
+        <script>
+            function updateCartCount() {
+                const cart = JSON.parse(localStorage.getItem('raw_material_cart')) || [];
+                document.getElementById('cart-count').textContent = cart.length;
+            }
+
+            function openCartModal() {
+                const cart = JSON.parse(localStorage.getItem('raw_material_cart')) || [];
+                const container = document.getElementById('cart-items-container');
+                container.innerHTML = "";
+
+                if (cart.length === 0) {
+                    container.innerHTML = `<p class="text-gray-500">No items in the cart.</p>`;
+                } else {
+                    cart.forEach((item, index) => {
+                        container.innerHTML += `
+                <div class="border p-3 rounded-lg flex justify-between items-center bg-gray-50">
+                    <div>
+                        <p class="font-semibold">${item.name}</p>
+                        <p class="text-xs text-gray-600">Type: ${item.type}</p>
+                        <p class="text-xs text-gray-600">Order ID: ${item.order_id}</p>
+                        <p class="text-xs text-gray-600">Qty Selected:
+                            <span class="font-semibold">${item.used_qty} ${item.unit}</span>
+                        </p>
+                    </div>
+
+                    <button onclick="removeFromCart(${index})"
+                            class="text-red-600 font-bold hover:underline text-sm">
+                        Remove
+                    </button>
+                </div>
+            `;
+                    });
+                }
+
+                document.getElementById('cartModal').classList.remove('hidden');
+                document.getElementById('cartModal').classList.add('flex');
+            }
+
+            function closeCartModal() {
+                document.getElementById('cartModal').classList.add('hidden');
+                document.getElementById('cartModal').classList.remove('flex');
+            }
+
+            function removeFromCart(index) {
+                let cart = JSON.parse(localStorage.getItem('raw_material_cart')) || [];
+                cart.splice(index, 1);
+                localStorage.setItem('raw_material_cart', JSON.stringify(cart));
+                openCartModal();       // Refresh modal
+                updateCartCount();     // Update header count
+            }
+
+            function submitCart() {
+                const cart = JSON.parse(localStorage.getItem('raw_material_cart')) || [];
+
+                if (cart.length === 0) {
+                    alert("Cart is empty!");
+                    return;
+                }
+
+                document.getElementById('cartDataInput').value = JSON.stringify(cart);
+                document.getElementById('cartSubmitForm').submit();
+            }
+
+            // Update on page load
+            updateCartCount();
+        </script>
+
+        <script>
+            let selectedOrderId = null;
+
+            function openAssignModal(orderId) {
+                selectedOrderId = orderId;
+                document.getElementById('assignModal').classList.remove('hidden');
+                document.getElementById('assignModal').classList.add('flex');
+            }
+
+            function closeAssignModal() {
+                document.getElementById('assignModal').classList.add('hidden');
+                document.getElementById('assignModal').classList.remove('flex');
+            }
+        </script>
+
+        <script>
+            // Show/hide qty input when checkbox is clicked
+            function toggleQtyInput(checkbox) {
+                let row = checkbox.closest("tr");
+                let qtyInput = row.querySelector(".qty-input");
+
+                if (checkbox.checked) {
+                    qtyInput.classList.remove("hidden");
+                    qtyInput.value = "";
+                } else {
+                    qtyInput.classList.add("hidden");
+                    qtyInput.value = "";
+                }
+            }
+
+            // Validate the input quantity
+            function validateQty(input) {
+                let max = parseFloat(input.dataset.max);
+                let val = parseFloat(input.value);
+
+                if (val > max) {
+                    input.value = max;
+                }
+                if (val < 1) {
+                    input.value = "";
+                }
+            }
+
+            function addToCart() {
+                let selected = document.querySelectorAll(".material-check:checked");
+                let cart = JSON.parse(localStorage.getItem("raw_material_cart")) || [];
+
+                if (selected.length === 0) {
+                    alert("Please select at least one item.");
+                    return;
+                }
+
+                let hasError = false;
+
+                selected.forEach(chk => {
+                    let row = chk.closest("tr");
+                    let qtyInput = row.querySelector(".qty-input");
+
+                    if (!qtyInput.value || qtyInput.value <= 0) {
+                        hasError = true;
+                        return;
+                    }
+
+                    cart.push({
+                        type: chk.dataset.type,
+                        material_id: chk.dataset.id,
+                        name: chk.dataset.name,
+                        price: chk.dataset.price,
+                        unit: chk.dataset.unit,
+                        used_qty: qtyInput.value,
+                        max_qty: chk.dataset.max,
+                        order_id: selectedOrderId
+                    });
+                });
+
+                if (hasError) {
+                    alert("Please enter quantity for all selected items.");
+                    return;
+                }
+
+                localStorage.setItem("raw_material_cart", JSON.stringify(cart));
+
+                // Update cart count badge
+                document.getElementById("cart-count").textContent = cart.length;
+
+                alert("Items added to cart successfully!");
+
+                // 🔥 Clear selections but do NOT close the modal
+                selected.forEach(chk => {
+                    chk.checked = false;
+                    let row = chk.closest("tr");
+                    row.querySelector(".qty-input").value = "";
+                    row.querySelector(".qty-input").classList.add("hidden");
+                });
+            }
+        </script>
+
         <script>
             document.addEventListener("DOMContentLoaded", function () {
                 const spinner = document.getElementById("pageLoadingSpinner");

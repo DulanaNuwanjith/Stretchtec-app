@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ExportRawMaterial;
 use App\Models\ProductOrderPreperation;
+use App\Models\RawMaterialStore;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
@@ -18,8 +20,12 @@ class ProductOrderPreperationController extends Controller
         // Fetch all records with pagination (adjust number per page as needed)
         $orderPreparations = ProductOrderPreperation::latest()->paginate(10);
 
+        $localRawMaterials = RawMaterialStore::all();
+
+        $exportRawMaterials = ExportRawMaterial::all();
+
         // Pass data to the blade
-        return view('production.pages.production-order-preparation', compact('orderPreparations'));
+        return view('production.pages.production-order-preparation', compact('orderPreparations', 'localRawMaterials', 'exportRawMaterials'));
     }
 
     /**
