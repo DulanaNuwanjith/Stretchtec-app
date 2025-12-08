@@ -128,7 +128,103 @@
                             </div>
 
                             <div id="filterFormContainer" class="hidden mt-4">
+                                <div id="stockFilterContainer" class="mt-4">
+                                    <form id="stockFilterForm" method="GET" action="{{ route('stockManagement.index') }}"
+                                        class="mb-6 sticky top-0 z-40 flex gap-6 items-center">
 
+                                        <div class="flex items-center gap-4 flex-wrap">
+
+                                            {{-- Filter - Reference No Dropdown --}}
+                                            <div class="relative inline-block text-left w-48">
+                                                <label class="block text-sm font-medium text-gray-700 mb-1">Reference
+                                                    No</label>
+
+                                                <input type="hidden" name="reference_no" id="referenceInput"
+                                                    value="{{ request('reference_no') }}">
+
+                                                <button id="referenceDropdownBtn" type="button"
+                                                    class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10"
+                                                    onclick="toggleReferenceDropdown(event)">
+
+                                                    <span
+                                                        id="selectedReference">{{ request('reference_no') ?? 'Select Reference No' }}</span>
+
+                                                    <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd"
+                                                            d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
+                                                            clip-rule="evenodd" />
+                                                    </svg>
+                                                </button>
+
+                                                <div id="referenceDropdownMenu"
+                                                    class="absolute z-40 mt-1 w-full bg-white border rounded-lg shadow-lg hidden max-h-48 overflow-y-auto p-2">
+
+                                                    <input type="text" id="referenceSearchInput"
+                                                        onkeyup="filterReferenceOptions()" placeholder="Search..."
+                                                        class="w-full px-2 py-1 text-sm border rounded-md"
+                                                        autocomplete="off">
+
+                                                    @foreach ($referenceNos as $ref)
+                                                        <div onclick="selectReference('{{ $ref }}')" tabindex="0"
+                                                            class="reference-option px-4 py-2 hover:bg-gray-100 cursor-pointer text-sm">
+                                                            {{ $ref }}
+                                                        </div>
+                                                    @endforeach
+                                                </div>
+                                            </div>
+
+                                            {{-- Filter - Shade Dropdown --}}
+                                            <div class="relative inline-block text-left w-48">
+                                                <label class="block text-sm font-medium text-gray-700 mb-1">Shade</label>
+
+                                                <input type="hidden" name="shade" id="shadeInput"
+                                                    value="{{ request('shade') }}">
+
+                                                <button id="shadeDropdownBtn" type="button"
+                                                    class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10"
+                                                    onclick="toggleShadeDropdown(event)">
+
+                                                    <span id="selectedShade">{{ request('shade') ?? 'Select Shade' }}</span>
+
+                                                    <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd"
+                                                            d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
+                                                            clip-rule="evenodd" />
+                                                    </svg>
+                                                </button>
+
+                                                <div id="shadeDropdownMenu"
+                                                    class="absolute z-40 mt-1 w-full bg-white border rounded-lg shadow-lg hidden max-h-48 overflow-y-auto p-2">
+
+                                                    <input type="text" id="shadeSearchInput"
+                                                        onkeyup="filterShadeOptions()" placeholder="Search..."
+                                                        class="w-full px-2 py-1 text-sm border rounded-md"
+                                                        autocomplete="off">
+
+                                                    @foreach ($shades as $shade)
+                                                        <div onclick="selectShade('{{ $shade }}')" tabindex="0"
+                                                            class="shade-option px-4 py-2 hover:bg-gray-100 cursor-pointer text-sm">
+                                                            {{ $shade }}
+                                                        </div>
+                                                    @endforeach
+                                                </div>
+                                            </div>
+
+                                            {{-- Apply + Clear Buttons --}}
+                                            <div class="flex items-end space-x-2 mt-2">
+                                                <button type="submit"
+                                                    class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                                                    Apply Filters
+                                                </button>
+
+                                                <button type="button" id="clearStockFilters"
+                                                    class="mt-4 bg-gray-200 text-gray-700 px-4 py-2 rounded hover:bg-gray-300">
+                                                    Clear
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
                             </div>
 
                             <div class="flex justify-between items-center mb-6">
@@ -251,7 +347,8 @@
                                                         <label for="reference_no"
                                                             class="block text-sm font-medium text-gray-700 dark:text-gray-300">Reference
                                                             No</label>
-                                                        <input id="reference_no" type="text" name="reference_no" required
+                                                        <input id="reference_no" type="text" name="reference_no"
+                                                            required
                                                             class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                                     </div>
                                                     <div class="w-1/2">
@@ -407,5 +504,67 @@
             const form = document.getElementById('filterFormContainer');
             form.classList.toggle('hidden');
         }
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+
+            // ===== Reference No Dropdown =====
+            const refBtn = document.getElementById("referenceDropdownBtn");
+            const refMenu = document.getElementById("referenceDropdownMenu");
+
+            window.toggleReferenceDropdown = function(e) {
+                e.stopPropagation();
+                refMenu.classList.toggle("hidden");
+            };
+
+            window.selectReference = function(value) {
+                document.getElementById("referenceInput").value = value;
+                document.getElementById("selectedReference").innerText = value;
+                refMenu.classList.add("hidden");
+            };
+
+            window.filterReferenceOptions = function() {
+                const filter = document.getElementById("referenceSearchInput").value.toLowerCase();
+                document.querySelectorAll(".reference-option").forEach(opt => {
+                    opt.style.display = opt.textContent.toLowerCase().includes(filter) ? "block" :
+                        "none";
+                });
+            };
+
+            // ===== Shade Dropdown =====
+            const shadeBtn = document.getElementById("shadeDropdownBtn");
+            const shadeMenu = document.getElementById("shadeDropdownMenu");
+
+            window.toggleShadeDropdown = function(e) {
+                e.stopPropagation();
+                shadeMenu.classList.toggle("hidden");
+            };
+
+            window.selectShade = function(value) {
+                document.getElementById("shadeInput").value = value;
+                document.getElementById("selectedShade").innerText = value;
+                shadeMenu.classList.add("hidden");
+            };
+
+            window.filterShadeOptions = function() {
+                const filter = document.getElementById("shadeSearchInput").value.toLowerCase();
+                document.querySelectorAll(".shade-option").forEach(opt => {
+                    opt.style.display = opt.textContent.toLowerCase().includes(filter) ? "block" :
+                        "none";
+                });
+            };
+
+            // Close dropdowns on outside click
+            document.addEventListener("click", function() {
+                refMenu.classList.add("hidden");
+                shadeMenu.classList.add("hidden");
+            });
+
+            // Clear filters
+            document.getElementById("clearStockFilters").addEventListener("click", function() {
+                window.location.href = "{{ route('stockManagement.index') }}";
+            });
+
+        });
     </script>
 @endsection
