@@ -15,10 +15,24 @@ class StockController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): Factory|View
+    public function index(Request $request)
     {
-        $stock = Stock::orderBy('id', 'asc')->paginate(20);
-        return view('store-management.pages.stockManagement', compact('stock'));
+        $query = Stock::query();
+
+        if ($request->filled('reference_no')) {
+            $query->where('reference_no', $request->reference_no);
+        }
+
+        if ($request->filled('shade')) {
+            $query->where('shade', $request->shade);
+        }
+
+        $stock = $query->orderBy('id', 'asc')->paginate(20);
+
+        $referenceNos = Stock::select('reference_no')->distinct()->pluck('reference_no');
+        $shades = Stock::select('shade')->distinct()->pluck('shade');
+
+        return view('store-management.pages.stockManagement', compact('stock', 'referenceNos', 'shades'));
     }
 
     public function storeManageIndex(): Factory|View
