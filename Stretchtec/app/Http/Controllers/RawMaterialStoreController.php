@@ -13,19 +13,44 @@ class RawMaterialStoreController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): Factory|View
+   public function index(Request $request): View
     {
-        $rawMaterials = RawMaterialStore::paginate(20);
-        return view('store-management.pages.rawMaterial', compact('rawMaterials'));
+        $query = RawMaterialStore::query();
+
+        // Apply Filters
+        if ($request->color) {
+            $query->where('color', $request->color);
+        }
+
+        if ($request->shade) {
+            $query->where('shade', $request->shade);
+        }
+
+        if ($request->pst_no) {
+            $query->where('pst_no', $request->pst_no);
+        }
+
+        if ($request->supplier) {
+            $query->where('supplier', $request->supplier);
+        }
+
+        $rawMaterials = $query->paginate(20)->appends($request->query());
+
+        // NEW — Send Dropdown Filter Data
+        $colors = RawMaterialStore::select('color')->distinct()->pluck('color');
+        $shades = RawMaterialStore::select('shade')->distinct()->pluck('shade');
+        $psts = RawMaterialStore::select('pst_no')->distinct()->pluck('pst_no');
+        $suppliers = RawMaterialStore::select('supplier')->distinct()->pluck('supplier');
+
+        return view('store-management.pages.rawMaterial', compact(
+            'rawMaterials',
+            'colors',
+            'shades',
+            'psts',
+            'suppliers'
+        ));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create(): void
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -47,30 +72,6 @@ class RawMaterialStoreController extends Controller
         RawMaterialStore::create($validated);
 
         return redirect()->route('rawMaterial.index')->with('success', 'Raw material added successfully!');
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(RawMaterialStore $rawMaterialStore)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(RawMaterialStore $rawMaterialStore)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, RawMaterialStore $rawMaterialStore)
-    {
-        //
     }
 
     /**

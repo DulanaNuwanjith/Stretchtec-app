@@ -512,8 +512,13 @@
             const refBtn = document.getElementById("referenceDropdownBtn");
             const refMenu = document.getElementById("referenceDropdownMenu");
 
+            // Prevent clicks inside the menu from closing it
+            refMenu.addEventListener("click", e => e.stopPropagation());
+
             window.toggleReferenceDropdown = function(e) {
                 e.stopPropagation();
+                // Close other dropdowns if needed
+                shadeMenu.classList.add("hidden");
                 refMenu.classList.toggle("hidden");
             };
 
@@ -535,8 +540,13 @@
             const shadeBtn = document.getElementById("shadeDropdownBtn");
             const shadeMenu = document.getElementById("shadeDropdownMenu");
 
+            // Prevent clicks inside the menu from closing it
+            shadeMenu.addEventListener("click", e => e.stopPropagation());
+
             window.toggleShadeDropdown = function(e) {
                 e.stopPropagation();
+                // Close other dropdowns if needed
+                refMenu.classList.add("hidden");
                 shadeMenu.classList.toggle("hidden");
             };
 
@@ -554,16 +564,19 @@
                 });
             };
 
-            // Close dropdowns on outside click
+            // ===== Close dropdowns when clicking outside =====
             document.addEventListener("click", function() {
                 refMenu.classList.add("hidden");
                 shadeMenu.classList.add("hidden");
             });
 
-            // Clear filters
-            document.getElementById("clearStockFilters").addEventListener("click", function() {
-                window.location.href = "{{ route('stockManagement.index') }}";
-            });
+            // ===== Clear filters =====
+            const clearBtn = document.getElementById("clearStockFilters");
+            if (clearBtn) {
+                clearBtn.addEventListener("click", function() {
+                    window.location.href = "{{ route('stockManagement.index') }}";
+                });
+            }
 
         });
     </script>

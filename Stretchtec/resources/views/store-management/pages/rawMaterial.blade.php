@@ -94,6 +94,190 @@
                                 });
                             </script>
 
+                            <div class="flex justify-start">
+                                <button onclick="toggleFilterForm()"
+                                    class="bg-white border border-blue-500 text-blue-500 hover:text-blue-600 hover:border-blue-600 font-semibold py-1 px-3 rounded shadow flex items-center gap-2 mb-6">
+                                    <img src="{{ asset('icons/filter.png') }}" class="w-6 h-6" alt="Filter Icon">
+                                    Filters
+                                </button>
+                            </div>
+
+                            <div id="filterFormContainer" class="mt-4 hidden">
+                                <form id="rawMaterialFilterForm" method="GET" action="{{ route('rawMaterial.index') }}"
+                                    class="mb-6 sticky top-0 z-40 flex gap-6 items-center">
+
+                                    <div class="flex items-center gap-4 flex-wrap">
+
+                                        {{-- Color Filter --}}
+                                        <div class="relative inline-block text-left w-48">
+                                            <label class="block text-sm font-medium text-gray-700 mb-1">Color</label>
+
+                                            <input type="hidden" name="color" id="colorInput"
+                                                value="{{ request('color') }}">
+
+                                            <button id="colorDropdownBtn" type="button"
+                                                class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 
+                               text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 
+                               hover:bg-gray-50 h-10"
+                                                onclick="toggleColorDropdown(event)">
+
+                                                <span id="selectedColor">{{ request('color') ?? 'Select Color' }}</span>
+
+                                                <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd"
+                                                        d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z" />
+                                                </svg>
+                                            </button>
+
+                                            <div id="colorDropdownMenu"
+                                                class="absolute z-40 mt-1 w-full bg-white border rounded-lg shadow-lg hidden 
+                            max-h-48 overflow-y-auto p-2">
+
+                                                <input type="text" id="colorSearchInput" onkeyup="filterColorOptions()"
+                                                    placeholder="Search..."
+                                                    class="w-full px-2 py-1 text-sm border rounded-md">
+
+                                                @foreach ($colors as $color)
+                                                    <div onclick="selectColor('{{ $color }}')" tabindex="0"
+                                                        class="color-option px-4 py-2 hover:bg-gray-100 cursor-pointer text-sm">
+                                                        {{ $color }}
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                        </div>
+
+                                        {{-- Shade Filter --}}
+                                        <div class="relative inline-block text-left w-48">
+                                            <label class="block text-sm font-medium text-gray-700 mb-1">Shade</label>
+
+                                            <input type="hidden" name="shade" id="shadeInputRM"
+                                                value="{{ request('shade') }}">
+
+                                            <button id="shadeDropdownBtnRM" type="button"
+                                                class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 
+                               text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 
+                               hover:bg-gray-50 h-10"
+                                                onclick="toggleShadeDropdownRM(event)">
+
+                                                <span id="selectedShadeRM">{{ request('shade') ?? 'Select Shade' }}</span>
+
+                                                <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd"
+                                                        d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z" />
+                                                </svg>
+                                            </button>
+
+                                            <div id="shadeDropdownMenuRM"
+                                                class="absolute z-40 mt-1 w-full bg-white border rounded-lg shadow-lg hidden 
+                            max-h-48 overflow-y-auto p-2">
+
+                                                <input type="text" id="shadeSearchInputRM"
+                                                    onkeyup="filterShadeOptionsRM()" placeholder="Search..."
+                                                    class="w-full px-2 py-1 text-sm border rounded-md">
+
+                                                @foreach ($shades as $shade)
+                                                    <div onclick="selectShadeRM('{{ $shade }}')" tabindex="0"
+                                                        class="shade-option-rm px-4 py-2 hover:bg-gray-100 cursor-pointer text-sm">
+                                                        {{ $shade }}
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                        </div>
+
+                                        {{-- PST No Filter --}}
+                                        <div class="relative inline-block text-left w-48">
+                                            <label class="block text-sm font-medium text-gray-700 mb-1">PST No</label>
+
+                                            <input type="hidden" name="pst_no" id="pstInput"
+                                                value="{{ request('pst_no') }}">
+
+                                            <button id="pstDropdownBtn" type="button"
+                                                class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 
+                               text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 
+                               hover:bg-gray-50 h-10"
+                                                onclick="togglePstDropdown(event)">
+
+                                                <span id="selectedPst">{{ request('pst_no') ?? 'Select PST No' }}</span>
+
+                                                <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd"
+                                                        d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z" />
+                                                </svg>
+                                            </button>
+
+                                            <div id="pstDropdownMenu"
+                                                class="absolute z-40 mt-1 w-full bg-white border rounded-lg shadow-lg hidden 
+                            max-h-48 overflow-y-auto p-2">
+
+                                                <input type="text" id="pstSearchInput" onkeyup="filterPstOptions()"
+                                                    placeholder="Search..."
+                                                    class="w-full px-2 py-1 text-sm border rounded-md">
+
+                                                @foreach ($psts as $pst)
+                                                    <div onclick="selectPst('{{ $pst }}')" tabindex="0"
+                                                        class="pst-option px-4 py-2 hover:bg-gray-100 cursor-pointer text-sm">
+                                                        {{ $pst }}
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                        </div>
+
+                                        {{-- Supplier Filter --}}
+                                        <div class="relative inline-block text-left w-48">
+                                            <label class="block text-sm font-medium text-gray-700 mb-1">Supplier</label>
+
+                                            <input type="hidden" name="supplier" id="supplierInput"
+                                                value="{{ request('supplier') }}">
+
+                                            <button id="supplierDropdownBtn" type="button"
+                                                class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 
+                               text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 
+                               hover:bg-gray-50 h-10"
+                                                onclick="toggleSupplierDropdown(event)">
+
+                                                <span
+                                                    id="selectedSupplier">{{ request('supplier') ?? 'Select Supplier' }}</span>
+
+                                                <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd"
+                                                        d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z" />
+                                                </svg>
+                                            </button>
+
+                                            <div id="supplierDropdownMenu"
+                                                class="absolute z-40 mt-1 w-full bg-white border rounded-lg shadow-lg hidden 
+                            max-h-48 overflow-y-auto p-2">
+
+                                                <input type="text" id="supplierSearchInput"
+                                                    onkeyup="filterSupplierOptions()" placeholder="Search..."
+                                                    class="w-full px-2 py-1 text-sm border rounded-md">
+
+                                                @foreach ($suppliers as $supplier)
+                                                    <div onclick="selectSupplier('{{ $supplier }}')" tabindex="0"
+                                                        class="supplier-option px-4 py-2 hover:bg-gray-100 cursor-pointer text-sm">
+                                                        {{ $supplier }}
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                        </div>
+
+                                        {{-- Apply + Clear Buttons --}}
+                                        <div class="flex items-end space-x-2 mt-2">
+                                            <button type="submit"
+                                                class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                                                Apply Filters
+                                            </button>
+
+                                            <button type="button" id="clearRawMaterialFilters"
+                                                class="mt-4 bg-gray-200 text-gray-700 px-4 py-2 rounded hover:bg-gray-300">
+                                                Clear
+                                            </button>
+                                        </div>
+
+                                    </div>
+                                </form>
+                            </div>
+
                             <script>
                                 function confirmDelete(id) {
                                     Swal.fire({
@@ -184,7 +368,8 @@
                                             <div class="grid grid-cols-3 gap-4">
                                                 <div>
                                                     <label class="block text-sm font-medium">Available Quantity</label>
-                                                    <input name="available_quantity" type="number" required min="1"
+                                                    <input name="available_quantity" type="number" required
+                                                        min="1"
                                                         class="w-full mt-1 px-3 py-2 border rounded-md text-sm">
                                                 </div>
                                                 <div>
@@ -414,6 +599,147 @@
                 window.requestAnimationFrame(() => {
                     spinner.classList.add("hidden"); // hide spinner after rendering
                 });
+            });
+        </script>
+
+        <script>
+            function toggleFilterForm() {
+                const form = document.getElementById('filterFormContainer');
+                form.classList.toggle('hidden');
+            }
+        </script>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+
+                // ------- DROPDOWN MENU ELEMENTS -------
+                const dropdowns = [{
+                        btn: 'colorDropdownBtn',
+                        menu: 'colorDropdownMenu'
+                    },
+                    {
+                        btn: 'shadeDropdownBtnRM',
+                        menu: 'shadeDropdownMenuRM'
+                    },
+                    {
+                        btn: 'pstDropdownBtn',
+                        menu: 'pstDropdownMenu'
+                    },
+                    {
+                        btn: 'supplierDropdownBtn',
+                        menu: 'supplierDropdownMenu'
+                    },
+                ];
+
+                // Stop clicks inside menu from closing
+                dropdowns.forEach(d => {
+                    const menu = document.getElementById(d.menu);
+                    if (menu) {
+                        menu.addEventListener('click', e => e.stopPropagation());
+                    }
+                });
+
+                // Toggle dropdown function
+                function toggleDropdown(menuId) {
+                    // Close all others first
+                    dropdowns.forEach(d => {
+                        if (d.menu !== menuId) document.getElementById(d.menu).classList.add('hidden');
+                    });
+                    // Toggle current
+                    document.getElementById(menuId).classList.toggle('hidden');
+                }
+
+                // ------- COLOR -------
+                window.toggleColorDropdown = function(e) {
+                    e.stopPropagation();
+                    toggleDropdown('colorDropdownMenu');
+                }
+
+                window.selectColor = function(val) {
+                    document.getElementById('colorInput').value = val;
+                    document.getElementById('selectedColor').innerText = val;
+                    document.getElementById('colorDropdownMenu').classList.add('hidden');
+                }
+
+                window.filterColorOptions = function() {
+                    const s = document.getElementById('colorSearchInput').value.toLowerCase();
+                    document.querySelectorAll('.color-option').forEach(opt => {
+                        opt.style.display = opt.innerText.toLowerCase().includes(s) ? "" : "none";
+                    });
+                }
+
+                // ------- SHADE -------
+                window.toggleShadeDropdownRM = function(e) {
+                    e.stopPropagation();
+                    toggleDropdown('shadeDropdownMenuRM');
+                }
+
+                window.selectShadeRM = function(val) {
+                    document.getElementById('shadeInputRM').value = val;
+                    document.getElementById('selectedShadeRM').innerText = val;
+                    document.getElementById('shadeDropdownMenuRM').classList.add('hidden');
+                }
+
+                window.filterShadeOptionsRM = function() {
+                    const s = document.getElementById('shadeSearchInputRM').value.toLowerCase();
+                    document.querySelectorAll('.shade-option-rm').forEach(opt => {
+                        opt.style.display = opt.innerText.toLowerCase().includes(s) ? "" : "none";
+                    });
+                }
+
+                // ------- PST -------
+                window.togglePstDropdown = function(e) {
+                    e.stopPropagation();
+                    toggleDropdown('pstDropdownMenu');
+                }
+
+                window.selectPst = function(val) {
+                    document.getElementById('pstInput').value = val;
+                    document.getElementById('selectedPst').innerText = val;
+                    document.getElementById('pstDropdownMenu').classList.add('hidden');
+                }
+
+                window.filterPstOptions = function() {
+                    const s = document.getElementById('pstSearchInput').value.toLowerCase();
+                    document.querySelectorAll('.pst-option').forEach(opt => {
+                        opt.style.display = opt.innerText.toLowerCase().includes(s) ? "" : "none";
+                    });
+                }
+
+                // ------- SUPPLIER -------
+                window.toggleSupplierDropdown = function(e) {
+                    e.stopPropagation();
+                    toggleDropdown('supplierDropdownMenu');
+                }
+
+                window.selectSupplier = function(val) {
+                    document.getElementById('supplierInput').value = val;
+                    document.getElementById('selectedSupplier').innerText = val;
+                    document.getElementById('supplierDropdownMenu').classList.add('hidden');
+                }
+
+                window.filterSupplierOptions = function() {
+                    const s = document.getElementById('supplierSearchInput').value.toLowerCase();
+                    document.querySelectorAll('.supplier-option').forEach(opt => {
+                        opt.style.display = opt.innerText.toLowerCase().includes(s) ? "" : "none";
+                    });
+                }
+
+                // ------- CLEAR FILTERS -------
+                const clearBtn = document.getElementById('clearRawMaterialFilters');
+                if (clearBtn) {
+                    clearBtn.addEventListener('click', () => {
+                        window.location.href = "{{ route('rawMaterial.index') }}";
+                    });
+                }
+
+                // ------- CLOSE DROPDOWNS ON OUTSIDE CLICK -------
+                document.addEventListener('click', () => {
+                    dropdowns.forEach(d => {
+                        document.getElementById(d.menu).classList.add('hidden');
+                    });
+                });
+
             });
         </script>
     @endsection
