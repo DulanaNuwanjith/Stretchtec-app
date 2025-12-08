@@ -128,7 +128,7 @@
             </div>
 
             <!-- Stock Records Table -->
-            <div class="overflow-x-auto max-h-[1200px] bg-white dark:bg-gray-900 shadow rounded-lg">
+            <div class="overflow-x-auto bg-white dark:bg-gray-900 shadow rounded-lg">
                 <table class="min-w-full border-collapse">
                     <thead class="bg-gray-100 dark:bg-gray-700">
                         <tr class="text-center">
