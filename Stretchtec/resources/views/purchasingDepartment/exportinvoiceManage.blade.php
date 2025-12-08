@@ -5,7 +5,11 @@
     @extends('layouts.purchasing-tabs')
 
     @section('content')
-        <div class="flex-1 overflow-y-auto p-8 bg-white">
+        <div class="flex-1 overflow-y-hidden">
+            <div class="">
+                <div class="w-full px-6 lg:px-2">
+                    <div class="bg-white dark:bg-gray-800 overflow-hidden">
+                        <div class="p-4 text-gray-900 dark:text-gray-100">
             <style>
                 .swal2-toast {
                     font-size: 0.875rem;
@@ -114,6 +118,107 @@
                     });
                 }
             </script>
+
+            {{-- Filters --}}
+            <div class="flex justify-start">
+                <button onclick="toggleFilterForm()"
+                    class="bg-white border border-blue-500 text-blue-500 hover:text-blue-600 font-semibold py-1 px-3 rounded shadow flex items-center gap-2 mb-6">
+                    <img src="{{ asset('icons/filter.png') }}" class="w-6 h-6" alt="Filter Icon">
+                    Filters
+                </button>
+            </div>
+
+            <div id="filterFormContainer" class="hidden mt-4">
+                <form id="filterForm" method="GET" action="{{ route('exportinvoiceManage.index') }}" class="mb-6">
+                    <div class="flex items-center gap-4 flex-wrap">
+
+                        {{-- Filter: Invoice Number --}}
+                        <div class="relative inline-block text-left w-64">
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Invoice Number</label>
+                            <input type="hidden" name="invoice_number" id="invoiceNumberInput" value="{{ request('invoice_number') }}">
+                            <button type="button" id="invoiceDropdown" onclick="toggleDropdown('invoiceDropdown', 'invoiceDropdownMenu')"
+                                class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold
+                                text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10 dark:bg-gray-700 dark:text-white"
+                                aria-expanded="false">
+                                <span id="selectedInvoiceNumber">{{ request('invoice_number') ?? 'Select Invoice Number' }}</span>
+                                <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd"
+                                        d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24
+                                        4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                            </button>
+
+                            <div id="invoiceDropdownMenu"
+                                class="absolute z-40 mt-1 w-full bg-white border rounded-lg shadow-lg hidden max-h-48 overflow-y-auto p-2">
+                                <input type="text" id="invoiceSearch" onkeyup="filterDropdown('.invoice-option', 'invoiceSearch')"
+                                    placeholder="Search..."
+                                    class="w-full px-2 py-1 text-sm border rounded-md dark:bg-gray-600 dark:text-white dark:placeholder-gray-300">
+
+                                @foreach ($uniqueInvoiceNumbers as $invoice)
+                                    <div onclick="selectDropdownValue('invoiceDropdown', 'invoiceDropdownMenu', 'selectedInvoiceNumber', 'invoiceNumberInput', '{{ $invoice->invoice_number }}', 'Select Invoice Number')"
+                                        class="invoice-option px-4 py-2 hover:bg-gray-100 cursor-pointer text-sm">
+                                        {{ $invoice->invoice_number }}
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+
+                        {{-- Filter: Supplier --}}
+                        <div class="relative inline-block text-left w-64">
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Supplier</label>
+                            <input type="hidden" name="supplier" id="supplierInput" value="{{ request('supplier') }}">
+                            <button type="button" id="supplierDropdown" onclick="toggleDropdown('supplierDropdown', 'supplierDropdownMenu')"
+                                class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold
+                                text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10 dark:bg-gray-700 dark:text-white"
+                                aria-expanded="false">
+                                <span id="selectedSupplier">{{ request('supplier') ?? 'Select Supplier' }}</span>
+                                <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd"
+                                        d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24
+                                        4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                            </button>
+
+                            <div id="supplierDropdownMenu"
+                                class="absolute z-40 mt-1 w-full bg-white border rounded-lg shadow-lg hidden max-h-48 overflow-y-auto p-2">
+                                <input type="text" id="supplierSearch" onkeyup="filterDropdown('.supplier-option', 'supplierSearch')"
+                                    placeholder="Search..."
+                                    class="w-full px-2 py-1 text-sm border rounded-md dark:bg-gray-600 dark:text-white dark:placeholder-gray-300">
+
+                                @foreach ($invoiceItems->flatten()->pluck('supplier')->unique() as $supplier)
+                                    <div onclick="selectDropdownValue('supplierDropdown', 'supplierDropdownMenu', 'selectedSupplier', 'supplierInput', '{{ $supplier }}', 'Select Supplier')"
+                                        class="supplier-option px-4 py-2 hover:bg-gray-100 cursor-pointer text-sm">
+                                        {{ $supplier }}
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+
+                        {{-- Filter: Date --}}
+                        <div class="w-48">
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Date</label>
+                            <input type="date" name="date" value="{{ request('date') }}"
+                                class="w-full px-3 py-2 border rounded dark:bg-gray-700 dark:text-white text-sm">
+                        </div>
+
+                        {{-- Filter Buttons --}}
+                        <div class="flex items-end space-x-2 mt-2">
+                            <button type="submit"
+                                class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                                Apply Filters
+                            </button>
+
+                            <button type="button" onclick="clearFilters()"
+                                class="mt-4 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 px-4 py-2 rounded hover:bg-gray-300">
+                                Clear
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
 
             {{-- ===================== PAGE HEADER ===================== --}}
             <div class="flex items-center mb-6">
@@ -401,6 +506,10 @@
                 </form>
             </div>
         </div>
+        </div>
+        </div>
+        </div>
+        </div>
 
         <script>
             document.addEventListener('DOMContentLoaded', () => {
@@ -543,4 +652,78 @@
                 });
             });
         </script>
+
+        <script>
+            function toggleFilterForm() {
+                document.getElementById('filterFormContainer').classList.toggle('hidden');
+            }
+
+            // ===== Dropdown functions =====
+            function toggleDropdown(btnId, menuId) {
+                const btn = document.getElementById(btnId);
+                const menu = document.getElementById(menuId);
+                const expanded = btn.getAttribute('aria-expanded') === 'true';
+                menu.classList.toggle('hidden');
+                btn.setAttribute('aria-expanded', !expanded);
+            }
+
+            function selectDropdownValue(btnId, menuId, selectedId, inputId, value, defaultText) {
+                document.getElementById(selectedId).innerText = value || defaultText;
+                document.getElementById(inputId).value = value;
+                closeDropdown(btnId, menuId);
+            }
+
+            function filterDropdown(optionClass, inputId) {
+                const input = document.getElementById(inputId).value.toLowerCase();
+                const items = document.querySelectorAll(optionClass);
+                items.forEach(item => {
+                    const text = item.textContent.toLowerCase();
+                    item.style.display = text.includes(input) ? 'block' : 'none';
+                });
+            }
+
+            function closeDropdown(btnId, menuId) {
+                const btn = document.getElementById(btnId);
+                const menu = document.getElementById(menuId);
+                menu.classList.add('hidden');
+                btn.setAttribute('aria-expanded', false);
+            }
+
+            function clearFilters() {
+                // Clear Invoice Number
+                document.getElementById('selectedInvoiceNumber').innerText = 'Select Invoice Number';
+                document.getElementById('invoiceNumberInput').value = '';
+                document.getElementById('invoiceSearch').value = '';
+                filterDropdown('.invoice-option', 'invoiceSearch');
+
+                // Clear Supplier
+                document.getElementById('selectedSupplier').innerText = 'Select Supplier';
+                document.getElementById('supplierInput').value = '';
+                document.getElementById('supplierSearch').value = '';
+                filterDropdown('.supplier-option', 'supplierSearch');
+
+                // Clear Date
+                document.querySelector('input[name="date"]').value = '';
+
+                // Reset form and reload page
+                document.getElementById('filterForm').reset();
+                window.location.href = "{{ route('exportinvoiceManage.index') }}";
+            }
+
+            // Close dropdown if click outside
+            document.addEventListener('click', function(e) {
+                const dropdowns = [
+                    { btn: 'invoiceDropdown', menu: 'invoiceDropdownMenu' },
+                    { btn: 'supplierDropdown', menu: 'supplierDropdownMenu' },
+                ];
+                dropdowns.forEach(d => {
+                    const btn = document.getElementById(d.btn);
+                    const menu = document.getElementById(d.menu);
+                    if (!btn.contains(e.target) && !menu.contains(e.target)) {
+                        closeDropdown(d.btn, d.menu);
+                    }
+                });
+            });
+        </script>
+
     @endsection

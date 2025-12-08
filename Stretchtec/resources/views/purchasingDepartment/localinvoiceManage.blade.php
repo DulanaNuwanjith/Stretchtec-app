@@ -6,7 +6,11 @@
     @extends('layouts.purchasing-tabs')
 
     @section('content')
-        <div class="flex-1 overflow-y-auto p-8 bg-white">
+         <div class="flex-1 overflow-y-hidden">
+            <div class="">
+                <div class="w-full px-6 lg:px-2">
+                    <div class="bg-white dark:bg-gray-800 overflow-hidden">
+                        <div class="p-4 text-gray-900 dark:text-gray-100">
             <style>
                 .swal2-toast {
                     font-size: 0.875rem;
@@ -778,6 +782,10 @@
                         </form>
                     </div>
                 </div>
+            </div>
+            </div>
+            </div>
+            </div>
             </div>
 
             <script>

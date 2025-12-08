@@ -18,13 +18,32 @@ class ExportProcurementController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): Factory|View
+    public function index(Request $request): Factory|View
     {
-        $uniqueInvoiceNumbers = ExportProcurement::select('invoice_number')
+        // Start query
+        $query = ExportProcurement::query();
+
+        // Apply filters if present
+        if ($request->filled('invoice_number')) {
+            $query->where('invoice_number', $request->invoice_number);
+        }
+
+        if ($request->filled('supplier')) {
+            $query->where('supplier', $request->supplier);
+        }
+
+        if ($request->filled('date')) {
+            $query->whereDate('date', $request->date);
+        }
+
+        // Get unique invoice numbers with pagination
+        $uniqueInvoiceNumbers = $query->select('invoice_number')
             ->groupBy('invoice_number')
             ->orderBy('date', 'desc')
-            ->paginate(10);
+            ->paginate(10)
+            ->withQueryString(); // preserve filter query params
 
+        // Get invoice items for listed invoice numbers
         $invoiceItems = ExportProcurement::whereIn('invoice_number', $uniqueInvoiceNumbers->pluck('invoice_number'))
             ->orderBy('date', 'desc')
             ->get()
@@ -33,11 +52,11 @@ class ExportProcurementController extends Controller
         return view('purchasingDepartment.exportinvoiceManage', compact('uniqueInvoiceNumbers', 'invoiceItems'));
     }
 
+
     public function exportRawIndex(): Factory|View
     {
         $exportRawMaterials = ExportRawMaterial::latest()->paginate(20);
         return view('store-management.pages.rawMaterialReceipt', compact('exportRawMaterials'));
-
     }
 
     public function exportRawStore(Request $request): RedirectResponse
@@ -168,7 +187,6 @@ class ExportProcurementController extends Controller
             return redirect()
                 ->back()
                 ->with('success', 'Export procurement records created successfully.');
-
         } catch (ValidationException $e) {
 
             DB::rollBack();
@@ -176,7 +194,6 @@ class ExportProcurementController extends Controller
                 ->back()
                 ->withErrors($e->errors())
                 ->withInput();
-
         } catch (Exception $e) {
 
             DB::rollBack();
@@ -235,5 +252,4 @@ class ExportProcurementController extends Controller
             return back()->with('error', 'Failed to delete the invoice.');
         }
     }
-
 }
