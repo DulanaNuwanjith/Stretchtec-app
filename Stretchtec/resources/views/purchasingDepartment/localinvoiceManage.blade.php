@@ -326,7 +326,7 @@
                     <p class="mt-3 text-gray-700 font-semibold">Loading data...</p>
                 </div>
 
-                <table class="min-w-full border-collapse">
+                <table class="table-fixed w-full text-sm divide-y divide-gray-200 dark:divide-gray-700">
                     <thead class="bg-gray-100 dark:bg-gray-700">
                         <tr class="text-center">
                             <!-- Parent Row Columns -->
@@ -335,37 +335,56 @@
                                 Invoice No
                             </th>
 
-                            <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                            <th
+                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                 Date
                             </th>
-                            <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                            <th
+                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                 PO Number
                             </th>
-                            <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                            <th
+                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                 Supplier
                             </th>
 
                             <!-- Other Columns -->
-                            <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                            <th
+                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                 Color</th>
-                            <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                            <th
+                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                 Shade</th>
-                            <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                            <th
+                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                 PST No</th>
-                            <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                            <th
+                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                 TKT</th>
-                            <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                            <th
+                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                 Quantity</th>
-                            <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-40 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                            <th
+                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-40 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                 Supplier Comment</th>
-                            <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                            <th
+                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                 Amount</th>
-                            <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                            <th
+                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                 Total Amount</th>
-                            <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                            <th
+                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-28 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                Checked By</th>
+                            <th
+                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-40 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                Notes</th>
+                            <th
+                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                 Status</th>
 
-                            <th class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                            <th
+                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                 Actions
                             </th>
                         </tr>
@@ -377,13 +396,13 @@
                             $first = $items->first();
                         @endphp
 
-                        <tbody x-data="{ open: false }"
-                            class="divide-y divide-gray-200 dark:divide-gray-600">
+                        <tbody x-data="{ open: false }" class="divide-y divide-gray-200 dark:divide-gray-600">
                             <!-- Parent Row -->
                             <tr class="odd:bg-white even:bg-gray-50 border-b border-gray-200 text-center">
 
                                 <!-- Expand Invoice -->
-                                <td class="sticky left-0 z-10 bg-white px-4 py-3 text-sm bg-gray-100 border-r border-gray-300 text-left whitespace-normal break-words font-bold">
+                                <td
+                                    class="sticky left-0 z-10 bg-white px-4 py-3 text-sm bg-gray-100 border-r border-gray-300 text-left whitespace-normal break-words font-bold">
                                     @if ($hasMultiple)
                                         <button @click="open = !open"
                                             class="flex items-center w-full gap-2 text-blue-600 hover:text-blue-800">
@@ -398,20 +417,33 @@
                                     @endif
                                 </td>
 
-                                <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">{{ $first->date }}</td>
-                                <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">{{ $first->po_number }}</td>
-                                <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">{{ $first->supplier_name }}</td>
-
-                                <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">{{ $first->color }}</td>
-                                <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">{{ $first->shade }}</td>
-                                <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">{{ $first->pst_no }}</td>
-                                <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">{{ $first->tkt }}</td>
-                                <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">{{ $first->quantity }} {{ $first->uom }}</td>
-                                <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">{{ $first->supplier_comment }}</td>
-                                <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">{{ $first->total_price }}</td>
-                                <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">{{ $first->invoice_value }}</td>
-
-                                <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">
+                                <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">
+                                    {{ $first->date }}</td>
+                                <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">
+                                    {{ $first->po_number }}</td>
+                                <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">
+                                    {{ $first->supplier_name }}</td>
+                                <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">
+                                    {{ $first->color }}</td>
+                                <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">
+                                    {{ $first->shade }}</td>
+                                <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">
+                                    {{ $first->pst_no }}</td>
+                                <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">
+                                    {{ $first->tkt }}</td>
+                                <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">
+                                    {{ $first->quantity }} {{ $first->uom }}</td>
+                                <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">
+                                    {{ $first->supplier_comment }}</td>
+                                <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">
+                                    {{ number_format($first->total_price, 2) }}</td>
+                                <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">
+                                    {{ number_format($first->invoice_value, 2) }}</td>
+                                <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">
+                                    {{ $first->approved_by }}</td>
+                                <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">
+                                    {{ $first->notes }}</td>
+                                <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r break-words">
                                     <span
                                         class="px-2 py-1 rounded-full text-xs font-semibold
                         @if ($first->status === 'pending') bg-yellow-100 text-yellow-800
@@ -450,25 +482,59 @@
 
                                         <!-- empty for alignment -->
                                         <td class="sticky left-0 z-10 border-r bg-white"></td>
-                                        <td class="px-2 py-4 text-sm text-gray-800 dark:text-gray-200 border-r"></td>
-                                        <td class="px-2 py-4 text-sm text-gray-800 dark:text-gray-200 border-r"></td>
-                                        <td class="px-2 py-4 text-sm text-gray-800 dark:text-gray-200 border-r"></td>
+                                        <td
+                                            class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center">
+                                        </td>
+                                        <td
+                                            class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center">
+                                        </td>
+                                        <td
+                                            class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center">
+                                        </td>
 
-                                        <td class="px-2 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">{{ $item->color }}</td>
-                                        <td class="px-2 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">{{ $item->shade }}</td>
-                                        <td class="px-2 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">{{ $item->pst_no }}</td>
-                                        <td class="px-2 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">{{ $item->tkt }}</td>
+                                        <td
+                                            class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center break-words">
+                                            {{ $item->color }}</td>
+                                        <td
+                                            class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center break-words">
+                                            {{ $item->shade }}</td>
+                                        <td
+                                            class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center break-words">
+                                            {{ $item->pst_no }}</td>
+                                        <td
+                                            class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center break-words">
+                                            {{ $item->tkt }}</td>
 
-                                        <td class="px-2 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">
+                                        <td
+                                            class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center break-words">
                                             {{ $item->quantity }} {{ $item->uom }}
                                         </td>
 
-                                        <td class="px-2 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">{{ $item->supplier_comment }}</td>
-                                        <td class="px-2 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">{{ $item->total_price }}</td>
-                                        <td class="px-2 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">-</td>
+                                        <td
+                                            class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center break-words">
+                                            {{ $item->supplier_comment }}</td>
+                                        <td
+                                            class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center break-words">
+                                            {{ $item->total_price }}</td>
+                                        <td
+                                            class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center">
+                                            -</td>
 
-                                        <td class="px-2 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">
+                                        <td
+                                            class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center">
                                             <span class="px-2 py-1 rounded-full text-xs font-semibold">-</span>
+                                        </td>
+                                        <td
+                                            class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center">
+                                            <span class="px-2 py-1 rounded-full text-xs font-semibold">-</span>
+                                        </td>
+                                        <td
+                                            class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center">
+                                            <span class="px-2 py-1 rounded-full text-xs font-semibold">-</span>
+                                        </td>
+                                        <td
+                                            class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r text-center">
+                                            <span class="px-2 py-1 rounded-full text-xs font-semibold"></span>
                                         </td>
                                     </tr>
                                 @endforeach

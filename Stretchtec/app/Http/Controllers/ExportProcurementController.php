@@ -40,6 +40,70 @@ class ExportProcurementController extends Controller
 
     }
 
+    public function exportRawStore(Request $request): RedirectResponse
+    {
+        // 1. Validate incoming request data
+        $validated = $request->validate([
+            'supplier'            => 'required|string|max:255',
+            'product_description' => 'required|string|max:255',
+            'net_weight'          => 'required|numeric|min:0.01',
+            'uom'                 => 'required|string|max:50',
+            'unit_price'          => 'required|numeric|min:0.01',
+            'notes'               => 'nullable|string|max:500',
+        ]);
+
+        // 2. Save into a database
+        ExportRawMaterial::create([
+            'supplier'            => $validated['supplier'],
+            'product_description' => $validated['product_description'],
+            'net_weight'          => $validated['net_weight'],
+            'uom'                 => $validated['uom'],
+            'unit_price'          => $validated['unit_price'],
+            'notes'               => $validated['notes'] ?? null,
+        ]);
+
+        // 3. Redirect or return success response
+        return redirect()->back()->with('success', 'Export raw material added successfully.');
+    }
+
+    public function exportRawDelete($id): RedirectResponse
+    {
+        $exportRaw = ExportRawMaterial::findOrFail($id);
+
+        $exportRaw->delete();
+
+        return redirect()
+            ->back()
+            ->with('success', 'Raw material record deleted successfully.');
+    }
+
+    public function borrowExportRawMaterial(Request $request, $id): RedirectResponse
+    {
+        $request->validate([
+            'borrow_qty' => 'required|numeric|min:0.01',
+        ]);
+
+        $material = ExportRawMaterial::findOrFail($id);
+
+        // Prevent borrowing more than available net_weight
+        if ($material->net_weight < $request->borrow_qty) {
+            return back()->with('error', 'Insufficient quantity to borrow.');
+        }
+
+        // Deduct quantity
+        $material->net_weight -= $request->borrow_qty;
+
+        if ($material->net_weight <= 0) {
+            // Delete record if all quantity borrowed
+            $material->delete();
+            return back()->with('success', 'All quantity borrowed. Record deleted.');
+        } else {
+            $material->save();
+            return back()->with('success', 'Borrowed ' . $request->borrow_qty . ' ' . $material->uom . ' successfully!');
+        }
+    }
+
+
     /**
      * Show the form for creating a new resource.
      */
@@ -156,7 +220,7 @@ class ExportProcurementController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-   public function destroy($id)
+    public function destroy($id)
     {
         try {
             // find the specific row
@@ -166,7 +230,7 @@ class ExportProcurementController extends Controller
             ExportProcurement::where('invoice_number', $record->invoice_number)->delete();
 
             return back()->with('success', 'Invoice and all its items deleted successfully.');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error('Error deleting invoice: ' . $e->getMessage());
             return back()->with('error', 'Failed to delete the invoice.');
         }

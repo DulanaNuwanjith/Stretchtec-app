@@ -145,7 +145,7 @@
                                 Available Stock
                             </th>
                             <th
-                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-56 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                 Special Note
                             </th>
                             <th
@@ -168,27 +168,29 @@
                                 <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">
                                     {{ $item->notes ?? '-' }}</td>
                                 <td class="px-6 py-4 text-sm text-right">
-                                    <div class="flex justify-center gap-2 items-center">
-                                        <!-- Quantity input field -->
-                                        <form action="{{ route('stockManagement.addStock', $item->id) }}" method="GET"
-                                            class="inline flex items-center gap-2">
-                                            <input type="number" name="stock_increment" min="1" placeholder="Qty"
-                                                class="w-24 px-2 py-1 border rounded text-sm" required>
+                                    <div class="flex gap-2 justify-center">
+                                        <!-- Add Stock Button -->
+                                        <button type="button"
+                                            onclick="openAddStockModal({{ $item->id }}, '{{ $item->reference_no }}')"
+                                            class="bg-green-500 h-10 hover:bg-green-600 text-white px-3 py-1 rounded text-sm">
+                                            Add Stock
+                                        </button>
 
-                                            <button type="submit"
-                                                class="px-4 py-1 bg-green-500 text-white rounded hover:bg-green-600 text-xs font-medium">
-                                                Add Stock
-                                            </button>
-                                        </form>
+                                        <!-- Borrow Button -->
+                                        <button type="button"
+                                            onclick="openBorrowModal({{ $item->id }}, '{{ $item->reference_no }}')"
+                                            class="bg-yellow-500 h-10 hover:bg-yellow-600 text-white px-3 py-1 rounded text-sm">
+                                            Borrow
+                                        </button>
 
-                                        <!-- Delete button -->
+                                        <!-- Delete Button -->
                                         <form id="delete-form-{{ $item->id }}"
                                             action="{{ route('stockManagement.destroy', $item->id) }}" method="POST"
                                             class="inline">
                                             @csrf
                                             @method('DELETE')
                                             <button type="button" onclick="confirmDelete({{ $item->id }})"
-                                                class="px-4 py-1 bg-red-500 text-white rounded hover:bg-red-600 text-xs font-medium">
+                                                class="bg-red-600 h-10 hover:bg-red-700 text-white px-3 py-1 rounded text-sm">
                                                 Delete
                                             </button>
                                         </form>
@@ -205,7 +207,7 @@
                     </tbody>
                 </table>
             </div>
-             <div class="py-6 flex justify-center">
+            <div class="py-6 flex justify-center">
                 {{ $stock->links() }}
             </div>
 
@@ -289,6 +291,75 @@
             </div>
         </div>
     </div>
+
+    {{-- Add Stock Modal --}}
+    <div id="addStockModal" class="fixed inset-0 z-50 hidden bg-black bg-opacity-50 flex items-center justify-center"
+        onclick="closeAddStockModal()">
+        <div class="bg-white p-6 rounded-xl w-96 shadow-xl" onclick="event.stopPropagation()">
+            <h2 class="text-xl font-bold text-gray-800 mb-4">Add Stock</h2>
+            <form id="addStockForm" method="POST">
+                @csrf
+                <input type="hidden" id="add_stock_id" name="id">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Enter Quantity</label>
+                    <input type="number" id="add_qty" name="stock_increment" min="1" required
+                        class="w-full mt-1 px-3 py-2 border rounded" placeholder="Quantity">
+                </div>
+                <div class="flex justify-end gap-3 mt-6">
+                    <button type="button" onclick="closeAddStockModal()"
+                        class="px-4 py-2 bg-gray-300 rounded">Cancel</button>
+                    <button type="submit"
+                        class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">Add</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    {{-- Borrow Modal --}}
+    <div id="borrowModal" class="fixed inset-0 z-50 hidden bg-black bg-opacity-50 flex items-center justify-center">
+        <div class="bg-white p-6 rounded-xl w-96 shadow-xl" onclick="event.stopPropagation()">
+            <h2 class="text-xl font-bold text-gray-800 mb-4">Borrow Stock</h2>
+            <form id="borrowForm" method="POST">
+                @csrf
+                <input type="hidden" id="borrow_stock_id" name="id">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Enter Quantity</label>
+                    <input type="number" id="borrow_qty" name="borrow_qty" min="1" required
+                        class="w-full mt-1 px-3 py-2 border rounded">
+                </div>
+                <div class="flex justify-end gap-3 mt-6">
+                    <button type="button" onclick="closeBorrowModal()"
+                        class="px-4 py-2 bg-gray-300 rounded">Cancel</button>
+                    <button type="submit"
+                        class="px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600">Borrow</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    {{-- JS Functions --}}
+    <script>
+        function openAddStockModal(id) {
+            document.getElementById('addStockModal').classList.remove('hidden');
+            document.getElementById('add_stock_id').value = id;
+            document.getElementById('addStockForm').action = `/stock/add/${id}`;
+        }
+
+        function closeAddStockModal() {
+            document.getElementById('addStockModal').classList.add('hidden');
+            document.getElementById('add_qty').value = '';
+        }
+
+        function openBorrowModal(id) {
+            document.getElementById('borrowModal').classList.remove('hidden');
+            document.getElementById('borrow_stock_id').value = id;
+            document.getElementById('borrowForm').action = `/stock/borrow/${id}`;
+        }
+
+        function closeBorrowModal() {
+            document.getElementById('borrowModal').classList.add('hidden');
+        }
+    </script>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {

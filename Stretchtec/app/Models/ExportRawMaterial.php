@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * @method static create(array $array)
+ * @method static findOrFail($id)
  */
 class ExportRawMaterial extends Model
 {

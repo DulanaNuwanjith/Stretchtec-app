@@ -218,7 +218,7 @@
             </div>
 
             <!-- Stock / Stores Records Table -->
-            <div class="overflow-x-auto max-h-[1200px] bg-white dark:bg-gray-900 shadow rounded-lg">
+            <div class="overflow-x-auto bg-white dark:bg-gray-900 shadow rounded-lg">
                 <!-- Spinner -->
                 <div id="pageLoadingSpinner"
                     class="fixed inset-0 z-50 bg-white bg-opacity-80 flex flex-col items-center justify-center">
@@ -242,7 +242,7 @@
                                 Date
                             </th>
                             <th
-                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-40 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                 Color
                             </th>
                             <th
@@ -254,7 +254,7 @@
                                 PST Number
                             </th>
                             <th
-                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-40 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                 Supplier
                             </th>
                             <th
@@ -262,7 +262,7 @@
                                 Quantity Available
                             </th>
                             <th
-                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-40 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-64 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                 Action
                             </th>
                         </tr>
@@ -293,11 +293,11 @@
                                     {{ $material->available_quantity }} {{ $material->unit }}
                                 </td>
                                 <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 border-r">
-                                    <div class="flex justify-center items-center space-x-2">
+                                    <div class="flex gap-2 justify-center">
                                         <div x-data="{ open: false }">
                                             <!-- Button -->
                                             <button type="button" @click="open = true"
-                                                class="mt-1 bg-yellow-600 hover:bg-yellow-700 text-white px-2 py-1 rounded text-sm transition">
+                                                class="bg-yellow-600 h-10 hover:bg-yellow-700 text-white px-3 py-1 rounded text-sm">
                                                 Remarks
                                             </button>
 
@@ -323,7 +323,7 @@
                                             </div>
                                         </div>
                                         <button
-                                            class="bg-red-500 mt-1 hover:bg-red-600 text-white font-semibold py-1 px-2 rounded shadow"
+                                            class="bg-red-600 h-10 hover:bg-red-700 text-white px-3 py-1 rounded text-sm"
                                             onclick="confirmDelete({{ $material->id }})">
                                             Delete
                                         </button>
@@ -333,6 +333,11 @@
                                             @csrf
                                             @method('DELETE')
                                         </form>
+                                        <button type="button"
+                                            onclick="openBorrowModal({{ $material->id }}, '{{ $material->shade }}')"
+                                            class="bg-yellow-500 h-10 hover:bg-yellow-600 text-white px-3 py-1 rounded text-sm">
+                                            Borrow
+                                        </button>
                                     </div>
                                 </td>
                             </tr>
@@ -344,7 +349,46 @@
                 {{ $rawMaterials->links() }}
             </div>
         </div>
-         
+
+        <div id="borrowModal" class="fixed inset-0 z-50 hidden bg-black bg-opacity-50 flex items-center justify-center">
+            <div class="bg-white p-6 rounded-xl w-96 shadow-lg" onclick="event.stopPropagation()">
+                <h2 class="text-xl font-bold text-gray-800 mb-4">Borrow Raw Material</h2>
+
+                <form id="borrowForm" method="POST">
+                    @csrf
+                    <input type="hidden" id="borrow_material_id" name="id">
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Quantity to Borrow</label>
+                        <input type="number" id="borrow_qty" name="borrow_qty" min="1" required
+                            class="w-full mt-1 px-3 py-2 border rounded" placeholder="Quantity">
+                    </div>
+
+                    <div class="flex justify-end gap-3 mt-6">
+                        <button type="button" onclick="closeBorrowModal()" class="px-4 py-2 bg-gray-300 rounded">
+                            Cancel
+                        </button>
+                        <button type="submit" class="px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600">
+                            Borrow
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <script>
+            function openBorrowModal(id) {
+                document.getElementById('borrow_material_id').value = id;
+                document.getElementById('borrowForm').action = `/raw-material/borrow/${id}`;
+                document.getElementById('borrow_qty').value = "";
+                document.getElementById('borrowModal').classList.remove('hidden');
+            }
+
+            function closeBorrowModal() {
+                document.getElementById('borrowModal').classList.add('hidden');
+                document.getElementById('borrow_qty').value = '';
+            }
+        </script>
+
         <script>
             document.addEventListener("DOMContentLoaded", function() {
                 const spinner = document.getElementById("pageLoadingSpinner");

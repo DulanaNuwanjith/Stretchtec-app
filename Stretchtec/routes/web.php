@@ -207,8 +207,17 @@ Route::middleware([
         'update' => 'rawMaterial.update',
         'destroy' => 'rawMaterial.destroy',
     ]);
+    Route::post('/raw-material/borrow/{id}', [RawMaterialStoreController::class, 'borrow'])
+        ->name('rawMaterial.borrow');
+
+
 
     Route::get('rawMaterialReceipt', [ExportProcurementController::class, 'exportRawIndex'])->name('rawMaterialReceipt.index');
+    Route::delete('rawMaterialReceipt/{id}', [ExportProcurementController::class, 'exportRawDelete'])->name('rawMaterialReceipt.delete');
+    Route::post('rawMaterialReceipt', [ExportProcurementController::class, 'exportRawStore'])->name('rawMaterialReceipt.store');
+    Route::post('/export-raw-material/borrow/{id}', [ExportProcurementController::class, 'borrowExportRawMaterial'])
+    ->name('rawMaterialReceipt.borrow');
+
 
 
     /* ----------------------------------------------------------------------
@@ -284,7 +293,8 @@ Route::middleware([
 
     Route::post('/stores/{id}/assign', [StoresController::class, 'assign'])->name('stores.assign');
 
-    Route::get('/stock/add/{id}', [StockController::class, 'addStock'])->name('stockManagement.addStock');
+    Route::post('/stock/add/{id}', [StockController::class, 'addStock'])->name('stockManagement.addStock');
+    Route::post('/stock/borrow/{id}', [StockController::class, 'borrowStock'])->name('stockManagement.borrowStock');
 
     Route::patch('/orders/{id}/mark-ordered', [ProductOrderPreperationController::class, 'markOrdered'])->name('orders.markOrdered');
     Route::patch('/orders/{id}/mark-received', [ProductOrderPreperationController::class, 'markReceived'])->name('orders.markReceived');

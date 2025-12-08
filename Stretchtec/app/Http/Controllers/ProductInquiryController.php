@@ -81,6 +81,8 @@ class ProductInquiryController extends Controller
                 'items.*.item' => 'required|string|max:255',
                 'items.*.supplier' => 'nullable|string|max:255',
                 'items.*.qty' => 'required|numeric|min:1',
+                'items.*.pst_no' => 'nullable|string|max:255',
+                'items.*.supplier_comment' => 'nullable|string|max:255',
                 'items.*.uom' => 'required|string|max:50',
                 'items.*.unitPrice' => 'required|numeric|min:0',
                 'items.*.price' => 'required|numeric|min:0',
@@ -101,7 +103,7 @@ class ProductInquiryController extends Controller
 
             $data = $validator->validated();
 
-            // Save each item separately with unique order number
+            // Save each item separately with a unique order number
             foreach ($data['items'] as $item) {
                 $referenceNo = null;
                 $sampleId = null;
@@ -140,6 +142,8 @@ class ProductInquiryController extends Controller
                     'size' => $item['size'],
                     'item' => $item['item'],
                     'supplier' => $item['supplier'] ?? null,
+                    'pst_no' => $item['pst_no'],
+                    'supplier_comment' => $data['supplier_comment'] ?? null,
                     'qty' => $item['qty'],
                     'uom' => $item['uom'],
                     'unitPrice' => $item['unitPrice'],
@@ -159,31 +163,6 @@ class ProductInquiryController extends Controller
 
             return redirect()->back()->with('error', 'Something went wrong.')->withInput();
         }
-    }
-
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(ProductInquiry $productInquiry)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(ProductInquiry $productInquiry)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, ProductInquiry $productInquiry)
-    {
-        //
     }
 
     /**
