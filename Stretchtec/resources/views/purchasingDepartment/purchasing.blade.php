@@ -133,7 +133,7 @@
                     <div class="flex items-center gap-4 flex-wrap">
 
                         {{-- Filter: PO Number --}}
-                        <div class="relative inline-block text-left w-64">
+                        <div class="relative inline-block text-left w-48">
                             <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">PO Number</label>
                             <input type="hidden" name="po_number" id="poNumberInput" value="{{ request('po_number') }}">
 
@@ -166,7 +166,7 @@
                         </div>
 
                         {{-- Filter: Supplier (updated to searchable dropdown) --}}
-                        <div class="relative inline-block text-left w-64">
+                        <div class="relative inline-block text-left w-48">
                             <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Supplier</label>
                             <input type="hidden" name="supplier" id="supplierInput" value="{{ request('supplier') }}">
 
@@ -202,7 +202,7 @@
                         <div class="w-48">
                             <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">PO Date</label>
                             <input type="date" name="po_date" value="{{ request('po_date') }}"
-                                class="w-full px-3 py-2 border rounded dark:bg-gray-700 dark:text-white text-sm">
+                                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 text-sm">
                         </div>
 
                         {{-- Filter Buttons --}}

@@ -134,7 +134,7 @@
                     <div class="flex items-center gap-4 flex-wrap">
 
                         {{-- Filter: Invoice Number --}}
-                        <div class="relative inline-block text-left w-64">
+                        <div class="relative inline-block text-left w-56">
                             <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Invoice Number</label>
                             <input type="hidden" name="invoice_number" id="invoiceNumberInput" value="{{ request('invoice_number') }}">
                             <button type="button" id="invoiceDropdown" onclick="toggleDropdown('invoiceDropdown', 'invoiceDropdownMenu')"
@@ -166,7 +166,7 @@
                         </div>
 
                         {{-- Filter: PO Number --}}
-                        <div class="relative inline-block text-left w-64">
+                        <div class="relative inline-block text-left w-48">
                             <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">PO Number</label>
                             <input type="hidden" name="po_number" id="poNumberInput" value="{{ request('po_number') }}">
                             <button type="button" id="poDropdown" onclick="toggleDropdown('poDropdown', 'poDropdownMenu')"
@@ -198,7 +198,7 @@
                         </div>
 
                         {{-- Filter: Supplier --}}
-                        <div class="relative inline-block text-left w-64">
+                        <div class="relative inline-block text-left w-48">
                             <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Supplier</label>
                             <input type="hidden" name="supplier_name" id="supplierInput" value="{{ request('supplier_name') }}">
                             <button type="button" id="supplierDropdown" onclick="toggleDropdown('supplierDropdown', 'supplierDropdownMenu')"
@@ -233,7 +233,7 @@
                         <div class="w-48">
                             <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Date</label>
                             <input type="date" name="date" value="{{ request('date') }}"
-                                class="w-full px-3 py-2 border rounded dark:bg-gray-700 dark:text-white text-sm">
+                                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 text-sm">
                         </div>
 
                         {{-- Filter Buttons --}}
