@@ -17,31 +17,59 @@ class PurchaseDepartmentController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): Factory|View
+    public function index(Request $request): Factory|View
     {
-        // Step 1: Get unique PO numbers and paginate them
-        $uniquePoNumbers = PurchaseDepartment::select('po_number')
+        // --- 1. Get filter values ---
+        $poNumber = $request->po_number;
+        $poDate = $request->po_date;
+        $supplier = $request->supplier;
+
+        // --- 2. Build the base query ---
+        $query = PurchaseDepartment::query();
+
+        if ($poNumber) {
+            $query->where('po_number', $poNumber);
+        }
+
+        if ($poDate) {
+            $query->whereDate('po_date', $poDate);
+        }
+
+        if ($supplier) {
+            $query->where('supplier', $supplier);
+        }
+
+        // --- 3. Paginate based on filtered PO Numbers ---
+        $uniquePoNumbers = $query
+            ->select('po_number')
             ->groupBy('po_number')
             ->orderBy('po_date', 'desc')
-            ->paginate(10); // 👉 pagination applied here
+            ->paginate(10);
 
-        // Step 2: Fetch all purchase items for only the PO numbers on this page
+        // --- 4. Fetch items ONLY for visible PO numbers ---
         $purchaseItems = PurchaseDepartment::whereIn('po_number', $uniquePoNumbers->pluck('po_number'))
             ->orderBy('po_date', 'desc')
             ->get()
-            ->groupBy('po_number'); // 👉 grouped for collapsible table
+            ->groupBy('po_number');
 
-        // Existing logic
+        // --- 5. Dropdown Lists ---
+        $uniquePoNumbersAll = PurchaseDepartment::select('po_number')->distinct()->pluck('po_number');
+        $suppliers = PurchaseDepartment::select('supplier')->distinct()->pluck('supplier');
+
+        // --- 6. Fetch Order Preparations for the separate table ---
         $orderPreparations = ProductOrderPreperation::where('isRawMaterialOrdered', false)
             ->latest()
             ->get();
 
         return view('purchasingDepartment.purchasing', [
-            'uniquePoNumbers' => $uniquePoNumbers,      // Pagination object
-            'groupedPurchaseOrders' => $purchaseItems,  // Grouped purchase order items
-            'orderPreparations' => $orderPreparations,
+            'uniquePoNumbers' => $uniquePoNumbers,
+            'groupedPurchaseOrders' => $purchaseItems,
+            'uniquePoNumbersAll' => $uniquePoNumbersAll,
+            'suppliers' => $suppliers,
+            'orderPreparations' => $orderPreparations, // ✅ now sent to Blade
         ]);
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -98,7 +126,6 @@ class PurchaseDepartmentController extends Controller
 
             DB::commit();
             return back()->with('success', 'Purchase Order with multiple items created successfully.');
-
         } catch (Exception $e) {
             DB::rollBack();
             Log::error('Error saving purchase order: ' . $e->getMessage());
@@ -144,5 +171,4 @@ class PurchaseDepartmentController extends Controller
             return back()->with('error', 'Failed to delete the Purchase Order.');
         }
     }
-    
 }

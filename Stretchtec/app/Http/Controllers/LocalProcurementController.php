@@ -22,7 +22,27 @@ class LocalProcurementController extends Controller
      */
     public function index(): Factory|View
     {
-        $uniqueInvoiceNumbers = LocalProcurement::select('invoice_number')
+        // Filter query
+        $query = LocalProcurement::query();
+
+        if ($invoiceNumber = request('invoice_number')) {
+            $query->where('invoice_number', $invoiceNumber);
+        }
+
+        if ($poNumber = request('po_number')) {
+            $query->where('po_number', $poNumber);
+        }
+
+        if ($supplier = request('supplier_name')) {
+            $query->where('supplier_name', $supplier);
+        }
+
+        if ($date = request('date')) {
+            $query->whereDate('date', $date);
+        }
+
+        // Use paginate instead of get for links()
+        $uniqueInvoiceNumbers = $query->select('invoice_number')
             ->groupBy('invoice_number')
             ->orderBy('date', 'desc')
             ->paginate(10);
@@ -32,17 +52,24 @@ class LocalProcurementController extends Controller
             ->get()
             ->groupBy('invoice_number');
 
+        $poNumbers = PurchaseDepartment::orderBy('po_date', 'desc')
+            ->pluck('po_number')
+            ->unique();
+
         $orderPreparations = ProductOrderPreperation::where('isRawMaterialOrdered', 1)
             ->where('isRawMaterialReceived', 0)
             ->latest()
             ->get();
 
-        $poNumbers = PurchaseDepartment::orderBy('po_date', 'desc')
-            ->pluck('po_number')
-            ->unique();
-
-        return view('purchasingDepartment.localinvoiceManage', compact('uniqueInvoiceNumbers', 'invoiceItems', 'orderPreparations', 'poNumbers'));
+        return view('purchasingDepartment.localinvoiceManage', compact(
+            'uniqueInvoiceNumbers',
+            'invoiceItems',
+            'poNumbers',
+            'orderPreparations'
+        ));
     }
+
+
 
     /**
      * Store a newly created resource in storage.
@@ -121,14 +148,12 @@ class LocalProcurementController extends Controller
             return redirect()
                 ->back()
                 ->with('success', 'Local procurement and raw material records created successfully.');
-
         } catch (ValidationException $e) {
             DB::rollBack();
             return redirect()
                 ->back()
                 ->withErrors($e->errors())
                 ->withInput();
-
         } catch (Exception $e) {
             DB::rollBack();
             Log::error('Local Procurement Creation Error: ' . $e->getMessage(), [
