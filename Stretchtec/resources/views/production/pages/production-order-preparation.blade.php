@@ -528,6 +528,11 @@
                             </div>
                         </div>
 
+                        <form id="cartSubmitForm" action="{{ route('orders.assignRawMaterials') }}" method="POST">
+                            @csrf
+                            <input type="hidden" name="cart_items" id="cartDataInput">
+                        </form>
+
                     </div>
                 </div>
             </div>
@@ -593,9 +598,16 @@
                     return;
                 }
 
+                // Put cart into hidden input
                 document.getElementById('cartDataInput').value = JSON.stringify(cart);
+
+                // Submit the form normally
                 document.getElementById('cartSubmitForm').submit();
+
+                // Optionally, clear cart in localStorage AFTER submission
+                localStorage.removeItem('raw_material_cart');
             }
+
 
             // Update on page load
             updateCartCount();
