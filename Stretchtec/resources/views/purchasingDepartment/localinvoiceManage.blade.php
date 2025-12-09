@@ -289,6 +289,31 @@
                         Manage & Update Purchase Orders
                     </h2>
 
+                    <!-- Search Bar -->
+                    <div class="mb-6">
+                        <form method="GET" action="{{ route('localinvoiceManage.index') }}" class="flex items-center space-x-2 max-w-2xl">
+                            <!-- Preserve order_page parameter -->
+                            <input type="hidden" name="order_page" value="{{ request('order_page', 1) }}">
+                            
+                            <input type="text" name="order_search" value="{{ request('order_search') }}"
+                                placeholder="Search by Order No, Customer, Reference, Item, Shade, TKT, Supplier, PST No"
+                                autocomplete="off"
+                                class="px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm w-full focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 transition duration-200 ease-in-out" />
+
+                            <button type="submit"
+                                class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm whitespace-nowrap">
+                                Search
+                            </button>
+
+                            @if (request()->has('order_search'))
+                                <a href="{{ route('localinvoiceManage.index', ['order_page' => 1]) }}"
+                                    class="px-4 py-2 bg-gray-400 text-white rounded hover:bg-gray-500 text-sm whitespace-nowrap select-none">
+                                    Clear
+                                </a>
+                            @endif
+                        </form>
+                    </div>
+
                     <!-- Table Container -->
                     <div id="orderTableContainer"
                         class="overflow-x-auto border border-gray-300 dark:border-gray-700 rounded-lg shadow-sm">
@@ -940,34 +965,29 @@
             </script>
 
             <script>
-                function openOrderPopup() {
-                    // Clear default 'page' param and add order_page parameter to maintain modal state
-                    const url = new URL(window.location);
-                    url.searchParams.delete('page'); // Remove main table pagination
-                    if (!url.searchParams.has('order_page')) {
-                        url.searchParams.set('order_page', '1');
-                    }
-                    window.history.pushState({}, '', url);
+            function openOrderPopup() {
+                // Clear default 'page' param and add order_page parameter to maintain modal state
+                const url = new URL(window.location);
+                url.searchParams.delete('page'); // Remove main table pagination
+                if (!url.searchParams.has('order_page') && !url.searchParams.has('order_search')) {
+                    url.searchParams.set('order_page', '1');
+                }
+                window.history.pushState({}, '', url);
+                document.getElementById('orderPopupModal').classList.remove('hidden');
+            }            function closeOrderPopup() {
+                // Remove order_page and order_search parameters when closing modal
+                const url = new URL(window.location);
+                url.searchParams.delete('order_page');
+                url.searchParams.delete('order_search');
+                window.history.pushState({}, '', url);
+                document.getElementById('orderPopupModal').classList.add('hidden');
+            }            // Keep modal open if order_page or order_search parameter exists (from pagination or search)
+            document.addEventListener('DOMContentLoaded', function() {
+                const urlParams = new URLSearchParams(window.location.search);
+                if (urlParams.has('order_page') || urlParams.has('order_search')) {
                     document.getElementById('orderPopupModal').classList.remove('hidden');
                 }
-
-                function closeOrderPopup() {
-                    // Remove order_page parameter when closing modal
-                    const url = new URL(window.location);
-                    url.searchParams.delete('order_page');
-                    window.history.pushState({}, '', url);
-                    document.getElementById('orderPopupModal').classList.add('hidden');
-                }
-
-                // Keep modal open if order_page parameter exists (from pagination)
-                document.addEventListener('DOMContentLoaded', function() {
-                    const urlParams = new URLSearchParams(window.location.search);
-                    if (urlParams.has('order_page')) {
-                        document.getElementById('orderPopupModal').classList.remove('hidden');
-                    }
-                });
-
-                // Optional: Close modal when clicking outside content
+            });                // Optional: Close modal when clicking outside content
                 window.addEventListener('click', function(e) {
                     const modal = document.getElementById('orderPopupModal');
                     if (e.target === modal) closeOrderPopup();

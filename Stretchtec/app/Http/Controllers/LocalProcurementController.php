@@ -56,10 +56,25 @@ class LocalProcurementController extends Controller
             ->pluck('po_number')
             ->unique();
 
-        $orderPreparations = ProductOrderPreperation::where('isRawMaterialOrdered', 1)
-            ->where('isRawMaterialReceived', 0)
-            ->latest()
-            ->paginate(10, ['*'], 'order_page');
+        // --- Fetch Order Preparations with search filter ---
+        $orderQuery = ProductOrderPreperation::where('isRawMaterialOrdered', 1)
+            ->where('isRawMaterialReceived', 0);
+
+        // Apply search filter if present
+        if ($search = request('order_search')) {
+            $orderQuery->where(function ($q) use ($search) {
+                $q->where('prod_order_no', 'like', "%{$search}%")
+                    ->orWhere('customer_name', 'like', "%{$search}%")
+                    ->orWhere('reference_no', 'like', "%{$search}%")
+                    ->orWhere('item', 'like', "%{$search}%")
+                    ->orWhere('shade', 'like', "%{$search}%")
+                    ->orWhere('tkt', 'like', "%{$search}%")
+                    ->orWhere('supplier', 'like', "%{$search}%")
+                    ->orWhere('pst_no', 'like', "%{$search}%");
+            });
+        }
+
+        $orderPreparations = $orderQuery->latest()->paginate(10, ['*'], 'order_page');
 
         return view('purchasingDepartment.localinvoiceManage', compact(
             'uniqueInvoiceNumbers',
