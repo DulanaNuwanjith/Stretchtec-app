@@ -11,9 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('braiding_section_orders', function (Blueprint $table) {
+        Schema::create('braiding_section_orders', static function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('order_preperation_id');
+            $table->unsignedBigInteger('product_inquiry_id');
+            $table->string('prod_order_no');
             $table->timestamps();
+
+            // Foreign key constraints
+            $table->foreign('order_preperation_id')->references('id')->on('product_order_preperations')->onDelete('cascade');
+            $table->foreign('product_inquiry_id')->references('id')->on('product_inquiries')->onDelete('cascade');
         });
     }
 
