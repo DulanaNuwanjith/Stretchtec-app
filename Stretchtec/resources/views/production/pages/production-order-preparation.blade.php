@@ -769,9 +769,9 @@
                         const rm = item.export_raw_material;
                         container.innerHTML += `
             <div class="border p-3 rounded-lg bg-gray-50">
-                <p class="font-semibold">Export Raw Material: ${rm.color} / ${rm.shade} / ${rm.tkt}</p>
-                <p class="text-xs text-gray-600">PST No: ${rm.pst_no}</p>
-                <p class="text-xs text-gray-600">Supplier: ${rm.supplier}</p>
+                <p class="font-semibold">Export Raw Material</p>
+                <p class="text-xs text-gray-600">Suuplier: ${rm.supplier}</p>
+                <p class="text-xs text-gray-600">Description: ${rm.product_description}</p>
                 <p class="text-xs text-gray-600">Assigned Qty: <span class="font-semibold">${item.assigned_quantity}</span></p>
             </div>`;
                     });
