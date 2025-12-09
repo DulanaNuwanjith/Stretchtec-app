@@ -19,19 +19,19 @@ class ProductOrderPreperationController extends Controller
      */
     public function index(): Factory|View
     {
-        // Fetch all records with pagination (adjust number per page as needed)
         $orderPreparations = ProductOrderPreperation::latest()->paginate(10);
 
         $localRawMaterials = RawMaterialStore::orderBy('available_quantity', 'desc')->get();
-
         $exportRawMaterials = ExportRawMaterial::orderBy('net_weight', 'desc')->get();
 
-        //Get the assigned raw materials
-        $assignedLocalRawMaterials = AssignedRawMaterial::latest()->get();
-        $assignedExportRawMaterials = AssignedRawMaterialExport::latest()->get();
+        // Get the assigned raw materials with their related details
+        $assignedLocalRawMaterials = AssignedRawMaterial::with('rawMaterial')->latest()->get();
+        $assignedExportRawMaterials = AssignedRawMaterialExport::with('exportRawMaterial')->latest()->get();
 
-        // Pass data to the blade
-        return view('production.pages.production-order-preparation', compact('orderPreparations', 'localRawMaterials', 'exportRawMaterials', 'assignedLocalRawMaterials', 'assignedExportRawMaterials'));
+        return view(
+            'production.pages.production-order-preparation',
+            compact('orderPreparations', 'localRawMaterials', 'exportRawMaterials', 'assignedLocalRawMaterials', 'assignedExportRawMaterials')
+        );
     }
 
     /**

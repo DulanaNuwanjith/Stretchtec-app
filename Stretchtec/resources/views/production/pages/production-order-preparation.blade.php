@@ -748,22 +748,28 @@
                 if (localFiltered.length === 0 && exportFiltered.length === 0) {
                     container.innerHTML = `<p class="text-gray-500">No assigned raw materials for this order.</p>`;
                 } else {
+                    // LOCAL ASSIGNED MATERIALS
                     localFiltered.forEach(item => {
+                        const rm = item.raw_material; // raw material details from relationship
                         container.innerHTML += `
-                    <div class="border p-3 rounded-lg bg-gray-50">
-                        <p class="font-semibold">Local Raw Material ID: ${item.raw_material_store_id}</p>
-                        <p class="text-xs text-gray-600">Order ID: ${item.order_preperation_id}</p>
-                        <p class="text-xs text-gray-600">Assigned Qty: <span class="font-semibold">${item.assigned_quantity}</span></p>
-                    </div>`;
+                            <div class="border p-3 rounded-lg bg-gray-50">
+                                <p class="font-semibold">Local Raw Material: ${rm.color} / ${rm.shade} / ${rm.tkt}</p>
+                                <p class="text-xs text-gray-600">PST No: ${rm.pst_no}</p>
+                                <p class="text-xs text-gray-600">Supplier: ${rm.supplier}</p>
+                                <p class="text-xs text-gray-600">Assigned Qty: <span class="font-semibold">${item.assigned_quantity}</span></p>
+                            </div>`;
                     });
 
+                    // EXPORT ASSIGNED MATERIALS
                     exportFiltered.forEach(item => {
+                        const rm = item.export_raw_material; // export material details from relationship
                         container.innerHTML += `
-                    <div class="border p-3 rounded-lg bg-gray-50">
-                        <p class="font-semibold">Export Raw Material ID: ${item.export_raw_material_id}</p>
-                        <p class="text-xs text-gray-600">Order ID: ${item.order_preperation_id}</p>
-                        <p class="text-xs text-gray-600">Assigned Qty: <span class="font-semibold">${item.assigned_quantity}</span></p>
-                    </div>`;
+                                <div class="border p-3 rounded-lg bg-gray-50">
+                                    <p class="font-semibold">Export Raw Material: ${rm.color} / ${rm.shade} / ${rm.tkt}</p>
+                                    <p class="text-xs text-gray-600">PST No: ${rm.pst_no}</p>
+                                    <p class="text-xs text-gray-600">Supplier: ${rm.supplier}</p>
+                                    <p class="text-xs text-gray-600">Assigned Qty: <span class="font-semibold">${item.assigned_quantity}</span></p>
+                                </div>`;
                     });
                 }
 
@@ -798,6 +804,7 @@
                 const form = document.getElementById('filterFormContainer');
                 form.classList.toggle('hidden');
             }
+
             function toggleReportForm() {
                 const form = document.getElementById('reportFormContainer');
                 form.classList.toggle('hidden');
