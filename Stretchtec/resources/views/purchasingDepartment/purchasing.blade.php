@@ -406,7 +406,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="6" class="px-4 py-3 text-center text-gray-500 dark:text-gray-400">
+                                        <td colspan="15" class="px-4 py-3 text-center text-gray-500 dark:text-gray-400">
                                             No orders available.
                                         </td>
                                     </tr>
@@ -414,8 +414,10 @@
                             </tbody>
                         </table>
                     </div>
+                    
                 </div>
             </div>
+            
 
             <!-- Add Purchase Modal -->
             <div id="addPurchaseModal"
