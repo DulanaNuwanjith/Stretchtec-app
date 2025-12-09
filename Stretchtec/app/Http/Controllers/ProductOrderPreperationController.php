@@ -7,8 +7,8 @@ use App\Models\ProductOrderPreperation;
 use App\Models\RawMaterialStore;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
-use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 
 class ProductOrderPreperationController extends Controller
 {
@@ -20,9 +20,9 @@ class ProductOrderPreperationController extends Controller
         // Fetch all records with pagination (adjust number per page as needed)
         $orderPreparations = ProductOrderPreperation::latest()->paginate(10);
 
-        $localRawMaterials = RawMaterialStore::all();
+        $localRawMaterials = RawMaterialStore::orderBy('available_quantity', 'desc')->get();
 
-        $exportRawMaterials = ExportRawMaterial::all();
+        $exportRawMaterials = ExportRawMaterial::orderBy('net_weight', 'desc')->get();
 
         // Pass data to the blade
         return view('production.pages.production-order-preparation', compact('orderPreparations', 'localRawMaterials', 'exportRawMaterials'));
