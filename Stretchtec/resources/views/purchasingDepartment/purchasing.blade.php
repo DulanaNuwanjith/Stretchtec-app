@@ -416,7 +416,7 @@
                     </div>
                     {{-- Pagination --}}
                     <div class="py-6 flex justify-center">
-                        {{ $orderPreparations->links() }}
+                        {{ $orderPreparations->appends(request()->query())->links() }}
                     </div>
                 </div>
             </div>
@@ -948,12 +948,31 @@
 
         <script>
             function openOrderPopup() {
+                // Clear default 'page' param and add order_page parameter to maintain modal state
+                const url = new URL(window.location);
+                url.searchParams.delete('page'); // Remove main table pagination
+                if (!url.searchParams.has('order_page')) {
+                    url.searchParams.set('order_page', '1');
+                }
+                window.history.pushState({}, '', url);
                 document.getElementById('orderPopupModal').classList.remove('hidden');
             }
 
             function closeOrderPopup() {
+                // Remove order_page parameter when closing modal
+                const url = new URL(window.location);
+                url.searchParams.delete('order_page');
+                window.history.pushState({}, '', url);
                 document.getElementById('orderPopupModal').classList.add('hidden');
             }
+
+            // Keep modal open if order_page parameter exists (from pagination)
+            document.addEventListener('DOMContentLoaded', function() {
+                const urlParams = new URLSearchParams(window.location.search);
+                if (urlParams.has('order_page')) {
+                    document.getElementById('orderPopupModal').classList.remove('hidden');
+                }
+            });
 
             // Optional: Close modal when clicking outside content
             window.addEventListener('click', function(e) {

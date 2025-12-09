@@ -59,7 +59,7 @@ class LocalProcurementController extends Controller
         $orderPreparations = ProductOrderPreperation::where('isRawMaterialOrdered', 1)
             ->where('isRawMaterialReceived', 0)
             ->latest()
-            ->get();
+            ->paginate(10, ['*'], 'order_page');
 
         return view('purchasingDepartment.localinvoiceManage', compact(
             'uniqueInvoiceNumbers',

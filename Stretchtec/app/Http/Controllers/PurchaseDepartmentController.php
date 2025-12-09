@@ -59,14 +59,14 @@ class PurchaseDepartmentController extends Controller
         // --- 6. Fetch Order Preparations for the separate table ---
         $orderPreparations = ProductOrderPreperation::where('isRawMaterialOrdered', false)
             ->latest()
-            ->paginate(10);
+            ->paginate(10, ['*'], 'order_page');
 
         return view('purchasingDepartment.purchasing', [
             'uniquePoNumbers' => $uniquePoNumbers,
             'groupedPurchaseOrders' => $purchaseItems,
             'uniquePoNumbersAll' => $uniquePoNumbersAll,
             'suppliers' => $suppliers,
-            'orderPreparations' => $orderPreparations, 
+            'orderPreparations' => $orderPreparations,
         ]);
     }
 

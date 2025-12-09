@@ -362,28 +362,28 @@
                                     <tr class="odd:bg-white even:bg-gray-50 border-b border-gray-200 text-center">
                                         <!-- Sticky first column -->
                                         <td
-                                            class="px-4 py-3 font-bold sticky left-0 z-10 bg-gray-100 whitespace-normal break-words border-r border-gray-300 text-blue-500">
+                                            class="px-4 py-3 font-bold sticky left-0 z-10 bg-gray-100 whitespace-normal break-words border-r border-gray-300 text-blue-500 text-sm">
                                             {{ $order->prod_order_no ?? 'N/A' }}
                                         </td>
-                                        <td class="px-4 py-3 border-r border-gray-300">{{ $order->customer_name ?? '-' }}
+                                        <td class="px-4 py-3 border-r border-gray-300 text-sm">{{ $order->customer_name ?? '-' }}
                                         </td>
-                                        <td class="px-4 py-3 border-r border-gray-300">{{ $order->reference_no ?? '-' }}
+                                        <td class="px-4 py-3 border-r border-gray-300 text-sm">{{ $order->reference_no ?? '-' }}
                                         </td>
-                                        <td class="px-4 py-3 border-r border-gray-300">{{ $order->item ?? '-' }}</td>
-                                        <td class="px-4 py-3 border-r border-gray-300">{{ $order->size ?? '-' }}</td>
-                                        <td class="px-4 py-3 border-r border-gray-300">{{ $order->color ?? '-' }}</td>
-                                        <td class="px-4 py-3 border-r border-gray-300">{{ $order->shade ?? '-' }}</td>
-                                        <td class="px-4 py-3 border-r border-gray-300">{{ $order->tkt ?? '-' }}</td>
-                                        <td class="px-4 py-3 border-r border-gray-300">{{ $order->qty ?? 0 }}</td>
-                                        <td class="px-4 py-3 border-r border-gray-300">{{ $order->uom ?? '-' }}</td>
-                                        <td class="px-4 py-3 border-r border-gray-300">{{ $order->supplier ?? '-' }}</td>
-                                        <td class="px-4 py-3 border-r border-gray-300">{{ $order->pst_no ?? '-' }}</td>
-                                        <td class="px-4 py-3 border-r border-gray-300">
+                                        <td class="px-4 py-3 border-r border-gray-300 text-sm">{{ $order->item ?? '-' }}</td>
+                                        <td class="px-4 py-3 border-r border-gray-300 text-sm">{{ $order->size ?? '-' }}</td>
+                                        <td class="px-4 py-3 border-r border-gray-300 text-sm">{{ $order->color ?? '-' }}</td>
+                                        <td class="px-4 py-3 border-r border-gray-300 text-sm">{{ $order->shade ?? '-' }}</td>
+                                        <td class="px-4 py-3 border-r border-gray-300 text-sm">{{ $order->tkt ?? '-' }}</td>
+                                        <td class="px-4 py-3 border-r border-gray-300 text-sm">{{ $order->qty ?? 0 }}</td>
+                                        <td class="px-4 py-3 border-r border-gray-300 text-sm">{{ $order->uom ?? '-' }}</td>
+                                        <td class="px-4 py-3 border-r border-gray-300 text-sm">{{ $order->supplier ?? '-' }}</td>
+                                        <td class="px-4 py-3 border-r border-gray-300 text-sm">{{ $order->pst_no ?? '-' }}</td>
+                                        <td class="px-4 py-3 border-r border-gray-300 text-sm">
                                             {{ $order->supplier_comment ?? '-' }}</td>
 
                                         <!-- Mark Raw Material Ordered -->
                                         <td class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
-                                            <div class="flex flex-col items-center justify-center">
+                                            <div class="flex flex-col items-center justify-center text-sm">
                                                 @if ($order->isRawMaterialOrdered)
                                                     <!-- Banner showing ordered timestamp -->
                                                     <span
@@ -409,7 +409,7 @@
                                         </td>
 
                                         <!-- Mark Raw Material Received -->
-                                        <td class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                        <td class="py-3 whitespace-normal break-words border-r border-gray-300 text-center text-sm">
                                             <div class="flex flex-col items-center justify-center">
                                                 @if ($order->isRawMaterialReceived)
                                                     <!-- Banner showing received timestamp -->
@@ -437,13 +437,17 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="6" class="px-4 py-3 text-center text-gray-500 dark:text-gray-400">
+                                        <td colspan="15" class="px-4 py-3 text-center text-gray-500 dark:text-gray-400">
                                             No orders available.
                                         </td>
                                     </tr>
                                 @endforelse
                             </tbody>
                         </table>
+                    </div>
+                    {{-- Pagination --}}
+                    <div class="py-6 flex justify-center">
+                        {{ $orderPreparations->appends(request()->query())->links() }}
                     </div>
                 </div>
             </div>
@@ -937,12 +941,31 @@
 
             <script>
                 function openOrderPopup() {
+                    // Clear default 'page' param and add order_page parameter to maintain modal state
+                    const url = new URL(window.location);
+                    url.searchParams.delete('page'); // Remove main table pagination
+                    if (!url.searchParams.has('order_page')) {
+                        url.searchParams.set('order_page', '1');
+                    }
+                    window.history.pushState({}, '', url);
                     document.getElementById('orderPopupModal').classList.remove('hidden');
                 }
 
                 function closeOrderPopup() {
+                    // Remove order_page parameter when closing modal
+                    const url = new URL(window.location);
+                    url.searchParams.delete('order_page');
+                    window.history.pushState({}, '', url);
                     document.getElementById('orderPopupModal').classList.add('hidden');
                 }
+
+                // Keep modal open if order_page parameter exists (from pagination)
+                document.addEventListener('DOMContentLoaded', function() {
+                    const urlParams = new URLSearchParams(window.location.search);
+                    if (urlParams.has('order_page')) {
+                        document.getElementById('orderPopupModal').classList.remove('hidden');
+                    }
+                });
 
                 // Optional: Close modal when clicking outside content
                 window.addEventListener('click', function(e) {
