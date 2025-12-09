@@ -12,7 +12,8 @@ class KnittedSectionOrdersController extends Controller
      */
     public function index()
     {
-        //
+        $orders = KnittedSectionOrders::latest()->with('productInquiry', 'orderPreparation')->get();
+        return view('production.pages.knitted', compact('orders'));
     }
 
     /**

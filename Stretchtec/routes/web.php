@@ -44,6 +44,7 @@ use App\Http\Controllers\AssignedRawMaterialController;
 use App\Http\Controllers\ColorMatchRejectController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ExportProcurementController;
+use App\Http\Controllers\KnittedSectionOrdersController;
 use App\Http\Controllers\LeftoverYarnController;
 use App\Http\Controllers\LocalProcurementController;
 use App\Http\Controllers\MailBookingApprovalController;
@@ -301,9 +302,9 @@ Route::middleware([
     Route::patch('/orders/{id}/mark-ordered', [ProductOrderPreperationController::class, 'markOrdered'])->name('orders.markOrdered');
     Route::patch('/orders/{id}/mark-received', [ProductOrderPreperationController::class, 'markReceived'])->name('orders.markReceived');
 
-    Route::get('knitted', static function () {
-        return view('production.pages.knitted');
-    })->name('knitted.index');
+    Route::resource('knitted', KnittedSectionOrdersController::class)->names([
+        'index' => 'knitted.index',
+    ]);
 
     Route::get('loom', static function () {
         return view('production.pages.loom');
