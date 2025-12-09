@@ -57,16 +57,30 @@ class PurchaseDepartmentController extends Controller
         $suppliers = PurchaseDepartment::select('supplier')->distinct()->pluck('supplier');
 
         // --- 6. Fetch Order Preparations for the separate table ---
-        $orderPreparations = ProductOrderPreperation::where('isRawMaterialOrdered', false)
-            ->latest()
-            ->get();
+        $orderQuery = ProductOrderPreperation::where('isRawMaterialOrdered', false);
+
+        // Apply search filter if present
+        if ($search = request('order_search')) {
+            $orderQuery->where(function ($q) use ($search) {
+                $q->where('prod_order_no', 'like', "%{$search}%")
+                    ->orWhere('customer_name', 'like', "%{$search}%")
+                    ->orWhere('reference_no', 'like', "%{$search}%")
+                    ->orWhere('item', 'like', "%{$search}%")
+                    ->orWhere('shade', 'like', "%{$search}%")
+                    ->orWhere('tkt', 'like', "%{$search}%")
+                    ->orWhere('supplier', 'like', "%{$search}%")
+                    ->orWhere('pst_no', 'like', "%{$search}%");
+            });
+        }
+
+        $orderPreparations = $orderQuery->latest()->paginate(10, ['*'], 'order_page');
 
         return view('purchasingDepartment.purchasing', [
             'uniquePoNumbers' => $uniquePoNumbers,
             'groupedPurchaseOrders' => $purchaseItems,
             'uniquePoNumbersAll' => $uniquePoNumbersAll,
             'suppliers' => $suppliers,
-            'orderPreparations' => $orderPreparations, // ✅ now sent to Blade
+            'orderPreparations' => $orderPreparations,
         ]);
     }
 
