@@ -319,7 +319,7 @@
                                         </td>
 
                                         <td class="px-4 py-3 border-r border-gray-300">
-                                            @if($order->isRawMaterialOrdered && $order->isRawMaterialReceived)
+                                            @if($order->isRawMaterialOrdered && $order->isRawMaterialReceived && !$order->isOrderAssigned)
                                                 <button type="button"
                                                         onclick="openAssignModal({{ $order->id }}, '{{ $order->prod_order_no }}')"
                                                         class="bg-purple-500 hover:bg-purple-600 text-white text-xs font-semibold py-2 px-3 rounded shadow transition">
