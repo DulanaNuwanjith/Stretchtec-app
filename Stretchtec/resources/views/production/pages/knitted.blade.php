@@ -173,7 +173,6 @@
                                         <th class="font-bold px-4 py-3 w-36 text-xs">Customer</th>
                                         <th class="font-bold px-4 py-3 w-36 text-xs">Customer Merchandiser</th>
                                         <th class="font-bold px-4 py-3 w-36 text-xs">Customer Coordinator</th>
-                                        <th class="font-bold px-4 py-3 w-36 text-xs">Reference No</th>
                                         <th class="font-bold px-4 py-3 w-36 text-xs">Qty To Produce</th>
                                         <th class="font-bold px-4 py-3 w-36 text-xs">Assigned Items</th>
 
@@ -225,11 +224,6 @@
                                             <!-- CUSTOMER COORDINATOR -->
                                             <td class="px-4 py-2">
                                                 {{ optional($order->productInquiry)->customer_coordinator }}
-                                            </td>
-
-                                            <!-- REFERENCE NUMBER -->
-                                            <td class="px-4 py-2">
-                                                {{ optional($order->productInquiry)->reference_no }}
                                             </td>
 
                                             <!-- TO MAKE QTY -->
