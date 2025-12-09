@@ -266,26 +266,32 @@
         <div id="assignedModal"
              class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
 
-            <div class="bg-white w-full max-w-3xl rounded-lg shadow-lg p-6 relative">
+            <div class="bg-white w-full max-w-3xl rounded-lg shadow-lg p-6 relative
+                max-h-[85vh] overflow-y-auto">
+
                 <button onclick="closeAssignedModal()"
                         class="absolute top-3 right-3 text-gray-600 hover:text-gray-900 text-xl">&times;
                 </button>
 
                 <h2 class="text-2xl font-bold mb-4 text-center">Assigned Raw Materials</h2>
 
-                <table class="w-full border">
-                    <thead class="bg-gray-100">
-                    <tr>
-                        <th class="p-2">Material / Description</th>
-                        <th class="p-2">Supplier</th>
-                        <th class="p-2">PST No</th>
-                        <th class="p-2">TKT</th>
-                        <th class="p-2">Unit / UOM</th>
-                        <th class="p-2">Assigned Qty</th>
-                    </tr>
-                    </thead>
-                    <tbody id="assignedItemsBody"></tbody>
-                </table>
+                <div class="overflow-x-auto">
+                    <table class="w-full border">
+                        <thead class="bg-gray-100 sticky top-0 z-20">
+                        <tr>
+                            <th class="p-2">Material / Description</th>
+                            <th class="p-2">Supplier</th>
+                            <th class="p-2">PST No</th>
+                            <th class="p-2">TKT</th>
+                            <th class="p-2">Unit / UOM</th>
+                            <th class="p-2">Assigned Qty</th>
+                            <th class="p-2">Remarks</th>
+                        </tr>
+                        </thead>
+                        <tbody id="assignedItemsBody"></tbody>
+                    </table>
+                </div>
+
             </div>
         </div>
 
@@ -293,7 +299,9 @@
         <div id="detailsModal"
              class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
 
-            <div class="bg-white w-full max-w-2xl rounded-lg shadow-lg p-6 relative">
+            <div class="bg-white w-full max-w-2xl rounded-lg shadow-lg p-6 relative
+                max-h-[85vh] overflow-y-auto">
+
                 <!-- Close button -->
                 <button onclick="closeDetailsModal()"
                         class="absolute top-3 right-3 text-gray-600 hover:text-gray-900 text-xl">&times;
@@ -345,13 +353,13 @@
 
                     <div class="col-span-2">
                         <p class="font-semibold">Supplier Comment:</p>
-                        <p id="modal_supplier_comment"
-                           class="text-gray-900 whitespace-pre-line"></p>
+                        <p id="modal_supplier_comment" class="text-gray-900 whitespace-pre-line"></p>
                     </div>
 
                 </div>
             </div>
         </div>
+
 
 </div>
 
@@ -384,7 +392,7 @@
                 </tr>`;
         } else {
             allItems.forEach(item => {
-                const localMat = item.raw_material_store;
+                const localMat = item.raw_material;
                 const exportMat = item.export_raw_material;
 
                 container.innerHTML += `
@@ -437,7 +445,6 @@
         document.getElementById("assignedModal").classList.add("hidden");
     }
 </script>
-
 
 
 @endsection
