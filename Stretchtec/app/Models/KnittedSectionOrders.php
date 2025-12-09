@@ -5,6 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @method static latest()
+ */
 class KnittedSectionOrders extends Model
 {
     protected $table = 'knitted_section_orders';

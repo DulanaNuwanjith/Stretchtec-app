@@ -175,6 +175,7 @@
                                         <th class="font-bold px-4 py-3 w-36 text-xs">Customer Coordinator</th>
                                         <th class="font-bold px-4 py-3 w-36 text-xs">Reference No</th>
                                         <th class="font-bold px-4 py-3 w-36 text-xs">Qty To Produce</th>
+                                        <th class="font-bold px-4 py-3 w-36 text-xs">Assigned Items</th>
 
                                     </tr>
                                     </thead>
@@ -236,6 +237,14 @@
                                                 {{ optional($order->orderPreparation)->qty }}
                                             </td>
 
+                                            <!-- Assigned Items -->
+                                            <td class="px-4 py-2">
+                                                <button
+                                                    class="text-blue-600 hover:text-blue-800 font-medium"
+                                                    onclick="openAssignedModal({{ $order->orderPreparation->id }})">
+                                                    View Assigned Items
+                                                </button>
+                                            </td>
                                         </tr>
                                     @endforeach
 
@@ -250,6 +259,33 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <!-- Assigned Items Modal -->
+        <div id="assignedModal"
+             class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+
+            <div class="bg-white w-full max-w-3xl rounded-lg shadow-lg p-6 relative">
+                <button onclick="closeAssignedModal()"
+                        class="absolute top-3 right-3 text-gray-600 hover:text-gray-900 text-xl">&times;
+                </button>
+
+                <h2 class="text-2xl font-bold mb-4 text-center">Assigned Raw Materials</h2>
+
+                <table class="w-full border">
+                    <thead class="bg-gray-100">
+                    <tr>
+                        <th class="p-2">Material / Description</th>
+                        <th class="p-2">Supplier</th>
+                        <th class="p-2">PST No</th>
+                        <th class="p-2">TKT</th>
+                        <th class="p-2">Unit / UOM</th>
+                        <th class="p-2">Assigned Qty</th>
+                    </tr>
+                    </thead>
+                    <tbody id="assignedItemsBody"></tbody>
+                </table>
             </div>
         </div>
 
@@ -327,23 +363,81 @@
 </script>
 
 <script>
-    function openDetailsModal(button) {
-        document.getElementById("modal_ref_no").textContent = button.dataset.refNo;
-        document.getElementById("modal_item").textContent = button.dataset.item;
-        document.getElementById("modal_colour").textContent = button.dataset.colour;
-        document.getElementById("modal_shade").textContent = button.dataset.shade;
-        document.getElementById("modal_size").textContent = button.dataset.size;
-        document.getElementById("modal_tkt").textContent = button.dataset.tkt;
-        document.getElementById("modal_supplier").textContent = button.dataset.supplier;
-        document.getElementById("modal_pst_no").textContent = button.dataset.pstno;
-        document.getElementById("modal_supplier_comment").textContent = button.dataset.suppliercomment;
+    const localAssigned = @json($localRawMaterial);
+    const exportAssigned = @json($exportRawMaterial);
 
-        document.getElementById("detailsModal").classList.remove("hidden");
+    function openAssignedModal(orderPrepId) {
+        const container = document.getElementById("assignedItemsBody");
+        container.innerHTML = "";
+
+        const local = localAssigned[orderPrepId] || [];
+        const exported = exportAssigned[orderPrepId] || [];
+
+        const allItems = [...local, ...exported];
+
+        if (allItems.length === 0) {
+            container.innerHTML = `
+                <tr>
+                    <td colspan="8" class="text-center p-4 text-gray-500">
+                        No assigned items found.
+                    </td>
+                </tr>`;
+        } else {
+            allItems.forEach(item => {
+                const localMat = item.raw_material_store;
+                const exportMat = item.export_raw_material;
+
+                container.innerHTML += `
+                    <tr class="border">
+
+                        <!-- PRODUCT DESCRIPTION / MATERIAL NAME -->
+                        <td class="p-2">
+                            ${localMat ? (localMat.color + " " + localMat.shade) :
+                    exportMat?.product_description ?? "-"}
+                        </td>
+
+                        <!-- SUPPLIER -->
+                        <td class="p-2">
+                            ${localMat?.supplier ?? exportMat?.supplier ?? "-"}
+                        </td>
+
+                        <!-- PST NO (LOCAL ONLY) -->
+                        <td class="p-2">
+                            ${localMat?.pst_no ?? "-"}
+                        </td>
+
+                        <!-- TKT (LOCAL ONLY) -->
+                        <td class="p-2">
+                            ${localMat?.tkt ?? "-"}
+                        </td>
+
+                        <!-- UNIT / UOM -->
+                        <td class="p-2">
+                            ${localMat?.unit ?? exportMat?.uom ?? "-"}
+                        </td>
+
+                        <!-- ASSIGNED QUANTITY -->
+                        <td class="p-2">
+                            ${item.assigned_quantity}
+                        </td>
+
+                        <!-- REMARKS -->
+                        <td class="p-2">
+                            ${item.remarks ?? "-"}
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        document.getElementById("assignedModal").classList.remove("hidden");
     }
 
-    function closeDetailsModal() {
-        document.getElementById("detailsModal").classList.add("hidden");
+    function closeAssignedModal() {
+        document.getElementById("assignedModal").classList.add("hidden");
     }
 </script>
+
+
 
 @endsection
