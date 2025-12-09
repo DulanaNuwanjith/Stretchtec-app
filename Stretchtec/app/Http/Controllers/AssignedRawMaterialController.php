@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\AssignedRawMaterial;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -14,22 +13,6 @@ use RuntimeException;
 class AssignedRawMaterialController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      * @throws JsonException
      */
@@ -39,7 +22,7 @@ class AssignedRawMaterialController extends Controller
             'cart_items' => 'required|json',
         ]);
 
-        $cartItems = json_decode($request->cart_items, true, 512, JSON_THROW_ON_ERROR);
+        $cartItems = json_decode($request->input('cart_items'), true, 512, JSON_THROW_ON_ERROR);
 
         DB::beginTransaction();
 
@@ -60,7 +43,7 @@ class AssignedRawMaterialController extends Controller
                     }
 
                     if ($material->available_quantity < $quantity) {
-                        throw new RuntimeException("Insufficient stock for material ID {$materialId}.");
+                        throw new RuntimeException("Insufficient stock for material ID $materialId.");
                     }
 
                     // Store assignment
@@ -90,7 +73,7 @@ class AssignedRawMaterialController extends Controller
                     }
 
                     if ($material->net_weight < $quantity) {
-                        throw new RuntimeException("Insufficient stock for export material ID {$materialId}.");
+                        throw new RuntimeException("Insufficient stock for export material ID $materialId.");
                     }
 
                     // Store assignment
@@ -124,37 +107,5 @@ class AssignedRawMaterialController extends Controller
             Session::flash('error', $e->getMessage());
             return redirect()->back();
         }
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(AssignedRawMaterial $assignedRawMaterial)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(AssignedRawMaterial $assignedRawMaterial)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, AssignedRawMaterial $assignedRawMaterial)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(AssignedRawMaterial $assignedRawMaterial)
-    {
-        //
     }
 }
