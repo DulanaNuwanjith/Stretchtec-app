@@ -33,6 +33,7 @@ class AssignedRawMaterialController extends Controller
                 $quantity = (int)$item['used_qty'];
                 $type = $item['type'];
                 $materialId = $item['material_id'];
+                $assignedSection = $item['productionType'];
 
                 if ($type === 'local') {
                     // Fetch material
@@ -45,6 +46,16 @@ class AssignedRawMaterialController extends Controller
                     if ($material->available_quantity < $quantity) {
                         throw new RuntimeException("Insufficient stock for material ID $materialId.");
                     }
+
+                    DB::table('product_order_preperations')
+                        ->where('id', $orderPreparationId)
+                        ->update([
+                            'isOrderAssigned' => true,
+                            'order_assigned_date' => now(),
+                            'status' => 'Assigned',
+                            'orderAssignedTo' => $assignedSection,
+                            'updated_at' => now(),
+                        ]);
 
                     // Store assignment
                     DB::table('assigned_raw_materials')->insert([
