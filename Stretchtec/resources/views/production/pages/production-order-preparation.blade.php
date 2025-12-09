@@ -319,7 +319,7 @@
                                         </td>
 
                                         <td class="px-4 py-3 border-r border-gray-300">
-                                            @if($order->isRawMaterialOrdered && $order->isRawMaterialReceived && !$order->isOrderAssigned)
+                                            @if($order->isRawMaterialOrdered && $order->isRawMaterialReceived)
                                                 <button type="button"
                                                         onclick="openAssignModal({{ $order->id }}, '{{ $order->prod_order_no }}')"
                                                         class="bg-purple-500 hover:bg-purple-600 text-white text-xs font-semibold py-2 px-3 rounded shadow transition">
@@ -498,9 +498,12 @@
                                     </button>
 
                                     <button onclick="addToCart()"
-                                            class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded shadow">
+                                            @if($order->isOrderAssigned) disabled @endif
+                                            class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded shadow
+                                            {{ $order->isOrderAssigned ? 'opacity-50 cursor-not-allowed' : '' }}">
                                         Add to Cart
                                     </button>
+
                                 </div>
 
                                 <!-- Cart + Submit Buttons -->
@@ -523,16 +526,20 @@
 
                                     <!-- RIGHT SIDE: Submit button -->
                                     <button onclick="submitCart()"
-                                            class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg shadow font-semibold">
+                                            @if($order->isOrderAssigned) disabled @endif
+                                            class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg shadow font-semibold
+                                            {{ $order->isOrderAssigned ? 'opacity-50 cursor-not-allowed' : '' }}">
                                         Submit
                                     </button>
+
                                 </div>
 
                             </div>
                         </div>
 
                         <!-- Cart Modal -->
-                        <div id="cartModal" class="fixed inset-0 bg-black bg-opacity-40 hidden items-center justify-center z-50">
+                        <div id="cartModal"
+                             class="fixed inset-0 bg-black bg-opacity-40 hidden items-center justify-center z-50">
                             <div class="bg-white rounded-xl shadow-xl w-full max-w-3xl p-6 space-y-6">
                                 <h2 class="text-xl font-semibold text-gray-800">
                                     Cart Items for Order No: <span id="cartOrderNo"></span>
@@ -548,7 +555,8 @@
                         </div>
 
                         <!-- Assigned Raw Materials Modal -->
-                        <div id="assignedRawModal" class="fixed inset-0 bg-black bg-opacity-40 hidden items-center justify-center z-50">
+                        <div id="assignedRawModal"
+                             class="fixed inset-0 bg-black bg-opacity-40 hidden items-center justify-center z-50">
                             <div class="bg-white rounded-xl shadow-xl w-full max-w-3xl p-6 space-y-6">
                                 <h2 class="text-xl font-semibold text-gray-800">
                                     Assigned Raw Materials for Order No: <span id="assignedOrderNo"></span>
