@@ -142,7 +142,7 @@ class ProductInquiryController extends Controller
                     'size' => $item['size'],
                     'item' => $item['item'],
                     'supplier' => $item['supplier'] ?? null,
-                    'pst_no' => $item['pst_no'],
+                    'pst_no' => $item['pst_no'] ?? null,
                     'supplier_comment' => $data['supplier_comment'] ?? null,
                     'qty' => $item['qty'],
                     'uom' => $item['uom'],

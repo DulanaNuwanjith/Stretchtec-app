@@ -40,6 +40,7 @@
  * --------------------------------------------------------------------------
  */
 
+use App\Http\Controllers\AssignedRawMaterialController;
 use App\Http\Controllers\ColorMatchRejectController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ExportProcurementController;
@@ -211,13 +212,11 @@ Route::middleware([
         ->name('rawMaterial.borrow');
 
 
-
     Route::get('rawMaterialReceipt', [ExportProcurementController::class, 'exportRawIndex'])->name('rawMaterialReceipt.index');
     Route::delete('rawMaterialReceipt/{id}', [ExportProcurementController::class, 'exportRawDelete'])->name('rawMaterialReceipt.delete');
     Route::post('rawMaterialReceipt', [ExportProcurementController::class, 'exportRawStore'])->name('rawMaterialReceipt.store');
     Route::post('/export-raw-material/borrow/{id}', [ExportProcurementController::class, 'borrowExportRawMaterial'])
-    ->name('rawMaterialReceipt.borrow');
-
+        ->name('rawMaterialReceipt.borrow');
 
 
     /* ----------------------------------------------------------------------
@@ -278,6 +277,9 @@ Route::middleware([
         'store' => 'production-inquery-details.store',
         'destroy' => 'production-inquery-details.destroy',
     ]);
+
+    Route::post('/orders/assign-raw-materials', [AssignedRawMaterialController::class, 'store'])
+        ->name('orders.assignRawMaterials');
 
     Route::resource('production-order-preparation', ProductOrderPreperationController::class)->names([
         'index' => 'production-order-preparation.index',

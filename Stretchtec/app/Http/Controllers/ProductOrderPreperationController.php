@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AssignedRawMaterial;
+use App\Models\AssignedRawMaterialExport;
+use App\Models\ExportRawMaterial;
 use App\Models\ProductOrderPreperation;
+use App\Models\RawMaterialStore;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
-use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 
 class ProductOrderPreperationController extends Controller
 {
@@ -15,11 +19,19 @@ class ProductOrderPreperationController extends Controller
      */
     public function index(): Factory|View
     {
-        // Fetch all records with pagination (adjust number per page as needed)
         $orderPreparations = ProductOrderPreperation::latest()->paginate(10);
 
-        // Pass data to the blade
-        return view('production.pages.production-order-preparation', compact('orderPreparations'));
+        $localRawMaterials = RawMaterialStore::orderBy('available_quantity', 'desc')->get();
+        $exportRawMaterials = ExportRawMaterial::orderBy('net_weight', 'desc')->get();
+
+        // Get the assigned raw materials with their related details
+        $assignedLocalRawMaterials = AssignedRawMaterial::with('rawMaterial')->latest()->get();
+        $assignedExportRawMaterials = AssignedRawMaterialExport::with('exportRawMaterial')->latest()->get();
+
+        return view(
+            'production.pages.production-order-preparation',
+            compact('orderPreparations', 'localRawMaterials', 'exportRawMaterials', 'assignedLocalRawMaterials', 'assignedExportRawMaterials')
+        );
     }
 
     /**
