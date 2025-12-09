@@ -371,6 +371,26 @@
 </script>
 
 <script>
+    function openDetailsModal(button) {
+        document.getElementById("modal_ref_no").textContent = button.dataset.refNo;
+        document.getElementById("modal_item").textContent = button.dataset.item;
+        document.getElementById("modal_colour").textContent = button.dataset.colour;
+        document.getElementById("modal_shade").textContent = button.dataset.shade;
+        document.getElementById("modal_size").textContent = button.dataset.size;
+        document.getElementById("modal_tkt").textContent = button.dataset.tkt;
+        document.getElementById("modal_supplier").textContent = button.dataset.supplier;
+        document.getElementById("modal_pst_no").textContent = button.dataset.pstno;
+        document.getElementById("modal_supplier_comment").textContent = button.dataset.suppliercomment;
+
+        document.getElementById("detailsModal").classList.remove("hidden");
+    }
+
+    function closeDetailsModal() {
+        document.getElementById("detailsModal").classList.add("hidden");
+    }
+</script>
+
+<script>
     const localAssigned = @json($localRawMaterial);
     const exportAssigned = @json($exportRawMaterial);
 
