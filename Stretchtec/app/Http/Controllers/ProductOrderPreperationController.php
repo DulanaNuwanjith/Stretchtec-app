@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AssignedRawMaterial;
+use App\Models\AssignedRawMaterialExport;
 use App\Models\ExportRawMaterial;
 use App\Models\ProductOrderPreperation;
 use App\Models\RawMaterialStore;
@@ -24,8 +26,12 @@ class ProductOrderPreperationController extends Controller
 
         $exportRawMaterials = ExportRawMaterial::orderBy('net_weight', 'desc')->get();
 
+        //Get the assigned raw materials
+        $assignedLocalRawMaterials = AssignedRawMaterial::latest()->get();
+        $assignedExportRawMaterials = AssignedRawMaterialExport::latest()->get();
+
         // Pass data to the blade
-        return view('production.pages.production-order-preparation', compact('orderPreparations', 'localRawMaterials', 'exportRawMaterials'));
+        return view('production.pages.production-order-preparation', compact('orderPreparations', 'localRawMaterials', 'exportRawMaterials', 'assignedLocalRawMaterials', 'assignedExportRawMaterials'));
     }
 
     /**

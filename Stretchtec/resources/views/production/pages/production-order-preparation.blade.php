@@ -491,15 +491,24 @@
                                 </div>
 
                                 <!-- Cart + Submit Buttons -->
-                                <div class="flex justify-between items-center pt-4 border-t mt-4">
-                                    <button onclick="openCartModal()"
-                                            class="relative bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg shadow font-semibold">
-                                        Cart
-                                        <span id="cart-count"
-                                              class="absolute -top-2 -right-2 bg-red-600 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full shadow">
-                                        </span>
-                                    </button>
+                                <div class="flex justify-between items-center pt-4 border-t mt-4" data-order-id="">
+                                    <!-- LEFT SIDE: Cart + Assigned buttons -->
+                                    <div class="flex items-center gap-3">
+                                        <button onclick="openCartModal()"
+                                                class="relative bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg shadow font-semibold">
+                                            Cart
+                                            <span id="cart-count"
+                                                  class="absolute -top-2 -right-2 bg-red-600 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full shadow">
+                                            </span>
+                                        </button>
 
+                                        <button onclick="openAssignedRawModal(selectedOrderId)"
+                                                class="relative bg-pink-600 hover:bg-pink-700 text-white px-4 py-2 rounded-lg shadow font-semibold">
+                                            Assigned
+                                        </button>
+                                    </div>
+
+                                    <!-- RIGHT SIDE: Submit button -->
                                     <button onclick="submitCart()"
                                             class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg shadow font-semibold">
                                         Submit
@@ -528,6 +537,27 @@
                             </div>
                         </div>
 
+                        <div id="assignedRawModal"
+                             class="fixed inset-0 bg-black bg-opacity-40 hidden items-center justify-center z-50">
+                            <div class="bg-white rounded-xl shadow-xl w-full max-w-3xl p-6 space-y-6">
+
+                                <h2 class="text-xl font-semibold text-gray-800">Assigned Raw Materials</h2>
+
+                                <div id="assigned-items-container" class="max-h-80 overflow-y-auto space-y-4">
+                                    <!-- Items dynamically loaded by JS -->
+                                </div>
+
+                                <div class="flex justify-end gap-3">
+                                    <button onclick="closeAssignedRawModal()"
+                                            class="px-4 py-2 bg-gray-300 hover:bg-gray-400 text-gray-800 rounded">
+                                        Close
+                                    </button>
+                                </div>
+
+                            </div>
+                        </div>
+
+
                         <form id="cartSubmitForm" action="{{ route('orders.assignRawMaterials') }}" method="POST">
                             @csrf
                             <input type="hidden" name="cart_items" id="cartDataInput">
@@ -539,6 +569,10 @@
         </div>
 
         <script>
+            // Global variable to store the currently selected order
+            let selectedOrderId = null;
+
+            // ------------- CART LOGIC -------------
             function updateCartCount() {
                 const cart = JSON.parse(localStorage.getItem('raw_material_cart')) || [];
                 document.getElementById('cart-count').textContent = cart.length;
@@ -554,22 +588,21 @@
                 } else {
                     cart.forEach((item, index) => {
                         container.innerHTML += `
-                <div class="border p-3 rounded-lg flex justify-between items-center bg-gray-50">
-                    <div>
-                        <p class="font-semibold">${item.name}</p>
-                        <p class="text-xs text-gray-600">Type: ${item.type}</p>
-                        <p class="text-xs text-gray-600">Order ID: ${item.order_id}</p>
-                        <p class="text-xs text-gray-600">Qty Selected:
-                            <span class="font-semibold">${item.used_qty} ${item.unit}</span>
-                        </p>
+                    <div class="border p-3 rounded-lg flex justify-between items-center bg-gray-50">
+                        <div>
+                            <p class="font-semibold">${item.name}</p>
+                            <p class="text-xs text-gray-600">Type: ${item.type}</p>
+                            <p class="text-xs text-gray-600">Order ID: ${item.order_id}</p>
+                            <p class="text-xs text-gray-600">Qty Selected:
+                                <span class="font-semibold">${item.used_qty} ${item.unit}</span>
+                            </p>
+                        </div>
+                        <button onclick="removeFromCart(${index})"
+                                class="text-red-600 font-bold hover:underline text-sm">
+                            Remove
+                        </button>
                     </div>
-
-                    <button onclick="removeFromCart(${index})"
-                            class="text-red-600 font-bold hover:underline text-sm">
-                        Remove
-                    </button>
-                </div>
-            `;
+                `;
                     });
                 }
 
@@ -586,36 +619,29 @@
                 let cart = JSON.parse(localStorage.getItem('raw_material_cart')) || [];
                 cart.splice(index, 1);
                 localStorage.setItem('raw_material_cart', JSON.stringify(cart));
-                openCartModal();       // Refresh modal
-                updateCartCount();     // Update header count
+                openCartModal();
+                updateCartCount();
             }
 
             function submitCart() {
                 const cart = JSON.parse(localStorage.getItem('raw_material_cart')) || [];
-
                 if (cart.length === 0) {
                     alert("Cart is empty!");
                     return;
                 }
 
-                // Put cart into hidden input
                 document.getElementById('cartDataInput').value = JSON.stringify(cart);
-
-                // Submit the form normally
                 document.getElementById('cartSubmitForm').submit();
 
-                // Optionally, clear cart in localStorage AFTER submission
+                // Clear cart after submission
                 localStorage.removeItem('raw_material_cart');
             }
 
-
-            // Update on page load
             updateCartCount();
         </script>
 
         <script>
-            let selectedOrderId = null;
-
+            // ------------- ASSIGN MODAL LOGIC -------------
             function openAssignModal(orderId) {
                 selectedOrderId = orderId;
                 document.getElementById('assignModal').classList.remove('hidden');
@@ -629,10 +655,10 @@
         </script>
 
         <script>
-            // Show/hide qty input when checkbox is clicked
+            // ------------- RAW MATERIAL SELECTION -------------
             function toggleQtyInput(checkbox) {
-                let row = checkbox.closest("tr");
-                let qtyInput = row.querySelector(".qty-input");
+                const row = checkbox.closest("tr");
+                const qtyInput = row.querySelector(".qty-input");
 
                 if (checkbox.checked) {
                     qtyInput.classList.remove("hidden");
@@ -643,22 +669,22 @@
                 }
             }
 
-            // Validate the input quantity
             function validateQty(input) {
-                let max = parseFloat(input.dataset.max);
+                const max = parseFloat(input.dataset.max);
                 let val = parseFloat(input.value);
 
-                if (val > max) {
-                    input.value = max;
-                }
-                if (val < 1) {
-                    input.value = "";
-                }
+                if (val > max) input.value = max;
+                if (val < 1) input.value = "";
             }
 
             function addToCart() {
-                let selected = document.querySelectorAll(".material-check:checked");
+                const selected = document.querySelectorAll(".material-check:checked");
                 let cart = JSON.parse(localStorage.getItem("raw_material_cart")) || [];
+
+                if (!selectedOrderId) {
+                    alert("No order selected!");
+                    return;
+                }
 
                 if (selected.length === 0) {
                     alert("Please select at least one item.");
@@ -668,8 +694,8 @@
                 let hasError = false;
 
                 selected.forEach(chk => {
-                    let row = chk.closest("tr");
-                    let qtyInput = row.querySelector(".qty-input");
+                    const row = chk.closest("tr");
+                    const qtyInput = row.querySelector(".qty-input");
 
                     if (!qtyInput.value || qtyInput.value <= 0) {
                         hasError = true;
@@ -694,16 +720,13 @@
                 }
 
                 localStorage.setItem("raw_material_cart", JSON.stringify(cart));
-
-                // Update cart count badge
-                document.getElementById("cart-count").textContent = cart.length;
-
+                updateCartCount();
                 alert("Items added to cart successfully!");
 
-                // 🔥 Clear selections but do NOT close the modal
+                // Clear selections
                 selected.forEach(chk => {
                     chk.checked = false;
-                    let row = chk.closest("tr");
+                    const row = chk.closest("tr");
                     row.querySelector(".qty-input").value = "";
                     row.querySelector(".qty-input").classList.add("hidden");
                 });
@@ -711,11 +734,57 @@
         </script>
 
         <script>
+            // ------------- ASSIGNED RAW MATERIALS MODAL -------------
+            const assignedLocal = @json($assignedLocalRawMaterials);
+            const assignedExport = @json($assignedExportRawMaterials);
+
+            function openAssignedRawModal(orderId) {
+                const container = document.getElementById('assigned-items-container');
+                container.innerHTML = "";
+
+                const localFiltered = assignedLocal.filter(item => item.order_preperation_id == orderId);
+                const exportFiltered = assignedExport.filter(item => item.order_preperation_id == orderId);
+
+                if (localFiltered.length === 0 && exportFiltered.length === 0) {
+                    container.innerHTML = `<p class="text-gray-500">No assigned raw materials for this order.</p>`;
+                } else {
+                    localFiltered.forEach(item => {
+                        container.innerHTML += `
+                    <div class="border p-3 rounded-lg bg-gray-50">
+                        <p class="font-semibold">Local Raw Material ID: ${item.raw_material_store_id}</p>
+                        <p class="text-xs text-gray-600">Order ID: ${item.order_preperation_id}</p>
+                        <p class="text-xs text-gray-600">Assigned Qty: <span class="font-semibold">${item.assigned_quantity}</span></p>
+                    </div>`;
+                    });
+
+                    exportFiltered.forEach(item => {
+                        container.innerHTML += `
+                    <div class="border p-3 rounded-lg bg-gray-50">
+                        <p class="font-semibold">Export Raw Material ID: ${item.export_raw_material_id}</p>
+                        <p class="text-xs text-gray-600">Order ID: ${item.order_preperation_id}</p>
+                        <p class="text-xs text-gray-600">Assigned Qty: <span class="font-semibold">${item.assigned_quantity}</span></p>
+                    </div>`;
+                    });
+                }
+
+                document.getElementById('assignedRawModal').classList.remove('hidden');
+                document.getElementById('assignedRawModal').classList.add('flex');
+            }
+
+            function closeAssignedRawModal() {
+                document.getElementById('assignedRawModal').classList.add('hidden');
+                document.getElementById('assignedRawModal').classList.remove('flex');
+            }
+        </script>
+
+        <script>
             document.addEventListener("DOMContentLoaded", function () {
                 const spinner = document.getElementById("pageLoadingSpinner");
 
+
                 // Show spinner immediately
                 spinner.classList.remove("hidden");
+
 
                 // Wait for table to render completely
                 window.requestAnimationFrame(() => {
@@ -729,7 +798,6 @@
                 const form = document.getElementById('filterFormContainer');
                 form.classList.toggle('hidden');
             }
-
             function toggleReportForm() {
                 const form = document.getElementById('reportFormContainer');
                 form.classList.toggle('hidden');
@@ -756,4 +824,5 @@
                 return true;
             }
         </script>
+
 @endsection
