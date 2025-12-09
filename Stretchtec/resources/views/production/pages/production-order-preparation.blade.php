@@ -321,7 +321,7 @@
                                         <td class="px-4 py-3 border-r border-gray-300">
                                             @if($order->isRawMaterialOrdered && $order->isRawMaterialReceived)
                                                 <button type="button"
-                                                        onclick="openAssignModal({{ $order->id }})"
+                                                        onclick="openAssignModal({{ $order->id }}, '{{ $order->prod_order_no }}')"
                                                         class="bg-purple-500 hover:bg-purple-600 text-white text-xs font-semibold py-2 px-3 rounded shadow transition">
                                                     Assign Order
                                                 </button>
@@ -518,16 +518,13 @@
                             </div>
                         </div>
 
-                        <div id="cartModal"
-                             class="fixed inset-0 bg-black bg-opacity-40 hidden items-center justify-center z-50">
+                        <!-- Cart Modal -->
+                        <div id="cartModal" class="fixed inset-0 bg-black bg-opacity-40 hidden items-center justify-center z-50">
                             <div class="bg-white rounded-xl shadow-xl w-full max-w-3xl p-6 space-y-6">
-
-                                <h2 class="text-xl font-semibold text-gray-800">Cart Items</h2>
-
-                                <div id="cart-items-container" class="max-h-80 overflow-y-auto space-y-4">
-                                    <!-- Items inserted dynamically -->
-                                </div>
-
+                                <h2 class="text-xl font-semibold text-gray-800">
+                                    Cart Items for Order No: <span id="cartOrderNo"></span>
+                                </h2>
+                                <div id="cart-items-container" class="max-h-80 overflow-y-auto space-y-4"></div>
                                 <div class="flex justify-end gap-3">
                                     <button onclick="closeCartModal()"
                                             class="px-4 py-2 bg-gray-300 hover:bg-gray-400 text-gray-800 rounded">
@@ -537,26 +534,21 @@
                             </div>
                         </div>
 
-                        <div id="assignedRawModal"
-                             class="fixed inset-0 bg-black bg-opacity-40 hidden items-center justify-center z-50">
+                        <!-- Assigned Raw Materials Modal -->
+                        <div id="assignedRawModal" class="fixed inset-0 bg-black bg-opacity-40 hidden items-center justify-center z-50">
                             <div class="bg-white rounded-xl shadow-xl w-full max-w-3xl p-6 space-y-6">
-
-                                <h2 class="text-xl font-semibold text-gray-800">Assigned Raw Materials</h2>
-
-                                <div id="assigned-items-container" class="max-h-80 overflow-y-auto space-y-4">
-                                    <!-- Items dynamically loaded by JS -->
-                                </div>
-
+                                <h2 class="text-xl font-semibold text-gray-800">
+                                    Assigned Raw Materials for Order No: <span id="assignedOrderNo"></span>
+                                </h2>
+                                <div id="assigned-items-container" class="max-h-80 overflow-y-auto space-y-4"></div>
                                 <div class="flex justify-end gap-3">
                                     <button onclick="closeAssignedRawModal()"
                                             class="px-4 py-2 bg-gray-300 hover:bg-gray-400 text-gray-800 rounded">
                                         Close
                                     </button>
                                 </div>
-
                             </div>
                         </div>
-
 
                         <form id="cartSubmitForm" action="{{ route('orders.assignRawMaterials') }}" method="POST">
                             @csrf
@@ -571,6 +563,7 @@
         <script>
             // Global variable to store the currently selected order
             let selectedOrderId = null;
+            let selectedOrderNo = null;
 
             // ------------- CART LOGIC -------------
             function updateCartCount() {
@@ -583,26 +576,28 @@
                 const container = document.getElementById('cart-items-container');
                 container.innerHTML = "";
 
+                // Set the order number in the heading
+                document.getElementById('cartOrderNo').textContent = selectedOrderNo || 'N/A';
+
                 if (cart.length === 0) {
                     container.innerHTML = `<p class="text-gray-500">No items in the cart.</p>`;
                 } else {
                     cart.forEach((item, index) => {
                         container.innerHTML += `
-                    <div class="border p-3 rounded-lg flex justify-between items-center bg-gray-50">
-                        <div>
-                            <p class="font-semibold">${item.name}</p>
-                            <p class="text-xs text-gray-600">Type: ${item.type}</p>
-                            <p class="text-xs text-gray-600">Order ID: ${item.order_id}</p>
-                            <p class="text-xs text-gray-600">Qty Selected:
-                                <span class="font-semibold">${item.used_qty} ${item.unit}</span>
-                            </p>
-                        </div>
-                        <button onclick="removeFromCart(${index})"
-                                class="text-red-600 font-bold hover:underline text-sm">
-                            Remove
-                        </button>
-                    </div>
-                `;
+            <div class="border p-3 rounded-lg flex justify-between items-center bg-gray-50">
+                <div>
+                    <p class="font-semibold">${item.name}</p>
+                    <p class="text-xs text-gray-600">Type: ${item.type}</p>
+                    <p class="text-xs text-gray-600">Order ID: ${item.order_id}</p>
+                    <p class="text-xs text-gray-600">Qty Selected:
+                        <span class="font-semibold">${item.used_qty} ${item.unit}</span>
+                    </p>
+                </div>
+                <button onclick="removeFromCart(${index})"
+                        class="text-red-600 font-bold hover:underline text-sm">
+                    Remove
+                </button>
+            </div>`;
                     });
                 }
 
@@ -642,13 +637,16 @@
 
         <script>
             // ------------- ASSIGN MODAL LOGIC -------------
-            function openAssignModal(orderId) {
+            function openAssignModal(orderId, orderNo) {
                 selectedOrderId = orderId;
+                selectedOrderNo = orderNo;
                 document.getElementById('assignModal').classList.remove('hidden');
                 document.getElementById('assignModal').classList.add('flex');
             }
 
             function closeAssignModal() {
+                selectedOrderId = null;
+                selectedOrderNo = null;
                 document.getElementById('assignModal').classList.add('hidden');
                 document.getElementById('assignModal').classList.remove('flex');
             }
@@ -742,34 +740,35 @@
                 const container = document.getElementById('assigned-items-container');
                 container.innerHTML = "";
 
+                // Set the order number in the heading
+                document.getElementById('assignedOrderNo').textContent = selectedOrderNo || 'N/A';
+
                 const localFiltered = assignedLocal.filter(item => item.order_preperation_id == orderId);
                 const exportFiltered = assignedExport.filter(item => item.order_preperation_id == orderId);
 
                 if (localFiltered.length === 0 && exportFiltered.length === 0) {
                     container.innerHTML = `<p class="text-gray-500">No assigned raw materials for this order.</p>`;
                 } else {
-                    // LOCAL ASSIGNED MATERIALS
                     localFiltered.forEach(item => {
-                        const rm = item.raw_material; // raw material details from relationship
+                        const rm = item.raw_material;
                         container.innerHTML += `
-                            <div class="border p-3 rounded-lg bg-gray-50">
-                                <p class="font-semibold">Local Raw Material: ${rm.color} / ${rm.shade} / ${rm.tkt}</p>
-                                <p class="text-xs text-gray-600">PST No: ${rm.pst_no}</p>
-                                <p class="text-xs text-gray-600">Supplier: ${rm.supplier}</p>
-                                <p class="text-xs text-gray-600">Assigned Qty: <span class="font-semibold">${item.assigned_quantity}</span></p>
-                            </div>`;
+            <div class="border p-3 rounded-lg bg-gray-50">
+                <p class="font-semibold">Local Raw Material: ${rm.color} / ${rm.shade} / ${rm.tkt}</p>
+                <p class="text-xs text-gray-600">PST No: ${rm.pst_no}</p>
+                <p class="text-xs text-gray-600">Supplier: ${rm.supplier}</p>
+                <p class="text-xs text-gray-600">Assigned Qty: <span class="font-semibold">${item.assigned_quantity}</span></p>
+            </div>`;
                     });
 
-                    // EXPORT ASSIGNED MATERIALS
                     exportFiltered.forEach(item => {
-                        const rm = item.export_raw_material; // export material details from relationship
+                        const rm = item.export_raw_material;
                         container.innerHTML += `
-                                <div class="border p-3 rounded-lg bg-gray-50">
-                                    <p class="font-semibold">Export Raw Material: ${rm.color} / ${rm.shade} / ${rm.tkt}</p>
-                                    <p class="text-xs text-gray-600">PST No: ${rm.pst_no}</p>
-                                    <p class="text-xs text-gray-600">Supplier: ${rm.supplier}</p>
-                                    <p class="text-xs text-gray-600">Assigned Qty: <span class="font-semibold">${item.assigned_quantity}</span></p>
-                                </div>`;
+            <div class="border p-3 rounded-lg bg-gray-50">
+                <p class="font-semibold">Export Raw Material: ${rm.color} / ${rm.shade} / ${rm.tkt}</p>
+                <p class="text-xs text-gray-600">PST No: ${rm.pst_no}</p>
+                <p class="text-xs text-gray-600">Supplier: ${rm.supplier}</p>
+                <p class="text-xs text-gray-600">Assigned Qty: <span class="font-semibold">${item.assigned_quantity}</span></p>
+            </div>`;
                     });
                 }
 
