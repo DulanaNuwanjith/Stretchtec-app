@@ -235,6 +235,7 @@ class MailBookingController extends Controller
             $storesItem = Stock::where('reference_no', $productionOrder->reference_no)->first();
 
             $productionOrder->isSentToStock = true;
+            $productionOrder->status = 'Sent to Store';
 
             if (!$catalogItem) {
                 $productionOrder->canSendToProduction = true;
