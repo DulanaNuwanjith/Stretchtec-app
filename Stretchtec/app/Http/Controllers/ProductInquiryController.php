@@ -207,6 +207,7 @@ class ProductInquiryController extends Controller
             }
 
             $productionOrder->sent_to_stock_at = now();
+            $productionOrder->status = 'Sent to Stores';
             $productionOrder->save();
 
             // 3. Create a new store record
