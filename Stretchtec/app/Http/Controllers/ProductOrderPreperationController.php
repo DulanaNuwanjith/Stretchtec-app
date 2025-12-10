@@ -88,6 +88,7 @@ class ProductOrderPreperationController extends Controller
 
         $order->isRawMaterialOrdered = true;
         $order->raw_material_ordered_date = now(); // sets current date and time
+        $order->status = 'Yarn Ordered';
 
         $order->save();
 
@@ -100,6 +101,7 @@ class ProductOrderPreperationController extends Controller
 
         $order->isRawMaterialReceived = true;
         $order->raw_material_received_date = now(); // sets current date and time
+        $order->status = 'Yarn Received';
 
         $order->save();
 

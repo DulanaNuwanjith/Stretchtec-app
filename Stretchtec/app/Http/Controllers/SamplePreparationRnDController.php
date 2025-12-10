@@ -42,6 +42,12 @@ class SamplePreparationRnDController extends Controller
             });
         }
 
+        if ($request->filled('style')) {
+            $query->whereHas('sampleInquiry', function ($q) use ($request) {
+                $q->where('style', $request->input('style'));
+            });
+        }
+
         if ($request->filled('reference_no')) {
             $query->where('referenceNo', $request->input('reference_no'));
         }
@@ -79,6 +85,10 @@ class SamplePreparationRnDController extends Controller
             ->unique()
             ->sort()
             ->values();
+        $styles = SampleInquiry::whereNotNull('style')
+            ->distinct()
+            ->orderBy('style')
+            ->pluck('style');
         $references = SamplePreparationRnD::whereNotNull('referenceNo')->where('referenceNo', '!=', '')->distinct()->orderBy('referenceNo')->pluck('referenceNo');
         $coordinators = SampleInquiry::whereNotNull('coordinatorName')->where('coordinatorName', '!=', '')->distinct()->orderBy('coordinatorName')->pluck('coordinatorName');
         $sampleStockReferences = SampleStock::pluck('reference_no')->unique();
@@ -104,6 +114,7 @@ class SamplePreparationRnDController extends Controller
             'coordinators',
             'dispatchCheck',
             'referenceShadesMap',
+            'styles',
         ));
     }
 

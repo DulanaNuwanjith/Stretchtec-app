@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AssignedRawMaterial;
+use App\Models\AssignedRawMaterialExport;
 use App\Models\BraidingSectionOrders;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 
 class BraidingSectionOrdersController extends Controller
@@ -10,9 +14,22 @@ class BraidingSectionOrdersController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): Factory|View
     {
-        //
+        $orders = BraidingSectionOrders::latest()
+            ->with('productInquiry', 'orderPreparation')
+            ->get();
+
+        // Group assigned items by order_preparation_id
+        $localRawMaterial = AssignedRawMaterial::with('orderPreparation', 'rawMaterial')
+            ->get()
+            ->groupBy('order_preperation_id');
+
+        $exportRawMaterial = AssignedRawMaterialExport::with('orderPreparation', 'exportRawMaterial')
+            ->get()
+            ->groupBy('order_preperation_id');
+
+        return view('production.pages.braiding', compact('orders', 'localRawMaterial', 'exportRawMaterial'));
     }
 
     /**
