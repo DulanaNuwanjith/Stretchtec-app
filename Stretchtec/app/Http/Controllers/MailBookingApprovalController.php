@@ -42,6 +42,7 @@ class MailBookingApprovalController extends Controller
 
         //Update isSentForApproval field
         $mailBooking->isSentForApproval = true;
+        $mailBooking->status = 'Sent For Approval';
         $mailBooking->save();
 
         MailBookingApproval::create([
@@ -66,6 +67,7 @@ class MailBookingApprovalController extends Controller
 
         // Update the mail booking approval status
         $mailBooking->isApproved = true;
+        $mailBooking->status = 'Approved';
         $mailBooking->approved_by = auth()->user()->id; // Assuming you have user authentication
         $mailBooking->approved_at = now();
         $mailBooking->save();
