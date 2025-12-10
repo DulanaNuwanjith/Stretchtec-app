@@ -58,8 +58,6 @@
                                     background-color: #3b82f6;
                                     border-radius: 0 0 8px 8px;
                                 }
-
-
                             </style>
 
                             {{-- Sweet Alert Script --}}
@@ -324,6 +322,40 @@
                                                         class="shade-option px-4 py-2 hover:bg-gray-100 cursor-pointer text-sm"
                                                         role="option">
                                                         {{ $shade }}
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                        </div>
+
+                                        {{-- Filters - Style Dropdown --}}
+                                        <div class="relative inline-block text-left w-72">
+                                            <label
+                                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Style</label>
+                                            <input type="hidden" name="style" id="styleInput"
+                                                value="{{ request('style') }}">
+
+                                            <button id="styleDropdown" type="button" onclick="toggleStyleDropdown()"
+                                                class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10 dark:bg-gray-700 dark:text-white"
+                                                aria-expanded="false" aria-haspopup="listbox">
+                                                <span id="selectedStyle">{{ request('style') ?? 'Select Style' }}</span>
+                                                <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20"
+                                                    fill="currentColor">
+                                                    <path fill-rule="evenodd"
+                                                        d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
+                                                        clip-rule="evenodd" />
+                                                </svg>
+                                            </button>
+
+                                            <div id="styleDropdownMenu"
+                                                class="absolute z-40 mt-1 w-full bg-white border rounded-lg shadow-lg hidden max-h-48 overflow-y-auto p-2">
+                                                <input type="text" id="styleSearchInput" onkeyup="filterStyles()"
+                                                    placeholder="Search..."
+                                                    class="w-full px-2 py-1 text-sm border rounded-md dark:bg-gray-600 dark:text-white dark:placeholder-gray-300"
+                                                    autocomplete="off">
+                                                @foreach ($styles as $style)
+                                                    <div onclick="selectStyle('{{ $style }}')" tabindex="0"
+                                                        class="style-option px-4 py-2 hover:bg-gray-100 cursor-pointer text-sm">
+                                                        {{ $style }}
                                                     </div>
                                                 @endforeach
                                             </div>
@@ -1224,8 +1256,8 @@
                                                                                                         stroke-linecap="round"
                                                                                                         stroke-linejoin="round"
                                                                                                         d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0
-                                                                                                                                                                                                   01-1.995-1.858L5 7m5 4v6m4-6v6M9 7V4a1 1 0
-                                                                                                                                                                                                   011-1h4a1 1 0 011 1v3m-9 0h10" />
+                                                                                                                                                                                                                   01-1.995-1.858L5 7m5 4v6m4-6v6M9 7V4a1 1 0
+                                                                                                                                                                                                                   011-1h4a1 1 0 011 1v3m-9 0h10" />
                                                                                                 </svg>
                                                                                             </button>
                                                                                         </div>
@@ -2710,6 +2742,19 @@
             filterDropdown('.shade-option', 'shadeSearchInput');
         }
 
+        // ===== STYLE dropdown =====
+        function toggleStyleDropdown() {
+            toggleDropdown('styleDropdown', 'styleDropdownMenu');
+        }
+
+        function selectStyle(style) {
+            selectDropdownValue('styleDropdown', 'styleDropdownMenu', 'selectedStyle', 'styleInput', style, 'Select Style');
+        }
+
+        function filterStyles() {
+            filterDropdown('.style-option', 'styleSearchInput');
+        }
+
         // ===== REFERENCE NO dropdown =====
         function toggleRefDropdown() {
             toggleDropdown('refDropdown', 'refDropdownMenu');
@@ -2794,6 +2839,13 @@
                     filterFunc: filterShades
                 },
                 {
+                    selected: 'selectedStyle',
+                    input: 'styleInput',
+                    search: 'styleSearchInput',
+                    default: 'Select Style',
+                    filterFunc: filterStyles
+                },
+                {
                     selected: 'selectedRef',
                     input: 'refInput',
                     search: 'refSearchInput',
@@ -2834,6 +2886,10 @@
                 {
                     btn: 'shadeDropdown',
                     menu: 'shadeDropdownMenu'
+                },
+                {
+                    btn: 'styleDropdown',
+                    menu: 'styleDropdownMenu'
                 },
                 {
                     btn: 'refDropdown',
