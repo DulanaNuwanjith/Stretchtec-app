@@ -38,6 +38,11 @@ class ProductOrderPreperation extends Model
         'orderAssignedTo',
     ];
 
+    protected $casts = [
+        'isOrderAssigned' => 'boolean',
+    ];
+
+
     // Optional: link back to ProductInquiry
     public function inquiry(): BelongsTo
     {

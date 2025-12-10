@@ -321,7 +321,7 @@
                                         <td class="px-4 py-3 border-r border-gray-300">
                                             @if($order->isRawMaterialOrdered && $order->isRawMaterialReceived)
                                                 <button type="button"
-                                                        onclick="openAssignModal({{ $order->id }}, '{{ $order->prod_order_no }}')"
+                                                        onclick="openAssignModal({{ $order->id }}, '{{ $order->prod_order_no }}', {{ $order->isOrderAssigned ? 'true' : 'false' }})"
                                                         class="bg-purple-500 hover:bg-purple-600 text-white text-xs font-semibold py-2 px-3 rounded shadow transition">
                                                     Assign Order
                                                 </button>
@@ -497,10 +497,9 @@
                                         Cancel
                                     </button>
 
-                                    <button onclick="addToCart()"
-                                            @if($order->isOrderAssigned) disabled @endif
-                                            class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded shadow
-                                            {{ $order->isOrderAssigned ? 'opacity-50 cursor-not-allowed' : '' }}">
+                                    <button
+                                        onclick="addToCart()"
+                                        class="px-4 py-2 text-white rounded shadow bg-purple-600 hover:bg-purple-700">
                                         Add to Cart
                                     </button>
 
@@ -526,7 +525,7 @@
 
                                     <!-- RIGHT SIDE: Submit button -->
                                     <button onclick="submitCart()"
-                                            @if($order->isOrderAssigned) disabled @endif
+                                            @if(!$order->isOrderAssigned) disabled @endif
                                             class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg shadow font-semibold
                                             {{ $order->isOrderAssigned ? 'opacity-50 cursor-not-allowed' : '' }}">
                                         Submit
@@ -658,23 +657,59 @@
 
         <script>
             // ------------- ASSIGN MODAL LOGIC -------------
-            function openAssignModal(orderId, orderNo) {
+            let currentOrderAssigned = false; // Track whether the current order is assigned
+
+            function openAssignModal(orderId, orderNo, isAssigned) {
                 selectedOrderId = orderId;
                 selectedOrderNo = orderNo;
+                currentOrderAssigned = isAssigned;
 
                 // Set the order number in the modal heading
                 document.getElementById('assignOrderNo').textContent = selectedOrderNo || 'N/A';
 
-                document.getElementById('assignModal').classList.remove('hidden');
-                document.getElementById('assignModal').classList.add('flex');
+                // Show modal
+                const modal = document.getElementById('assignModal');
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+
+                // Update Add to Cart button state
+                const addToCartBtn = modal.querySelector('button[onclick="addToCart()"]');
+                if (currentOrderAssigned) {
+                    addToCartBtn.disabled = true;
+                    addToCartBtn.classList.add('bg-purple-400', 'cursor-not-allowed');
+                    addToCartBtn.classList.remove('bg-purple-600', 'hover:bg-purple-700');
+                } else {
+                    addToCartBtn.disabled = false;
+                    addToCartBtn.classList.remove('bg-purple-400', 'cursor-not-allowed');
+                    addToCartBtn.classList.add('bg-purple-600', 'hover:bg-purple-700');
+                }
             }
 
             function closeAssignModal() {
                 selectedOrderId = null;
                 selectedOrderNo = null;
-                document.getElementById('assignModal').classList.add('hidden');
-                document.getElementById('assignModal').classList.remove('flex');
+                currentOrderAssigned = false;
+
+                const modal = document.getElementById('assignModal');
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+
+                // Reset Add to Cart button
+                const addToCartBtn = modal.querySelector('button[onclick="addToCart()"]');
+                addToCartBtn.disabled = false;
+                addToCartBtn.classList.remove('bg-purple-400', 'cursor-not-allowed');
+                addToCartBtn.classList.add('bg-purple-600', 'hover:bg-purple-700');
+
+                // Clear all selected checkboxes and qty inputs
+                modal.querySelectorAll(".material-check").forEach(chk => {
+                    chk.checked = false;
+                    const row = chk.closest("tr");
+                    const qtyInput = row.querySelector(".qty-input");
+                    qtyInput.value = "";
+                    qtyInput.classList.add("hidden");
+                });
             }
+
         </script>
 
         <script>
