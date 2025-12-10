@@ -12,6 +12,21 @@
         [x-cloak] {
             display: none !important;
         }
+
+        .scroll-hidden {
+            overflow-y: scroll;
+            scrollbar-width: none;
+            /* Firefox */
+        }
+
+        .scroll-hidden::-webkit-scrollbar {
+            display: none;
+            /* Chrome, Safari, Edge */
+        }
+
+        .sidebar-bg {
+            background-size: 100% 100%;
+        }
     </style>
 </head>
 
@@ -47,9 +62,12 @@
     </script>
 
     <!-- Sidebar -->
-    <aside x-data="{ collapsed: window.__initialCollapsed, initialized: false, open: false }" x-init="initialized = true" :class="collapsed ? 'md:w-20' : 'md:w-72'"
-        class="fixed md:relative z-40 inset-y-0 left-0 w-64 md:w-auto transform md:translate-x-0 transition-transform duration-300 ease-in-out bg-gradient-to-b from-white to-blue-500 shadow-md flex flex-col min-h-screen"
-        x-bind:class="{ '-translate-x-full': !open, 'translate-x-0': open }" style="width: var(--sidebar-width);">
+    <aside x-data="{ collapsed: window.__initialCollapsed, initialized: false, open: false }" x-init="initialized = true"
+        :class="collapsed ? 'md:w-20 scroll-hidden' : 'md:w-72 overflow-y-auto scroll-hidden'"
+        class="fixed md:relative z-40 inset-y-0 left-0 transform md:translate-x-0 
+           transition-transform duration-300 ease-in-out 
+           bg-gradient-to-b from-white to-blue-500 sidebar-bg
+           shadow-md flex flex-col min-h-screen">
 
         <!-- Mobile Toggle -->
         <div class="flex justify-between items-center md:hidden p-4 bg-white border-b">
