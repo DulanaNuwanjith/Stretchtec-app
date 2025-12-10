@@ -84,6 +84,7 @@ class ProductInquiryController extends Controller
                 'items.*.qty' => 'required|numeric|min:1',
                 'items.*.pst_no' => 'nullable|string|max:255',
                 'items.*.supplier_comment' => 'nullable|string|max:255',
+                'items.*.item_description' => 'nullable|string|max:255',
                 'items.*.uom' => 'required|string|max:50',
                 'items.*.unitPrice' => 'required|numeric|min:0',
                 'items.*.price' => 'required|numeric|min:0',
@@ -113,7 +114,6 @@ class ProductInquiryController extends Controller
                     // Sample order → fetch reference from catalog
                     $sample = ProductCatalog::find($item['sample_id']);
                     $referenceNo = $sample?->reference_no;
-                    $sampleId = $item['sample_id'];
                 } else {
                     // Direct order → use "Direct Bulk" or value from a hidden field
                     $referenceNo = $data['reference_no'] ?? 'Direct Bulk';
@@ -136,7 +136,6 @@ class ProductInquiryController extends Controller
                     'order_type' => $item['order_type'],
                     'remarks' => $data['remarks'] ?? null,
                     'reference_no' => $referenceNo,
-                    'sample_id' => $sampleId,
                     'shade' => $item['shade'],
                     'color' => $item['color'],
                     'tkt' => $item['tkt'] ?? 'N/A',
@@ -145,6 +144,7 @@ class ProductInquiryController extends Controller
                     'supplier' => $item['supplier'] ?? null,
                     'pst_no' => $item['pst_no'] ?? null,
                     'supplier_comment' => $data['supplier_comment'] ?? null,
+                    'item_description' => $data['item_description'] ?? null,
                     'qty' => $item['qty'],
                     'uom' => $item['uom'],
                     'unitPrice' => $item['unitPrice'],

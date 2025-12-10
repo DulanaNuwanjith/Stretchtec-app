@@ -14,6 +14,7 @@ return new class extends Migration {
             $table->id();
             $table->string('prod_order_no');
             $table->dateTime('po_received_date');
+            $table->string('order_type');
             $table->string('customer_name');
             $table->string('customer_coordinator');
             $table->string('merchandiser_name');
@@ -29,6 +30,7 @@ return new class extends Migration {
             $table->string('supplier')->nullable();
             $table->string('pst_no')->nullable();
             $table->string('supplier_comment')->nullable();
+            $table->string('item_description')->nullable();
             $table->decimal('unitPrice');
             $table->decimal('price');
             $table->date('customer_req_date')->nullable();
