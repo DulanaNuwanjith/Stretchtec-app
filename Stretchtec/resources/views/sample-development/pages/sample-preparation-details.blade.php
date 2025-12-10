@@ -693,7 +693,7 @@
                                     </thead>
                                     <tbody id="sampleDevelopmentRecords"
                                         class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                                        @foreach ($samplePreparations as $prep)
+                                        @forelse ($samplePreparations as $prep)
                                             <tr id="prodRow{{ $prep->id }}"
                                                 class="odd:bg-white even:bg-gray-50 border-b border-gray-200  text-left">
                                                 <td
@@ -2428,7 +2428,14 @@
                                                     </div>
                                                 </td>
                                             </tr>
-                                        @endforeach
+                                        @empty
+                                            <tr>
+                                                <td colspan="22"
+                                                    class="text-center px-6 py-6 text-gray-500 text-sm italic">
+                                                    No sample preparation records found.
+                                                </td>
+                                            </tr>
+                                        @endforelse
                                     </tbody>
                                 </table>
 

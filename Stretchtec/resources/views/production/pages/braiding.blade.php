@@ -181,7 +181,7 @@
 
                                     <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
 
-                                    @foreach ($orders as $order)
+                                    @forelse ($orders as $order)
                                         <tr class="text-center">
 
                                             <!-- ORDER NO -->
@@ -240,7 +240,14 @@
                                                 </button>
                                             </td>
                                         </tr>
-                                    @endforeach
+                                        @empty
+                                            <tr>
+                                                <td colspan="8"
+                                                    class="text-center px-6 py-6 text-gray-500 text-sm italic">
+                                                    No records found.
+                                                </td>
+                                            </tr>
+                                    @endforelse
 
                                     </tbody>
                                 </table>

@@ -459,7 +459,7 @@
                                         </tr>
                                     </thead>
                                     <tbody class="divide-y divide-gray-200 dark:divide-gray-600">
-                                        @foreach ($rawMaterials as $material)
+                                        @forelse ($rawMaterials as $material)
                                             <tr class="odd:bg-white even:bg-gray-50 border-b border-gray-200 text-center">
                                                 <td
                                                     class="sticky left-0 z-10 bg-white px-4 py-3 text-sm bg-gray-100 border-r border-gray-300 text-left whitespace-normal break-words font-bold">
@@ -533,7 +533,14 @@
                                                     </div>
                                                 </td>
                                             </tr>
-                                        @endforeach
+                                            @empty
+                                            <tr>
+                                                <td colspan="8"
+                                                    class="text-center px-6 py-6 text-gray-500 text-sm italic">
+                                                    No records found.
+                                                </td>
+                                            </tr>
+                                        @endforelse
                                     </tbody>
                                 </table>
                             </div>

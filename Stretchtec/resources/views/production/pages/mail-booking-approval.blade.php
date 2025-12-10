@@ -217,7 +217,7 @@
                                     </tr>
                                     </thead>
                                     <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
-                                    @foreach ($mailBookingApprovals as $approval)
+                                    @forelse ($mailBookingApprovals as $approval)
                                         <tr class="odd:bg-white even:bg-gray-50 border-b border-gray-200  text-left">
                                             <td
                                                 class="px-4 py-3 font-bold sticky left-0 z-10 bg-gray-100 whitespace-normal break-words border-r border-gray-300 text-blue-500">
@@ -306,7 +306,14 @@
                                                 </div>
                                             </td>
                                         </tr>
-                                    @endforeach
+                                        @empty
+                                            <tr>
+                                                <td colspan="12"
+                                                    class="text-center px-6 py-6 text-gray-500 text-sm italic">
+                                                    No records found.
+                                                </td>
+                                            </tr>
+                                    @endforelse
                                     </tbody>
                                 </table>
                             </div>

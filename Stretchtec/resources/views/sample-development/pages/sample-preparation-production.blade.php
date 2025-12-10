@@ -293,7 +293,7 @@
                                     </tr>
                                     </thead>
                                     <tbody id="serviceRecords" class="bg-white divide-y divide-gray-200">
-                                    @foreach ($productions as $prod)
+                                    @forelse ($productions as $prod)
                                         <tr id="serviceRow{{ $prod->id }}"
                                             class="odd:bg-white even:bg-gray-50 border-b border-gray-200  text-left">
                                             @php
@@ -1085,7 +1085,14 @@
                                             </td>
 
                                         </tr>
-                                    @endforeach
+                                    @empty
+                                        <tr>
+                                            <td colspan="12"
+                                                class="text-center px-6 py-6 text-gray-500 text-sm italic">
+                                                No production orders available.
+                                            </td>
+                                        </tr>
+                                    @endforelse
                                     </tbody>
                                 </table>
 

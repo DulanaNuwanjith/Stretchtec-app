@@ -159,7 +159,7 @@
                 <p class="mt-3 text-gray-700 font-semibold">Loading data...</p>
             </div>
             <table class="table-fixed w-full text-sm divide-y divide-gray-200 dark:divide-gray-700 text-center">
-                <thead class="bg-gray-100 dark:bg-gray-700">
+                <thead class="bg-gray-200 dark:bg-gray-700">
                     <tr>
                         <th
                             class="px-4 py-3 w-48 text-xs font-medium text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words border-r border-gray-300 dark:border-gray-600">
@@ -194,7 +194,7 @@
                 <tbody id="sampleInquiryRecords"
                     class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
 
-                    @foreach ($sampleStocks as $stock)
+                    @forelse ($sampleStocks as $stock)
                         <tr id="row{{ $stock->id }}">
                             <td class="px-4 py-3 border-r border-gray-300 dark:border-gray-600">
                                 {{ $stock->reference_no }}
@@ -253,7 +253,14 @@
                                 </td>
                             @endif
                         </tr>
-                    @endforeach
+                        @empty
+                            <tr>
+                                <td colspan="5"
+                                    class="text-center px-6 py-6 text-gray-500 text-sm italic">
+                                    No records found.
+                                </td>
+                            </tr>
+                    @endforelse
 
                 </tbody>
 

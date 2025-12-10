@@ -294,7 +294,7 @@
                         </tr>
                     </thead>
 
-                    @foreach ($invoiceItems as $invoiceNumber => $items)
+                    @forelse ($invoiceItems as $invoiceNumber => $items)
                         @php
                             $hasMultiple = $items->count() > 1;
                             $first = $items->first();
@@ -407,7 +407,14 @@
                             @endif
 
                         </tbody>
-                    @endforeach
+                        @empty
+                            <tr>
+                                <td colspan="11"
+                                    class="text-center px-6 py-6 text-gray-500 text-sm italic">
+                                    No records found.
+                                </td>
+                            </tr>
+                    @endforelse
 
                 </table>
             </div>

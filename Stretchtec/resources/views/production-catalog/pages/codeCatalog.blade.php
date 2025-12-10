@@ -346,7 +346,7 @@
                                     </thead>
                                     <tbody id="productionCatalogTable"
                                         class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                                        @foreach ($catalogs as $catalog)
+                                        @forelse ($catalogs as $catalog)
                                             <tr class="odd:bg-white even:bg-gray-50 border-b border-gray-200 text-center">
                                                 @php
                                                     $userRole = Auth::user()->role;
@@ -696,7 +696,14 @@
                                                     @endif
                                                 </td>
                                             </tr>
-                                        @endforeach
+                                            @empty
+                                            <tr>
+                                                <td colspan="11"
+                                                    class="text-center px-6 py-6 text-gray-500 text-sm italic">
+                                                    No records found.
+                                                </td>
+                                            </tr>
+                                        @endforelse
                                     </tbody>
                                 </table>
                             </div>

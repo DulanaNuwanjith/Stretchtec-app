@@ -887,7 +887,7 @@
 
                                     <tbody id="sampleInquiryRecords"
                                            class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                                    @foreach ($inquiries as $inquiry)
+                                    @forelse ($inquiries as $inquiry)
                                         <tr id="row{{ $inquiry->id }}"
                                             class="odd:bg-white even:bg-gray-50 border-b border-gray-200  text-left">
                                             <!-- Order No -->
@@ -1917,7 +1917,14 @@
                                                 @endif
                                             </td>
                                         </tr>
-                                    @endforeach
+                                    @empty
+                                        <tr>
+                                            <td colspan="22"
+                                                class="text-center px-6 py-6 text-gray-500 text-sm italic">
+                                                No Inquiries found.
+                                            </td>
+                                        </tr>
+                                    @endforelse
                                     </tbody>
                                 </table>
                             </div>
