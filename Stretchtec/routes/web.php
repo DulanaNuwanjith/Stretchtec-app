@@ -41,6 +41,7 @@
  */
 
 use App\Http\Controllers\AssignedRawMaterialController;
+use App\Http\Controllers\BraidingSectionOrdersController;
 use App\Http\Controllers\ColorMatchRejectController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ExportProcurementController;
@@ -311,9 +312,9 @@ Route::middleware([
         'index' => 'loom.index',
     ]);
 
-    Route::get('braiding', static function () {
-        return view('production.pages.braiding');
-    })->name('braiding.index');
+    Route::resource('braiding', BraidingSectionOrdersController::class)->names([
+        'index' => 'braiding.index',
+    ]);
 
     //Technical Details Routes
     Route::get('/elasticTD', [TechnicalCardController::class, 'elasticIndex'])->name('elasticTD.index');
