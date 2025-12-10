@@ -142,19 +142,306 @@
                                     <img src="{{ asset('icons/filter.png') }}" class="w-6 h-6" alt="Filter Icon">
                                     Filters
                                 </button>
-                                <button onclick="toggleReportForm()"
-                                        class="bg-white border border-blue-500 text-blue-500 hover:text-blue-600 hover:border-blue-600 font-semibold py-1 px-3 rounded shadow flex items-center gap-2 mb-6 ml-2">
-                                    Generate Report
-                                </button>
+                                
                             </div>
 
                             <div id="filterFormContainer" class="hidden mt-4">
                                 <!-- Filter Form -->
-                                <form id="filterForm1" method="GET" action="{{ route('sample-inquery-details.index') }}"
+                                <form id="filterForm1" method="GET" action="{{ route('production-inquery-details.index') }}"
                                       class="mb-6 sticky top-0 z-40 flex gap-6 items-center">
                                     <div class="flex items-center gap-4 flex-wrap">
 
+                                        <!-- Filters - ORDER NO DROPDOWN -->
+                                        <div class="relative inline-block text-left w-48">
+                                            <label for="orderNoDropdown"
+                                                   class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Order
+                                                No</label>
+                                            <div>
+                                                <button type="button" id="orderNoDropdown"
+                                                        class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10 dark:bg-gray-700 dark:text-white"
+                                                        aria-haspopup="listbox"
+                                                        aria-expanded="false">
+                                                    <span
+                                                        id="selectedOrderNo">{{ request('orderNo') ? request('orderNo') : 'Select Order No' }}</span>
+                                                    <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20"
+                                                         fill="currentColor">
+                                                        <path fill-rule="evenodd"
+                                                              d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
+                                                              clip-rule="evenodd"/>
+                                                    </svg>
+                                                </button>
+                                            </div>
 
+                                            <div id="orderNoDropdownMenu"
+                                                 class="hidden absolute z-40 mt-2 w-full rounded-md bg-white shadow-lg ring-1 ring-black/5 dark:bg-gray-700 max-h-48 overflow-y-auto">
+                                                <div class="p-2 sticky top-0 bg-white dark:bg-gray-700 z-10">
+                                                    <input type="text" id="orderNoSearchInput"
+                                                           placeholder="Search order numbers..."
+                                                           class="w-full px-2 py-1 text-sm border rounded-md dark:bg-gray-600 dark:text-white dark:placeholder-gray-300"/>
+                                                </div>
+                                                <div class="py-1" role="listbox" tabindex="-1"
+                                                     aria-labelledby="orderNoDropdown">
+                                                    <button type="button"
+                                                            class="orderNo-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600">Select Order No
+                                                    </button>
+
+                                                    @foreach ($orderNos as $orderNo)
+                                                        <button type="button"
+                                                                class="orderNo-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600">{{ $orderNo }}</button>
+                                                    @endforeach
+                                                </div>
+                                            </div>
+
+                                            <input type="hidden" name="orderNo" id="orderNoInput"
+                                                   value="{{ request('orderNo') }}">
+                                        </div>
+
+                                        <!-- Filters - REFERENCE NO DROPDOWN -->
+                                        <div class="relative inline-block text-left w-48">
+                                            <label for="referenceNoDropdown"
+                                                   class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Reference No</label>
+                                            <div>
+                                                <button type="button" id="referenceNoDropdown"
+                                                        class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10 dark:bg-gray-700 dark:text-white"
+                                                        aria-haspopup="listbox"
+                                                        aria-expanded="false">
+                                                    <span
+                                                        id="selectedReferenceNo">{{ request('referenceNo') ? request('referenceNo') : 'Select Reference No' }}</span>
+                                                    <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20"
+                                                         fill="currentColor">
+                                                        <path fill-rule="evenodd"
+                                                              d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
+                                                              clip-rule="evenodd"/>
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                            <div id="referenceNoDropdownMenu"
+                                                 class="hidden absolute z-40 mt-2 w-full rounded-md bg-white shadow-lg ring-1 ring-black/5 dark:bg-gray-700 max-h-48 overflow-y-auto">
+                                                <div class="p-2 sticky top-0 bg-white dark:bg-gray-700 z-10">
+                                                    <input type="text" id="referenceNoSearchInput"
+                                                           placeholder="Search reference numbers..."
+                                                           class="w-full px-2 py-1 text-sm border rounded-md dark:bg-gray-600 dark:text-white dark:placeholder-gray-300"/>
+                                                </div>
+                                                <div class="py-1" role="listbox" tabindex="-1"
+                                                     aria-labelledby="referenceNoDropdown">
+                                                    <button type="button"
+                                                            class="referenceNo-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600">Select Reference No
+                                                    </button>
+
+                                                    @foreach ($referenceNumbers as $ref)
+                                                        <button type="button"
+                                                                class="referenceNo-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600">{{ $ref }}</button>
+                                                    @endforeach
+                                                </div>
+                                            </div>
+                                            <input type="hidden" name="referenceNo" id="referenceNoInput"
+                                                   value="{{ request('referenceNo') }}">
+                                        </div>
+
+                                        <!-- Filters - PO NUMBER DROPDOWN -->
+                                        <div class="relative inline-block text-left w-48">
+                                            <label for="poNumberDropdown"
+                                                   class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                                PO Number
+                                            </label>
+                                            <div>
+                                                <button type="button" id="poNumberDropdown"
+                                                        class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10 dark:bg-gray-700 dark:text-white"
+                                                        aria-haspopup="listbox"
+                                                        aria-expanded="false">
+                                                    <span id="selectedPoNumber">
+                                                        {{ request('poNumber') ? request('poNumber') : 'Select PO Number' }}
+                                                    </span>
+                                                    <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20"
+                                                         fill="currentColor">
+                                                        <path fill-rule="evenodd"
+                                                              d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
+                                                              clip-rule="evenodd"/>
+                                                    </svg>
+                                                </button>
+                                            </div>
+
+                                            <div id="poNumberDropdownMenu"
+                                                 class="hidden absolute z-40 mt-2 w-full rounded-md bg-white shadow-lg ring-1 ring-black/5 dark:bg-gray-700 max-h-48 overflow-y-auto">
+                                                <div class="p-2 sticky top-0 bg-white dark:bg-gray-700 z-10">
+                                                    <input type="text" id="poNumberSearchInput"
+                                                           placeholder="Search PO numbers..."
+                                                           class="w-full px-2 py-1 text-sm border rounded-md dark:bg-gray-600 dark:text-white dark:placeholder-gray-300"/>
+                                                </div>
+                                                <div class="py-1" role="listbox" tabindex="-1"
+                                                     aria-labelledby="poNumberDropdown">
+                                                    <button type="button"
+                                                            class="poNumber-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600">
+                                                        Select PO Number
+                                                    </button>
+
+                                                    @foreach ($poNumbers as $po)
+                                                        <button type="button"
+                                                                class="poNumber-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600">
+                                                            {{ $po }}
+                                                        </button>
+                                                    @endforeach
+                                                </div>
+                                            </div>
+
+                                            <input type="hidden" name="poNumber" id="poNumberInput"
+                                                   value="{{ request('poNumber') }}">
+                                        </div>
+
+                                        <!-- Filters - PO RECEIVED DATE -->
+                                        <div class="relative inline-block text-left w-48">
+                                            <label for="poReceivedDate"
+                                                   class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                                PO Received Date
+                                            </label>
+                                            <input type="date" id="poReceivedDate" name="poReceivedDate"
+                                                   value="{{ request('poReceivedDate') }}"
+                                                   class="w-full px-3 py-2 text-sm border rounded-md bg-white dark:bg-gray-700 dark:text-white dark:border-gray-600 h-10">
+                                        </div>
+
+                                        <!-- Filters - COORDINATOR DROPDOWN -->
+                                        <div class="relative inline-block text-left w-56">
+                                            <label for="coordinatorDropdown"
+                                                   class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                                Coordinator
+                                            </label>
+                                            <div>
+                                                <button type="button" id="coordinatorDropdown"
+                                                        class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10 dark:bg-gray-700 dark:text-white"
+                                                        aria-haspopup="listbox" aria-expanded="false">
+                                                    <span id="selectedCoordinator">
+                                                        {{ request('coordinator') ? implode(', ', (array) request('coordinator')) : 'Select Coordinator(s)' }}
+                                                    </span>
+                                                    <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20"
+                                                         fill="currentColor">
+                                                        <path fill-rule="evenodd"
+                                                              d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
+                                                              clip-rule="evenodd"/>
+                                                    </svg>
+                                                </button>
+                                            </div>
+
+                                            <div id="coordinatorDropdownMenu"
+                                                 class="hidden absolute z-40 mt-2 w-full rounded-md bg-white shadow-lg ring-1 ring-black/5 dark:bg-gray-700 max-h-48 overflow-y-auto">
+
+                                                <div class="p-2 sticky top-0 bg-white dark:bg-gray-700 z-10">
+                                                    <input type="text" id="coordinatorSearchInput"
+                                                           placeholder="Search coordinators..."
+                                                           class="w-full px-2 py-1 text-sm border rounded-md dark:bg-gray-600 dark:text-white dark:placeholder-gray-300"/>
+                                                </div>
+
+                                                <div class="py-1" id="coordinatorOptions" role="listbox"
+                                                     tabindex="-1" aria-labelledby="coordinatorDropdown">
+                                                    @foreach ($coordinators as $coordinator)
+                                                        <label
+                                                            class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600">
+                                                            <input type="checkbox" name="coordinator[]"
+                                                                   value="{{ $coordinator }}"
+                                                                   {{ in_array($coordinator, (array) request('coordinator', [])) ? 'checked' : '' }}
+                                                                   class="mr-2 coordinator-checkbox">
+                                                            {{ $coordinator }}
+                                                        </label>
+                                                    @endforeach
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Filters - CUSTOMER DROPDOWN -->
+                                        <div class="relative inline-block text-left w-48">
+                                            <label for="customerDropdown"
+                                                   class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Customer</label>
+                                            <div>
+                                                <button type="button" id="customerDropdown"
+                                                        class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10 dark:bg-gray-700 dark:text-white"
+                                                        aria-haspopup="listbox"
+                                                        aria-expanded="false">
+                                                    <span
+                                                        id="selectedCustomer">{{ request('customer') ? request('customer') : 'Select Customer' }}</span>
+                                                    <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20"
+                                                         fill="currentColor">
+                                                        <path fill-rule="evenodd"
+                                                              d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
+                                                              clip-rule="evenodd"/>
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                            <div id="customerDropdownMenu"
+                                                 class="hidden absolute z-40 mt-2 w-full rounded-md bg-white shadow-lg ring-1 ring-black/5 dark:bg-gray-700 max-h-48 overflow-y-auto">
+                                                <div class="p-2 sticky top-0 bg-white dark:bg-gray-700 z-10">
+                                                    <input type="text" id="customerSearchInput"
+                                                           placeholder="Search customers..."
+                                                           class="w-full px-2 py-1 text-sm border rounded-md dark:bg-gray-600 dark:text-white dark:placeholder-gray-300"/>
+                                                </div>
+                                                <div class="py-1" role="listbox" tabindex="-1"
+                                                     aria-labelledby="customerDropdown">
+                                                    <button type="button"
+                                                            class="customer-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600">Select Customer
+                                                    </button>
+
+                                                    @foreach ($customers as $customer)
+                                                        <button type="button"
+                                                                class="customer-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600">{{ $customer }}</button>
+                                                    @endforeach
+                                                </div>
+                                            </div>
+                                            <input type="hidden" name="customer" id="customerInput"
+                                                   value="{{ request('customer') }}">
+                                        </div>
+
+                                        <!-- Filters - MERCHANDISER DROPDOWN -->
+                                        <div class="relative inline-block text-left w-48">
+                                            <label for="merchandiserDropdown"
+                                                   class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Merchandiser</label>
+                                            <div>
+                                                <button type="button" id="merchandiserDropdown"
+                                                        class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10 dark:bg-gray-700 dark:text-white"
+                                                        aria-haspopup="listbox"
+                                                        aria-expanded="false">
+                                                    <span
+                                                        id="selectedMerchandiser">{{ request('merchandiser') ? request('merchandiser') : 'Select Merchandiser' }}</span>
+                                                    <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20"
+                                                         fill="currentColor">
+                                                        <path fill-rule="evenodd"
+                                                              d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z"
+                                                              clip-rule="evenodd"/>
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                            <div id="merchandiserDropdownMenu"
+                                                 class="hidden absolute z-40 mt-2 w-full rounded-md bg-white shadow-lg ring-1 ring-black/5 dark:bg-gray-700 max-h-48 overflow-y-auto">
+                                                <div class="p-2 sticky top-0 bg-white dark:bg-gray-700 z-10">
+                                                    <input type="text" id="merchandiserSearchInput"
+                                                           placeholder="Search merchandisers..."
+                                                           class="w-full px-2 py-1 text-sm border rounded-md dark:bg-gray-600 dark:text-white dark:placeholder-gray-300"/>
+                                                </div>
+                                                <div class="py-1" role="listbox" tabindex="-1"
+                                                     aria-labelledby="merchandiserDropdown">
+                                                    <button type="button"
+                                                            class="merchandiser-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600">Select
+                                                        Merchandiser
+                                                    </button>
+
+                                                    @foreach ($merchandisers as $merch)
+                                                        <button type="button"
+                                                                class="merchandiser-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600">{{ $merch }}</button>
+                                                    @endforeach
+                                                </div>
+                                            </div>
+                                            <input type="hidden" name="merchandiser" id="merchandiserInput"
+                                                   value="{{ request('merchandiser') }}">
+                                        </div>
+                                            <div class="flex items-end space-x-2 mt-2">
+                                                <button type="submit"
+                                                        class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                                                    Apply Filters
+                                                </button>
+
+                                                <button type="button" id="clearFiltersBtn"
+                                                        class="mt-4 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 px-4 py-2 rounded hover:bg-gray-300">
+                                                    Clear Filters
+                                                </button>
+                                            </div>
+                                        </div>
                                     </div>
                                 </form>
                             </div>
@@ -163,10 +450,12 @@
                                 <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Production Inquiry
                                     Records
                                 </h1>
+                                <div class="flex space-x-3">
                                 <button onclick="document.getElementById('addSampleModal').classList.remove('hidden')"
                                         class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded shadow">
                                     + Add New Production Order
                                 </button>
+                            </div>
                             </div>
 
                             <!-- Add Order Modal -->
@@ -808,7 +1097,7 @@
         <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Sample Reference</label>
         <div class="relative">
             <button type="button" class="sampleReferenceDropdown w-full inline-flex justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10"
-                    onclick="toggleDropdown(this)" aria-haspopup="listbox">
+                    onclick="toggleModalDropdown(this)" aria-haspopup="listbox">
                 <span class="selectedSampleReference">Select Sample Reference</span>
                 <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
                     <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.25 8.29a.75.75 0 01-.02-1.08z" clip-rule="evenodd"/>
@@ -963,7 +1252,7 @@
     `;
     }
 
-    function toggleDropdown(button) {
+    function toggleModalDropdown(button) {
         button.nextElementSibling.classList.toggle("hidden");
     }
 
@@ -1020,5 +1309,146 @@
         form.classList.toggle('hidden');
     }
 </script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const filters = ['customer', 'merchandiser', 'orderNo', 'referenceNo', 'poNumber'];
+        const multiSelectFilters = ['coordinator']; // Multi-select filters
+
+        // Toggle dropdowns
+        [...filters, ...multiSelectFilters].forEach(type => {
+            const button = document.getElementById(`${type}Dropdown`);
+            const menu = document.getElementById(`${type}DropdownMenu`);
+
+            if (button && menu) {
+                button.addEventListener("click", (e) => {
+                    e.stopPropagation();
+                    const isOpen = !menu.classList.contains("hidden");
+                    closeAllDropdowns();
+                    if (!isOpen) {
+                        menu.classList.remove("hidden");
+                        button.setAttribute("aria-expanded", "true");
+                    }
+                });
+            }
+        });
+
+        // Single-select option handlers
+        filters.forEach(type => {
+            const options = document.querySelectorAll(`.${type}-option`);
+            options.forEach(option => {
+                option.addEventListener("click", () => {
+                    const value = option.textContent.trim() === `Select ${capitalize(type)}` ? '' : option.textContent.trim();
+                    const input = document.getElementById(`${type}Input`);
+                    const selectedSpan = document.getElementById(`selected${capitalize(type)}`);
+                    const menu = document.getElementById(`${type}DropdownMenu`);
+                    const button = document.getElementById(`${type}Dropdown`);
+
+                    if (input) input.value = value;
+                    if (selectedSpan) selectedSpan.textContent = value || `Select ${capitalize(type)}`;
+                    if (menu) menu.classList.add("hidden");
+                    if (button) button.setAttribute("aria-expanded", "false");
+                });
+            });
+        });
+
+        // Multi-select (coordinator) handlers
+        multiSelectFilters.forEach(type => {
+            const checkboxes = document.querySelectorAll(`#${type}DropdownMenu input[type="checkbox"]`);
+            const selectedSpan = document.getElementById(`selected${capitalize(type)}`);
+
+            function updateSelected() {
+                const selectedValues = Array.from(checkboxes)
+                    .filter(cb => cb.checked)
+                    .map(cb => cb.value);
+
+                let displayText = '';
+                if (selectedValues.length === 0) {
+                    displayText = `Select ${capitalize(type)}(s)`;
+                } else if (selectedValues.length === 1) {
+                    displayText = selectedValues[0];
+                } else {
+                    displayText = selectedValues[0] + '   ...';
+                }
+
+                if (selectedSpan) selectedSpan.textContent = displayText;
+            }
+
+            checkboxes.forEach(cb => cb.addEventListener("change", updateSelected));
+            updateSelected();
+        });
+
+        // Search input handlers
+        [...filters, ...multiSelectFilters].forEach(type => {
+            const searchInput = document.getElementById(`${type}SearchInput`);
+            if (searchInput) {
+                searchInput.addEventListener("keyup", () => {
+                    const query = searchInput.value.toLowerCase();
+                    const options = document.querySelectorAll(`#${type}DropdownMenu label, .${type}-option`);
+                    options.forEach(option => {
+                        const text = option.textContent.toLowerCase();
+                        option.style.display = text.includes(query) ? "" : "none";
+                    });
+                });
+            }
+        });
+
+        // Close dropdowns when clicking outside
+        document.addEventListener("click", (e) => {
+            [...filters, ...multiSelectFilters].forEach(type => {
+                const menu = document.getElementById(`${type}DropdownMenu`);
+                const button = document.getElementById(`${type}Dropdown`);
+                if (menu && button && !menu.contains(e.target) && !button.contains(e.target)) {
+                    menu.classList.add("hidden");
+                    button.setAttribute("aria-expanded", "false");
+                }
+            });
+        });
+
+        function capitalize(str) {
+            return str.charAt(0).toUpperCase() + str.slice(1);
+        }
+
+        function closeAllDropdowns() {
+            [...filters, ...multiSelectFilters].forEach(type => {
+                const menu = document.getElementById(`${type}DropdownMenu`);
+                const button = document.getElementById(`${type}Dropdown`);
+                if (menu) menu.classList.add("hidden");
+                if (button) button.setAttribute("aria-expanded", "false");
+            });
+        }
+    });
+
+    // Clear filters button handler
+    document.getElementById('clearFiltersBtn')?.addEventListener('click', function () {
+        window.location.href = "{{ route('production-inquery-details.index') }}";
+    });
+
+    // Legacy functions for backward compatibility (if used elsewhere)
+    function toggleDropdown(type) {
+        document.getElementById(type + 'DropdownMenu')?.classList.toggle('hidden');
+    }
+
+    function selectOption(type, value) {
+        const input = document.getElementById(type + 'Input');
+        const selectedSpan = document.getElementById('selected' + capitalize(type));
+        if (input) input.value = value;
+        if (selectedSpan) selectedSpan.innerText = value || `Select ${capitalize(type)}`;
+        toggleDropdown(type);
+    }
+
+    function filterOptions(type) {
+        const input = document.getElementById(type + 'SearchInput')?.value.toLowerCase() || '';
+        const options = document.querySelectorAll('.' + type + '-option');
+        options.forEach(option => {
+            option.style.display = option.innerText.toLowerCase().includes(input) ? '' : 'none';
+        });
+    }
+
+    function capitalize(text) {
+        return text.charAt(0).toUpperCase() + text.slice(1);
+    }
+</script>
+
 
 @endsection

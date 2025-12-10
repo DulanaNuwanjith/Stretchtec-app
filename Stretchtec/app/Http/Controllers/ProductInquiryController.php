@@ -21,15 +21,73 @@ class ProductInquiryController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): Factory|View
+    public function index(Request $request)
     {
+        // keep sample catalog (used by your blade)
         $samples = ProductCatalog::where('isShadeSelected', true)->get();
-        $productInquiries = ProductInquiry::orderBy('prod_order_no', 'DESC')
-            ->orderBy('po_received_date', 'DESC')
-            ->paginate(10);
 
-        return view('production.pages.production-inquery-details', compact('samples', 'productInquiries'));
+        // Fetch distinct filter values
+        $orderNos = ProductInquiry::select('prod_order_no')->distinct()->pluck('prod_order_no');
+        $poDates = ProductInquiry::select('po_received_date')->distinct()->pluck('po_received_date');
+        $referenceNumbers = ProductInquiry::select('reference_no')->distinct()->pluck('reference_no');
+        $poNumbers = ProductInquiry::select('po_number')->distinct()->pluck('po_number');
+        $coordinators = ProductInquiry::select('customer_coordinator')->distinct()->pluck('customer_coordinator');
+        $customers = ProductInquiry::select('customer_name')->distinct()->pluck('customer_name');
+        $merchandisers = ProductInquiry::select('merchandiser_name')->distinct()->pluck('merchandiser_name');
+
+        // Base query
+        $query = ProductInquiry::query();
+
+        // Apply Filters
+        if ($request->filled('orderNo')) {
+            $query->where('prod_order_no', $request->orderNo);
+        }
+
+        if ($request->filled('poReceivedDate')) {
+            $query->whereDate('po_received_date', $request->poReceivedDate);
+        }
+
+        if ($request->filled('referenceNo')) {
+            $query->where('reference_no', $request->referenceNo);
+        }
+
+        if ($request->filled('poNumber')) {
+            $query->where('po_number', $request->poNumber);
+        }
+
+        if ($request->filled('coordinator')) {
+            $query->whereIn('customer_coordinator', $request->coordinator);
+        }
+
+        if ($request->filled('customer')) {
+            $query->where('customer_name', $request->customer);
+        }
+
+        if ($request->filled('merchandiser')) {
+            $query->where('merchandiser_name', $request->merchandiser);
+        }
+
+        // Final results with pagination and preserve query params
+        $productInquiries = $query
+            ->orderBy('prod_order_no', 'DESC')
+            ->orderBy('po_received_date', 'DESC')
+            ->paginate(10)
+            ->appends($request->query());
+
+        return view('production.pages.production-inquery-details', compact(
+            'samples',            // <-- restored
+            'productInquiries',
+            'orderNos',
+            'poDates',
+            'referenceNumbers',
+            'poNumbers',
+            'coordinators',
+            'customers',
+            'merchandisers'
+        ));
     }
+
+
 
 
     public function getSampleDetails($id): JsonResponse
@@ -153,7 +211,6 @@ class ProductInquiryController extends Controller
             }
 
             return redirect()->back()->with('success', 'PO with multiple items created successfully.');
-
         } catch (Exception $e) {
             Log::error('Exception occurred: ' . $e->getMessage(), [
                 'exception' => $e,
@@ -224,7 +281,6 @@ class ProductInquiryController extends Controller
             $store->save();
 
             return redirect()->back()->with('success', 'Order successfully sent to store.');
-
         } catch (Exception $e) {
             return redirect()->back()->with('error', 'Error sending to store: ' . $e->getMessage());
         }
