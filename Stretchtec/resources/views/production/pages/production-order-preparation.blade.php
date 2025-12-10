@@ -525,12 +525,10 @@
 
                                     <!-- RIGHT SIDE: Submit button -->
                                     <button onclick="submitCart()"
-                                            @if(!$order->isOrderAssigned) disabled @endif
-                                            class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg shadow font-semibold
-                                            {{ $order->isOrderAssigned ? 'opacity-50 cursor-not-allowed' : '' }}">
+                                            id="submitCartBtn"
+                                            class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg shadow font-semibold">
                                         Submit
                                     </button>
-
                                 </div>
 
                             </div>
@@ -674,14 +672,22 @@
 
                 // Update Add to Cart button state
                 const addToCartBtn = modal.querySelector('button[onclick="addToCart()"]');
+                const submitButton = modal.querySelector('button[onclick="submitCart()"]')
+
                 if (currentOrderAssigned) {
                     addToCartBtn.disabled = true;
+                    submitButton.disabled = true;
                     addToCartBtn.classList.add('bg-purple-400', 'cursor-not-allowed');
                     addToCartBtn.classList.remove('bg-purple-600', 'hover:bg-purple-700');
+                    submitButton.classList.add('bg-green-400', 'cursor-not-allowed');
+                    submitButton.classList.remove('bg-green-600', 'hover:bg-green-700');
                 } else {
                     addToCartBtn.disabled = false;
+                    submitButton.disabled = false;
                     addToCartBtn.classList.remove('bg-purple-400', 'cursor-not-allowed');
                     addToCartBtn.classList.add('bg-purple-600', 'hover:bg-purple-700');
+                    submitButton.classList.remove('bg-green-400', 'cursor-not-allowed');
+                    submitButton.classList.add('bg-green-600', 'hover:bg-green-700');
                 }
             }
 
