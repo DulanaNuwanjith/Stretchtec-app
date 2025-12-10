@@ -51,7 +51,7 @@ class MailBookingController extends Controller
                 'customer_name' => 'required|string|max:255',
                 'merchandiser_name' => 'nullable|string|max:255',
                 'customer_coordinator' => 'required|string|max:255',
-                'customer_req_date' => 'required|date',
+                'customer_req_date' => 'nullable|date',
                 'remarks' => 'nullable|string',
                 'items' => 'required|array|min:1',
 

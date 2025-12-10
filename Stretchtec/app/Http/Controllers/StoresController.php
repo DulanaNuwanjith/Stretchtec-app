@@ -234,7 +234,7 @@ class StoresController extends Controller
         }
 
         $store->save();
-
+        
         /**
          * --------------------------------------------------------------------
          * Step 5: Mark the respective order as ready for production but if requested qty is fulfilled then mark as status == ready for delivery

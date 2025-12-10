@@ -253,7 +253,7 @@
                                             </td>
                                             <td
                                                 class="px-4 py-3 text-gray-800 dark:text-gray-100 whitespace-normal break-words border-r text-center">
-                                                {{ $approval->mailBooking->customer_req_date ? Carbon::parse($approval->customer_req_date)->format('d M Y') : '' }}
+                                                {{ $approval->mailBooking->customer_req_date ? Carbon::parse($approval->customer_req_date)->format('d M Y') : 'N/A' }}
                                             </td>
                                             <td
                                                 class="px-4 py-3 text-gray-800 dark:text-gray-100 whitespace-normal break-words border-r text-center">

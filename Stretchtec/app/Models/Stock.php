@@ -29,4 +29,17 @@ class Stock extends Model
     {
         return $this->hasMany(Stores::class, 'reference_no', 'reference_no');
     }
+
+    /**
+     * Boot method to attach model event listeners
+     */
+    protected static function booted()
+    {
+        static::updated(function ($stock) {
+            // Delete the stock if qty_available is 0 or less
+            if ($stock->qty_available <= 0) {
+                $stock->delete();
+            }
+        });
+    }
 }
