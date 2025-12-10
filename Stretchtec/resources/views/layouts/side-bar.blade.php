@@ -63,7 +63,11 @@
 
     <!-- Sidebar -->
     <aside x-data="{ collapsed: window.__initialCollapsed, initialized: false, open: false }" x-init="initialized = true"
-        :class="collapsed ? 'md:w-20 scroll-hidden' : 'md:w-72 overflow-y-auto scroll-hidden'"
+        :class="[
+            collapsed ? 'md:w-20 scroll-hidden' : 'md:w-72 overflow-y-auto scroll-hidden',
+            { '-translate-x-full': !open, 'translate-x-0': open }
+        ]"
+        style="width: var(--sidebar-width);"
         class="fixed md:relative z-40 inset-y-0 left-0 transform md:translate-x-0 
            transition-transform duration-300 ease-in-out 
            bg-gradient-to-b from-white to-blue-500 sidebar-bg
