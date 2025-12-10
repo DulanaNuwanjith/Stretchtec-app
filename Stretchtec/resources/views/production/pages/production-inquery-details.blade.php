@@ -227,7 +227,7 @@
                                                 <label
                                                     class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer
                                                     Requested Date</label>
-                                                <input type="date" name="customer_req_date" required
+                                                <input type="date" name="customer_req_date"
                                                        class="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white text-sm">
                                             </div>
                                             <div class="mt-3">
