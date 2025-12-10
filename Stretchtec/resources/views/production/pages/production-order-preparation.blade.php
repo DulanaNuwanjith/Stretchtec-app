@@ -357,9 +357,21 @@
                              class="fixed inset-0 bg-black bg-opacity-40 hidden items-center justify-center z-50">
                             <div class="bg-white rounded-xl shadow-xl w-full max-w-7xl p-6 space-y-6">
 
-                                <h2 class="text-xl font-semibold text-gray-800">
-                                    Select Raw Materials for Order No: <span id="assignOrderNo"></span>
-                                </h2>
+                                <div class="flex justify-between items-center mb-4">
+                                    <h2 class="text-xl font-semibold text-gray-800">
+                                        Select Raw Materials for Order No: <span id="assignOrderNo"></span>
+                                    </h2>
+
+                                    <!-- Production Type Dropdown -->
+                                    <div>
+                                        <select id="productionType" class="border rounded px-3 py-2 w-48 mt-2">
+                                            <option value="Knitted">Knitted</option>
+                                            <option value="Loom">Loom</option>
+                                            <option value="Braiding">Braiding</option>
+                                        </select>
+                                    </div>
+                                </div>
+
                                 <!-- Tabs Wrapper -->
                                 <div x-data="{ tab: 'local' }">
 
@@ -486,9 +498,12 @@
                                     </button>
 
                                     <button onclick="addToCart()"
-                                            class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded shadow">
+                                            @if($order->isOrderAssigned) disabled @endif
+                                            class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded shadow
+                                            {{ $order->isOrderAssigned ? 'opacity-50 cursor-not-allowed' : '' }}">
                                         Add to Cart
                                     </button>
+
                                 </div>
 
                                 <!-- Cart + Submit Buttons -->
@@ -511,16 +526,20 @@
 
                                     <!-- RIGHT SIDE: Submit button -->
                                     <button onclick="submitCart()"
-                                            class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg shadow font-semibold">
+                                            @if($order->isOrderAssigned) disabled @endif
+                                            class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg shadow font-semibold
+                                            {{ $order->isOrderAssigned ? 'opacity-50 cursor-not-allowed' : '' }}">
                                         Submit
                                     </button>
+
                                 </div>
 
                             </div>
                         </div>
 
                         <!-- Cart Modal -->
-                        <div id="cartModal" class="fixed inset-0 bg-black bg-opacity-40 hidden items-center justify-center z-50">
+                        <div id="cartModal"
+                             class="fixed inset-0 bg-black bg-opacity-40 hidden items-center justify-center z-50">
                             <div class="bg-white rounded-xl shadow-xl w-full max-w-3xl p-6 space-y-6">
                                 <h2 class="text-xl font-semibold text-gray-800">
                                     Cart Items for Order No: <span id="cartOrderNo"></span>
@@ -536,7 +555,8 @@
                         </div>
 
                         <!-- Assigned Raw Materials Modal -->
-                        <div id="assignedRawModal" class="fixed inset-0 bg-black bg-opacity-40 hidden items-center justify-center z-50">
+                        <div id="assignedRawModal"
+                             class="fixed inset-0 bg-black bg-opacity-40 hidden items-center justify-center z-50">
                             <div class="bg-white rounded-xl shadow-xl w-full max-w-3xl p-6 space-y-6">
                                 <h2 class="text-xl font-semibold text-gray-800">
                                     Assigned Raw Materials for Order No: <span id="assignedOrderNo"></span>
@@ -713,7 +733,9 @@
                         unit: chk.dataset.unit,
                         used_qty: qtyInput.value,
                         max_qty: chk.dataset.max,
-                        order_id: selectedOrderId
+                        order_id: selectedOrderId,
+
+                        productionType: document.getElementById('productionType').value
                     });
                 });
 

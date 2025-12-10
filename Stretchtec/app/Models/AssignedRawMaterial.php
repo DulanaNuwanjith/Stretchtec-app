@@ -21,4 +21,9 @@ class AssignedRawMaterial extends Model
     {
         return $this->belongsTo(RawMaterialStore::class, 'raw_material_store_id');
     }
+
+    public function orderPreparation(): BelongsTo
+    {
+        return $this->belongsTo(ProductOrderPreperation::class, 'order_preperation_id');
+    }
 }

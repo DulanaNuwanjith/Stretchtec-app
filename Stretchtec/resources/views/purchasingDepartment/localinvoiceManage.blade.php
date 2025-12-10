@@ -289,6 +289,41 @@
                         Manage & Update Purchase Orders
                     </h2>
 
+                    <!-- Search Bar -->
+                    <div class="mb-6">
+                        <form id="orderSearchForm" method="GET" action="{{ route('localinvoiceManage.index') }}" class="flex items-center space-x-2 max-w-2xl">
+                            <!-- Preserve order_page parameter -->
+                            <input type="hidden" name="order_page" value="{{ request('order_page', 1) }}">
+                            
+                            <input type="text" name="order_search" id="orderSearchInput" value="{{ request('order_search') }}"
+                                placeholder="Search by Order No, Customer, Reference, Item, Shade, TKT, Supplier, PST No"
+                                autocomplete="off"
+                                class="px-3 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white text-sm w-full focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 transition duration-200 ease-in-out" />
+
+                            <button type="submit"
+                                class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm whitespace-nowrap">
+                                Search
+                            </button>
+
+                            <a href="javascript:void(0)" onclick="clearOrderSearch()" id="orderClearBtn"
+                                class="px-4 py-2 bg-gray-400 text-white rounded hover:bg-gray-500 text-sm whitespace-nowrap select-none">
+                                Clear
+                            </a>
+                        </form>
+                    </div>
+
+                    <!-- Loading Overlay -->
+                    <div id="orderModalLoadingSpinner" class="hidden">
+                        <div class="flex items-center justify-center py-8">
+                            <svg class="animate-spin h-10 w-10 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
+                                    stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+                            </svg>
+                        </div>
+                    </div>
+
                     <!-- Table Container -->
                     <div id="orderTableContainer"
                         class="overflow-x-auto border border-gray-300 dark:border-gray-700 rounded-lg shadow-sm">
@@ -362,28 +397,28 @@
                                     <tr class="odd:bg-white even:bg-gray-50 border-b border-gray-200 text-center">
                                         <!-- Sticky first column -->
                                         <td
-                                            class="px-4 py-3 font-bold sticky left-0 z-10 bg-gray-100 whitespace-normal break-words border-r border-gray-300 text-blue-500">
+                                            class="px-4 py-3 font-bold sticky left-0 z-10 bg-gray-100 whitespace-normal break-words border-r border-gray-300 text-blue-500 text-sm">
                                             {{ $order->prod_order_no ?? 'N/A' }}
                                         </td>
-                                        <td class="px-4 py-3 border-r border-gray-300">{{ $order->customer_name ?? '-' }}
+                                        <td class="px-4 py-3 border-r border-gray-300 text-sm">{{ $order->customer_name ?? '-' }}
                                         </td>
-                                        <td class="px-4 py-3 border-r border-gray-300">{{ $order->reference_no ?? '-' }}
+                                        <td class="px-4 py-3 border-r border-gray-300 text-sm">{{ $order->reference_no ?? '-' }}
                                         </td>
-                                        <td class="px-4 py-3 border-r border-gray-300">{{ $order->item ?? '-' }}</td>
-                                        <td class="px-4 py-3 border-r border-gray-300">{{ $order->size ?? '-' }}</td>
-                                        <td class="px-4 py-3 border-r border-gray-300">{{ $order->color ?? '-' }}</td>
-                                        <td class="px-4 py-3 border-r border-gray-300">{{ $order->shade ?? '-' }}</td>
-                                        <td class="px-4 py-3 border-r border-gray-300">{{ $order->tkt ?? '-' }}</td>
-                                        <td class="px-4 py-3 border-r border-gray-300">{{ $order->qty ?? 0 }}</td>
-                                        <td class="px-4 py-3 border-r border-gray-300">{{ $order->uom ?? '-' }}</td>
-                                        <td class="px-4 py-3 border-r border-gray-300">{{ $order->supplier ?? '-' }}</td>
-                                        <td class="px-4 py-3 border-r border-gray-300">{{ $order->pst_no ?? '-' }}</td>
-                                        <td class="px-4 py-3 border-r border-gray-300">
+                                        <td class="px-4 py-3 border-r border-gray-300 text-sm">{{ $order->item ?? '-' }}</td>
+                                        <td class="px-4 py-3 border-r border-gray-300 text-sm">{{ $order->size ?? '-' }}</td>
+                                        <td class="px-4 py-3 border-r border-gray-300 text-sm">{{ $order->color ?? '-' }}</td>
+                                        <td class="px-4 py-3 border-r border-gray-300 text-sm">{{ $order->shade ?? '-' }}</td>
+                                        <td class="px-4 py-3 border-r border-gray-300 text-sm">{{ $order->tkt ?? '-' }}</td>
+                                        <td class="px-4 py-3 border-r border-gray-300 text-sm">{{ $order->qty ?? 0 }}</td>
+                                        <td class="px-4 py-3 border-r border-gray-300 text-sm">{{ $order->uom ?? '-' }}</td>
+                                        <td class="px-4 py-3 border-r border-gray-300 text-sm">{{ $order->supplier ?? '-' }}</td>
+                                        <td class="px-4 py-3 border-r border-gray-300 text-sm">{{ $order->pst_no ?? '-' }}</td>
+                                        <td class="px-4 py-3 border-r border-gray-300 text-sm">
                                             {{ $order->supplier_comment ?? '-' }}</td>
 
                                         <!-- Mark Raw Material Ordered -->
                                         <td class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
-                                            <div class="flex flex-col items-center justify-center">
+                                            <div class="flex flex-col items-center justify-center text-sm">
                                                 @if ($order->isRawMaterialOrdered)
                                                     <!-- Banner showing ordered timestamp -->
                                                     <span
@@ -409,7 +444,7 @@
                                         </td>
 
                                         <!-- Mark Raw Material Received -->
-                                        <td class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
+                                        <td class="py-3 whitespace-normal break-words border-r border-gray-300 text-center text-sm">
                                             <div class="flex flex-col items-center justify-center">
                                                 @if ($order->isRawMaterialReceived)
                                                     <!-- Banner showing received timestamp -->
@@ -437,13 +472,17 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="6" class="px-4 py-3 text-center text-gray-500 dark:text-gray-400">
+                                        <td colspan="15" class="px-4 py-3 text-center text-gray-500 dark:text-gray-400">
                                             No orders available.
                                         </td>
                                     </tr>
                                 @endforelse
                             </tbody>
                         </table>
+                    </div>
+                    {{-- Pagination --}}
+                    <div id="orderPaginationContainer" class="py-6 flex justify-center">
+                        {{ $orderPreparations->appends(request()->query())->links() }}
                     </div>
                 </div>
             </div>
@@ -936,19 +975,172 @@
             </script>
 
             <script>
-                function openOrderPopup() {
+            function openOrderPopup() {
+                // Clear default 'page' param and add order_page parameter to maintain modal state
+                const url = new URL(window.location);
+                url.searchParams.delete('page'); // Remove main table pagination
+                if (!url.searchParams.has('order_page') && !url.searchParams.has('order_search')) {
+                    url.searchParams.set('order_page', '1');
+                }
+                window.history.pushState({}, '', url);
+                document.getElementById('orderPopupModal').classList.remove('hidden');
+            }
+
+            function closeOrderPopup() {
+                // Remove order_page and order_search parameters when closing modal
+                const url = new URL(window.location);
+                url.searchParams.delete('order_page');
+                url.searchParams.delete('order_search');
+                window.history.pushState({}, '', url);
+                document.getElementById('orderPopupModal').classList.add('hidden');
+            }
+
+            // Keep modal open if order_page or order_search parameter exists (from pagination or search)
+            document.addEventListener('DOMContentLoaded', function() {
+                const urlParams = new URLSearchParams(window.location.search);
+                if (urlParams.has('order_page') || urlParams.has('order_search')) {
                     document.getElementById('orderPopupModal').classList.remove('hidden');
                 }
 
-                function closeOrderPopup() {
-                    document.getElementById('orderPopupModal').classList.add('hidden');
-                }
+                // Setup AJAX pagination for modal
+                setupModalPagination();
+                
+                // Setup AJAX search for modal
+                setupModalSearch();
+            });
 
-                // Optional: Close modal when clicking outside content
-                window.addEventListener('click', function(e) {
-                    const modal = document.getElementById('orderPopupModal');
-                    if (e.target === modal) closeOrderPopup();
+            // AJAX Search for Orders Modal
+            function setupModalSearch() {
+                const searchForm = document.getElementById('orderSearchForm');
+                if (searchForm) {
+                    searchForm.addEventListener('submit', function(e) {
+                        e.preventDefault();
+                        
+                        const formData = new FormData(searchForm);
+                        const searchValue = formData.get('order_search');
+                        
+                        loadModalPage(1, searchValue);
+                    });
+                }
+            }
+
+            // Clear search function
+            function clearOrderSearch() {
+                document.getElementById('orderSearchInput').value = '';
+                loadModalPage(1, '');
+            }
+
+            // AJAX Pagination for Orders Modal
+            function setupModalPagination() {
+                // Intercept pagination link clicks inside the modal
+                document.addEventListener('click', function(e) {
+                    // Check if clicked element is a pagination link inside the order modal
+                    const paginationLink = e.target.closest('#orderPaginationContainer a');
+                    
+                    if (paginationLink) {
+                        e.preventDefault();
+                        
+                        const url = new URL(paginationLink.href);
+                        const orderPage = url.searchParams.get('order_page');
+                        const orderSearch = url.searchParams.get('order_search') || '';
+                        
+                        if (orderPage) {
+                            loadModalPage(orderPage, orderSearch);
+                        }
+                    }
                 });
+            }
+
+            // Load modal page via AJAX
+            function loadModalPage(page, search = '') {
+                // Show loading overlay
+                const tableContainer = document.getElementById('orderTableContainer');
+                const paginationContainer = document.getElementById('orderPaginationContainer');
+                const loadingSpinner = document.getElementById('orderModalLoadingSpinner');
+                
+                tableContainer.style.opacity = '0.4';
+                paginationContainer.style.opacity = '0.4';
+                loadingSpinner.classList.remove('hidden');
+
+                // Build request URL
+                const params = new URLSearchParams();
+                params.set('order_page', page);
+                if (search) {
+                    params.set('order_search', search);
+                }
+                params.set('ajax', '1'); // Add ajax flag
+
+                // Fetch new page content
+                fetch(`{{ route('localinvoiceManage.index') }}?${params.toString()}`, {
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                .then(response => response.text())
+                .then(html => {
+                    // Parse the HTML response
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(html, 'text/html');
+                    
+                    // Extract table and pagination from response
+                    const newTable = doc.querySelector('#orderTableContainer table');
+                    const newPagination = doc.querySelector('#orderPaginationContainer');
+                    
+                    if (newTable && newPagination) {
+                        // Update table content
+                        tableContainer.querySelector('table').innerHTML = newTable.innerHTML;
+                        
+                        // Update pagination
+                        paginationContainer.innerHTML = newPagination.innerHTML;
+                        
+                        // Update search input and clear button visibility
+                        const searchInput = document.getElementById('orderSearchInput');
+                        const clearBtn = document.getElementById('orderClearBtn');
+                        if (searchInput) {
+                            searchInput.value = search;
+                        }
+                        if (clearBtn) {
+                            if (search) {
+                                clearBtn.classList.remove('hidden');
+                            } else {
+                                clearBtn.classList.add('hidden');
+                            }
+                        }
+                        
+                        // Update URL without reload
+                        const newUrl = new URL(window.location);
+                        newUrl.searchParams.set('order_page', page);
+                        if (search) {
+                            newUrl.searchParams.set('order_search', search);
+                        } else {
+                            newUrl.searchParams.delete('order_search');
+                        }
+                        window.history.pushState({}, '', newUrl);
+                    }
+                    
+                    // Hide loading overlay with smooth animation after rendering
+                    window.requestAnimationFrame(() => {
+                        loadingSpinner.classList.add('hidden');
+                        tableContainer.style.opacity = '1';
+                        paginationContainer.style.opacity = '1';
+                    });
+                })
+                .catch(error => {
+                    console.error('Error loading page:', error);
+                    window.requestAnimationFrame(() => {
+                        loadingSpinner.classList.add('hidden');
+                        tableContainer.style.opacity = '1';
+                        paginationContainer.style.opacity = '1';
+                    });
+                    alert('Failed to load page. Please try again.');
+                });
+            }
+
+            // Optional: Close modal when clicking outside content
+            window.addEventListener('click', function(e) {
+                const modal = document.getElementById('orderPopupModal');
+                if (e.target === modal) closeOrderPopup();
+            });
             </script>
 
             <script>

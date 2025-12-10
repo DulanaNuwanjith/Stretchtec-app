@@ -22,4 +22,9 @@ class AssignedRawMaterialExport extends Model
     {
         return $this->belongsTo(ExportRawMaterial::class, 'export_raw_material_id');
     }
+
+    public function orderPreparation(): BelongsTo
+    {
+        return $this->belongsTo(ProductOrderPreperation::class, 'order_preperation_id');
+    }
 }
