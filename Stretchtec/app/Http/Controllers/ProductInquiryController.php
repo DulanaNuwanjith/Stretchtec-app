@@ -108,7 +108,6 @@ class ProductInquiryController extends Controller
             // Save each item separately with a unique order number
             foreach ($data['items'] as $item) {
                 $referenceNo = null;
-                $sampleId = null;
 
                 if (!empty($item['sample_id'])) {
                     // Sample order → fetch reference from catalog
