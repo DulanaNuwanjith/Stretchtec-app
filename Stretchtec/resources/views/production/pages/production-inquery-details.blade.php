@@ -663,6 +663,7 @@
                                                         data-size="{{ $inquiry->size ?? '' }}"
                                                         data-supplier="{{ $inquiry->supplier ?? '' }}"
                                                         data-pstno="{{ $inquiry->pst_no ?? '' }}"
+                                                        data-itemdescription="{{ $inquiry->item_description ?? '' }}"
                                                         data-suppliercomment="{{ $inquiry->supplier_comment ?? '' }}">
                                                     {{ $inquiry->reference_no ?? 'N/A' }}
                                                 </button>
@@ -945,6 +946,7 @@
             "Size": button.dataset.size,
             "Supplier": button.dataset.supplier,
             "PST No": button.dataset.pstno,
+            "Item Description": button.dataset.itemdescription,
             "Supplier Comment": button.dataset.suppliercomment
         };
 

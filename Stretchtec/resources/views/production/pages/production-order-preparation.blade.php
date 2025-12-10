@@ -236,7 +236,16 @@
                                             {{ $order->prod_order_no ?? 'N/A' }}
                                         </td>
                                         <td class="px-4 py-3 border-r border-gray-300">{{ $order->customer_name ?? '-' }}</td>
-                                        <td class="px-4 py-3 border-r border-gray-300">{{ $order->reference_no ?? '-' }}</td>
+                                        <td class="px-4 py-3 border-r border-gray-300">
+                                            {{ $order->reference_no ?? '-' }}
+
+                                            @if(!empty($order->item_description))
+                                                <br>
+                                                <span class="text-xs text-gray-500">
+                                                    {{ $order->item_description }}
+                                                </span>
+                                            @endif
+                                        </td>
                                         <td class="px-4 py-3 border-r border-gray-300">{{ $order->item ?? '-' }}</td>
                                         <td class="px-4 py-3 border-r border-gray-300">{{ $order->size ?? '-' }}</td>
                                         <td class="px-4 py-3 border-r border-gray-300">{{ $order->color ?? '-' }}</td>

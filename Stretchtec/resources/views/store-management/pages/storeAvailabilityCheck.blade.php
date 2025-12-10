@@ -169,7 +169,7 @@
                                                 Assigned By
                                             </th>
                                             <th
-                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                class="font-bold sticky top-0 bg-gray-200 px-4 py-3 w-40 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Is Assigned
                                             </th>
                                             <th
@@ -208,7 +208,7 @@
                                                     @if ($store->is_qty_assigned)
                                                         {{-- Already assigned --}}
                                                         <span
-                                                            class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-green-200 dark:bg-gray-800 px-3 py-1 rounded">
+                                                            class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-yellow-100 dark:bg-gray-800 px-3 py-1 rounded">
                                                             Assigned ({{ $store->qty_allocated }}
                                                             {{ $store->allocated_uom }})
                                                         </span>

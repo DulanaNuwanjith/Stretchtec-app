@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -27,6 +26,7 @@ return new class extends Migration
             $table->string('supplier')->nullable();
             $table->string('pst_no')->nullable();
             $table->string('supplier_comment')->nullable();
+            $table->string('item_description')->nullable();
             $table->boolean('isRawMaterialOrdered')->default(false);
             $table->dateTime('raw_material_ordered_date')->nullable();
             $table->boolean('isRawMaterialReceived')->default(false);
