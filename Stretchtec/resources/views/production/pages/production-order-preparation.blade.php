@@ -204,9 +204,6 @@
                                     <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-24 text-xs text-gray-600 dark:text-gray-300 uppercase">
                                         Quantity
                                     </th>
-                                    <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-28 text-xs text-gray-600 dark:text-gray-300 uppercase">
-                                        UOM
-                                    </th>
                                     <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase">
                                         Supplier
                                     </th>
@@ -245,8 +242,7 @@
                                         <td class="px-4 py-3 border-r border-gray-300">{{ $order->color ?? '-' }}</td>
                                         <td class="px-4 py-3 border-r border-gray-300">{{ $order->shade ?? '-' }}</td>
                                         <td class="px-4 py-3 border-r border-gray-300">{{ $order->tkt ?? '-' }}</td>
-                                        <td class="px-4 py-3 border-r border-gray-300">{{ $order->qty ?? 0 }}</td>
-                                        <td class="px-4 py-3 border-r border-gray-300">{{ $order->uom ?? '-' }}</td>
+                                        <td class="px-4 py-3 border-r border-gray-300 whitespace-nowrap min-w-[100px]">{{ $order->qty ?? 0 }} {{ $order->uom ?? '-' }}</td>
                                         <td class="px-4 py-3 border-r border-gray-300">{{ $order->supplier ?? '-' }}</td>
                                         <td class="px-4 py-3 border-r border-gray-300">{{ $order->pst_no ?? '-' }}</td>
                                         <td class="px-4 py-3 border-r border-gray-300">{{ $order->supplier_comment ?? '-' }}</td>
