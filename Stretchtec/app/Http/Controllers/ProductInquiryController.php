@@ -45,6 +45,7 @@ class ProductInquiryController extends Controller
             'supplier' => $sample->supplier,
             'pst_no' => $sample->pst_no,
             'supplier_comments' => $sample->supplierComment,
+            'item_description' => $sample->item_description,
         ]);
     }
 

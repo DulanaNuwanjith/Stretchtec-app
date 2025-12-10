@@ -865,7 +865,7 @@
         </div>
     </div>
 
-    <div class="grid grid-cols-2 gap-4 mt-3">
+    <div class="grid grid-cols-3 gap-4 mt-3">
         <div>
             <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">PST No</label>
             <input type="text" name="items[${index}][pst_no]" readonly class="samplePSTNo w-full mt-1 px-3 py-2 border rounded-md bg-gray-100 dark:bg-gray-600 dark:text-white text-sm">
@@ -873,6 +873,10 @@
         <div>
             <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Supplier Comment</label>
             <input type="text" name="items[${index}][supplier_comment]" readonly class="sampleSupplierComment w-full mt-1 px-3 py-2 border rounded-md bg-gray-100 dark:bg-gray-600 dark:text-white text-sm">
+        </div>
+         <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Item Description</label>
+            <input type="text" name="items[${index}][item_description]" readonly class="sampleItemDescription w-full mt-1 px-3 py-2 border rounded-md bg-gray-100 dark:bg-gray-600 dark:text-white text-sm">
         </div>
     </div>
 
@@ -989,6 +993,7 @@
                 group.querySelector(".samplePSTNo").value = data.pst_no || '';
                 group.querySelector(".sampleSupplier").value = data.supplier || '';
                 group.querySelector(".sampleSupplierComment").value = data.supplier_comments || '';
+                group.querySelector(".sampleItemDescription").value = data.item_description || '';
             })
             .catch(err => console.error('Error fetching sample details:', err));
     }
