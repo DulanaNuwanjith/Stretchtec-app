@@ -28,6 +28,7 @@ class ProductOrderPreperation extends Model
         'supplier',
         'pst_no',
         'supplier_comment',
+        'item_description' ,
         'status',
         'isRawMaterialOrdered',
         'raw_material_ordered_date',

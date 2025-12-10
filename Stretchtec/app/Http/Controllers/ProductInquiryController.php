@@ -263,7 +263,8 @@ class ProductInquiryController extends Controller
                 'uom' => $productInquiry->uom,
                 'supplier' => $productInquiry->supplier,
                 'pst_no' => $productInquiry->pst_no,
-                'supplier_comment' => $productInquiry->supplier_comment,
+                'supplier_comment' => $productInquiry->supplier_comment ?? null,
+                'item_description' => $productInquiry->item_description ?? null,
                 'status' => 'Pending', // initial production status
             ]);
 
