@@ -343,7 +343,7 @@
                         <p id="modal_tkt" class="text-gray-900"></p>
                     </div>
 
-                    <div>
+                    <div id="wrap_supplier">
                         <p class="font-semibold">Supplier:</p>
                         <p id="modal_supplier" class="text-gray-900"></p>
                     </div>
@@ -396,6 +396,7 @@
         toggleField("wrap_pst_no", button.dataset.pstno);
         toggleField("wrap_supplier_comment", button.dataset.suppliercomment);
         toggleField("wrap_item_description", button.dataset.itemdescription);
+        toggleField("wrap_supplier", button.dataset.supplier);
     }
 
     function toggleField(wrapperId, value) {
