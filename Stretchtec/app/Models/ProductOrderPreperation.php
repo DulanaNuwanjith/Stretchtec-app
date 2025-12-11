@@ -18,6 +18,7 @@ class ProductOrderPreperation extends Model
         'prod_order_no',
         'customer_name',
         'reference_no',
+        'requested_date',         
         'item',
         'size',
         'color',
@@ -28,7 +29,7 @@ class ProductOrderPreperation extends Model
         'supplier',
         'pst_no',
         'supplier_comment',
-        'item_description' ,
+        'item_description',
         'status',
         'isRawMaterialOrdered',
         'raw_material_ordered_date',
@@ -42,7 +43,6 @@ class ProductOrderPreperation extends Model
     protected $casts = [
         'isOrderAssigned' => 'boolean',
     ];
-
 
     // Optional: link back to ProductInquiry
     public function inquiry(): BelongsTo

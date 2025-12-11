@@ -310,6 +310,9 @@ class ProductInquiryController extends Controller
                 'prod_order_no' => $productInquiry->prod_order_no,
                 'customer_name' => $productInquiry->customer_name,
                 'reference_no' => $productInquiry->reference_no,
+                'requested_date' => $productInquiry->customer_req_date
+                ? \Carbon\Carbon::parse($productInquiry->customer_req_date)->format('Y-m-d')
+                : null,
                 'item' => $productInquiry->item,
                 'size' => $productInquiry->size,
                 'color' => $productInquiry->color,
