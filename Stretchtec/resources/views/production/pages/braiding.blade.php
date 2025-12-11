@@ -231,6 +231,7 @@
                                             <td class="px-4 py-2">
                                                 {{ optional($order->orderPreparation)->qty }}
                                             </td>
+                                            
 
                                             <!-- Assigned Items -->
                                             <td class="px-4 py-2">
