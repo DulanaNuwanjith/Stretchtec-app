@@ -277,7 +277,8 @@ class MailBookingController extends Controller
 
             // Create a production order preparation record
             ProductOrderPreperation::create([
-                'product_inquiry_id' => $productInquiry->id,
+                'product_inquiry_id' => null,
+                'mail_booking_id' => $productInquiry->id,
                 'prod_order_no' => $productInquiry->mail_booking_number,
                 'customer_name' => $productInquiry->customer_name,
                 'reference_no' => $productInquiry->reference_no,

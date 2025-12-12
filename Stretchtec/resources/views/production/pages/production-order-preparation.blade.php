@@ -275,14 +275,14 @@
 
                                         <td class="px-4 py-3 border-r border-gray-300">
 
-                                            @if ($order->inquiry->production_deadline)
+                                            @if ($order->source_order?->production_deadline)
                                                 <div class="flex flex-col">
                                                     <span class="font-medium">
-                                                        {{ Carbon::parse($order->inquiry->production_deadline)->format('Y-m-d') }}
+                                                        {{ Carbon::parse($order->source_order->production_deadline)->format('Y-m-d') }}
                                                     </span>
-                                                    @if ($order->inquiry->deadline_reason)
+                                                    @if ($order->source_order->deadline_reason)
                                                         <span class="text-xs text-gray-500 italic mt-1">
-                                                            {{ $order->inquiry->deadline_reason }}
+                                                            {{ $order->source_order->deadline_reason }}
                                                         </span>
                                                     @endif
                                                 </div>

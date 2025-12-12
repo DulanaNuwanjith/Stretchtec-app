@@ -558,6 +558,10 @@
                                             </th>
                                             <th
                                                 class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
+                                                Production Deadline
+                                            </th>
+                                            <th
+                                                class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase whitespace-normal break-words">
                                                 Notes
                                             </th>
                                             <th
@@ -672,6 +676,24 @@
                                                 <td
                                                     class="px-4 py-3 whitespace-normal break-words border-r border-gray-300  text-center">
                                                     {{ $inquiry->customer_req_date ?? 'N/A' }}</td>
+
+                                                <!-- Production Deadline -->
+                                                <td class="px-4 py-3 border-r border-gray-300 text-center">
+                                                    @if ($inquiry->production_deadline)
+                                                        <div class="flex flex-col">
+                                                        <span class="font-medium">
+                                                            {{ Carbon::parse($inquiry->production_deadline)->format('Y-m-d') }}
+                                                        </span>
+                                                            @if ($inquiry->deadline_reason)
+                                                                <span class="text-xs text-gray-500 italic mt-1">
+                                                                {{ $inquiry->deadline_reason }}
+                                                            </span>
+                                                            @endif
+                                                        </div>
+                                                    @else
+                                                        <span class="text-red-600 text-sm">Deadline Not Set</span>
+                                                    @endif
+                                                </td>
 
                                                 <!-- Notes -->
                                                 <td

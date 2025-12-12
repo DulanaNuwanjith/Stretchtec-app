@@ -119,12 +119,14 @@ class ProductOrderPreperationController extends Controller
         // Fetch the order
         $preperationOrder = ProductOrderPreperation::findOrFail($orderId);
 
-        $inquiryOrder = $preperationOrder->inquiry;
+        $inquiryOrder = $preperationOrder->source_order;
 
-        // Update fields
-        $inquiryOrder->production_deadline = $request->production_deadline;
-        $inquiryOrder->deadline_reason = $request->deadline_reason;
-        $inquiryOrder->save();
+        if ($inquiryOrder) {
+            // Update fields
+            $inquiryOrder->production_deadline = $request->production_deadline;
+            $inquiryOrder->deadline_reason = $request->deadline_reason;
+            $inquiryOrder->save();
+        }
 
         return redirect()->back()->with('success', 'Production deadline updated successfully.');
     }

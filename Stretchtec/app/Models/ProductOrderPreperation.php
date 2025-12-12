@@ -15,6 +15,7 @@ class ProductOrderPreperation extends Model
 {
     protected $fillable = [
         'product_inquiry_id',
+        'mail_booking_id',
         'prod_order_no',
         'customer_name',
         'reference_no',
@@ -48,5 +49,15 @@ class ProductOrderPreperation extends Model
     public function inquiry(): BelongsTo
     {
         return $this->belongsTo(ProductInquiry::class, 'product_inquiry_id');
+    }
+
+    public function mailBooking(): BelongsTo
+    {
+        return $this->belongsTo(MailBooking::class, 'mail_booking_id');
+    }
+
+    public function getSourceOrderAttribute()
+    {
+        return $this->inquiry ?? $this->mailBooking;
     }
 }
