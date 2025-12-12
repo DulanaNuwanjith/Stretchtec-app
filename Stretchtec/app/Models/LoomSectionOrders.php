@@ -15,6 +15,7 @@ class LoomSectionOrders extends Model
     protected $fillable = [
         'order_preperation_id',
         'product_inquiry_id',
+        'mail_booking_id',
         'prod_order_no',
     ];
 
@@ -24,6 +25,14 @@ class LoomSectionOrders extends Model
     public function productInquiry(): BelongsTo
     {
         return $this->belongsTo(ProductInquiry::class, 'product_inquiry_id');
+    }
+
+    /**
+     * Relationship: Each loom section order belongs to one mail booking.
+     */
+    public function mailBooking(): BelongsTo
+    {
+        return $this->belongsTo(MailBooking::class, 'mail_booking_id');
     }
 
     /**

@@ -190,41 +190,44 @@
                                             </td>
 
                                             <td class="px-4 py-2">
+                                                @php
+                                                    $inquiry = $order->productInquiry ?? $order->mailBooking;
+                                                @endphp
                                                 <button type="button"
                                                         onclick="openDetailsModal(this)"
-                                                        data-ref-no="{{ $order->productInquiry->reference_no }}"
-                                                        data-shade="{{ $order->productInquiry->shade }}"
-                                                        data-colour="{{ $order->productInquiry->color }}"
-                                                        data-item="{{ $order->productInquiry->item }}"
-                                                        data-tkt="{{ $order->productInquiry->tkt }}"
-                                                        data-size="{{ $order->productInquiry->size }}"
-                                                        data-supplier="{{ $order->productInquiry->supplier }}"
-                                                        data-pstno="{{ $order->productInquiry->pst_no }}"
-                                                        data-itemdescription="{{ $order->productInquiry->item_description }}"
-                                                        data-suppliercomment="{{ $order->productInquiry->supplier_comment }}">
-                                                    {{ $order->productInquiry->reference_no }}
+                                                        data-ref-no="{{ $inquiry->reference_no ?? '-' }}"
+                                                        data-shade="{{ $inquiry->shade ?? '-' }}"
+                                                        data-colour="{{ $inquiry->color ?? '-' }}"
+                                                        data-item="{{ $inquiry->item ?? '-' }}"
+                                                        data-tkt="{{ $inquiry->tkt ?? '-' }}"
+                                                        data-size="{{ $inquiry->size ?? '-' }}"
+                                                        data-supplier="{{ $inquiry->supplier ?? '-' }}"
+                                                        data-pstno="{{ $inquiry->pst_no ?? '-' }}"
+                                                        data-itemdescription="{{ $inquiry->item_description ?? '-' }}"
+                                                        data-suppliercomment="{{ $inquiry->supplier_comment ?? '-' }}">
+                                                    {{ $inquiry->reference_no ?? '-' }}
                                                 </button>
 
                                             </td>
 
-                                            <!-- REQUESTED DATE (from product_inquiries) -->
+                                            <!-- REQUESTED DATE -->
                                             <td class="px-4 py-2">
-                                                {{ optional($order->productInquiry)->customer_req_date }}
+                                                {{ optional($inquiry)->customer_req_date }}
                                             </td>
 
                                             <!-- CUSTOMER NAME -->
                                             <td class="px-4 py-2">
-                                                {{ optional($order->productInquiry)->customer_name }}
+                                                {{ optional($inquiry)->customer_name }}
                                             </td>
 
                                             <!-- CUSTOMER MERCHANDISER -->
                                             <td class="px-4 py-2">
-                                                {{ optional($order->productInquiry)->merchandiser_name }}
+                                                {{ optional($inquiry)->merchandiser_name }}
                                             </td>
 
                                             <!-- CUSTOMER COORDINATOR -->
                                             <td class="px-4 py-2">
-                                                {{ optional($order->productInquiry)->customer_coordinator }}
+                                                {{ optional($inquiry)->customer_coordinator }}
                                             </td>
 
                                             <!-- TO MAKE QTY -->
