@@ -17,7 +17,7 @@ class LoomSectionOrdersController extends Controller
     public function index(): Factory|View
     {
         $orders = LoomSectionOrders::latest()
-            ->with('productInquiry', 'orderPreparation')
+            ->with('productInquiry', 'mailBooking', 'orderPreparation')
             ->get();
 
         // Group assigned items by order_preparation_id

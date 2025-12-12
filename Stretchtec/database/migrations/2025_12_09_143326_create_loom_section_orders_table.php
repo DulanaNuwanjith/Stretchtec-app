@@ -13,13 +13,13 @@ return new class extends Migration {
         Schema::create('loom_section_orders', static function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('order_preperation_id');
-            $table->unsignedBigInteger('product_inquiry_id');
+            $table->foreignId('product_inquiry_id')->nullable()->constrained('product_inquiries')->onDelete('cascade');
+            $table->foreignId('mail_booking_id')->nullable()->constrained('mail_bookings')->onDelete('cascade');
             $table->string('prod_order_no');
             $table->timestamps();
 
             // Foreign key constraints
             $table->foreign('order_preperation_id')->references('id')->on('product_order_preperations')->onDelete('cascade');
-            $table->foreign('product_inquiry_id')->references('id')->on('product_inquiries')->onDelete('cascade');
         });
     }
 

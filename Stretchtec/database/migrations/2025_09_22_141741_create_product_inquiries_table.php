@@ -20,6 +20,7 @@ return new class extends Migration {
             $table->string('merchandiser_name');
             $table->string('po_number');
             $table->date('production_deadline')->nullable();
+            $table->string('deadline_reason')->nullable();
             $table->string('size');
             $table->string('item');
             $table->string('color');

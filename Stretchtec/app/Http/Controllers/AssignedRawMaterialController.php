@@ -10,12 +10,14 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 use JsonException;
 use RuntimeException;
+use Throwable;
 
 class AssignedRawMaterialController extends Controller
 {
     /**
      * Store a newly created resource in storage.
      * @throws JsonException
+     * @throws Throwable
      */
     public function store(Request $request): RedirectResponse
     {
@@ -35,14 +37,13 @@ class AssignedRawMaterialController extends Controller
             $orderPreparationId = $firstItem['order_id'];
 
             //Find the product inquiry id related to this order preparation
-            $productInquiryId = DB::table('product_order_preperations')
+            $orderPrep = DB::table('product_order_preperations')
                 ->where('id', $orderPreparationId)
-                ->value('product_inquiry_id');
+                ->first();
 
-            //Find the prod order no related to this order preparation
-            $prodOrderNo = DB::table('product_order_preperations')
-                ->where('id', $orderPreparationId)
-                ->value('prod_order_no');
+            $productInquiryId = $orderPrep->product_inquiry_id;
+            $mailBookingId = $orderPrep->mail_booking_id ?? null; // Assuming mail_booking_id is added to product_order_preperations
+            $prodOrderNo = $orderPrep->prod_order_no;
 
             foreach ($cartItems as $item) {
 
@@ -122,30 +123,33 @@ class AssignedRawMaterialController extends Controller
             | INSERT INTO PRODUCTION SECTION TABLE — RUN ONLY ONCE
             |--------------------------------------------------------------------------
             */
+            // Prepare common data for insertion
+            $insertData = [
+                'order_preperation_id' => $orderPreparationId,
+                'prod_order_no' => $orderPrep->prod_order_no,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
+
+            // Explicitly handle Product Inquiry vs Mail Booking
+            if (!empty($orderPrep->product_inquiry_id)) {
+                $insertData['product_inquiry_id'] = $orderPrep->product_inquiry_id;
+                $insertData['mail_booking_id'] = null;
+            } elseif (!empty($orderPrep->mail_booking_id)) {
+                $insertData['product_inquiry_id'] = null;
+                $insertData['mail_booking_id'] = $orderPrep->mail_booking_id;
+            } else {
+                // Should ideally not happen if data integrity is maintained
+                $insertData['product_inquiry_id'] = null;
+                $insertData['mail_booking_id'] = null;
+            }
+
             if ($assignedSection === 'Knitted') {
-                DB::table('knitted_section_orders')->insert([
-                    'order_preperation_id' => $orderPreparationId,
-                    'product_inquiry_id' => $productInquiryId,
-                    'prod_order_no' => $prodOrderNo,
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ]);
+                DB::table('knitted_section_orders')->insert($insertData);
             } elseif ($assignedSection === 'Loom') {
-                DB::table('loom_section_orders')->insert([
-                    'order_preperation_id' => $orderPreparationId,
-                    'product_inquiry_id' => $productInquiryId,
-                    'prod_order_no' => $prodOrderNo,
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ]);
+                DB::table('loom_section_orders')->insert($insertData);
             } elseif ($assignedSection === 'Braiding') {
-                DB::table('braiding_section_orders')->insert([
-                    'order_preperation_id' => $orderPreparationId,
-                    'product_inquiry_id' => $productInquiryId,
-                    'prod_order_no' => $prodOrderNo,
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ]);
+                DB::table('braiding_section_orders')->insert($insertData);
             }
 
             DB::commit();

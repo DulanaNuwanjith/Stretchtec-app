@@ -114,10 +114,6 @@ Route::middleware([
     Route::patch('/product-catalog/{catalog}/update-shade', [ProductCatalogController::class, 'updateShade'])
         ->name('productCatalog.updateShade');
 
-    Route::get('productCatalog', static function () {
-        return view('production-catalog.productCatalog');
-    })->name('productCatalog.index');
-
     Route::get('elasticCatalog', [ProductCatalogController::class, 'elasticCatalog'])->name('elasticCatalog.index');
     Route::get('tapeCatalog', [ProductCatalogController::class, 'tapeCatalog'])->name('tapeCatalog.index');
     Route::get('codeCatalog', [ProductCatalogController::class, 'codeCatalog'])->name('codeCatalog.index');
@@ -284,7 +280,7 @@ Route::middleware([
     Route::post('/orders/assign-raw-materials', [AssignedRawMaterialController::class, 'store'])
         ->name('orders.assignRawMaterials');
 
-    Route::patch('/orders/{order}/deadline', [ProductOrderPreperationController::class, 'setDeadline'])->name('setDeadline');
+    Route::patch('/orders/{orderId}/set-deadline', [ProductOrderPreperationController::class, 'setDeadline'])->name('setDeadline');
 
     Route::resource('production-order-preparation', ProductOrderPreperationController::class)->names([
         'index' => 'production-order-preparation.index',
@@ -318,7 +314,7 @@ Route::middleware([
         'index' => 'braiding.index',
     ]);
 
-    //Technical Details Routes
+    //Technically Details Routes
     Route::get('/elasticTD', [TechnicalCardController::class, 'elasticIndex'])->name('elasticTD.index');
     Route::get('/tapeTD', [TechnicalCardController::class, 'tapeIndex'])->name('tapeTD.index');
     Route::get('/cordTD', [TechnicalCardController::class, 'cordIndex'])->name('cordTD.index');
@@ -387,11 +383,13 @@ Route::middleware(['auth'])->group(function () {
         // Field locking (ensure values can’t be modified further)
         Route::post('/rnd/lockPoField', [SamplePreparationRnDController::class, 'lockPoField'])->name('rnd.lockPoField');
         Route::post('/rnd/lockShadeField', [SamplePreparationRnDController::class, 'lockShadeField'])->name('rnd.lockShadeField');
-        Route::post('/rnd/lockQtyField', [SamplePreparationRnDController::class, 'lockQtyField'])->name('rnd.lockQtyField');
         Route::post('/rnd/lockTktField', [SamplePreparationRnDController::class, 'lockTktField'])->name('rnd.lockTktField');
         Route::post('/rnd/lockSupplierField', [SamplePreparationRnDController::class, 'lockSupplierField'])->name('rnd.lockSupplierField');
         Route::post('/rnd/lockDeadlineField', [SamplePreparationRnDController::class, 'lockDeadlineField'])->name('rnd.lockDeadlineField');
         Route::post('/rnd/lockReferenceField', [SamplePreparationRnDController::class, 'lockReferenceField'])->name('rnd.lockReferenceField');
+
+        // Route::post('/rnd/lockQtyField', [SamplePreparationRnDController::class, 'lockQtyField'])->name('rnd.lockQtyField');
+
 
         // Development status & yarn weight updates
         Route::post('/sample-preparation/update-developed', [SamplePreparationRnDController::class, 'updateDevelopedStatus'])
@@ -404,7 +402,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/color-match-reject/{id}', [ColorMatchRejectController::class, 'getRejectDetails']);
 
         Route::post('/report/rnd', [ReportController::class, 'generateRndReport'])->name('report.rndReport');
-        Route::post('/sample-preparation-rnd/{id}/cancel', [SamplePreparationRndController::class, 'cancelOrder']);
+        Route::post('/sample-preparation-rnd/{id}/cancel', [SamplePreparationRnDController::class, 'cancelOrder']);
     });
 });
 

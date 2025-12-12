@@ -17,7 +17,7 @@ class BraidingSectionOrdersController extends Controller
     public function index(): Factory|View
     {
         $orders = BraidingSectionOrders::latest()
-            ->with('productInquiry', 'orderPreparation')
+            ->with('productInquiry', 'mailBooking', 'orderPreparation')
             ->get();
 
         // Group assigned items by order_preparation_id

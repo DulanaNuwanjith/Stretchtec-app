@@ -21,14 +21,103 @@ class MailBookingController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): Factory|View
+    public function index(Request $request): Factory|View
     {
         $samples = ProductCatalog::where('isShadeSelected', true)->get();
-        $mailBookings = MailBooking::orderBy('mail_booking_number', 'DESC')
-            ->orderBy('order_received_date', 'DESC')
-            ->paginate(10);
 
-        return view('production.pages.mail-booking', compact('samples', 'mailBookings'));
+        // Base query
+        $query = MailBooking::query();
+
+        // Apply filters
+        if ($request->filled('mailBookingNo')) {
+            $query->where('mail_booking_number', $request->input('mailBookingNo'));
+        }
+
+        if ($request->filled('referenceNo')) {
+            $query->where('reference_no', $request->input('referenceNo'));
+        }
+
+        if ($request->filled('email')) {
+            $query->where('email', 'LIKE', '%' . $request->input('email') . '%');
+        }
+
+        if ($request->filled('customer')) {
+            $query->where('customer_name', $request->input('customer'));
+        }
+
+        if ($request->filled('merchandiser')) {
+            $query->where('merchandiser_name', $request->input('merchandiser'));
+        }
+
+        if ($request->filled('coordinator')) {
+            $coordinators = (array) $request->input('coordinator');
+            $query->whereIn('customer_coordinator', $coordinators);
+        }
+
+        if ($request->filled('orderReceivedDate')) {
+            $query->whereDate('order_received_date', $request->input('orderReceivedDate'));
+        }
+
+        // Filter by approval status (isApproved: 1 => approved, 0 => not approved)
+        if ($request->filled('isApproved')) {
+            $isApproved = $request->input('isApproved');
+            if ($isApproved === '1' || $isApproved === '0') {
+                $query->where('isApproved', (int) $isApproved);
+            }
+        }
+
+        $mailBookings = $query
+            ->orderBy('mail_booking_number', 'DESC')
+            ->orderBy('order_received_date', 'DESC')
+            ->paginate(10)
+            ->appends($request->query());
+
+        // Dropdown source lists
+        $mailBookingNos = MailBooking::orderBy('mail_booking_number', 'DESC')
+            ->pluck('mail_booking_number')
+            ->unique()
+            ->values();
+
+        $referenceNumbers = MailBooking::orderBy('reference_no')
+            ->whereNotNull('reference_no')
+            ->pluck('reference_no')
+            ->unique()
+            ->values();
+
+        $emails = MailBooking::orderBy('email')
+            ->whereNotNull('email')
+            ->pluck('email')
+            ->unique()
+            ->values();
+
+        $coordinators = MailBooking::orderBy('customer_coordinator')
+            ->whereNotNull('customer_coordinator')
+            ->pluck('customer_coordinator')
+            ->unique()
+            ->values();
+
+        $customers = MailBooking::orderBy('customer_name')
+            ->whereNotNull('customer_name')
+            ->pluck('customer_name')
+            ->unique()
+            ->values();
+
+        $merchandisers = MailBooking::orderBy('merchandiser_name')
+            ->whereNotNull('merchandiser_name')
+            ->pluck('merchandiser_name')
+            ->unique()
+            ->values();
+
+        return view('production.pages.mail-booking', compact(
+            'samples',
+            'mailBookings',
+            'mailBookingNos',
+            'referenceNumbers',
+            'emails',
+            'coordinators',
+            'customers',
+            'merchandisers'
+        ));
     }
 
     /**
@@ -131,7 +220,6 @@ class MailBookingController extends Controller
             }
 
             return redirect()->back()->with('success', 'PO with multiple items created successfully.');
-
         } catch (Exception $e) {
             Log::error('Exception occurred: ' . $e->getMessage(), [
                 'exception' => $e,
@@ -197,7 +285,8 @@ class MailBookingController extends Controller
 
             // Create a production order preparation record
             ProductOrderPreperation::create([
-                'product_inquiry_id' => $productInquiry->id,
+                'product_inquiry_id' => null,
+                'mail_booking_id' => $productInquiry->id,
                 'prod_order_no' => $productInquiry->mail_booking_number,
                 'customer_name' => $productInquiry->customer_name,
                 'reference_no' => $productInquiry->reference_no,
@@ -207,8 +296,8 @@ class MailBookingController extends Controller
                 'shade' => $productInquiry->shade,
                 'tkt' => $productInquiry->tkt,
                 'qty' => $productInquiry->qty - optional($productInquiry->stores)->sum(function ($store) {
-                        return $store->qty_allocated ?? 0;
-                    }) ?? 0,
+                    return $store->qty_allocated ?? 0;
+                }) ?? 0,
                 'uom' => $productInquiry->uom,
                 'supplier' => $productInquiry->supplier,
                 'pst_no' => $productInquiry->pst_no,
@@ -267,7 +356,6 @@ class MailBookingController extends Controller
             $store->save();
 
             return redirect()->back()->with('success', 'Order successfully sent to store.');
-
         } catch (Exception $e) {
             return redirect()->back()->with('error', 'Error sending to store: ' . $e->getMessage());
         }

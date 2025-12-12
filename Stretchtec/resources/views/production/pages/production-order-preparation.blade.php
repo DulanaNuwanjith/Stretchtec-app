@@ -8,7 +8,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
-<div class="flex h-full w-full">
+<div class="flex h-full w-full" x-data="deadlineModal()">
     @extends('layouts.production-tabs')
 
     @section('content')
@@ -219,7 +219,7 @@
                                     <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-28 text-xs text-gray-600 dark:text-gray-300 uppercase">
                                         Status
                                     </th>
-                                    <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-28 text-xs text-gray-600 dark:text-gray-300 uppercase">
+                                    <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-48 text-xs text-gray-600 dark:text-gray-300 uppercase">
                                         Production Deadline
                                     </th>
                                     <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-40 text-xs text-gray-600 dark:text-gray-300 uppercase">
@@ -275,8 +275,17 @@
 
                                         <td class="px-4 py-3 border-r border-gray-300">
 
-                                            @if ($order->production_deadline)
-                                                {{ \Carbon\Carbon::parse($order->production_deadline)->format('Y-m-d') }}
+                                            @if ($order->source_order?->production_deadline)
+                                                <div class="flex flex-col">
+                                                    <span class="font-medium">
+                                                        {{ Carbon::parse($order->source_order->production_deadline)->format('Y-m-d') }}
+                                                    </span>
+                                                    @if ($order->source_order->deadline_reason)
+                                                        <span class="text-xs text-gray-500 italic mt-1">
+                                                            {{ $order->source_order->deadline_reason }}
+                                                        </span>
+                                                    @endif
+                                                </div>
                                             @else
                                                 <button
                                                     @click="openDeadlineModal('{{ $order->id }}')"
@@ -284,12 +293,12 @@
                                                     Set Deadline
                                                 </button>
                                             @endif
-
                                         </td>
 
                                         <!-- Mark Raw Material Ordered -->
                                         <td class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
                                             <div class="flex flex-col items-center justify-center">
+
                                                 @if ($order->isRawMaterialOrdered)
                                                     <!-- Banner showing ordered timestamp -->
                                                     <span
@@ -299,20 +308,37 @@
                                                         at
                                                         {{ Carbon::parse($order->raw_material_ordered_date)->format('H:i') }}
                                                     </span>
+
                                                 @else
-                                                    <!-- Mark Ordered button -->
+                                                    @php
+                                                        $deadlineSet = $order->source_order?->production_deadline !== null;
+                                                    @endphp
+
                                                     <form action="{{ route('orders.markOrdered', $order->id) }}"
                                                           method="POST" onsubmit="handleSubmit(this)">
                                                         @csrf
                                                         @method('PATCH')
+
                                                         <button type="submit"
-                                                                class="px-3 py-1 mt-4 text-xs rounded-lg bg-blue-100 text-blue-700 hover:bg-blue-200 flex items-center justify-center">
+                                                                class="px-3 py-1 mt-4 text-xs rounded-lg flex items-center justify-center
+                                                            {{ $deadlineSet ? 'bg-blue-100 text-blue-700 hover:bg-blue-200' : 'bg-gray-200 text-gray-400 cursor-not-allowed' }}"
+                                                            {{ $deadlineSet ? '' : 'disabled' }}>
                                                             Mark as Ordered
                                                         </button>
+
                                                     </form>
+
+                                                    @unless($deadlineSet)
+                                                        <span class="text-[11px] text-red-500 mt-1">
+                                                            Set production deadline first
+                                                        </span>
+                                                    @endunless
+
                                                 @endif
+
                                             </div>
                                         </td>
+
 
                                         <!-- Mark Raw Material Received -->
                                         <td class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
@@ -388,14 +414,28 @@
                                         Select Raw Materials for Order No: <span id="assignOrderNo"></span>
                                     </h2>
 
-                                    <!-- Production Type Dropdown -->
-                                    <div>
-                                        <select id="productionType" class="border rounded px-3 py-2 w-48 mt-2">
-                                            <option value="Knitted">Knitted</option>
-                                            <option value="Loom">Loom</option>
-                                            <option value="Braiding">Braiding</option>
-                                        </select>
+                                    <!-- Production Type Section -->
+                                    <div class="mt-2">
+
+                                        @if (is_null($order->order_assigned_date))
+                                            <!-- Show dropdown if order is NOT assigned -->
+                                            <select id="productionType" name="production_type"
+                                                    class="border rounded px-3 py-2 w-48">
+                                                <option value="Knitted">Knitted</option>
+                                                <option value="Loom">Loom</option>
+                                                <option value="Braiding">Braiding</option>
+                                            </select>
+
+                                        @else
+                                            <!-- Show assigned-to name if order is ALREADY assigned -->
+                                            <input type="text"
+                                                   class="border rounded px-3 py-2 w-48 bg-gray-100 cursor-not-allowed"
+                                                   value="{{ $order->orderAssignedTo ?? 'Unknown' }}"
+                                                   readonly>
+                                        @endif
+
                                     </div>
+
                                 </div>
 
                                 <!-- Tabs Wrapper -->
@@ -604,45 +644,36 @@
             </div>
         </div>
 
-        <div x-data="deadlineModal()" x-cloak>
+        {{-- Deadline Modal --}}
+        <div x-show="show" x-cloak
+             class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
 
-            <!-- Overlay -->
-            <div
-                x-show="show"
-                class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center">
+            <div class="bg-white w-96 p-6 rounded shadow">
+                <h2 class="text-lg font-semibold mb-4">Set Production Deadline</h2>
 
-                <!-- Modal -->
-                <div class="bg-white w-96 p-6 rounded shadow">
-                    <h2 class="text-lg font-semibold mb-4">Set Production Deadline</h2>
+                <form method="POST" :action="`/orders/${orderId}/set-deadline`">
+                    @csrf
+                    @method('PATCH')
 
-                    <form method="POST" :action="`/orders/${orderId}/set-deadline`">
-                        @csrf
-                        @method('PATCH')
+                    <label class="block mb-2">Select Date</label>
+                    <input type="date" name="production_deadline" required
+                           class="border w-full px-3 py-2 rounded mb-4">
 
-                        <label class="block mb-2">Select Date</label>
-                        <input
-                            type="date"
-                            name="production_deadline"
-                            required
-                            class="border w-full px-3 py-2 rounded mb-4">
+                    <input type="text" name="deadline_reason" required
+                           class="border w-full px-3 py-2 rounded mb-4" placeholder="Enter a Reason for the Deadline">
 
-                        <div class="flex justify-end gap-2">
-                            <button
-                                type="button"
-                                @click="close()"
+                    <div class="flex justify-end gap-2">
+                        <button type="button" @click="close()"
                                 class="px-3 py-1 bg-gray-300 rounded hover:bg-gray-400">
-                                Cancel
-                            </button>
+                            Cancel
+                        </button>
 
-                            <button
-                                type="submit"
+                        <button type="submit"
                                 class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700">
-                                Save
-                            </button>
-                        </div>
-                    </form>
-                </div>
-
+                            Save
+                        </button>
+                    </div>
+                </form>
             </div>
 
         </div>
