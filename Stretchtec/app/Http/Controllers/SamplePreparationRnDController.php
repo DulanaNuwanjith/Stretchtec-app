@@ -3,18 +3,21 @@
 namespace App\Http\Controllers;
 
 use App\Models\LeftoverYarn;
+use App\Models\ProductCatalog;
 use App\Models\SampleInquiry;
 use App\Models\SamplePreparationProduction;
 use App\Models\SamplePreparationRnD;
 use App\Models\SampleStock;
 use App\Models\ShadeOrder;
-use App\Models\ProductCatalog;
 use Carbon\Carbon;
+use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\View\Factory;
 use Illuminate\View\View;
+use Log;
 
 class SamplePreparationRnDController extends Controller
 {
@@ -797,7 +800,7 @@ class SamplePreparationRnDController extends Controller
         return back()->with('success', 'Borrowed successfully.');
     }
 
-    public function cancelOrder(Request $request, $id)
+    public function cancelOrder(Request $request, $id): ?JsonResponse
     {
         try {
             $prep = SamplePreparationRnd::findOrFail($id);
@@ -809,9 +812,9 @@ class SamplePreparationRnDController extends Controller
             // Return JSON response
             return response()->json(['success' => true]);
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             // Optional: log the error
-            \Log::error('Order Cancel Error: ' . $e->getMessage());
+            Log::error('Order Cancel Error: ' . $e->getMessage());
 
             // Return failure response
             return response()->json(['success' => false], 500);

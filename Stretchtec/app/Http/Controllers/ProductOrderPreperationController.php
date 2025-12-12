@@ -108,4 +108,26 @@ class ProductOrderPreperationController extends Controller
         return back()->with('success', 'Marked as received with timestamp.');
     }
 
+    public function setDeadline(Request $request, $orderId): RedirectResponse
+    {
+        // Validate only the fields coming from the form
+        $request->validate([
+            'production_deadline' => 'required|date',
+            'deadline_reason' => 'required|string|max:255',
+        ]);
+
+        // Fetch the order
+        $preperationOrder = ProductOrderPreperation::findOrFail($orderId);
+
+        $inquiryOrder = $preperationOrder->inquiry;
+
+        // Update fields
+        $inquiryOrder->production_deadline = $request->production_deadline;
+        $inquiryOrder->deadline_reason = $request->deadline_reason;
+        $inquiryOrder->save();
+
+        return redirect()->back()->with('success', 'Production deadline updated successfully.');
+    }
+
+
 }
