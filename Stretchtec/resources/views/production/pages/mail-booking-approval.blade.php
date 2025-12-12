@@ -649,6 +649,21 @@
         bindDropdown('customerDropdown', 'customerDropdownMenu', 'customer-option', 'selectedCustomer', 'customerInput',
             'customerSearchInput');
 
+        // Close dropdowns when clicking outside (single + multi-select)
+        const filters = ['mailBookingNo', 'referenceNo', 'email', 'merchandiser', 'customer'];
+        const multiSelectFilters = ['coordinator'];
+
+        document.addEventListener('click', (e) => {
+            [...filters, ...multiSelectFilters].forEach(type => {
+                const menu = document.getElementById(`${type}DropdownMenu`);
+                const button = document.getElementById(`${type}Dropdown`);
+                if (menu && button && !menu.contains(e.target) && !button.contains(e.target)) {
+                    menu.classList.add('hidden');
+                    button.setAttribute('aria-expanded', 'false');
+                }
+            });
+        });
+
         // Coordinator multi-select label update
         const coordinatorBtn = document.getElementById('coordinatorDropdown');
         const coordinatorMenu = document.getElementById('coordinatorDropdownMenu');

@@ -58,6 +58,14 @@ class MailBookingController extends Controller
             $query->whereDate('order_received_date', $request->input('orderReceivedDate'));
         }
 
+        // Filter by approval status (isApproved: 1 => approved, 0 => not approved)
+        if ($request->filled('isApproved')) {
+            $isApproved = $request->input('isApproved');
+            if ($isApproved === '1' || $isApproved === '0') {
+                $query->where('isApproved', (int) $isApproved);
+            }
+        }
+
         $mailBookings = $query
             ->orderBy('mail_booking_number', 'DESC')
             ->orderBy('order_received_date', 'DESC')

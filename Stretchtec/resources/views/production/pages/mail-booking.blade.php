@@ -404,6 +404,37 @@
                                                 value="{{ request('customer') }}">
                                         </div>
 
+                                        <div class="relative inline-block text-left w-48">
+                                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                                Status</label>
+                                            <div class="relative inline-block w-full">
+                                                <button id="approvalStatusDropdown" type="button"
+                                                    class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10 dark:bg-gray-700 dark:text-white">
+                                                    <span
+                                                        id="selectedApprovalStatus">{{ request('isApproved') === '1' ? 'Approved' : (request('isApproved') === '0' ? 'Not Approved' : 'Select Status') }}</span>
+                                                    <svg class="w-4 h-4 text-gray-500" fill="none"
+                                                        stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                                    </svg>
+                                                </button>
+                                                <div id="approvalStatusDropdownMenu"
+                                                    class="hidden absolute z-40 mt-2 w-full rounded-md bg-white shadow-lg ring-1 ring-black/5 dark:bg-gray-700 max-h-48 overflow-y-auto">
+                                                    <ul class="max-h-48 overflow-auto py-1 text-sm">
+                                                        <li
+                                                            class="approvalStatus-option cursor-pointer select-none px-3 py-2 hover:bg-gray-100">
+                                                            Select Approval Status</li>
+                                                        <li class="approvalStatus-option cursor-pointer select-none px-3 py-2 hover:bg-gray-100"
+                                                            data-value="1">Approved</li>
+                                                        <li class="approvalStatus-option cursor-pointer select-none px-3 py-2 hover:bg-gray-100"
+                                                            data-value="0">Not Approved</li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <input id="isApprovedInput" type="hidden" name="isApproved"
+                                                value="{{ request('isApproved') === '1' ? '1' : (request('isApproved') === '0' ? '0' : '') }}">
+                                        </div>
+
                                         <!-- Order Received Date -->
                                         <div class="relative inline-block text-left w-48">
                                             <label
@@ -681,13 +712,13 @@
                                                 <td class="px-4 py-3 border-r border-gray-300 text-center">
                                                     @if ($inquiry->production_deadline)
                                                         <div class="flex flex-col">
-                                                        <span class="font-medium">
-                                                            {{ Carbon::parse($inquiry->production_deadline)->format('Y-m-d') }}
-                                                        </span>
+                                                            <span class="font-medium">
+                                                                {{ Carbon::parse($inquiry->production_deadline)->format('Y-m-d') }}
+                                                            </span>
                                                             @if ($inquiry->deadline_reason)
                                                                 <span class="text-xs text-gray-500 italic mt-1">
-                                                                {{ $inquiry->deadline_reason }}
-                                                            </span>
+                                                                    {{ $inquiry->deadline_reason }}
+                                                                </span>
                                                             @endif
                                                         </div>
                                                     @else
@@ -1007,6 +1038,23 @@
             }
         }
 
+        bindDropdown('approvalStatusDropdown',
+            'approvalStatusDropdownMenu',
+            'approvalStatus-option',
+            'selectedApprovalStatus',
+            'isApprovedInput',
+            'approvalStatusSearchInput');
+
+        document.querySelectorAll('#approvalStatusDropdownMenu .approvalStatus-option').forEach(opt => {
+            opt.addEventListener('click', () => {
+                const val = opt.dataset.value ?? '';
+                document.getElementById('selectedApprovalStatus').textContent =
+                    val === '1' ? 'Approved' : (val === '0' ? 'Not Approved' : 'Select Approval Status');
+                document.getElementById('isApprovedInput').value = val;
+                document.getElementById('approvalStatusDropdownMenu').classList.add('hidden');
+            });
+        });
+
         // Bind single-select dropdowns
         bindDropdown('mailBookingNoDropdown', 'mailBookingNoDropdownMenu', 'mailBookingNo-option', 'selectedMailBookingNo',
             'mailBookingNoInput', 'mailBookingNoSearchInput');
@@ -1018,6 +1066,21 @@
             'merchandiserInput', 'merchandiserSearchInput');
         bindDropdown('customerDropdown', 'customerDropdownMenu', 'customer-option', 'selectedCustomer', 'customerInput',
             'customerSearchInput');
+
+        // Close dropdowns when clicking outside (single + multi-select)
+        const filters = ['mailBookingNo', 'referenceNo', 'email', 'merchandiser', 'customer', 'approvalStatus'];
+        const multiSelectFilters = ['coordinator'];
+
+        document.addEventListener('click', (e) => {
+            [...filters, ...multiSelectFilters].forEach(type => {
+                const menu = document.getElementById(`${type}DropdownMenu`);
+                const button = document.getElementById(`${type}Dropdown`);
+                if (menu && button && !menu.contains(e.target) && !button.contains(e.target)) {
+                    menu.classList.add('hidden');
+                    button.setAttribute('aria-expanded', 'false');
+                }
+            });
+        });
 
         // Coordinator multi-select label update
         const coordinatorBtn = document.getElementById('coordinatorDropdown');
