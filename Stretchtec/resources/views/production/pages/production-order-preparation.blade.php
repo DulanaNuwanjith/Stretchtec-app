@@ -298,6 +298,7 @@
                                         <!-- Mark Raw Material Ordered -->
                                         <td class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
                                             <div class="flex flex-col items-center justify-center">
+
                                                 @if ($order->isRawMaterialOrdered)
                                                     <!-- Banner showing ordered timestamp -->
                                                     <span
@@ -307,20 +308,37 @@
                                                         at
                                                         {{ Carbon::parse($order->raw_material_ordered_date)->format('H:i') }}
                                                     </span>
+
                                                 @else
-                                                    <!-- Mark Ordered button -->
+                                                    @php
+                                                        $deadlineSet = $order->source_order?->production_deadline !== null;
+                                                    @endphp
+
                                                     <form action="{{ route('orders.markOrdered', $order->id) }}"
                                                           method="POST" onsubmit="handleSubmit(this)">
                                                         @csrf
                                                         @method('PATCH')
+
                                                         <button type="submit"
-                                                                class="px-3 py-1 mt-4 text-xs rounded-lg bg-blue-100 text-blue-700 hover:bg-blue-200 flex items-center justify-center">
+                                                                class="px-3 py-1 mt-4 text-xs rounded-lg flex items-center justify-center
+                                                            {{ $deadlineSet ? 'bg-blue-100 text-blue-700 hover:bg-blue-200' : 'bg-gray-200 text-gray-400 cursor-not-allowed' }}"
+                                                            {{ $deadlineSet ? '' : 'disabled' }}>
                                                             Mark as Ordered
                                                         </button>
+
                                                     </form>
+
+                                                    @unless($deadlineSet)
+                                                        <span class="text-[11px] text-red-500 mt-1">
+                                                            Set production deadline first
+                                                        </span>
+                                                    @endunless
+
                                                 @endif
+
                                             </div>
                                         </td>
+
 
                                         <!-- Mark Raw Material Received -->
                                         <td class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
@@ -396,14 +414,28 @@
                                         Select Raw Materials for Order No: <span id="assignOrderNo"></span>
                                     </h2>
 
-                                    <!-- Production Type Dropdown -->
-                                    <div>
-                                        <select id="productionType" class="border rounded px-3 py-2 w-48 mt-2">
-                                            <option value="Knitted">Knitted</option>
-                                            <option value="Loom">Loom</option>
-                                            <option value="Braiding">Braiding</option>
-                                        </select>
+                                    <!-- Production Type Section -->
+                                    <div class="mt-2">
+
+                                        @if (is_null($order->order_assigned_date))
+                                            <!-- Show dropdown if order is NOT assigned -->
+                                            <select id="productionType" name="production_type"
+                                                    class="border rounded px-3 py-2 w-48">
+                                                <option value="Knitted">Knitted</option>
+                                                <option value="Loom">Loom</option>
+                                                <option value="Braiding">Braiding</option>
+                                            </select>
+
+                                        @else
+                                            <!-- Show assigned-to name if order is ALREADY assigned -->
+                                            <input type="text"
+                                                   class="border rounded px-3 py-2 w-48 bg-gray-100 cursor-not-allowed"
+                                                   value="{{ $order->orderAssignedTo ?? 'Unknown' }}"
+                                                   readonly>
+                                        @endif
+
                                     </div>
+
                                 </div>
 
                                 <!-- Tabs Wrapper -->

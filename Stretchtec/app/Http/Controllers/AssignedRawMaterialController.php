@@ -10,12 +10,14 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 use JsonException;
 use RuntimeException;
+use Throwable;
 
 class AssignedRawMaterialController extends Controller
 {
     /**
      * Store a newly created resource in storage.
      * @throws JsonException
+     * @throws Throwable
      */
     public function store(Request $request): RedirectResponse
     {
