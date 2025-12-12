@@ -17,6 +17,8 @@ return new class extends Migration {
             $table->string('customer_name');
             $table->string('customer_coordinator');
             $table->string('merchandiser_name');
+            $table->date('production_deadline')->nullable();
+            $table->string('deadline_reason')->nullable();
             $table->string('email');
             $table->string('size');
             $table->string('item');
