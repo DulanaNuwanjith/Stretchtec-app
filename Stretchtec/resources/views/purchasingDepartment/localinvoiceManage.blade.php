@@ -367,10 +367,6 @@
                                         Quantity
                                     </th>
                                     <th
-                                        class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-28 text-xs text-gray-600 dark:text-gray-300 uppercase">
-                                        UOM
-                                    </th>
-                                    <th
                                         class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase">
                                         Supplier
                                     </th>
@@ -409,8 +405,7 @@
                                         <td class="px-4 py-3 border-r border-gray-300 text-sm">{{ $order->color ?? '-' }}</td>
                                         <td class="px-4 py-3 border-r border-gray-300 text-sm">{{ $order->shade ?? '-' }}</td>
                                         <td class="px-4 py-3 border-r border-gray-300 text-sm">{{ $order->tkt ?? '-' }}</td>
-                                        <td class="px-4 py-3 border-r border-gray-300 text-sm">{{ $order->qty ?? 0 }}</td>
-                                        <td class="px-4 py-3 border-r border-gray-300 text-sm">{{ $order->uom ?? '-' }}</td>
+                                        <td class="px-4 py-3 border-r border-gray-300 text-sm">{{ $order->qty ?? 0 }} {{ $order->uom ?? '-' }}</td>
                                         <td class="px-4 py-3 border-r border-gray-300 text-sm">{{ $order->supplier ?? '-' }}</td>
                                         <td class="px-4 py-3 border-r border-gray-300 text-sm">{{ $order->pst_no ?? '-' }}</td>
                                         <td class="px-4 py-3 border-r border-gray-300 text-sm">
@@ -566,7 +561,7 @@
                         </tr>
                     </thead>
 
-                    @foreach ($invoiceItems as $invoiceNumber => $items)
+                    @forelse ($invoiceItems as $invoiceNumber => $items)
                         @php
                             $hasMultiple = $items->count() > 1;
                             $first = $items->first();
@@ -716,7 +711,14 @@
                                 @endforeach
                             @endif
                         </tbody>
-                    @endforeach
+                        @empty
+                            <tr>
+                                <td colspan="16"
+                                    class="text-center px-6 py-6 text-gray-500 text-sm italic">
+                                    No records found.
+                                </td>
+                            </tr>
+                    @endforelse
                 </table>
             </div>
 

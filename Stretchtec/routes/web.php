@@ -284,6 +284,8 @@ Route::middleware([
     Route::post('/orders/assign-raw-materials', [AssignedRawMaterialController::class, 'store'])
         ->name('orders.assignRawMaterials');
 
+    Route::patch('/orders/{order}/deadline', [ProductOrderPreperationController::class, 'setDeadline'])->name('setDeadline');
+
     Route::resource('production-order-preparation', ProductOrderPreperationController::class)->names([
         'index' => 'production-order-preparation.index',
     ]);

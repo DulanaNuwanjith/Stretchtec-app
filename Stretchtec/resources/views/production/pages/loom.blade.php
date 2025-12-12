@@ -181,7 +181,7 @@
 
                                     <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
 
-                                    @foreach ($orders as $order)
+                                    @forelse ($orders as $order)
                                         <tr class="text-center">
 
                                             <!-- ORDER NO -->
@@ -200,6 +200,7 @@
                                                         data-size="{{ $order->productInquiry->size }}"
                                                         data-supplier="{{ $order->productInquiry->supplier }}"
                                                         data-pstno="{{ $order->productInquiry->pst_no }}"
+                                                        data-itemdescription="{{ $order->productInquiry->item_description }}"
                                                         data-suppliercomment="{{ $order->productInquiry->supplier_comment }}">
                                                     {{ $order->productInquiry->reference_no }}
                                                 </button>
@@ -240,7 +241,14 @@
                                                 </button>
                                             </td>
                                         </tr>
-                                    @endforeach
+                                        @empty
+                                            <tr>
+                                                <td colspan="8"
+                                                    class="text-center px-6 py-6 text-gray-500 text-sm italic">
+                                                    No records found.
+                                                </td>
+                                            </tr>
+                                    @endforelse
 
                                     </tbody>
                                 </table>
@@ -335,19 +343,24 @@
                         <p id="modal_tkt" class="text-gray-900"></p>
                     </div>
 
-                    <div>
+                    <div id="wrap_supplier">
                         <p class="font-semibold">Supplier:</p>
                         <p id="modal_supplier" class="text-gray-900"></p>
                     </div>
 
-                    <div>
+                    <div id="wrap_pst_no">
                         <p class="font-semibold">PST No:</p>
                         <p id="modal_pst_no" class="text-gray-900"></p>
                     </div>
 
-                    <div class="col-span-2">
+                    <div id="wrap_supplier_comment" class="col-span-2">
                         <p class="font-semibold">Supplier Comment:</p>
                         <p id="modal_supplier_comment" class="text-gray-900 whitespace-pre-line"></p>
+                    </div>
+
+                    <div id="wrap_item_description" class="col-span-2">
+                        <p class="font-semibold">Item Description:</p>
+                        <p id="modal_item_description" class="text-gray-900 whitespace-pre-line"></p>
                     </div>
 
                 </div>
@@ -375,8 +388,26 @@
         document.getElementById("modal_supplier").textContent = button.dataset.supplier;
         document.getElementById("modal_pst_no").textContent = button.dataset.pstno;
         document.getElementById("modal_supplier_comment").textContent = button.dataset.suppliercomment;
+        document.getElementById("modal_item_description").textContent = button.dataset.itemdescription;
 
         document.getElementById("detailsModal").classList.remove("hidden");
+
+        // ----- Visibility Logic -----
+        toggleField("wrap_pst_no", button.dataset.pstno);
+        toggleField("wrap_supplier_comment", button.dataset.suppliercomment);
+        toggleField("wrap_item_description", button.dataset.itemdescription);
+        toggleField("wrap_supplier", button.dataset.supplier);
+    }
+
+    function toggleField(wrapperId, value) {
+        const wrapper = document.getElementById(wrapperId);
+
+        // Hide if null, empty string, undefined, or literal "null"
+        if (!value || value === "null") {
+            wrapper.classList.add("hidden");
+        } else {
+            wrapper.classList.remove("hidden");
+        }
     }
 
     function closeDetailsModal() {

@@ -21,15 +21,73 @@ class ProductInquiryController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): Factory|View
+    public function index(Request $request)
     {
+        // keep sample catalog (used by your blade)
         $samples = ProductCatalog::where('isShadeSelected', true)->get();
-        $productInquiries = ProductInquiry::orderBy('prod_order_no', 'DESC')
-            ->orderBy('po_received_date', 'DESC')
-            ->paginate(10);
 
-        return view('production.pages.production-inquery-details', compact('samples', 'productInquiries'));
+        // Fetch distinct filter values
+        $orderNos = ProductInquiry::select('prod_order_no')->distinct()->pluck('prod_order_no');
+        $poDates = ProductInquiry::select('po_received_date')->distinct()->pluck('po_received_date');
+        $referenceNumbers = ProductInquiry::select('reference_no')->distinct()->pluck('reference_no');
+        $poNumbers = ProductInquiry::select('po_number')->distinct()->pluck('po_number');
+        $coordinators = ProductInquiry::select('customer_coordinator')->distinct()->pluck('customer_coordinator');
+        $customers = ProductInquiry::select('customer_name')->distinct()->pluck('customer_name');
+        $merchandisers = ProductInquiry::select('merchandiser_name')->distinct()->pluck('merchandiser_name');
+
+        // Base query
+        $query = ProductInquiry::query();
+
+        // Apply Filters
+        if ($request->filled('orderNo')) {
+            $query->where('prod_order_no', $request->orderNo);
+        }
+
+        if ($request->filled('poReceivedDate')) {
+            $query->whereDate('po_received_date', $request->poReceivedDate);
+        }
+
+        if ($request->filled('referenceNo')) {
+            $query->where('reference_no', $request->referenceNo);
+        }
+
+        if ($request->filled('poNumber')) {
+            $query->where('po_number', $request->poNumber);
+        }
+
+        if ($request->filled('coordinator')) {
+            $query->whereIn('customer_coordinator', $request->coordinator);
+        }
+
+        if ($request->filled('customer')) {
+            $query->where('customer_name', $request->customer);
+        }
+
+        if ($request->filled('merchandiser')) {
+            $query->where('merchandiser_name', $request->merchandiser);
+        }
+
+        // Final results with pagination and preserve query params
+        $productInquiries = $query
+            ->orderBy('prod_order_no', 'DESC')
+            ->orderBy('po_received_date', 'DESC')
+            ->paginate(10)
+            ->appends($request->query());
+
+        return view('production.pages.production-inquery-details', compact(
+            'samples',            // <-- restored
+            'productInquiries',
+            'orderNos',
+            'poDates',
+            'referenceNumbers',
+            'poNumbers',
+            'coordinators',
+            'customers',
+            'merchandisers'
+        ));
     }
+
+
 
 
     public function getSampleDetails($id): JsonResponse
@@ -45,6 +103,7 @@ class ProductInquiryController extends Controller
             'supplier' => $sample->supplier,
             'pst_no' => $sample->pst_no,
             'supplier_comments' => $sample->supplierComment,
+            'item_description' => $sample->item_description,
         ]);
     }
 
@@ -68,7 +127,7 @@ class ProductInquiryController extends Controller
                 'customer_name' => 'required|string|max:255',
                 'merchandiser_name' => 'nullable|string|max:255',
                 'customer_coordinator' => 'required|string|max:255',
-                'customer_req_date' => 'required|date',
+                'customer_req_date' => 'nullable|date',
                 'remarks' => 'nullable|string',
                 'items' => 'required|array|min:1',
 
@@ -83,6 +142,7 @@ class ProductInquiryController extends Controller
                 'items.*.qty' => 'required|numeric|min:1',
                 'items.*.pst_no' => 'nullable|string|max:255',
                 'items.*.supplier_comment' => 'nullable|string|max:255',
+                'items.*.item_description' => 'nullable|string|max:255',
                 'items.*.uom' => 'required|string|max:50',
                 'items.*.unitPrice' => 'required|numeric|min:0',
                 'items.*.price' => 'required|numeric|min:0',
@@ -106,13 +166,11 @@ class ProductInquiryController extends Controller
             // Save each item separately with a unique order number
             foreach ($data['items'] as $item) {
                 $referenceNo = null;
-                $sampleId = null;
 
                 if (!empty($item['sample_id'])) {
                     // Sample order → fetch reference from catalog
                     $sample = ProductCatalog::find($item['sample_id']);
                     $referenceNo = $sample?->reference_no;
-                    $sampleId = $item['sample_id'];
                 } else {
                     // Direct order → use "Direct Bulk" or value from a hidden field
                     $referenceNo = $data['reference_no'] ?? 'Direct Bulk';
@@ -135,7 +193,6 @@ class ProductInquiryController extends Controller
                     'order_type' => $item['order_type'],
                     'remarks' => $data['remarks'] ?? null,
                     'reference_no' => $referenceNo,
-                    'sample_id' => $sampleId,
                     'shade' => $item['shade'],
                     'color' => $item['color'],
                     'tkt' => $item['tkt'] ?? 'N/A',
@@ -143,7 +200,8 @@ class ProductInquiryController extends Controller
                     'item' => $item['item'],
                     'supplier' => $item['supplier'] ?? null,
                     'pst_no' => $item['pst_no'] ?? null,
-                    'supplier_comment' => $data['supplier_comment'] ?? null,
+                    'supplier_comment' => $item['supplier_comment'] ?? null,
+                    'item_description' => $item['item_description'] ?? null,
                     'qty' => $item['qty'],
                     'uom' => $item['uom'],
                     'unitPrice' => $item['unitPrice'],
@@ -152,7 +210,6 @@ class ProductInquiryController extends Controller
             }
 
             return redirect()->back()->with('success', 'PO with multiple items created successfully.');
-
         } catch (Exception $e) {
             Log::error('Exception occurred: ' . $e->getMessage(), [
                 'exception' => $e,
@@ -223,7 +280,6 @@ class ProductInquiryController extends Controller
             $store->save();
 
             return redirect()->back()->with('success', 'Order successfully sent to store.');
-
         } catch (Exception $e) {
             return redirect()->back()->with('error', 'Error sending to store: ' . $e->getMessage());
         }
@@ -254,6 +310,9 @@ class ProductInquiryController extends Controller
                 'prod_order_no' => $productInquiry->prod_order_no,
                 'customer_name' => $productInquiry->customer_name,
                 'reference_no' => $productInquiry->reference_no,
+                'requested_date' => $productInquiry->customer_req_date
+                ? \Carbon\Carbon::parse($productInquiry->customer_req_date)->format('Y-m-d')
+                : null,
                 'item' => $productInquiry->item,
                 'size' => $productInquiry->size,
                 'color' => $productInquiry->color,
@@ -263,7 +322,8 @@ class ProductInquiryController extends Controller
                 'uom' => $productInquiry->uom,
                 'supplier' => $productInquiry->supplier,
                 'pst_no' => $productInquiry->pst_no,
-                'supplier_comment' => $productInquiry->supplier_comment,
+                'supplier_comment' => $productInquiry->supplier_comment ?? null,
+                'item_description' => $productInquiry->item_description ?? null,
                 'status' => 'Pending', // initial production status
             ]);
 

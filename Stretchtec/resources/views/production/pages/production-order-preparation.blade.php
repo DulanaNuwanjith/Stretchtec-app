@@ -187,6 +187,9 @@
                                         Reference No
                                     </th>
                                     <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase">
+                                        Requested Date
+                                    </th>
+                                    <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase">
                                         Item
                                     </th>
                                     <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-24 text-xs text-gray-600 dark:text-gray-300 uppercase">
@@ -204,9 +207,6 @@
                                     <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-24 text-xs text-gray-600 dark:text-gray-300 uppercase">
                                         Quantity
                                     </th>
-                                    <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-28 text-xs text-gray-600 dark:text-gray-300 uppercase">
-                                        UOM
-                                    </th>
                                     <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase">
                                         Supplier
                                     </th>
@@ -218,6 +218,9 @@
                                     </th>
                                     <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-28 text-xs text-gray-600 dark:text-gray-300 uppercase">
                                         Status
+                                    </th>
+                                    <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-28 text-xs text-gray-600 dark:text-gray-300 uppercase">
+                                        Production Deadline
                                     </th>
                                     <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-40 text-xs text-gray-600 dark:text-gray-300 uppercase">
                                         Mark Raw Material Ordered
@@ -239,14 +242,23 @@
                                             {{ $order->prod_order_no ?? 'N/A' }}
                                         </td>
                                         <td class="px-4 py-3 border-r border-gray-300">{{ $order->customer_name ?? '-' }}</td>
-                                        <td class="px-4 py-3 border-r border-gray-300">{{ $order->reference_no ?? '-' }}</td>
+                                        <td class="px-4 py-3 border-r border-gray-300">
+                                            {{ $order->reference_no ?? '-' }}
+
+                                            @if(!empty($order->item_description))
+                                                <br>
+                                                <span class="text-xs text-gray-500">
+                                                    {{ $order->item_description }}
+                                                </span>
+                                            @endif
+                                        </td>
+                                        <td class="px-4 py-3 border-r border-gray-300">{{ $order->requested_date ?? '-' }}</td>
                                         <td class="px-4 py-3 border-r border-gray-300">{{ $order->item ?? '-' }}</td>
                                         <td class="px-4 py-3 border-r border-gray-300">{{ $order->size ?? '-' }}</td>
                                         <td class="px-4 py-3 border-r border-gray-300">{{ $order->color ?? '-' }}</td>
                                         <td class="px-4 py-3 border-r border-gray-300">{{ $order->shade ?? '-' }}</td>
                                         <td class="px-4 py-3 border-r border-gray-300">{{ $order->tkt ?? '-' }}</td>
-                                        <td class="px-4 py-3 border-r border-gray-300">{{ $order->qty ?? 0 }}</td>
-                                        <td class="px-4 py-3 border-r border-gray-300">{{ $order->uom ?? '-' }}</td>
+                                        <td class="px-4 py-3 border-r border-gray-300 whitespace-nowrap min-w-[100px]">{{ $order->qty ?? 0 }} {{ $order->uom ?? '-' }}</td>
                                         <td class="px-4 py-3 border-r border-gray-300">{{ $order->supplier ?? '-' }}</td>
                                         <td class="px-4 py-3 border-r border-gray-300">{{ $order->pst_no ?? '-' }}</td>
                                         <td class="px-4 py-3 border-r border-gray-300">{{ $order->supplier_comment ?? '-' }}</td>
@@ -259,6 +271,20 @@
                                                     : 'bg-gray-100 text-gray-600') }}">
                                             {{ $order->status ?? 'Pending' }}
                                         </span>
+                                        </td>
+
+                                        <td class="px-4 py-3 border-r border-gray-300">
+
+                                            @if ($order->production_deadline)
+                                                {{ \Carbon\Carbon::parse($order->production_deadline)->format('Y-m-d') }}
+                                            @else
+                                                <button
+                                                    @click="openDeadlineModal('{{ $order->id }}')"
+                                                    class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700">
+                                                    Set Deadline
+                                                </button>
+                                            @endif
+
                                         </td>
 
                                         <!-- Mark Raw Material Ordered -->
@@ -577,6 +603,67 @@
                 </div>
             </div>
         </div>
+
+        <div x-data="deadlineModal()" x-cloak>
+
+            <!-- Overlay -->
+            <div
+                x-show="show"
+                class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center">
+
+                <!-- Modal -->
+                <div class="bg-white w-96 p-6 rounded shadow">
+                    <h2 class="text-lg font-semibold mb-4">Set Production Deadline</h2>
+
+                    <form method="POST" :action="`/orders/${orderId}/set-deadline`">
+                        @csrf
+                        @method('PATCH')
+
+                        <label class="block mb-2">Select Date</label>
+                        <input
+                            type="date"
+                            name="production_deadline"
+                            required
+                            class="border w-full px-3 py-2 rounded mb-4">
+
+                        <div class="flex justify-end gap-2">
+                            <button
+                                type="button"
+                                @click="close()"
+                                class="px-3 py-1 bg-gray-300 rounded hover:bg-gray-400">
+                                Cancel
+                            </button>
+
+                            <button
+                                type="submit"
+                                class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700">
+                                Save
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+
+        </div>
+
+        <script>
+            function deadlineModal() {
+                return {
+                    show: false,
+                    orderId: null,
+
+                    openDeadlineModal(id) {
+                        this.orderId = id;
+                        this.show = true;
+                    },
+
+                    close() {
+                        this.show = false;
+                    }
+                }
+            }
+        </script>
 
         <script>
             // Global variable to store the currently selected order

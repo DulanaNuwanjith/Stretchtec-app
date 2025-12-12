@@ -336,10 +336,6 @@
                                         Quantity
                                     </th>
                                     <th
-                                        class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-28 text-xs text-gray-600 dark:text-gray-300 uppercase">
-                                        UOM
-                                    </th>
-                                    <th
                                         class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase">
                                         Supplier
                                     </th>
@@ -355,10 +351,7 @@
                                         class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-40 text-xs text-gray-600 dark:text-gray-300 uppercase">
                                         Mark Raw Material Ordered
                                     </th>
-                                    <th
-                                        class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-40 text-xs text-gray-600 dark:text-gray-300 uppercase">
-                                        Mark Raw Material Received
-                                    </th>
+                                    
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-200 dark:divide-gray-600">
@@ -378,8 +371,7 @@
                                         <td class="px-4 py-3 border-r border-gray-300 text-sm">{{ $order->color ?? '-' }}</td>
                                         <td class="px-4 py-3 border-r border-gray-300 text-sm">{{ $order->shade ?? '-' }}</td>
                                         <td class="px-4 py-3 border-r border-gray-300 text-sm">{{ $order->tkt ?? '-' }}</td>
-                                        <td class="px-4 py-3 border-r border-gray-300 text-sm">{{ $order->qty ?? 0 }}</td>
-                                        <td class="px-4 py-3 border-r border-gray-300 text-sm">{{ $order->uom ?? '-' }}</td>
+                                        <td class="px-4 py-3 border-r border-gray-300 text-sm">{{ $order->qty ?? 0 }} {{ $order->uom ?? '-' }}</td>
                                         <td class="px-4 py-3 border-r border-gray-300 text-sm">{{ $order->supplier ?? '-' }}</td>
                                         <td class="px-4 py-3 border-r border-gray-300 text-sm">{{ $order->pst_no ?? '-' }}</td>
                                         <td class="px-4 py-3 border-r border-gray-300 text-sm">
@@ -410,34 +402,7 @@
                                                     </form>
                                                 @endif
                                             </div>
-                                        </td>
-
-                                        <!-- Mark Raw Material Received -->
-                                        <td class="py-3 whitespace-normal break-words border-r border-gray-300 text-center text-sm">
-                                            <div class="flex flex-col items-center justify-center">
-                                                @if ($order->isRawMaterialReceived)
-                                                    <!-- Banner showing received timestamp -->
-                                                    <span
-                                                        class="inline-block m-1 text-sm font-semibold text-gray-700 dark:text-white bg-green-100 dark:bg-gray-800 px-3 py-1 rounded">
-                                                        Received on <br>
-                                                        {{ Carbon::parse($order->raw_material_received_date)->format('Y-m-d') }}
-                                                        at
-                                                        {{ Carbon::parse($order->raw_material_received_date)->format('H:i') }}
-                                                    </span>
-                                                @else
-                                                    <!-- Mark Received button -->
-                                                    <form action="{{ route('orders.markReceived', $order->id) }}"
-                                                        method="POST" onsubmit="handleSubmit(this)">
-                                                        @csrf
-                                                        @method('PATCH')
-                                                        <button type="submit"
-                                                            class="px-3 py-1 mt-4 text-xs rounded-lg bg-green-100 text-green-700 hover:bg-green-200 flex items-center justify-center">
-                                                            Mark as Received
-                                                        </button>
-                                                    </form>
-                                                @endif
-                                            </div>
-                                        </td>
+                                        </td>    
                                     </tr>
                                 @empty
                                     <tr>
@@ -615,7 +580,7 @@
                         </tr>
                     </thead>
 
-                    @foreach ($groupedPurchaseOrders as $poNumber => $items)
+                    @forelse ($groupedPurchaseOrders as $poNumber => $items)
                         @php
                             $hasMultipleItems = $items->count() > 1;
                             $first = $items->first();
@@ -804,7 +769,14 @@
                             @endif
 
                         </tbody>
-                    @endforeach
+                        @empty
+                            <tr>
+                                <td colspan="14"
+                                    class="text-center px-6 py-6 text-gray-500 text-sm italic">
+                                    No records found.
+                                </td>
+                            </tr>
+                    @endforelse
                 </table>
             </div>
 

@@ -23,6 +23,7 @@ class ProductInquiry extends Model
         'merchandiser_name',
         'customer_coordinator',
         'po_number',
+        'production_deadline',
         'size',
         'item',
         'color',
@@ -30,6 +31,7 @@ class ProductInquiry extends Model
         'supplier',
         'pst_no',
         'supplier_comment',
+        'item_description',
         'shade',
         'tkt',
         'qty',
@@ -52,6 +54,7 @@ class ProductInquiry extends Model
         'sent_to_production_at',
         'status',
         'remarks',
+        'order_type',
     ];
 
     public function stores(): HasMany
