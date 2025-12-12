@@ -8,7 +8,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
-<div class="flex h-full w-full">
+<div class="flex h-full w-full" x-data="deadlineModal()">
     @extends('layouts.production-tabs')
 
     @section('content')
@@ -603,45 +603,36 @@
             </div>
         </div>
 
-        <div x-data="deadlineModal()" x-cloak>
+        {{-- Deadline Modal --}}
+        <div x-show="show" x-cloak
+             class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center">
 
-            <!-- Overlay -->
-            <div
-                x-show="show"
-                class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center">
+            <div class="bg-white w-96 p-6 rounded shadow">
+                <h2 class="text-lg font-semibold mb-4">Set Production Deadline</h2>
 
-                <!-- Modal -->
-                <div class="bg-white w-96 p-6 rounded shadow">
-                    <h2 class="text-lg font-semibold mb-4">Set Production Deadline</h2>
+                <form method="POST" :action="`/orders/${orderId}/set-deadline`">
+                    @csrf
+                    @method('PATCH')
 
-                    <form method="POST" :action="`/orders/${orderId}/set-deadline`">
-                        @csrf
-                        @method('PATCH')
+                    <label class="block mb-2">Select Date</label>
+                    <input type="date" name="production_deadline" required
+                           class="border w-full px-3 py-2 rounded mb-4">
 
-                        <label class="block mb-2">Select Date</label>
-                        <input
-                            type="date"
-                            name="production_deadline"
-                            required
-                            class="border w-full px-3 py-2 rounded mb-4">
+                    <input type="text" name="deadline_reason" required
+                           class="border w-full px-3 py-2 rounded mb-4" placeholder="Enter a Reason for the Deadline">
 
-                        <div class="flex justify-end gap-2">
-                            <button
-                                type="button"
-                                @click="close()"
+                    <div class="flex justify-end gap-2">
+                        <button type="button" @click="close()"
                                 class="px-3 py-1 bg-gray-300 rounded hover:bg-gray-400">
-                                Cancel
-                            </button>
+                            Cancel
+                        </button>
 
-                            <button
-                                type="submit"
+                        <button type="submit"
                                 class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700">
-                                Save
-                            </button>
-                        </div>
-                    </form>
-                </div>
-
+                            Save
+                        </button>
+                    </div>
+                </form>
             </div>
 
         </div>
