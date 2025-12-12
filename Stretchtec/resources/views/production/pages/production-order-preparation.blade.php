@@ -284,7 +284,6 @@
                                                     Set Deadline
                                                 </button>
                                             @endif
-
                                         </td>
 
                                         <!-- Mark Raw Material Ordered -->
