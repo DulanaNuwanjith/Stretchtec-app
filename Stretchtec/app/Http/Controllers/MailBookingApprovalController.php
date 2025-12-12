@@ -14,14 +14,99 @@ class MailBookingApprovalController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): Factory|View
+    public function index(Request $request): Factory|View
     {
-        // Fetch approvals with their related mail booking details
-        $mailBookingApprovals = MailBookingApproval::with('mailBooking')
-            ->orderBy('created_at', 'DESC')
-            ->paginate(10);
+        // Base query with relation
+        $query = MailBookingApproval::with('mailBooking');
 
-        return view('production.pages.mail-booking-approval', compact('mailBookingApprovals'));
+        // Apply filters against related MailBooking fields
+        if ($request->filled('mailBookingNo')) {
+            $query->whereHas('mailBooking', function ($q) use ($request) {
+                $q->where('mail_booking_number', $request->input('mailBookingNo'));
+            });
+        }
+
+        if ($request->filled('referenceNo')) {
+            $query->whereHas('mailBooking', function ($q) use ($request) {
+                $q->where('reference_no', $request->input('referenceNo'));
+            });
+        }
+
+        if ($request->filled('email')) {
+            $query->whereHas('mailBooking', function ($q) use ($request) {
+                $q->where('email', 'LIKE', '%' . $request->input('email') . '%');
+            });
+        }
+
+        if ($request->filled('customer')) {
+            $query->whereHas('mailBooking', function ($q) use ($request) {
+                $q->where('customer_name', $request->input('customer'));
+            });
+        }
+
+        if ($request->filled('merchandiser')) {
+            $query->whereHas('mailBooking', function ($q) use ($request) {
+                $q->where('merchandiser_name', $request->input('merchandiser'));
+            });
+        }
+
+        if ($request->filled('coordinator')) {
+            $coordinators = (array) $request->input('coordinator');
+            $query->whereHas('mailBooking', function ($q) use ($coordinators) {
+                $q->whereIn('customer_coordinator', $coordinators);
+            });
+        }
+
+        $mailBookingApprovals = $query
+            ->orderBy('created_at', 'DESC')
+            ->paginate(10)
+            ->appends($request->query());
+
+        // Dropdown source lists from MailBooking
+        $mailBookingNos = MailBooking::orderBy('mail_booking_number', 'DESC')
+            ->pluck('mail_booking_number')
+            ->unique()
+            ->values();
+
+        $referenceNumbers = MailBooking::orderBy('reference_no')
+            ->whereNotNull('reference_no')
+            ->pluck('reference_no')
+            ->unique()
+            ->values();
+
+        $emails = MailBooking::orderBy('email')
+            ->whereNotNull('email')
+            ->pluck('email')
+            ->unique()
+            ->values();
+
+        $coordinators = MailBooking::orderBy('customer_coordinator')
+            ->whereNotNull('customer_coordinator')
+            ->pluck('customer_coordinator')
+            ->unique()
+            ->values();
+
+        $customers = MailBooking::orderBy('customer_name')
+            ->whereNotNull('customer_name')
+            ->pluck('customer_name')
+            ->unique()
+            ->values();
+
+        $merchandisers = MailBooking::orderBy('merchandiser_name')
+            ->whereNotNull('merchandiser_name')
+            ->pluck('merchandiser_name')
+            ->unique()
+            ->values();
+
+        return view('production.pages.mail-booking-approval', compact(
+            'mailBookingApprovals',
+            'mailBookingNos',
+            'referenceNumbers',
+            'emails',
+            'coordinators',
+            'customers',
+            'merchandisers'
+        ));
     }
 
     /**
