@@ -23,6 +23,7 @@ class ProductInquiry extends Model
         'merchandiser_name',
         'customer_coordinator',
         'po_number',
+        'production_deadline',
         'size',
         'item',
         'color',

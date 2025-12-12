@@ -108,4 +108,8 @@ class ProductOrderPreperationController extends Controller
         return back()->with('success', 'Marked as received with timestamp.');
     }
 
+    public function setDeadline(){
+        //
+    }
+
 }
