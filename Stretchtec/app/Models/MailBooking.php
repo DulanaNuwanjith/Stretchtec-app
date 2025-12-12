@@ -22,6 +22,8 @@ class MailBooking extends Model
         'customer_name',
         'customer_coordinator',
         'merchandiser_name',
+        'production_deadline',
+        'deadline_reason',
         'email',
         'size',
         'item',
