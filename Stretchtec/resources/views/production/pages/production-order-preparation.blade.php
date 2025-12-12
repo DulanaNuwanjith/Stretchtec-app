@@ -275,8 +275,17 @@
 
                                         <td class="px-4 py-3 border-r border-gray-300">
 
-                                            @if ($order->production_deadline)
-                                                {{ \Carbon\Carbon::parse($order->production_deadline)->format('Y-m-d') }}
+                                            @if ($order->inquiry->production_deadline)
+                                                <div class="flex flex-col">
+                                                    <span class="font-medium">
+                                                        {{ Carbon::parse($order->inquiry->production_deadline)->format('Y-m-d') }}
+                                                    </span>
+                                                    @if ($order->inquiry->deadline_reason)
+                                                        <span class="text-xs text-gray-500 italic mt-1">
+                                                            {{ $order->inquiry->deadline_reason }}
+                                                        </span>
+                                                    @endif
+                                                </div>
                                             @else
                                                 <button
                                                     @click="openDeadlineModal('{{ $order->id }}')"
@@ -605,7 +614,7 @@
 
         {{-- Deadline Modal --}}
         <div x-show="show" x-cloak
-             class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center">
+             class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
 
             <div class="bg-white w-96 p-6 rounded shadow">
                 <h2 class="text-lg font-semibold mb-4">Set Production Deadline</h2>
