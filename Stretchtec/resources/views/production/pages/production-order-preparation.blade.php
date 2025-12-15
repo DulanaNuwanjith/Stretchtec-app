@@ -141,12 +141,203 @@
                         </div>
 
                         <div id="filterFormContainer" class="hidden mt-4">
-                            <!-- Filter Form -->
-                            <form id="filterForm1" method="GET" action="{{ route('sample-inquery-details.index') }}"
+                            <!-- Production Order Preparation Filter Form -->
+                            <form id="popFilterForm" method="GET" action="{{ route('production-order-preparation.index') }}"
                                   class="mb-6 sticky top-0 z-40 flex gap-6 items-center">
                                 <div class="flex items-center gap-4 flex-wrap">
 
+                                    <!-- Order No -->
+                                    <div class="relative inline-block text-left w-56">
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Order No</label>
+                                        <div>
+                                            <button type="button" id="orderNoDropdown"
+                                                    class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10 dark:bg-gray-700 dark:text-white"
+                                                    aria-haspopup="listbox" aria-expanded="false">
+                                                <span id="selectedOrderNo">{{ request('orderNo') ? request('orderNo') : 'Select Order No' }}</span>
+                                                <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                                                    <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z" clip-rule="evenodd" />
+                                                </svg>
+                                            </button>
+                                        </div>
+                                        <div id="orderNoDropdownMenu"
+                                             class="hidden absolute z-40 mt-2 w-full rounded-md bg-white shadow-lg ring-1 ring-black/5 dark:bg-gray-700 max-h-48 overflow-y-auto">
+                                            <div class="p-2 sticky top-0 bg-white dark:bg-gray-700 z-10">
+                                                <input type="text" id="orderNoSearchInput" placeholder="Search..."
+                                                       class="w-full px-2 py-1 text-sm border rounded-md dark:bg-gray-600 dark:text-white dark:placeholder-gray-300" />
+                                            </div>
+                                            <div class="py-1" role="listbox" tabindex="-1">
+                                                <button type="button" class="orderNo-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600">Select Order No</button>
+                                                @isset($orderNos)
+                                                    @foreach ($orderNos as $ono)
+                                                        <button type="button" class="orderNo-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600">{{ $ono }}</button>
+                                                    @endforeach
+                                                @endisset
+                                            </div>
+                                        </div>
+                                        <input type="hidden" name="orderNo" id="orderNoInput" value="{{ request('orderNo') }}">
+                                    </div>
 
+                                    <!-- Customer -->
+                                    <div class="relative inline-block text-left w-56">
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Customer</label>
+                                        <div>
+                                            <button type="button" id="customerDropdown"
+                                                    class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10 dark:bg-gray-700 dark:text-white"
+                                                    aria-haspopup="listbox" aria-expanded="false">
+                                                <span id="selectedCustomer">{{ request('customer') ? request('customer') : 'Select Customer' }}</span>
+                                                <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                                                    <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z" clip-rule="evenodd" />
+                                                </svg>
+                                            </button>
+                                        </div>
+                                        <div id="customerDropdownMenu"
+                                             class="hidden absolute z-40 mt-2 w-full rounded-md bg-white shadow-lg ring-1 ring-black/5 dark:bg-gray-700 max-h-48 overflow-y-auto">
+                                            <div class="p-2 sticky top-0 bg-white dark:bg-gray-700 z-10">
+                                                <input type="text" id="customerSearchInput" placeholder="Search customers..."
+                                                       class="w-full px-2 py-1 text-sm border rounded-md dark:bg-gray-600 dark:text-white dark:placeholder-gray-300" />
+                                            </div>
+                                            <div class="py-1" role="listbox" tabindex="-1">
+                                                <button type="button" class="customer-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600">Select Customer</button>
+                                                @isset($customers)
+                                                    @foreach ($customers as $cust)
+                                                        <button type="button" class="customer-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600">{{ $cust }}</button>
+                                                    @endforeach
+                                                @endisset
+                                            </div>
+                                        </div>
+                                        <input type="hidden" name="customer" id="customerInput" value="{{ request('customer') }}">
+                                    </div>
+
+                                    <!-- Reference No -->
+                                    <div class="relative inline-block text-left w-56">
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Reference No</label>
+                                        <div>
+                                            <button type="button" id="referenceNoDropdown"
+                                                    class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10 dark:bg-gray-700 dark:text-white"
+                                                    aria-haspopup="listbox" aria-expanded="false">
+                                                <span id="selectedReferenceNo">{{ request('referenceNo') ? request('referenceNo') : 'Select Reference No' }}</span>
+                                                <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                                                    <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z" clip-rule="evenodd" />
+                                                </svg>
+                                            </button>
+                                        </div>
+                                        <div id="referenceNoDropdownMenu"
+                                             class="hidden absolute z-40 mt-2 w-full rounded-md bg-white shadow-lg ring-1 ring-black/5 dark:bg-gray-700 max-h-48 overflow-y-auto">
+                                            <div class="p-2 sticky top-0 bg-white dark:bg-gray-700 z-10">
+                                                <input type="text" id="referenceNoSearchInput" placeholder="Search reference numbers..."
+                                                       class="w-full px-2 py-1 text-sm border rounded-md dark:bg-gray-600 dark:text-white dark:placeholder-gray-300" />
+                                            </div>
+                                            <div class="py-1" role="listbox" tabindex="-1">
+                                                <button type="button" class="referenceNo-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600">Select Reference No</button>
+                                                @isset($referenceNumbers)
+                                                    @foreach ($referenceNumbers as $ref)
+                                                        <button type="button" class="referenceNo-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600">{{ $ref }}</button>
+                                                    @endforeach
+                                                @endisset
+                                            </div>
+                                        </div>
+                                        <input type="hidden" name="referenceNo" id="referenceNoInput" value="{{ request('referenceNo') }}">
+                                    </div>
+
+                                    <!-- Shade -->
+                                    <div class="relative inline-block text-left w-48">
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Shade</label>
+                                        <div>
+                                            <button type="button" id="shadeDropdown"
+                                                    class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10 dark:bg-gray-700 dark:text-white"
+                                                    aria-haspopup="listbox" aria-expanded="false">
+                                                <span id="selectedShade">{{ request('shade') ? request('shade') : 'Select Shade' }}</span>
+                                                <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                                                    <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z" clip-rule="evenodd" />
+                                                </svg>
+                                            </button>
+                                        </div>
+                                        <div id="shadeDropdownMenu"
+                                             class="hidden absolute z-40 mt-2 w-full rounded-md bg-white shadow-lg ring-1 ring-black/5 dark:bg-gray-700 max-h-48 overflow-y-auto">
+                                            <div class="p-2 sticky top-0 bg-white dark:bg-gray-700 z-10">
+                                                <input type="text" id="shadeSearchInput" placeholder="Search shades..."
+                                                       class="w-full px-2 py-1 text-sm border rounded-md dark:bg-gray-600 dark:text-white dark:placeholder-gray-300" />
+                                            </div>
+                                            <div class="py-1" role="listbox" tabindex="-1">
+                                                <button type="button" class="shade-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600">Select Shade</button>
+                                                @isset($shades)
+                                                    @foreach ($shades as $shade)
+                                                        <button type="button" class="shade-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600">{{ $shade }}</button>
+                                                    @endforeach
+                                                @endisset
+                                            </div>
+                                        </div>
+                                        <input type="hidden" name="shade" id="shadeInput" value="{{ request('shade') }}">
+                                    </div>
+
+                                    <!-- TKT -->
+                                    <div class="relative inline-block text-left w-48">
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">TKT</label>
+                                        <div>
+                                            <button type="button" id="tktDropdown"
+                                                    class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10 dark:bg-gray-700 dark:text-white"
+                                                    aria-haspopup="listbox" aria-expanded="false">
+                                                <span id="selectedTkt">{{ request('tkt') ? request('tkt') : 'Select TKT' }}</span>
+                                                <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                                                    <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z" clip-rule="evenodd" />
+                                                </svg>
+                                            </button>
+                                        </div>
+                                        <div id="tktDropdownMenu"
+                                             class="hidden absolute z-40 mt-2 w-full rounded-md bg-white shadow-lg ring-1 ring-black/5 dark:bg-gray-700 max-h-48 overflow-y-auto">
+                                            <div class="p-2 sticky top-0 bg-white dark:bg-gray-700 z-10">
+                                                <input type="text" id="tktSearchInput" placeholder="Search tkt..."
+                                                       class="w-full px-2 py-1 text-sm border rounded-md dark:bg-gray-600 dark:text-white dark:placeholder-gray-300" />
+                                            </div>
+                                            <div class="py-1" role="listbox" tabindex="-1">
+                                                <button type="button" class="tkt-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600">Select TKT</button>
+                                                @isset($tkts)
+                                                    @foreach ($tkts as $t)
+                                                        <button type="button" class="tkt-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600">{{ $t }}</button>
+                                                    @endforeach
+                                                @endisset
+                                            </div>
+                                        </div>
+                                        <input type="hidden" name="tkt" id="tktInput" value="{{ request('tkt') }}">
+                                    </div>
+
+                                    <!-- Supplier -->
+                                    <div class="relative inline-block text-left w-56">
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Supplier</label>
+                                        <div>
+                                            <button type="button" id="supplierDropdown"
+                                                    class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 h-10 dark:bg-gray-700 dark:text-white"
+                                                    aria-haspopup="listbox" aria-expanded="false">
+                                                <span id="selectedSupplier">{{ request('supplier') ? request('supplier') : 'Select Supplier' }}</span>
+                                                <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                                                    <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.25 8.29a.75.75 0 0 1-.02-1.08z" clip-rule="evenodd" />
+                                                </svg>
+                                            </button>
+                                        </div>
+                                        <div id="supplierDropdownMenu"
+                                             class="hidden absolute z-40 mt-2 w-full rounded-md bg-white shadow-lg ring-1 ring-black/5 dark:bg-gray-700 max-h-48 overflow-y-auto">
+                                            <div class="p-2 sticky top-0 bg-white dark:bg-gray-700 z-10">
+                                                <input type="text" id="supplierSearchInput" placeholder="Search suppliers..."
+                                                       class="w-full px-2 py-1 text-sm border rounded-md dark:bg-gray-600 dark:text-white dark:placeholder-gray-300" />
+                                            </div>
+                                            <div class="py-1" role="listbox" tabindex="-1">
+                                                <button type="button" class="supplier-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600">Select Supplier</button>
+                                                @isset($suppliers)
+                                                    @foreach ($suppliers as $sup)
+                                                        <button type="button" class="supplier-option w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600">{{ $sup }}</button>
+                                                    @endforeach
+                                                @endisset
+                                            </div>
+                                        </div>
+                                        <input type="hidden" name="supplier" id="supplierInput" value="{{ request('supplier') }}">
+                                    </div>
+
+                                    <div class="flex items-end space-x-2 mt-2">
+                                        <button type="submit"
+                                                class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Apply Filters</button>
+                                        <button type="button" id="clearFiltersBtn"
+                                                class="mt-4 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 px-4 py-2 rounded hover:bg-gray-300">Clear Filters</button>
+                                    </div>
                                 </div>
                             </form>
                         </div>
@@ -192,19 +383,19 @@
                                     <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase">
                                         Item
                                     </th>
-                                    <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-24 text-xs text-gray-600 dark:text-gray-300 uppercase">
+                                    <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase">
                                         Size
                                     </th>
-                                    <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-24 text-xs text-gray-600 dark:text-gray-300 uppercase">
+                                    <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase">
                                         Color
                                     </th>
-                                    <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-24 text-xs text-gray-600 dark:text-gray-300 uppercase">
+                                    <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase">
                                         Shade
                                     </th>
-                                    <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-24 text-xs text-gray-600 dark:text-gray-300 uppercase">
+                                    <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase">
                                         TKT
                                     </th>
-                                    <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-24 text-xs text-gray-600 dark:text-gray-300 uppercase">
+                                    <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase">
                                         Quantity
                                     </th>
                                     <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase">
@@ -216,13 +407,13 @@
                                     <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-36 text-xs text-gray-600 dark:text-gray-300 uppercase">
                                         Supplier Comment
                                     </th>
-                                    <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-28 text-xs text-gray-600 dark:text-gray-300 uppercase">
+                                    <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-32 text-xs text-gray-600 dark:text-gray-300 uppercase">
                                         Status
                                     </th>
                                     <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-48 text-xs text-gray-600 dark:text-gray-300 uppercase">
                                         Production Deadline
                                     </th>
-                                    <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-40 text-xs text-gray-600 dark:text-gray-300 uppercase">
+                                    <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-44 text-xs text-gray-600 dark:text-gray-300 uppercase">
                                         Mark Raw Material Ordered
                                     </th>
                                     <th class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-40 text-xs text-gray-600 dark:text-gray-300 uppercase">
@@ -994,6 +1185,133 @@
                 const form = document.getElementById('reportFormContainer');
                 form.classList.toggle('hidden');
             }
+        </script>
+
+        <script>
+            // Generic dropdown initializer to avoid repetition
+            function setupDropdown(cfg) {
+                const btn = document.getElementById(cfg.buttonId);
+                const menu = document.getElementById(cfg.menuId);
+                const search = document.getElementById(cfg.searchInputId);
+                const selectedSpan = document.getElementById(cfg.selectedSpanId);
+                const hiddenInput = document.getElementById(cfg.hiddenInputId);
+
+                const toggleMenu = (show) => {
+                    if (show === undefined) {
+                        menu.classList.toggle('hidden');
+                    } else {
+                        menu.classList.toggle('hidden', !show);
+                    }
+                };
+
+                btn?.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    toggleMenu();
+                });
+
+                // Option click handler
+                menu?.addEventListener('click', (e) => {
+                    const opt = e.target.closest('.' + cfg.optionClass);
+                    if (!opt) return;
+                    e.preventDefault();
+                    const text = opt.textContent.trim();
+                    const isReset = text.startsWith('Select');
+                    selectedSpan.textContent = isReset ? cfg.placeholderText : text;
+                    hiddenInput.value = isReset ? '' : text;
+                    toggleMenu(false);
+                });
+
+                // Search filter
+                search?.addEventListener('input', () => {
+                    const q = search.value.toLowerCase();
+                    menu.querySelectorAll('.' + cfg.optionClass).forEach((el) => {
+                        const t = el.textContent.toLowerCase();
+                        // Always show the reset option
+                        if (t.startsWith('select')) {
+                            el.classList.remove('hidden');
+                            return;
+                        }
+                        el.classList.toggle('hidden', !t.includes(q));
+                    });
+                });
+
+                // Close on outside click
+                document.addEventListener('click', (e) => {
+                    if (!menu || menu.classList.contains('hidden')) return;
+                    if (!menu.contains(e.target) && !btn.contains(e.target)) {
+                        toggleMenu(false);
+                    }
+                });
+            }
+
+            // Initialize all dropdowns after DOM is ready
+            document.addEventListener('DOMContentLoaded', () => {
+                setupDropdown({
+                    buttonId: 'orderNoDropdown',
+                    menuId: 'orderNoDropdownMenu',
+                    searchInputId: 'orderNoSearchInput',
+                    optionClass: 'orderNo-option',
+                    selectedSpanId: 'selectedOrderNo',
+                    hiddenInputId: 'orderNoInput',
+                    placeholderText: 'Select Order No'
+                });
+
+                setupDropdown({
+                    buttonId: 'customerDropdown',
+                    menuId: 'customerDropdownMenu',
+                    searchInputId: 'customerSearchInput',
+                    optionClass: 'customer-option',
+                    selectedSpanId: 'selectedCustomer',
+                    hiddenInputId: 'customerInput',
+                    placeholderText: 'Select Customer'
+                });
+
+                setupDropdown({
+                    buttonId: 'referenceNoDropdown',
+                    menuId: 'referenceNoDropdownMenu',
+                    searchInputId: 'referenceNoSearchInput',
+                    optionClass: 'referenceNo-option',
+                    selectedSpanId: 'selectedReferenceNo',
+                    hiddenInputId: 'referenceNoInput',
+                    placeholderText: 'Select Reference No'
+                });
+
+                setupDropdown({
+                    buttonId: 'shadeDropdown',
+                    menuId: 'shadeDropdownMenu',
+                    searchInputId: 'shadeSearchInput',
+                    optionClass: 'shade-option',
+                    selectedSpanId: 'selectedShade',
+                    hiddenInputId: 'shadeInput',
+                    placeholderText: 'Select Shade'
+                });
+
+                setupDropdown({
+                    buttonId: 'tktDropdown',
+                    menuId: 'tktDropdownMenu',
+                    searchInputId: 'tktSearchInput',
+                    optionClass: 'tkt-option',
+                    selectedSpanId: 'selectedTkt',
+                    hiddenInputId: 'tktInput',
+                    placeholderText: 'Select TKT'
+                });
+
+                setupDropdown({
+                    buttonId: 'supplierDropdown',
+                    menuId: 'supplierDropdownMenu',
+                    searchInputId: 'supplierSearchInput',
+                    optionClass: 'supplier-option',
+                    selectedSpanId: 'selectedSupplier',
+                    hiddenInputId: 'supplierInput',
+                    placeholderText: 'Select Supplier'
+                });
+
+                // Clear filters button
+                const clearBtn = document.getElementById('clearFiltersBtn');
+                clearBtn?.addEventListener('click', () => {
+                    window.location.href = "{{ route('production-order-preparation.index') }}";
+                });
+            });
         </script>
 
         <script>
