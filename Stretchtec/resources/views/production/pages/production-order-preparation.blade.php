@@ -415,23 +415,35 @@
                                     </h2>
 
                                     <!-- Production Type Section -->
+                                    @php
+                                        $assignModalOrder = $order ?? null;
+                                    @endphp
+
                                     <div class="mt-2">
 
-                                        @if (is_null($order->order_assigned_date))
+                                        @if ($assignModalOrder && is_null($assignModalOrder->order_assigned_date))
                                             <!-- Show dropdown if order is NOT assigned -->
-                                            <select id="productionType" name="production_type"
+                                            <select id="productionType"
+                                                    name="production_type"
                                                     class="border rounded px-3 py-2 w-48">
                                                 <option value="Knitted">Knitted</option>
                                                 <option value="Loom">Loom</option>
                                                 <option value="Braiding">Braiding</option>
                                             </select>
 
-                                        @else
+                                        @elseif ($assignModalOrder)
                                             <!-- Show assigned-to name if order is ALREADY assigned -->
                                             <input type="text"
                                                    class="border rounded px-3 py-2 w-48 bg-gray-100 cursor-not-allowed"
-                                                   value="{{ $order->orderAssignedTo ?? 'Unknown' }}"
+                                                   value="{{ $assignModalOrder->orderAssignedTo ?? 'Unknown' }}"
                                                    readonly>
+
+                                        @else
+                                            <!-- No order selected yet -->
+                                            <select class="border rounded px-3 py-2 w-48 bg-gray-100 cursor-not-allowed"
+                                                    disabled>
+                                                <option>Select an order first</option>
+                                            </select>
                                         @endif
 
                                     </div>
