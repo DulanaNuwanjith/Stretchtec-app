@@ -41,9 +41,9 @@ class PurchaseDepartmentController extends Controller
 
         // --- 3. Paginate based on filtered PO Numbers ---
         $uniquePoNumbers = $query
-            ->select('po_number')
+            ->select('po_number', DB::raw('MAX(po_date) as latest_po_date'))
             ->groupBy('po_number')
-            ->orderBy('po_date', 'desc')
+            ->orderBy('latest_po_date', 'desc')
             ->paginate(10);
 
         // --- 4. Fetch items ONLY for visible PO numbers ---
