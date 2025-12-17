@@ -17,9 +17,31 @@ class ProductOrderPreperationController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): Factory|View
+    public function index(Request $request): Factory|View
     {
-        $orderPreparations = ProductOrderPreperation::latest()->paginate(10);
+        $query = ProductOrderPreperation::query()->latest();
+
+        // Apply filters
+        if ($request->filled('orderNo')) {
+            $query->where('prod_order_no', $request->input('orderNo'));
+        }
+        if ($request->filled('customer')) {
+            $query->where('customer_name', $request->input('customer'));
+        }
+        if ($request->filled('referenceNo')) {
+            $query->where('reference_no', $request->input('referenceNo'));
+        }
+        if ($request->filled('shade')) {
+            $query->where('shade', $request->input('shade'));
+        }
+        if ($request->filled('tkt')) {
+            $query->where('tkt', $request->input('tkt'));
+        }
+        if ($request->filled('supplier')) {
+            $query->where('supplier', $request->input('supplier'));
+        }
+
+        $orderPreparations = $query->paginate(10)->appends($request->query());
 
         $localRawMaterials = RawMaterialStore::orderBy('available_quantity', 'desc')->get();
         $exportRawMaterials = ExportRawMaterial::orderBy('net_weight', 'desc')->get();
@@ -28,9 +50,58 @@ class ProductOrderPreperationController extends Controller
         $assignedLocalRawMaterials = AssignedRawMaterial::with('rawMaterial')->latest()->get();
         $assignedExportRawMaterials = AssignedRawMaterialExport::with('exportRawMaterial')->latest()->get();
 
+        // Dropdown option lists
+        $orderNos = ProductOrderPreperation::select('prod_order_no')
+            ->whereNotNull('prod_order_no')
+            ->distinct()
+            ->orderBy('prod_order_no')
+            ->pluck('prod_order_no');
+
+        $customers = ProductOrderPreperation::select('customer_name')
+            ->whereNotNull('customer_name')
+            ->distinct()
+            ->orderBy('customer_name')
+            ->pluck('customer_name');
+
+        $referenceNumbers = ProductOrderPreperation::select('reference_no')
+            ->whereNotNull('reference_no')
+            ->distinct()
+            ->orderBy('reference_no')
+            ->pluck('reference_no');
+
+        $shades = ProductOrderPreperation::select('shade')
+            ->whereNotNull('shade')
+            ->distinct()
+            ->orderBy('shade')
+            ->pluck('shade');
+
+        $tkts = ProductOrderPreperation::select('tkt')
+            ->whereNotNull('tkt')
+            ->distinct()
+            ->orderBy('tkt')
+            ->pluck('tkt');
+
+        $suppliers = ProductOrderPreperation::select('supplier')
+            ->whereNotNull('supplier')
+            ->distinct()
+            ->orderBy('supplier')
+            ->pluck('supplier');
+
         return view(
             'production.pages.production-order-preparation',
-            compact('orderPreparations', 'localRawMaterials', 'exportRawMaterials', 'assignedLocalRawMaterials', 'assignedExportRawMaterials')
+            compact(
+                'orderPreparations',
+                'localRawMaterials',
+                'exportRawMaterials',
+                'assignedLocalRawMaterials',
+                'assignedExportRawMaterials',
+                'orderNos',
+                'customers',
+                'referenceNumbers',
+                'shades',
+                'tkts',
+                'suppliers'
+            )
         );
     }
 
