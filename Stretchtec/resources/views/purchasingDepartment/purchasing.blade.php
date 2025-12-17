@@ -223,7 +223,7 @@
             </div>
 
 
-            
+
 
             <div class="flex justify-between items-center mb-6">
                 <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">
@@ -263,7 +263,7 @@
                         <form id="orderSearchForm" method="GET" action="{{ route('purchasing.index') }}" class="flex items-center space-x-2 max-w-2xl">
                             <!-- Preserve order_page parameter -->
                             <input type="hidden" name="order_page" value="{{ request('order_page', 1) }}">
-                            
+
                             <input type="text" name="order_search" id="orderSearchInput" value="{{ request('order_search') }}"
                                 placeholder="Search by Order No, Customer, Reference, Item, Shade, TKT, Supplier, PST No"
                                 autocomplete="off"
@@ -351,7 +351,7 @@
                                         class="font-bold sticky top-0 bg-gray-200 dark:bg-gray-700 px-4 py-3 w-40 text-xs text-gray-600 dark:text-gray-300 uppercase">
                                         Mark Raw Material Ordered
                                     </th>
-                                    
+
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-200 dark:divide-gray-600">
@@ -378,8 +378,9 @@
                                             {{ $order->supplier_comment ?? '-' }}</td>
 
                                         <!-- Mark Raw Material Ordered -->
-                                        <td class="py-3 whitespace-normal break-words border-r border-gray-300 text-center text-sm">
+                                        <td class="py-3 whitespace-normal break-words border-r border-gray-300 text-center">
                                             <div class="flex flex-col items-center justify-center">
+
                                                 @if ($order->isRawMaterialOrdered)
                                                     <!-- Banner showing ordered timestamp -->
                                                     <span
@@ -389,20 +390,36 @@
                                                         at
                                                         {{ Carbon::parse($order->raw_material_ordered_date)->format('H:i') }}
                                                     </span>
+
                                                 @else
-                                                    <!-- Mark Ordered button -->
+                                                    @php
+                                                        $deadlineSet = $order->source_order?->production_deadline !== null;
+                                                    @endphp
+
                                                     <form action="{{ route('orders.markOrdered', $order->id) }}"
-                                                        method="POST" onsubmit="handleSubmit(this)">
+                                                          method="POST" onsubmit="handleSubmit(this)">
                                                         @csrf
                                                         @method('PATCH')
+
                                                         <button type="submit"
-                                                            class="px-3 py-1 mt-4 text-xs rounded-lg bg-blue-100 text-blue-700 hover:bg-blue-200 flex items-center justify-center">
+                                                                class="px-3 py-1 mt-4 text-xs rounded-lg flex items-center justify-center
+                                                            {{ $deadlineSet ? 'bg-blue-100 text-blue-700 hover:bg-blue-200' : 'bg-gray-200 text-gray-400 cursor-not-allowed' }}"
+                                                            {{ $deadlineSet ? '' : 'disabled' }}>
                                                             Mark as Ordered
                                                         </button>
+
                                                     </form>
+
+                                                    @unless($deadlineSet)
+                                                        <span class="text-[11px] text-red-500 mt-1">
+                                                            Set production deadline first
+                                                        </span>
+                                                    @endunless
+
                                                 @endif
+
                                             </div>
-                                        </td>    
+                                        </td>
                                     </tr>
                                 @empty
                                     <tr>
@@ -420,7 +437,7 @@
                     </div>
                 </div>
             </div>
-            
+
 
             <!-- Add Purchase Modal -->
             <div id="addPurchaseModal"
@@ -983,7 +1000,7 @@
 
                 // Setup AJAX pagination for modal
                 setupModalPagination();
-                
+
                 // Setup AJAX search for modal
                 setupModalSearch();
             });
@@ -994,10 +1011,10 @@
                 if (searchForm) {
                     searchForm.addEventListener('submit', function(e) {
                         e.preventDefault();
-                        
+
                         const formData = new FormData(searchForm);
                         const searchValue = formData.get('order_search');
-                        
+
                         loadModalPage(1, searchValue);
                     });
                 }
@@ -1015,14 +1032,14 @@
                 document.addEventListener('click', function(e) {
                     // Check if clicked element is a pagination link inside the order modal
                     const paginationLink = e.target.closest('#orderPaginationContainer a');
-                    
+
                     if (paginationLink) {
                         e.preventDefault();
-                        
+
                         const url = new URL(paginationLink.href);
                         const orderPage = url.searchParams.get('order_page');
                         const orderSearch = url.searchParams.get('order_search') || '';
-                        
+
                         if (orderPage) {
                             loadModalPage(orderPage, orderSearch);
                         }
@@ -1036,7 +1053,7 @@
                 const tableContainer = document.getElementById('orderTableContainer');
                 const paginationContainer = document.getElementById('orderPaginationContainer');
                 const loadingSpinner = document.getElementById('orderModalLoadingSpinner');
-                
+
                 tableContainer.style.opacity = '0.4';
                 paginationContainer.style.opacity = '0.4';
                 loadingSpinner.classList.remove('hidden');
@@ -1060,18 +1077,18 @@
                     // Parse the HTML response
                     const parser = new DOMParser();
                     const doc = parser.parseFromString(html, 'text/html');
-                    
+
                     // Extract table and pagination from response
                     const newTable = doc.querySelector('#orderTableContainer table');
                     const newPagination = doc.querySelector('#orderPaginationContainer');
-                    
+
                     if (newTable && newPagination) {
                         // Update table content
                         tableContainer.querySelector('table').innerHTML = newTable.innerHTML;
-                        
+
                         // Update pagination
                         paginationContainer.innerHTML = newPagination.innerHTML;
-                        
+
                         // Update search input and clear button visibility
                         const searchInput = document.getElementById('orderSearchInput');
                         const clearBtn = document.getElementById('orderClearBtn');
@@ -1085,7 +1102,7 @@
                                 clearBtn.classList.add('hidden');
                             }
                         }
-                        
+
                         // Update URL without reload
                         const newUrl = new URL(window.location);
                         newUrl.searchParams.set('order_page', page);
@@ -1096,7 +1113,7 @@
                         }
                         window.history.pushState({}, '', newUrl);
                     }
-                    
+
                     // Hide loading overlay with smooth animation after rendering
                     window.requestAnimationFrame(() => {
                         loadingSpinner.classList.add('hidden');
@@ -1196,6 +1213,6 @@
             });
         });
     </script>
-    
+
 
     @endsection
