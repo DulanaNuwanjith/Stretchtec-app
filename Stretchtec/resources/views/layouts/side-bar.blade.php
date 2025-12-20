@@ -207,7 +207,7 @@
                         <a href="{{ route('storeManagement.index') }}"
                             class="flex items-center px-4 py-2 rounded hover:bg-gray-200
                       {{ request()->routeIs('storeManagement.*') ? 'bg-gray-200' : '' }}">
-                            <img src="{{ asset('icons/inventory.png') }}" alt="" class="w-6 h-6 mr-5" />
+                            <img src="{{ asset('images/inventory.png') }}" alt="" class="w-6 h-6 mr-5" />
                             <span x-show="initialized && !collapsed">Store Management</span>
                         </a>
                     </li>
@@ -219,7 +219,7 @@
                 <li>
                     <a href="{{ route('profile.show') }}"
                         class="flex items-center px-4 py-2 rounded hover:bg-gray-200">
-                        <img src="{{ asset('icons/employee.png') }}" alt="Profile Icon" class="w-6 h-6 mr-5" />
+                        <img src="{{ asset('images/employee.png') }}" alt="Profile Icon" class="w-6 h-6 mr-5" />
                         <span x-show="initialized && !collapsed">Profile</span>
                     </a>
                 </li>
@@ -229,7 +229,7 @@
                         @csrf
                         <button type="submit"
                             class="w-full flex items-center px-4 py-2 rounded hover:bg-gray-200 text-left text-blue-900">
-                            <img src="{{ asset('icons/close.png') }}" alt="Logout Icon" class="w-6 h-6 mr-5" />
+                            <img src="{{ asset('images/close.png') }}" alt="Logout Icon" class="w-6 h-6 mr-5" />
                             <span x-show="initialized && !collapsed">Logout</span>
                         </button>
                     </form>
