@@ -124,7 +124,7 @@
             <div class="flex justify-start">
                 <button onclick="toggleFilterForm()"
                     class="bg-white border border-blue-500 text-blue-500 hover:text-blue-600 font-semibold py-1 px-3 rounded shadow flex items-center gap-2 mb-6">
-                    <img src="{{ asset('icons/filter.png') }}" class="w-6 h-6" alt="Filter Icon">
+                    <img src="{{ asset('images/filter.png') }}" class="w-6 h-6" alt="Filter Icon">
                     Filters
                 </button>
             </div>
@@ -294,7 +294,7 @@
                         <form id="orderSearchForm" method="GET" action="{{ route('localinvoiceManage.index') }}" class="flex items-center space-x-2 max-w-2xl">
                             <!-- Preserve order_page parameter -->
                             <input type="hidden" name="order_page" value="{{ request('order_page', 1) }}">
-                            
+
                             <input type="text" name="order_search" id="orderSearchInput" value="{{ request('order_search') }}"
                                 placeholder="Search by Order No, Customer, Reference, Item, Shade, TKT, Supplier, PST No"
                                 autocomplete="off"
@@ -1006,7 +1006,7 @@
 
                 // Setup AJAX pagination for modal
                 setupModalPagination();
-                
+
                 // Setup AJAX search for modal
                 setupModalSearch();
             });
@@ -1017,10 +1017,10 @@
                 if (searchForm) {
                     searchForm.addEventListener('submit', function(e) {
                         e.preventDefault();
-                        
+
                         const formData = new FormData(searchForm);
                         const searchValue = formData.get('order_search');
-                        
+
                         loadModalPage(1, searchValue);
                     });
                 }
@@ -1038,14 +1038,14 @@
                 document.addEventListener('click', function(e) {
                     // Check if clicked element is a pagination link inside the order modal
                     const paginationLink = e.target.closest('#orderPaginationContainer a');
-                    
+
                     if (paginationLink) {
                         e.preventDefault();
-                        
+
                         const url = new URL(paginationLink.href);
                         const orderPage = url.searchParams.get('order_page');
                         const orderSearch = url.searchParams.get('order_search') || '';
-                        
+
                         if (orderPage) {
                             loadModalPage(orderPage, orderSearch);
                         }
@@ -1059,7 +1059,7 @@
                 const tableContainer = document.getElementById('orderTableContainer');
                 const paginationContainer = document.getElementById('orderPaginationContainer');
                 const loadingSpinner = document.getElementById('orderModalLoadingSpinner');
-                
+
                 tableContainer.style.opacity = '0.4';
                 paginationContainer.style.opacity = '0.4';
                 loadingSpinner.classList.remove('hidden');
@@ -1083,18 +1083,18 @@
                     // Parse the HTML response
                     const parser = new DOMParser();
                     const doc = parser.parseFromString(html, 'text/html');
-                    
+
                     // Extract table and pagination from response
                     const newTable = doc.querySelector('#orderTableContainer table');
                     const newPagination = doc.querySelector('#orderPaginationContainer');
-                    
+
                     if (newTable && newPagination) {
                         // Update table content
                         tableContainer.querySelector('table').innerHTML = newTable.innerHTML;
-                        
+
                         // Update pagination
                         paginationContainer.innerHTML = newPagination.innerHTML;
-                        
+
                         // Update search input and clear button visibility
                         const searchInput = document.getElementById('orderSearchInput');
                         const clearBtn = document.getElementById('orderClearBtn');
@@ -1108,7 +1108,7 @@
                                 clearBtn.classList.add('hidden');
                             }
                         }
-                        
+
                         // Update URL without reload
                         const newUrl = new URL(window.location);
                         newUrl.searchParams.set('order_page', page);
@@ -1119,7 +1119,7 @@
                         }
                         window.history.pushState({}, '', newUrl);
                     }
-                    
+
                     // Hide loading overlay with smooth animation after rendering
                     window.requestAnimationFrame(() => {
                         loadingSpinner.classList.add('hidden');

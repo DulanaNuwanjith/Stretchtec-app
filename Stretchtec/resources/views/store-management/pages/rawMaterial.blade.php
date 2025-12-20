@@ -97,7 +97,7 @@
                             <div class="flex justify-start">
                                 <button onclick="toggleFilterForm()"
                                     class="bg-white border border-blue-500 text-blue-500 hover:text-blue-600 hover:border-blue-600 font-semibold py-1 px-3 rounded shadow flex items-center gap-2 mb-6">
-                                    <img src="{{ asset('icons/filter.png') }}" class="w-6 h-6" alt="Filter Icon">
+                                    <img src="{{ asset('images/filter.png') }}" class="w-6 h-6" alt="Filter Icon">
                                     Filters
                                 </button>
                             </div>
@@ -116,8 +116,8 @@
                                                 value="{{ request('color') }}">
 
                                             <button id="colorDropdownBtn" type="button"
-                                                class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 
-                               text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 
+                                                class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2
+                               text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300
                                hover:bg-gray-50 h-10"
                                                 onclick="toggleColorDropdown(event)">
 
@@ -130,7 +130,7 @@
                                             </button>
 
                                             <div id="colorDropdownMenu"
-                                                class="absolute z-40 mt-1 w-full bg-white border rounded-lg shadow-lg hidden 
+                                                class="absolute z-40 mt-1 w-full bg-white border rounded-lg shadow-lg hidden
                             max-h-48 overflow-y-auto p-2">
 
                                                 <input type="text" id="colorSearchInput" onkeyup="filterColorOptions()"
@@ -154,8 +154,8 @@
                                                 value="{{ request('shade') }}">
 
                                             <button id="shadeDropdownBtnRM" type="button"
-                                                class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 
-                               text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 
+                                                class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2
+                               text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300
                                hover:bg-gray-50 h-10"
                                                 onclick="toggleShadeDropdownRM(event)">
 
@@ -168,7 +168,7 @@
                                             </button>
 
                                             <div id="shadeDropdownMenuRM"
-                                                class="absolute z-40 mt-1 w-full bg-white border rounded-lg shadow-lg hidden 
+                                                class="absolute z-40 mt-1 w-full bg-white border rounded-lg shadow-lg hidden
                             max-h-48 overflow-y-auto p-2">
 
                                                 <input type="text" id="shadeSearchInputRM"
@@ -192,8 +192,8 @@
                                                 value="{{ request('pst_no') }}">
 
                                             <button id="pstDropdownBtn" type="button"
-                                                class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 
-                               text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 
+                                                class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2
+                               text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300
                                hover:bg-gray-50 h-10"
                                                 onclick="togglePstDropdown(event)">
 
@@ -206,7 +206,7 @@
                                             </button>
 
                                             <div id="pstDropdownMenu"
-                                                class="absolute z-40 mt-1 w-full bg-white border rounded-lg shadow-lg hidden 
+                                                class="absolute z-40 mt-1 w-full bg-white border rounded-lg shadow-lg hidden
                             max-h-48 overflow-y-auto p-2">
 
                                                 <input type="text" id="pstSearchInput" onkeyup="filterPstOptions()"
@@ -230,8 +230,8 @@
                                                 value="{{ request('supplier') }}">
 
                                             <button id="supplierDropdownBtn" type="button"
-                                                class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2 
-                               text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 
+                                                class="inline-flex w-full justify-between rounded-md bg-white px-3 py-2
+                               text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300
                                hover:bg-gray-50 h-10"
                                                 onclick="toggleSupplierDropdown(event)">
 
@@ -245,7 +245,7 @@
                                             </button>
 
                                             <div id="supplierDropdownMenu"
-                                                class="absolute z-40 mt-1 w-full bg-white border rounded-lg shadow-lg hidden 
+                                                class="absolute z-40 mt-1 w-full bg-white border rounded-lg shadow-lg hidden
                             max-h-48 overflow-y-auto p-2">
 
                                                 <input type="text" id="supplierSearchInput"
