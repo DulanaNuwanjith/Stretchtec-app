@@ -68,8 +68,8 @@
             { '-translate-x-full': !open, 'translate-x-0': open }
         ]"
         style="width: var(--sidebar-width);"
-        class="fixed md:relative z-40 inset-y-0 left-0 transform md:translate-x-0 
-           transition-transform duration-300 ease-in-out 
+        class="fixed md:relative z-40 inset-y-0 left-0 transform md:translate-x-0
+           transition-transform duration-300 ease-in-out
            bg-gradient-to-b from-white to-blue-500 sidebar-bg
            shadow-md flex flex-col min-h-screen">
 
@@ -118,7 +118,7 @@
                 <li>
                     <a href="{{ route('dashboard') }}"
                         class="flex items-center px-4 py-2 rounded hover:bg-gray-200 {{ request()->routeIs('dashboard') ? 'bg-gray-200' : '' }}">
-                        <img src="{{ asset('icons/statisctics.png') }}" alt="Dashboard" class="w-6 h-6 mr-5" />
+                        <img src="{{ asset('images/statisctics.png') }}" alt="Dashboard" class="w-6 h-6 mr-5" />
                         <span x-show="initialized && !collapsed">Dashboard</span>
                     </a>
                 </li>
@@ -129,7 +129,7 @@
                         <a href="{{ $sampleRoute }}"
                             class="flex items-center px-4 py-2 rounded hover:bg-gray-200
                       {{ request()->routeIs('sample-inquery-details.*', 'sample-preparation-details.*', 'sample-preparation-production.*', 'sampleStock.*', 'leftoverYarn.*') ? 'bg-gray-200' : '' }}">
-                            <img src="{{ asset('icons/research.png') }}" alt="" class="w-6 h-6 mr-5" />
+                            <img src="{{ asset('images/research.png') }}" alt="" class="w-6 h-6 mr-5" />
                             <span x-show="initialized && !collapsed">Sample Development</span>
                         </a>
                     </li>
@@ -138,7 +138,7 @@
                         <a href="{{ route('elasticCatalog.index') }}"
                             class="flex items-center px-4 py-2 rounded hover:bg-gray-200
                       {{ request()->routeIs('elasticCatalog.*', 'codeCatalog.*', 'tapeCatalog.*') ? 'bg-gray-200' : '' }}">
-                            <img src="{{ asset('icons/catalog.png') }}" alt="" class="w-6 h-6 mr-5" />
+                            <img src="{{ asset('images/catalog.png') }}" alt="" class="w-6 h-6 mr-5" />
                             <span x-show="initialized && !collapsed">Product Catalog</span>
                         </a>
                     </li>
@@ -147,7 +147,7 @@
                         <a href="{{ route('elasticTD.index') }}"
                             class="flex items-center px-4 py-2 rounded hover:bg-gray-200
                       {{ request()->routeIs('elasticTD.*', 'cordTD.*', 'tapeTD.*') ? 'bg-gray-200' : '' }}">
-                            <img src="{{ asset('icons/writing.png') }}" alt="" class="w-6 h-6 mr-5" />
+                            <img src="{{ asset('images/writing.png') }}" alt="" class="w-6 h-6 mr-5" />
                             <span x-show="initialized && !collapsed">Technical Details</span>
                         </a>
                     </li>
@@ -159,7 +159,7 @@
                         <a href="{{ route('production-inquery-details.index') }}"
                             class="flex items-center px-4 py-2 rounded hover:bg-gray-200
                       {{ request()->routeIs('production-inquery-details.*', 'production-order-preparation.*', 'mail-booking.*', 'mail-booking-approval.*', 'packing.*', 'knitted.*', 'loom.*', 'braiding.*', 'mailBooking.index') ? 'bg-gray-200' : '' }}">
-                            <img src="{{ asset('icons/factory.png') }}" alt="" class="w-6 h-6 mr-5" />
+                            <img src="{{ asset('images/factory.png') }}" alt="" class="w-6 h-6 mr-5" />
                             <span x-show="initialized && !collapsed">Production</span>
                         </a>
                     </li>
@@ -168,7 +168,7 @@
                         <a href="{{ route('purchasing.index') }}"
                             class="flex items-center px-4 py-2 rounded hover:bg-gray-200
                       {{ request()->routeIs('purchasing.*', 'localinvoiceManage.*', 'exportinvoiceManage.*') ? 'bg-gray-200' : '' }}">
-                            <img src="{{ asset('icons/purchasing.png') }}" alt="" class="w-6 h-6 mr-5" />
+                            <img src="{{ asset('images/purchasing.png') }}" alt="" class="w-6 h-6 mr-5" />
                             <span x-show="initialized && !collapsed">Purchase Operations</span>
                         </a>
                     </li>
@@ -177,7 +177,7 @@
                         <a href="{{ route('stockAvailabilityCheck.index') }}"
                             class="flex items-center px-4 py-2 rounded hover:bg-gray-200
                       {{ request()->routeIs('stockManagement.*', 'stockAvailabilityCheck.*', 'rawMaterial.*', 'rawMaterialReceipt.*') ? 'bg-gray-200' : '' }}">
-                            <img src="{{ asset('icons/stores.png') }}" alt="" class="w-6 h-6 mr-5" />
+                            <img src="{{ asset('images/stores.png') }}" alt="" class="w-6 h-6 mr-5" />
                             <span x-show="initialized && !collapsed">Store Management</span>
                         </a>
                     </li>
@@ -186,7 +186,7 @@
                         <a href="{{ route('sample-reports.index') }}"
                             class="flex items-center px-4 py-2 rounded hover:bg-gray-200
                       {{ request()->routeIs('sample-reports.*', 'production-reports.*') ? 'bg-gray-200' : '' }}">
-                            <img src="{{ asset('icons/report.png') }}" alt="" class="w-6 h-6 mr-5" />
+                            <img src="{{ asset('images/report.png') }}" alt="" class="w-6 h-6 mr-5" />
                             <span x-show="initialized && !collapsed">Reports</span>
                         </a>
                     </li>
@@ -195,7 +195,7 @@
                         <a href="{{ route('operatorsandSupervisors.index') }}"
                             class="flex items-center px-4 py-2 rounded hover:bg-gray-200
                       {{ request()->routeIs('operatorsandSupervisors.*', 'userDetails.*') ? 'bg-gray-200' : '' }}">
-                            <img src="{{ asset('icons/man.png') }}" alt="" class="w-6 h-6 mr-5" />
+                            <img src="{{ asset('images/man.png') }}" alt="" class="w-6 h-6 mr-5" />
                             <span x-show="initialized && !collapsed">Add Users</span>
                         </a>
                     </li>
