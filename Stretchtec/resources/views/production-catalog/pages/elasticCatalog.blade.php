@@ -283,7 +283,7 @@
                                 @endif
                             </div>
 
-                            <div class="overflow-x-auto bg-white dark:bg-gray-900 shadow rounded-lg">
+                            <div id="elasticCatalogScroll" class="overflow-x-auto bg-white max-h-[1200px] dark:bg-gray-900 shadow rounded-lg">
                                 <!-- Spinner -->
                                 <div id="pageLoadingSpinner"
                                     class="fixed inset-0 z-50 bg-white bg-opacity-80 flex flex-col items-center justify-center">
@@ -538,7 +538,8 @@
                                                         </div>
                                                     @else
                                                         {{-- Read-only display (single shade OR unauthorized role) --}}
-                                                        <span class="readonly">{{ $catalog->shade }} - {{ $catalog->option }}</span>
+                                                        <span class="readonly">{{ $catalog->shade }} -
+                                                            {{ $catalog->option }}</span>
                                                     @endif
                                                 </td>
 
@@ -838,6 +839,47 @@
             window.requestAnimationFrame(() => {
                 spinner.classList.add("hidden"); // hide spinner after rendering
             });
+        });
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            let container = document.getElementById("elasticCatalogScroll");
+
+            // Restore table scroll immediately after DOM loaded
+            if (container) {
+                let scrollTop = localStorage.getItem("tableScrollTop");
+                let scrollLeft = localStorage.getItem("tableScrollLeft");
+                if (scrollTop !== null) container.scrollTop = parseInt(scrollTop);
+                if (scrollLeft !== null) container.scrollLeft = parseInt(scrollLeft);
+                // Optionally clear
+                localStorage.removeItem("tableScrollTop");
+                localStorage.removeItem("tableScrollLeft");
+            }
+
+            // Save table scroll on form submit
+            document.querySelectorAll("form").forEach(form => {
+                form.addEventListener("submit", function() {
+                    if (container) {
+                        localStorage.setItem("tableScrollTop", container.scrollTop);
+                        localStorage.setItem("tableScrollLeft", container.scrollLeft);
+                    }
+                });
+            });
+        });
+
+        // Restore page scroll after full load (including images etc.)
+        window.onload = function() {
+            let pageScroll = localStorage.getItem("pageScrollY");
+            if (pageScroll !== null) {
+                window.scrollTo(0, parseInt(pageScroll));
+                localStorage.removeItem("pageScrollY");
+            }
+        };
+
+        // Save page scroll position before unload
+        window.addEventListener("beforeunload", function() {
+            localStorage.setItem("pageScrollY", window.scrollY);
         });
     </script>
 
