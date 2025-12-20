@@ -139,7 +139,7 @@
                             <div class="flex justify-start">
                                 <button onclick="toggleFilterForm()"
                                     class="bg-white border border-blue-500 text-blue-500 hover:text-blue-600 hover:border-blue-600 font-semibold py-1 px-3 rounded shadow flex items-center gap-2 mb-6">
-                                    <img src="{{ asset('icons/filter.png') }}" class="w-6 h-6" alt="Filter Icon">
+                                    <img src="{{ asset('images/filter.png') }}" class="w-6 h-6" alt="Filter Icon">
                                     Filters
                                 </button>
                             </div>
